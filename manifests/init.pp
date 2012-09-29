@@ -57,15 +57,6 @@ class quantum (
  
   }
 
-  # Temporary
-  file { '/etc/init/quantum-server.conf':
-    ensure => present,
-    owner  => 'root',
-    group  => 'root',
-    source => 'puppet:///modules/quantum/quantum-server.conf',
-    before => Service[$::quantum::params::service_name],
-  }
-
   if $enabled {
     $ensure = 'running'
   } else {
@@ -81,11 +72,5 @@ class quantum (
 
   Ini_setting<| tag == $::quantum::params::quantum_conf_tag |> ~> Service['quantum']
   Ini_setting<| tag == $::quantum::params::quantum_paste_api_ini_tag |> ~> Service['quantum']
-
-  # This is a hack. Most likely a bug in the Ubuntu package
-  #file { '/usr/lib/python2.7/dist-packages/bin/nova-dhcpbridge':
-  #  type   => link,
-  #  target => '/usr/bin/nova-dhcpbridge',
-  #}
 
 }

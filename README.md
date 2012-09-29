@@ -1,6 +1,9 @@
 Puppet module for OpenStack Quantum
 ===================================
 
+(Work under development)
+========================
+
 This is an extremely basic puppet module for quantum. Right now it only supports Open vSwitch. Some of the Open vSwitch functionality should probably be moved to its own module. 
 
 At the moment, this has only been tested on an all-in-one installation, although this module has been created with a multi-node installation in mind.

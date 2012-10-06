@@ -8,16 +8,18 @@ class quantum::plugins::openvswitch (
 ) {
   include "quantum::params"
 
-  class {
-    "vswitch":
-      provider => ovs
-  }
+
   Exec {
     path => ['/bin', '/usr/bin'],
   }
 
   if $controller {
     $package = $::quantum::params::ovs_package_agent
+
+    class {
+      "vswitch":
+        provider => ovs
+    }
 
     vs_bridge {$private_bridge:
       external_ids => "bridge-id=$private_bridge"

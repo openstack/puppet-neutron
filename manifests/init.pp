@@ -1,4 +1,3 @@
-#
 class quantum (
   $keystone_password,
   $quantum_settings       = false,

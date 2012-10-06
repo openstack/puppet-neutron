@@ -6,6 +6,8 @@ class quantum::plugins::openvswitch (
   $openvswitch_settings = false,
   $controller           = true
 ) {
+  include "quantum::params"
+
   class {
     "vswitch":
       provider => ovs
@@ -20,12 +22,13 @@ class quantum::plugins::openvswitch (
   package { 'quantum-plugin-openvswitch':
     name    => $package,
     ensure  => latest,
-    require => [Class['quantum'], Service[$::quantum::params::ovs_service]],
+    require => Service[$::quantum::params::ovs_service],
   }
 
   File {
     require => Package['quantum-plugin-openvswitch'],
   }
+
   file { $::quantum::params::quantum_ovs_plugin_ini: }
 
   if $openvswitch_settings {
@@ -37,7 +40,7 @@ class quantum::plugins::openvswitch (
   }
 
   vs_bridge {$private_bridge:
-    external_ids => "bridge-id=" + $private_bridge,
+    external_ids => "bridge-id=$private_bridge"
   }
 
   vs_port {$private_interface:
@@ -45,11 +48,11 @@ class quantum::plugins::openvswitch (
   }
 
   vs_bridge {$public_bridge:
-    external_ids => "bridge-id=" + $public_bridge,
+    external_ids => "bridge-id=$public_bridge"
   }
 
   vs_port {$public_interface:
-    bridge => $public_interface
+    bridge => $public_bridge
   }
 
   case $::osfamily {

@@ -9,10 +9,6 @@ class quantum::plugins::openvswitch (
   include "quantum::params"
 
 
-  Exec {
-    path => ['/bin', '/usr/bin'],
-  }
-
   if $controller {
     $package = $::quantum::params::ovs_package_agent
 
@@ -43,6 +39,9 @@ class quantum::plugins::openvswitch (
 
   package { $package: }
 
+  File {
+    require => Package['quantum-plugin-openvswitch'],
+  }
   file { $::quantum::params::quantum_ovs_plugin_ini: }
 
   if $openvswitch_settings {

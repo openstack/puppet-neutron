@@ -34,12 +34,12 @@ class quantum::plugins::openvswitch (
   }
 
   vs_bridge {$public_bridge:
-    external_ids => "bridge-id=$public_bridge"
+    external_ids => "bridge-id=$public_bridge",
     ensure       => present
   }
 
   vs_port {$public_interface:
-    bridge => $public_bridge
+    bridge => $public_bridge,
     ensure => present
   }
 

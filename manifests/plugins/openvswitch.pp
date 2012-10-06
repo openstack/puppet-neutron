@@ -6,35 +6,9 @@ class quantum::plugins::openvswitch (
   $openvswitch_settings = false,
   $controller           = true
 ) {
-
-  include quantum::params
-
-  # Open vSwitch stuff
-  package { 'openvswitch':
-    name   => $::quantum::params::ovs_package,
-    ensure => present,
-  }
-
-  case $::osfamily {
-    Debian, Ubuntu: {
-      package { 'kernel-headers':
-        name   => $::quantum::params::kernel_headers,
-        ensure => present,
-      }
-      package { 'openvswitch-datapath-dkms':
-        ensure => present,
-        require => [Package['kernel-headers'], Package['openvswitch']],
-      }
-    }
-  }
-
-  service { 'ovsdb-server':
-    name       => $::quantum::params::ovs_service,
-    enable     => true,
-    ensure     => running,
-    hasstatus  => false,
-    status     => 'pgrep ovsdb-server',
-    require    => Package['openvswitch-datapath-dkms'],
+  class {
+    "vswitch":
+      provider => ovs
   }
 
   if $controller {
@@ -63,29 +37,19 @@ class quantum::plugins::openvswitch (
   }
 
   vs_bridge {$private_bridge:
-    require => [Package[$package], Service[$::quantum::params::ovs_service]]
+    external_ids => "bridge-id=" + $private_bridge,
   }
 
   vs_port {$private_interface:
     bridge  => $private_bridge
   }
 
-  exec { "ovs-vsctl br-set-external-id ${private_bridge} bridge-id ${private_bridge}":
-    unless  => "ovs-vsctl br-get-external-id ${private_bridge} bridge-id | grep ${private_bridge}",
-    require => Exec["ovs-vsctl add-br ${private_bridge}"],
-  }
-
   vs_bridge {$public_bridge:
-    require => [Package[$package], Service[$::quantum::params::ovs_service]]
+    external_ids => "bridge-id=" + $public_bridge,
   }
 
   vs_port {$public_interface:
     bridge => $public_interface
-  }
-
-  exec { "ovs-vsctl br-set-external-id ${public_bridge} bridge-id ${public_bridge}":
-    unless  => "ovs-vsctl br-get-external-id ${public_bridge} bridge-id | grep ${public_bridge}",
-    require => Exec["ovs-vsctl add-br ${public_bridge}"],
   }
 
   case $::osfamily {
@@ -111,7 +75,7 @@ class quantum::plugins::openvswitch (
     name    => $::quantum::params::ovs_service_agent,
     enable  => true,
     ensure  => running,
-    require => [Package[$package], Exec["ovs-vsctl add-port ${private_bridge} ${private_interface}"], File[$init_file]],
+    require => [Package[$package], File[$init_file]]
   }
 
   Ini_setting<| tag == $::quantum::params::quantum_ovs_plugin_ini_tag |> ~> Service['quantum-ovs-service-agent']

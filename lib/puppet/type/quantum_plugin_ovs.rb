@@ -1,4 +1,4 @@
-Puppet::Type.newtype(:quantum_plugin_os) do
+Puppet::Type.newtype(:quantum_plugin_ovs) do
 
   ensurable
 

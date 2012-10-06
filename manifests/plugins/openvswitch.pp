@@ -12,22 +12,34 @@ class quantum::plugins::openvswitch (
     "vswitch":
       provider => ovs
   }
+  Exec {
+    path => ['/bin', '/usr/bin'],
+  }
 
   if $controller {
-    $package = $::quantum::params::ovs_package_server
-  } else {
     $package = $::quantum::params::ovs_package_agent
+
+    vs_bridge {$private_bridge:
+      external_ids => "bridge-id=$private_bridge"
+    }
+
+    vs_port {$private_interface:
+      bridge  => $private_bridge
+    }
+
+    vs_bridge {$public_bridge:
+      external_ids => "bridge-id=$public_bridge"
+    }
+
+    vs_port {$public_interface:
+      bridge => $public_bridge
+    }
+  } else {
+    $package = $::quantum::params::ovs_package_server
   }
 
-  package { 'quantum-plugin-openvswitch':
-    name    => $package,
-    ensure  => latest,
-    require => Service[$::quantum::params::ovs_service],
-  }
 
-  File {
-    require => Package['quantum-plugin-openvswitch'],
-  }
+  package { $package: }
 
   file { $::quantum::params::quantum_ovs_plugin_ini: }
 
@@ -35,52 +47,12 @@ class quantum::plugins::openvswitch (
     multini($::quantum::params::quantum_ovs_plugin_ini, $openvswitch_settings)
   }
 
-  Exec {
-    path => ['/bin', '/usr/bin'],
-  }
-
-  vs_bridge {$private_bridge:
-    external_ids => "bridge-id=$private_bridge"
-  }
-
-  vs_port {$private_interface:
-    bridge  => $private_bridge
-  }
-
-  vs_bridge {$public_bridge:
-    external_ids => "bridge-id=$public_bridge"
-  }
-
-  vs_port {$public_interface:
-    bridge => $public_bridge
-  }
-
-  case $::osfamily {
-    'Debian': {
-      file { '/etc/init/quantum-agent.conf':
-        ensure => present,
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0644',
-        source => 'puppet:///modules/quantum/quantum-agent.conf',
-      }
-    
-      file { '/etc/init.d/quantum-agent':
-        ensure  => link,
-        target  => '/lib/init/upstart-job',
-        require => File['/etc/init/quantum-agent.conf'],
-      }
-      $init_file = '/etc/init.d/quantum-agent'
-    }
-  }
-
   service { 'quantum-ovs-service-agent':
     name    => $::quantum::params::ovs_service_agent,
     enable  => true,
     ensure  => running,
-    require => [Package[$package], File[$init_file]]
+    require => [Package[$package]]
   }
 
   Ini_setting<| tag == $::quantum::params::quantum_ovs_plugin_ini_tag |> ~> Service['quantum-ovs-service-agent']
-
 }

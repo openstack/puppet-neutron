@@ -24,19 +24,23 @@ class quantum::plugins::openvswitch (
   }
 
   vs_bridge {$private_bridge:
-    external_ids => "bridge-id=$private_bridge"
+    external_ids => "bridge-id=$private_bridge",
+    ensure       => present
   }
 
   vs_port {$private_interface:
-    bridge  => $private_bridge
+    bridge => $private_bridge,
+    ensure => present
   }
 
   vs_bridge {$public_bridge:
     external_ids => "bridge-id=$public_bridge"
+    ensure       => present
   }
 
   vs_port {$public_interface:
     bridge => $public_bridge
+    ensure => present
   }
 
   package { "quantum-plugin-openvswitch":

@@ -1,6 +1,6 @@
 class quantum::plugins::openvswitch (
   $uplink_interfaces    = ['br-virtual:eth1'],
-  $plugin_settings      = {},
+  $plugin_settings      = null,
   $controller           = true
 ) {
   include "quantum::params"

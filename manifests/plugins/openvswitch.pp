@@ -1,14 +1,9 @@
 class quantum::plugins::openvswitch (
-  $private_bridge       = 'br-int',
-  $private_interface    = 'eth0',
-  $public_bridge        = 'br-virtual',
-  $public_interface     = 'eth1',
-  $plugin_settings      = false,
+  $uplink_interfaces    = ['br-virtual:eth1'],
+  $plugin_settings      = {},
   $controller           = true
 ) {
   include "quantum::params"
-
-  notice("Controller $controller")
 
   if !$controller {
     $package = $::quantum::params::ovs_package_agent
@@ -23,25 +18,34 @@ class quantum::plugins::openvswitch (
       provider => ovs
   }
 
-  vs_bridge {$private_bridge:
-    external_ids => "bridge-id=$private_bridge",
+  $bridge_int = $plugin_settings["integration_bridge"] ? { default => "br-int" }
+  vs_bridge {$bridge_int:
+    external_ids => "bridge-id=$bridge_int",
     ensure       => present
   }
 
-  vs_port {$private_interface:
-    bridge => $private_bridge,
-    ensure => present
+  define bridge() {
+    $mapping = split($name, ":")
+    $bridge = $mapping[1]
+
+    vs_bridge {$bridge:
+      ensure       => present,
+      external_ids => "bridge-id=${bridge}"
+    }
   }
 
-  vs_bridge {$public_bridge:
-    external_ids => "bridge-id=$public_bridge",
-    ensure       => present
-  }
+  $bm_string = $plugin_settings["bridge_mappings"] ? { default => "default:br-virtual"}
+  $bm_list = split($bm_string, ",")
+  bridge{$bm_list: }
 
-  vs_port {$public_interface:
-    bridge => $public_bridge,
-    ensure => present
+  define port() {
+    $mapping = split($name, ":")
+    vs_port {$mapping[1]:
+      ensure => present,
+      bridge => $mapping[0]
+    }
   }
+  port{$uplink_interfaces: }
 
   package { "quantum-plugin-openvswitch":
     name    => $package,

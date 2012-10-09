@@ -1,51 +1,34 @@
-#
-class quantum::l3 (
-  $keystone_password,
-  $l3_settings            = false,
-  $keystone_enabled       = true,
-  $keystone_tenant        = 'services',
-  $keystone_user          = 'quantum',
-  $keystone_auth_host     = 'localhost',
-  $keystone_auth_port     = '35357',
-  $keystone_auth_protocol = 'http',
-  $package_ensure         = 'latest',
-  $enabled                = true
-) {
+class quantum::agent::l3 (
+  $interface_driver         = "quantum.agent.linux.interface.OVSInterfaceDriver",
+  $use_namespaces           = "False",
+  $router_id                = "7e5c2aca-bbac-44dd-814d-f2ea9a4003e4",
+  $gateway_external_net_id  = "3f8699d7-f221-421a-acf5-e41e88cfd54f",
+  $metadata_ip              = "169.254.169.254",
+  $external_network_bridge  = "br-ex"
+) inherits quantum {
+  Package["quantum-l3-agent"] -> Quantum_agent_l3_config<||>
+  Quantum_config<||> ~> Service["quantum-l3-service"]
+  Quantum_agent_l3_config<||> ~> Service["quantum-l3-service"]
 
-  include quantum::params
+  quantum_agent_l3_config {
+    "DEFAULT/debug"                     value => $debug;
+    "DEFAULT/auth_host":                value => $auth_host;
+    "DEFAULT/auth_port":                value => $auth_port;
+    "DEFAULT/auth_uri":                 value => $auth_uri;
+    "DEFAULT/admin_tenant_name":        value => $keystone_tenant;
+    "DEFAULT/admin_user":               value => $keystone_user;
+    "DEFAULT/admin_password":           value => $keystone_password;
+    "DEFAULT/use_namespaces"            value => $use_namespaces;
+    "DEFAULT/router_id"                 value => $router_id;
+    "DEFAULT/gateway_external_net_id"   value => $gateway_external_net_id;
+    "DEFAULT/metadata_ip"               value => $metadata_ip;
+    "DEFAULT/external_network_bridge"   value => $external_network_bridge;
+  }
 
   package { 'quantum-l3':
     name    => $::quantum::params::l3_package,
     ensure  => $package_ensure,
     require => Class['quantum'],
-  }
-
-  File {
-    ensure  => present,
-    owner   => 'quantum',
-    group   => 'quantum',
-    mode    => '0644',
-    require => Package[$::quantum::params::l3_package],
-    notify  => Service[$::quantum::params::l3_service],
-  }
-
-  file { $::quantum::params::quantum_l3_agent_ini: }
-
-  if $l3_settings {
-    multini($::quantum::params::quantum_l3_agent_ini, $l3_settings)
-  }
-
-  if $keystone_enabled {
-    $auth_url = "${keystone_auth_protocol}://${keystone_auth_host}:${keystone_auth_port}/v2.0"
-    $keystone_settings = {
-      'DEFAULT' => {
-        'auth_url'          => $auth_url,
-        'admin_tenant_name' => $keystone_tenant,
-        'admin_user'        => $keystone_user,
-        'admin_password'    => $keystone_password,
-      }
-    }
-    multini($::quantum::params::quantum_l3_agent_ini, $keystone_settings)
   }
 
   if $enabled {
@@ -60,6 +43,4 @@ class quantum::l3 (
     ensure  => $ensure,
     require => [Package[$::quantum::params::l3_package], Class['quantum']],
   }
-
-  Ini_setting<| tag == $::quantum::params::quantum_l3_agent_ini_tag |> ~> Service['quantum-l3']
 }

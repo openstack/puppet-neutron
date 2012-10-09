@@ -1,53 +1,28 @@
-#
-class quantum::dhcp (
-  $keystone_password,
-  $dhcp_settings          = false,
-  $keystone_enabled       = true,
-  $keystone_tenant        = 'service',
-  $keystone_user          = 'quantum',
-  $keystone_auth_host     = 'localhost',
-  $keystone_auth_port     = '35357',
-  $keystone_auth_protocol = 'http',
-  $package_ensure         = 'latest',
-  $enabled                = true
-) {
+class quantum::agent::dhcp (
+  $state_path         = "/var/lib/quantum",
+  $interface_driver   = "quantum.agent.linux.interface.OVSInterfaceDriver",
+  $dhcp_driver        = "quantum.agent.linux.dhcp.Dnsmasq",
+  $use_namespaces     = "False",
+  $root_helper        = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf"
+) inherits quantum {
+  Package["quantum-dhcp-agent"] -> Quantum_agent_dhcp_config<||>
+  Quantum_config<||> ~> Service["quantum-dhcp-service"]
+  Quantum_gent_dhcp_config<||> ~> Service["quantum-dhcp-service"]
 
-  include quantum::params
+  quantum_agent_dhcp_config {
+    "DEFAULT/debug"               value => $debug;
+    "DEFAULT/state_path":         value => $state_path;
+    "DEFAULT/interface_driver":   value => $interface_driver;
+    "DEFAULT/dhcp_driver":        value => $dhcp_driver;
+    "DEFAULT/use_namespaces":     value => $use_namespaces;
+    "DEFAULT/root_helper":        value => $root_helper;
+  }
 
-  package { 'quantum-dhcp':
+  package { 'quantum-dhcp-agent':
     name    => $::quantum::params::dhcp_package,
     ensure  => $package_ensure,
     require => Class['quantum'],
   }
-
-  File {
-    ensure  => present,
-    owner   => 'quantum',
-    group   => 'quantum',
-    mode    => '0644',
-    require => Package[$::quantum::params::dhcp_package],
-    notify  => Service[$::quantum::params::dhcp_service],
-  }
-
-  file { $::quantum::params::quantum_dhcp_agent_ini: }
-
-  if $dhcp_settings {
-    multini($::quantum::params::quantum_dhcp_agent_ini, $dhcp_settings)
-  }
-
-  if $keystone_enabled {
-    $auth_url = "${keystone_auth_protocol}://${keystone_auth_host}:${keystone_auth_port}/v2.0"
-    $keystone_settings = {
-      'DEFAULT' => {
-        'auth_url'          => $auth_url,
-        'admin_tenant_name' => $keystone_tenant,
-        'admin_user'        => $keystone_user,
-        'admin_password'    => $keystone_password,
-      }
-    }
-    multini($::quantum::params::quantum_dhcp_agent_ini, $keystone_settings)
-  }
-
 
   if $enabled {
     $ensure = 'running'
@@ -55,13 +30,10 @@ class quantum::dhcp (
     $ensure = 'stopped'
   }
 
-  service { 'quantum-dhcp':
+  service { 'quantum-dhcp-service':
     name    => $::quantum::params::dhcp_service,
     enable  => $enabled,
     ensure  => $ensure,
     require => [Package[$::quantum::params::dhcp_package], Class['quantum']],
-    subscribe => File[$::quantum::params::quantum_dhcp_agent_ini],
   }
-
-  Ini_setting<| tag == $::quantum::params::quantum_dhcp_agent_ini_tag |> ~> Service['quantum-dhcp']
 }

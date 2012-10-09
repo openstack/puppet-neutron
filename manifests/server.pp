@@ -14,7 +14,7 @@ class quantum::server (
   quantum_api_config {
     "filter:authtoken/auth_host": value => $auth_host;
     "filter:authtoken/auth_port": value => $auth_port;
-    "filter:authtoken/auth_user": value => $auth_uri;
+    "filter:authtoken/auth_uri": value => $auth_uri;
     "filter:authtoken/admin_tenant_name": value => $keystone_tenant;
     "filter:authtoken/admin_user": value => $keystone_user;
     "filter:authtoken/admin_password": value => $keystone_password;

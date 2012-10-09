@@ -4,7 +4,8 @@ class quantum::agent::l3 (
   $router_id                = "7e5c2aca-bbac-44dd-814d-f2ea9a4003e4",
   $gateway_external_net_id  = "3f8699d7-f221-421a-acf5-e41e88cfd54f",
   $metadata_ip              = "169.254.169.254",
-  $external_network_bridge  = "br-ex"
+  $external_network_bridge  = "br-ex",
+  $root_helper              = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf"
 ) inherits quantum {
   Package["quantum-l3-agent"] -> Quantum_agent_l3_config<||>
   Quantum_config<||> ~> Service["quantum-l3-service"]
@@ -23,6 +24,7 @@ class quantum::agent::l3 (
     "DEFAULT/gateway_external_net_id"   value => $gateway_external_net_id;
     "DEFAULT/metadata_ip"               value => $metadata_ip;
     "DEFAULT/external_network_bridge"   value => $external_network_bridge;
+    "DEFAULT/root_helper":              value => $root_helper;
   }
 
   package { 'quantum-l3':

@@ -1,4 +1,4 @@
-class quantum::agent::l3 (
+class quantum::agents::l3 (
   $interface_driver         = "quantum.agent.linux.interface.OVSInterfaceDriver",
   $use_namespaces           = "False",
   $router_id                = "7e5c2aca-bbac-44dd-814d-f2ea9a4003e4",
@@ -7,12 +7,12 @@ class quantum::agent::l3 (
   $external_network_bridge  = "br-ex",
   $root_helper              = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf"
 ) inherits quantum {
-  Package["quantum-l3-agent"] -> Quantum_agent_l3_config<||>
+  Package["quantum-l3-agent"] -> Quantum_l3_agent_config<||>
   Quantum_config<||> ~> Service["quantum-l3-service"]
-  Quantum_agent_l3_config<||> ~> Service["quantum-l3-service"]
+  Quantum_l3_agent_config<||> ~> Service["quantum-l3-service"]
 
-  quantum_agent_l3_config {
-    "DEFAULT/debug"                     value => $debug;
+  quantum_l3_agent_config {
+    "DEFAULT/debug"                     value => $log_debug;
     "DEFAULT/auth_host":                value => $auth_host;
     "DEFAULT/auth_port":                value => $auth_port;
     "DEFAULT/auth_uri":                 value => $auth_uri;

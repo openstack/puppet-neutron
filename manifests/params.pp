@@ -16,7 +16,7 @@ class quantum::params {
     'Debian', 'Ubuntu': {
       $package_name       = 'quantum-common'
       $server_package     = 'quantum-server'
-      $service_name       = 'quantum-server'
+      $server_service     = 'quantum-server'
 
       $ovs_package_agent  = 'quantum-plugin-openvswitch-agent'
       $ovs_agent_package  = 'quantum-plugin-openvswitch-agent'

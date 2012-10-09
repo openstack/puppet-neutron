@@ -1,5 +1,6 @@
 class quantum (
-  $ensure               = true,
+  $enabled              = true,
+  $package_ensure       = true,
   $log_verbose          = "False",
   $log_debug            = "False",
 
@@ -53,7 +54,7 @@ class quantum (
 
   package {"quantum":
     name   => $::quantum::params::package_name,
-    ensure => $ensure
+    ensure => $package_ensure
   }
 
   quantum_config {

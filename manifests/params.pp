@@ -5,13 +5,13 @@ class quantum::params {
       $server_package     = 'quantum-server'
       $server_service     = 'quantum-server'
 
-      $ovs_package_agent  = 'quantum-plugin-openvswitch-agent'
       $ovs_agent_package  = 'quantum-plugin-openvswitch-agent'
+      $ovs_agent_service  = 'quantum-plugin-openvswitch-agent'
       $ovs_server_package = 'quantum-plugin-openvswitch'
-      $ovs_service        = 'openvswitch-switch'
 
       $dhcp_package       = 'quantum-dhcp-agent'
       $dhcp_service       = 'quantum-dhcp-agent'
+
       $l3_package         = 'quantum-l3-agent'
       $l3_service         = 'quantum-l3-agent'
 

@@ -12,18 +12,18 @@ class quantum::agents::l3 (
   Quantum_l3_agent_config<||> ~> Service["quantum-l3-service"]
 
   quantum_l3_agent_config {
-    "DEFAULT/debug"                     value => $log_debug;
+    "DEFAULT/debug":                    value => $log_debug;
     "DEFAULT/auth_host":                value => $auth_host;
     "DEFAULT/auth_port":                value => $auth_port;
     "DEFAULT/auth_uri":                 value => $auth_uri;
     "DEFAULT/admin_tenant_name":        value => $keystone_tenant;
     "DEFAULT/admin_user":               value => $keystone_user;
     "DEFAULT/admin_password":           value => $keystone_password;
-    "DEFAULT/use_namespaces"            value => $use_namespaces;
-    "DEFAULT/router_id"                 value => $router_id;
-    "DEFAULT/gateway_external_net_id"   value => $gateway_external_net_id;
-    "DEFAULT/metadata_ip"               value => $metadata_ip;
-    "DEFAULT/external_network_bridge"   value => $external_network_bridge;
+    "DEFAULT/use_namespaces":           value => $use_namespaces;
+    "DEFAULT/router_id":                value => $router_id;
+    "DEFAULT/gateway_external_net_id":  value => $gateway_external_net_id;
+    "DEFAULT/metadata_ip":              value => $metadata_ip;
+    "DEFAULT/external_network_bridge":  value => $external_network_bridge;
     "DEFAULT/root_helper":              value => $root_helper;
   }
 

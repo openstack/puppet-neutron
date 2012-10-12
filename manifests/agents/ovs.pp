@@ -1,6 +1,7 @@
 class quantum::plugins::ovs::agent (
   $controller = false
 ) inherits quantum::plugin::ovs {
+  Package['quantum'] ->  Package['quantum-plugin-ovs-agent']
   Package["quantum-plugin-ovs-agent"] -> Quantum_plugin_ovs<||>
 
   class {
@@ -10,23 +11,28 @@ class quantum::plugins::ovs::agent (
 
   vs_bridge {$integration_bridge:
     external_ids => "bridge-id=$ingration_bridge",
-    ensure       => present
+    ensure       => present,
+    require      => Service['quantum-plugin-ovs-service'],
   }
-  
+
   if $enable_tunneling {
     vs_bridge {$tunnel_bridge:
       external_ids => "bridge-id=$tunnel_bridge",
-      ensure       => present
+      ensure       => present,
+      require      => Service['quantum-plugin-ovs-service'],
     }
   }
 
-  quantum::plugins::ovs::bridge{$bridge_mappings:}
-  quantum::plugins::ovs::port{$bridge_uplinks:}
+  quantum::plugins::ovs::bridge{$bridge_mappings:
+    require      => Service['quantum-plugin-ovs-service'],
+  }
+  quantum::plugins::ovs::port{$bridge_uplinks:
+    require      => Service['quantum-plugin-ovs-service'],
+  }
 
   package { "quantum-plugin-ovs-agent":
     name    => $::quantum::params::ovs_agent_package,
     ensure  => $package_ensure,
-    require => [Class['quantum'], Service["quantum-plugin-ovs-service"]]
   }
 
   if $enabled {

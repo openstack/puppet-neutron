@@ -5,7 +5,9 @@ class quantum::agents::dhcp (
   $use_namespaces     = "False",
   $root_helper        = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf"
 ) inherits quantum {
+  Package['quantum'] -> Package["quantum-dhcp-agent"]
   Package["quantum-dhcp-agent"] -> Quantum_dhcp_agent_config<||>
+  Package["quantum-dhcp-agent"] -> Quantum_config<||>
   Quantum_config<||> ~> Service["quantum-dhcp-service"]
   Quantum_dhcp_agent_config<||> ~> Service["quantum-dhcp-service"]
 
@@ -21,7 +23,6 @@ class quantum::agents::dhcp (
   package { 'quantum-dhcp-agent':
     name    => $::quantum::params::dhcp_package,
     ensure  => $package_ensure,
-    require => Class['quantum'],
   }
 
   if $enabled {

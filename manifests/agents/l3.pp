@@ -7,6 +7,7 @@ class quantum::agents::l3 (
   $external_network_bridge  = "br-ex",
   $root_helper              = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf"
 ) inherits quantum {
+  Package['quantum'] -> Package['quantum-l3-agent']
   Package["quantum-l3-agent"] -> Quantum_l3_agent_config<||>
   Quantum_config<||> ~> Service["quantum-l3-service"]
   Quantum_l3_agent_config<||> ~> Service["quantum-l3-service"]
@@ -30,7 +31,6 @@ class quantum::agents::l3 (
   package { 'quantum-l3':
     name    => $::quantum::params::l3_package,
     ensure  => $package_ensure,
-    require => Class['quantum'],
   }
 
   if $enabled {

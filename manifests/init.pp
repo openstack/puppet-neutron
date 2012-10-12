@@ -53,20 +53,20 @@ class quantum (
     "DEFAULT/verbose":                value => $verbose;
     "DEFAULT/debug":                  value => $debug;
 
-    "DEFAULT/bind_host":  value => $bind_host;
-    "DEFAULT/bind_port":  value => $bind_port;
+    "DEFAULT/bind_host":              value => $bind_host;
+    "DEFAULT/bind_port":              value => $bind_port;
 
-    "DEFAULT/sql_connection":       value => $sql_connection;
+    "DEFAULT/sql_connection":         value => $sql_connection;
 
-    "DEFAULT/auth_strategy":        value => $auth_strategy;
+    "DEFAULT/auth_strategy":          value => $auth_strategy;
 
-    "DEFAULT/rabbit_host":          value => $rabbit_host;
-    "DEFAULT/rabbit_port":          value => $rabbit_port;
-    "DEFAULT/rabbit_user":          value => $rabbit_user;
-    "DEFAULT/rabbit_password":      value => $rabbit_password;
-    "DEFAULT/rabbit_virtual_host":  value => $rabbit_password;
+    "DEFAULT/rabbit_host":            value => $rabbit_host;
+    "DEFAULT/rabbit_port":            value => $rabbit_port;
+    "DEFAULT/rabbit_userid":          value => $rabbit_user;
+    "DEFAULT/rabbit_password":        value => $rabbit_password;
+    "DEFAULT/rabbit_virtual_host":    value => $rabbit_virtual_host;
 
-    "DEFAULT/control_exchange":     value => $control_exchange;
+    "DEFAULT/control_exchange":       value => $control_exchange;
 
     "DEFAULT/core_plugin":            value => $core_plugin;
     "DEFAULT/mac_generation_retries": value => $mac_generation_retries;

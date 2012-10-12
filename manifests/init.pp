@@ -7,15 +7,6 @@ class quantum (
   $bind_host            = "0.0.0.0",
   $bind_port            = "9696",
   $sql_connection       = "sqlite:///var/lib/quantum/quantum.sqlite",
-
-  $auth_type            = "keystone",
-  $auth_host            = "localhost",
-  $auth_port            = "35357",
-  $auth_uri             = "http://localhost:5000",
-  $keystone_tenant      = "service",
-  $keystone_user        = "quantum",
-  $keystone_password    = "ChangeMe",
-
   $rabbit_host          = "localhost",
   $rabbit_port          = "5672",
   $rabbit_user          = "guest",

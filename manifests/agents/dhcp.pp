@@ -1,9 +1,9 @@
 class quantum::agents::dhcp (
-  $state_path         = "/var/lib/quantum",
-  $interface_driver   = "quantum.agent.linux.interface.OVSInterfaceDriver",
-  $dhcp_driver        = "quantum.agent.linux.dhcp.Dnsmasq",
-  $use_namespaces     = "False",
-  $root_helper        = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf"
+  $state_path       = "/var/lib/quantum",
+  $interface_driver = "quantum.agent.linux.interface.OVSInterfaceDriver",
+  $dhcp_driver      = "quantum.agent.linux.dhcp.Dnsmasq",
+  $use_namespaces   = "False",
+  $root_helper      = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf",
   $debug            = 'False'
 ) inherits quantum {
 

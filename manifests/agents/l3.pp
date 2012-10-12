@@ -5,7 +5,7 @@ class quantum::agents::l3 (
   $gateway_external_net_id  = "3f8699d7-f221-421a-acf5-e41e88cfd54f",
   $metadata_ip              = "169.254.169.254",
   $external_network_bridge  = "br-ex",
-  $root_helper              = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf"
+  $root_helper              = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf",
   $debug                    = 'False'
 ) inherits quantum {
 

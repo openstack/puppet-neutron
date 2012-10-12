@@ -1,6 +1,4 @@
 class quantum (
-  $enabled              = true,
-  $package_ensure       = true,
   $rabbit_password,
   $verbose          = "False",
   $debug            = "False",
@@ -17,7 +15,9 @@ class quantum (
 
   $core_plugin            = "quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2",
   $mac_generation_retries = 16,
-  $dhcp_lease_duration    = 120
+  $dhcp_lease_duration    = 120,
+  $auth_strategy          = 'keystone',
+  $enabled                = true,
   $package_ensure         = 'present'
 ) {
   include quantum::params

@@ -12,7 +12,6 @@ class quantum::keystone::auth (
   $region             = 'RegionOne'
 ) {
 
-  Class['keystone::db::sync'] -> Class['quantum::keystone::auth']
   Keystone_user_role["${auth_name}@services"] ~> Service <| name == 'quantum-server' |>
 
   keystone_user { $auth_name:

@@ -9,10 +9,7 @@ class quantum::agents::ovs (
   Package['quantum'] ->  Package['quantum-plugin-ovs-agent']
   Package["quantum-plugin-ovs-agent"] -> Quantum_plugin_ovs<||>
 
-  class {
-    "vswitch":
-      provider => ovs
-  }
+  require 'vswitch::ovs'
 
   vs_bridge {$integration_bridge:
     external_ids => "bridge-id=$ingration_bridge",

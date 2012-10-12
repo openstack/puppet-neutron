@@ -18,6 +18,7 @@ class quantum (
   $core_plugin            = "quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2",
   $mac_generation_retries = 16,
   $dhcp_lease_duration    = 120
+  $package_ensure         = 'present'
 ) {
   include quantum::params
 

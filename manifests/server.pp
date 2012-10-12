@@ -7,6 +7,7 @@ class quantum::server (
 # $auth_uri        = "http://localhost:5000",
   $keystone_tenant = "services",
   $keystone_user   = "quantum",
+  $package_ensure  = 'present'
 ) inherits quantum {
   require 'keystone::python'
 

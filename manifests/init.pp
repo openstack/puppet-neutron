@@ -1,8 +1,8 @@
 class quantum (
   $enabled              = true,
   $package_ensure       = true,
-  $log_verbose          = "False",
-  $log_debug            = "False",
+  $verbose          = "False",
+  $debug            = "False",
 
   $bind_host            = "0.0.0.0",
   $bind_port            = "9696",
@@ -49,8 +49,8 @@ class quantum (
   }
 
   quantum_config {
-    "DEFAULT/verbose":    value => $log_verbose;
-    "DEFAULT/debug":      value => $log_debug;
+    "DEFAULT/verbose":                value => $verbose;
+    "DEFAULT/debug":                  value => $debug;
 
     "DEFAULT/bind_host":  value => $bind_host;
     "DEFAULT/bind_port":  value => $bind_port;

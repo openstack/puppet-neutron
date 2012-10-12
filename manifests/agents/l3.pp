@@ -6,7 +6,9 @@ class quantum::agents::l3 (
   $metadata_ip              = "169.254.169.254",
   $external_network_bridge  = "br-ex",
   $root_helper              = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf"
+  $debug                    = 'False'
 ) inherits quantum {
+
   Package['quantum'] -> Package['quantum-l3-agent']
   Package["quantum-l3-agent"] -> Quantum_l3_agent_config<||>
   Quantum_config<||> ~> Service["quantum-l3-service"]

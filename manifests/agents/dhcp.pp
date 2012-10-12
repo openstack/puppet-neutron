@@ -4,7 +4,10 @@ class quantum::agents::dhcp (
   $dhcp_driver        = "quantum.agent.linux.dhcp.Dnsmasq",
   $use_namespaces     = "False",
   $root_helper        = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf"
+  $debug            = 'False'
 ) inherits quantum {
+
+
   Package['quantum'] -> Package["quantum-dhcp-agent"]
   Package["quantum-dhcp-agent"] -> Quantum_dhcp_agent_config<||>
   Package["quantum-dhcp-agent"] -> Quantum_config<||>
@@ -12,7 +15,7 @@ class quantum::agents::dhcp (
   Quantum_dhcp_agent_config<||> ~> Service["quantum-dhcp-service"]
 
   quantum_dhcp_agent_config {
-    "DEFAULT/debug":              value => $log_debug;
+    "DEFAULT/debug":              value => $debug;
     "DEFAULT/state_path":         value => $state_path;
     "DEFAULT/interface_driver":   value => $interface_driver;
     "DEFAULT/dhcp_driver":        value => $dhcp_driver;

@@ -1,26 +1,31 @@
 class quantum::agents::dhcp (
-  $state_path       = "/var/lib/quantum",
-  $interface_driver = "quantum.agent.linux.interface.OVSInterfaceDriver",
-  $dhcp_driver      = "quantum.agent.linux.dhcp.Dnsmasq",
-  $use_namespaces   = "False",
-  $root_helper      = "sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf",
-  $debug            = 'False'
-) inherits quantum {
+  $package_ensure   = true,
+  $enabled          = true,
 
+  $debug            = 'False',
+  $state_path       = '/var/lib/quantum',
+  $resync_interval  = 30,
+  $interface_driver = 'quantum.agent.linux.interface.OVSInterfaceDriver',
+  $dhcp_driver      = 'quantum.agent.linux.dhcp.Dnsmasq',
+  $use_namespaces   = 'False',
+  $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
+) {
+  include 'quantum::params'
 
-  Package['quantum'] -> Package["quantum-dhcp-agent"]
-  Package["quantum-dhcp-agent"] -> Quantum_dhcp_agent_config<||>
-  Package["quantum-dhcp-agent"] -> Quantum_config<||>
-  Quantum_config<||> ~> Service["quantum-dhcp-service"]
-  Quantum_dhcp_agent_config<||> ~> Service["quantum-dhcp-service"]
+  Package['quantum'] -> Package['quantum-dhcp-agent']
+  Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>
+  Package['quantum-dhcp-agent'] -> Quantum_config<||>
+  Quantum_config<||> ~> Service['quantum-dhcp-service']
+  Quantum_dhcp_agent_config<||> ~> Service['quantum-dhcp-service']
 
   quantum_dhcp_agent_config {
-    "DEFAULT/debug":              value => $debug;
-    "DEFAULT/state_path":         value => $state_path;
-    "DEFAULT/interface_driver":   value => $interface_driver;
-    "DEFAULT/dhcp_driver":        value => $dhcp_driver;
-    "DEFAULT/use_namespaces":     value => $use_namespaces;
-    "DEFAULT/root_helper":        value => $root_helper;
+    'DEFAULT/debug':              value => $debug;
+    'DEFAULT/state_path':         value => $state_path;
+    'DEFAULT/resync_interval':    value => $resync_interval;
+    'DEFAULT/interface_driver':   value => $interface_driver;
+    'DEFAULT/dhcp_driver':        value => $dhcp_driver;
+    'DEFAULT/use_namespaces':     value => $use_namespaces;
+    'DEFAULT/root_helper':        value => $root_helper;
   }
 
   package { 'quantum-dhcp-agent':

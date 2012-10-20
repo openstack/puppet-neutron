@@ -5,7 +5,6 @@ class quantum::plugins::ovs (
   $sql_max_retries      = 10,
   $reconnect_interval   = 2,
 
-  $bridge_uplinks       = ['br-virtual:eth1'],
   $bridge_mappings      = ['default:br-virtual'],
   $tenant_network_type  = 'vlan',
   $network_vlan_ranges  = 'default:1000:2000',

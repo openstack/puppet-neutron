@@ -4,9 +4,9 @@ class quantum::agents::ovs (
 
   $bridge_uplinks       = ['br-virtual:eth1'],
   $bridge_mappings      = ['default:br-virtual'],
-  $network_vlan_ranges  = 'default:1000:2000',
   $integration_bridge   = 'br-int',
-  $enable_tunneling     = true
+  $enable_tunneling     = true,
+  $tunnel_bridge        = 'br-tun'
 ) {
   include 'quantun::params'
 

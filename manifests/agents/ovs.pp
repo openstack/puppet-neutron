@@ -3,9 +3,9 @@ class quantum::agents::ovs (
   $enabled              = true,
 
   $bridge_uplinks       = ['br-virtual:eth1'],
-  $bridge_mappings      = ['default:br-virtual'],
+  $bridge_mappings      = ['physnet1:br-virtual'],
   $integration_bridge   = 'br-int',
-  $enable_tunneling     = true,
+  $enable_tunneling     = false,
   $tunnel_bridge        = 'br-tun'
 ) {
   include 'quantun::params'

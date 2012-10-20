@@ -7,7 +7,7 @@ class quantum::agents::dhcp (
   $resync_interval  = 30,
   $interface_driver = 'quantum.agent.linux.interface.OVSInterfaceDriver',
   $dhcp_driver      = 'quantum.agent.linux.dhcp.Dnsmasq',
-  $use_namespaces   = 'False',
+  $use_namespaces   = 'True',
   $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
   include 'quantum::params'

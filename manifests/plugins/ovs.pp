@@ -5,11 +5,11 @@ class quantum::plugins::ovs (
   $sql_max_retries      = 10,
   $reconnect_interval   = 2,
 
-  $bridge_mappings      = ['default:br-virtual'],
+  $bridge_mappings      = ['physnet1:br-virtual'],
   $tenant_network_type  = 'vlan',
-  $network_vlan_ranges  = 'default:1000:2000',
+  $network_vlan_ranges  = 'physnet1:1000:2000',
   $integration_bridge   = 'br-int',
-  $enable_tunneling     = true,
+  $enable_tunneling     = false,
   $tunnel_bridge        = 'br-tun',
   $tunnel_id_ranges     = '1:1000',
   $local_ip             = '10.0.0.1',
@@ -18,8 +18,6 @@ class quantum::plugins::ovs (
   $root_helper          = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
   include 'quantum::params'
-
-  require 'vswitch::ovs'
 
   Package['quantum'] -> Package['quantum-plugin-ovs']
   Package['quantum-plugin-ovs'] -> Quantum_plugin_ovs<||>

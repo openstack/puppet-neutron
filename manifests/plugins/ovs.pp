@@ -28,7 +28,7 @@ class quantum::plugins::ovs (
 
   case $sql_connection {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
-      $backend_package = 'python-mysqldb'
+      require 'mysql::python'
     }
     /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
       $backend_package = 'python-psycopg2'
@@ -39,11 +39,6 @@ class quantum::plugins::ovs (
     defeault: {
       fail('Unsupported backend configured')
     }
-  }
-
-  package {'quantum-backend-package':
-    name   => $backend_package,
-    ensure => present
   }
 
   package { 'quantum-plugin-ovs':

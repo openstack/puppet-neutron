@@ -23,8 +23,8 @@ class quantum::agents::l3 (
 
   Package['quantum'] -> Package['quantum-l3-agent']
   Package['quantum-l3-agent'] -> Quantum_l3_agent_config<||>
-  Quantum_config<||> ~> Service['quantum-l3-service']
-  Quantum_l3_agent_config<||> ~> Service['quantum-l3-service']
+  Quantum_config<||> ~> Service['quantum-l3']
+  Quantum_l3_agent_config<||> ~> Service['quantum-l3']
 
   quantum_l3_agent_config {
     'DEFAULT/debug':                          value => $debug;

@@ -26,14 +26,24 @@ class quantum::plugins::ovs (
 
   validate_re($sql_connection, '(sqlite|mysql|posgres):\/\/(\S+:\S+@\S+\/\S+)?')
 
-  if ($sql_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-    ensure_resource( 'package', 'python-mysqldb', {'ensure' => 'present'})
-  } elsif ($sql_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
-    ensure_resource( 'package', 'python-psycopg2', {'ensure' => 'present'})
-  } elsif($sql_connection =~ /sqlite:\/\//) {
-    ensure_resource( 'package', 'python-pysqlite2', {'ensure' => 'present'})
-  } else {
-    fail('Invalid db connection ${sql_connection}')
+  case $sql_connection {
+    /mysql:\/\/\S+:\S+@\S+\/\S+/: {
+      $backend_package = '  python-mysqldb'
+    }
+    /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
+      $backend_package = 'python-psycopg2'
+    }
+    /sqlite:\/\//: {
+      $backend_package = 'python-pysqlite2'
+    }
+    defeault: {
+      fail('Unsupported backend configured')
+    }
+  }
+
+  package {'quantum-backend-package':
+    name   => $backend_package,
+    ensure => present
   }
 
   package { 'quantum-plugin-ovs':
@@ -44,15 +54,15 @@ class quantum::plugins::ovs (
   $br_map_str = join($bridge_mappings, ',')
 
   quantum_plugin_ovs {
-    'DATABASE/sql_connection':    value => $sql_connection;
-    'DATABASE/sql_max_retries':   value => $sql_max_retries;
-    'DATABASE/sql_connection':    value => $sql_connection;
-    'OVS/integration_bridge':     value => $integration_bridge;
-    'OVS/network_vlan_ranges':    value => $network_vlan_ranges;
-    'OVS/tenant_network_type':    value => $tenant_network_type;
-    'OVS/bridge_mappings':        value => $br_map_str;
-    'AGENT/polling_interval':     value => $polling_interval;
-    'AGENT/root_helper':          value => $root_helper;
+    'DATABASE/sql_connection':      value => $sql_connection;
+    'DATABASE/sql_max_retries':     value => $sql_max_retries;
+    'DATABASE/reconnect_interval':  value => $reconnect_interval;
+    'OVS/integration_bridge':       value => $integration_bridge;
+    'OVS/network_vlan_ranges':      value => $network_vlan_ranges;
+    'OVS/tenant_network_type':      value => $tenant_network_type;
+    'OVS/bridge_mappings':          value => $br_map_str;
+    'AGENT/polling_interval':       value => $polling_interval;
+    'AGENT/root_helper':            value => $root_helper;
   }
 
   if ($tenant_network_type == 'gre') and ($enable_tunneling) {

@@ -1,5 +1,5 @@
 class quantum (
-  $package_ensure         = true,
+  $package_ensure         = 'present',
 
   $verbose                = 'False',
   $debug                  = 'False',

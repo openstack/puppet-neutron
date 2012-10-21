@@ -1,5 +1,5 @@
 class quantum::agents::dhcp (
-  $package_ensure   = true,
+  $package_ensure   = 'present',
   $enabled          = true,
 
   $debug            = 'False',

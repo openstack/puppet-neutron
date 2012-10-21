@@ -28,7 +28,7 @@ class quantum::plugins::ovs (
 
   case $sql_connection {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
-      $backend_package = '  python-mysqldb'
+      $backend_package = 'python-mysqldb'
     }
     /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
       $backend_package = 'python-psycopg2'

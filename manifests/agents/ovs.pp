@@ -8,7 +8,8 @@ class quantum::agents::ovs (
   $enable_tunneling     = false,
   $tunnel_bridge        = 'br-tun'
 ) {
-  include 'quantun::params'
+
+  include 'quantum::params'
 
   require 'vswitch::ovs'
 

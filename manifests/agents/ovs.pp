@@ -1,5 +1,5 @@
 class quantum::agents::ovs (
-  $package_ensure       = true,
+  $package_ensure       = 'present',
   $enabled              = true,
 
   $bridge_uplinks       = ['br-virtual:eth1'],

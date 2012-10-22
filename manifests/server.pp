@@ -1,5 +1,5 @@
 class quantum::server (
-  $package_ensure   = true,
+  $package_ensure   = present,
   $enabled          = true,
 
   $log_file         = '/var/log/quantum/server.log',

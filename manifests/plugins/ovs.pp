@@ -1,5 +1,5 @@
 class quantum::plugins::ovs (
-  $package_ensure       = true,
+  $package_ensure       = 'present',
 
   $sql_connection       = 'sqlite:////var/lib/quantum/ovs.sqlite',
   $sql_max_retries      = 10,

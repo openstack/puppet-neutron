@@ -28,9 +28,18 @@ class quantum::agents::dhcp (
     'DEFAULT/root_helper':        value => $root_helper;
   }
 
+  case $dhcp_driver {
+    /\.Dnsmasq/: {
+      $dhcp_server_packages = $::quantum::params::dnsmasq_packages
+    }
+    default: {
+      fail("${dhcp_driver} is not supported as of now")
+    }
+  }
+
   package { 'quantum-dhcp-agent':
-    name    => $::quantum::params::dhcp_package,
-    ensure  => $package_ensure,
+    name    => $dhcp_server_packages,
+    ensure  => $package_ensure
   }
 
   if $enabled {
@@ -40,9 +49,9 @@ class quantum::agents::dhcp (
   }
 
   service { 'quantum-dhcp-service':
-    name    => $::quantum::params::dhcp_service,
+    name    => $::quantum::params::dhcp_agent_service,
     enable  => $enabled,
     ensure  => $ensure,
-    require => [Package[$::quantum::params::dhcp_package], Class['quantum']],
+    require => [Package[$::quantum::params::dhcp_agent_package], Class['quantum']],
   }
 }

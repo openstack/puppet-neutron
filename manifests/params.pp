@@ -9,11 +9,15 @@ class quantum::params {
       $ovs_agent_service  = 'quantum-plugin-openvswitch-agent'
       $ovs_server_package = 'quantum-plugin-openvswitch'
 
-      $dhcp_package       = 'quantum-dhcp-agent'
-      $dhcp_service       = 'quantum-dhcp-agent'
+      $dhcp_agent_package = 'quantum-dhcp-agent'
+      $dhcp_agent_service = 'quantum-dhcp-agent'
 
-      $l3_package         = 'quantum-l3-agent'
-      $l3_service         = 'quantum-l3-agent'
+      $dnsmasq_packages   = ['dnsmasq-base', 'dnsmasq-utils']
+
+      $isc_dhcp_packages  = ['isc-dhcp-server']
+
+      $l3_agent_package   = 'quantum-l3-agent'
+      $l3_agent_service   = 'quantum-l3-agent'
 
       $cliff_package      = 'python-cliff'
       $kernel_headers     = "linux-headers-${::kernelrelease}"

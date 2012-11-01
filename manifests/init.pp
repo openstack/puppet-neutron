@@ -7,7 +7,6 @@ class quantum (
   $bind_host              = '0.0.0.0',
   $bind_port              = '9696',
   $core_plugin            = 'quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2',
-  $api_paste              = '/etc/quantum/api-paste.ini',
   $auth_strategy          = 'keystone',
   $base_mac               = 'fa:16:3e:00:00:00',
   $mac_generation_retries = 16,

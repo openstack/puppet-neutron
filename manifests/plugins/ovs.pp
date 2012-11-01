@@ -1,10 +1,8 @@
 class quantum::plugins::ovs (
   $package_ensure       = 'present',
-
   $sql_connection       = 'sqlite:////var/lib/quantum/ovs.sqlite',
   $sql_max_retries      = 10,
   $reconnect_interval   = 2,
-
   $bridge_mappings      = ['physnet1:br-virtual'],
   $tenant_network_type  = 'vlan',
   $network_vlan_ranges  = 'physnet1:1000:2000',
@@ -15,6 +13,7 @@ class quantum::plugins::ovs (
   $polling_interval     = 2,
   $root_helper          = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
+
   include 'quantum::params'
   require 'vswitch::ovs'
 

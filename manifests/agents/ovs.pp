@@ -1,7 +1,6 @@
 class quantum::agents::ovs (
   $package_ensure       = 'present',
   $enabled              = true,
-
   $bridge_uplinks       = ['br-virtual:eth1'],
   $bridge_mappings      = ['physnet1:br-virtual'],
   $integration_bridge   = 'br-int',
@@ -15,6 +14,7 @@ class quantum::agents::ovs (
     fail('Local ip for ovs agent must be set when tunneling is enabled')
   }
 
+  include 'quantum::params'
   require 'vswitch::ovs'
 
   Package['quantum'] ->  Package['quantum-plugin-ovs-agent']

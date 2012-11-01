@@ -1,7 +1,6 @@
 class quantum::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
-
   $debug                        = 'False',
   $interface_driver             = 'quantum.agent.linux.interface.OVSInterfaceDriver',
   $auth_url                     = 'http://localhost:5000/v2.0',
@@ -19,6 +18,7 @@ class quantum::agents::l3 (
   $metadata_port                = 8775,
   $polling_interval             = 3
 ) {
+
   include 'quantum::params'
 
   Package['quantum'] -> Package['quantum-l3-agent']

@@ -2,7 +2,6 @@ class quantum::server (
   $auth_password,
   $package_ensure   = 'present',
   $enabled          = true,
-
   $log_file         = '/var/log/quantum/server.log',
   $auth_type        = 'keystone',
   $auth_host        = 'localhost',

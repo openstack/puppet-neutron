@@ -1,7 +1,6 @@
 class quantum::agents::dhcp (
   $package_ensure   = 'present',
   $enabled          = true,
-
   $debug            = 'False',
   $state_path       = '/var/lib/quantum',
   $resync_interval  = 30,
@@ -10,7 +9,9 @@ class quantum::agents::dhcp (
   $use_namespaces   = 'True',
   $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
+
   include 'quantum::params'
+
 
   Package['quantum'] -> Package['quantum-dhcp-agent']
   Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>

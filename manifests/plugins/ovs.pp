@@ -12,8 +12,6 @@ class quantum::plugins::ovs (
   $enable_tunneling     = false,
   $tunnel_bridge        = 'br-tun',
   $tunnel_id_ranges     = '1:1000',
-  $local_ip             = '10.0.0.1',
-
   $polling_interval     = 2,
   $root_helper          = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
@@ -65,7 +63,6 @@ class quantum::plugins::ovs (
       'OVS/enable_tunneling':   value => 'True';
       'OVS/tunnel_bridge':      value => $tunnel_bridge;
       'OVS/tunnel_id_ranges':   value => $tunnel_id_ranges;
-      'OVS/local_ip':           value => $local_ip;
     }
   }
 }

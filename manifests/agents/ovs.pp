@@ -6,10 +6,14 @@ class quantum::agents::ovs (
   $bridge_mappings      = ['physnet1:br-virtual'],
   $integration_bridge   = 'br-int',
   $enable_tunneling     = false,
+  $local_ip             = false,
   $tunnel_bridge        = 'br-tun'
 ) {
 
   include 'quantum::params'
+  if $enable_tunneling and ! $local_ip {
+    fail('Local ip for ovs agent must be set when tunneling is enabled')
+  }
 
   require 'vswitch::ovs'
 
@@ -46,6 +50,10 @@ class quantum::agents::ovs (
     $service_ensure = 'running'
   } else {
     $service_ensure = 'stopped'
+  }
+
+  quantum_plugin_ovs {
+    'OVS/local_ip': value => $local_ip;
   }
 
   service { 'quantum-plugin-ovs-service':

@@ -1,7 +1,7 @@
 class quantum (
   $rabbit_password,
+  $enabled                = true,
   $package_ensure         = 'present',
-
   $verbose                = 'False',
   $debug                  = 'False',
   $bind_host              = '0.0.0.0',

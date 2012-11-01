@@ -6,7 +6,6 @@ class quantum::server (
   $auth_type        = 'keystone',
   $auth_host        = 'localhost',
   $auth_port        = '35357',
-  $auth_url         = 'http://localhost:5000',
   $auth_tenant      = 'services',
   $auth_user        = 'quantum',
   $auth_password    = 'password'
@@ -27,7 +26,6 @@ class quantum::server (
   quantum_api_config {
     'filter:authtoken/auth_host':         value => $auth_host;
     'filter:authtoken/auth_port':         value => $auth_port;
-    'filter:authtoken/auth_uri':          value => $auth_url;
     'filter:authtoken/admin_tenant_name': value => $auth_tenant;
     'filter:authtoken/admin_user':        value => $auth_user;
     'filter:authtoken/admin_password':    value => $auth_password;

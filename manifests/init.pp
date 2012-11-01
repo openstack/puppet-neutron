@@ -1,4 +1,5 @@
 class quantum (
+  $rabbit_password,
   $package_ensure         = 'present',
 
   $verbose                = 'False',
@@ -17,7 +18,6 @@ class quantum (
   $rabbit_host            = 'localhost',
   $rabbit_port            = '5672',
   $rabbit_user            = 'guest',
-  $rabbit_password        = 'guest',
   $rabbit_virtual_host    = '/'
 ) {
   include 'quantum::params'

@@ -1,4 +1,5 @@
 class quantum::server (
+  $auth_password,
   $package_ensure   = 'present',
   $enabled          = true,
 
@@ -8,7 +9,6 @@ class quantum::server (
   $auth_port        = '35357',
   $auth_tenant      = 'services',
   $auth_user        = 'quantum',
-  $auth_password    = 'password'
 ) {
   include 'quantum::params'
 

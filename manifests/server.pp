@@ -7,7 +7,7 @@ class quantum::server (
   $auth_host        = 'localhost',
   $auth_port        = '35357',
   $auth_tenant      = 'services',
-  $auth_user        = 'quantum',
+  $auth_user        = 'quantum'
 ) {
   include 'quantum::params'
 

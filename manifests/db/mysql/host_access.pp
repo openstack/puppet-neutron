@@ -9,7 +9,7 @@ define quantum::db::mysql::host_access ($user, $password, $database)  {
   }
   database_grant { "${user}@${name}/${database}":
     # TODO figure out which privileges to grant.
-    privileges => "all",
+    privileges => 'all',
     provider => 'mysql',
     require => Database_user["${user}@${name}"]
   }

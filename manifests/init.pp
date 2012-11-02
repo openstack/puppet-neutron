@@ -1,12 +1,12 @@
 class quantum (
+  $rabbit_password,
+  $enabled                = true,
   $package_ensure         = 'present',
-
   $verbose                = 'False',
   $debug                  = 'False',
   $bind_host              = '0.0.0.0',
   $bind_port              = '9696',
   $core_plugin            = 'quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2',
-  $api_paste              = '/etc/quantum/api-paste.ini',
   $auth_strategy          = 'keystone',
   $base_mac               = 'fa:16:3e:00:00:00',
   $mac_generation_retries = 16,
@@ -17,7 +17,6 @@ class quantum (
   $rabbit_host            = 'localhost',
   $rabbit_port            = '5672',
   $rabbit_user            = 'guest',
-  $rabbit_password        = 'guest',
   $rabbit_virtual_host    = '/'
 ) {
   include 'quantum::params'

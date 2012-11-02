@@ -1,7 +1,6 @@
 class quantum::agents::dhcp (
   $package_ensure   = 'present',
   $enabled          = true,
-
   $debug            = 'False',
   $state_path       = '/var/lib/quantum',
   $resync_interval  = 30,
@@ -10,7 +9,21 @@ class quantum::agents::dhcp (
   $use_namespaces   = 'True',
   $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
+
   include 'quantum::params'
+
+  case $dhcp_driver {
+    /\.Dnsmasq/: {
+      package { $::quantum::params::dnsmasq_packages:
+        ensure => present,
+        before => Package['quantum-dhcp-agent'],
+      }
+      $dhcp_server_packages = $::quantum::params::dnsmasq_packages
+    }
+    default: {
+      fail("${dhcp_driver} is not supported as of now")
+    }
+  }
 
   Package['quantum'] -> Package['quantum-dhcp-agent']
   Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>
@@ -28,19 +41,11 @@ class quantum::agents::dhcp (
     'DEFAULT/root_helper':        value => $root_helper;
   }
 
-  case $dhcp_driver {
-    /\.Dnsmasq/: {
-      $dhcp_server_packages = $::quantum::params::dnsmasq_packages
-    }
-    default: {
-      fail("${dhcp_driver} is not supported as of now")
-    }
-  }
 
   package { 'quantum-dhcp-agent':
-    name    => $dhcp_server_packages,
-    ensure  => $package_ensure
-  }
+    name    => $::quantum::params::dhcp_agent_package,
+    ensure  => $package_ensure,
+   }
 
   if $enabled {
     $ensure = 'running'
@@ -52,6 +57,6 @@ class quantum::agents::dhcp (
     name    => $::quantum::params::dhcp_agent_service,
     enable  => $enabled,
     ensure  => $ensure,
-    require => [Package[$::quantum::params::dhcp_agent_package], Class['quantum']],
+    require => [Package['quantum-dhcp-agent'], Class['quantum']],
   }
 }

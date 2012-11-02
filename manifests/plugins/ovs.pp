@@ -1,10 +1,8 @@
 class quantum::plugins::ovs (
   $package_ensure       = 'present',
-
   $sql_connection       = 'sqlite:////var/lib/quantum/ovs.sqlite',
   $sql_max_retries      = 10,
   $reconnect_interval   = 2,
-
   $bridge_mappings      = ['physnet1:br-virtual'],
   $tenant_network_type  = 'vlan',
   $network_vlan_ranges  = 'physnet1:1000:2000',
@@ -12,12 +10,12 @@ class quantum::plugins::ovs (
   $enable_tunneling     = false,
   $tunnel_bridge        = 'br-tun',
   $tunnel_id_ranges     = '1:1000',
-  $local_ip             = '10.0.0.1',
-
   $polling_interval     = 2,
   $root_helper          = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
+
   include 'quantum::params'
+  require 'vswitch::ovs'
 
   Package['quantum'] -> Package['quantum-plugin-ovs']
   Package['quantum-plugin-ovs'] -> Quantum_plugin_ovs<||>
@@ -65,7 +63,6 @@ class quantum::plugins::ovs (
       'OVS/enable_tunneling':   value => 'True';
       'OVS/tunnel_bridge':      value => $tunnel_bridge;
       'OVS/tunnel_id_ranges':   value => $tunnel_id_ranges;
-      'OVS/local_ip':           value => $local_ip;
     }
   }
 }

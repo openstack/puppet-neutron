@@ -55,4 +55,15 @@ class quantum (
     'DEFAULT/rabbit_password':        value => $rabbit_password;
     'DEFAULT/rabbit_virtual_host':    value => $rabbit_virtual_host;
   }
+
+  # Any machine using Quantum / OVS endpoints with certain nova networking configs will
+  # have protetion issues writing unexpected files unless qemu is changed appropriately.
+  @file { "/etc/libvirt/qemu.conf":
+    ensure => present,
+    notify => Exec[ '/etc/init.d/libvirt-bin restart'],
+    source => 'puppet:///modules/quantum/qemu.conf',
+  }
+  exec { '/etc/init.d/libvirt-bin restart':
+ 	  refreshonly => true,
+ 	}
 }

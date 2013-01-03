@@ -34,7 +34,7 @@ class quantum::plugins::ovs (
     /sqlite:\/\//: {
       $backend_package = 'python-pysqlite2'
     }
-    defeault: {
+    default: {
       fail('Unsupported backend configured')
     }
   }

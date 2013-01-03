@@ -45,7 +45,7 @@ class quantum::agents::dhcp (
   package { 'quantum-dhcp-agent':
     name    => $::quantum::params::dhcp_agent_package,
     ensure  => $package_ensure,
-   }
+  }
 
   if $enabled {
     $ensure = 'running'

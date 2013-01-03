@@ -57,6 +57,6 @@ class quantum::agents::l3 (
     name    => $::quantum::params::l3_agent_service,
     enable  => $enabled,
     ensure  => $ensure,
-    require => [Package[$::quantum::params::l3_agent_package], Class['quantum']],
+    require => [Package['quantum-l3'], Class['quantum']],
   }
 }

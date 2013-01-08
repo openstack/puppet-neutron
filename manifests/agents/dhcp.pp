@@ -31,6 +31,9 @@ class quantum::agents::dhcp (
   Quantum_config<||> ~> Service['quantum-dhcp-service']
   Quantum_dhcp_agent_config<||> ~> Service['quantum-dhcp-service']
 
+  # The DHCP agent loads both quantum.ini and its own file.
+  # This only lists config specific to the agent.  quantum.ini supplies
+  # the rest.
   quantum_dhcp_agent_config {
     'DEFAULT/debug':              value => $debug;
     'DEFAULT/state_path':         value => $state_path;

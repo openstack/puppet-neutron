@@ -1,17 +1,23 @@
+# Configure the quantum server to use the OVS plugin.
+# This configures the plugin for the API server, but does nothing
+# about configuring the agents that must also run and share a config
+# file with the OVS plugin if both are on the same machine.
+
 class quantum::plugins::ovs (
   $package_ensure       = 'present',
+
   $sql_connection       = 'sqlite:////var/lib/quantum/ovs.sqlite',
   $sql_max_retries      = 10,
   $reconnect_interval   = 2,
-  $bridge_mappings      = ['physnet1:br-virtual'],
+
   $tenant_network_type  = 'vlan',
+
+  # NB: don't need tunnel ID range when using VLANs,
+  # *but* you do need the network vlan range regardless of type,
+  # because the list of networks there is still important
+  # even if the ranges aren't specified
   $network_vlan_ranges  = 'physnet1:1000:2000',
-  $integration_bridge   = 'br-int',
-  $enable_tunneling     = false,
-  $tunnel_bridge        = 'br-tun',
   $tunnel_id_ranges     = '1:1000',
-  $polling_interval     = 2,
-  $root_helper          = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
 
   include 'quantum::params'
@@ -44,24 +50,17 @@ class quantum::plugins::ovs (
     ensure  => $package_ensure,
   }
 
-  $br_map_str = join($bridge_mappings, ',')
-
   quantum_plugin_ovs {
     'DATABASE/sql_connection':      value => $sql_connection;
     'DATABASE/sql_max_retries':     value => $sql_max_retries;
     'DATABASE/reconnect_interval':  value => $reconnect_interval;
-    'OVS/integration_bridge':       value => $integration_bridge;
     'OVS/network_vlan_ranges':      value => $network_vlan_ranges;
     'OVS/tenant_network_type':      value => $tenant_network_type;
-    'OVS/bridge_mappings':          value => $br_map_str;
-    'AGENT/polling_interval':       value => $polling_interval;
-    'AGENT/root_helper':            value => $root_helper;
   }
 
-  if ($tenant_network_type == 'gre') and ($enable_tunneling) {
+  if($tenant_network_type == 'gre') {
     quantum_plugin_ovs {
       'OVS/enable_tunneling':   value => 'True';
-      'OVS/tunnel_bridge':      value => $tunnel_bridge;
       'OVS/tunnel_id_ranges':   value => $tunnel_id_ranges;
     }
   }

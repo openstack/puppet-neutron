@@ -32,7 +32,7 @@ class quantum::agents::ovs (
   }
 
   vs_bridge {$integration_bridge:
-    external_ids => "bridge-id=${ingration_bridge}",
+    external_ids => "bridge-id=${integration_bridge}",
     ensure       => present,
     require      => Service['quantum-plugin-ovs-service'],
   }

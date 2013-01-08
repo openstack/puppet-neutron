@@ -9,7 +9,8 @@ class quantum::agents::l3 (
   $gateway_external_net_id      = '3f8699d7-f221-421a-acf5-e41e88cfd54f',
   $handle_internal_only_routers = 'True',
   $metadata_ip                  = '169.254.169.254',
-  $polling_interval             = 3
+  $polling_interval             = 3,
+  $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf',
 ) {
 
   include 'quantum::params'
@@ -25,6 +26,7 @@ class quantum::agents::l3 (
   quantum_l3_agent_config {
     'DEFAULT/debug':                          value => $debug;
     'DEFAULT/use_namespaces':                 value => $use_namespaces;
+    'DEFAULT/root_helper':                    value => $root_helper;
     'DEFAULT/interface_driver':               value => $interface_driver;
     'DEFAULT/router_id':                      value => $router_id;
     'DEFAULT/gateway_external_net_id':        value => $gateway_external_net_id;

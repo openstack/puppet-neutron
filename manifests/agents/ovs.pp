@@ -20,6 +20,17 @@ class quantum::agents::ovs (
   Package['quantum'] ->  Package['quantum-plugin-ovs-agent']
   Package['quantum-plugin-ovs-agent'] -> Quantum_plugin_ovs<||>
 
+  # Reads both its own and the base Quantum config
+  Quantum_plugin_ovs<||> -> Service['quantum-plugin-ovs-service']
+  Quantum_config<||> ~> Service['quantum-plugin-ovs-service']
+
+  # If this machine is running the quantum service, it must be restarted
+  # if the plugin config changes (e.g. if new provider networks are added
+  # they are not available until the quantum service is restarted)
+  @service { "quantum-server":
+    subscribe +> Quantum_plugin_ovs<||>,
+  }
+
   vs_bridge {$integration_bridge:
     external_ids => "bridge-id=${ingration_bridge}",
     ensure       => present,

@@ -60,7 +60,10 @@ class quantum::plugins::ovs (
 
   if($tenant_network_type == 'gre') {
     quantum_plugin_ovs {
-      'OVS/enable_tunneling':   value => 'True';
+      # this is set by the plugin and the agent - since the plugin node has the agent installed
+      # we rely on it setting it.
+      # TODO(ijw): do something with a virtualised node
+      # 'OVS/enable_tunneling':   value => 'True';
       'OVS/tunnel_id_ranges':   value => $tunnel_id_ranges;
     }
   }

@@ -2,6 +2,9 @@ class quantum::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
   $debug                        = 'False',
+  $auth_tenant                  = 'service',
+  $auth_user                    = 'quantum',
+  $auth_password                = 'password',
   $external_network_bridge      = 'br-ex',
   $use_namespaces               = 'True',
   $interface_driver             = 'quantum.agent.linux.interface.OVSInterfaceDriver',
@@ -25,6 +28,9 @@ class quantum::agents::l3 (
   # the rest.
   quantum_l3_agent_config {
     'DEFAULT/debug':                          value => $debug;
+    'DEFAULT/admin_tenant_name':              value => $auth_tenant;
+    'DEFAULT/admin_user':                     value => $auth_user;
+    'DEFAULT/admin_password':                 value => $auth_password;
     'DEFAULT/use_namespaces':                 value => $use_namespaces;
     'DEFAULT/root_helper':                    value => $root_helper;
     'DEFAULT/interface_driver':               value => $interface_driver;

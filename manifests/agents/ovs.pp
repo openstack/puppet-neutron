@@ -48,13 +48,13 @@ class quantum::agents::ovs (
 
   Quantum_config<||> ~> Service['quantum-plugin-ovs-service']
 
-  vs_bridge {$integration_bridge:
+  vswitch::bridge {$integration_bridge:
     ensure       => present,
     require      => Service['quantum-plugin-ovs-service'],
   }
 
   if $enable_tunneling {
-    vs_bridge {$tunnel_bridge:
+    vswitch::bridge {$tunnel_bridge:
       ensure       => present,
       require      => Service['quantum-plugin-ovs-service'],
     }

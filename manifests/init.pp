@@ -36,6 +36,12 @@ class quantum (
     source => 'puppet:///modules/quantum/rootwrap.conf',
     require => File['/etc/quantum'],
   }
+  exec { 'quantum-rootwrap-sudoers-file':
+    command => 'echo -e "quantum ALL = (root) NOPASSWD: /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf *\n" >> /etc/sudoers',
+    unless => 'grep quantum-rootwrap /etc/sudoers',
+    path => ['/bin','/sbin','/usr/bin'],
+    require => File['/etc/quantum/rootwrap.conf'],
+  }
   package {'quantum':
     name   => $::quantum::params::package_name,
     ensure => $package_ensure

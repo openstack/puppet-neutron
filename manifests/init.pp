@@ -31,6 +31,11 @@ class quantum (
     require => Package['quantum']
   }
 
+  file {'/etc/quantum/rootwrap.conf':
+    ensure => present,
+    source => 'puppet:///modules/quantum/rootwrap.conf',
+    require => File['/etc/quantum'],
+  }
   package {'quantum':
     name   => $::quantum::params::package_name,
     ensure => $package_ensure
@@ -54,6 +59,7 @@ class quantum (
     'DEFAULT/rabbit_userid':          value => $rabbit_user;
     'DEFAULT/rabbit_password':        value => $rabbit_password;
     'DEFAULT/rabbit_virtual_host':    value => $rabbit_virtual_host;
+    'DEFAULT/rootwrap_conf':	      value => '/etc/quantum/rootwrap.conf';
   }
 
   # Any machine using Quantum / OVS endpoints with certain nova networking configs will

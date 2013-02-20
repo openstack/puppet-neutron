@@ -37,7 +37,7 @@ class quantum (
     require => File['/etc/quantum'],
   }
   exec { 'quantum-rootwrap-sudoers-file':
-    command => 'echo -e "quantum ALL = (root) NOPASSWD: /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf *\n" >> /etc/sudoers',
+    command => 'echo "quantum ALL = (root) NOPASSWD: /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf *" >> /etc/sudoers',
     unless => 'grep quantum-rootwrap /etc/sudoers',
     path => ['/bin','/sbin','/usr/bin'],
     require => File['/etc/quantum/rootwrap.conf'],

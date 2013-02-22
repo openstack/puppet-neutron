@@ -25,9 +25,9 @@ class quantum (
 
   file {'/etc/quantum':
     ensure  => directory,
-    owner   => 'quantum',
-    group   => 'root',
-    mode    => 770,
+    owner   => 'root',
+    group   => 'quantum',
+    mode    => 750,
     require => Package['quantum']
   }
 

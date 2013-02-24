@@ -23,12 +23,24 @@ class quantum (
 
   Package['quantum'] -> Quantum_config<||>
 
+  File {
+    require => Package['quantum-common'],
+    owner   => 'root',
+    group   => 'quantum',
+    mode    => '750',
+  }
+
   file {'/etc/quantum':
     ensure  => directory,
     owner   => 'root',
     group   => 'quantum',
     mode    => 750,
     require => Package['quantum']
+  }
+
+  file { '/etc/quantum/quantum.conf':
+    owner => 'root',
+    mode  => '0640',
   }
 
   file {'/etc/quantum/rootwrap.conf':

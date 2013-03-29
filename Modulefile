@@ -1,5 +1,5 @@
 name    'puppet-quantum'
-version '0.2.2a'
+version '0.2.2'
 source  'https://github.com/CiscoSystems/puppet-quantum'
 author  'Joe Topjian,Endre Karlson,Emilien Macchi,Dan Bode,Dmitry Ukov,Edgar Mangana,Robert Starmer,Ian Wells,Daneyon Hansen'
 license 'Apache License 2.0'
@@ -8,8 +8,4 @@ description 'Puppet module to install and configure the OpenStack network servic
 project_page 'https://github.com/CiscoSystems/puppet-quantum'
 
 # Dependencies
-dependency 'CiscoSystems/mysql', '>= 0.3.0'
-dependency 'CiscoSystems/nova', '>= 1.0.1'
-dependency 'CiscoSystems/inifile', '>= 0.9.0'
-dependency 'CiscoSystems/vswitch', '>= 0.1.0a'
-dependency 'CiscoSystems/stdlib', '>= 2.4.0'
+#dependency 'CiscoSystems/vswitch', '>= 0.1.0'

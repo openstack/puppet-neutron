@@ -2,7 +2,7 @@ class quantum::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
   $debug                        = 'False',
-  $auth_tenant                  = 'service',
+  $auth_tenant                  = 'services',
   $auth_user                    = 'quantum',
   $auth_password                = 'password',
   $external_network_bridge      = 'br-ex',

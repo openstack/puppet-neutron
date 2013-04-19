@@ -13,12 +13,12 @@ class quantum::params {
     $linuxbridge_agent_service  = 'quantum-linuxbridge-agent'
     $linuxbridge_server_package = 'openstack-quantum-linuxbridge'
 
-    $dhcp_agent_package = 'quantum-dhcp-agent'
+    $dhcp_agent_package = false
     $dhcp_agent_service = 'quantum-dhcp-agent'
 
     $dnsmasq_packages   = ['dnsmasq', 'dnsmasq-utils']
 
-    $l3_agent_package   = 'quantum-l3-agent'
+    $l3_agent_package   = false
     $l3_agent_service   = 'quantum-l3-agent'
     $metadata_service   = 'quantum-metadata-agent'
 

@@ -17,7 +17,7 @@ class quantum (
   $rpc_backend                 = 'quantum.openstack.common.rpc.impl_kombu',
   $rabbit_password             = false,
   $rabbit_host                 = 'localhost',
-  $rabbit_hosts                = false,
+  $rabbit_hosts                = undef,
   $rabbit_port                 = '5672',
   $rabbit_user                 = 'guest',
   $rabbit_virtual_host         = '/',

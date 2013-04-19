@@ -29,10 +29,10 @@ class quantum::agents::dhcp (
   case $dhcp_driver {
     /\.Dnsmasq/: {
       Package<| title == 'dnsmasq' |> -> Package<| title == 'quantum-dhcp-agent' |>
+      Package['dnsmasq'] -> Package['quantum-dhcp-agent']
       package { 'dnsmasq':
         name   => $::quantum::params::dnsmasq_packages,
         ensure => present,
-        before => Package['quantum-dhcp-agent'],
       }
       $dhcp_server_packages = $::quantum::params::dnsmasq_packages
     }
@@ -61,10 +61,10 @@ class quantum::agents::dhcp (
     Package['quantum'] -> Package['quantum-dhcp-agent']
     Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>
     Package['quantum-dhcp-agent'] -> Quantum_config<||>
+    Package['quantum-dhcp-agent'] -> Service['quantum-dhcp-service']
     package { 'quantum-dhcp-agent':
       name    => $::quantum::params::dhcp_agent_package,
       ensure  => $package_ensure,
-      before  => Service['quantum-dhcp-service'],
     }
   }
 

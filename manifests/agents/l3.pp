@@ -41,11 +41,11 @@ class quantum::agents::l3 (
 
   if $::quantum::params::l3_agent_package {
     Package['quantum-l3'] -> Quantum_l3_agent_config<||>
+    Package['quantum-l3'] -> Service['quantum-l3']
     package { 'quantum-l3':
       name    => $::quantum::params::l3_agent_package,
       ensure  => $package_ensure,
       require => Package['quantum'],
-      before  => Service['quantum-l3']
     }
   }
 

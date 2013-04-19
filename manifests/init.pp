@@ -66,7 +66,7 @@ class quantum (
     require => File['/etc/quantum'],
   }
 
-  package { 'quantum':
+  package {'quantum':
     name   => $::quantum::params::package_name,
     ensure => $package_ensure
   }

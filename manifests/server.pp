@@ -13,8 +13,6 @@ class quantum::server (
 
   require 'keystone::python'
 
-  Package['quantum-server'] -> Quantum_api_config<||>
-  Package['quantum-server'] -> Quantum_config<||>
   Quantum_config<||> ~> Service['quantum-server']
   Quantum_api_config<||> ~> Service['quantum-server']
 
@@ -36,9 +34,13 @@ class quantum::server (
     $service_ensure = 'stopped'
   }
 
-  package {'quantum-server':
-    name   => $::quantum::params::server_package,
-    ensure => $package_ensure
+  if($::quantum::params::server_package) {
+    Package['quantum-server'] -> Quantum_api_config<||>
+    Package['quantum-server'] -> Quantum_config<||>
+    package {'quantum-server':
+      name   => $::quantum::params::server_package,
+      ensure => $package_ensure
+    }
   }
 
   service {'quantum-server':

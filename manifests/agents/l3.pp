@@ -18,8 +18,6 @@ class quantum::agents::l3 (
 
   include 'quantum::params'
 
-  Package['quantum'] -> Package['quantum-l3']
-  Package['quantum-l3'] -> Quantum_l3_agent_config<||>
   Quantum_config<||> ~> Service['quantum-l3']
   Quantum_l3_agent_config<||> ~> Service['quantum-l3']
 
@@ -41,9 +39,14 @@ class quantum::agents::l3 (
     'DEFAULT/polling_interval':               value => $polling_interval;
   }
 
-  package { 'quantum-l3':
-    name    => $::quantum::params::l3_agent_package,
-    ensure  => $package_ensure,
+  if $::quantum::params::l3_agent_package {
+    Package['quantum-l3'] -> Quantum_l3_agent_config<||>
+    Package['quantum-l3'] -> Service['quantum-l3']
+    package { 'quantum-l3':
+      name    => $::quantum::params::l3_agent_package,
+      ensure  => $package_ensure,
+      require => Package['quantum'],
+    }
   }
 
   if $enabled {
@@ -56,6 +59,6 @@ class quantum::agents::l3 (
     name    => $::quantum::params::l3_agent_service,
     enable  => $enabled,
     ensure  => $ensure,
-    require => [Package['quantum-l3'], Class['quantum']],
+    require => Class['quantum'],
   }
 }

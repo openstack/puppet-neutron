@@ -1,3 +1,17 @@
+#
+# This class configures quantum dhcp agent
+#
+# [package_ensure] specifies the state that packages should be in. This can be present or latest or
+#   a specific version.
+# [enabled] specifies if the service should be running and enabled. This is typically used for
+#  active/passive HA models.
+# [debug] Enables the debug flag for the dhcp service
+# [state_path] Location of stateful files.
+# [resync_interval]
+# [dhcp_driver] The driver to use for dhcp. Only accepts Dnsmasq.
+# [interface_driver]
+# [use_namespaces] Whether namespaces should be used with dhcp.
+# [root_helper] command used to run commands with sudo.
 class quantum::agents::dhcp (
   $package_ensure   = 'present',
   $enabled          = true,
@@ -14,9 +28,11 @@ class quantum::agents::dhcp (
 
   case $dhcp_driver {
     /\.Dnsmasq/: {
-      package { $::quantum::params::dnsmasq_packages:
+      Package<| title == 'dnsmasq' |> -> Package<| title == 'quantum-dhcp-agent' |>
+      Package['dnsmasq'] -> Package['quantum-dhcp-agent']
+      package { 'dnsmasq':
+        name   => $::quantum::params::dnsmasq_packages,
         ensure => present,
-        before => Package['quantum-dhcp-agent'],
       }
       $dhcp_server_packages = $::quantum::params::dnsmasq_packages
     }
@@ -25,9 +41,6 @@ class quantum::agents::dhcp (
     }
   }
 
-  Package['quantum'] -> Package['quantum-dhcp-agent']
-  Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>
-  Package['quantum-dhcp-agent'] -> Quantum_config<||>
   Quantum_config<||> ~> Service['quantum-dhcp-service']
   Quantum_dhcp_agent_config<||> ~> Service['quantum-dhcp-service']
 
@@ -44,10 +57,15 @@ class quantum::agents::dhcp (
     'DEFAULT/root_helper':        value => $root_helper;
   }
 
-
-  package { 'quantum-dhcp-agent':
-    name    => $::quantum::params::dhcp_agent_package,
-    ensure  => $package_ensure,
+  if $::quantum::params::dhcp_agent_package {
+    Package['quantum'] -> Package['quantum-dhcp-agent']
+    Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>
+    Package['quantum-dhcp-agent'] -> Quantum_config<||>
+    Package['quantum-dhcp-agent'] -> Service['quantum-dhcp-service']
+    package { 'quantum-dhcp-agent':
+      name    => $::quantum::params::dhcp_agent_package,
+      ensure  => $package_ensure,
+    }
   }
 
   if $enabled {
@@ -60,6 +78,6 @@ class quantum::agents::dhcp (
     name    => $::quantum::params::dhcp_agent_service,
     enable  => $enabled,
     ensure  => $ensure,
-    require => [Package['quantum-dhcp-agent'], Class['quantum']],
+    require => Class['quantum'],
   }
 }

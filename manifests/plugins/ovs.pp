@@ -67,4 +67,12 @@ class quantum::plugins::ovs (
       'OVS/tunnel_id_ranges':   value => $tunnel_id_ranges;
     }
   }
+
+  if $::osfamily == 'Redhat' {
+    file {'/etc/quantum/plugin.ini':
+      ensure => link,
+      target => '/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini',
+      require => Package['quantum-plugin-ovs']
+    }
+  }
 }

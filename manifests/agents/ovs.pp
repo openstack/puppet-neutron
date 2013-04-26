@@ -95,7 +95,7 @@ class quantum::agents::ovs (
 
   service { 'quantum-plugin-ovs-service':
     name    => $::quantum::params::ovs_agent_service,
-    enable  => $enable,
+    enable  => $enabled,
     ensure  => $service_ensure,
     require => [Package['quantum-plugin-ovs-agent']]
   }

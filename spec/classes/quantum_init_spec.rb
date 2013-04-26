@@ -10,7 +10,7 @@ describe 'quantum' do
       :rabbit_host         => '127.0.0.1',
       :rabbit_port         => 5672,
       :rabbit_user         => 'guest',
-      :rabbit_password     => '',
+      :rabbit_password     => 'guest',
       :rabbit_virtual_host => '/',
     }
   end

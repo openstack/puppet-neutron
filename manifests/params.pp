@@ -5,7 +5,7 @@ class quantum::params {
     $server_package     = false
     $server_service     = 'quantum-server'
 
-    $ovs_agent_package  = 'openstack-quantum-openvswitch'
+    $ovs_agent_package  = false
     $ovs_agent_service  = 'quantum-openvswitch-agent'
     $ovs_server_package = 'openstack-quantum-openvswitch'
 

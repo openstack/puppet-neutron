@@ -85,6 +85,7 @@ class quantum (
     'DEFAULT/allow_overlapping_ips':  value => $allow_overlapping_ips;
     'DEFAULT/control_exchange':       value => $control_exchange;
     'DEFAULT/rootwrap_conf':          value => '/etc/quantum/rootwrap.conf';
+    'DEFAULT/rpc_backend':            value => $rpc_backend;
   }
 
   if $rpc_backend == 'quantum.openstack.common.rpc.impl_kombu' {

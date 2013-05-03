@@ -9,7 +9,7 @@ class quantum::agents::l3 (
   $use_namespaces               = 'True',
   $interface_driver             = 'quantum.agent.linux.interface.OVSInterfaceDriver',
   $router_id                    = '7e5c2aca-bbac-44dd-814d-f2ea9a4003e4',
-  $gateway_external_net_id      = '3f8699d7-f221-421a-acf5-e41e88cfd54f',
+  $gateway_external_network_id  = '3f8699d7-f221-421a-acf5-e41e88cfd54f',
   $handle_internal_only_routers = 'True',
   $metadata_ip                  = '127.0.0.1',
   $polling_interval             = 3,
@@ -33,7 +33,7 @@ class quantum::agents::l3 (
     'DEFAULT/root_helper':                    value => $root_helper;
     'DEFAULT/interface_driver':               value => $interface_driver;
     'DEFAULT/router_id':                      value => $router_id;
-    'DEFAULT/gateway_external_net_id':        value => $gateway_external_net_id;
+    'DEFAULT/gateway_external_network_id':    value => $gateway_external_network_id;
     'DEFAULT/metadata_ip':                    value => $metadata_ip;
     'DEFAULT/external_network_bridge':        value => $external_network_bridge;
     'DEFAULT/polling_interval':               value => $polling_interval;

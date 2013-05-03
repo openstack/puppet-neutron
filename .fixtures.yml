@@ -2,7 +2,9 @@ fixtures:
   repositories:
     "stdlib": "git://github.com/puppetlabs/puppetlabs-stdlib.git"
     "inifile": "git://github.com/cprice-puppet/puppetlabs-inifile"
+    "mysql": "git://github.com/puppetlabs/puppetlabs-mysql"
     "keystone": "git://github.com/stackforge/puppet-keystone.git"
     "nova": "git://github.com/stackforge/puppet-nova.git"
+    "vswitch": "git://github.com/bodepd/puppet-vswitch"
   symlinks:
     "quantum": "#{source_dir}"

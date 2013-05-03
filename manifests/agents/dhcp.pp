@@ -29,7 +29,7 @@ class quantum::agents::dhcp (
   case $dhcp_driver {
     /\.Dnsmasq/: {
       Package<| title == 'dnsmasq' |> -> Package<| title == 'quantum-dhcp-agent' |>
-      Package['dnsmasq'] -> Package['quantum-dhcp-agent']
+      Package['dnsmasq'] -> Package<| title == 'quantum-dhcp-agent' |>
       package { 'dnsmasq':
         name   => $::quantum::params::dnsmasq_packages,
         ensure => present,

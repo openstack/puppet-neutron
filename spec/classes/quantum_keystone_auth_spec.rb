@@ -5,7 +5,7 @@ describe 'quantum::keystone::auth' do
   describe 'with default class parameters' do
     let :params do
       {
-        :password => 'quantum_password',
+        :password => 'quantum_password'
       }
     end
 
@@ -16,13 +16,13 @@ describe 'quantum::keystone::auth' do
 
     it { should contain_keystone_user_role('quantum@services').with(
       :ensure  => 'present',
-      :roles   => 'admin',
+      :roles   => 'admin'
     )}
 
     it { should contain_keystone_service('quantum').with(
       :ensure      => 'present',
       :type        => 'network',
-      :description => 'Quantum Networking Service',
+      :description => 'Quantum Networking Service'
     ) }
 
     it { should contain_keystone_endpoint('RegionOne/quantum').with(

@@ -65,13 +65,6 @@ describe 'quantum' do
       )
     end
 
-    it 'creates rootwrap.conf' do
-      should contain_file('/etc/quantum/rootwrap.conf').with(
-        :ensure => 'present',
-        :source => 'puppet:///modules/quantum/rootwrap.conf'
-      )
-    end
-
     it 'installs quantum package' do
       should contain_package('quantum').with(
         :ensure => 'present',
@@ -97,7 +90,7 @@ describe 'quantum' do
       should contain_quantum_config('DEFAULT/allow_bulk').with_value('True')
       should contain_quantum_config('DEFAULT/allow_overlapping_ips').with_value('False')
       should contain_quantum_config('DEFAULT/control_exchange').with_value('quantum')
-      should contain_quantum_config('DEFAULT/rootwrap_conf').with_value('/etc/quantum/rootwrap.conf')
+      should contain_quantum_config('DEFAULT/root_helper').with_value('sudo quantum-rootwrap /etc/quantum/rootwrap.conf')
     end
   end
 

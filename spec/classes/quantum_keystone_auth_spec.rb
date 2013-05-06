@@ -5,16 +5,18 @@ describe 'quantum::keystone::auth' do
   describe 'with default class parameters' do
     let :params do
       {
-        :password => 'quantum_password'
+        :password => 'quantum_password',
+        :tenant   => 'foobar'
       }
     end
 
     it { should contain_keystone_user('quantum').with(
       :ensure   => 'present',
-      :password => 'quantum_password'
+      :password => 'quantum_password',
+      :tenant   => 'foobar'
     ) }
 
-    it { should contain_keystone_user_role('quantum@services').with(
+    it { should contain_keystone_user_role('quantum@foobar').with(
       :ensure  => 'present',
       :roles   => 'admin'
     )}
@@ -38,13 +40,13 @@ describe 'quantum::keystone::auth' do
 
     let :params do
       {
-        :password => 'quantum_password',
-        :public_protocol => 'https',
-        :public_port => '80',
-        :public_address => '10.10.10.10',
-        :port => '81',
+        :password         => 'quantum_password',
+        :public_protocol  => 'https',
+        :public_port      => '80',
+        :public_address   => '10.10.10.10',
+        :port             => '81',
         :internal_address => '10.10.10.11',
-        :admin_address => '10.10.10.12'
+        :admin_address    => '10.10.10.12'
       }
     end
 

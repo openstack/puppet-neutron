@@ -14,7 +14,7 @@ class quantum::keystone::auth (
   $region             = 'RegionOne'
 ) {
 
-  Keystone_user_role["${auth_name}@services"] ~> Service <| name == 'quantum-server' |>
+  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'quantum-server' |>
 
   if ! $public_port {
     $real_public_port = $port

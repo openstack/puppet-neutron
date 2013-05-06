@@ -43,6 +43,9 @@ class quantum::params {
     $dhcp_agent_package = 'quantum-dhcp-agent'
     $dhcp_agent_service = 'quantum-dhcp-agent'
 
+    $metadata_agent_package = 'quantum-metadata-agent'
+    $metadata_agent_service = 'quantum-metadata-agent'
+
     $dnsmasq_packages   = ['dnsmasq-base', 'dnsmasq-utils']
 
     $isc_dhcp_packages  = ['isc-dhcp-server']

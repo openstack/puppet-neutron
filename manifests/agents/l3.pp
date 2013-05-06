@@ -1,42 +1,88 @@
+# == Class: quantum::agents::l3
+#
+# Installs and configures the Quantum L3 service
+#
+# TODO: create ability to have multiple L3 services
+#
+# === Parameters:
+#
+# [*package_ensure*]
+#   (optional) The state of the package
+#   Defaults to present
+#
+# [*enabled*]
+#   (optional) The state of the service
+#   Defaults to true
+#
+# [*debug*]
+#   (optional) Print debug info in logs
+#   Defaults to false
+#
+# [*external_network_bridge*]
+#   (optional) The name of the external bridge
+#   Defaults to br-ex
+#
+# [*use_namespaces*]
+#   (optional) Enable overlapping IPs / network namespaces
+#   Defaults to false
+#
+# [*interface_driver*]
+#   (optional) Driver to interface with quantum
+#   Defaults to OVSInterfaceDriver
+#
+# [*router_id*]
+#   (optional) The ID of the external router in quantum
+#   Defaults to blank
+#
+# [*gateway_external_network_id*]
+#   (optional) The ID of the external network in quantum
+#   Defaults to blank
+#
+# [*handle_internal_only_routers*]
+#   (optional) L3 Agent will handle non-external routers
+#   Defaults to true
+#
+# [*metadata_port*]
+#   (optional) The port of the metadata server
+#   Defaults to 9697
+#
+# [*use_ovs*]
+#   (optional) Whether or not to use OVS to create any bridges
+#   Defaults to false
+#
+# [*external_port*]
+#   (optional) The uplink port to use on the external bridge
+#   Defaults to false
+#
 class quantum::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
-  $debug                        = 'False',
-  $auth_tenant                  = 'services',
-  $auth_user                    = 'quantum',
-  $auth_password                = 'password',
+  $debug                        = false,
   $external_network_bridge      = 'br-ex',
-  $use_namespaces               = 'True',
+  $use_namespaces               = true,
   $interface_driver             = 'quantum.agent.linux.interface.OVSInterfaceDriver',
-  $router_id                    = '7e5c2aca-bbac-44dd-814d-f2ea9a4003e4',
-  $gateway_external_network_id  = '3f8699d7-f221-421a-acf5-e41e88cfd54f',
-  $handle_internal_only_routers = 'True',
-  $metadata_ip                  = '127.0.0.1',
-  $polling_interval             = 3,
-  $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
+  $router_id                    = undef,
+  $gateway_external_network_id  = undef,
+  $handle_internal_only_routers = true,
+  $metadata_port                = '9697',
+  $root_helper                  = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf',
 ) {
 
-  include 'quantum::params'
+  include quantum::params
 
   Quantum_config<||> ~> Service['quantum-l3']
   Quantum_l3_agent_config<||> ~> Service['quantum-l3']
 
-  # The L3 agent loads both quantum.ini and its own file.
-  # This only lists config specific to the l3 agent.  quantum.ini supplies
-  # the rest.
   quantum_l3_agent_config {
-    'DEFAULT/debug':                          value => $debug;
-    'DEFAULT/admin_tenant_name':              value => $auth_tenant;
-    'DEFAULT/admin_user':                     value => $auth_user;
-    'DEFAULT/admin_password':                 value => $auth_password;
-    'DEFAULT/use_namespaces':                 value => $use_namespaces;
-    'DEFAULT/root_helper':                    value => $root_helper;
-    'DEFAULT/interface_driver':               value => $interface_driver;
-    'DEFAULT/router_id':                      value => $router_id;
-    'DEFAULT/gateway_external_network_id':    value => $gateway_external_network_id;
-    'DEFAULT/metadata_ip':                    value => $metadata_ip;
-    'DEFAULT/external_network_bridge':        value => $external_network_bridge;
-    'DEFAULT/polling_interval':               value => $polling_interval;
+    'DEFAULT/debug':                        value => $debug;
+    'DEFAULT/external_network_bridge':      value => $external_network_bridge;
+    'DEFAULT/use_namespaces':               value => $use_namespaces;
+    'DEFAULT/interface_driver':             value => $interface_driver;
+    'DEFAULT/router_id':                    value => $router_id;
+    'DEFAULT/gateway_external_network_id':  value => $gateway_external_network_id;
+    'DEFAULT/handle_internal_only_routers': value => $handle_internal_only_routers;
+    'DEFAULT/metadata_port':                value => $metadata_port;
+    'DEFAULT/root_helper':                  value => $root_helper;
   }
 
   if $::quantum::params::l3_agent_package {

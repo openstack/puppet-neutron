@@ -1,51 +1,57 @@
-### Servers:
+### Cloud Controller:
 
-# Generally, any machine with a quantum element running on it talks over Rabbit and needs to know if overlapping IPs (namespaces) are in use
-class { quantum:
-  $allow_overlapping_ips  = 'False',
-
-  $rabbit_password => 'password',
-  $rabbit_host            = 'localhost',
-  $rabbit_port            = '5672',
-  $rabbit_user            = 'guest',
-  $rabbit_virtual_host    = '/'
+# General Quantum stuff
+# Configures everything in quantum.conf
+class { 'quantum':
+  verbose               => true,
+  allow_overlapping_ips => true,
+  rabbit_password       => 'password',
+  rabbit_user           => 'guest',
+  rabbit_host           => 'localhost',
 }
 
 # The API server talks to keystone for authorisation
-class { quantum::server:
-  $auth_password => 'password', # with keystone,
-  $auth_host        = 'localhost',
-  $auth_tenant      = 'services',
-  $auth_user        = 'quantum'
+class { 'quantum::server':
+  $keystone_password => 'password',
 }
 
-# The OVS plugin has its own DB and implements network sharing strategy
-# It must also know what 'networks' the agent nodes share between them
-class { quantum::plugins::ovs:
-  $sql_connection       = 'sqlite://quantum@localhost/quantum',
-  $tenant_network_type  = 'gre',
-  $network_vlan_ranges  = 'physnet1',
+# Various agents
+class { 'quantum::agents::dhcp': }
+class { 'quantum::agents::l3': }
+
+# This plugin configures Quantum for OVS on the server
+# Agent
+class { 'quantum::agents::ovs':
+  local_ip         => '192.168.1.1',
+  enable_tunneling => true,
+}
+
+# Plugin
+class { 'quantum::plugins::ovs':
+  sql_connection      => 'mysql://quantum:password@localhost/quantum',
+  tenant_network_type => 'gre',
 }
 
 
-### Clients:
-# Generally, any machine with a quantum element running on it talks over Rabbit and needs to know if overlapping IPs (namespaces) are in use
-class { quantum:
-  $allow_overlapping_ips  = 'False',
-
-  $rabbit_password => 'password',
-  $rabbit_host            = 'localhost',
-  $rabbit_port            = '5672',
-  $rabbit_user            = 'guest',
-  $rabbit_virtual_host    = '/'
+### Compute Nodes:
+# Generally, any machine with a quantum element running on it talks
+# over Rabbit and needs to know if overlapping IPs (namespaces) are in use
+class { 'quantum':
+  $allow_overlapping_ips => true,
+  $rabbit_password       => 'password',
+  $rabbit_user           => 'guest',
+  $rabbit_host           => 'localhost',
 }
 
-# With OVS networks, the server has all the smarts and the clients need only have the
-# OVS agent installed, which will get information from the server and do something useful
-# with it
-class { quantum::agents::ovs:
-  $bridge_uplinks       = ['br-virtual:eth1'], # Interfaces in each bridge
-  $bridge_mappings      = ['physnet1:br-virtual'], # Network name for bridge (see vlan ranges above)
-  $enable_tunneling     = true, # if GRE above,
-  $local_ip             = '1.2.3.4', # a local IP address to this machine - needed if GRE
+# The agent/plugin combo also needs installed on clients
+# Agent
+class { 'quantum::agents::ovs':
+  local_ip         => '192.168.1.11',
+  enable_tunneling => true,
+}
+
+# Plugin
+class { 'quantum::plugins::ovs':
+  sql_connection      => 'mysql://quantum:password@192.168.1.1/quantum',
+  tenant_network_type => 'gre',
 }

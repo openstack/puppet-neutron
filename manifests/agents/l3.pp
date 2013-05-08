@@ -13,7 +13,7 @@ class quantum::agents::l3 (
   $handle_internal_only_routers = 'True',
   $metadata_ip                  = '127.0.0.1',
   $polling_interval             = 3,
-  $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf',
+  $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
 
   include 'quantum::params'

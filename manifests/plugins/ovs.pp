@@ -17,7 +17,7 @@ class quantum::plugins::ovs (
   # because the list of networks there is still important
   # even if the ranges aren't specified
   $network_vlan_ranges  = 'physnet1:1000:2000',
-  $tunnel_id_ranges     = '1:1000',
+  $tunnel_id_ranges     = '1:1000'
 ) {
 
   include 'quantum::params'

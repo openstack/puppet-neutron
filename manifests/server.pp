@@ -97,7 +97,7 @@ class quantum::server (
         'keystone_authtoken/auth_protocol':     value => $auth_protocol;
         'keystone_authtoken/admin_tenant_name': value => $auth_tenant;
         'keystone_authtoken/admin_user':        value => $auth_user;
-        'keystone_authtoken/admin_password':    value => $keystone_password;
+        'keystone_authtoken/admin_password':    value => $auth_password;
       }
 
       quantum_api_config {
@@ -106,7 +106,7 @@ class quantum::server (
         'filter:authtoken/auth_protocol':     value => $auth_protocol;
         'filter:authtoken/admin_tenant_name': value => $auth_tenant;
         'filter:authtoken/admin_user':        value => $auth_user;
-        'filter:authtoken/admin_password':    value => $keystone_password;
+        'filter:authtoken/admin_password':    value => $auth_password;
       }
     }
   }

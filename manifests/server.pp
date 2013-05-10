@@ -95,7 +95,7 @@ class quantum::server (
         'keystone_authtoken/auth_host':         value => $auth_host;
         'keystone_authtoken/auth_port':         value => $auth_port;
         'keystone_authtoken/auth_protocol':     value => $auth_protocol;
-        'keystone_authtoken/admin_tenant_name': value => $auth_user;
+        'keystone_authtoken/admin_tenant_name': value => $auth_tenant;
         'keystone_authtoken/admin_user':        value => $auth_user;
         'keystone_authtoken/admin_password':    value => $keystone_password;
       }

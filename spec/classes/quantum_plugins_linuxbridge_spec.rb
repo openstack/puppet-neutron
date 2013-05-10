@@ -49,6 +49,11 @@ describe 'quantum::plugins::linuxbridge' do
     end
 
     it_configures 'quantum linuxbridge plugin'
+    it 'configures /etc/default/quantum-server' do
+      should contain_file_line('/etc/default/quantum-server:QUANTUM_PLUGIN_CONFIG').with(
+        :line => 'QUANTUM_PLUGIN_CONFIG=/etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini'
+      )
+    end
   end
 
   context 'on RedHat platforms' do

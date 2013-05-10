@@ -4,8 +4,8 @@ describe 'quantum' do
 
   let :params do
     { :package_ensure      => 'present',
-      :verbose             => 'False',
-      :debug               => 'False',
+      :verbose             => false,
+      :debug               => false,
       :core_plugin         => 'quantum.plugins.linuxbridge.lb_quantum_plugin.LinuxBridgePluginV2',
       :rabbit_host         => '127.0.0.1',
       :rabbit_port         => 5672,
@@ -87,8 +87,8 @@ describe 'quantum' do
       should contain_quantum_config('DEFAULT/base_mac').with_value('fa:16:3e:00:00:00')
       should contain_quantum_config('DEFAULT/mac_generation_retries').with_value(16)
       should contain_quantum_config('DEFAULT/dhcp_lease_duration').with_value(120)
-      should contain_quantum_config('DEFAULT/allow_bulk').with_value('True')
-      should contain_quantum_config('DEFAULT/allow_overlapping_ips').with_value('False')
+      should contain_quantum_config('DEFAULT/allow_bulk').with_value(true)
+      should contain_quantum_config('DEFAULT/allow_overlapping_ips').with_value(false)
       should contain_quantum_config('DEFAULT/control_exchange').with_value('quantum')
       should contain_quantum_config('DEFAULT/root_helper').with_value('sudo quantum-rootwrap /etc/quantum/rootwrap.conf')
     end
@@ -99,7 +99,7 @@ describe 'quantum' do
       should contain_quantum_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] )
       should contain_quantum_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] )
       should contain_quantum_config('DEFAULT/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" )
-      should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value('false')
+      should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value(false)
     end
   end
 
@@ -108,7 +108,7 @@ describe 'quantum' do
       should contain_quantum_config('DEFAULT/rabbit_host').with_ensure('absent')
       should contain_quantum_config('DEFAULT/rabbit_port').with_ensure('absent')
       should contain_quantum_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
-      should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value('false')
+      should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value(false)
     end
   end
 
@@ -117,7 +117,7 @@ describe 'quantum' do
       should contain_quantum_config('DEFAULT/rabbit_host').with_ensure('absent')
       should contain_quantum_config('DEFAULT/rabbit_port').with_ensure('absent')
       should contain_quantum_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
-      should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value('true')
+      should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end
   end
 

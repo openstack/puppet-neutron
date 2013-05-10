@@ -3,7 +3,7 @@ class quantum::agents::metadata (
   $shared_secret,
   $package_ensure               = 'present',
   $enabled                      = true,
-  $debug                        = 'False',
+  $debug                        = false,
   $auth_tenant                  = 'services',
   $auth_user                    = 'quantum',
   $auth_url                     = 'http://localhost:35357/v2.0',

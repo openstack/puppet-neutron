@@ -93,8 +93,8 @@
 class quantum (
   $enabled                     = true,
   $package_ensure              = 'present',
-  $verbose                     = 'False',
-  $debug                       = 'False',
+  $verbose                     = false,
+  $debug                       = false,
   $bind_host                   = '0.0.0.0',
   $bind_port                   = '9696',
   $core_plugin                 = 'quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2',
@@ -102,8 +102,8 @@ class quantum (
   $base_mac                    = 'fa:16:3e:00:00:00',
   $mac_generation_retries      = 16,
   $dhcp_lease_duration         = 120,
-  $allow_bulk                  = 'True',
-  $allow_overlapping_ips       = 'False',
+  $allow_bulk                  = true,
+  $allow_overlapping_ips       = false,
   $root_helper                 = 'sudo quantum-rootwrap /etc/quantum/rootwrap.conf',
   $control_exchange            = 'quantum',
   $rpc_backend                 = 'quantum.openstack.common.rpc.impl_kombu',
@@ -183,9 +183,9 @@ class quantum (
     }
 
     if size($rabbit_hosts) > 1 {
-      quantum_config { 'DEFAULT/rabbit_ha_queues': value => 'true' }
+      quantum_config { 'DEFAULT/rabbit_ha_queues': value => true }
     } else {
-      quantum_config { 'DEFAULT/rabbit_ha_queues': value => 'false' }
+      quantum_config { 'DEFAULT/rabbit_ha_queues': value => false }
     }
     quantum_config {
       'DEFAULT/rabbit_userid':       value => $rabbit_user;

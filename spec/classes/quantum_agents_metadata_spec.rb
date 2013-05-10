@@ -5,11 +5,11 @@ describe 'quantum::agents::metadata' do
   let :pre_condition do
     "class { 'quantum': rabbit_password => 'passw0rd' }"
   end
-  
+
   let :params do
     { :package_ensure   => 'present',
-      :debug            => 'False',
-      :enabled          => 'true',
+      :debug            => false,
+      :enabled          => true,
       :auth_url         => 'http://localhost:35357/v2.0',
       :auth_region      => 'RegionOne',
       :auth_tenant      => 'services',
@@ -20,7 +20,7 @@ describe 'quantum::agents::metadata' do
       :shared_secret    => 'metadata-secret'
     }
   end
-  
+
   shared_examples_for 'quantum metadata agent' do
 
     it { should include_class('quantum::params') }
@@ -51,7 +51,7 @@ describe 'quantum::agents::metadata' do
     let :facts do
       { :osfamily => 'Debian' }
     end
-    
+
     let :platform_params do
       { :metadata_agent_package => 'quantum-metadata-agent',
         :metadata_agent_service => 'quantum-metadata-agent' }
@@ -80,5 +80,5 @@ describe 'quantum::agents::metadata' do
     it_configures 'quantum metadata agent'
 
   end
-  
+
 end

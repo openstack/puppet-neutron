@@ -1,48 +1,70 @@
+# == Class: quantum::agents::dhcp
 #
-# This class configures quantum dhcp agent
+# Setups Quantum DHCP agent.
 #
-# [package_ensure] specifies the state that packages should be in. This can be present or latest or
-#   a specific version.
-# [enabled] specifies if the service should be running and enabled. This is typically used for
-#  active/passive HA models.
-# [debug] Enables the debug flag for the dhcp service
-# [state_path] Location of stateful files.
-# [resync_interval]
-# [dhcp_driver] The driver to use for dhcp. Only accepts Dnsmasq.
-# [interface_driver]
-# [use_namespaces] Whether namespaces should be used with dhcp.
-# [root_helper] command used to run commands with sudo.
+# === Parameters
+#
+# [*package_ensure*]
+#   (optional) Ensure state for package. Defaults to 'present'.
+#
+# [*enabled*]
+#   (optional) Enable state for service. Defaults to 'true'.
+#
+# [*debug*]
+#   (optional) Show debugging output in log. Defaults to false.
+#
+# [*state_path*]
+#   (optional) Where to store dnsmasq state files. This directory must be
+#   writable by the user executing the agent. Defaults to '/var/lib/quantum'.
+#
+# [*resync_interval*]
+#   (optional) The DHCP agent will resync its state with Quantum to recover
+#   from any transient notification or rpc errors. The interval is number of
+#   seconds between attempts. Defaults to 30.
+#
+# [*interface_driver*]
+#   (optional) Defaults to 'quantum.agent.linux.interface.OVSInterfaceDriver'.
+#
+# [*dhcp_driver*]
+#   (optional) Defaults to 'quantum.agent.linux.dhcp.Dnsmasq'.
+#
+# [*use_namespaces*]
+#   (optional) Allow overlapping IP (Must have kernel build with
+#   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
+#   Defaults to true.
+#
+# [*root_helper*]
+#   (optional) Prints debugging output. Defaults to false.
+#
 class quantum::agents::dhcp (
-  $package_ensure   = 'present',
+  $package_ensure   = present,
   $enabled          = true,
-  $debug            = 'False',
+  $debug            = false,
   $state_path       = '/var/lib/quantum',
   $resync_interval  = 30,
   $interface_driver = 'quantum.agent.linux.interface.OVSInterfaceDriver',
   $dhcp_driver      = 'quantum.agent.linux.dhcp.Dnsmasq',
-  $use_namespaces   = 'True',
+  $use_namespaces   = true,
   $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
 
-  include 'quantum::params'
+  include quantum::params
+
+  Quantum_config<||>            ~> Service['quantum-dhcp-service']
+  Quantum_dhcp_agent_config<||> ~> Service['quantum-dhcp-service']
 
   case $dhcp_driver {
     /\.Dnsmasq/: {
-      Package<| title == 'dnsmasq' |> -> Package<| title == 'quantum-dhcp-agent' |>
       Package['dnsmasq'] -> Package<| title == 'quantum-dhcp-agent' |>
       package { 'dnsmasq':
         name   => $::quantum::params::dnsmasq_packages,
         ensure => present,
       }
-      $dhcp_server_packages = $::quantum::params::dnsmasq_packages
     }
     default: {
-      fail("${dhcp_driver} is not supported as of now")
+      fail("Unsupported dhcp_driver ${dhcp_driver}")
     }
   }
-
-  Quantum_config<||> ~> Service['quantum-dhcp-service']
-  Quantum_dhcp_agent_config<||> ~> Service['quantum-dhcp-service']
 
   # The DHCP agent loads both quantum.ini and its own file.
   # This only lists config specific to the agent.  quantum.ini supplies
@@ -58,14 +80,17 @@ class quantum::agents::dhcp (
   }
 
   if $::quantum::params::dhcp_agent_package {
-    Package['quantum'] -> Package['quantum-dhcp-agent']
-    Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>
+    Package['quantum']            -> Package['quantum-dhcp-agent']
     Package['quantum-dhcp-agent'] -> Quantum_config<||>
-    Package['quantum-dhcp-agent'] -> Service['quantum-dhcp-service']
+    Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>
     package { 'quantum-dhcp-agent':
       name    => $::quantum::params::dhcp_agent_package,
       ensure  => $package_ensure,
     }
+  } else {
+    # Some platforms (RedHat) do not provide a quantum DHCP agent package.
+    # The quantum DHCP agent config file is provided by the quantum package.
+    Package['quantum'] -> Quantum_dhcp_agent_config<||>
   }
 
   if $enabled {

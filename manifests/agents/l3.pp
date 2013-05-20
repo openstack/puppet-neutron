@@ -4,7 +4,7 @@
 #
 # TODO: create ability to have multiple L3 services
 #
-# === Parameters:
+# === Parameters
 #
 # [*package_ensure*]
 #   (optional) The state of the package
@@ -46,14 +46,6 @@
 #   (optional) The port of the metadata server
 #   Defaults to 9697
 #
-# [*use_ovs*]
-#   (optional) Whether or not to use OVS to create any bridges
-#   Defaults to false
-#
-# [*external_port*]
-#   (optional) The uplink port to use on the external bridge
-#   Defaults to false
-#
 class quantum::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
@@ -70,7 +62,7 @@ class quantum::agents::l3 (
 
   include quantum::params
 
-  Quantum_config<||> ~> Service['quantum-l3']
+  Quantum_config<||>          ~> Service['quantum-l3']
   Quantum_l3_agent_config<||> ~> Service['quantum-l3']
 
   quantum_l3_agent_config {
@@ -87,12 +79,15 @@ class quantum::agents::l3 (
 
   if $::quantum::params::l3_agent_package {
     Package['quantum-l3'] -> Quantum_l3_agent_config<||>
-    Package['quantum-l3'] -> Service['quantum-l3']
     package { 'quantum-l3':
       name    => $::quantum::params::l3_agent_package,
       ensure  => $package_ensure,
       require => Package['quantum'],
     }
+  } else {
+    # Some platforms (RedHat) does not provide a quantum L3 agent package.
+    # The quantum L3 agent config file is provided by the quantum package.
+    Package['quantum'] -> Quantum_l3_agent_config<||>
   }
 
   if $enabled {

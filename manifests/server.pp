@@ -64,11 +64,11 @@ class quantum::server (
   include quantum::params
   require keystone::python
 
-  Quantum_config<||> ~> Service['quantum-server']
+  Quantum_config<||>     ~> Service['quantum-server']
   Quantum_api_config<||> ~> Service['quantum-server']
 
   quantum_config {
-    'DEFAULT/log_file':  value => $log_file
+    'DEFAULT/log_file': value => $log_file
   }
 
   if $enabled {
@@ -80,10 +80,15 @@ class quantum::server (
   if ($::quantum::params::server_package) {
     Package['quantum-server'] -> Quantum_api_config<||>
     Package['quantum-server'] -> Quantum_config<||>
-    package {'quantum-server':
+    Package['quantum-server'] -> Service['quantum-server']
+    package { 'quantum-server':
       name   => $::quantum::params::server_package,
       ensure => $package_ensure
     }
+  } else {
+    # Some platforms (RedHat) does not provide a quantum-server package.
+    # The quantum api config file is provided by the quantum package.
+    Package['quantum'] -> Quantum_api_config<||>
   }
 
   if ($auth_type == 'keystone') {
@@ -111,11 +116,12 @@ class quantum::server (
     }
   }
 
-  service {'quantum-server':
+  service { 'quantum-server':
     name       => $::quantum::params::server_service,
     ensure     => $service_ensure,
     enable     => $enabled,
     hasstatus  => true,
-    hasrestart => true
+    hasrestart => true,
+    require    => Class['quantum'],
   }
 }

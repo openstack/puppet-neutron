@@ -14,7 +14,7 @@ describe 'quantum::server' do
   let :default_params do
     { :package_ensure => 'present',
       :enabled        => true,
-      :log_file       => '/var/log/quantum/server.log',
+      :log_dir        => '/var/log/quantum',
       :auth_type      => 'keystone',
       :auth_host      => 'localhost',
       :auth_port      => '35357',
@@ -28,7 +28,10 @@ describe 'quantum::server' do
     end
 
     it { should include_class('quantum::params') }
-    it { should contain_quantum_config('DEFAULT/log_file').with_value(p[:log_file]) }
+    it 'configures logging' do
+      should contain_quantum_config('DEFAULT/log_file').with_ensure('absent')
+      should contain_quantum_config('DEFAULT/log_dir').with_value(p[:log_dir])
+    end
 
     it 'configures authentication middleware' do
       should contain_quantum_api_config('filter:authtoken/auth_host').with_value(p[:auth_host]);
@@ -69,6 +72,18 @@ describe 'quantum::server' do
     it_raises 'a Puppet::Error', /auth_password must be set/
   end
 
+  shared_examples_for 'a quantum server with log_file specified' do
+    before do
+      params.merge!(
+        :log_file => '/var/log/quantum/server.log'
+      )
+    end
+    it 'configures logging' do
+      should contain_quantum_config('DEFAULT/log_file').with_value(params[:log_file])
+      should contain_quantum_config('DEFAULT/log_dir').with_ensure('absent')
+    end
+  end
+
   context 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }
@@ -81,6 +96,7 @@ describe 'quantum::server' do
 
     it_configures 'a quantum server'
     it_configures 'a quantum server with broken authentication'
+    it_configures 'a quantum server with log_file specified'
   end
 
   context 'on RedHat platforms' do
@@ -94,5 +110,6 @@ describe 'quantum::server' do
 
     it_configures 'a quantum server'
     it_configures 'a quantum server with broken authentication'
+    it_configures 'a quantum server with log_file specified'
   end
 end

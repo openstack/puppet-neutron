@@ -14,7 +14,10 @@
 #
 # [*log_file*]
 #   (optional) Where to log
-#   Defaults to /var/log/quantum/server.log
+#
+# [*log_dir*]
+#   (optional) Directory to store logs
+#   Defaults to /var/log/quantum
 #
 # [*auth_password*]
 #   (optional) The password to use for authentication (keystone)
@@ -58,7 +61,8 @@ class quantum::server (
   $auth_tenant    = 'services',
   $auth_user      = 'quantum',
   $auth_protocol  = 'http',
-  $log_file       = '/var/log/quantum/server.log'
+  $log_file       = false,
+  $log_dir        = '/var/log/quantum'
 ) {
 
   include quantum::params
@@ -67,8 +71,16 @@ class quantum::server (
   Quantum_config<||>     ~> Service['quantum-server']
   Quantum_api_config<||> ~> Service['quantum-server']
 
-  quantum_config {
-    'DEFAULT/log_file': value => $log_file
+  if $log_file {
+    quantum_config {
+      'DEFAULT/log_file': value  => $log_file;
+      'DEFAULT/log_dir':  ensure => absent;
+    }
+  } else {
+    quantum_config {
+      'DEFAULT/log_dir':  value  => $log_dir;
+      'DEFAULT/log_file': ensure => absent;
+    }
   }
 
   if $enabled {

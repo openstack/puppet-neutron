@@ -17,6 +17,7 @@ describe 'quantum::agents::ovs' do
       :local_ip             => false,
       :tunnel_bridge        => 'br-tun',
       :polling_interval     => 2,
+      :firewall_driver     => 'quantum.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
       :root_helper          => 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf' }
   end
 
@@ -35,6 +36,11 @@ describe 'quantum::agents::ovs' do
       should contain_quantum_plugin_ovs('AGENT/polling_interval').with_value(p[:polling_interval])
       should contain_quantum_plugin_ovs('AGENT/root_helper').with_value(p[:root_helper])
       should contain_quantum_plugin_ovs('OVS/integration_bridge').with_value(p[:integration_bridge])
+      should contain_quantum_plugin_ovs('SECURITYGROUP/firewall_driver').\
+        with_value(p[:firewall_driver])
+      should contain_quantum_plugin_ovs('OVS/enable_tunneling').with_value(false)
+      should contain_quantum_plugin_ovs('OVS/tunnel_bridge').with_ensure('absent')
+      should contain_quantum_plugin_ovs('OVS/local_ip').with_ensure('absent')
     end
 
     it 'configures vs_bridge' do
@@ -42,6 +48,7 @@ describe 'quantum::agents::ovs' do
         :ensure  => 'present',
         :require => 'Service[quantum-plugin-ovs-service]'
       )
+      should_not contain_vs_brige(p[:integration_bridge])
     end
 
     it 'installs quantum ovs agent package' do
@@ -64,8 +71,42 @@ describe 'quantum::agents::ovs' do
         :require => 'Class[Quantum]'
       )
     end
-  end
 
+    context 'when supplying a firewall driver' do
+      before :each do
+        params.merge!(:firewall_driver => false)
+      end
+      it 'should configure firewall driver' do
+        should contain_quantum_plugin_ovs('SECURITYGROUP/firewall_driver').with_ensure('absent')
+      end
+    end
+    context 'when enabling tunneling' do
+      context 'without local ip address' do
+        before :each do
+          params.merge!(:enable_tunneling => true)
+        end
+        it 'should fail' do
+          expect do
+            subject
+          end.to raise_error(Puppet::Error, /Local ip for ovs agent must be set when tunneling is enabled/)
+        end
+      end
+      context 'with default params' do
+        before :each do
+          params.merge!(:enable_tunneling => true, :local_ip => '127.0.0.1' )
+        end
+        it 'should configure ovs for tunneling' do
+          should contain_quantum_plugin_ovs('OVS/enable_tunneling').with_value(true)
+          should contain_quantum_plugin_ovs('OVS/tunnel_bridge').with_value(default_params[:tunnel_bridge])
+          should contain_quantum_plugin_ovs('OVS/local_ip').with_value('127.0.0.1')
+          should contain_vs_bridge(default_params[:tunnel_bridge]).with(
+            :ensure  => 'present',
+            :require => 'Service[quantum-plugin-ovs-service]'
+          )
+        end
+      end
+    end
+  end
 
   context 'on Debian platforms' do
     let :facts do

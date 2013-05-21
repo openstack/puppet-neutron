@@ -21,7 +21,8 @@ class quantum::params {
 
     $l3_agent_package   = false
     $l3_agent_service   = 'quantum-l3-agent'
-    $metadata_service   = 'quantum-metadata-agent'
+
+    $metadata_agent_service = 'quantum-metadata-agent'
 
     $cliff_package      = 'python-cliff'
 

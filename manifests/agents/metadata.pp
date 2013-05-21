@@ -9,7 +9,7 @@ class quantum::agents::metadata (
   $auth_url                     = 'http://localhost:35357/v2.0',
   $auth_region                  = 'RegionOne',
   $metadata_ip                  = '127.0.0.1',
-  $metadata_port                = '8775',
+  $metadata_port                = '8775'
   ) {
 
   include 'quantum::params'

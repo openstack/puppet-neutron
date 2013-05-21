@@ -25,13 +25,6 @@ describe 'quantum::agents::metadata' do
 
     it { should include_class('quantum::params') }
 
-    it 'installs quantum metadata agent package' do
-      should contain_package('quantum-metadata').with(
-        :ensure => params[:package_ensure],
-        :name   => platform_params[:metadata_agent_package]
-      )
-    end
-
     it 'configures quantum metadata agent service' do
       should contain_service('quantum-metadata').with(
         :name    => platform_params[:metadata_agent_service],
@@ -62,6 +55,26 @@ describe 'quantum::agents::metadata' do
     let :platform_params do
       { :metadata_agent_package => 'quantum-metadata-agent',
         :metadata_agent_service => 'quantum-metadata-agent' }
+    end
+
+    it 'installs quantum metadata agent package' do
+      should contain_package('quantum-metadata').with(
+        :ensure => params[:package_ensure],
+        :name   => platform_params[:metadata_agent_package]
+      )
+    end
+
+    it_configures 'quantum metadata agent'
+
+  end
+
+  context 'on Red Hat platforms' do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+
+    let :platform_params do
+      { :metadata_agent_service => 'quantum-metadata-agent' }
     end
 
     it_configures 'quantum metadata agent'

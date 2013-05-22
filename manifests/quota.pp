@@ -53,7 +53,7 @@ class quantum::quota (
   # securitygroup extension
   $quota_security_group      = 10,
   $quota_security_group_rule = 100,
-  $quota_driver              = 'quantum.quota.ConfDriver',
+  $quota_driver              = 'quantum.quota.ConfDriver'
 ) {
 
   quantum_config {

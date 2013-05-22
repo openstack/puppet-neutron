@@ -24,7 +24,7 @@ class quantum::plugins::linuxbridge (
   $sql_connection,
   $network_vlan_ranges,
   $tenant_network_type = 'vlan',
-  $package_ensure      = 'present',
+  $package_ensure      = 'present'
 ) {
 
   include quantum::params

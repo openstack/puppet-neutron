@@ -57,7 +57,7 @@ class quantum::agents::l3 (
   $gateway_external_network_id  = undef,
   $handle_internal_only_routers = true,
   $metadata_port                = '9697',
-  $root_helper                  = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf',
+  $root_helper                  = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
 ) {
 
   include quantum::params

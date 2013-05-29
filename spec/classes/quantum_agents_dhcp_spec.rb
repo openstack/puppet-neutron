@@ -18,8 +18,7 @@ describe 'quantum::agents::dhcp' do
       :resync_interval  => 30,
       :interface_driver => 'quantum.agent.linux.interface.OVSInterfaceDriver',
       :dhcp_driver      => 'quantum.agent.linux.dhcp.Dnsmasq',
-      :use_namespaces   => true,
-      :root_helper      => 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf' }
+      :use_namespaces   => true }
   end
 
 
@@ -39,7 +38,6 @@ describe 'quantum::agents::dhcp' do
       should contain_quantum_dhcp_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
       should contain_quantum_dhcp_agent_config('DEFAULT/dhcp_driver').with_value(p[:dhcp_driver]);
       should contain_quantum_dhcp_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces]);
-      should contain_quantum_dhcp_agent_config('DEFAULT/root_helper').with_value(p[:root_helper]);
     end
 
     it 'installs quantum dhcp agent package' do

@@ -16,8 +16,7 @@ describe 'quantum::agents::l3' do
       :router_id                    => nil,
       :gateway_external_network_id  => nil,
       :handle_internal_only_routers => true,
-      :metadata_port                => '9697',
-      :root_helper                  => 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf' }
+      :metadata_port                => '9697' }
   end
 
   let :params do
@@ -40,7 +39,6 @@ describe 'quantum::agents::l3' do
       should contain_quantum_l3_agent_config('DEFAULT/gateway_external_network_id').with_value(p[:gateway_external_network_id])
       should contain_quantum_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value(p[:handle_internal_only_routers])
       should contain_quantum_l3_agent_config('DEFAULT/metadata_port').with_value(p[:metadata_port])
-      should contain_quantum_l3_agent_config('DEFAULT/root_helper').with_value(p[:root_helper])
     end
 
     it 'installs quantum l3 agent package' do

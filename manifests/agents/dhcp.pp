@@ -33,9 +33,6 @@
 #   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
 #   Defaults to true.
 #
-# [*root_helper*]
-#   (optional) Prints debugging output. Defaults to false.
-#
 class quantum::agents::dhcp (
   $package_ensure   = present,
   $enabled          = true,
@@ -44,8 +41,7 @@ class quantum::agents::dhcp (
   $resync_interval  = 30,
   $interface_driver = 'quantum.agent.linux.interface.OVSInterfaceDriver',
   $dhcp_driver      = 'quantum.agent.linux.dhcp.Dnsmasq',
-  $use_namespaces   = true,
-  $root_helper      = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
+  $use_namespaces   = true
 ) {
 
   include quantum::params
@@ -76,7 +72,6 @@ class quantum::agents::dhcp (
     'DEFAULT/interface_driver':   value => $interface_driver;
     'DEFAULT/dhcp_driver':        value => $dhcp_driver;
     'DEFAULT/use_namespaces':     value => $use_namespaces;
-    'DEFAULT/root_helper':        value => $root_helper;
   }
 
   if $::quantum::params::dhcp_agent_package {

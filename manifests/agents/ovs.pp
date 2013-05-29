@@ -18,8 +18,7 @@ class quantum::agents::ovs (
   $local_ip             = false,
   $tunnel_bridge        = 'br-tun',
   $polling_interval     = 2,
-  $firewall_driver      = 'quantum.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
-  $root_helper          = 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf'
+  $firewall_driver      = 'quantum.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
 ) {
 
   include quantum::params
@@ -61,7 +60,6 @@ class quantum::agents::ovs (
 
   quantum_plugin_ovs {
     'AGENT/polling_interval': value => $polling_interval;
-    'AGENT/root_helper':      value => $root_helper;
     'OVS/integration_bridge': value => $integration_bridge;
   }
 

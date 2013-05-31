@@ -163,9 +163,9 @@ class quantum (
     'DEFAULT/dhcp_lease_duration':    value => $dhcp_lease_duration;
     'DEFAULT/allow_bulk':             value => $allow_bulk;
     'DEFAULT/allow_overlapping_ips':  value => $allow_overlapping_ips;
-    'DEFAULT/root_helper':            value => $root_helper;
     'DEFAULT/control_exchange':       value => $control_exchange;
     'DEFAULT/rpc_backend':            value => $rpc_backend;
+    'AGENT/root_helper':              value => $root_helper;
   }
 
   if $rpc_backend == 'quantum.openstack.common.rpc.impl_kombu' {

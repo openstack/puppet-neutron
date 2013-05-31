@@ -17,8 +17,7 @@ describe 'quantum::agents::ovs' do
       :local_ip             => false,
       :tunnel_bridge        => 'br-tun',
       :polling_interval     => 2,
-      :firewall_driver     => 'quantum.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
-      :root_helper          => 'sudo /usr/bin/quantum-rootwrap /etc/quantum/rootwrap.conf' }
+      :firewall_driver     => 'quantum.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver' }
   end
 
   let :params do
@@ -34,7 +33,6 @@ describe 'quantum::agents::ovs' do
 
     it 'configures ovs_quantum_plugin.ini' do
       should contain_quantum_plugin_ovs('AGENT/polling_interval').with_value(p[:polling_interval])
-      should contain_quantum_plugin_ovs('AGENT/root_helper').with_value(p[:root_helper])
       should contain_quantum_plugin_ovs('OVS/integration_bridge').with_value(p[:integration_bridge])
       should contain_quantum_plugin_ovs('SECURITYGROUP/firewall_driver').\
         with_value(p[:firewall_driver])

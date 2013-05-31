@@ -90,7 +90,7 @@ describe 'quantum' do
       should contain_quantum_config('DEFAULT/allow_bulk').with_value(true)
       should contain_quantum_config('DEFAULT/allow_overlapping_ips').with_value(false)
       should contain_quantum_config('DEFAULT/control_exchange').with_value('quantum')
-      should contain_quantum_config('DEFAULT/root_helper').with_value('sudo quantum-rootwrap /etc/quantum/rootwrap.conf')
+      should contain_quantum_config('AGENT/root_helper').with_value('sudo quantum-rootwrap /etc/quantum/rootwrap.conf')
     end
   end
 

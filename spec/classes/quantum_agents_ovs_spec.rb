@@ -125,9 +125,19 @@ describe 'quantum::agents::ovs' do
     end
 
     let :platform_params do
-      { :ovs_agent_service => 'quantum-openvswitch-agent' }
+      { :ovs_cleanup_service => 'quantum-ovs-cleanup',
+        :ovs_agent_service   => 'quantum-openvswitch-agent' }
     end
 
     it_configures 'quantum plugin ovs agent'
+    it 'configures quantum ovs cleanup service' do
+      should contain_service('ovs-cleanup-service').with(
+        :name    => platform_params[:ovs_cleanup_service],
+        :enable  => true,
+        :ensure  => 'running'
+      )
+    end
+
+
   end
 end

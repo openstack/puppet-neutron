@@ -120,4 +120,12 @@ class quantum::agents::ovs (
     ensure  => $service_ensure,
     require => Class['quantum'],
   }
+
+  if $::quantum::params::ovs_cleanup_service {
+    service {'ovs-cleanup-service':
+      name => $::quantum::params::ovs_cleanup_service,
+      enable => $enabled,
+      ensure => $service_ensure,
+    }
+  }
 }

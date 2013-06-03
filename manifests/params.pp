@@ -5,9 +5,10 @@ class quantum::params {
     $server_package     = false
     $server_service     = 'quantum-server'
 
-    $ovs_agent_package  = false
-    $ovs_agent_service  = 'quantum-openvswitch-agent'
-    $ovs_server_package = 'openstack-quantum-openvswitch'
+    $ovs_agent_package   = false
+    $ovs_agent_service   = 'quantum-openvswitch-agent'
+    $ovs_server_package  = 'openstack-quantum-openvswitch'
+    $ovs_cleanup_service = 'quantum-ovs-cleanup'
 
     $linuxbridge_agent_package  = 'openstack-quantum-linuxbridge'
     $linuxbridge_agent_service  = 'quantum-linuxbridge-agent'
@@ -34,9 +35,10 @@ class quantum::params {
     $server_package     = 'quantum-server'
     $server_service     = 'quantum-server'
 
-    $ovs_agent_package  = 'quantum-plugin-openvswitch-agent'
-    $ovs_agent_service  = 'quantum-plugin-openvswitch-agent'
-    $ovs_server_package = 'quantum-plugin-openvswitch'
+    $ovs_agent_package   = 'quantum-plugin-openvswitch-agent'
+    $ovs_agent_service   = 'quantum-plugin-openvswitch-agent'
+    $ovs_server_package  = 'quantum-plugin-openvswitch'
+    $ovs_cleanup_service = false
 
     $linuxbridge_agent_package  = 'quantum-plugin-linuxbridge-agent'
     $linuxbridge_agent_service  = 'quantum-plugin-linuxbridge-agent'

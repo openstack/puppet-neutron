@@ -136,8 +136,8 @@ describe 'quantum::agents::ovs' do
         :enable  => true,
         :ensure  => 'running'
       )
+      should contain_package('quantum-plugin-ovs').with_before(/Service\[ovs-cleanup-service\]/)
     end
-
 
   end
 end

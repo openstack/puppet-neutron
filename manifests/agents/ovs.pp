@@ -106,6 +106,7 @@ class quantum::agents::ovs (
     # quantum plugin ovs agent package. The configuration file for
     # the ovs agent is provided by the quantum ovs plugin package.
     Package['quantum-plugin-ovs'] -> Quantum_plugin_ovs<||>
+    Package['quantum-plugin-ovs'] -> Service['ovs-cleanup-service']
   }
 
   if $enabled {

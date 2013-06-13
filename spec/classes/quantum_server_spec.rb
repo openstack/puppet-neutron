@@ -39,6 +39,7 @@ describe 'quantum::server' do
       should contain_quantum_api_config('filter:authtoken/admin_tenant_name').with_value(p[:auth_tenant]);
       should contain_quantum_api_config('filter:authtoken/admin_user').with_value(p[:auth_user]);
       should contain_quantum_api_config('filter:authtoken/admin_password').with_value(p[:auth_password]);
+      should contain_quantum_api_config('filter:authtoken/auth_admin_prefix').with(:ensure => 'absent')
     end
 
     it 'installs quantum server package' do
@@ -62,6 +63,44 @@ describe 'quantum::server' do
         :ensure  => 'running',
         :require => 'Class[Quantum]'
       )
+      should contain_quantum_api_config('filter:authtoken/auth_admin_prefix').with(
+        :ensure => 'absent'
+      )
+    end
+  end
+
+  shared_examples_for 'a quantum server with auth_admin_prefix set' do
+    [ '/keystone', '/keystone/admin', '' ].each do |auth_admin_prefix|
+      describe "with keystone_auth_admin_prefix containing incorrect value #{auth_admin_prefix}" do
+        before do
+          params.merge!({
+            :auth_admin_prefix => auth_admin_prefix,
+          })
+        end
+        it do
+          should contain_quantum_api_config('filter:authtoken/auth_admin_prefix').with(
+            :value => params[:auth_admin_prefix]
+          )
+        end
+      end
+    end
+  end
+
+
+  shared_examples_for 'a quantum server with some incorrect auth_admin_prefix set' do
+    [ '/keystone/', 'keystone/', 'keystone' ].each do |auth_admin_prefix|
+      describe "with keystone_auth_admin_prefix containing incorrect value #{auth_admin_prefix}" do
+        before do
+          params.merge!({
+            :auth_admin_prefix => auth_admin_prefix,
+          })
+        end
+        it do
+          expect {
+            should contain_quantum_api_config('filter:authtoken/auth_admin_prefix')
+          }.to raise_error(Puppet::Error, /validate_re\(\): "#{auth_admin_prefix}" does not match/)
+        end
+      end
     end
   end
 
@@ -97,6 +136,8 @@ describe 'quantum::server' do
     it_configures 'a quantum server'
     it_configures 'a quantum server with broken authentication'
     it_configures 'a quantum server with log_file specified'
+    it_configures 'a quantum server with auth_admin_prefix set'
+    it_configures 'a quantum server with some incorrect auth_admin_prefix set'
   end
 
   context 'on RedHat platforms' do
@@ -111,5 +152,7 @@ describe 'quantum::server' do
     it_configures 'a quantum server'
     it_configures 'a quantum server with broken authentication'
     it_configures 'a quantum server with log_file specified'
+    it_configures 'a quantum server with auth_admin_prefix set'
+    it_configures 'a quantum server with some incorrect auth_admin_prefix set'
   end
 end

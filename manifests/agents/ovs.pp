@@ -51,10 +51,10 @@ class quantum::agents::ovs (
       'OVS/bridge_mappings': value => $br_map_str;
     }
     quantum::plugins::ovs::bridge{ $bridge_mappings:
-      require => Service['quantum-plugin-ovs-service'],
+      before => Service['quantum-plugin-ovs-service'],
     }
     quantum::plugins::ovs::port{ $bridge_uplinks:
-      require => Service['quantum-plugin-ovs-service'],
+      before => Service['quantum-plugin-ovs-service'],
     }
   }
 
@@ -73,13 +73,13 @@ class quantum::agents::ovs (
 
   vs_bridge { $integration_bridge:
     ensure  => present,
-    require => Service['quantum-plugin-ovs-service'],
+    before => Service['quantum-plugin-ovs-service'],
   }
 
   if $enable_tunneling {
     vs_bridge { $tunnel_bridge:
       ensure  => present,
-      require => Service['quantum-plugin-ovs-service'],
+      before => Service['quantum-plugin-ovs-service'],
     }
     quantum_plugin_ovs {
       'OVS/enable_tunneling': value => true;

@@ -44,7 +44,7 @@ describe 'quantum::agents::ovs' do
     it 'configures vs_bridge' do
       should contain_vs_bridge(p[:integration_bridge]).with(
         :ensure  => 'present',
-        :require => 'Service[quantum-plugin-ovs-service]'
+        :before => 'Service[quantum-plugin-ovs-service]'
       )
       should_not contain_vs_brige(p[:integration_bridge])
     end
@@ -78,6 +78,29 @@ describe 'quantum::agents::ovs' do
         should contain_quantum_plugin_ovs('SECURITYGROUP/firewall_driver').with_ensure('absent')
       end
     end
+
+    context 'when supplying bridge mappings for provider networks' do
+      before :each do
+        params.merge!(:bridge_uplinks => ['br-ex:eth2'],:bridge_mappings => ['default:br-ex'])
+      end
+
+      it 'configures bridge mappings' do
+        should contain_quantum_plugin_ovs('OVS/bridge_mappings')
+      end
+
+      it 'should configure bridge mappings' do
+        should contain_quantum__plugins__ovs__bridge(params[:bridge_mappings]).with(
+          :before => 'Service[quantum-plugin-ovs-service]'
+        )
+      end
+
+      it 'should configure bridge uplinks' do
+        should contain_quantum__plugins__ovs__port(params[:bridge_uplinks]).with(
+          :before => 'Service[quantum-plugin-ovs-service]'
+        )
+      end
+    end
+
     context 'when enabling tunneling' do
       context 'without local ip address' do
         before :each do
@@ -99,7 +122,7 @@ describe 'quantum::agents::ovs' do
           should contain_quantum_plugin_ovs('OVS/local_ip').with_value('127.0.0.1')
           should contain_vs_bridge(default_params[:tunnel_bridge]).with(
             :ensure  => 'present',
-            :require => 'Service[quantum-plugin-ovs-service]'
+            :before => 'Service[quantum-plugin-ovs-service]'
           )
         end
       end

@@ -14,6 +14,13 @@ quantum_network { 'public':
   tenant_name     => 'admin',
 }
 
+quantum_subnet { 'public_subnet':
+  ensure       => 'present',
+  cidr         => '172.24.4.224/28',
+  network_name => 'public',
+  tenant_name  => 'admin',
+}
+
 keystone_tenant { 'demo':
   ensure => present,
 }
@@ -21,4 +28,11 @@ keystone_tenant { 'demo':
 quantum_network { 'private':
   ensure          => present,
   tenant_name     => 'demo',
+}
+
+quantum_subnet { 'private_subnet':
+  ensure       => present,
+  cidr         => '10.0.0.0/24',
+  network_name => 'private',
+  tenant_name  => 'demo',
 }

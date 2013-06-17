@@ -25,7 +25,7 @@ class quantum::plugins::ovs (
   Quantum_plugin_ovs<||> ~> Service<| title == 'quantum-server' |>
   Package['quantum-plugin-ovs'] -> Service<| title == 'quantum-server' |>
 
-  validate_re($sql_connection, '(sqlite|mysql|posgres):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   case $sql_connection {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {

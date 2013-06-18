@@ -48,3 +48,7 @@ quantum_router { 'demo_router':
   gateway_network_name => 'public',
   require              => Quantum_subnet['public_subnet'],
 }
+
+quantum_router_interface { 'demo_router:private_subnet':
+  ensure => present,
+}

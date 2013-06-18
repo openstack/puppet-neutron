@@ -12,7 +12,7 @@ class { 'quantum':
 
 # The API server talks to keystone for authorisation
 class { 'quantum::server':
-  $keystone_password => 'password',
+  keystone_password => 'password',
 }
 
 # Various agents
@@ -37,10 +37,10 @@ class { 'quantum::plugins::ovs':
 # Generally, any machine with a quantum element running on it talks
 # over Rabbit and needs to know if overlapping IPs (namespaces) are in use
 class { 'quantum':
-  $allow_overlapping_ips => true,
-  $rabbit_password       => 'password',
-  $rabbit_user           => 'guest',
-  $rabbit_host           => 'localhost',
+  allow_overlapping_ips => true,
+  rabbit_password       => 'password',
+  rabbit_user           => 'guest',
+  rabbit_host           => 'localhost',
 }
 
 # The agent/plugin combo also needs installed on clients

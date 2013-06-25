@@ -128,4 +128,48 @@ subnet2"
 
   end
 
+  describe 'when listing router ports' do
+
+    let :router do
+      'router1'
+    end
+
+    it 'should handle an empty port list' do
+      klass.expects(:auth_quantum).with('router-port-list',
+                                        '--format=csv',
+                                        router)
+      result = klass.list_router_ports(router)
+      result.should eql([])
+    end
+
+    it 'should handle several ports' do
+      output = <<-EOT
+"id","name","mac_address","fixed_ips"
+"1345e576-a21f-4c2e-b24a-b245639852ab","","fa:16:3e:e3:e6:38","{""subnet_id"": ""839a1d2d-2c6e-44fb-9a2b-9b011dce8c2f"", ""ip_address"": ""10.0.0.1""}"
+"de0dc526-02b2-467c-9832-2c3dc69ac2b4","","fa:16:3e:f6:b5:72","{""subnet_id"": ""e4db0abd-276a-4f69-92ea-8b9e4eacfd43"", ""ip_address"": ""172.24.4.226""}"
+      EOT
+      expected =
+       [{ "fixed_ips"=>
+          "{\"subnet_id\": \"839a1d2d-2c6e-44fb-9a2b-9b011dce8c2f\", \
+\"ip_address\": \"10.0.0.1\"}",
+          "name"=>"",
+          "subnet_id"=>"839a1d2d-2c6e-44fb-9a2b-9b011dce8c2f",
+          "id"=>"1345e576-a21f-4c2e-b24a-b245639852ab",
+          "mac_address"=>"fa:16:3e:e3:e6:38"},
+        {"fixed_ips"=>
+          "{\"subnet_id\": \"e4db0abd-276a-4f69-92ea-8b9e4eacfd43\", \
+\"ip_address\": \"172.24.4.226\"}",
+          "name"=>"",
+          "subnet_id"=>"e4db0abd-276a-4f69-92ea-8b9e4eacfd43",
+          "id"=>"de0dc526-02b2-467c-9832-2c3dc69ac2b4",
+          "mac_address"=>"fa:16:3e:f6:b5:72"}]
+      klass.expects(:auth_quantum).
+        with('router-port-list', '--format=csv', router).
+        returns(output)
+      result = klass.list_router_ports(router)
+      result.should eql(expected)
+    end
+
+  end
+
 end

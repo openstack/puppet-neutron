@@ -1,4 +1,6 @@
+require 'csv'
 require 'puppet/util/inifile'
+
 class Puppet::Provider::Quantum < Puppet::Provider
 
   def self.conf_filename
@@ -138,6 +140,31 @@ correctly configured.")
       exts << line.strip
     end
     return exts
+  end
+
+  def self.list_router_ports(router_name_or_id)
+    results = []
+    cmd_output = auth_quantum("router-port-list",
+                              '--format=csv',
+                              router_name_or_id)
+    if ! cmd_output
+      return results
+    end
+
+    headers = nil
+    CSV.parse(cmd_output) do |row|
+      if headers == nil
+        headers = row
+      else
+        result = Hash[*headers.zip(row).flatten]
+        match_data = /.*"subnet_id": "(.*)", .*/.match(result['fixed_ips'])
+        if match_data
+          result['subnet_id'] = match_data[1]
+        end
+        results << result
+      end
+    end
+    return results
   end
 
 end

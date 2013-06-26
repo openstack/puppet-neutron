@@ -9,6 +9,7 @@ describe 'quantum' do
       :core_plugin         => 'quantum.plugins.linuxbridge.lb_quantum_plugin.LinuxBridgePluginV2',
       :rabbit_host         => '127.0.0.1',
       :rabbit_port         => 5672,
+      :rabbit_hosts        => false,
       :rabbit_user         => 'guest',
       :rabbit_password     => 'guest',
       :rabbit_virtual_host => '/'
@@ -19,7 +20,6 @@ describe 'quantum' do
 
     context 'and if rabbit_host parameter is provided' do
       it_configures 'a quantum base installation'
-      it_configures 'rabbit without HA support (with backward compatibility)'
     end
 
     context 'and if rabbit_hosts parameter is provided' do
@@ -31,13 +31,13 @@ describe 'quantum' do
       context 'with one server' do
         before { params.merge!( :rabbit_hosts => ['127.0.0.1:5672'] ) }
         it_configures 'a quantum base installation'
-        it_configures 'rabbit without HA support (without backward compatibility)'
+        it_configures 'rabbit HA with a single virtual host'
       end
 
       context 'with multiple servers' do
         before { params.merge!( :rabbit_hosts => ['rabbit1:5672', 'rabbit2:5672'] ) }
         it_configures 'a quantum base installation'
-        it_configures 'rabbit with HA support'
+        it_configures 'rabbit HA with multiple hosts'
       end
     end
   end
@@ -94,28 +94,19 @@ describe 'quantum' do
     end
   end
 
-  shared_examples_for 'rabbit without HA support (with backward compatibility)' do
+  shared_examples_for 'rabbit HA with a single virtual host' do
     it 'in quantum.conf' do
-      should contain_quantum_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] )
-      should contain_quantum_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] )
-      should contain_quantum_config('DEFAULT/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" )
-      should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value(false)
+      should_not contain_quantum_config('DEFAULT/rabbit_host')
+      should_not contain_quantum_config('DEFAULT/rabbit_port')
+      should contain_quantum_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts] )
+      should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end
   end
 
-  shared_examples_for 'rabbit without HA support (without backward compatibility)' do
+  shared_examples_for 'rabbit HA with multiple hosts' do
     it 'in quantum.conf' do
-      should contain_quantum_config('DEFAULT/rabbit_host').with_ensure('absent')
-      should contain_quantum_config('DEFAULT/rabbit_port').with_ensure('absent')
-      should contain_quantum_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
-      should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value(false)
-    end
-  end
-
-  shared_examples_for 'rabbit with HA support' do
-    it 'in quantum.conf' do
-      should contain_quantum_config('DEFAULT/rabbit_host').with_ensure('absent')
-      should contain_quantum_config('DEFAULT/rabbit_port').with_ensure('absent')
+      should_not contain_quantum_config('DEFAULT/rabbit_host')
+      should_not contain_quantum_config('DEFAULT/rabbit_port')
       should contain_quantum_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
       should contain_quantum_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end

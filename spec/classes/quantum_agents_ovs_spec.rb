@@ -89,13 +89,13 @@ describe 'quantum::agents::ovs' do
       end
 
       it 'should configure bridge mappings' do
-        should contain_quantum__plugins__ovs__bridge(params[:bridge_mappings]).with(
+        should contain_quantum__plugins__ovs__bridge(params[:bridge_mappings].join(',')).with(
           :before => 'Service[quantum-plugin-ovs-service]'
         )
       end
 
       it 'should configure bridge uplinks' do
-        should contain_quantum__plugins__ovs__port(params[:bridge_uplinks]).with(
+        should contain_quantum__plugins__ovs__port(params[:bridge_uplinks].join(',')).with(
           :before => 'Service[quantum-plugin-ovs-service]'
         )
       end

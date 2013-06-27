@@ -115,14 +115,14 @@ Puppet::Type.type(:quantum_network).provide(
       @property_hash = {
         :ensure                    => :present,
         :name                      => resource[:name],
-        :id                        => @network[:id],
-        :admin_state_up            => @network[:admin_state_up],
-        :provider_network_type     => @network[:'provider:network_type'],
-        :provider_physical_network => @network[:'provider:physical_network'],
-        :provider_segmentation_id  => @network[:'provider:segmentation_id'],
-        :router_external           => @network[:'router:external'],
-        :shared                    => @network[:shared],
-        :tenant_id                 => @network[:tenant_id],
+        :id                        => @network['id'],
+        :admin_state_up            => @network['admin_state_up'],
+        :provider_network_type     => @network['provider:network_type'],
+        :provider_physical_network => @network['provider:physical_network'],
+        :provider_segmentation_id  => @network['provider:segmentation_id'],
+        :router_external           => @network['router:external'],
+        :shared                    => @network['shared'],
+        :tenant_id                 => @network['tenant_id'],
       }
     else
       fail("did not get expected message on network creation, got #{results}")

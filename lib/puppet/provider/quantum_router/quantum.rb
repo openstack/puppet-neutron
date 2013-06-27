@@ -69,11 +69,11 @@ Puppet::Type.type(:quantum_router).provide(
       @property_hash = {
         :ensure                    => :present,
         :name                      => resource[:name],
-        :id                        => @router[:id],
-        :admin_state_up            => @router[:admin_state_up],
-        :external_gateway_info     => @router[:external_gateway_info],
-        :status                    => @router[:status],
-        :tenant_id                 => @router[:tenant_id],
+        :id                        => @router['id'],
+        :admin_state_up            => @router['admin_state_up'],
+        :external_gateway_info     => @router['external_gateway_info'],
+        :status                    => @router['status'],
+        :tenant_id                 => @router['tenant_id'],
       }
 
       if @resource[:gateway_network_name]

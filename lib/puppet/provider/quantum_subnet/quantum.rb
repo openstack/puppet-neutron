@@ -92,16 +92,16 @@ Puppet::Type.type(:quantum_subnet).provide(
       @property_hash = {
         :ensure                    => :present,
         :name                      => resource[:name],
-        :id                        => @subnet[:id],
-        :cidr                      => @subnet[:cidr],
-        :ip_version                => @subnet[:ip_version],
-        :gateway_ip                => @subnet[:gateway_ip],
-        :allocation_pools          => @subnet[:allocation_pools],
-        :host_routes               => @subnet[:host_routes],
-        :dns_nameservers           => @subnet[:dns_nameservers],
-        :enable_dhcp               => @subnet[:enable_dhcp],
-        :network_id                => @subnet[:network_id],
-        :tenant_id                 => @subnet[:tenant_id],
+        :id                        => @subnet['id'],
+        :cidr                      => @subnet['cidr'],
+        :ip_version                => @subnet['ip_version'],
+        :gateway_ip                => @subnet['gateway_ip'],
+        :allocation_pools          => @subnet['allocation_pools'],
+        :host_routes               => @subnet['host_routes'],
+        :dns_nameservers           => @subnet['dns_nameservers'],
+        :enable_dhcp               => @subnet['enable_dhcp'],
+        :network_id                => @subnet['network_id'],
+        :tenant_id                 => @subnet['tenant_id'],
       }
     else
       fail("did not get expected message on subnet creation, got #{results}")

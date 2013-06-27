@@ -212,18 +212,4 @@ class quantum (
     }
   }
 
-  # Any machine using Quantum / OVS endpoints with certain nova networking configs will
-  # have protetion issues writing unexpected files unless qemu is changed appropriately.
-  # See: https://bugs.launchpad.net/openstack-cisco/+bug/1086255
-  # TODO: this feels dirty. Maybe it should be moved elsewhere?
-  @file { '/etc/libvirt/qemu.conf':
-    ensure => present,
-    notify => Exec[ '/etc/init.d/libvirt-bin restart'],
-    source => 'puppet:///modules/quantum/qemu.conf',
-  }
-
-  @exec { '/etc/init.d/libvirt-bin restart':
-    refreshonly => true,
-  }
-
 }

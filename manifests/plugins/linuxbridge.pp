@@ -21,8 +21,8 @@
 #   (optional) Ensure state for package. Defaults to 'present'.
 #
 class quantum::plugins::linuxbridge (
-  $sql_connection,
-  $network_vlan_ranges,
+  $sql_connection      = 'sqlite:////var/lib/quantum/linuxbridge.sqlite',
+  $network_vlan_ranges = 'physnet1:1000:2000',
   $tenant_network_type = 'vlan',
   $package_ensure      = 'present'
 ) {
@@ -54,4 +54,13 @@ class quantum::plugins::linuxbridge (
     'VLANS/tenant_network_type': value => $tenant_network_type;
     'VLANS/network_vlan_ranges': value => $network_vlan_ranges;
   }
+
+  if $::osfamily == 'Redhat' {
+    file {'/etc/quantum/plugin.ini':
+      ensure => link,
+      target => '/etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini',
+      require => Package['quantum-plugin-linuxbridge']
+    }
+  }
+
 }

@@ -28,13 +28,22 @@ class quantum::agents::linuxbridge (
 
   include quantum::params
 
-  Package['quantum'] -> Package['quantum-plugin-linuxbridge-agent']
-  Package['quantum-plugin-linuxbridge-agent'] -> Quantum_plugin_linuxbridge<||>
+  Quantum_config<||>             ~> Service['quantum-plugin-linuxbridge-service']
   Quantum_plugin_linuxbridge<||> ~> Service<| title == 'quantum-plugin-linuxbridge-service' |>
 
-  package { 'quantum-plugin-linuxbridge-agent':
-    ensure => $package_ensure,
-    name   => $::quantum::params::linuxbridge_agent_package,
+  if $::quantum::params::linuxbridge_agent_package {
+    Package['quantum'] -> Package['quantum-plugin-linuxbridge-agent']
+    Package['quantum-plugin-linuxbridge-agent'] -> Quantum_plugin_linuxbridge<||>
+    Package['quantum-plugin-linuxbridge-agent'] -> Service['quantum-plugin-linuxbridge-service']
+    package { 'quantum-plugin-linuxbridge-agent':
+      ensure => $package_ensure,
+      name   => $::quantum::params::linuxbridge_agent_package,
+    }
+  } else {
+    # Some platforms (RedHat) do not provide a separate quantum plugin
+    # linuxbridge agent package. The configuration file for the linuxbridge
+    # agent is provided by the quantum linuxbridge plugin package.
+    Package['quantum-plugin-linuxbridge'] -> Quantum_plugin_linuxbridge<||>
   }
 
   if $enable {
@@ -52,6 +61,5 @@ class quantum::agents::linuxbridge (
     ensure  => $service_ensure,
     name    => $::quantum::params::linuxbridge_agent_service,
     enable  => $enable,
-    require => Package['quantum-plugin-linuxbridge-agent'],
   }
 }

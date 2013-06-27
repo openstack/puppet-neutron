@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'quantum::agents::linuxbridge' do
 
   let :pre_condition do
-    "class { 'quantum': rabbit_password => 'passw0rd' }"
+    "class { 'quantum': rabbit_password => 'passw0rd' }\n" +
+    "class { 'quantum::plugins::linuxbridge': }"
   end
 
   let :params do
@@ -18,19 +19,11 @@ describe 'quantum::agents::linuxbridge' do
 
     it { should include_class('quantum::params') }
 
-    it 'installs quantum linuxbridge agent package' do
-      should contain_package('quantum-plugin-linuxbridge-agent').with(
-        :ensure => params[:package_ensure],
-        :name   => platform_params[:linuxbridge_agent_package]
-      )
-    end
-
     it 'configures quantum linuxbridge agent service' do
       should contain_service('quantum-plugin-linuxbridge-service').with(
         :ensure  => 'running',
         :name    => platform_params[:linuxbridge_agent_service],
-        :enable  => params[:enable],
-        :require => 'Package[quantum-plugin-linuxbridge-agent]'
+        :enable  => params[:enable]
       )
     end
 
@@ -56,6 +49,13 @@ describe 'quantum::agents::linuxbridge' do
     end
 
     it_configures 'quantum linuxbridge agent'
+
+    it 'installs quantum linuxbridge agent package' do
+      should contain_package('quantum-plugin-linuxbridge-agent').with(
+        :ensure => params[:package_ensure],
+        :name   => platform_params[:linuxbridge_agent_package]
+      )
+    end
   end
 
   context 'on RedHat platforms' do

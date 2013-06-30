@@ -11,6 +11,7 @@ describe 'quantum::plugins::ovs' do
      :package_ensure       => 'present',
      :sql_connection       => 'sqlite:////var/lib/quantum/ovs.sqlite',
      :sql_max_retries      => 10,
+     :sql_idle_timeout     => '3600',
      :reconnect_interval   => 2,
      :tenant_network_type  => 'vlan',
      :network_vlan_ranges  => 'physnet1:1000:2000',
@@ -33,6 +34,7 @@ describe 'quantum::plugins::ovs' do
         with_value(p[:network_vlan_ranges])
       should contain_quantum_plugin_ovs('DATABASE/sql_connection').with_value(p[:sql_connection])
       should contain_quantum_plugin_ovs('DATABASE/sql_max_retries').with_value(p[:sql_max_retries])
+      should contain_quantum_plugin_ovs('DATABASE/sql_idle_timeout').with_value(p[:sql_idle_timeout])
       should contain_quantum_plugin_ovs('DATABASE/reconnect_interval').with_value(p[:reconnect_interval])
       should contain_quantum_plugin_ovs('OVS/tenant_network_type').with_value(p[:tenant_network_type])
       should_not contain_quantum_plugin_ovs('OVS/tunnel_id_ranges')

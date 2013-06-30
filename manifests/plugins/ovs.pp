@@ -2,11 +2,18 @@
 # This configures the plugin for the API server, but does nothing
 # about configuring the agents that must also run and share a config
 # file with the OVS plugin if both are on the same machine.
-
+#
+# === Parameters
+#
+# [*sql_idle_timeout*]
+#   (optional) Timeout for SQL to reap connetions.
+#   Defaults to '3600'.
+#
 class quantum::plugins::ovs (
   $package_ensure       = 'present',
   $sql_connection       = 'sqlite:////var/lib/quantum/ovs.sqlite',
   $sql_max_retries      = 10,
+  $sql_idle_timeout     = '3600',
   $reconnect_interval   = 2,
   $tenant_network_type  = 'vlan',
   # NB: don't need tunnel ID range when using VLANs,
@@ -50,6 +57,7 @@ class quantum::plugins::ovs (
   quantum_plugin_ovs {
     'DATABASE/sql_connection':      value => $sql_connection;
     'DATABASE/sql_max_retries':     value => $sql_max_retries;
+    'DATABASE/sql_idle_timeout':    value => $sql_idle_timeout;
     'DATABASE/reconnect_interval':  value => $reconnect_interval;
     'OVS/tenant_network_type':      value => $tenant_network_type;
   }

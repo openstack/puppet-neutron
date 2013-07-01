@@ -1,5 +1,5 @@
 define quantum::plugins::ovs::bridge {
-  $mapping = split($name, ":")
+  $mapping = split($name, ':')
   $bridge = $mapping[1]
 
   vs_bridge {$bridge:

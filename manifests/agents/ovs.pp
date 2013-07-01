@@ -72,13 +72,13 @@ class quantum::agents::ovs (
   }
 
   vs_bridge { $integration_bridge:
-    ensure  => present,
+    ensure => present,
     before => Service['quantum-plugin-ovs-service'],
   }
 
   if $enable_tunneling {
     vs_bridge { $tunnel_bridge:
-      ensure  => present,
+      ensure => present,
       before => Service['quantum-plugin-ovs-service'],
     }
     quantum_plugin_ovs {
@@ -124,7 +124,7 @@ class quantum::agents::ovs (
 
   if $::quantum::params::ovs_cleanup_service {
     service {'ovs-cleanup-service':
-      name => $::quantum::params::ovs_cleanup_service,
+      name   => $::quantum::params::ovs_cleanup_service,
       enable => $enabled,
       ensure => $service_ensure,
     }

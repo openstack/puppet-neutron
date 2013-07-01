@@ -35,7 +35,7 @@ class quantum::keystone::auth (
   keystone_service { $auth_name:
     ensure      => present,
     type        => $service_type,
-    description => "Quantum Networking Service",
+    description => 'Quantum Networking Service',
   }
 
   if $configure_endpoint {

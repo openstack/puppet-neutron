@@ -172,7 +172,7 @@ class quantum (
 
   if $rpc_backend == 'quantum.openstack.common.rpc.impl_kombu' {
     if ! $rabbit_password {
-      fail("When rpc_backend is rabbitmq, you must set rabbit password")
+      fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }
     if $rabbit_hosts {
       quantum_config { 'DEFAULT/rabbit_hosts':     value  => join($rabbit_hosts, ',') }

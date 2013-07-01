@@ -11,7 +11,7 @@ class quantum::db::mysql (
 
   Class['mysql::server'] -> Class['quantum::db::mysql']
 
-  require 'mysql::python'
+  require mysql::python
 
   mysql::db { $dbname:
     user         => $user,
@@ -22,11 +22,10 @@ class quantum::db::mysql (
   }
 
   if $allowed_hosts {
-     quantum::db::mysql::host_access { $allowed_hosts:
+    quantum::db::mysql::host_access { $allowed_hosts:
       user      => $user,
       password  => $password,
       database  => $dbname,
     }
   }
-
 }

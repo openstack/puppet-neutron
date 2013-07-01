@@ -12,7 +12,7 @@ class quantum::agents::metadata (
   $metadata_port                = '8775'
   ) {
 
-  include 'quantum::params'
+  include quantum::params
 
   Package['quantum'] -> Quantum_metadata_agent_config<||>
   Quantum_config<||> ~> Service['quantum-metadata']

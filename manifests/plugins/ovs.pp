@@ -24,8 +24,8 @@ class quantum::plugins::ovs (
   $tunnel_id_ranges     = '1:1000'
 ) {
 
-  include 'quantum::params'
-  require 'vswitch::ovs'
+  include quantum::params
+  require vswitch::ovs
 
   Package['quantum'] -> Package['quantum-plugin-ovs']
   Package['quantum-plugin-ovs'] -> Quantum_plugin_ovs<||>
@@ -77,13 +77,13 @@ class quantum::plugins::ovs (
       'OVS/network_vlan_ranges': value => $network_vlan_ranges;
     }
   } else {
-     quantum_plugin_ovs { 'OVS/network_vlan_ranges': ensure => absent }
+    quantum_plugin_ovs { 'OVS/network_vlan_ranges': ensure => absent }
   }
 
   if $::osfamily == 'Redhat' {
     file {'/etc/quantum/plugin.ini':
-      ensure => link,
-      target => '/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini',
+      ensure  => link,
+      target  => '/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini',
       require => Package['quantum-plugin-ovs']
     }
   }

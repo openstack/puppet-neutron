@@ -63,7 +63,7 @@ class quantum::params {
 
   } else {
 
-    fail("Unsupported osfamily ${$::osfamily}")
+    fail("Unsupported osfamily ${::osfamily}")
 
   }
 }

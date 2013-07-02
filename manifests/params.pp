@@ -20,6 +20,11 @@ class quantum::params {
 
     $dnsmasq_packages   = ['dnsmasq', 'dnsmasq-utils']
 
+    $lbaas_agent_package = false
+    $lbaas_agent_service = 'quantum-lbaas-agent'
+
+    $haproxy_package   = 'haproxy'
+
     $l3_agent_package   = false
     $l3_agent_service   = 'quantum-l3-agent'
 
@@ -47,6 +52,11 @@ class quantum::params {
 
     $dhcp_agent_package = 'quantum-dhcp-agent'
     $dhcp_agent_service = 'quantum-dhcp-agent'
+
+    $lbaas_agent_package = 'quantum-lbaas-agent'
+    $lbaas_agent_service = 'quantum-lbaas-agent'
+
+    $haproxy_package   = 'haproxy'
 
     $metadata_agent_package = 'quantum-metadata-agent'
     $metadata_agent_service = 'quantum-metadata-agent'

@@ -18,6 +18,7 @@ class { 'quantum::server':
 # Various agents
 class { 'quantum::agents::dhcp': }
 class { 'quantum::agents::l3': }
+class { 'quantum::agents::lbaas': }
 
 # This plugin configures Quantum for OVS on the server
 # Agent

@@ -1,0 +1,52 @@
+Puppet::Type.type(:quantum_l3_ovs_bridge).provide(:quantum) do
+  desc <<-EOT
+    Quantum provider to manage quantum_l3_ovs_bridge type.
+
+    The provider ensures that the gateway ip of the subnet is
+    configured on the ovs bridge.
+  EOT
+
+  commands :ip => '/sbin/ip'
+
+  mk_resource_methods
+
+  def gateway_ip
+    if @gateway_ip == nil
+      subnet = Puppet::Type.type('quantum_subnet').instances.find do |instance|
+        instance.provider.name == @resource[:subnet_name]
+      end
+      if subnet
+        provider = subnet.provider
+        @gateway_ip = "#{provider.gateway_ip}/#{provider.cidr.split('/')[1]}"
+      else
+        fail("Unable to find subnet for name #{@resource[:subnet_name]}")
+      end
+    end
+    @gateway_ip
+  end
+
+  def bridge_ip_addresses
+    addresses = []
+    result = ip('addr', 'show', @resource[:name])
+    (result.split("\n") || []).compact.collect do |line|
+      if match = line.match(/\sinet ([^\s]*) .*/)
+        addresses << match.captures[0]
+      end
+    end
+    return addresses
+  end
+
+  def exists?
+    bridge_ip_addresses.include?(gateway_ip)
+  end
+
+  def create
+    ip('addr', 'add', gateway_ip, 'dev', @resource[:name])
+    ip('link', 'set', @resource[:name], 'up')
+  end
+
+  def destroy
+    ip('addr', 'del', gateway_ip, 'dev', @resource[:name])
+  end
+
+end

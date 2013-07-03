@@ -167,4 +167,15 @@ correctly configured.")
     return results
   end
 
+  def self.get_tenant_id(tenant_name)
+    tenant = Puppet::Type.type('keystone_tenant').instances.find do |i|
+      i.provider.name == tenant_name
+    end
+    if tenant
+      return tenant.provider.id
+    else
+      fail("Unable to find tenant for name #{tenant_name}")
+    end
+  end
+
 end

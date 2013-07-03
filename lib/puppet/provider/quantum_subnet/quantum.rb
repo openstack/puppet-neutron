@@ -109,8 +109,7 @@ Puppet::Type.type(:quantum_subnet).provide(
   end
 
   def get_tenant_id
-    @tenant_id ||= model.catalog.resource( \
-     "Keystone_tenant[#{resource[:tenant_name]}]").provider.id
+    @tenant_id ||= self.class.get_tenant_id(@resource[:tenant_name])
   end
 
   def destroy

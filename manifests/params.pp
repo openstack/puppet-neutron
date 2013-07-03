@@ -10,7 +10,7 @@ class quantum::params {
     $ovs_server_package  = 'openstack-quantum-openvswitch'
     $ovs_cleanup_service = 'quantum-ovs-cleanup'
 
-    $linuxbridge_agent_package  = 'openstack-quantum-linuxbridge'
+    $linuxbridge_agent_package  = false
     $linuxbridge_agent_service  = 'quantum-linuxbridge-agent'
     $linuxbridge_server_package = 'openstack-quantum-linuxbridge'
     $linuxbridge_config_file    = '/etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini'

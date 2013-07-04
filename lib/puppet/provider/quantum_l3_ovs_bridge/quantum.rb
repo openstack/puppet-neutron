@@ -28,7 +28,7 @@ Puppet::Type.type(:quantum_l3_ovs_bridge).provide(:quantum) do
   def bridge_ip_addresses
     addresses = []
     result = ip('addr', 'show', @resource[:name])
-    (result.split("\n") || []).compact.collect do |line|
+    (result.split("\n") || []).compact.each do |line|
       if match = line.match(/\sinet ([^\s]*) .*/)
         addresses << match.captures[0]
       end
@@ -43,10 +43,12 @@ Puppet::Type.type(:quantum_l3_ovs_bridge).provide(:quantum) do
   def create
     ip('addr', 'add', gateway_ip, 'dev', @resource[:name])
     ip('link', 'set', @resource[:name], 'up')
+    @property_hash[:ensure] = :present
   end
 
   def destroy
     ip('addr', 'del', gateway_ip, 'dev', @resource[:name])
+    @property_hash[:ensure] = :absent
   end
 
 end

@@ -57,15 +57,6 @@ Puppet::Type.type(:quantum_network).provide(
     end
   end
 
-  def self.prefetch(resources)
-    networks = instances
-    resources.keys.each do |name|
-      if provider = networks.find{ |net| net.name == name }
-        resources[name].provider = provider
-      end
-    end
-  end
-
   def exists?
     @property_hash[:ensure] == :present
   end

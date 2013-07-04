@@ -68,7 +68,9 @@ Puppet::Type.type(:quantum_subnet).provide(
     end
 
     if @resource[:tenant_name]
-      opts << "--tenant_id=#{get_tenant_id}"
+      tenant_id = self.class.get_tenant_id(model.catalog,
+                                           @resource[:tenant_name])
+      opts << "--tenant_id=#{tenant_id}"
     elsif @resource[:tenant_id]
       opts << "--tenant_id=#{@resource[:tenant_id]}"
     end
@@ -106,10 +108,6 @@ Puppet::Type.type(:quantum_subnet).provide(
     else
       fail("did not get expected message on subnet creation, got #{results}")
     end
-  end
-
-  def get_tenant_id
-    @tenant_id ||= self.class.get_tenant_id(@resource[:tenant_name])
   end
 
   def destroy

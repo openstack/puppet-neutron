@@ -39,6 +39,15 @@ Puppet::Type.type(:quantum_subnet).provide(
     end
   end
 
+  def self.prefetch(resources)
+    subnets = instances
+    resources.keys.each do |name|
+      if provider = subnets.find{ |subnet| subnet.name == name }
+        resources[name].provider = provider
+      end
+    end
+  end
+
   def exists?
     @property_hash[:ensure] == :present
   end

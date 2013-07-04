@@ -42,6 +42,15 @@ Puppet::Type.type(:quantum_router_interface).provide(
     return instances_
   end
 
+  def self.prefetch(resources)
+    instances_ = instances
+    resources.keys.each do |name|
+      if provider = instances_.find{ |instance| instance.name == name }
+        resources[name].provider = provider
+      end
+    end
+  end
+
   def exists?
     @property_hash[:ensure] == :present
   end

@@ -53,10 +53,6 @@ correctly configured.")
     "#{q['auth_protocol']}://#{q['auth_host']}:#{q['auth_port']}/v2.0/"
   end
 
-  def self.prefetch(resources)
-    @quantum_conf = nil
-  end
-
   def self.quantum_conf
     return @quantum_conf if @quantum_conf
     @quantum_conf = Puppet::Util::IniConfig::File.new

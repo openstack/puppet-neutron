@@ -62,20 +62,15 @@ Puppet::Type.type(:quantum_router).provide(
                            opts, resource[:name])
 
     if results =~ /Created a new router:/
-      @router = Hash.new
-      results.split("\n").compact do |line|
-        @router[line.split('=').first] = \
-          line.split('=', 2)[1].gsub(/\A"|"\Z/, '')
-      end
-
+      attrs = self.class.parse_creation_output(results)
       @property_hash = {
         :ensure                    => :present,
         :name                      => resource[:name],
-        :id                        => @router['id'],
-        :admin_state_up            => @router['admin_state_up'],
-        :external_gateway_info     => @router['external_gateway_info'],
-        :status                    => @router['status'],
-        :tenant_id                 => @router['tenant_id'],
+        :id                        => attrs['id'],
+        :admin_state_up            => attrs['admin_state_up'],
+        :external_gateway_info     => attrs['external_gateway_info'],
+        :status                    => attrs['status'],
+        :tenant_id                 => attrs['tenant_id'],
       }
 
       if @resource[:gateway_network_name]

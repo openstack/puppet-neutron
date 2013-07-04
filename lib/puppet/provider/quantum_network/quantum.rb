@@ -108,23 +108,18 @@ Puppet::Type.type(:quantum_network).provide(
                            network_opts, resource[:name])
 
     if results =~ /Created a new network:/
-      @network = Hash.new
-      results.split("\n").compact do |line|
-        @network[line.split('=').first] = \
-          line.split('=', 2)[1].gsub(/\A"|"\Z/, '')
-      end
-
+      attrs = self.class.parse_creation_output(results)
       @property_hash = {
         :ensure                    => :present,
         :name                      => resource[:name],
-        :id                        => @network['id'],
-        :admin_state_up            => @network['admin_state_up'],
-        :provider_network_type     => @network['provider:network_type'],
-        :provider_physical_network => @network['provider:physical_network'],
-        :provider_segmentation_id  => @network['provider:segmentation_id'],
-        :router_external           => @network['router:external'],
-        :shared                    => @network['shared'],
-        :tenant_id                 => @network['tenant_id'],
+        :id                        => attrs['id'],
+        :admin_state_up            => attrs['admin_state_up'],
+        :provider_network_type     => attrs['provider:network_type'],
+        :provider_physical_network => attrs['provider:physical_network'],
+        :provider_segmentation_id  => attrs['provider:segmentation_id'],
+        :router_external           => attrs['router:external'],
+        :shared                    => attrs['shared'],
+        :tenant_id                 => attrs['tenant_id'],
       }
     else
       fail("did not get expected message on network creation, got #{results}")

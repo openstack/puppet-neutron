@@ -182,4 +182,14 @@ correctly configured.")
     end
   end
 
+  def self.parse_creation_output(data)
+    hash = {}
+    data.split("\n").compact.each do |line|
+      if line.include? '='
+        hash[line.split('=').first] = line.split('=', 2)[1].gsub(/\A"|"\Z/, '')
+      end
+    end
+    hash
+  end
+
 end

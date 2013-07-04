@@ -172,4 +172,25 @@ subnet2"
 
   end
 
+  describe 'when parsing creation output' do
+
+    it 'should parse valid output into a hash' do
+      data = <<-EOT
+Created a new network:
+admin_state_up="True"
+id="5f9cbed2-d31c-4e9c-be92-87229acb3f69"
+name="foo"
+tenant_id="3056a91768d948d399f1d79051a7f221"
+      EOT
+      expected = {
+        'admin_state_up' => 'True',
+        'id'             => '5f9cbed2-d31c-4e9c-be92-87229acb3f69',
+        'name'           => 'foo',
+        'tenant_id'      => '3056a91768d948d399f1d79051a7f221',
+      }
+      klass.parse_creation_output(data).should == expected
+    end
+
+  end
+
 end

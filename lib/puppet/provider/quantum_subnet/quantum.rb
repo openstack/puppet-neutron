@@ -85,25 +85,20 @@ Puppet::Type.type(:quantum_subnet).provide(
                            opts, resource[:cidr])
 
     if results =~ /Created a new subnet:/
-      @subnet = Hash.new
-      results.split("\n").compact do |line|
-        @subnet[line.split('=').first] = \
-          line.split('=', 2)[1].gsub(/\A"|"\Z/, '')
-      end
-
+      attrs = self.class.parse_creation_output(results)
       @property_hash = {
         :ensure                    => :present,
         :name                      => resource[:name],
-        :id                        => @subnet['id'],
-        :cidr                      => @subnet['cidr'],
-        :ip_version                => @subnet['ip_version'],
-        :gateway_ip                => @subnet['gateway_ip'],
-        :allocation_pools          => @subnet['allocation_pools'],
-        :host_routes               => @subnet['host_routes'],
-        :dns_nameservers           => @subnet['dns_nameservers'],
-        :enable_dhcp               => @subnet['enable_dhcp'],
-        :network_id                => @subnet['network_id'],
-        :tenant_id                 => @subnet['tenant_id'],
+        :id                        => attrs['id'],
+        :cidr                      => attrs['cidr'],
+        :ip_version                => attrs['ip_version'],
+        :gateway_ip                => attrs['gateway_ip'],
+        :allocation_pools          => attrs['allocation_pools'],
+        :host_routes               => attrs['host_routes'],
+        :dns_nameservers           => attrs['dns_nameservers'],
+        :enable_dhcp               => attrs['enable_dhcp'],
+        :network_id                => attrs['network_id'],
+        :tenant_id                 => attrs['tenant_id'],
       }
     else
       fail("did not get expected message on subnet creation, got #{results}")

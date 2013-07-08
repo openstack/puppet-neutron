@@ -44,14 +44,12 @@ Puppet::Type.newtype(:quantum_network) do
     desc 'A uuid identifying the tenant which will own the network.'
   end
 
-  newproperty(:provider_network_type,
-              :required_features => :provider_extension) do
+  newproperty(:provider_network_type) do
     desc 'The physical mechanism by which the virtual network is realized.'
     newvalues(:flat, :vlan, :local, :gre)
   end
 
-  newproperty(:provider_physical_network,
-              :required_features => :provider_extension) do
+  newproperty(:provider_physical_network) do
     desc <<-EOT
       The name of the physical network over which the virtual network
       is realized for flat and VLAN networks.
@@ -59,15 +57,14 @@ Puppet::Type.newtype(:quantum_network) do
     newvalues(/\S+/)
   end
 
-  newproperty(:provider_segmentation_id,
-              :required_features => :provider_extension) do
+  newproperty(:provider_segmentation_id) do
     desc 'Identifies an isolated segment on the physical network.'
     munge do |v|
       Integer(v)
     end
   end
 
-  newproperty(:router_external, :required_features => :router_extension) do
+  newproperty(:router_external) do
     desc 'Whether this router will route traffic to an external network'
     newvalues(/(t|T)rue/, /(f|F)alse/)
     munge do |v|

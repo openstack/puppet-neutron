@@ -122,26 +122,6 @@ correctly configured.")
     return attrs
   end
 
-  def self.list_quantum_extensions
-    exts = []
-    begin
-      list = auth_quantum('ext-list', '--format=csv',
-                          '--column=alias', '--quote=none')
-    rescue => e
-      if (e.message =~ /Quantum types will not work/)
-        # Silently return no features if configuration is not
-        # available so that feature definition doesn't break
-        # autoload.
-        return exts
-      end
-      raise
-    end
-    (list.split("\n")[1..-1] || []).compact.collect do |line|
-      exts << line.strip
-    end
-    return exts
-  end
-
   def self.list_router_ports(router_name_or_id)
     results = []
     cmd_output = auth_quantum("router-port-list",

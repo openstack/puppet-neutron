@@ -15,26 +15,6 @@ Puppet::Type.type(:quantum_network).provide(
 
   mk_resource_methods
 
-  def self.has_provider_extension?
-    list_quantum_extensions.include?('provider')
-  end
-
-  def has_provider_extension?
-    self.class.has_provider_extension?
-  end
-
-  has_feature :provider_extension if has_provider_extension?
-
-  def self.has_router_extension?
-    list_quantum_extensions.include?('router')
-  end
-
-  def has_router_extension?
-    self.class.has_router_extension?
-  end
-
-  has_feature :router_extension if has_router_extension?
-
   def self.quantum_type
     'net'
   end

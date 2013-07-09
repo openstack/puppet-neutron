@@ -2,12 +2,6 @@ Puppet::Type.newtype(:quantum_network) do
 
   ensurable
 
-  feature :provider_extension,
-      "The provider extension supports provider networks."
-
-  feature :router_extension,
-      "The router extension supports L3 forwarding and NAT."
-
   newparam(:name, :namevar => true) do
     desc 'Symbolic name for the network'
     newvalues(/.*/)

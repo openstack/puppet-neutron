@@ -9,8 +9,6 @@ class quantum::db::mysql (
   $cluster_id    = 'localzone'
 ) {
 
-  Class['mysql::server'] -> Class['quantum::db::mysql']
-
   require mysql::python
 
   mysql::db { $dbname:

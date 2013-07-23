@@ -208,5 +208,4 @@ class quantum (
       'DEFAULT/qpid_reconnect_interval':     value => $qpid_reconnect_interval;
     }
   }
-
 }

@@ -49,9 +49,11 @@ class quantum::plugins::ovs (
     }
   }
 
-  package { 'quantum-plugin-ovs':
-    name    => $::quantum::params::ovs_server_package,
-    ensure  => $package_ensure,
+  if ! defined(Package['quantum-plugin-ovs']) {
+    package { 'quantum-plugin-ovs':
+      ensure  => $package_ensure,
+      name    => $::quantum::params::ovs_server_package,
+    }
   }
 
   quantum_plugin_ovs {

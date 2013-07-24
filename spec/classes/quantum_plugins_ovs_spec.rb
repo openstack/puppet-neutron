@@ -13,54 +13,81 @@ describe 'quantum::plugins::ovs' do
      :sql_max_retries      => 10,
      :sql_idle_timeout     => '3600',
      :reconnect_interval   => 2,
-     :tenant_network_type  => 'vlan',
-     :network_vlan_ranges  => 'physnet1:1000:2000',
-     :tunnel_id_ranges     => '1:1000'
+     :tunnel_id_ranges     => '1:1000',
+     :network_vlan_ranges  => 'physnet1:1000:2000'
    }
   end
 
   let :params do
-    {}
+    { }
   end
 
   shared_examples_for 'quantum ovs plugin' do
+    before do
+      params.merge!(default_params)
+    end
 
-    let :p do
-      default_params.merge(params)
+    let :params do
+      { :tenant_network_type => 'vlan' }
     end
 
     it 'should perform default configuration of' do
-      should contain_quantum_plugin_ovs('OVS/network_vlan_ranges').\
-        with_value(p[:network_vlan_ranges])
-      should contain_quantum_plugin_ovs('DATABASE/sql_connection').with_value(p[:sql_connection])
-      should contain_quantum_plugin_ovs('DATABASE/sql_max_retries').with_value(p[:sql_max_retries])
-      should contain_quantum_plugin_ovs('DATABASE/sql_idle_timeout').with_value(p[:sql_idle_timeout])
-      should contain_quantum_plugin_ovs('DATABASE/reconnect_interval').with_value(p[:reconnect_interval])
-      should contain_quantum_plugin_ovs('OVS/tenant_network_type').with_value(p[:tenant_network_type])
-      should_not contain_quantum_plugin_ovs('OVS/tunnel_id_ranges')
-      should contain_quantum_plugin_ovs('OVS/network_vlan_ranges').with_value(p[:network_vlan_ranges])
+      should contain_quantum_plugin_ovs('DATABASE/sql_connection').with_value(params[:sql_connection])
+      should contain_quantum_plugin_ovs('DATABASE/sql_max_retries').with_value(params[:sql_max_retries])
+      should contain_quantum_plugin_ovs('DATABASE/sql_idle_timeout').with_value(params[:sql_idle_timeout])
+      should contain_quantum_plugin_ovs('DATABASE/reconnect_interval').with_value(params[:reconnect_interval])
+      should contain_quantum_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
       should contain_package('quantum-plugin-ovs').with(
         :name   => platform_params[:ovs_server_package],
-        :ensure => p[:package_ensure]
+        :ensure => params[:package_ensure]
       )
+    end
+
+    context 'with vlan mode' do
+      let :params do
+        { :tenant_network_type => 'vlan' }
+      end
+
+      it 'should perform vlan network configuration' do
+        should contain_quantum_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
+        should contain_quantum_plugin_ovs('OVS/network_vlan_ranges').with_value(params[:network_vlan_ranges])
+      end
     end
 
     context 'with gre tunneling' do
       let :params do
-        { :tenant_network_type => 'gre' }
+        { :tenant_network_type => 'gre', :tunnel_id_ranges => '1:1000'}
+      end
+
+      before do
+        params.delete('network_vlan_ranges')
       end
 
       it 'should perform gre network configuration' do
-        should contain_quantum_plugin_ovs('OVS/network_vlan_ranges').with_ensure('absent')
-        should contain_quantum_plugin_ovs('OVS/tenant_network_type').with_value(p[:tenant_network_type])
-        should contain_quantum_plugin_ovs('OVS/tunnel_id_ranges').with_value(p[:tunnel_id_ranges])
+        should contain_quantum_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
+        should contain_quantum_plugin_ovs('OVS/tunnel_id_ranges').with_value(params[:tunnel_id_ranges])
       end
     end
+
+    context 'with gre tunneling and provider networks' do
+      let :params do
+        { :tenant_network_type => 'gre',
+          :network_vlan_ranges => 'physnet1:1000:2000',
+          :tunnel_id_ranges    => '1:1000'}
+      end
+
+      it 'should perform gre network configuration' do
+        should contain_quantum_plugin_ovs('OVS/network_vlan_ranges').with_value(params[:network_vlan_ranges])
+        should contain_quantum_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
+        should contain_quantum_plugin_ovs('OVS/tunnel_id_ranges').with_value(params[:tunnel_id_ranges])
+      end
+    end
+
     context 'with a flat network' do
       let :params do
-        { :tenant_network_type => 'flat' }
+        { :tenant_network_type => 'flat'}
       end
-      it { should contain_quantum_plugin_ovs('OVS/network_vlan_ranges').with_value(p[:network_vlan_ranges]) }
+      it { should contain_quantum_plugin_ovs('OVS/network_vlan_ranges').with_value(params[:network_vlan_ranges]) }
     end
   end
 
@@ -73,7 +100,6 @@ describe 'quantum::plugins::ovs' do
       { :ovs_server_package => 'quantum-plugin-openvswitch' }
     end
 
-    it { should contain_class('quantum::plugins::ovs') }
     it_configures 'quantum ovs plugin'
   end
 
@@ -82,11 +108,14 @@ describe 'quantum::plugins::ovs' do
       { :osfamily => 'RedHat' }
     end
 
+    let :params do
+      { :network_vlan_ranges => 'test' }
+    end
+
     let :platform_params do
       { :ovs_server_package => 'openstack-quantum-openvswitch' }
     end
 
-    it { should contain_class('quantum::plugins::ovs') }
     it 'should perform redhat specific configuration' do
       should contain_file('/etc/quantum/plugin.ini').with(
         :ensure  => 'link',
@@ -94,6 +123,7 @@ describe 'quantum::plugins::ovs' do
         :require => 'Package[quantum-plugin-ovs]'
       )
     end
+
     it_configures 'quantum ovs plugin'
   end
 end

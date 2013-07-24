@@ -4,7 +4,7 @@ describe 'quantum::agents::ovs' do
 
   let :pre_condition do
     "class { 'quantum': rabbit_password => 'passw0rd' }\n" +
-    "class { 'quantum::plugins::ovs': }"
+    "class { 'quantum::plugins::ovs': network_vlan_ranges => 'test' }"
   end
 
   let :default_params do

@@ -20,7 +20,9 @@ class quantum::plugins::ovs (
   # *but* you do need the network vlan range regardless of type,
   # because the list of networks there is still important
   # even if the ranges aren't specified
-  $network_vlan_ranges  = 'physnet1:1000:2000',
+  # if type is vlan or flat, a default of physnet1:1000:2000 is used
+  # otherwise this will not be set by default.
+  $network_vlan_ranges  = undef,
   $tunnel_id_ranges     = '1:1000'
 ) {
 
@@ -74,12 +76,24 @@ class quantum::plugins::ovs (
     }
   }
 
+  # If the user hasn't specified vlan_ranges, fail for the modes where
+  # it is required, otherwise keep it absent
   if ($tenant_network_type == 'vlan') or ($tenant_network_type == 'flat') {
-    quantum_plugin_ovs {
-      'OVS/network_vlan_ranges': value => $network_vlan_ranges;
+    if ! $network_vlan_ranges {
+      fail('When using the vlan network type, network_vlan_ranges is required')
     }
   } else {
-    quantum_plugin_ovs { 'OVS/network_vlan_ranges': ensure => absent }
+    if ! $network_vlan_ranges {
+      quantum_plugin_ovs { 'OVS/network_vlan_ranges': ensure => absent }
+    }
+  }
+
+  # This might be set by the user for the gre case where
+  # provider networks are in use
+  if $network_vlan_ranges {
+    quantum_plugin_ovs {
+      'OVS/network_vlan_ranges': value => $network_vlan_ranges
+    }
   }
 
   if $::osfamily == 'Redhat' {

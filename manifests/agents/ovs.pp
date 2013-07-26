@@ -98,8 +98,8 @@ class quantum::agents::ovs (
   if $::quantum::params::ovs_agent_package {
     Package['quantum-plugin-ovs-agent'] -> Quantum_plugin_ovs<||>
     package { 'quantum-plugin-ovs-agent':
-      name    => $::quantum::params::ovs_agent_package,
       ensure  => $package_ensure,
+      name    => $::quantum::params::ovs_agent_package,
     }
   } else {
     # Some platforms (RedHat) do not provide a separate
@@ -107,6 +107,13 @@ class quantum::agents::ovs (
     # the ovs agent is provided by the quantum ovs plugin package.
     Package['quantum-plugin-ovs'] -> Quantum_plugin_ovs<||>
     Package['quantum-plugin-ovs'] -> Service['ovs-cleanup-service']
+
+    if ! defined(Package['quantum-plugin-ovs']) {
+      package { 'quantum-plugin-ovs':
+        ensure  => $package_ensure,
+        name    => $::quantum::params::ovs_server_package,
+      }
+    }
   }
 
   if $enabled {
@@ -116,17 +123,17 @@ class quantum::agents::ovs (
   }
 
   service { 'quantum-plugin-ovs-service':
+    ensure  => $service_ensure,
     name    => $::quantum::params::ovs_agent_service,
     enable  => $enabled,
-    ensure  => $service_ensure,
     require => Class['quantum'],
   }
 
   if $::quantum::params::ovs_cleanup_service {
     service {'ovs-cleanup-service':
+      ensure => $service_ensure,
       name   => $::quantum::params::ovs_cleanup_service,
       enable => $enabled,
-      ensure => $service_ensure,
     }
   }
 }

@@ -33,7 +33,7 @@ Setup
 
 ### Installing quantum
 
-    example% puppet module install puppetlabs/quantum
+    puppet module install puppetlabs/quantum
 
 ### Beginning with quantum
 
@@ -75,8 +75,8 @@ Nova will also need to be configured to connect to the quantum service. Setting 
 the `network_api_class` parameter in nova to use quantum instead of nova-network.
 
 ```puppet
-class { 'nova::network::quantum',
-  quantum_admin_password  => 'quantim_admin_secret',
+class { 'nova::network::quantum':
+  quantum_admin_password  => 'quantum_admin_secret',
 }
 ```
 

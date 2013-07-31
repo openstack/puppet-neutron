@@ -28,6 +28,11 @@
 # [*dhcp_driver*]
 #   (optional) Defaults to 'quantum.agent.linux.dhcp.Dnsmasq'.
 #
+# [*root_helper*]
+#   (optional) Defaults to 'sudo quantum-rootwrap /etc/quantum/rootwrap.conf'.
+#   Addresses bug: https://bugs.launchpad.net/neutron/+bug/1182616
+#   Note: This can safely be removed once the module only targets the Havana release.
+#
 # [*use_namespaces*]
 #   (optional) Allow overlapping IP (Must have kernel build with
 #   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
@@ -41,6 +46,7 @@ class quantum::agents::dhcp (
   $resync_interval  = 30,
   $interface_driver = 'quantum.agent.linux.interface.OVSInterfaceDriver',
   $dhcp_driver      = 'quantum.agent.linux.dhcp.Dnsmasq',
+  $root_helper      = 'sudo quantum-rootwrap /etc/quantum/rootwrap.conf',
   $use_namespaces   = true
 ) {
 
@@ -72,6 +78,7 @@ class quantum::agents::dhcp (
     'DEFAULT/interface_driver':   value => $interface_driver;
     'DEFAULT/dhcp_driver':        value => $dhcp_driver;
     'DEFAULT/use_namespaces':     value => $use_namespaces;
+    'DEFAULT/root_helper':        value => $root_helper;
   }
 
   if $::quantum::params::dhcp_agent_package {

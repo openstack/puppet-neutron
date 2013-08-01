@@ -16,7 +16,11 @@ describe 'quantum::agents::l3' do
       :router_id                    => nil,
       :gateway_external_network_id  => nil,
       :handle_internal_only_routers => true,
-      :metadata_port                => '9697' }
+      :metadata_port                => '9697',
+      :send_arp_for_ha              => '3',
+      :periodic_interval            => '40',
+      :periodic_fuzzy_delay         => '5',
+      :enable_metadata_proxy        => true }
   end
 
   let :params do
@@ -39,6 +43,10 @@ describe 'quantum::agents::l3' do
       should contain_quantum_l3_agent_config('DEFAULT/gateway_external_network_id').with_value(p[:gateway_external_network_id])
       should contain_quantum_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value(p[:handle_internal_only_routers])
       should contain_quantum_l3_agent_config('DEFAULT/metadata_port').with_value(p[:metadata_port])
+      should contain_quantum_l3_agent_config('DEFAULT/send_arp_for_ha').with_value(p[:send_arp_for_ha])
+      should contain_quantum_l3_agent_config('DEFAULT/periodic_interval').with_value(p[:periodic_interval])
+      should contain_quantum_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value(p[:periodic_fuzzy_delay])
+      should contain_quantum_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value(p[:enable_metadata_proxy])
     end
 
     it 'installs quantum l3 agent package' do

@@ -9,4 +9,4 @@ fixtures:
     "nova": "git://github.com/stackforge/puppet-nova.git"
     "vswitch": "git://github.com/bodepd/puppet-vswitch"
   symlinks:
-    "quantum": "#{source_dir}"
+    "neutron": "#{source_dir}"

@@ -1,6 +1,6 @@
-# == Class: quantum::plugins::linuxbridge
+# == Class: neutron::plugins::linuxbridge
 #
-# Setups linuxbridge plugin for quantum server.
+# Setups linuxbridge plugin for neutron server.
 #
 # === Parameters
 #
@@ -20,46 +20,46 @@
 # [*package_ensure*]
 #   (optional) Ensure state for package. Defaults to 'present'.
 #
-class quantum::plugins::linuxbridge (
-  $sql_connection      = 'sqlite:////var/lib/quantum/linuxbridge.sqlite',
+class neutron::plugins::linuxbridge (
+  $sql_connection      = 'sqlite:////var/lib/neutron/linuxbridge.sqlite',
   $network_vlan_ranges = 'physnet1:1000:2000',
   $tenant_network_type = 'vlan',
   $package_ensure      = 'present'
 ) {
 
-  include quantum::params
+  include neutron::params
 
-  Package['quantum'] -> Package['quantum-plugin-linuxbridge']
-  Package['quantum-plugin-linuxbridge'] -> Quantum_plugin_linuxbridge<||>
-  Quantum_plugin_linuxbridge<||> ~> Service<| title == 'quantum-server' |>
-  Package['quantum-plugin-linuxbridge'] -> Service<| title == 'quantum-server' |>
+  Package['neutron'] -> Package['neutron-plugin-linuxbridge']
+  Package['neutron-plugin-linuxbridge'] -> Neutron_plugin_linuxbridge<||>
+  Neutron_plugin_linuxbridge<||> ~> Service<| title == 'neutron-server' |>
+  Package['neutron-plugin-linuxbridge'] -> Service<| title == 'neutron-server' |>
 
   if $::osfamily == 'Debian' {
-    file_line { '/etc/default/quantum-server:QUANTUM_PLUGIN_CONFIG':
-      path    => '/etc/default/quantum-server',
-      match   => '^QUANTUM_PLUGIN_CONFIG=(.*)$',
-      line    => "QUANTUM_PLUGIN_CONFIG=${::quantum::params::linuxbridge_config_file}",
-      require => Package['quantum-plugin-linuxbridge'],
-      notify  => Service['quantum-server'],
+    file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
+      path    => '/etc/default/neutron-server',
+      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::linuxbridge_config_file}",
+      require => Package['neutron-plugin-linuxbridge'],
+      notify  => Service['neutron-server'],
     }
   }
 
-  package { 'quantum-plugin-linuxbridge':
+  package { 'neutron-plugin-linuxbridge':
     ensure => $package_ensure,
-    name   => $::quantum::params::linuxbridge_server_package,
+    name   => $::neutron::params::linuxbridge_server_package,
   }
 
-  quantum_plugin_linuxbridge {
+  neutron_plugin_linuxbridge {
     'DATABASE/sql_connection':   value => $sql_connection;
     'VLANS/tenant_network_type': value => $tenant_network_type;
     'VLANS/network_vlan_ranges': value => $network_vlan_ranges;
   }
 
   if $::osfamily == 'Redhat' {
-    file {'/etc/quantum/plugin.ini':
+    file {'/etc/neutron/plugin.ini':
       ensure => link,
-      target => '/etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini',
-      require => Package['quantum-plugin-linuxbridge']
+      target => '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
+      require => Package['neutron-plugin-linuxbridge']
     }
   }
 

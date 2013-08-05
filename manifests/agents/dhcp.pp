@@ -1,6 +1,6 @@
-# == Class: quantum::agents::dhcp
+# == Class: neutron::agents::dhcp
 #
-# Setups Quantum DHCP agent.
+# Setups Neutron DHCP agent.
 #
 # === Parameters
 #
@@ -15,21 +15,21 @@
 #
 # [*state_path*]
 #   (optional) Where to store dnsmasq state files. This directory must be
-#   writable by the user executing the agent. Defaults to '/var/lib/quantum'.
+#   writable by the user executing the agent. Defaults to '/var/lib/neutron'.
 #
 # [*resync_interval*]
-#   (optional) The DHCP agent will resync its state with Quantum to recover
+#   (optional) The DHCP agent will resync its state with Neutron to recover
 #   from any transient notification or rpc errors. The interval is number of
 #   seconds between attempts. Defaults to 30.
 #
 # [*interface_driver*]
-#   (optional) Defaults to 'quantum.agent.linux.interface.OVSInterfaceDriver'.
+#   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*dhcp_driver*]
-#   (optional) Defaults to 'quantum.agent.linux.dhcp.Dnsmasq'.
+#   (optional) Defaults to 'neutron.agent.linux.dhcp.Dnsmasq'.
 #
 # [*root_helper*]
-#   (optional) Defaults to 'sudo quantum-rootwrap /etc/quantum/rootwrap.conf'.
+#   (optional) Defaults to 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf'.
 #   Addresses bug: https://bugs.launchpad.net/neutron/+bug/1182616
 #   Note: This can safely be removed once the module only targets the Havana release.
 #
@@ -38,28 +38,28 @@
 #   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
 #   Defaults to true.
 #
-class quantum::agents::dhcp (
+class neutron::agents::dhcp (
   $package_ensure   = present,
   $enabled          = true,
   $debug            = false,
-  $state_path       = '/var/lib/quantum',
+  $state_path       = '/var/lib/neutron',
   $resync_interval  = 30,
-  $interface_driver = 'quantum.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_driver      = 'quantum.agent.linux.dhcp.Dnsmasq',
-  $root_helper      = 'sudo quantum-rootwrap /etc/quantum/rootwrap.conf',
+  $interface_driver = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $dhcp_driver      = 'neutron.agent.linux.dhcp.Dnsmasq',
+  $root_helper      = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $use_namespaces   = true
 ) {
 
-  include quantum::params
+  include neutron::params
 
-  Quantum_config<||>            ~> Service['quantum-dhcp-service']
-  Quantum_dhcp_agent_config<||> ~> Service['quantum-dhcp-service']
+  Neutron_config<||>            ~> Service['neutron-dhcp-service']
+  Neutron_dhcp_agent_config<||> ~> Service['neutron-dhcp-service']
 
   case $dhcp_driver {
     /\.Dnsmasq/: {
-      Package['dnsmasq'] -> Package<| title == 'quantum-dhcp-agent' |>
+      Package['dnsmasq'] -> Package<| title == 'neutron-dhcp-agent' |>
       package { 'dnsmasq':
-        name   => $::quantum::params::dnsmasq_packages,
+        name   => $::neutron::params::dnsmasq_packages,
         ensure => present,
       }
     }
@@ -68,10 +68,10 @@ class quantum::agents::dhcp (
     }
   }
 
-  # The DHCP agent loads both quantum.ini and its own file.
-  # This only lists config specific to the agent.  quantum.ini supplies
+  # The DHCP agent loads both neutron.ini and its own file.
+  # This only lists config specific to the agent.  neutron.ini supplies
   # the rest.
-  quantum_dhcp_agent_config {
+  neutron_dhcp_agent_config {
     'DEFAULT/debug':              value => $debug;
     'DEFAULT/state_path':         value => $state_path;
     'DEFAULT/resync_interval':    value => $resync_interval;
@@ -81,18 +81,18 @@ class quantum::agents::dhcp (
     'DEFAULT/root_helper':        value => $root_helper;
   }
 
-  if $::quantum::params::dhcp_agent_package {
-    Package['quantum']            -> Package['quantum-dhcp-agent']
-    Package['quantum-dhcp-agent'] -> Quantum_config<||>
-    Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>
-    package { 'quantum-dhcp-agent':
-      name    => $::quantum::params::dhcp_agent_package,
+  if $::neutron::params::dhcp_agent_package {
+    Package['neutron']            -> Package['neutron-dhcp-agent']
+    Package['neutron-dhcp-agent'] -> Neutron_config<||>
+    Package['neutron-dhcp-agent'] -> Neutron_dhcp_agent_config<||>
+    package { 'neutron-dhcp-agent':
+      name    => $::neutron::params::dhcp_agent_package,
       ensure  => $package_ensure,
     }
   } else {
-    # Some platforms (RedHat) do not provide a quantum DHCP agent package.
-    # The quantum DHCP agent config file is provided by the quantum package.
-    Package['quantum'] -> Quantum_dhcp_agent_config<||>
+    # Some platforms (RedHat) do not provide a neutron DHCP agent package.
+    # The neutron DHCP agent config file is provided by the neutron package.
+    Package['neutron'] -> Neutron_dhcp_agent_config<||>
   }
 
   if $enabled {
@@ -101,10 +101,10 @@ class quantum::agents::dhcp (
     $ensure = 'stopped'
   }
 
-  service { 'quantum-dhcp-service':
-    name    => $::quantum::params::dhcp_agent_service,
+  service { 'neutron-dhcp-service':
+    name    => $::neutron::params::dhcp_agent_service,
     enable  => $enabled,
     ensure  => $ensure,
-    require => Class['quantum'],
+    require => Class['neutron'],
   }
 }

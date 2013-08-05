@@ -1,7 +1,7 @@
 #
-# Used to grant access to the quantum mysql DB
+# Used to grant access to the neutron mysql DB
 #
-define quantum::db::mysql::host_access ($user, $password, $database)  {
+define neutron::db::mysql::host_access ($user, $password, $database)  {
   database_user { "${user}@${name}":
     password_hash => mysql_password($password),
     provider      => 'mysql',

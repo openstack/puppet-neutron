@@ -1,6 +1,6 @@
-# == Class: quantum::agents::linuxbridge
+# == Class: neutron::agents::linuxbridge
 #
-# Setups linuxbridge quantum agent.
+# Setups linuxbridge neutron agent.
 #
 # === Parameters
 #
@@ -10,8 +10,8 @@
 #   network interfaces.
 #
 # [*firewall_driver*]
-#   (optional) Firewall driver for realizing quantum security group function.
-#   Defaults to 'quantum.agent.linux.iptables_firewall.IptablesFirewallDriver'.
+#   (optional) Firewall driver for realizing neutron security group function.
+#   Defaults to 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'.
 #
 # [*package_ensure*]
 #   (optional) Ensure state for package. Defaults to 'present'.
@@ -19,31 +19,31 @@
 # [*enable*]
 #   (optional) Enable state for service. Defaults to 'true'.
 #
-class quantum::agents::linuxbridge (
+class neutron::agents::linuxbridge (
   $physical_interface_mappings,
-  $firewall_driver = 'quantum.agent.linux.iptables_firewall.IptablesFirewallDriver',
+  $firewall_driver = 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver',
   $package_ensure  = 'present',
   $enable          = true
 ) {
 
-  include quantum::params
+  include neutron::params
 
-  Quantum_config<||>             ~> Service['quantum-plugin-linuxbridge-service']
-  Quantum_plugin_linuxbridge<||> ~> Service<| title == 'quantum-plugin-linuxbridge-service' |>
+  Neutron_config<||>             ~> Service['neutron-plugin-linuxbridge-service']
+  Neutron_plugin_linuxbridge<||> ~> Service<| title == 'neutron-plugin-linuxbridge-service' |>
 
-  if $::quantum::params::linuxbridge_agent_package {
-    Package['quantum'] -> Package['quantum-plugin-linuxbridge-agent']
-    Package['quantum-plugin-linuxbridge-agent'] -> Quantum_plugin_linuxbridge<||>
-    Package['quantum-plugin-linuxbridge-agent'] -> Service['quantum-plugin-linuxbridge-service']
-    package { 'quantum-plugin-linuxbridge-agent':
+  if $::neutron::params::linuxbridge_agent_package {
+    Package['neutron'] -> Package['neutron-plugin-linuxbridge-agent']
+    Package['neutron-plugin-linuxbridge-agent'] -> Neutron_plugin_linuxbridge<||>
+    Package['neutron-plugin-linuxbridge-agent'] -> Service['neutron-plugin-linuxbridge-service']
+    package { 'neutron-plugin-linuxbridge-agent':
       ensure => $package_ensure,
-      name   => $::quantum::params::linuxbridge_agent_package,
+      name   => $::neutron::params::linuxbridge_agent_package,
     }
   } else {
-    # Some platforms (RedHat) do not provide a separate quantum plugin
+    # Some platforms (RedHat) do not provide a separate neutron plugin
     # linuxbridge agent package. The configuration file for the linuxbridge
-    # agent is provided by the quantum linuxbridge plugin package.
-    Package['quantum-plugin-linuxbridge'] -> Quantum_plugin_linuxbridge<||>
+    # agent is provided by the neutron linuxbridge plugin package.
+    Package['neutron-plugin-linuxbridge'] -> Neutron_plugin_linuxbridge<||>
   }
 
   if $enable {
@@ -52,14 +52,14 @@ class quantum::agents::linuxbridge (
     $service_ensure = 'stopped'
   }
 
-  quantum_plugin_linuxbridge {
+  neutron_plugin_linuxbridge {
     'LINUX_BRIDGE/physical_interface_mappings': value => $physical_interface_mappings;
     'SECURITYGROUP/firewall_driver':            value => $firewall_driver;
   }
 
-  service { 'quantum-plugin-linuxbridge-service':
+  service { 'neutron-plugin-linuxbridge-service':
     ensure  => $service_ensure,
-    name    => $::quantum::params::linuxbridge_agent_service,
+    name    => $::neutron::params::linuxbridge_agent_service,
     enable  => $enable,
   }
 }

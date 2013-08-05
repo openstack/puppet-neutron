@@ -1,6 +1,6 @@
-# == Class: quantum::quota
+# == Class: neutron::quota
 #
-# Setups quantum quota.
+# Setups neutron quota.
 #
 # === Parameters
 #
@@ -40,7 +40,7 @@
 #
 # [*quota_driver*]
 #   (optional) Default driver to use for quota checks.
-#   Defaults to 'quantum.quota.ConfDriver'.
+#   Defaults to 'neutron.quota.ConfDriver'.
 #
 # [*quota_firewall*]
 #   (optional) Number of firewalls allowed per tenant, -1 for unlimited.
@@ -54,7 +54,7 @@
 #   (optional) Number of firewalls rules allowed per tenant, -1 for unlimited.
 #   Defaults to '-1'.
 #
-class quantum::quota (
+class neutron::quota (
   $default_quota             = -1,
   $quota_network             = 10,
   $quota_subnet              = 10,
@@ -65,13 +65,13 @@ class quantum::quota (
   # securitygroup extension
   $quota_security_group      = 10,
   $quota_security_group_rule = 100,
-  $quota_driver              = 'quantum.quota.ConfDriver',
+  $quota_driver              = 'neutron.quota.ConfDriver',
   $quota_firewall            = 1,
   $quota_firewall_policy     = 1,
   $quota_firewall_rule       = -1
 ) {
 
-  quantum_config {
+  neutron_config {
     'QUOTAS/default_quota':             value => $default_quota;
     'QUOTAS/quota_network':             value => $quota_network;
     'QUOTAS/quota_subnet':              value => $quota_subnet;

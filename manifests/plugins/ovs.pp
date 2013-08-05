@@ -1,4 +1,4 @@
-# Configure the quantum server to use the OVS plugin.
+# Configure the neutron server to use the OVS plugin.
 # This configures the plugin for the API server, but does nothing
 # about configuring the agents that must also run and share a config
 # file with the OVS plugin if both are on the same machine.
@@ -9,9 +9,9 @@
 #   (optional) Timeout for SQL to reap connetions.
 #   Defaults to '3600'.
 #
-class quantum::plugins::ovs (
+class neutron::plugins::ovs (
   $package_ensure       = 'present',
-  $sql_connection       = 'sqlite:////var/lib/quantum/ovs.sqlite',
+  $sql_connection       = 'sqlite:////var/lib/neutron/ovs.sqlite',
   $sql_max_retries      = 10,
   $sql_idle_timeout     = '3600',
   $reconnect_interval   = 2,
@@ -26,13 +26,13 @@ class quantum::plugins::ovs (
   $tunnel_id_ranges     = '1:1000'
 ) {
 
-  include quantum::params
+  include neutron::params
   require vswitch::ovs
 
-  Package['quantum'] -> Package['quantum-plugin-ovs']
-  Package['quantum-plugin-ovs'] -> Quantum_plugin_ovs<||>
-  Quantum_plugin_ovs<||> ~> Service<| title == 'quantum-server' |>
-  Package['quantum-plugin-ovs'] -> Service<| title == 'quantum-server' |>
+  Package['neutron'] -> Package['neutron-plugin-ovs']
+  Package['neutron-plugin-ovs'] -> Neutron_plugin_ovs<||>
+  Neutron_plugin_ovs<||> ~> Service<| title == 'neutron-server' |>
+  Package['neutron-plugin-ovs'] -> Service<| title == 'neutron-server' |>
 
   validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
@@ -51,14 +51,14 @@ class quantum::plugins::ovs (
     }
   }
 
-  if ! defined(Package['quantum-plugin-ovs']) {
-    package { 'quantum-plugin-ovs':
+  if ! defined(Package['neutron-plugin-ovs']) {
+    package { 'neutron-plugin-ovs':
       ensure  => $package_ensure,
-      name    => $::quantum::params::ovs_server_package,
+      name    => $::neutron::params::ovs_server_package,
     }
   }
 
-  quantum_plugin_ovs {
+  neutron_plugin_ovs {
     'DATABASE/sql_connection':      value => $sql_connection;
     'DATABASE/sql_max_retries':     value => $sql_max_retries;
     'DATABASE/sql_idle_timeout':    value => $sql_idle_timeout;
@@ -67,7 +67,7 @@ class quantum::plugins::ovs (
   }
 
   if($tenant_network_type == 'gre') {
-    quantum_plugin_ovs {
+    neutron_plugin_ovs {
       # this is set by the plugin and the agent - since the plugin node has the agent installed
       # we rely on it setting it.
       # TODO(ijw): do something with a virtualised node
@@ -84,23 +84,23 @@ class quantum::plugins::ovs (
     }
   } else {
     if ! $network_vlan_ranges {
-      quantum_plugin_ovs { 'OVS/network_vlan_ranges': ensure => absent }
+      neutron_plugin_ovs { 'OVS/network_vlan_ranges': ensure => absent }
     }
   }
 
   # This might be set by the user for the gre case where
   # provider networks are in use
   if $network_vlan_ranges {
-    quantum_plugin_ovs {
+    neutron_plugin_ovs {
       'OVS/network_vlan_ranges': value => $network_vlan_ranges
     }
   }
 
   if $::osfamily == 'Redhat' {
-    file {'/etc/quantum/plugin.ini':
+    file {'/etc/neutron/plugin.ini':
       ensure  => link,
-      target  => '/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini',
-      require => Package['quantum-plugin-ovs']
+      target  => '/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini',
+      require => Package['neutron-plugin-ovs']
     }
   }
 }

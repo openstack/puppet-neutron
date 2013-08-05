@@ -1,11 +1,11 @@
-name    'puppet-quantum'
+name    'puppet-neutron'
 version '2.1.1'
-source  'https://github.com/CiscoSystems/puppet-quantum'
+source  'https://github.com/CiscoSystems/puppet-neutron'
 author  'Joe Topjian,Endre Karlson,Emilien Macchi,Dan Bode,Dmitry Ukov,Edgar Mangana,Robert Starmer,Ian Wells,Daneyon Hansen'
 license 'Apache License 2.0'
-summary 'Puppet module for OpenStack Quantum'
-description 'Puppet module to install and configure the OpenStack network service, Quantum'
-project_page 'https://github.com/CiscoSystems/puppet-quantum'
+summary 'Puppet module for OpenStack Neutron'
+description 'Puppet module to install and configure the OpenStack network service, Neutron'
+project_page 'https://github.com/stackforge/puppet-neutron'
 
 # Dependencies
 dependency 'puppetlabs/vswitch', '>=0.0.1 <1.0.0'

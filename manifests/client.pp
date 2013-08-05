@@ -1,6 +1,6 @@
-# == Class: quantum::client
+# == Class: neutron::client
 #
-# Manages the quantum client package on systems
+# Manages the neutron client package on systems
 #
 # === Parameters:
 #
@@ -8,14 +8,14 @@
 #   (optional) The state of the package
 #   Defaults to present
 #
-class quantum::client (
+class neutron::client (
   $package_ensure = present
 ) {
 
-  include quantum::params
+  include neutron::params
 
-  package { 'python-quantumclient':
-    name   => $::quantum::params::client_package_name,
+  package { 'python-neutronclient':
+    name   => $::neutron::params::client_package_name,
     ensure => $package_ensure
   }
 

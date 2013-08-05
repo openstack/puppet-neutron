@@ -1,6 +1,6 @@
-# == Class: quantum::agents::l3
+# == Class: neutron::agents::l3
 #
-# Installs and configures the Quantum L3 service
+# Installs and configures the Neutron L3 service
 #
 # TODO: create ability to have multiple L3 services
 #
@@ -27,15 +27,15 @@
 #   Defaults to false
 #
 # [*interface_driver*]
-#   (optional) Driver to interface with quantum
+#   (optional) Driver to interface with neutron
 #   Defaults to OVSInterfaceDriver
 #
 # [*router_id*]
-#   (optional) The ID of the external router in quantum
+#   (optional) The ID of the external router in neutron
 #   Defaults to blank
 #
 # [*gateway_external_network_id*]
-#   (optional) The ID of the external network in quantum
+#   (optional) The ID of the external network in neutron
 #   Defaults to blank
 #
 # [*handle_internal_only_routers*]
@@ -63,13 +63,13 @@
 #   (optional) can be set to False if the Nova metadata server is not available
 #   Defaults to True
 #
-class quantum::agents::l3 (
+class neutron::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
   $debug                        = false,
   $external_network_bridge      = 'br-ex',
   $use_namespaces               = true,
-  $interface_driver             = 'quantum.agent.linux.interface.OVSInterfaceDriver',
+  $interface_driver             = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $router_id                    = undef,
   $gateway_external_network_id  = undef,
   $handle_internal_only_routers = true,
@@ -80,12 +80,12 @@ class quantum::agents::l3 (
   $enable_metadata_proxy        = true
 ) {
 
-  include quantum::params
+  include neutron::params
 
-  Quantum_config<||>          ~> Service['quantum-l3']
-  Quantum_l3_agent_config<||> ~> Service['quantum-l3']
+  Neutron_config<||>          ~> Service['neutron-l3']
+  Neutron_l3_agent_config<||> ~> Service['neutron-l3']
 
-  quantum_l3_agent_config {
+  neutron_l3_agent_config {
     'DEFAULT/debug':                        value => $debug;
     'DEFAULT/external_network_bridge':      value => $external_network_bridge;
     'DEFAULT/use_namespaces':               value => $use_namespaces;
@@ -100,17 +100,17 @@ class quantum::agents::l3 (
     'DEFAULT/enable_metadata_proxy':        value => $enable_metadata_proxy;
   }
 
-  if $::quantum::params::l3_agent_package {
-    Package['quantum-l3'] -> Quantum_l3_agent_config<||>
-    package { 'quantum-l3':
-      name    => $::quantum::params::l3_agent_package,
+  if $::neutron::params::l3_agent_package {
+    Package['neutron-l3'] -> Neutron_l3_agent_config<||>
+    package { 'neutron-l3':
+      name    => $::neutron::params::l3_agent_package,
       ensure  => $package_ensure,
-      require => Package['quantum'],
+      require => Package['neutron'],
     }
   } else {
-    # Some platforms (RedHat) does not provide a quantum L3 agent package.
-    # The quantum L3 agent config file is provided by the quantum package.
-    Package['quantum'] -> Quantum_l3_agent_config<||>
+    # Some platforms (RedHat) does not provide a neutron L3 agent package.
+    # The neutron L3 agent config file is provided by the neutron package.
+    Package['neutron'] -> Neutron_l3_agent_config<||>
   }
 
   if $enabled {
@@ -119,10 +119,10 @@ class quantum::agents::l3 (
     $ensure = 'stopped'
   }
 
-  service { 'quantum-l3':
-    name    => $::quantum::params::l3_agent_service,
+  service { 'neutron-l3':
+    name    => $::neutron::params::l3_agent_service,
     enable  => $enabled,
     ensure  => $ensure,
-    require => Class['quantum'],
+    require => Class['neutron'],
   }
 }

@@ -1,6 +1,6 @@
-# == Class: quantum::agents:lbaas:
+# == Class: neutron::agents:lbaas:
 #
-# Setups Quantum Load Balancing agent.
+# Setups Neutron Load Balancing agent.
 #
 # === Parameters
 #
@@ -14,10 +14,10 @@
 #   (optional) Show debugging output in log. Defaults to false.
 #
 # [*interface_driver*]
-#   (optional) Defaults to 'quantum.agent.linux.interface.OVSInterfaceDriver'.
+#   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*device_driver*]
-#   (optional) Defaults to 'quantum.plugins.services.agent_loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver'.
+#   (optional) Defaults to 'neutron.plugins.services.agent_loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver'.
 #
 # [*use_namespaces*]
 #   (optional) Allow overlapping IP (Must have kernel build with
@@ -27,26 +27,26 @@
 # [*user_group*]
 #   (optional) The user group. Defaults to nogroup.
 #
-class quantum::agents::lbaas (
+class neutron::agents::lbaas (
   $package_ensure   = present,
   $enabled          = true,
   $debug            = false,
-  $interface_driver = 'quantum.agent.linux.interface.OVSInterfaceDriver',
-  $device_driver    = 'quantum.plugins.services.agent_loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
+  $interface_driver = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $device_driver    = 'neutron.plugins.services.agent_loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
   $use_namespaces   = true,
   $user_group       = 'nogroup',
 ) {
 
-  include quantum::params
+  include neutron::params
 
-  Quantum_config<||>            ~> Service['quantum-lbaas-service']
-  Quantum_lbaas_agent_config<||> ~> Service['quantum-lbaas-service']
+  Neutron_config<||>            ~> Service['neutron-lbaas-service']
+  Neutron_lbaas_agent_config<||> ~> Service['neutron-lbaas-service']
 
   case $device_driver {
     /\.haproxy/: {
-      Package['haproxy'] -> Package<| title == 'quantum-lbaas-agent' |>
+      Package['haproxy'] -> Package<| title == 'neutron-lbaas-agent' |>
       package { 'haproxy':
-        name   => $::quantum::params::haproxy_package,
+        name   => $::neutron::params::haproxy_package,
         ensure => present,
       }
     }
@@ -55,10 +55,10 @@ class quantum::agents::lbaas (
     }
   }
 
-  # The LBaaS agent loads both quantum.ini and its own file.
-  # This only lists config specific to the agent.  quantum.ini supplies
+  # The LBaaS agent loads both neutron.ini and its own file.
+  # This only lists config specific to the agent.  neutron.ini supplies
   # the rest.
-  quantum_lbaas_agent_config {
+  neutron_lbaas_agent_config {
     'DEFAULT/debug':              value => $debug;
     'DEFAULT/interface_driver':   value => $interface_driver;
     'DEFAULT/device_driver':      value => $device_driver;
@@ -66,18 +66,18 @@ class quantum::agents::lbaas (
     'DEFAULT/user_group':         value => $user_group;
   }
 
-  if $::quantum::params::lbaas_agent_package {
-    Package['quantum']            -> Package['quantum-lbaas-agent']
-    Package['quantum-lbaas-agent'] -> Quantum_config<||>
-    Package['quantum-lbaas-agent'] -> Quantum_lbaas_agent_config<||>
-    package { 'quantum-lbaas-agent':
-      name    => $::quantum::params::lbaas_agent_package,
+  if $::neutron::params::lbaas_agent_package {
+    Package['neutron']            -> Package['neutron-lbaas-agent']
+    Package['neutron-lbaas-agent'] -> Neutron_config<||>
+    Package['neutron-lbaas-agent'] -> Neutron_lbaas_agent_config<||>
+    package { 'neutron-lbaas-agent':
+      name    => $::neutron::params::lbaas_agent_package,
       ensure  => $package_ensure,
     }
   } else {
-    # Some platforms (RedHat) do not provide a quantum LBaaS agent package.
-    # The quantum LBaaS agent config file is provided by the quantum package.
-    Package['quantum'] -> Quantum_lbaas_agent_config<||>
+    # Some platforms (RedHat) do not provide a neutron LBaaS agent package.
+    # The neutron LBaaS agent config file is provided by the neutron package.
+    Package['neutron'] -> Neutron_lbaas_agent_config<||>
   }
 
   if $enabled {
@@ -86,10 +86,10 @@ class quantum::agents::lbaas (
     $ensure = 'stopped'
   }
 
-  service { 'quantum-lbaas-service':
-    name    => $::quantum::params::lbaas_agent_service,
+  service { 'neutron-lbaas-service':
+    name    => $::neutron::params::lbaas_agent_service,
     enable  => $enabled,
     ensure  => $ensure,
-    require => Class['quantum'],
+    require => Class['neutron'],
   }
 }

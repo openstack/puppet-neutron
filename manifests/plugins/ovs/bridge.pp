@@ -1,4 +1,4 @@
-define quantum::plugins::ovs::bridge {
+define neutron::plugins::ovs::bridge {
   $mapping = split($name, ':')
   $bridge = $mapping[1]
 

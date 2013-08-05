@@ -1,8 +1,8 @@
 #
-class quantum::db::mysql (
+class neutron::db::mysql (
   $password,
-  $dbname        = 'quantum',
-  $user          = 'quantum',
+  $dbname        = 'neutron',
+  $user          = 'neutron',
   $host          = '127.0.0.1',
   $allowed_hosts = undef,
   $charset       = 'latin1',
@@ -27,7 +27,7 @@ class quantum::db::mysql (
   }
 
   if $real_allowed_hosts {
-    quantum::db::mysql::host_access { $real_allowed_hosts:
+    neutron::db::mysql::host_access { $real_allowed_hosts:
       user      => $user,
       password  => $password,
       database  => $dbname,

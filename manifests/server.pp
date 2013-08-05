@@ -1,6 +1,6 @@
-# == Class: quantum::server
+# == Class: neutron::server
 #
-# Setup and configure the quantum API endpoint
+# Setup and configure the neutron API endpoint
 #
 # === Parameters
 #
@@ -17,7 +17,7 @@
 #
 # [*log_dir*]
 #   (optional) Directory to store logs
-#   Defaults to /var/log/quantum
+#   Defaults to /var/log/neutron
 #
 # [*auth_password*]
 #   (optional) The password to use for authentication (keystone)
@@ -51,13 +51,13 @@
 #
 # [*auth_user*]
 #   (optional) The name of the auth user
-#   Defaults to quantum
+#   Defaults to neutron
 #
 # [*auth_protocol*]
 #   (optional) The protocol to connect to keystone
 #   Defaults to http
 #
-class quantum::server (
+class neutron::server (
   $package_ensure    = 'present',
   $enabled           = true,
   $auth_password     = false,
@@ -66,25 +66,25 @@ class quantum::server (
   $auth_port         = '35357',
   $auth_admin_prefix = false,
   $auth_tenant       = 'services',
-  $auth_user         = 'quantum',
+  $auth_user         = 'neutron',
   $auth_protocol     = 'http',
   $log_file          = false,
-  $log_dir           = '/var/log/quantum'
+  $log_dir           = '/var/log/neutron'
 ) {
 
-  include quantum::params
+  include neutron::params
   require keystone::python
 
-  Quantum_config<||>     ~> Service['quantum-server']
-  Quantum_api_config<||> ~> Service['quantum-server']
+  Neutron_config<||>     ~> Service['neutron-server']
+  Neutron_api_config<||> ~> Service['neutron-server']
 
   if $log_file {
-    quantum_config {
+    neutron_config {
       'DEFAULT/log_file': value  => $log_file;
       'DEFAULT/log_dir':  ensure => absent;
     }
   } else {
-    quantum_config {
+    neutron_config {
       'DEFAULT/log_dir':  value  => $log_dir;
       'DEFAULT/log_file': ensure => absent;
     }
@@ -96,18 +96,18 @@ class quantum::server (
     $service_ensure = 'stopped'
   }
 
-  if ($::quantum::params::server_package) {
-    Package['quantum-server'] -> Quantum_api_config<||>
-    Package['quantum-server'] -> Quantum_config<||>
-    Package['quantum-server'] -> Service['quantum-server']
-    package { 'quantum-server':
-      name   => $::quantum::params::server_package,
+  if ($::neutron::params::server_package) {
+    Package['neutron-server'] -> Neutron_api_config<||>
+    Package['neutron-server'] -> Neutron_config<||>
+    Package['neutron-server'] -> Service['neutron-server']
+    package { 'neutron-server':
+      name   => $::neutron::params::server_package,
       ensure => $package_ensure
     }
   } else {
-    # Some platforms (RedHat) does not provide a quantum-server package.
-    # The quantum api config file is provided by the quantum package.
-    Package['quantum'] -> Quantum_api_config<||>
+    # Some platforms (RedHat) does not provide a neutron-server package.
+    # The neutron api config file is provided by the neutron package.
+    Package['neutron'] -> Neutron_api_config<||>
   }
 
   if ($auth_type == 'keystone') {
@@ -115,7 +115,7 @@ class quantum::server (
     if ($auth_password == false) {
       fail('$auth_password must be set when using keystone authentication.')
     } else {
-      quantum_config {
+      neutron_config {
         'keystone_authtoken/auth_host':         value => $auth_host;
         'keystone_authtoken/auth_port':         value => $auth_port;
         'keystone_authtoken/auth_protocol':     value => $auth_protocol;
@@ -124,7 +124,7 @@ class quantum::server (
         'keystone_authtoken/admin_password':    value => $auth_password;
       }
 
-      quantum_api_config {
+      neutron_api_config {
         'filter:authtoken/auth_host':         value => $auth_host;
         'filter:authtoken/auth_port':         value => $auth_port;
         'filter:authtoken/auth_protocol':     value => $auth_protocol;
@@ -135,17 +135,17 @@ class quantum::server (
 
       if $auth_admin_prefix {
         validate_re($auth_admin_prefix, '^(/.+[^/])?$')
-        quantum_config {
+        neutron_config {
           'keystone_authtoken/auth_admin_prefix': value => $auth_admin_prefix;
         }
-        quantum_api_config {
+        neutron_api_config {
           'filter:authtoken/auth_admin_prefix': value => $auth_admin_prefix;
         }
       } else {
-        quantum_config {
+        neutron_config {
           'keystone_authtoken/auth_admin_prefix': ensure => absent;
         }
-        quantum_api_config {
+        neutron_api_config {
           'filter:authtoken/auth_admin_prefix': ensure => absent;
         }
       }
@@ -153,12 +153,12 @@ class quantum::server (
 
   }
 
-  service { 'quantum-server':
-    name       => $::quantum::params::server_service,
+  service { 'neutron-server':
+    name       => $::neutron::params::server_service,
     ensure     => $service_ensure,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Class['quantum'],
+    require    => Class['neutron'],
   }
 }

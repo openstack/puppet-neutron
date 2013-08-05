@@ -1,7 +1,7 @@
-class quantum::keystone::auth (
+class neutron::keystone::auth (
   $password,
-  $auth_name          = 'quantum',
-  $email              = 'quantum@localhost',
+  $auth_name          = 'neutron',
+  $email              = 'neutron@localhost',
   $tenant             = 'services',
   $configure_endpoint = true,
   $service_type       = 'network',
@@ -14,7 +14,7 @@ class quantum::keystone::auth (
   $region             = 'RegionOne'
 ) {
 
-  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'quantum-server' |>
+  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'neutron-server' |>
 
   if ! $public_port {
     $real_public_port = $port
@@ -35,7 +35,7 @@ class quantum::keystone::auth (
   keystone_service { $auth_name:
     ensure      => present,
     type        => $service_type,
-    description => 'Quantum Networking Service',
+    description => 'Neutron Networking Service',
   }
 
   if $configure_endpoint {

@@ -59,7 +59,7 @@ Puppet::Type.type(:neutron_router_interface).provide(
     results = auth_neutron("router-interface-add", '--format=shell',
                            resource[:name].split(':', 2))
 
-    if results =~ /Added interface to router/
+    if results =~ /Added interface.* to router/
       @property_hash = {
         :ensure => :present,
         :name   => resource[:name],

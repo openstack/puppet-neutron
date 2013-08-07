@@ -8,4 +8,9 @@ description 'Puppet module to install and configure the OpenStack network servic
 project_page 'https://github.com/CiscoSystems/puppet-quantum'
 
 # Dependencies
-#dependency 'CiscoSystems/vswitch', '>= 0.1.0'
+dependency 'puppetlabs/vswitch', '>=0.0.1 <1.0.0'
+dependency 'puppetlabs/inifile', '>=1.0.0 <2.0.0'
+dependency 'puppetlabs/mysql', '>=0.6.1 <1.0.0'
+dependency 'puppetlabs/stdlib', '>=2.3.0'
+dependency 'puppetlabs/keystone', '>=2.0.0 <3.0.0'
+dependency 'puppetlabs/nova', '>=2.0.0 <3.0.0'

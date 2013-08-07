@@ -1,5 +1,5 @@
 name    'puppet-quantum'
-version '0.2.2'
+version '2.1.1'
 source  'https://github.com/CiscoSystems/puppet-quantum'
 author  'Joe Topjian,Endre Karlson,Emilien Macchi,Dan Bode,Dmitry Ukov,Edgar Mangana,Robert Starmer,Ian Wells,Daneyon Hansen'
 license 'Apache License 2.0'

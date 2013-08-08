@@ -46,6 +46,23 @@
 #   (optional) The port of the metadata server
 #   Defaults to 9697
 #
+# [*send_arp_for_ha*]
+#   (optional) Send this many gratuitous ARPs for HA setup. Set it below or equal to 0
+#   to disable this feature.
+#   Defaults to 3
+#
+# [*periodic_interval*]
+#   (optional) seconds between re-sync routers' data if needed
+#   Defaults to 40
+#
+# [*periodic_fuzzy_delay*]
+#   (optional) seconds to start to sync routers' data after starting agent
+#   Defaults to 5
+#
+# [*enable_metadata_proxy*]
+#   (optional) can be set to False if the Nova metadata server is not available
+#   Defaults to True
+#
 class quantum::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
@@ -56,7 +73,11 @@ class quantum::agents::l3 (
   $router_id                    = undef,
   $gateway_external_network_id  = undef,
   $handle_internal_only_routers = true,
-  $metadata_port                = '9697'
+  $metadata_port                = '9697',
+  $send_arp_for_ha              = '3',
+  $periodic_interval            = '40',
+  $periodic_fuzzy_delay         = '5',
+  $enable_metadata_proxy        = true
 ) {
 
   include quantum::params
@@ -73,6 +94,10 @@ class quantum::agents::l3 (
     'DEFAULT/gateway_external_network_id':  value => $gateway_external_network_id;
     'DEFAULT/handle_internal_only_routers': value => $handle_internal_only_routers;
     'DEFAULT/metadata_port':                value => $metadata_port;
+    'DEFAULT/send_arp_for_ha':              value => $send_arp_for_ha;
+    'DEFAULT/periodic_interval':            value => $periodic_interval;
+    'DEFAULT/periodic_fuzzy_delay':         value => $periodic_fuzzy_delay;
+    'DEFAULT/enable_metadata_proxy':        value => $enable_metadata_proxy;
   }
 
   if $::quantum::params::l3_agent_package {

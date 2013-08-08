@@ -42,6 +42,18 @@
 #   (optional) Default driver to use for quota checks.
 #   Defaults to 'quantum.quota.ConfDriver'.
 #
+# [*quota_firewall*]
+#   (optional) Number of firewalls allowed per tenant, -1 for unlimited.
+#   Defaults to '1'.
+#
+# [*quota_firewall_policy*]
+#   (optional) Number of firewalls policies allowed per tenant, -1 for unlimited.
+#   Defaults to '1'.
+#
+# [*quota_firewall_rule*]
+#   (optional) Number of firewalls rules allowed per tenant, -1 for unlimited.
+#   Defaults to '-1'.
+#
 class quantum::quota (
   $default_quota             = -1,
   $quota_network             = 10,
@@ -53,7 +65,10 @@ class quantum::quota (
   # securitygroup extension
   $quota_security_group      = 10,
   $quota_security_group_rule = 100,
-  $quota_driver              = 'quantum.quota.ConfDriver'
+  $quota_driver              = 'quantum.quota.ConfDriver',
+  $quota_firewall            = 1,
+  $quota_firewall_policy     = 1,
+  $quota_firewall_rule       = -1
 ) {
 
   quantum_config {
@@ -66,5 +81,8 @@ class quantum::quota (
     'QUOTAS/quota_security_group':      value => $quota_security_group;
     'QUOTAS/quota_security_group_rule': value => $quota_security_group_rule;
     'QUOTAS/quota_driver':              value => $quota_driver;
+    'QUOTAS/quota_firewall':            value => $quota_firewall;
+    'QUOTAS/quota_firewall_policy':     value => $quota_firewall_policy;
+    'QUOTAS/quota_firewall_rule':       value => $quota_firewall_rule;
   }
 }

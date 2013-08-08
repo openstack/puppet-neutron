@@ -15,7 +15,10 @@ describe 'quantum::quota' do
       :quota_floatingip          => 50,
       :quota_security_group      => 10,
       :quota_security_group_rule => 100,
-      :quota_driver              => 'quantum.quota.ConfDriver' }
+      :quota_driver              => 'quantum.quota.ConfDriver',
+      :quota_firewall            => 1,
+      :quota_firewall_policy     => 1,
+      :quota_firewall_rule       => -1 }
   end
 
   shared_examples_for 'quantum quota' do
@@ -43,7 +46,10 @@ describe 'quantum::quota' do
         :quota_router              => 20,
         :quota_floatingip          => 100,
         :quota_security_group      => 20,
-        :quota_security_group_rule => 200
+        :quota_security_group_rule => 200,
+        :quota_firewall            => 1,
+        :quota_firewall_policy     => 1,
+        :quota_firewall_rule       => -1
       })
     end
 

@@ -149,8 +149,8 @@ class quantum (
   file { '/etc/quantum/quantum.conf': }
 
   package { 'quantum':
+    ensure => $package_ensure,
     name   => $::quantum::params::package_name,
-    ensure => $package_ensure
   }
 
   quantum_config {

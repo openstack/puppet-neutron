@@ -15,8 +15,8 @@ class quantum::client (
   include quantum::params
 
   package { 'python-quantumclient':
+    ensure => $package_ensure,
     name   => $::quantum::params::client_package_name,
-    ensure => $package_ensure
   }
 
 }

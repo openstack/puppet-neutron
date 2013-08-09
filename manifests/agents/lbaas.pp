@@ -46,8 +46,8 @@ class quantum::agents::lbaas (
     /\.haproxy/: {
       Package['haproxy'] -> Package<| title == 'quantum-lbaas-agent' |>
       package { 'haproxy':
-        name   => $::quantum::params::haproxy_package,
         ensure => present,
+        name   => $::quantum::params::haproxy_package,
       }
     }
     default: {
@@ -71,8 +71,8 @@ class quantum::agents::lbaas (
     Package['quantum-lbaas-agent'] -> Quantum_config<||>
     Package['quantum-lbaas-agent'] -> Quantum_lbaas_agent_config<||>
     package { 'quantum-lbaas-agent':
-      name    => $::quantum::params::lbaas_agent_package,
       ensure  => $package_ensure,
+      name    => $::quantum::params::lbaas_agent_package,
     }
   } else {
     # Some platforms (RedHat) do not provide a quantum LBaaS agent package.
@@ -87,9 +87,9 @@ class quantum::agents::lbaas (
   }
 
   service { 'quantum-lbaas-service':
+    ensure  => $ensure,
     name    => $::quantum::params::lbaas_agent_service,
     enable  => $enabled,
-    ensure  => $ensure,
     require => Class['quantum'],
   }
 }

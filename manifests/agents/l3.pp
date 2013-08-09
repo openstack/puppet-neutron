@@ -78,8 +78,8 @@ class quantum::agents::l3 (
   if $::quantum::params::l3_agent_package {
     Package['quantum-l3'] -> Quantum_l3_agent_config<||>
     package { 'quantum-l3':
-      name    => $::quantum::params::l3_agent_package,
       ensure  => $package_ensure,
+      name    => $::quantum::params::l3_agent_package,
       require => Package['quantum'],
     }
   } else {
@@ -95,9 +95,9 @@ class quantum::agents::l3 (
   }
 
   service { 'quantum-l3':
+    ensure  => $ensure,
     name    => $::quantum::params::l3_agent_service,
     enable  => $enabled,
-    ensure  => $ensure,
     require => Class['quantum'],
   }
 }

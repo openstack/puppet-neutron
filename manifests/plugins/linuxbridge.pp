@@ -57,8 +57,8 @@ class quantum::plugins::linuxbridge (
 
   if $::osfamily == 'Redhat' {
     file {'/etc/quantum/plugin.ini':
-      ensure => link,
-      target => '/etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini',
+      ensure  => link,
+      target  => '/etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini',
       require => Package['quantum-plugin-linuxbridge']
     }
   }

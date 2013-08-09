@@ -59,8 +59,8 @@ class quantum::agents::dhcp (
     /\.Dnsmasq/: {
       Package['dnsmasq'] -> Package<| title == 'quantum-dhcp-agent' |>
       package { 'dnsmasq':
-        name   => $::quantum::params::dnsmasq_packages,
         ensure => present,
+        name   => $::quantum::params::dnsmasq_packages,
       }
     }
     default: {
@@ -86,8 +86,8 @@ class quantum::agents::dhcp (
     Package['quantum-dhcp-agent'] -> Quantum_config<||>
     Package['quantum-dhcp-agent'] -> Quantum_dhcp_agent_config<||>
     package { 'quantum-dhcp-agent':
-      name    => $::quantum::params::dhcp_agent_package,
       ensure  => $package_ensure,
+      name    => $::quantum::params::dhcp_agent_package,
     }
   } else {
     # Some platforms (RedHat) do not provide a quantum DHCP agent package.
@@ -102,9 +102,9 @@ class quantum::agents::dhcp (
   }
 
   service { 'quantum-dhcp-service':
+    ensure  => $ensure,
     name    => $::quantum::params::dhcp_agent_service,
     enable  => $enabled,
-    ensure  => $ensure,
     require => Class['quantum'],
   }
 }

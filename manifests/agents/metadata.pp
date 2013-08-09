@@ -34,8 +34,8 @@ class quantum::agents::metadata (
     Package['quantum-metadata'] -> Quantum_metadata_agent_config<||>
     Package['quantum-metadata'] -> Service['quantum-metadata']
     package { 'quantum-metadata':
-      name    => $::quantum::params::metadata_agent_package,
       ensure  => $package_ensure,
+      name    => $::quantum::params::metadata_agent_package,
       require => Package['quantum'],
     }
   }
@@ -47,9 +47,9 @@ class quantum::agents::metadata (
   }
 
   service { 'quantum-metadata':
+    ensure  => $ensure,
     name    => $::quantum::params::metadata_agent_service,
     enable  => $enabled,
-    ensure  => $ensure,
     require => Class['quantum'],
   }
 }

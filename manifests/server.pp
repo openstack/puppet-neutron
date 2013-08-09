@@ -101,8 +101,8 @@ class quantum::server (
     Package['quantum-server'] -> Quantum_config<||>
     Package['quantum-server'] -> Service['quantum-server']
     package { 'quantum-server':
+      ensure => $package_ensure,
       name   => $::quantum::params::server_package,
-      ensure => $package_ensure
     }
   } else {
     # Some platforms (RedHat) does not provide a quantum-server package.
@@ -154,8 +154,8 @@ class quantum::server (
   }
 
   service { 'quantum-server':
-    name       => $::quantum::params::server_service,
     ensure     => $service_ensure,
+    name       => $::quantum::params::server_service,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,

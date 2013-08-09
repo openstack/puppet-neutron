@@ -15,6 +15,9 @@ class quantum::params {
     $linuxbridge_server_package = 'openstack-quantum-linuxbridge'
     $linuxbridge_config_file    = '/etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini'
 
+    $cisco_server_package = 'openstack-quantum-cisco'
+    $cisco_config_file    = '/etc/quantum/plugins/cisco/cisco_plugins.ini'
+
     $dhcp_agent_package = false
     $dhcp_agent_service = 'quantum-dhcp-agent'
 
@@ -49,6 +52,9 @@ class quantum::params {
     $linuxbridge_agent_service  = 'quantum-plugin-linuxbridge-agent'
     $linuxbridge_server_package = 'quantum-plugin-linuxbridge'
     $linuxbridge_config_file    = '/etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini'
+
+    $cisco_server_package = 'quantum-plugin-cisco'
+    $cisco_config_file    = '/etc/quantum/plugins/cisco/cisco_plugins.ini'
 
     $dhcp_agent_package = 'quantum-dhcp-agent'
     $dhcp_agent_service = 'quantum-dhcp-agent'

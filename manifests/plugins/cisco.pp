@@ -108,6 +108,20 @@ class quantum::plugins::cisco(
     Package['quantum'] -> Quantum_plugin_cisco_l2network<||>
   }
 
+  if $::osfamily == 'Debian' {
+    # Only set the quantum_plugin_config path for n1k as it uses single config for grizzly.
+    # rest of the plugins default to multi config.
+    if $vswitch_plugin == 'quantum.plugins.cisco.n1kv.n1kv_quantum_plugin.N1kvQuantumPluginV2' {
+      file_line { '/etc/default/quantum-server:QUANTUM_PLUGIN_CONFIG':
+        path    => '/etc/default/quantum-server',
+        match   => '^QUANTUM_PLUGIN_CONFIG=(.*)$',
+        line    => "QUANTUM_PLUGIN_CONFIG=${::quantum::params::cisco_config_file}",
+        require => Package['quantum-plugin-cisco'],
+        notify  => Service['quantum-server'],
+      }
+    }
+  }
+
   if $nexus_plugin {
     quantum_plugin_cisco {
       'PLUGINS/nexus_plugin' : value => $nexus_plugin;

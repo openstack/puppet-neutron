@@ -15,6 +15,9 @@ class neutron::params {
     $linuxbridge_server_package = 'openstack-neutron-linuxbridge'
     $linuxbridge_config_file    = '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini'
 
+    $cisco_server_package = 'openstack-neutron-cisco'
+    $cisco_config_file    = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
+
     $dhcp_agent_package = false
     $dhcp_agent_service = 'neutron-dhcp-agent'
 
@@ -49,6 +52,9 @@ class neutron::params {
     $linuxbridge_agent_service  = 'neutron-plugin-linuxbridge-agent'
     $linuxbridge_server_package = 'neutron-plugin-linuxbridge'
     $linuxbridge_config_file    = '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini'
+
+    $cisco_server_package = 'neutron-plugin-cisco'
+    $cisco_config_file    = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
 
     $dhcp_agent_package = 'neutron-dhcp-agent'
     $dhcp_agent_service = 'neutron-dhcp-agent'

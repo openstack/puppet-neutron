@@ -108,6 +108,22 @@ class neutron::plugins::cisco(
     Package['neutron'] -> Neutron_plugin_cisco_l2network<||>
   }
 
+  if $::osfamily == 'Debian' {
+    file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
+      path    => '/etc/default/neutron-server',
+      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::cisco_config_file}",
+      require => Package['neutron-plugin-cisco'],
+      notify  => Service['neutron-server'],
+    }
+  }
+
+  package { 'neutron-plugin-cisco':
+    ensure => $package_ensure,
+    name   => $::neutron::params::cisco_server_package,
+  }
+
+
   if $nexus_plugin {
     neutron_plugin_cisco {
       'PLUGINS/nexus_plugin' : value => $nexus_plugin;

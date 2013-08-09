@@ -103,8 +103,8 @@ class neutron::agents::l3 (
   if $::neutron::params::l3_agent_package {
     Package['neutron-l3'] -> Neutron_l3_agent_config<||>
     package { 'neutron-l3':
-      name    => $::neutron::params::l3_agent_package,
       ensure  => $package_ensure,
+      name    => $::neutron::params::l3_agent_package,
       require => Package['neutron'],
     }
   } else {
@@ -120,9 +120,9 @@ class neutron::agents::l3 (
   }
 
   service { 'neutron-l3':
+    ensure  => $ensure,
     name    => $::neutron::params::l3_agent_service,
     enable  => $enabled,
-    ensure  => $ensure,
     require => Class['neutron'],
   }
 }

@@ -15,8 +15,8 @@ class neutron::client (
   include neutron::params
 
   package { 'python-neutronclient':
+    ensure => $package_ensure,
     name   => $::neutron::params::client_package_name,
-    ensure => $package_ensure
   }
 
 }

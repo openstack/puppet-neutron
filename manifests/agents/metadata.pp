@@ -34,8 +34,8 @@ class neutron::agents::metadata (
     Package['neutron-metadata'] -> Neutron_metadata_agent_config<||>
     Package['neutron-metadata'] -> Service['neutron-metadata']
     package { 'neutron-metadata':
-      name    => $::neutron::params::metadata_agent_package,
       ensure  => $package_ensure,
+      name    => $::neutron::params::metadata_agent_package,
       require => Package['neutron'],
     }
   }
@@ -47,9 +47,9 @@ class neutron::agents::metadata (
   }
 
   service { 'neutron-metadata':
+    ensure  => $ensure,
     name    => $::neutron::params::metadata_agent_service,
     enable  => $enabled,
-    ensure  => $ensure,
     require => Class['neutron'],
   }
 }

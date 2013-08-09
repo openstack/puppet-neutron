@@ -149,8 +149,8 @@ class neutron (
   file { '/etc/neutron/neutron.conf': }
 
   package { 'neutron':
+    ensure => $package_ensure,
     name   => $::neutron::params::package_name,
-    ensure => $package_ensure
   }
 
   neutron_config {

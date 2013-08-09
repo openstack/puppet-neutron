@@ -59,8 +59,8 @@ class neutron::agents::dhcp (
     /\.Dnsmasq/: {
       Package['dnsmasq'] -> Package<| title == 'neutron-dhcp-agent' |>
       package { 'dnsmasq':
-        name   => $::neutron::params::dnsmasq_packages,
         ensure => present,
+        name   => $::neutron::params::dnsmasq_packages,
       }
     }
     default: {
@@ -86,8 +86,8 @@ class neutron::agents::dhcp (
     Package['neutron-dhcp-agent'] -> Neutron_config<||>
     Package['neutron-dhcp-agent'] -> Neutron_dhcp_agent_config<||>
     package { 'neutron-dhcp-agent':
-      name    => $::neutron::params::dhcp_agent_package,
       ensure  => $package_ensure,
+      name    => $::neutron::params::dhcp_agent_package,
     }
   } else {
     # Some platforms (RedHat) do not provide a neutron DHCP agent package.
@@ -102,9 +102,9 @@ class neutron::agents::dhcp (
   }
 
   service { 'neutron-dhcp-service':
+    ensure  => $ensure,
     name    => $::neutron::params::dhcp_agent_service,
     enable  => $enabled,
-    ensure  => $ensure,
     require => Class['neutron'],
   }
 }

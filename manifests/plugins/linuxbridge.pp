@@ -57,8 +57,8 @@ class neutron::plugins::linuxbridge (
 
   if $::osfamily == 'Redhat' {
     file {'/etc/neutron/plugin.ini':
-      ensure => link,
-      target => '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
+      ensure  => link,
+      target  => '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
       require => Package['neutron-plugin-linuxbridge']
     }
   }

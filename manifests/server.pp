@@ -101,8 +101,8 @@ class neutron::server (
     Package['neutron-server'] -> Neutron_config<||>
     Package['neutron-server'] -> Service['neutron-server']
     package { 'neutron-server':
+      ensure => $package_ensure,
       name   => $::neutron::params::server_package,
-      ensure => $package_ensure
     }
   } else {
     # Some platforms (RedHat) does not provide a neutron-server package.
@@ -154,8 +154,8 @@ class neutron::server (
   }
 
   service { 'neutron-server':
-    name       => $::neutron::params::server_service,
     ensure     => $service_ensure,
+    name       => $::neutron::params::server_service,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,

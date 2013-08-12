@@ -38,6 +38,15 @@ describe 'quantum::plugins::cisco' do
       params.merge!(params_default)
     end
 
+    it { should include_class('quantum::params') }
+
+    it 'installs quantum cisco plugin package' do
+      should contain_package('quantum-plugin-cisco').with(
+        :ensure => params[:package_ensure],
+        :name   => platform_params[:cisco_plugin_package]
+      )
+    end
+
     it 'should have a plugin config folder' do
       should contain_file('/etc/quantum/plugins').with(
         :ensure => 'directory',
@@ -122,7 +131,12 @@ describe 'quantum::plugins::cisco' do
   context 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }
-     end
-     it_configures 'default cisco plugin'
+    end
+
+    let :platform_params do
+      { :cisco_plugin_package => 'quantum-plugin-cisco' }
+    end
+
+    it_configures 'default cisco plugin'
   end
 end

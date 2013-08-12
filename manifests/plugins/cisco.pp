@@ -78,6 +78,9 @@ class quantum::plugins::cisco(
   $max_networks      = '65568'
 )
 {
+
+  include quantum::params
+
   Quantum_plugin_cisco<||> ~> Service['quantum-server']
   Quantum_plugin_cisco_db_conn<||> ~> Service['quantum-server']
   Quantum_plugin_cisco_l2network<||> ~> Service['quantum-server']
@@ -121,6 +124,12 @@ class quantum::plugins::cisco(
       }
     }
   }
+
+  package { 'quantum-plugin-cisco':
+    ensure => $package_ensure,
+    name   => $::quantum::params::cisco_server_package,
+  }
+
 
   if $nexus_plugin {
     quantum_plugin_cisco {

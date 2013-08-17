@@ -138,5 +138,17 @@ describe 'quantum::plugins::cisco' do
     end
 
     it_configures 'default cisco plugin'
+
+    describe 'with n1k plugin' do
+      before do
+        params.merge!(:vswitch_plugin => 'quantum.plugins.cisco.n1kv.n1kv_quantum_plugin.N1kvQuantumPluginV2')
+      end
+      it 'configures /etc/default/quantum-server' do
+        should contain_file_line('/etc/default/quantum-server:QUANTUM_PLUGIN_CONFIG').with(
+          :line => 'QUANTUM_PLUGIN_CONFIG=/etc/quantum/plugins/cisco/cisco_plugins.ini',
+          :require => ['Package[quantum-server]', 'Package[quantum-plugin-cisco]']
+        )
+      end
+    end
   end
 end

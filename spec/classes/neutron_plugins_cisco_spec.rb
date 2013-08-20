@@ -122,7 +122,14 @@ describe 'neutron::plugins::cisco' do
   context 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }
-     end
-     it_configures 'default cisco plugin'
+    end
+
+    it_configures 'default cisco plugin'
+    it 'configures /etc/default/neutron-server' do
+      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
+        :line => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/cisco/cisco_plugins.ini',
+        :require => ['Package[neutron-server]', 'Package[neutron-plugin-cisco]']
+      )
+    end
   end
 end

@@ -113,7 +113,7 @@ class neutron::plugins::cisco(
       path    => '/etc/default/neutron-server',
       match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
       line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::cisco_config_file}",
-      require => Package['neutron-plugin-cisco'],
+      require => [ Package['neutron-server'], Package['neutron-plugin-cisco'] ],
       notify  => Service['neutron-server'],
     }
   }

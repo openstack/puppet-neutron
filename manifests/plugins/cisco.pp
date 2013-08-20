@@ -119,7 +119,7 @@ class quantum::plugins::cisco(
         path    => '/etc/default/quantum-server',
         match   => '^QUANTUM_PLUGIN_CONFIG=(.*)$',
         line    => "QUANTUM_PLUGIN_CONFIG=${::quantum::params::cisco_config_file}",
-        require => Package['quantum-plugin-cisco'],
+        require => [ Package['quantum-server'], Package['quantum-plugin-cisco'] ],
         notify  => Service['quantum-server'],
       }
     }

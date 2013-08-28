@@ -28,7 +28,8 @@ describe 'quantum::plugins::cisco' do
       :max_ports         => '100',
       :max_port_profiles => '65568',
       :max_networks      => '65568',
-      :manager_class     => 'quantum.plugins.cisco.segmentation.l2network_vlan_mgr_v2.L2NetworkVLANMgr'
+      :manager_class     => 'quantum.plugins.cisco.segmentation.l2network_vlan_mgr_v2.L2NetworkVLANMgr',
+      :package_ensure    => 'present'
     }
   end
 

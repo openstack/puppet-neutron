@@ -1,15 +1,55 @@
+# == Class: quantum::agents::metadata
+#
+# Setup and configure Quantum metadata agent.
+#
+# === Parameters
+#
+# [*auth_password*]
+#   (required) The password for the administrative user.
+#
+# [*shared_secret*]
+#   (required) Shared secret to validate proxies Quantum metadata requests.
+#
+# [*package_ensure*]
+#   Ensure state of the package. Defaults to 'present'.
+#
+# [*enabled*]
+#   State of the service. Defaults to true.
+#
+# [*debug*]
+#   Debug. Defaults to false.
+#
+# [*auth_tenant*]
+#   The administrative user's tenant name. Defaults to 'services'.
+#
+# [*auth_user*]
+#   The administrative user name for OpenStack Networking.
+#   Defaults to 'quantum'.
+#
+# [*auth_url*]
+#   The URL used to validate tokens. Defaults to 'http://localhost:35357/v2.0'.
+#
+# [*auth_region*]
+#   The authentication region. Defaults to 'RegionOne'.
+#
+# [*metadata_ip*]
+#   The IP address of the metadata service. Defaults to '127.0.0.1'.
+#
+# [*metadata_port*]
+#   The TCP port of the metadata service. Defaults to 8775.
+#
 class quantum::agents::metadata (
   $auth_password,
   $shared_secret,
-  $package_ensure               = 'present',
-  $enabled                      = true,
-  $debug                        = false,
-  $auth_tenant                  = 'services',
-  $auth_user                    = 'quantum',
-  $auth_url                     = 'http://localhost:35357/v2.0',
-  $auth_region                  = 'RegionOne',
-  $metadata_ip                  = '127.0.0.1',
-  $metadata_port                = '8775'
+  $package_ensure = 'present',
+  $enabled        = true,
+  $debug          = false,
+  $auth_tenant    = 'services',
+  $auth_user      = 'quantum',
+  $auth_url       = 'http://localhost:35357/v2.0',
+  $auth_region    = 'RegionOne',
+  $metadata_ip    = '127.0.0.1',
+  $metadata_port  = '8775'
   ) {
 
   include quantum::params

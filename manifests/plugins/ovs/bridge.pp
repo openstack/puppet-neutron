@@ -1,3 +1,4 @@
+#
 define quantum::plugins::ovs::bridge {
   $mapping = split($name, ':')
   $bridge = $mapping[1]

@@ -1,3 +1,48 @@
+# == Class: quantum::keystone::auth
+#
+# Configures Quantum user, service and endpoint in Keystone.
+#
+# === Parameters
+#
+# [*password*]
+#   (required) Password for Quantum user.
+#
+# [*auth_name*]
+#   Username for Quantum service. Defaults to 'quantum'.
+#
+# [*email*]
+#   Email for Quantum user. Defaults to 'quantum@localhost'.
+#
+# [*tenant*]
+#   Tenant for Quantum user. Defaults to 'services'.
+#
+# [*configure_endpoint*]
+#   Should Quantum endpoint be configured? Defaults to 'true'.
+#
+# [*service_type*]
+#   Type of service. Defaults to 'network'.
+#
+# [*public_protocol*]
+#   Protocol for public endpoint. Defaults to 'http'.
+#
+# [*public_address*]
+#   Public address for endpoint. Defaults to '127.0.0.1'.
+#
+# [*admin_address*]
+#   Admin address for endpoint. Defaults to '127.0.0.1'.
+#
+# [*internal_address*]
+#   Internal address for endpoint. Defaults to '127.0.0.1'.
+#
+# [*port*]
+#   Port for endpoint. Defaults to '9696'.
+#
+# [*public_port*]
+#   Port for public endpoint. Defaults to $port.
+#
+# [*region*]
+#   Region for endpoint. Defaults to 'RegionOne'.
+#
 class quantum::keystone::auth (
   $password,
   $auth_name          = 'quantum',

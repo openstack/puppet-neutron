@@ -1,3 +1,4 @@
+#
 class quantum::params {
 
   if($::osfamily == 'Redhat') {

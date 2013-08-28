@@ -1,3 +1,48 @@
+# == Class: neutron::keystone::auth
+#
+# Configures Neutron user, service and endpoint in Keystone.
+#
+# === Parameters
+#
+# [*password*]
+#   (required) Password for Neutron user.
+#
+# [*auth_name*]
+#   Username for Neutron service. Defaults to 'neutron'.
+#
+# [*email*]
+#   Email for Neutron user. Defaults to 'neutron@localhost'.
+#
+# [*tenant*]
+#   Tenant for Neutron user. Defaults to 'services'.
+#
+# [*configure_endpoint*]
+#   Should Neutron endpoint be configured? Defaults to 'true'.
+#
+# [*service_type*]
+#   Type of service. Defaults to 'network'.
+#
+# [*public_protocol*]
+#   Protocol for public endpoint. Defaults to 'http'.
+#
+# [*public_address*]
+#   Public address for endpoint. Defaults to '127.0.0.1'.
+#
+# [*admin_address*]
+#   Admin address for endpoint. Defaults to '127.0.0.1'.
+#
+# [*internal_address*]
+#   Internal address for endpoint. Defaults to '127.0.0.1'.
+#
+# [*port*]
+#   Port for endpoint. Defaults to '9696'.
+#
+# [*public_port*]
+#   Port for public endpoint. Defaults to $port.
+#
+# [*region*]
+#   Region for endpoint. Defaults to 'RegionOne'.
+#
 class neutron::keystone::auth (
   $password,
   $auth_name          = 'neutron',

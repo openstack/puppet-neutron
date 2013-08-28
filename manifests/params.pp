@@ -1,3 +1,4 @@
+#
 class neutron::params {
 
   if($::osfamily == 'Redhat') {

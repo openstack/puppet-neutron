@@ -1,3 +1,4 @@
+#
 define neutron::plugins::ovs::bridge {
   $mapping = split($name, ':')
   $bridge = $mapping[1]

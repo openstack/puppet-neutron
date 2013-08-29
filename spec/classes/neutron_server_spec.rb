@@ -40,6 +40,7 @@ describe 'neutron::server' do
       should contain_neutron_api_config('filter:authtoken/admin_user').with_value(p[:auth_user]);
       should contain_neutron_api_config('filter:authtoken/admin_password').with_value(p[:auth_password]);
       should contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(:ensure => 'absent')
+      should contain_neutron_api_config('filter:authtoken/auth_uri').with_value("http://localhost:5000/");
     end
 
     it 'installs neutron server package' do
@@ -120,6 +121,20 @@ describe 'neutron::server' do
     it 'configures logging' do
       should contain_neutron_config('DEFAULT/log_file').with_value(params[:log_file])
       should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
+    end
+  end
+
+  describe "with custom keystone auth_uri" do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+    before do
+      params.merge!({
+        :auth_uri => 'https://foo.bar:1234/',
+      })
+    end
+    it 'configures auth_uri' do
+      should contain_neutron_api_config('filter:authtoken/auth_uri').with_value("https://foo.bar:1234/");
     end
   end
 

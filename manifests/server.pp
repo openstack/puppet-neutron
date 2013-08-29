@@ -57,6 +57,10 @@
 #   (optional) The protocol to connect to keystone
 #   Defaults to http
 #
+# [*auth_uri*]
+#   (optional) Complete public Identity API endpoint.
+#   Defaults to: $auth_protocol://$auth_host:5000/
+#
 class neutron::server (
   $package_ensure    = 'present',
   $enabled           = true,
@@ -68,6 +72,7 @@ class neutron::server (
   $auth_tenant       = 'services',
   $auth_user         = 'neutron',
   $auth_protocol     = 'http',
+  $auth_uri          = false,
   $log_file          = false,
   $log_dir           = '/var/log/neutron'
 ) {
@@ -149,6 +154,23 @@ class neutron::server (
           'filter:authtoken/auth_admin_prefix': ensure => absent;
         }
       }
+
+      if $auth_uri {
+        neutron_config {
+          'keystone_authtoken/auth_uri': value => $auth_uri;
+        }
+        neutron_api_config {
+          'filter:authtoken/auth_uri': value => $auth_uri;
+        }
+      } else {
+        neutron_config {
+          'keystone_authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/";
+        }
+        neutron_api_config {
+          'filter:authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/";
+        }
+      }
+
     }
 
   }

@@ -92,6 +92,15 @@
 # [*qpid_reconnect_interval_max*]
 #   (optional) various QPID options
 #
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults to false
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults to LOG_USER
+#
+
 class quantum (
   $enabled                     = true,
   $package_ensure              = 'present',
@@ -127,7 +136,9 @@ class quantum (
   $qpid_reconnect_limit        = 0,
   $qpid_reconnect_interval_min = 0,
   $qpid_reconnect_interval_max = 0,
-  $qpid_reconnect_interval     = 0
+  $qpid_reconnect_interval     = 0,
+  $use_syslog                  = false,
+  $log_facility                = 'LOG_USER',
 ) {
 
   include quantum::params
@@ -206,6 +217,17 @@ class quantum (
       'DEFAULT/qpid_reconnect_interval_min': value => $qpid_reconnect_interval_min;
       'DEFAULT/qpid_reconnect_interval_max': value => $qpid_reconnect_interval_max;
       'DEFAULT/qpid_reconnect_interval':     value => $qpid_reconnect_interval;
+    }
+  }
+
+  if $use_syslog {
+    quantum_config {
+      'DEFAULT/use_syslog':           value => true;
+      'DEFAULT/syslog_log_facility':  value => $log_facility;
+    }
+  } else {
+    quantum_config {
+      'DEFAULT/use_syslog':           value => false;
     }
   }
 }

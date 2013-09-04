@@ -40,6 +40,10 @@ describe 'neutron' do
         it_configures 'rabbit HA with multiple hosts'
       end
     end
+
+    it_configures 'with syslog disabled'
+    it_configures 'with syslog enabled'
+    it_configures 'with syslog enabled and custom settings'
   end
 
   shared_examples_for 'a neutron base installation' do
@@ -112,6 +116,36 @@ describe 'neutron' do
     end
   end
 
+  shared_examples_for 'with syslog disabled' do
+    it { should contain_neutron_config('DEFAULT/use_syslog').with_value(false) }
+  end
+
+  shared_examples_for 'with syslog enabled' do
+    before do
+      params.merge!(
+        :use_syslog => 'true'
+      )
+    end
+
+    it do
+      should contain_neutron_config('DEFAULT/use_syslog').with_value(true)
+      should contain_neutron_config('DEFAULT/syslog_log_facility').with_value('LOG_USER')
+    end
+  end
+
+  shared_examples_for 'with syslog enabled and custom settings' do
+    before do
+      params.merge!(
+        :use_syslog       => 'true',
+        :syslog_facility  => 'LOG_LOCAL0'
+      )
+    end
+
+    it do
+      should contain_neutron_config('DEFAULT/use_syslog').with_value(true)
+      should contain_neutron_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
+    end
+  end
 
   context 'on Debian platforms' do
     let :facts do

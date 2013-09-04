@@ -92,6 +92,14 @@
 # [*qpid_reconnect_interval_max*]
 #   (optional) various QPID options
 #
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults to false
+#
+# [*syslog_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults to LOG_USER
+#
 class neutron (
   $enabled                     = true,
   $package_ensure              = 'present',
@@ -127,7 +135,9 @@ class neutron (
   $qpid_reconnect_limit        = 0,
   $qpid_reconnect_interval_min = 0,
   $qpid_reconnect_interval_max = 0,
-  $qpid_reconnect_interval     = 0
+  $qpid_reconnect_interval     = 0,
+  $use_syslog                  = false,
+  $syslog_facility             = 'LOG_USER',
 ) {
 
   include neutron::params
@@ -206,6 +216,17 @@ class neutron (
       'DEFAULT/qpid_reconnect_interval_min': value => $qpid_reconnect_interval_min;
       'DEFAULT/qpid_reconnect_interval_max': value => $qpid_reconnect_interval_max;
       'DEFAULT/qpid_reconnect_interval':     value => $qpid_reconnect_interval;
+    }
+  }
+
+  if $use_syslog {
+    neutron_config {
+      'DEFAULT/use_syslog':           value => true;
+      'DEFAULT/syslog_log_facility':  value => $syslog_facility;
+    }
+  } else {
+    neutron_config {
+      'DEFAULT/use_syslog':           value => false;
     }
   }
 }

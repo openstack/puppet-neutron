@@ -96,7 +96,7 @@
 #   (optional) Use syslog for logging
 #   Defaults to false
 #
-# [*syslog_facility*]
+# [*log_facility*]
 #   (optional) Syslog facility to receive log lines
 #   Defaults to LOG_USER
 #
@@ -137,7 +137,7 @@ class neutron (
   $qpid_reconnect_interval_max = 0,
   $qpid_reconnect_interval     = 0,
   $use_syslog                  = false,
-  $syslog_facility             = 'LOG_USER',
+  $log_facility                = 'LOG_USER',
 ) {
 
   include neutron::params
@@ -222,7 +222,7 @@ class neutron (
   if $use_syslog {
     neutron_config {
       'DEFAULT/use_syslog':           value => true;
-      'DEFAULT/syslog_log_facility':  value => $syslog_facility;
+      'DEFAULT/syslog_log_facility':  value => $log_facility;
     }
   } else {
     neutron_config {

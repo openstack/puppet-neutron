@@ -1,13 +1,13 @@
-name    'puppet-neutron'
+name 'puppetlabs-neutron'
 version '2.1.1'
-source  'https://github.com/CiscoSystems/puppet-neutron'
-author  'Joe Topjian,Endre Karlson,Emilien Macchi,Dan Bode,Dmitry Ukov,Edgar Mangana,Robert Starmer,Ian Wells,Daneyon Hansen'
+
+author 'Joe Topjian,Endre Karlson,Emilien Macchi,Dan Bode,Dmitry Ukov,Edgar Mangana,Robert Starmer,Ian Wells,Daneyon Hansen'
 license 'Apache License 2.0'
+project_page 'https://launchpad.net/puppet-neutron'
+source 'https://github.com/stackforge/puppet-neutron'
 summary 'Puppet module for OpenStack Neutron'
 description 'Puppet module to install and configure the OpenStack network service, Neutron'
-project_page 'https://github.com/stackforge/puppet-neutron'
 
-# Dependencies
 dependency 'puppetlabs/vswitch', '>=0.0.1 <1.0.0'
 dependency 'puppetlabs/inifile', '>=1.0.0 <2.0.0'
 dependency 'puppetlabs/mysql', '>=0.6.1 <1.0.0'

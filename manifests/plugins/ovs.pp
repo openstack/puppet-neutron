@@ -47,7 +47,7 @@ class quantum::plugins::ovs (
       $backend_package = 'python-pysqlite2'
     }
     default: {
-      fail('Unsupported backend configured')
+      fail("Invalid sql connection: ${sql_connection}")
     }
   }
 

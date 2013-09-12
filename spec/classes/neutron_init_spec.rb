@@ -44,6 +44,8 @@ describe 'neutron' do
     it_configures 'with syslog disabled'
     it_configures 'with syslog enabled'
     it_configures 'with syslog enabled and custom settings'
+    it_configures 'without service_plugins'
+    it_configures 'with service_plugins'
   end
 
   shared_examples_for 'a neutron base installation' do
@@ -147,6 +149,22 @@ describe 'neutron' do
     end
   end
 
+  shared_examples_for 'without service_plugins' do
+    it { should_not contain_neutron_config('DEFAULT/service_plugins') }
+  end
+
+  shared_examples_for 'with service_plugins' do
+    before do
+      params.merge!(
+        :service_plugins => ['neutron.services.firewall.fwaas_plugin.FirewallPlugin','neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.vpn.plugin.VPNDriverPlugin']
+      )
+    end
+
+    it do
+      should contain_neutron_config('DEFAULT/service_plugins').with_value('neutron.services.firewall.fwaas_plugin.FirewallPlugin,neutron.services.loadbalancer.plugin.LoadBalancerPlugin,neutron.services.vpn.plugin.VPNDriverPlugin')
+    end
+
+  end
   context 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }

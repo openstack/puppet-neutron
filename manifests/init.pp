@@ -33,6 +33,14 @@
 #   (optional) Neutron plugin provider
 #   Defaults to OVSQneutronPluginV2 (openvswitch)
 #
+# [*service_plugins*]
+#   (optional) Advanced service modules.
+#   Could be an array that can have these elements:
+#   neutron.services.firewall.fwaas_plugin.FirewallPlugin
+#   neutron.services.loadbalancer.plugin.LoadBalancerPlugin
+#   neutron.services.vpn.plugin.VPNDriverPlugin
+#   Defaults to empty
+#
 # [*auth_strategy*]
 #   (optional) How to authenticate
 #   Defaults to 'keystone'. 'noauth' is the only other valid option
@@ -108,6 +116,7 @@ class neutron (
   $bind_host                   = '0.0.0.0',
   $bind_port                   = '9696',
   $core_plugin                 = 'neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2',
+  $service_plugins             = undef,
   $auth_strategy               = 'keystone',
   $base_mac                    = 'fa:16:3e:00:00:00',
   $mac_generation_retries      = 16,
@@ -178,6 +187,14 @@ class neutron (
     'DEFAULT/control_exchange':       value => $control_exchange;
     'DEFAULT/rpc_backend':            value => $rpc_backend;
     'AGENT/root_helper':              value => $root_helper;
+  }
+
+  if $service_plugins {
+    if is_array($service_plugins) {
+      neutron_config { 'DEFAULT/service_plugins': value => join($service_plugins, ',') }
+    } else {
+      fail('service_plugins should be an array.')
+    }
   }
 
   if $rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' {

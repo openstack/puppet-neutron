@@ -136,8 +136,8 @@ describe 'neutron' do
   shared_examples_for 'with syslog enabled and custom settings' do
     before do
       params.merge!(
-        :use_syslog       => 'true',
-        :syslog_facility  => 'LOG_LOCAL0'
+        :use_syslog    => 'true',
+        :log_facility  => 'LOG_LOCAL0'
       )
     end
 

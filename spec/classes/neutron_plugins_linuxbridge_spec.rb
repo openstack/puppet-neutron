@@ -51,7 +51,8 @@ describe 'neutron::plugins::linuxbridge' do
     it_configures 'neutron linuxbridge plugin'
     it 'configures /etc/default/neutron-server' do
       should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
-        :line => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini'
+        :line => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
+        :require => ['Package[neutron-plugin-linuxbridge]', 'Package[neutron-server]']
       )
     end
   end

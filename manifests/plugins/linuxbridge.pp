@@ -39,7 +39,10 @@ class neutron::plugins::linuxbridge (
       path    => '/etc/default/neutron-server',
       match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
       line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::linuxbridge_config_file}",
-      require => Package['neutron-plugin-linuxbridge'],
+      require => [
+        Package['neutron-plugin-linuxbridge'],
+        Package['neutron-server'],
+      ],
       notify  => Service['neutron-server'],
     }
   }

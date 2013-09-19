@@ -27,7 +27,6 @@ class neutron::plugins::ovs (
 ) {
 
   include neutron::params
-  require vswitch::ovs
 
   Package['neutron'] -> Package['neutron-plugin-ovs']
   Package['neutron-plugin-ovs'] -> Neutron_plugin_ovs<||>

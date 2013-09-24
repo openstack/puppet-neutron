@@ -29,6 +29,10 @@ class neutron::params {
 
     $haproxy_package   = 'haproxy'
 
+    $vpnaas_agent_package = false
+    $vpnaas_agent_service = 'neutron-vpnaas-agent'
+    $openswan_package     = 'openswan'
+
     $l3_agent_package   = false
     $l3_agent_service   = 'neutron-l3-agent'
 
@@ -64,6 +68,10 @@ class neutron::params {
     $lbaas_agent_service = 'neutron-lbaas-agent'
 
     $haproxy_package   = 'haproxy'
+
+    $vpnaas_agent_package = 'neutron-plugin-vpn-agent'
+    $vpnaas_agent_service = 'neutron-vpnaas-agent'
+    $openswan_package     = 'openswan'
 
     $metadata_agent_package = 'neutron-metadata-agent'
     $metadata_agent_service = 'neutron-metadata-agent'

@@ -31,7 +31,18 @@
 #
 # [*core_plugin*]
 #   (optional) Neutron plugin provider
-#   Defaults to OVSQneutronPluginV2 (openvswitch)
+#   Defaults to neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2 (Open-vSwitch)
+#   Could be:
+#   neutron.plugins.bigswitch.plugin.NeutronRestProxyV2
+#   neutron.plugins.brocade.NeutronPlugin.BrocadePluginV2
+#   neutron.plugins.cisco.network_plugin.PluginV2
+#   neutron.plugins.linuxbridge.lb_neutron_plugin.LinuxBridgePluginV2
+#   neutron.plugins.midonet.plugin.MidonetPluginV2
+#   neutron.plugins.ml2.plugin.Ml2Plugin
+#   neutron.plugins.nec.nec_plugin.NECPluginV2
+#   neutron.plugins.nicira.NeutronPlugin.NvpPluginV2
+#   neutron.plugins.plumgrid.plumgrid_plugin.plumgrid_plugin.NeutronPluginPLUMgridV2
+#   neutron.plugins.ryu.ryu_neutron_plugin.RyuNeutronPluginV2
 #
 # [*service_plugins*]
 #   (optional) Advanced service modules.
@@ -56,6 +67,11 @@
 # [*dhcp_lease_duration*]
 #   (optional) DHCP lease
 #   Defaults to 120 seconds
+#
+# [*dhcp_agents_per_network*]
+#   (optional) Number of DHCP agents scheduled to host a network.
+#   This enables redundant DHCP agents for configured networks.
+#   Defaults to 1
 #
 # [*allow_bulk*]
 #   (optional) Enable bulk crud operations
@@ -121,6 +137,7 @@ class neutron (
   $base_mac                    = 'fa:16:3e:00:00:00',
   $mac_generation_retries      = 16,
   $dhcp_lease_duration         = 120,
+  $dhcp_agents_per_network     = 1,
   $allow_bulk                  = true,
   $allow_overlapping_ips       = false,
   $root_helper                 = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
@@ -173,20 +190,21 @@ class neutron (
   }
 
   neutron_config {
-    'DEFAULT/verbose':                value => $verbose;
-    'DEFAULT/debug':                  value => $debug;
-    'DEFAULT/bind_host':              value => $bind_host;
-    'DEFAULT/bind_port':              value => $bind_port;
-    'DEFAULT/auth_strategy':          value => $auth_strategy;
-    'DEFAULT/core_plugin':            value => $core_plugin;
-    'DEFAULT/base_mac':               value => $base_mac;
-    'DEFAULT/mac_generation_retries': value => $mac_generation_retries;
-    'DEFAULT/dhcp_lease_duration':    value => $dhcp_lease_duration;
-    'DEFAULT/allow_bulk':             value => $allow_bulk;
-    'DEFAULT/allow_overlapping_ips':  value => $allow_overlapping_ips;
-    'DEFAULT/control_exchange':       value => $control_exchange;
-    'DEFAULT/rpc_backend':            value => $rpc_backend;
-    'AGENT/root_helper':              value => $root_helper;
+    'DEFAULT/verbose':                 value => $verbose;
+    'DEFAULT/debug':                   value => $debug;
+    'DEFAULT/bind_host':               value => $bind_host;
+    'DEFAULT/bind_port':               value => $bind_port;
+    'DEFAULT/auth_strategy':           value => $auth_strategy;
+    'DEFAULT/core_plugin':             value => $core_plugin;
+    'DEFAULT/base_mac':                value => $base_mac;
+    'DEFAULT/mac_generation_retries':  value => $mac_generation_retries;
+    'DEFAULT/dhcp_lease_duration':     value => $dhcp_lease_duration;
+    'DEFAULT/dhcp_agents_per_network': value => $dhcp_agents_per_network;
+    'DEFAULT/allow_bulk':              value => $allow_bulk;
+    'DEFAULT/allow_overlapping_ips':   value => $allow_overlapping_ips;
+    'DEFAULT/control_exchange':        value => $control_exchange;
+    'DEFAULT/rpc_backend':             value => $rpc_backend;
+    'AGENT/root_helper':               value => $root_helper;
   }
 
   if $service_plugins {

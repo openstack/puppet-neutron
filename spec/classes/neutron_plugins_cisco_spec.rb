@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'neutron::plugins::cisco' do
 
   let :pre_condition do
-    "class { 'neutron::server': auth_password => 'password'}"
+    "class { 'neutron::server': auth_password => 'password'}
+     class { 'neutron': rabbit_password => 'passw0rd' }"
   end
 
   let :params do
@@ -132,4 +133,21 @@ describe 'neutron::plugins::cisco' do
       )
     end
   end
+
+  context 'on RedHat platforms' do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+
+    it_configures 'default cisco plugin'
+    it 'should perform redhat specific configuration' do
+      should contain_file('/etc/neutron/plugin.ini').with(
+        :ensure  => 'link',
+        :target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
+        :require => 'Package[neutron-plugin-cisco]'
+      )
+    end
+
+  end
+
 end

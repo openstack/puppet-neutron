@@ -168,4 +168,14 @@ class neutron::plugins::cisco(
     'keystone/auth_url': value => $keystone_auth_url;
     'keystone/tenant'  : value => $keystone_tenant;
   }
+
+  if $::osfamily == 'Redhat' {
+    file {'/etc/neutron/plugin.ini':
+      ensure  => link,
+      target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
+      require => Package['neutron-plugin-cisco'],
+    }
+  }
+
+
 }

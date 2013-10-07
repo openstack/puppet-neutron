@@ -1,5 +1,5 @@
 name 'puppetlabs-neutron'
-version '2.1.1'
+version '2.2.0'
 
 author 'Joe Topjian,Endre Karlson,Emilien Macchi,Dan Bode,Dmitry Ukov,Edgar Mangana,Robert Starmer,Ian Wells,Daneyon Hansen'
 license 'Apache License 2.0'

@@ -116,3 +116,13 @@ The puppet-openstack modules follow the Openstack development model. Developer d
 Contributors
 ------------
 The github [contributor graph](https://github.com/stackforge/puppet-quantum/graphs/contributors).
+
+Release Notes
+-------------
+
+**2.2.0**
+
+* Improved documentation.
+* Added syslog support.
+* Added quantum-plugin-cisco package resource.
+* Various lint and bug fixes.

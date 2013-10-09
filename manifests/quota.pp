@@ -40,7 +40,7 @@
 #
 # [*quota_driver*]
 #   (optional) Default driver to use for quota checks.
-#   Defaults to 'neutron.quota.ConfDriver'.
+#   Defaults to 'neutron.db.quota_db.DbQuotaDriver'.
 #
 # [*quota_firewall*]
 #   (optional) Number of firewalls allowed per tenant, -1 for unlimited.
@@ -65,7 +65,7 @@ class neutron::quota (
   # securitygroup extension
   $quota_security_group      = 10,
   $quota_security_group_rule = 100,
-  $quota_driver              = 'neutron.quota.ConfDriver',
+  $quota_driver              = 'neutron.db.quota_db.DbQuotaDriver',
   $quota_firewall            = 1,
   $quota_firewall_policy     = 1,
   $quota_firewall_rule       = -1

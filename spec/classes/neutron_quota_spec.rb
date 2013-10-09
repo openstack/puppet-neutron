@@ -15,7 +15,7 @@ describe 'neutron::quota' do
       :quota_floatingip          => 50,
       :quota_security_group      => 10,
       :quota_security_group_rule => 100,
-      :quota_driver              => 'neutron.quota.ConfDriver',
+      :quota_driver              => 'neutron.db.quota_db.DbQuotaDriver',
       :quota_firewall            => 1,
       :quota_firewall_policy     => 1,
       :quota_firewall_rule       => -1 }

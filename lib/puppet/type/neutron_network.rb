@@ -79,18 +79,6 @@ Puppet::Type.newtype(:neutron_network) do
     if self[:ensure] != :present
       return
     end
-    if (self[:provider_network_type] ||
-        self[:provider_physical_network] ||
-        self[:provider_segmentation_id])
-      if (self[:provider_network_type].nil? ||
-          self[:provider_physical_network].nil? ||
-          self[:provider_segmentation_id].nil?)
-        raise(Puppet::Error, <<-EOT
-All provider properties are required when using provider extension.
-EOT
-              )
-      end
-    end
     if self[:tenant_id] && self[:tenant_name]
       raise(Puppet::Error, <<-EOT
 Please provide a value for only one of tenant_name and tenant_id.

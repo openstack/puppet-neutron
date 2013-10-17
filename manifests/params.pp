@@ -5,6 +5,7 @@ class neutron::params {
     $package_name       = 'openstack-neutron'
     $server_package     = false
     $server_service     = 'neutron-server'
+    $client_package     = 'python-neutronclient'
 
     $ovs_agent_package   = false
     $ovs_agent_service   = 'neutron-openvswitch-agent'
@@ -47,6 +48,7 @@ class neutron::params {
     $package_name       = 'neutron-common'
     $server_package     = 'neutron-server'
     $server_service     = 'neutron-server'
+    $client_package     = 'python-neutronclient'
 
     $ovs_agent_package   = 'neutron-plugin-openvswitch-agent'
     $ovs_agent_service   = 'neutron-plugin-openvswitch-agent'

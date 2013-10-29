@@ -73,7 +73,7 @@ class neutron::agents::l3 (
   $router_id                    = undef,
   $gateway_external_network_id  = undef,
   $handle_internal_only_routers = true,
-  $metadata_port                = '9697',
+  $metadata_port                = '8775',
   $send_arp_for_ha              = '3',
   $periodic_interval            = '40',
   $periodic_fuzzy_delay         = '5',

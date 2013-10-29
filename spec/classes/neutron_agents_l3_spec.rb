@@ -16,7 +16,7 @@ describe 'neutron::agents::l3' do
       :router_id                    => nil,
       :gateway_external_network_id  => nil,
       :handle_internal_only_routers => true,
-      :metadata_port                => '9697',
+      :metadata_port                => '8775',
       :send_arp_for_ha              => '3',
       :periodic_interval            => '40',
       :periodic_fuzzy_delay         => '5',

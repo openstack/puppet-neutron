@@ -60,6 +60,7 @@ class neutron::keystone::auth (
 ) {
 
   Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'neutron-server' |>
+  Keystone_endpoint["${region}/${auth_name}"]  ~> Service <| name == 'neutron-server' |>
 
   if ! $public_port {
     $real_public_port = $port

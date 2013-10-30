@@ -36,6 +36,25 @@ describe 'neutron::keystone::auth' do
 
   end
 
+  describe 'when configuring neutron-server' do
+    let :pre_condition do
+      "class { 'neutron::server': auth_password => 'test' }"
+    end
+
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+
+    let :params do
+      {
+        :password => 'neutron_password',
+        :tenant   => 'foobar'
+      }
+    end
+
+    it { should contain_keystone_endpoint('RegionOne/neutron').with_notify('Service[neutron-server]') }
+  end
+
   describe 'when overriding public_protocol, public_port and public address' do
 
     let :params do

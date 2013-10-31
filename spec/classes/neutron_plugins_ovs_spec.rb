@@ -9,10 +9,10 @@ describe 'neutron::plugins::ovs' do
   let :default_params do
    {
      :package_ensure       => 'present',
-     :sql_connection       => 'sqlite:////var/lib/neutron/ovs.sqlite',
-     :sql_max_retries      => 10,
-     :sql_idle_timeout     => '3600',
-     :reconnect_interval   => 2,
+     :sql_connection       => false,
+     :sql_max_retries      => false,
+     :sql_idle_timeout     => false,
+     :reconnect_interval   => false,
      :tunnel_id_ranges     => '1:1000',
      :network_vlan_ranges  => 'physnet1:1000:2000'
    }
@@ -32,10 +32,6 @@ describe 'neutron::plugins::ovs' do
     end
 
     it 'should perform default configuration of' do
-      should contain_neutron_plugin_ovs('DATABASE/sql_connection').with_value(params[:sql_connection])
-      should contain_neutron_plugin_ovs('DATABASE/sql_max_retries').with_value(params[:sql_max_retries])
-      should contain_neutron_plugin_ovs('DATABASE/sql_idle_timeout').with_value(params[:sql_idle_timeout])
-      should contain_neutron_plugin_ovs('DATABASE/reconnect_interval').with_value(params[:reconnect_interval])
       should contain_neutron_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
       should contain_package('neutron-plugin-ovs').with(
         :name   => platform_params[:ovs_server_package],

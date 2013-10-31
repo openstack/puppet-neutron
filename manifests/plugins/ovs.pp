@@ -5,16 +5,12 @@
 #
 # === Parameters
 #
-# [*sql_idle_timeout*]
-#   (optional) Timeout for SQL to reap connetions.
-#   Defaults to '3600'.
-#
 class neutron::plugins::ovs (
   $package_ensure       = 'present',
-  $sql_connection       = 'sqlite:////var/lib/neutron/ovs.sqlite',
-  $sql_max_retries      = 10,
-  $sql_idle_timeout     = '3600',
-  $reconnect_interval   = 2,
+  $sql_connection       = false,
+  $sql_max_retries      = false,
+  $sql_idle_timeout     = false,
+  $reconnect_interval   = false,
   $tenant_network_type  = 'vlan',
   # NB: don't need tunnel ID range when using VLANs,
   # *but* you do need the network vlan range regardless of type,
@@ -33,23 +29,6 @@ class neutron::plugins::ovs (
   Neutron_plugin_ovs<||> ~> Service<| title == 'neutron-server' |>
   Package['neutron-plugin-ovs'] -> Service<| title == 'neutron-server' |>
 
-  validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
-
-  case $sql_connection {
-    /mysql:\/\/\S+:\S+@\S+\/\S+/: {
-      require 'mysql::python'
-    }
-    /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
-      $backend_package = 'python-psycopg2'
-    }
-    /sqlite:\/\//: {
-      $backend_package = 'python-pysqlite2'
-    }
-    default: {
-      fail("Invalid sql connection: ${sql_connection}")
-    }
-  }
-
   if ! defined(Package['neutron-plugin-ovs']) {
     package { 'neutron-plugin-ovs':
       ensure  => $package_ensure,
@@ -57,11 +36,23 @@ class neutron::plugins::ovs (
     }
   }
 
+  if $sql_connection {
+    warning('sql_connection is deprecated for connection in the neutron::server class')
+  }
+
+  if $sql_max_retries {
+    warning('sql_max_retries is deprecated for max_retries in the neutron::server class')
+  }
+
+  if $sql_idle_timeout {
+    warning('sql_idle_timeout is deprecated for idle_timeout in the neutron::server class')
+  }
+
+  if $reconnect_interval {
+    warning('reconnect_interval is deprecated for retry_interval in the neutron::server class')
+  }
+
   neutron_plugin_ovs {
-    'DATABASE/sql_connection':      value => $sql_connection;
-    'DATABASE/sql_max_retries':     value => $sql_max_retries;
-    'DATABASE/sql_idle_timeout':    value => $sql_idle_timeout;
-    'DATABASE/reconnect_interval':  value => $reconnect_interval;
     'OVS/tenant_network_type':      value => $tenant_network_type;
   }
 

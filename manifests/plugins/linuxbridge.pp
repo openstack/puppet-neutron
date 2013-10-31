@@ -5,8 +5,9 @@
 # === Parameters
 #
 # [*sql_connection*]
-#   (required) SQL connection string with the format:
-#   [driver]://[user]:[password]@[host]/[database]
+#   sql_connection is no longer configured in the plugin.ini.
+#   Use $connection in the nuetron::server class to configure the SQL
+#   connection string.
 #
 # [*network_vlan_ranges*]
 #   (required) Comma-separated list of <physical_network>[:<vlan_min>:<vlan_max>]
@@ -21,7 +22,7 @@
 #   (optional) Ensure state for package. Defaults to 'present'.
 #
 class neutron::plugins::linuxbridge (
-  $sql_connection      = 'sqlite:////var/lib/neutron/linuxbridge.sqlite',
+  $sql_connection      = false,
   $network_vlan_ranges = 'physnet1:1000:2000',
   $tenant_network_type = 'vlan',
   $package_ensure      = 'present'
@@ -52,8 +53,11 @@ class neutron::plugins::linuxbridge (
     name   => $::neutron::params::linuxbridge_server_package,
   }
 
+  if $sql_connection {
+    warning('sql_connection is deprecated for connection in the neutron::server class')
+  }
+
   neutron_plugin_linuxbridge {
-    'DATABASE/sql_connection':   value => $sql_connection;
     'VLANS/tenant_network_type': value => $tenant_network_type;
     'VLANS/network_vlan_ranges': value => $network_vlan_ranges;
   }

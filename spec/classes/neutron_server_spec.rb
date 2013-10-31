@@ -12,19 +12,34 @@ describe 'neutron::server' do
   end
 
   let :default_params do
-    { :package_ensure => 'present',
-      :enabled        => true,
-      :log_dir        => '/var/log/neutron',
-      :auth_type      => 'keystone',
-      :auth_host      => 'localhost',
-      :auth_port      => '35357',
-      :auth_tenant    => 'services',
-      :auth_user      => 'neutron' }
+    { :package_ensure     => 'present',
+      :enabled            => true,
+      :log_dir            => '/var/log/neutron',
+      :auth_type          => 'keystone',
+      :auth_host          => 'localhost',
+      :auth_port          => '35357',
+      :auth_tenant        => 'services',
+      :auth_user          => 'neutron',
+      :sql_connection     => 'sqlite:////var/lib/neutron/ovs.sqlite',
+      :connection         => 'sqlite:////var/lib/neutron/ovs.sqlite',
+      :sql_max_retries    => '10',
+      :max_retries        => '10',
+      :sql_idle_timeout   => '3600',
+      :idle_timeout       => '3600',
+      :reconnect_interval => '10',
+      :retry_interval     => '10' }
   end
 
   shared_examples_for 'a neutron server' do
     let :p do
       default_params.merge(params)
+    end
+
+    it 'should perform default database configuration of' do
+      should contain_neutron_config('database/connection').with_value(p[:connection])
+      should contain_neutron_config('database/max_retries').with_value(p[:max_retries])
+      should contain_neutron_config('database/idle_timeout').with_value(p[:idle_timeout])
+      should contain_neutron_config('database/retry_interval').with_value(p[:retry_interval])
     end
 
     it { should include_class('neutron::params') }

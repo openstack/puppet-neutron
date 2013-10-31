@@ -61,20 +61,48 @@
 #   (optional) Complete public Identity API endpoint.
 #   Defaults to: $auth_protocol://$auth_host:5000/
 #
+# [*connection*]
+#   (optional) Connection url for the neutron database.
+#   Deprecates sql_connection
+#   Defaults to: sqlite:////var/lib/neutron/ovs.sqlite
+#
+# [*max_retries*]
+#   (optional) Database reconnection retry times.
+#   Deprecates sql_max_retries
+#   Defaults to: 10
+#
+# [*idle_timeout*]
+#   (optional) Timeout before idle db connections are reaped.
+#   Deprecates sql_idle_timeout
+#   Defaults to: 3600
+#
+# [*retry_interval*]
+#   (optional) Database reconnection interval in seconds.
+#   Deprecates reconnect_interval
+#   Defaults to: 10
+#
 class neutron::server (
-  $package_ensure    = 'present',
-  $enabled           = true,
-  $auth_password     = false,
-  $auth_type         = 'keystone',
-  $auth_host         = 'localhost',
-  $auth_port         = '35357',
-  $auth_admin_prefix = false,
-  $auth_tenant       = 'services',
-  $auth_user         = 'neutron',
-  $auth_protocol     = 'http',
-  $auth_uri          = false,
-  $log_file          = false,
-  $log_dir           = '/var/log/neutron'
+  $package_ensure     = 'present',
+  $enabled            = true,
+  $auth_password      = false,
+  $auth_type          = 'keystone',
+  $auth_host          = 'localhost',
+  $auth_port          = '35357',
+  $auth_admin_prefix  = false,
+  $auth_tenant        = 'services',
+  $auth_user          = 'neutron',
+  $auth_protocol      = 'http',
+  $auth_uri           = false,
+  $sql_connection     = 'sqlite:////var/lib/neutron/ovs.sqlite',
+  $connection         = 'sqlite:////var/lib/neutron/ovs.sqlite',
+  $max_retries        = '10',
+  $sql_max_retries    = '10',
+  $sql_idle_timeout   = '3600',
+  $idle_timeout       = '3600',
+  $reconnect_interval = '10',
+  $retry_interval     = '10',
+  $log_file           = false,
+  $log_dir            = '/var/log/neutron'
 ) {
 
   include neutron::params
@@ -82,6 +110,58 @@ class neutron::server (
 
   Neutron_config<||>     ~> Service['neutron-server']
   Neutron_api_config<||> ~> Service['neutron-server']
+
+  if $sql_connection {
+    warning('sql_connection deprecated for connection')
+    $connection_real = $sql_connection
+  } else {
+    $connection_real = $connection
+  }
+
+  if $sql_max_retries {
+    warning('sql_max_retries deprecated for max_retries')
+    $max_retries_real = $sql_max_retries
+  } else {
+    $max_retries_real = $max_retries
+  }
+
+  if $sql_idle_timeout {
+    warning('sql_idle_timeout deprecated for idle_timeout')
+    $idle_timeout_real = $sql_idle_timeout
+  } else {
+    $idle_timeout_real = $idle_timeout
+  }
+
+  if $reconnect_interval {
+    warning('reconnect_interval deprecated for retry_interval')
+    $retry_interval_real = $reconnect_interval
+  } else {
+    $retry_interval_real = $retry_interval
+  }
+
+  validate_re($connection_real, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+
+  case $connection_real {
+    /mysql:\/\/\S+:\S+@\S+\/\S+/: {
+      require 'mysql::python'
+    }
+    /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
+      $backend_package = 'python-psycopg2'
+    }
+    /sqlite:\/\//: {
+      $backend_package = 'python-pysqlite2'
+    }
+    default: {
+      fail("Invalid sql connection: ${connection_real}")
+    }
+  }
+
+  neutron_config {
+    'database/connection':     value => $connection_real;
+    'database/idle_timeout':   value => $idle_timeout_real;
+    'database/retry_interval': value => $retry_interval_real;
+    'database/max_retries':    value => $max_retries_real;
+  }
 
   if $log_file {
     neutron_config {

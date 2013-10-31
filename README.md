@@ -55,11 +55,11 @@ class { '::neutron':
 class { 'neutron::server':
     auth_host       => '127.0.0.1', # the keystone host address
     auth_password   => 'keystone_neutron_secret',
+    sql_connection  => 'mysql://neutron:neutron_sql_secret@127.0.0.1/neutron?charset=utf8',
 }
 
 # enable the Open VSwitch plugin server
 class { 'neutron::plugins::ovs':
-    sql_connection      => 'mysql://neutron:neutron_sql_secret@127.0.0.1/neutron?charset=utf8',
     tenant_network_type => 'gre',
     network_vlan_ranges => 'physnet:1000:2000',
 }

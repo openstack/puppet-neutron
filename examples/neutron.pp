@@ -13,6 +13,7 @@ class { 'neutron':
 # The API server talks to keystone for authorisation
 class { 'neutron::server':
   keystone_password => 'password',
+  connection        => 'mysql://neutron:password@192.168.1.1/neutron',
 }
 
 # Various agents
@@ -29,7 +30,6 @@ class { 'neutron::agents::ovs':
 
 # Plugin
 class { 'neutron::plugins::ovs':
-  sql_connection      => 'mysql://neutron:password@localhost/neutron',
   tenant_network_type => 'gre',
 }
 
@@ -53,6 +53,5 @@ class { 'neutron::agents::ovs':
 
 # Plugin
 class { 'neutron::plugins::ovs':
-  sql_connection      => 'mysql://neutron:password@192.168.1.1/neutron',
   tenant_network_type => 'gre',
 }

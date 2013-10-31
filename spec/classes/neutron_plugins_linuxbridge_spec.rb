@@ -7,7 +7,7 @@ describe 'neutron::plugins::linuxbridge' do
   end
 
   let :params do
-    { :sql_connection      => 'mysql://user:pass@db/db',
+    { :sql_connection      => false,
       :network_vlan_ranges => 'physnet0:100:109',
       :tenant_network_type => 'vlan',
       :package_ensure      => 'installed'
@@ -26,9 +26,6 @@ describe 'neutron::plugins::linuxbridge' do
     end
 
     it 'configures linuxbridge_conf.ini' do
-      should contain_neutron_plugin_linuxbridge('DATABASE/sql_connection').with(
-        :value => params[:sql_connection]
-      )
       should contain_neutron_plugin_linuxbridge('VLANS/tenant_network_type').with(
         :value => params[:tenant_network_type]
       )

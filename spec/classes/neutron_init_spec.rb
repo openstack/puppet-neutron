@@ -93,6 +93,7 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/base_mac').with_value('fa:16:3e:00:00:00')
       should contain_neutron_config('DEFAULT/mac_generation_retries').with_value(16)
       should contain_neutron_config('DEFAULT/dhcp_lease_duration').with_value(120)
+      should contain_neutron_config('DEFAULT/dhcp_agents_per_network').with_value(1)
       should contain_neutron_config('DEFAULT/allow_bulk').with_value(true)
       should contain_neutron_config('DEFAULT/allow_overlapping_ips').with_value(false)
       should contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')

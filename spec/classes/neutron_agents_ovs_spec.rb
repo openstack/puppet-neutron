@@ -4,7 +4,7 @@ describe 'neutron::agents::ovs' do
 
   let :pre_condition do
     "class { 'neutron': rabbit_password => 'passw0rd' }\n" +
-    "class { 'neutron::plugins::ovs': network_vlan_ranges => 'test' }"
+    "class { 'neutron::plugins::ovs': network_vlan_ranges => 'physnet1:1000:2000' }"
   end
 
   let :default_params do
@@ -124,6 +124,20 @@ describe 'neutron::agents::ovs' do
             :ensure  => 'present',
             :before => 'Service[neutron-plugin-ovs-service]'
           )
+        end
+      end
+
+      context 'with vxlan tunneling' do
+        before :each do
+          params.merge!(:enable_tunneling => true,
+                        :local_ip => '127.0.0.1',
+                        :tunnel_types => ['vxlan'],
+                        :vxlan_udp_port => '4789')
+        end
+
+        it 'should perform vxlan network configuration' do
+          should contain_neutron_plugin_ovs('agent/tunnel_types').with_value(params[:tunnel_types])
+          should contain_neutron_plugin_ovs('agent/vxlan_udp_port').with_value(params[:vxlan_udp_port])
         end
       end
     end

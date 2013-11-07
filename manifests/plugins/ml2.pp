@@ -89,7 +89,7 @@ class neutron::plugins::ml2 (
   $tenant_network_types  = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
   $mechanism_drivers     = ['openvswitch', 'linuxbridge'],
   $flat_networks         = ['*'],
-  $network_vlan_ranges   = ['10:50'],
+  $network_vlan_ranges   = ['physnet1:1000:2999'],
   $tunnel_id_ranges      = ['20:100'],
   $vxlan_group           = '224.0.0.1',
   $vni_ranges            = ['10:100']

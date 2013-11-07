@@ -36,7 +36,7 @@ define neutron::plugins::ml2::driver (
       fail('when gre is part of type_drivers, tunnel_id_ranges should be given.')
     }
 
-    neutron::plugins::ml2::validate_tunnel_id_ranges { $tunnel_id_ranges:; }
+    validate_tunnel_id_ranges($tunnel_id_ranges)
 
     neutron_plugin_ml2 {
       'ml2_type_gre/tunnel_id_ranges': value => join($tunnel_id_ranges, ',');
@@ -48,7 +48,7 @@ define neutron::plugins::ml2::driver (
       fail('when vlan is part of type_drivers, network_vlan_ranges should be given.')
     }
 
-    neutron::plugins::ml2::validate_network_vlan_ranges { $network_vlan_ranges:; }
+    validate_network_vlan_ranges($network_vlan_ranges)
 
     neutron_plugin_ml2 {
       'ml2_type_vlan/network_vlan_ranges': value => join($network_vlan_ranges, ',');
@@ -73,7 +73,7 @@ define neutron::plugins::ml2::driver (
       }
     }
 
-    neutron::plugins::ml2::validate_vni_ranges { $vni_ranges: }
+    validate_vni_ranges($vni_ranges)
 
     neutron_plugin_ml2 {
       'ml2_type_vxlan/vxlan_group': value => $vxlan_group;

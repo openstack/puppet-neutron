@@ -2,6 +2,7 @@
 # Copyright (C) 2013 eNovance SAS <licensing@enovance.com>
 #
 # Author: Emilien Macchi <emilien.macchi@enovance.com>
+#         Martin Magr <mmagr@redhat.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -15,20 +16,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Advanced testing when using VXLAN
+# Advanced validation for VXLAN UDP port configuration
 #
 
-define neutron::plugins::ml2::validate_vni_ranges {
-  if ($name !~ /^(\d+):(\d+)$/) {
-    fail('vni ranges are invalid.')
-  }
-  else {
-    $first_id = regsubst($name,'^(\d+):(\d+)$','\1') + 0
-    $second_id = regsubst($name,'^(\d+):(\d+)$','\2') + 0
-    if ( $first_id > 16777215 ) or ( $second_id > 16777215 )
-      or ( $first_id < 0 ) or ( $second_id < 0 )
-      or ( $second_id < $first_id ) {
-      fail('vni ranges are invalid.')
-    }
-  }
-}
+module Puppet::Parser::Functions
+  newfunction(:validate_vxlan_udp_port) do |args|
+    value = Integer(args[0])
+
+    # check if port is either default value or one of the private ports
+    # according to http://tools.ietf.org/html/rfc6056
+    if value != 4789 or (49151 >= value and value > 65535)
+      raise Puppet::Error, "vxlan udp port is invalid."
+    end
+  end
+end

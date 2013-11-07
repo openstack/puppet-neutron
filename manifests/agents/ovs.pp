@@ -15,8 +15,10 @@ class neutron::agents::ovs (
   $bridge_mappings      = [],
   $integration_bridge   = 'br-int',
   $enable_tunneling     = false,
+  $tunnel_types         = [],
   $local_ip             = false,
   $tunnel_bridge        = 'br-tun',
+  $vxlan_udp_port       = 4789,
   $polling_interval     = 2,
   $firewall_driver      = 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
 ) {
@@ -85,6 +87,18 @@ class neutron::agents::ovs (
       'OVS/enable_tunneling': value => true;
       'OVS/tunnel_bridge':    value => $tunnel_bridge;
       'OVS/local_ip':         value => $local_ip;
+    }
+
+    if $tunnel_types {
+      neutron_plugin_ovs {
+        'agent/tunnel_types': value => join($tunnel_types, ',');
+      }
+    }
+    if 'vxlan' in $tunnel_types {
+      validate_vxlan_udp_port($vxlan_udp_port)
+      neutron_plugin_ovs {
+        'agent/vxlan_udp_port': value => $vxlan_udp_port;
+      }
     }
   } else {
     neutron_plugin_ovs {

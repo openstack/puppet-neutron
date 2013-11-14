@@ -2,11 +2,15 @@ fixtures:
   repositories:
     "stdlib": "git://github.com/puppetlabs/puppetlabs-stdlib.git"
     "inifile": "git://github.com/puppetlabs/puppetlabs-inifile"
-    "keystone": "git://github.com/stackforge/puppet-keystone.git"
+    "keystone": 
+      repo: "git://github.com/stackforge/puppet-keystone.git"
+      ref:  'stable/havana'
     "mysql":
       repo: "git://github.com/puppetlabs/puppetlabs-mysql.git"
       ref:  'origin/0.x'
-    "nova": "git://github.com/stackforge/puppet-nova.git"
+    "nova": 
+      repo: "git://github.com/stackforge/puppet-nova.git"
+      ref:  'stable/havana'
     "vswitch": "git://github.com/bodepd/puppet-vswitch"
   symlinks:
     "neutron": "#{source_dir}"

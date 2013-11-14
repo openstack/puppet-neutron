@@ -121,6 +121,16 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 Release Notes
 -------------
 
+**3.0.0**
+
+* Major release for OpenStack Havana.
+* Renamed project from quantum to neutron.
+* Changed the default quota_driver.
+* Removed provider setting requirement.
+* Fixed file permissions.
+* Fixed bug to ensure that keystone endpoint is set before service starts.
+* Added database configuration support for Havana.
+
 **2.2.0**
 
 * Improved documentation.

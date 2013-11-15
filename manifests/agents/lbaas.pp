@@ -17,7 +17,7 @@
 #   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*device_driver*]
-#   (optional) Defaults to 'neutron.plugins.services.agent_loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver'.
+#   (optional) Defaults to 'neutron.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver'.
 #
 # [*use_namespaces*]
 #   (optional) Allow overlapping IP (Must have kernel build with
@@ -32,7 +32,7 @@ class neutron::agents::lbaas (
   $enabled          = true,
   $debug            = false,
   $interface_driver = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $device_driver    = 'neutron.plugins.services.agent_loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
+  $device_driver    = 'neutron.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
   $use_namespaces   = true,
   $user_group       = 'nogroup',
 ) {

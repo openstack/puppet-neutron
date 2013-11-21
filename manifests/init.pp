@@ -50,6 +50,7 @@
 #   neutron.services.firewall.fwaas_plugin.FirewallPlugin
 #   neutron.services.loadbalancer.plugin.LoadBalancerPlugin
 #   neutron.services.vpn.plugin.VPNDriverPlugin
+#   neutron.services.metering.metering_plugin.MeteringPlugin
 #   Defaults to empty
 #
 # [*auth_strategy*]

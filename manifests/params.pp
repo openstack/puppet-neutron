@@ -64,6 +64,8 @@ class neutron::params {
     $ovs_server_package  = 'neutron-plugin-openvswitch'
     $ovs_cleanup_service = false
 
+    $plumgrid_plugin_package = 'neutron-plugin-plumgrid'
+
     $linuxbridge_agent_package  = 'neutron-plugin-linuxbridge-agent'
     $linuxbridge_agent_service  = 'neutron-plugin-linuxbridge-agent'
     $linuxbridge_server_package = 'neutron-plugin-linuxbridge'

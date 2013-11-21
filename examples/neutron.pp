@@ -20,6 +20,7 @@ class { 'neutron::server':
 class { 'neutron::agents::dhcp': }
 class { 'neutron::agents::l3': }
 class { 'neutron::agents::lbaas': }
+class { 'neutron::agents::vpnaas': }
 
 # This plugin configures Neutron for OVS on the server
 # Agent

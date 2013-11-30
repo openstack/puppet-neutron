@@ -27,7 +27,8 @@ describe 'neutron::server' do
       :sql_idle_timeout   => '3600',
       :idle_timeout       => '3600',
       :reconnect_interval => '10',
-      :retry_interval     => '10' }
+      :retry_interval     => '10',
+      :api_workers        => '0'}
   end
 
   shared_examples_for 'a neutron server' do
@@ -82,6 +83,7 @@ describe 'neutron::server' do
       should contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(
         :ensure => 'absent'
       )
+      should contain_neutron_config('DEFAULT/api_workers').with_value('0')
     end
   end
 

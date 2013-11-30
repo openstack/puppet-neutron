@@ -81,6 +81,14 @@
 #   Deprecates reconnect_interval
 #   Defaults to: 10
 #
+# [*api_workers*]
+#   (optional) Number of separate worker processes to spawn.
+#   The default, 0, runs the worker thread in the current process.
+#   Greater than 0 launches that number of child processes as workers.
+#   The parent process manages them.
+#   Defaults to: 0
+#
+
 class neutron::server (
   $package_ensure     = 'present',
   $enabled            = true,
@@ -102,7 +110,8 @@ class neutron::server (
   $reconnect_interval = '10',
   $retry_interval     = '10',
   $log_file           = false,
-  $log_dir            = '/var/log/neutron'
+  $log_dir            = '/var/log/neutron',
+  $api_workers        = '0'
 ) {
 
   include neutron::params
@@ -157,6 +166,7 @@ class neutron::server (
   }
 
   neutron_config {
+    'DEFAULT/api_workers':     value => $api_workers;
     'database/connection':     value => $connection_real;
     'database/idle_timeout':   value => $idle_timeout_real;
     'database/retry_interval': value => $retry_interval_real;

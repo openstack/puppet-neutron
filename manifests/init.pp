@@ -31,7 +31,18 @@
 #
 # [*core_plugin*]
 #   (optional) Neutron plugin provider
-#   Defaults to OVSQneutronPluginV2 (openvswitch)
+#   Defaults to neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2 (Open-vSwitch)
+#   Could be:
+#   neutron.plugins.bigswitch.plugin.NeutronRestProxyV2
+#   neutron.plugins.brocade.NeutronPlugin.BrocadePluginV2
+#   neutron.plugins.cisco.network_plugin.PluginV2
+#   neutron.plugins.linuxbridge.lb_neutron_plugin.LinuxBridgePluginV2
+#   neutron.plugins.midonet.plugin.MidonetPluginV2
+#   neutron.plugins.ml2.plugin.Ml2Plugin
+#   neutron.plugins.nec.nec_plugin.NECPluginV2
+#   neutron.plugins.nicira.NeutronPlugin.NvpPluginV2
+#   neutron.plugins.plumgrid.plumgrid_plugin.plumgrid_plugin.NeutronPluginPLUMgridV2
+#   neutron.plugins.ryu.ryu_neutron_plugin.RyuNeutronPluginV2
 #
 # [*service_plugins*]
 #   (optional) Advanced service modules.

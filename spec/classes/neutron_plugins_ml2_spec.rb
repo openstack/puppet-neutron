@@ -22,6 +22,12 @@ require 'spec_helper'
 
 describe 'neutron::plugins::ml2' do
 
+  let :pre_condition do
+    "class { 'neutron':
+      rabbit_password => 'passw0rd',
+      core_plugin     => 'neutron.plugins.ml2.plugin.Ml2Plugin' }"
+  end
+
   let :default_params do
     { :type_drivers         => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
       :tenant_network_types => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
@@ -44,10 +50,26 @@ describe 'neutron::plugins::ml2' do
 
     it { should include_class('neutron::params') }
 
+    it 'configure neutron.conf' do
+        should contain_neutron_config('DEFAULT/core_plugin').with_value('neutron.plugins.ml2.plugin.Ml2Plugin')
+    end
+
     it 'configures ml2_conf.ini' do
       should contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
       should contain_neutron_plugin_ml2('ml2/tenant_network_types').with_value(p[:tenant_network_types].join(','))
       should contain_neutron_plugin_ml2('ml2/mechanism_drivers').with_value(p[:mechanism_drivers].join(','))
+    end
+
+
+    context 'configure ml2 with wrong core_plugin configured' do
+      let :pre_condition do
+        "class { 'neutron':
+          rabbit_password => 'passw0rd',
+          core_plugin     => 'foo' }"
+      end
+      it 'should fails to configure ml2 because core_plugin should contain ML2 class' do
+          expect { subject }.to raise_error(Puppet::Error, /ml2 plugin should be the core_plugin in neutron.conf/)
+      end
     end
 
     it 'configures ovs plugin' do
@@ -59,14 +81,14 @@ describe 'neutron::plugins::ml2' do
       should_not contain_neutron_plugin_linuxbridge('vxlan/l2_population').with('value' => true)
     end
 
-     context 'configure ml2 with bad driver value' do
-       before :each do
-        params.merge!(:type_drivers => ['foobar'])
-       end
-       it 'should fails to configure ml2 because foobar is not a valid driver' do
-           expect { subject }.to raise_error(Puppet::Error, /type_driver unknown./)
-       end
-     end
+    context 'configure ml2 with bad driver value' do
+      before :each do
+       params.merge!(:type_drivers => ['foobar'])
+      end
+      it 'should fails to configure ml2 because foobar is not a valid driver' do
+          expect { subject }.to raise_error(Puppet::Error, /type_driver unknown./)
+      end
+    end
 
     context 'when using flat driver' do
       before :each do
@@ -86,14 +108,14 @@ describe 'neutron::plugins::ml2' do
       end
     end
 
-     context 'when using gre driver with invalid values' do
-       before :each do
-        params.merge!(:tunnel_id_ranges => ['0:20', '40:100000000'])
-       end
-       it 'should fails to configure gre_networks because of too big range' do
-           expect { subject }.to raise_error(Puppet::Error, /tunnel id ranges are to large./)
-       end
-     end
+    context 'when using gre driver with invalid values' do
+      before :each do
+       params.merge!(:tunnel_id_ranges => ['0:20', '40:100000000'])
+      end
+      it 'should fails to configure gre_networks because of too big range' do
+          expect { subject }.to raise_error(Puppet::Error, /tunnel id ranges are to large./)
+      end
+    end
 
     context 'when using vlan driver with valid values' do
       before :each do

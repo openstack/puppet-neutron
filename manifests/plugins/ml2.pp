@@ -143,4 +143,8 @@ class neutron::plugins::ml2 (
     }
   }
 
+  if $::neutron::core_plugin != 'neutron.plugins.ml2.plugin.Ml2Plugin' {
+    fail('ml2 plugin should be the core_plugin in neutron.conf')
+  }
+
 }

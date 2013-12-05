@@ -19,6 +19,8 @@ class neutron::plugins::plumgrid (
   Neutron_plugin_plumgrid<||> ~> Service<| title == 'neutron-server' |>
   Package['neutron-plugin-plumgrid'] -> File['remove plumgrid.ini']
   File['remove plumgrid.ini'] -> Service<| title == 'neutron-server' |>
+  Package['neutron-plugin-plumgrid'] -> Package['plumgrid-pythonlib']
+  Package['plumgrid-pythonlib'] ~> Service<| title == 'neutron-server' |>
 
   file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
       path    => '/etc/default/neutron-server',
@@ -31,6 +33,11 @@ class neutron::plugins::plumgrid (
   package { 'neutron-plugin-plumgrid':
     ensure  => $package_ensure,
     name    => $::neutron::params::plumgrid_plugin_package,
+  }
+
+  package { 'plumgrid-pythonlib':
+    ensure  => $package_ensure,
+    name    => $::neutron::params::plumgrid_pythonlib_package,
   }
 
   file { 'remove plumgrid.ini':

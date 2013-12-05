@@ -56,6 +56,7 @@ class neutron::params {
     $ovs_cleanup_service = false
 
     $plumgrid_plugin_package = 'neutron-plugin-plumgrid'
+    $plumgrid_pythonlib_package = 'plumgrid-pythonlib'
     $plumgrid_config_file = '/etc/neutron/plugins/plumgrid/plumgrid.ini'
 
     $linuxbridge_agent_package  = 'neutron-plugin-linuxbridge-agent'

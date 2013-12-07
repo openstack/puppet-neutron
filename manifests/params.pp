@@ -30,6 +30,9 @@ class neutron::params {
 
     $haproxy_package   = 'haproxy'
 
+    $metering_agent_package = false
+    $metering_agent_service = 'neutron-metering-agent'
+
     $vpnaas_agent_package = false
     $vpnaas_agent_service = 'neutron-vpnaas-agent'
     $openswan_package     = 'openswan'
@@ -70,6 +73,9 @@ class neutron::params {
     $lbaas_agent_service = 'neutron-lbaas-agent'
 
     $haproxy_package   = 'haproxy'
+
+    $metering_agent_package = 'neutron-metering-agent'
+    $metering_agent_service = 'neutron-metering-agent'
 
     $vpnaas_agent_package = 'neutron-plugin-vpn-agent'
     $vpnaas_agent_service = 'neutron-vpnaas-agent'

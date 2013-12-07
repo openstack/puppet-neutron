@@ -8,6 +8,7 @@ class { 'neutron':
   rabbit_password       => 'password',
   rabbit_user           => 'guest',
   rabbit_host           => 'localhost',
+  service_plugins       => ['neutron.services.metering.metering_plugin.MeteringPlugin']
 }
 
 # The API server talks to keystone for authorisation
@@ -21,6 +22,7 @@ class { 'neutron::agents::dhcp': }
 class { 'neutron::agents::l3': }
 class { 'neutron::agents::lbaas': }
 class { 'neutron::agents::vpnaas': }
+class { 'neutron::agents::metering': }
 
 # This plugin configures Neutron for OVS on the server
 # Agent

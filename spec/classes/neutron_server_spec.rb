@@ -20,7 +20,7 @@ describe 'neutron::server' do
       :auth_port          => '35357',
       :auth_tenant        => 'services',
       :auth_user          => 'neutron',
-      :sql_connection     => 'sqlite:////var/lib/neutron/ovs.sqlite',
+      :sql_connection     => false,
       :connection         => 'sqlite:////var/lib/neutron/ovs.sqlite',
       :sql_max_retries    => '10',
       :max_retries        => '10',
@@ -141,6 +141,29 @@ describe 'neutron::server' do
     end
   end
 
+  shared_examples_for 'a neutron server with deprecated sql_connection' do
+    before do
+      params.merge!(
+        :sql_connection => 'sqlite:////var/lib/neutron/ovs-deprecated_parameter.sqlite',
+        :connection     => 'sqlite:////var/lib/neutron/ovs-IGNORED_parameter.sqlite'
+      )
+    end
+    it 'configures database connection' do
+      should contain_neutron_config('database/connection').with_value(params[:sql_connection])
+    end
+  end
+
+  shared_examples_for 'a neutron server with database connection specified' do
+    before do
+      params.merge!(
+        :connection => 'sqlite:////var/lib/neutron/ovs-TEST_parameter.sqlite'
+      )
+    end
+    it 'configures database connection' do
+      should contain_neutron_config('database/connection').with_value(params[:connection])
+    end
+  end
+
   describe "with custom keystone auth_uri" do
     let :facts do
       { :osfamily => 'RedHat' }
@@ -170,6 +193,8 @@ describe 'neutron::server' do
     it_configures 'a neutron server with log_file specified'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
+    it_configures 'a neutron server with deprecated sql_connection'
+    it_configures 'a neutron server with database connection specified'
   end
 
   context 'on RedHat platforms' do
@@ -186,5 +211,7 @@ describe 'neutron::server' do
     it_configures 'a neutron server with log_file specified'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
+    it_configures 'a neutron server with deprecated sql_connection'
+    it_configures 'a neutron server with database connection specified'
   end
 end

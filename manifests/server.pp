@@ -101,7 +101,7 @@ class neutron::server (
   $auth_user          = 'neutron',
   $auth_protocol      = 'http',
   $auth_uri           = false,
-  $sql_connection     = 'sqlite:////var/lib/neutron/ovs.sqlite',
+  $sql_connection     = false,
   $connection         = 'sqlite:////var/lib/neutron/ovs.sqlite',
   $max_retries        = '10',
   $sql_max_retries    = '10',

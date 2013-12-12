@@ -69,11 +69,16 @@ describe 'neutron::agents::dhcp' do
   shared_examples_for 'dnsmasq dhcp_driver' do
     it 'installs dnsmasq packages' do
       if platform_params.has_key?(:dhcp_agent_package)
-        should contain_package('dnsmasq').with_before('Package[neutron-dhcp-agent]')
+        should contain_package(platform_params[:dnsmasq_base_package]).with_before('Package[neutron-dhcp-agent]')
+        should contain_package(platform_params[:dnsmasq_utils_package]).with_before('Package[neutron-dhcp-agent]')
       end
-      should contain_package('dnsmasq').with(
+      should contain_package(platform_params[:dnsmasq_base_package]).with(
         :ensure => 'present',
-        :name   => platform_params[:dnsmasq_packages]
+        :name   => platform_params[:dnsmasq_base_package]
+      )
+      should contain_package(platform_params[:dnsmasq_utils_package]).with(
+        :ensure => 'present',
+        :name   => platform_params[:dnsmasq_utils_package]
       )
     end
   end
@@ -85,9 +90,10 @@ describe 'neutron::agents::dhcp' do
     end
 
     let :platform_params do
-      { :dnsmasq_packages   => ['dnsmasq-base', 'dnsmasq-utils'],
-        :dhcp_agent_package => 'neutron-dhcp-agent',
-        :dhcp_agent_service => 'neutron-dhcp-agent' }
+      { :dnsmasq_base_package  => 'dnsmasq-base',
+        :dnsmasq_utils_package => 'dnsmasq-utils',
+        :dhcp_agent_package    => 'neutron-dhcp-agent',
+        :dhcp_agent_service    => 'neutron-dhcp-agent' }
     end
 
     it_configures 'neutron dhcp agent'
@@ -99,8 +105,9 @@ describe 'neutron::agents::dhcp' do
     end
 
     let :platform_params do
-      { :dnsmasq_packages   => ['dnsmasq', 'dnsmasq-utils'],
-        :dhcp_agent_service => 'neutron-dhcp-agent' }
+      { :dnsmasq_base_package  => 'dnsmasq',
+        :dnsmasq_utils_package => 'dnsmasq-utils',
+        :dhcp_agent_service    => 'neutron-dhcp-agent' }
     end
 
     it_configures 'neutron dhcp agent'

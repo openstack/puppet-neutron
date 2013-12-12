@@ -58,10 +58,10 @@ class neutron::agents::dhcp (
   case $dhcp_driver {
     /\.Dnsmasq/: {
       Package['dnsmasq'] -> Package<| title == 'neutron-dhcp-agent' |>
-      package { 'dnsmasq':
+      ensure_resource('package', 'dnsmasq', {
         ensure => present,
         name   => $::neutron::params::dnsmasq_packages,
-      }
+      })
     }
     default: {
       fail("Unsupported dhcp_driver ${dhcp_driver}")

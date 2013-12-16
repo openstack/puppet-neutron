@@ -27,7 +27,7 @@ describe 'neutron::agents::lbaas' do
       default_params.merge(params)
     end
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it_configures 'haproxy lbaas_driver'
 

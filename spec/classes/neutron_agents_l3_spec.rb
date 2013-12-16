@@ -32,7 +32,7 @@ describe 'neutron::agents::l3' do
       default_params.merge(params)
     end
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'configures l3_agent.ini' do
       should contain_neutron_l3_agent_config('DEFAULT/debug').with_value(p[:debug])

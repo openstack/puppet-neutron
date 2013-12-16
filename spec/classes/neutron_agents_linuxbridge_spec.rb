@@ -17,7 +17,7 @@ describe 'neutron::agents::linuxbridge' do
 
   shared_examples_for 'neutron linuxbridge agent' do
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'configures neutron linuxbridge agent service' do
       should contain_service('neutron-plugin-linuxbridge-service').with(

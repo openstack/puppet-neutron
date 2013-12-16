@@ -49,7 +49,7 @@ describe 'neutron::agents::metering' do
       default_params.merge(params)
     end
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'configures metering_agent.ini' do
       should contain_neutron_metering_agent_config('DEFAULT/debug').with_value(p[:debug]);

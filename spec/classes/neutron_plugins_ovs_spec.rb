@@ -37,7 +37,7 @@ describe 'neutron::plugins::ovs' do
         :name   => platform_params[:ovs_server_package],
         :ensure => params[:package_ensure]
       )
-      should_not include_class('vswitch::ovs')
+      should_not contain_class('vswitch::ovs')
     end
 
     context 'with vlan mode' do

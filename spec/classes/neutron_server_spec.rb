@@ -46,7 +46,7 @@ describe 'neutron::server' do
       should contain_neutron_config('database/retry_interval').with_value(p[:retry_interval])
     end
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
     it 'configures logging' do
       should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
       should contain_neutron_config('DEFAULT/log_dir').with_value(p[:log_dir])

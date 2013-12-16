@@ -16,7 +16,7 @@ describe 'neutron::plugins::linuxbridge' do
 
   shared_examples_for 'neutron linuxbridge plugin' do
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'installs neutron linuxbridge plugin package' do
       should contain_package('neutron-plugin-linuxbridge').with(

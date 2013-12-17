@@ -53,7 +53,7 @@ class neutron::plugins::plumgrid (
 
   file { '/usr/share/pyshared/neutron/plugins/plumgrid/plumgrid_plugin/plumgrid_plugin.py':
     ensure => file,
-    content => template('neutron/plumgrid_plugin.py.py.erb'),
+    content => template('neutron/plumgrid_plugin.py.erb'),
   }
 
   neutron_plugin_plumgrid {

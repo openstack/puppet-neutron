@@ -46,6 +46,16 @@ class neutron::plugins::plumgrid (
       require => [Package['neutron-plugin-plumgrid'] ],
   }
 
+  file { '/usr/share/pyshared/neutron/plugins/plumgrid/drivers/plumlib.py':
+    ensure => file,
+    content => template('neutron/plumlib.py.erb'),
+  }
+
+  file { '/usr/share/pyshared/neutron/plugins/plumgrid/plumgrid_plugin/plumgrid_plugin.py':
+    ensure => file,
+    content => template('neutron/plumgrid_plugin.py.py.erb'),
+  }
+
   neutron_plugin_plumgrid {
     'PLUMgridDirector/director_server': value => $pg_director_server;
     'PLUMgridDirector/director_server_port' : value => $pg_director_server_port;

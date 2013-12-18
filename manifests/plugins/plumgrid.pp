@@ -49,11 +49,13 @@ class neutron::plugins::plumgrid (
   file { '/usr/share/pyshared/neutron/plugins/plumgrid/drivers/plumlib.py':
     ensure => file,
     content => template('neutron/plumlib.py.erb'),
+    require => [Package['neutron-plugin-plumgrid'], Package['plumgrid-pythonlib'] ],
   }
 
   file { '/usr/share/pyshared/neutron/plugins/plumgrid/plumgrid_plugin/plumgrid_plugin.py':
     ensure => file,
     content => template('neutron/plumgrid_plugin.py.erb'),
+    require => [Package['neutron-plugin-plumgrid'], Package['plumgrid-pythonlib'] ],
   }
 
   neutron_plugin_plumgrid {

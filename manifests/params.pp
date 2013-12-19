@@ -22,6 +22,8 @@ class neutron::params {
     $cisco_server_package = 'openstack-neutron-cisco'
     $cisco_config_file    = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
 
+    $nvp_server_package = 'openstack-neutron-nicira'
+
     $dhcp_agent_package = false
     $dhcp_agent_service = 'neutron-dhcp-agent'
 
@@ -69,6 +71,8 @@ class neutron::params {
 
     $cisco_server_package = 'neutron-plugin-cisco'
     $cisco_config_file    = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
+
+    $nvp_server_package = 'neutron-plugin-nicira'
 
     $dhcp_agent_package = 'neutron-dhcp-agent'
     $dhcp_agent_service = 'neutron-dhcp-agent'

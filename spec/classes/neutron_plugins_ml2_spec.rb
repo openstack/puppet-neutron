@@ -29,14 +29,15 @@ describe 'neutron::plugins::ml2' do
   end
 
   let :default_params do
-    { :type_drivers         => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
-      :tenant_network_types => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
-      :mechanism_drivers    => ['openvswitch', 'linuxbridge'],
-      :flat_networks        => ['*'],
-      :network_vlan_ranges  => ['10:50'],
-      :tunnel_id_ranges     => ['20:100'],
-      :vxlan_group          => '224.0.0.1',
-      :vni_ranges           => ['10:100'] }
+    { :type_drivers          => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
+      :tenant_network_types  => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
+      :mechanism_drivers     => ['openvswitch', 'linuxbridge'],
+      :flat_networks         => ['*'],
+      :network_vlan_ranges   => ['10:50'],
+      :tunnel_id_ranges      => ['20:100'],
+      :vxlan_group           => '224.0.0.1',
+      :vni_ranges            => ['10:100'],
+      :enable_security_group => false }
   end
 
   let :params do
@@ -58,6 +59,7 @@ describe 'neutron::plugins::ml2' do
       should contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
       should contain_neutron_plugin_ml2('ml2/tenant_network_types').with_value(p[:tenant_network_types].join(','))
       should contain_neutron_plugin_ml2('ml2/mechanism_drivers').with_value(p[:mechanism_drivers].join(','))
+      should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('neutron.agent.firewall.NoopFirewallDriver')
     end
 
     it 'installs ml2 package (if any)' do
@@ -198,6 +200,15 @@ describe 'neutron::plugins::ml2' do
        it 'should set l2_population flag as true' do
          should contain_neutron_plugin_linuxbridge('vxlan/enable_vxlan').with_value('true')
          should contain_neutron_plugin_linuxbridge('vxlan/l2_population').with_value('true')
+       end
+     end
+
+     context 'when enabling security group' do
+       before :each do
+         params.merge!(:enable_security_group => true)
+       end
+       it 'should set firewall_driver to true' do
+         should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with('value' => true)
        end
      end
   end

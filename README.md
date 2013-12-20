@@ -130,6 +130,12 @@ Release Notes
 * Fixed file permissions.
 * Fixed bug to ensure that keystone endpoint is set before service starts.
 * Added database configuration support for Havana.
+* Ensured dnsmasq package resource for compatibility with modules that define the same resource
+* Added multi-worker support.
+* Added metering agent support.
+* Added vpnaas agent support.
+* Added ml2 plugin support.
+* Fixed lbass driver name.
 
 **2.2.0**
 

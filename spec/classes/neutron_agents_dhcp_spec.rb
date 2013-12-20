@@ -11,15 +11,16 @@ describe 'neutron::agents::dhcp' do
   end
 
   let :default_params do
-    { :package_ensure   => 'present',
-      :enabled          => true,
-      :debug            => false,
-      :state_path       => '/var/lib/neutron',
-      :resync_interval  => 30,
-      :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :dhcp_driver      => 'neutron.agent.linux.dhcp.Dnsmasq',
-      :root_helper      => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-      :use_namespaces   => true }
+    { :package_ensure      => 'present',
+      :enabled             => true,
+      :debug               => false,
+      :state_path          => '/var/lib/neutron',
+      :resync_interval     => 30,
+      :interface_driver    => 'neutron.agent.linux.interface.OVSInterfaceDriver',
+      :dhcp_driver         => 'neutron.agent.linux.dhcp.Dnsmasq',
+      :root_helper         => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+      :use_namespaces      => true,
+      :dnsmasq_config_file => nil }
   end
 
 
@@ -66,6 +67,17 @@ describe 'neutron::agents::dhcp' do
     end
   end
 
+  shared_examples_for 'neutron dhcp agent with dnsmasq_config_file specified' do
+    before do
+      params.merge!(
+        :dnsmasq_config_file => '/foo'
+      )
+    end
+    it 'configures dnsmasq_config_file' do
+      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value(params[:dnsmasq_config_file])
+    end
+  end
+
   shared_examples_for 'dnsmasq dhcp_driver' do
     it 'installs dnsmasq packages' do
       if platform_params.has_key?(:dhcp_agent_package)
@@ -97,6 +109,7 @@ describe 'neutron::agents::dhcp' do
     end
 
     it_configures 'neutron dhcp agent'
+    it_configures 'neutron dhcp agent with dnsmasq_config_file specified'
   end
 
   context 'on RedHat platforms' do
@@ -111,5 +124,6 @@ describe 'neutron::agents::dhcp' do
     end
 
     it_configures 'neutron dhcp agent'
+    it_configures 'neutron dhcp agent with dnsmasq_config_file specified'
   end
 end

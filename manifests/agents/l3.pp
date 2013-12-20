@@ -63,6 +63,10 @@
 #   (optional) can be set to False if the Nova metadata server is not available
 #   Defaults to True
 #
+# [*network_device_mtu*]
+#   (optional) The MTU size for the interfaces managed by the L3 agent
+#   Defaults to undef
+#
 class neutron::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
@@ -77,7 +81,8 @@ class neutron::agents::l3 (
   $send_arp_for_ha              = '3',
   $periodic_interval            = '40',
   $periodic_fuzzy_delay         = '5',
-  $enable_metadata_proxy        = true
+  $enable_metadata_proxy        = true,
+  $network_device_mtu           = undef
 ) {
 
   include neutron::params
@@ -98,6 +103,16 @@ class neutron::agents::l3 (
     'DEFAULT/periodic_interval':            value => $periodic_interval;
     'DEFAULT/periodic_fuzzy_delay':         value => $periodic_fuzzy_delay;
     'DEFAULT/enable_metadata_proxy':        value => $enable_metadata_proxy;
+  }
+
+  if $network_device_mtu {
+    neutron_l3_agent_config {
+      'DEFAULT/network_device_mtu':           value => $network_device_mtu;
+    }
+  } else {
+    neutron_l3_agent_config {
+      'DEFAULT/network_device_mtu':           ensure => absent;
+    }
   }
 
   if $::neutron::params::l3_agent_package {

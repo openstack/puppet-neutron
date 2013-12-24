@@ -11,15 +11,17 @@ describe 'neutron::agents::dhcp' do
   end
 
   let :default_params do
-    { :package_ensure   => 'present',
-      :enabled          => true,
-      :debug            => false,
-      :state_path       => '/var/lib/neutron',
-      :resync_interval  => 30,
-      :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :dhcp_driver      => 'neutron.agent.linux.dhcp.Dnsmasq',
-      :root_helper      => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-      :use_namespaces   => true }
+    { :package_ensure           => 'present',
+      :enabled                  => true,
+      :debug                    => false,
+      :state_path               => '/var/lib/neutron',
+      :resync_interval          => 30,
+      :interface_driver         => 'neutron.agent.linux.interface.OVSInterfaceDriver',
+      :dhcp_driver              => 'neutron.agent.linux.dhcp.Dnsmasq',
+      :root_helper              => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+      :use_namespaces           => true,
+      :enable_isolated_metadata => false,
+      :enable_metadata_network  => false }
   end
 
 
@@ -40,6 +42,8 @@ describe 'neutron::agents::dhcp' do
       should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_driver').with_value(p[:dhcp_driver]);
       should contain_neutron_dhcp_agent_config('DEFAULT/root_helper').with_value(p[:root_helper]);
       should contain_neutron_dhcp_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces]);
+      should contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(p[:enable_isolated_metadata]);
+      should contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value(p[:enable_metadata_network]);
     end
 
     it 'installs neutron dhcp agent package' do
@@ -63,6 +67,35 @@ describe 'neutron::agents::dhcp' do
         :ensure  => 'running',
         :require => 'Class[Neutron]'
       )
+    end
+
+    context 'when enabling isolated metadata only' do
+      before :each do
+        params.merge!(:enable_isolated_metadata => true, :enable_metadata_network => false)
+      end
+      it 'should enable isolated_metadata only' do
+        should contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value('true');
+        should contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value('false');
+      end
+    end
+
+    context 'when enabling isolated metadata with metadata networks' do
+      before :each do
+        params.merge!(:enable_isolated_metadata => true, :enable_metadata_network => true)
+      end
+      it 'should enable both isolated_metadata and metadata_network' do
+        should contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value('true');
+        should contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value('true');
+      end
+    end
+
+    context 'when enabling metadata networks without enabling isolated metadata' do
+      before :each do
+        params.merge!(:enable_isolated_metadata => false, :enable_metadata_network => true)
+      end
+      it 'should fails to configure metadata_network without isolated_metadata' do
+        expect { subject }.to raise_error(Puppet::Error, /enable_metadata_network to true requires enable_isolated_metadata also enabled./)
+      end
     end
   end
 

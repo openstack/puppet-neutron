@@ -38,16 +38,30 @@
 #   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
 #   Defaults to true.
 #
+# [*enable_isolated_metadata*]
+#   (optional) enable metadata support on isolated networks.
+#   Defaults to false.
+#
+# [*enable_metadata_network*]
+#   (optional) Allows for serving metadata requests coming from a dedicated
+#   metadata access network whose cidr is 169.254.169.254/16 (or larger prefix),
+#   and is connected to a Neutron router from which the VMs send metadata
+#   request.
+#   This option requires enable_isolated_metadata = True
+#   Defaults to false.
+#
 class neutron::agents::dhcp (
-  $package_ensure   = present,
-  $enabled          = true,
-  $debug            = false,
-  $state_path       = '/var/lib/neutron',
-  $resync_interval  = 30,
-  $interface_driver = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_driver      = 'neutron.agent.linux.dhcp.Dnsmasq',
-  $root_helper      = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $use_namespaces   = true
+  $package_ensure           = present,
+  $enabled                  = true,
+  $debug                    = false,
+  $state_path               = '/var/lib/neutron',
+  $resync_interval          = 30,
+  $interface_driver         = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $dhcp_driver              = 'neutron.agent.linux.dhcp.Dnsmasq',
+  $root_helper              = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+  $use_namespaces           = true,
+  $enable_isolated_metadata = false,
+  $enable_metadata_network  = false
 ) {
 
   include neutron::params
@@ -62,6 +76,15 @@ class neutron::agents::dhcp (
     }
     default: {
       fail("Unsupported dhcp_driver ${dhcp_driver}")
+    }
+  }
+
+  if (! $enable_isolated_metadata) and $enable_metadata_network {
+    fail('enable_metadata_network to true requires enable_isolated_metadata also enabled.')
+  } else {
+    neutron_dhcp_agent_config {
+      'DEFAULT/enable_isolated_metadata': value => $enable_isolated_metadata;
+      'DEFAULT/enable_metadata_network':  value => $enable_metadata_network;
     }
   }
 

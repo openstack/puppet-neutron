@@ -28,7 +28,9 @@ describe 'neutron::server' do
       :idle_timeout       => '3600',
       :reconnect_interval => '10',
       :retry_interval     => '10',
-      :api_workers        => '0'}
+      :api_workers        => '0',
+      :agent_down_time    => '9',
+      :report_interval    => '4'}
   end
 
   shared_examples_for 'a neutron server' do
@@ -84,6 +86,8 @@ describe 'neutron::server' do
         :ensure => 'absent'
       )
       should contain_neutron_config('DEFAULT/api_workers').with_value('0')
+      should contain_neutron_config('DEFAULT/agent_down_time').with_value('9')
+      should contain_neutron_config('DEFAULT/report_interval').with_value('4')
     end
   end
 

@@ -63,7 +63,7 @@ class neutron::agents::lbaas (
     'DEFAULT/interface_driver':   value => $interface_driver;
     'DEFAULT/device_driver':      value => $device_driver;
     'DEFAULT/use_namespaces':     value => $use_namespaces;
-    'DEFAULT/user_group':         value => $user_group;
+    'haproxy/user_group':         value => $user_group;
   }
 
   if $::neutron::params::lbaas_agent_package {

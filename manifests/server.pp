@@ -88,6 +88,16 @@
 #   The parent process manages them.
 #   Defaults to: 0
 #
+# [*agent_down_time*]
+#   (optional) Seconds to regard the agent as down; should be at least twice
+#   report_interval, to be sure the agent is down for good.
+#   Defaults to: 9
+#
+# [*report_interval*]
+#   (optional) Seconds between nodes reporting state to server; should be less than
+#   agent_down_time, best if it is half or less than agent_down_time.
+#   Defaults to: 4
+#
 
 class neutron::server (
   $package_ensure     = 'present',
@@ -111,7 +121,9 @@ class neutron::server (
   $retry_interval     = '10',
   $log_file           = false,
   $log_dir            = '/var/log/neutron',
-  $api_workers        = '0'
+  $api_workers        = '0',
+  $agent_down_time    = '9',
+  $report_interval    = '4'
 ) {
 
   include neutron::params
@@ -167,6 +179,8 @@ class neutron::server (
 
   neutron_config {
     'DEFAULT/api_workers':     value => $api_workers;
+    'DEFAULT/agent_down_time': value => $agent_down_time;
+    'DEFAULT/report_interval': value => $report_interval;
     'database/connection':     value => $connection_real;
     'database/idle_timeout':   value => $idle_timeout_real;
     'database/retry_interval': value => $retry_interval_real;

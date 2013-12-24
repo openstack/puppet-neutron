@@ -12,25 +12,26 @@ describe 'neutron::server' do
   end
 
   let :default_params do
-    { :package_ensure     => 'present',
-      :enabled            => true,
-      :log_dir            => '/var/log/neutron',
-      :auth_type          => 'keystone',
-      :auth_host          => 'localhost',
-      :auth_port          => '35357',
-      :auth_tenant        => 'services',
-      :auth_user          => 'neutron',
-      :sql_connection     => false,
-      :connection         => 'sqlite:////var/lib/neutron/ovs.sqlite',
-      :sql_max_retries    => '10',
-      :max_retries        => '10',
-      :sql_idle_timeout   => '3600',
-      :idle_timeout       => '3600',
-      :reconnect_interval => '10',
-      :retry_interval     => '10',
-      :api_workers        => '0',
-      :agent_down_time    => '9',
-      :report_interval    => '4'}
+    { :package_ensure          => 'present',
+      :enabled                 => true,
+      :log_dir                 => '/var/log/neutron',
+      :auth_type               => 'keystone',
+      :auth_host               => 'localhost',
+      :auth_port               => '35357',
+      :auth_tenant             => 'services',
+      :auth_user               => 'neutron',
+      :sql_connection          => false,
+      :connection              => 'sqlite:////var/lib/neutron/ovs.sqlite',
+      :sql_max_retries         => '10',
+      :max_retries             => '10',
+      :sql_idle_timeout        => '3600',
+      :idle_timeout            => '3600',
+      :reconnect_interval      => '10',
+      :retry_interval          => '10',
+      :api_workers             => '0',
+      :agent_down_time         => '9',
+      :report_interval         => '4',
+      :router_scheduler_driver => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler'}
   end
 
   shared_examples_for 'a neutron server' do
@@ -88,6 +89,7 @@ describe 'neutron::server' do
       should contain_neutron_config('DEFAULT/api_workers').with_value('0')
       should contain_neutron_config('DEFAULT/agent_down_time').with_value('9')
       should contain_neutron_config('DEFAULT/report_interval').with_value('4')
+      should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value('neutron.scheduler.l3_agent_scheduler.ChanceScheduler')
     end
   end
 

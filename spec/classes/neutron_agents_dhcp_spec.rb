@@ -11,16 +11,17 @@ describe 'neutron::agents::dhcp' do
   end
 
   let :default_params do
-    { :package_ensure      => 'present',
-      :enabled             => true,
-      :debug               => false,
-      :state_path          => '/var/lib/neutron',
-      :resync_interval     => 30,
-      :interface_driver    => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :dhcp_driver         => 'neutron.agent.linux.dhcp.Dnsmasq',
-      :root_helper         => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-      :use_namespaces      => true,
-      :dnsmasq_config_file => nil }
+    { :package_ensure         => 'present',
+      :enabled                => true,
+      :debug                  => false,
+      :state_path             => '/var/lib/neutron',
+      :resync_interval        => 30,
+      :interface_driver       => 'neutron.agent.linux.interface.OVSInterfaceDriver',
+      :dhcp_driver            => 'neutron.agent.linux.dhcp.Dnsmasq',
+      :root_helper            => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+      :use_namespaces         => true,
+      :dnsmasq_config_file    => nil,
+      :dhcp_delete_namespaces => false }
   end
 
 
@@ -41,6 +42,7 @@ describe 'neutron::agents::dhcp' do
       should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_driver').with_value(p[:dhcp_driver]);
       should contain_neutron_dhcp_agent_config('DEFAULT/root_helper').with_value(p[:root_helper]);
       should contain_neutron_dhcp_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces]);
+      should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_delete_namespaces').with_value(p[:dhcp_delete_namespaces]);
     end
 
     it 'installs neutron dhcp agent package' do

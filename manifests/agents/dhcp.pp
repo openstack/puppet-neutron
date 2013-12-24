@@ -42,17 +42,22 @@
 #   (optional) Override the default dnsmasq settings with this file.
 #   Defaults to undef
 #
+# [*dhcp_delete_namespaces*]
+#   (optional) Delete namespace after removing a dhcp server
+#   Defaults to false.
+#
 class neutron::agents::dhcp (
-  $package_ensure      = present,
-  $enabled             = true,
-  $debug               = false,
-  $state_path          = '/var/lib/neutron',
-  $resync_interval     = 30,
-  $interface_driver    = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_driver         = 'neutron.agent.linux.dhcp.Dnsmasq',
-  $root_helper         = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $use_namespaces      = true,
-  $dnsmasq_config_file = undef
+  $package_ensure         = present,
+  $enabled                = true,
+  $debug                  = false,
+  $state_path             = '/var/lib/neutron',
+  $resync_interval        = 30,
+  $interface_driver       = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $dhcp_driver            = 'neutron.agent.linux.dhcp.Dnsmasq',
+  $root_helper            = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+  $use_namespaces         = true,
+  $dnsmasq_config_file    = undef,
+  $dhcp_delete_namespaces = false
 ) {
 
   include neutron::params
@@ -74,13 +79,14 @@ class neutron::agents::dhcp (
   # This only lists config specific to the agent.  neutron.ini supplies
   # the rest.
   neutron_dhcp_agent_config {
-    'DEFAULT/debug':              value => $debug;
-    'DEFAULT/state_path':         value => $state_path;
-    'DEFAULT/resync_interval':    value => $resync_interval;
-    'DEFAULT/interface_driver':   value => $interface_driver;
-    'DEFAULT/dhcp_driver':        value => $dhcp_driver;
-    'DEFAULT/use_namespaces':     value => $use_namespaces;
-    'DEFAULT/root_helper':        value => $root_helper;
+    'DEFAULT/debug':                  value => $debug;
+    'DEFAULT/state_path':             value => $state_path;
+    'DEFAULT/resync_interval':        value => $resync_interval;
+    'DEFAULT/interface_driver':       value => $interface_driver;
+    'DEFAULT/dhcp_driver':            value => $dhcp_driver;
+    'DEFAULT/use_namespaces':         value => $use_namespaces;
+    'DEFAULT/root_helper':            value => $root_helper;
+    'DEFAULT/dhcp_delete_namespaces': value => $dhcp_delete_namespaces;
   }
 
   if $dnsmasq_config_file {

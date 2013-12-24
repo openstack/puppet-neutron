@@ -21,7 +21,8 @@ describe 'neutron::agents::l3' do
       :periodic_interval            => '40',
       :periodic_fuzzy_delay         => '5',
       :enable_metadata_proxy        => true,
-      :network_device_mtu           => nil }
+      :network_device_mtu           => nil,
+      :router_delete_namespaces     => false }
   end
 
   let :params do
@@ -48,8 +49,8 @@ describe 'neutron::agents::l3' do
       should contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value(p[:periodic_interval])
       should contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value(p[:periodic_fuzzy_delay])
       should contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value(p[:enable_metadata_proxy])
-
       should contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_ensure('absent')
+      should contain_neutron_l3_agent_config('DEFAULT/router_delete_namespaces').with_value(p[:router_delete_namespaces])
     end
 
     it 'installs neutron l3 agent package' do

@@ -67,6 +67,10 @@
 #   (optional) The MTU size for the interfaces managed by the L3 agent
 #   Defaults to undef
 #
+# [*router_delete_namespaces*]
+#   (optional) namespaces can be deleted cleanly on the host running the L3 agent
+#   Defaults to False
+#
 class neutron::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
@@ -82,7 +86,8 @@ class neutron::agents::l3 (
   $periodic_interval            = '40',
   $periodic_fuzzy_delay         = '5',
   $enable_metadata_proxy        = true,
-  $network_device_mtu           = undef
+  $network_device_mtu           = undef,
+  $router_delete_namespaces     = false
 ) {
 
   include neutron::params
@@ -103,6 +108,7 @@ class neutron::agents::l3 (
     'DEFAULT/periodic_interval':            value => $periodic_interval;
     'DEFAULT/periodic_fuzzy_delay':         value => $periodic_fuzzy_delay;
     'DEFAULT/enable_metadata_proxy':        value => $enable_metadata_proxy;
+    'DEFAULT/router_delete_namespaces':     value => $router_delete_namespaces;
   }
 
   if $network_device_mtu {

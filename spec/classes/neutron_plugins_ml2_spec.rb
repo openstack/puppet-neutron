@@ -62,6 +62,16 @@ describe 'neutron::plugins::ml2' do
       should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('neutron.agent.firewall.NoopFirewallDriver')
     end
 
+    it 'installs ml2 package (if any)' do
+      if platform_params.has_key?(:ml2_server_package)
+        should contain_package('neutron-plugin-ml2').with(
+          :name   => platform_params[:ml2_server_package],
+          :ensure => 'present'
+        )
+        should contain_package('neutron-plugin-ml2').with_before(/Neutron_plugin_ml2\[.+\]/)
+      end
+
+    end
 
     context 'configure ml2 with wrong core_plugin configured' do
       let :pre_condition do
@@ -208,12 +218,20 @@ describe 'neutron::plugins::ml2' do
       { :osfamily => 'Debian' }
     end
 
+    let :platform_params do
+      {}
+    end
+
     it_configures 'neutron plugin ml2'
   end
 
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily => 'RedHat' }
+    end
+
+    let :platform_params do
+      { :ml2_server_package => 'openstack-neutron-ml2' }
     end
 
     it_configures 'neutron plugin ml2'

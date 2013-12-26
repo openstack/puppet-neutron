@@ -38,16 +38,21 @@
 #   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
 #   Defaults to true.
 #
+# [*dnsmasq_config_file*]
+#   (optional) Override the default dnsmasq settings with this file.
+#   Defaults to undef
+#
 class neutron::agents::dhcp (
-  $package_ensure   = present,
-  $enabled          = true,
-  $debug            = false,
-  $state_path       = '/var/lib/neutron',
-  $resync_interval  = 30,
-  $interface_driver = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_driver      = 'neutron.agent.linux.dhcp.Dnsmasq',
-  $root_helper      = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $use_namespaces   = true
+  $package_ensure      = present,
+  $enabled             = true,
+  $debug               = false,
+  $state_path          = '/var/lib/neutron',
+  $resync_interval     = 30,
+  $interface_driver    = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $dhcp_driver         = 'neutron.agent.linux.dhcp.Dnsmasq',
+  $root_helper         = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+  $use_namespaces      = true,
+  $dnsmasq_config_file = undef
 ) {
 
   include neutron::params
@@ -76,6 +81,16 @@ class neutron::agents::dhcp (
     'DEFAULT/dhcp_driver':        value => $dhcp_driver;
     'DEFAULT/use_namespaces':     value => $use_namespaces;
     'DEFAULT/root_helper':        value => $root_helper;
+  }
+
+  if $dnsmasq_config_file {
+    neutron_dhcp_agent_config {
+      'DEFAULT/dnsmasq_config_file':           value => $dnsmasq_config_file;
+    }
+  } else {
+    neutron_dhcp_agent_config {
+      'DEFAULT/dnsmasq_config_file':           ensure => absent;
+    }
   }
 
   if $::neutron::params::dhcp_agent_package {

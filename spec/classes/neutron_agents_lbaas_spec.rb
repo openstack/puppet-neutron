@@ -36,7 +36,7 @@ describe 'neutron::agents::lbaas' do
       should contain_neutron_lbaas_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
       should contain_neutron_lbaas_agent_config('DEFAULT/device_driver').with_value(p[:device_driver]);
       should contain_neutron_lbaas_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces]);
-      should contain_neutron_lbaas_agent_config('DEFAULT/user_group').with_value(p[:user_group]);
+      should contain_neutron_lbaas_agent_config('haproxy/user_group').with_value(p[:user_group]);
     end
 
     it 'installs neutron lbaas agent package' do

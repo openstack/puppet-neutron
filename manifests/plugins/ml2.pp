@@ -103,6 +103,15 @@ class neutron::plugins::ml2 (
     warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')
   }
 
+  # Some platforms do not have a dedicated ml2 plugin package
+  if $::neutron::params::ml2_server_package {
+    package { 'neutron-plugin-ml2':
+      ensure => present,
+      name   => $::neutron::params::ml2_server_package,
+    }
+    Package['neutron-plugin-ml2'] -> Neutron_plugin_ml2<||>
+  }
+
   neutron::plugins::ml2::driver { $type_drivers:
     flat_networks       => $flat_networks,
     tunnel_id_ranges    => $tunnel_id_ranges,

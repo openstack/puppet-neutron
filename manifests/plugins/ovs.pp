@@ -53,7 +53,7 @@ class neutron::plugins::ovs (
   }
 
   neutron_plugin_ovs {
-    'OVS/tenant_network_type':      value => $tenant_network_type;
+    'OVS/tenant_network_type': value => $tenant_network_type;
   }
 
   if($tenant_network_type == 'gre') {
@@ -61,7 +61,7 @@ class neutron::plugins::ovs (
       # this is set by the plugin and the agent - since the plugin node has the agent installed
       # we rely on it setting it.
       # TODO(ijw): do something with a virtualised node
-      # 'OVS/enable_tunneling':   value => 'True';
+      # 'OVS/enable_tunneling': value => 'True';
       'OVS/tunnel_id_ranges':   value => $tunnel_id_ranges;
     }
   }

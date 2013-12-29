@@ -85,16 +85,16 @@ class neutron::plugins::cisco(
 
   ensure_resource('file', '/etc/neutron/plugins', {
     ensure => directory,
-    owner   => 'root',
-    group   => 'neutron',
-    mode    => '0640'}
+    owner  => 'root',
+    group  => 'neutron',
+    mode   => '0640'}
   )
 
   ensure_resource('file', '/etc/neutron/plugins/cisco', {
     ensure => directory,
-    owner   => 'root',
-    group   => 'neutron',
-    mode    => '0640'}
+    owner  => 'root',
+    group  => 'neutron',
+    mode   => '0640'}
   )
 
   # Ensure the neutron package is installed before config is set

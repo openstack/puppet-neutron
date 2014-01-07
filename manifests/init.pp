@@ -78,6 +78,14 @@
 #   (optional) Enable bulk crud operations
 #   Defaults to true
 #
+# [*allow_pagination*]
+#   (optional) Enable pagination
+#   Defaults to false
+#
+# [*allow_sorting*]
+#   (optional) Enable sorting
+#   Defaults to false
+#
 # [*allow_overlapping_ips*]
 #   (optional) Enables network namespaces
 #   Defaults to false
@@ -140,6 +148,8 @@ class neutron (
   $dhcp_lease_duration         = 120,
   $dhcp_agents_per_network     = 1,
   $allow_bulk                  = true,
+  $allow_pagination            = false,
+  $allow_sorting               = false,
   $allow_overlapping_ips       = false,
   $root_helper                 = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $control_exchange            = 'neutron',
@@ -202,6 +212,8 @@ class neutron (
     'DEFAULT/dhcp_lease_duration':     value => $dhcp_lease_duration;
     'DEFAULT/dhcp_agents_per_network': value => $dhcp_agents_per_network;
     'DEFAULT/allow_bulk':              value => $allow_bulk;
+    'DEFAULT/allow_pagination':        value => $allow_pagination;
+    'DEFAULT/allow_sorting':           value => $allow_sorting;
     'DEFAULT/allow_overlapping_ips':   value => $allow_overlapping_ips;
     'DEFAULT/control_exchange':        value => $control_exchange;
     'DEFAULT/rpc_backend':             value => $rpc_backend;

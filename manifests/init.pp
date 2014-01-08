@@ -51,6 +51,7 @@
 #   neutron.services.loadbalancer.plugin.LoadBalancerPlugin
 #   neutron.services.vpn.plugin.VPNDriverPlugin
 #   neutron.services.metering.metering_plugin.MeteringPlugin
+#   neutron.services.l3_router.l3_router_plugin.L3RouterPlugin
 #   Defaults to empty
 #
 # [*auth_strategy*]

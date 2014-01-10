@@ -24,7 +24,7 @@ describe 'neutron::plugins::ovs' do
 
   shared_examples_for 'neutron ovs plugin' do
     before do
-      params.merge!(default_params)
+      params.merge!(default_params) { |key, v1, v2| v1 }
     end
 
     let :params do
@@ -57,12 +57,13 @@ describe 'neutron::plugins::ovs' do
       end
 
       before do
-        params.delete('network_vlan_ranges')
+        params.delete(:network_vlan_ranges)
       end
 
       it 'should perform gre network configuration' do
         should contain_neutron_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
         should contain_neutron_plugin_ovs('OVS/tunnel_id_ranges').with_value(params[:tunnel_id_ranges])
+        should contain_neutron_plugin_ovs('OVS/network_vlan_ranges').with_ensure('absent')
       end
     end
 
@@ -77,6 +78,79 @@ describe 'neutron::plugins::ovs' do
         should contain_neutron_plugin_ovs('OVS/network_vlan_ranges').with_value(params[:network_vlan_ranges])
         should contain_neutron_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
         should contain_neutron_plugin_ovs('OVS/tunnel_id_ranges').with_value(params[:tunnel_id_ranges])
+      end
+    end
+
+    context 'with vxlan tunneling' do
+      let :params do
+        { :tenant_network_type => 'vxlan',
+          :vxlan_udp_port      => '4789'}
+      end
+
+      before do
+        params.delete(:network_vlan_ranges)
+      end
+
+      it 'should perform vxlan network configuration' do
+        should contain_neutron_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
+        should contain_neutron_plugin_ovs('OVS/vxlan_udp_port').with_value(params[:vxlan_udp_port])
+        should contain_neutron_plugin_ovs('OVS/network_vlan_ranges').with_ensure('absent')
+      end
+    end
+
+    context 'with vxlan tunnelling using bad vxlan_udp_port' do
+      let :params do
+        { :tenant_network_type => 'vxlan',
+          :vxlan_udp_port      => '1',}
+      end
+
+      it 'should fail if invalid port is passed' do
+        expect { subject }.to raise_error(Puppet::Error, /vxlan udp port is invalid./)
+      end
+    end
+
+    context 'with vxlan tunnelling using bad tunnel_id_ranges' do
+      let :params do
+        { :tenant_network_type => 'vxlan',
+          :tunnel_id_ranges    => '100:9',}
+      end
+
+      it 'should fail if invalid id range is passed' do
+        expect { subject }.to raise_error(Puppet::Error, /tunnel id ranges are invalid./)
+      end
+    end
+
+    context 'with vxlan tunneling and provider networks using bad network_vlan_ranges' do
+      let :params do
+        { :tenant_network_type => 'vxlan',
+          :network_vlan_ranges => 'physnet1:200:1'}
+      end
+
+      it 'should fail if invalid vlan range is passed' do
+        expect { subject }.to raise_error(Puppet::Error, /network vlan ranges are invalid./)
+      end
+    end
+
+    context 'with vxlan tunneling using bad multiple network_vlan_ranges' do
+      let :params do
+        { :tenant_network_type => 'vxlan',
+          :network_vlan_ranges => ['physnet1:0:100', 'physnet2:1000:1']}
+      end
+
+      it 'should fail if invalid network vlan range is passed' do
+        expect { subject }.to raise_error(Puppet::Error, /network vlan ranges are invalid/)
+      end
+    end
+
+    context 'with vxlan tunneling and provider networks' do
+      let :params do
+        { :tenant_network_type => 'vxlan',
+          :network_vlan_ranges => 'physnet1:1000:2000'}
+      end
+
+      it 'should perform vxlan network configuration' do
+        should contain_neutron_plugin_ovs('OVS/network_vlan_ranges').with_value(params[:network_vlan_ranges])
+        should contain_neutron_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
       end
     end
 
@@ -106,7 +180,7 @@ describe 'neutron::plugins::ovs' do
     end
 
     let :params do
-      { :network_vlan_ranges => 'test' }
+      { :network_vlan_ranges => 'physnet1:1000:2000' }
     end
 
     let :platform_params do

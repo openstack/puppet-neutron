@@ -95,6 +95,8 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/dhcp_lease_duration').with_value(120)
       should contain_neutron_config('DEFAULT/dhcp_agents_per_network').with_value(1)
       should contain_neutron_config('DEFAULT/allow_bulk').with_value(true)
+      should contain_neutron_config('DEFAULT/allow_pagination').with_value(false)
+      should contain_neutron_config('DEFAULT/allow_sorting').with_value(false)
       should contain_neutron_config('DEFAULT/allow_overlapping_ips').with_value(false)
       should contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
       should contain_neutron_config('AGENT/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')

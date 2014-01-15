@@ -88,30 +88,49 @@
 #   The parent process manages them.
 #   Defaults to: 0
 #
+# [*agent_down_time*]
+#   (optional) Seconds to regard the agent as down; should be at least twice
+#   report_interval, to be sure the agent is down for good.
+#   Defaults to: 9
+#
+# [*report_interval*]
+#   (optional) Seconds between nodes reporting state to server; should be less than
+#   agent_down_time, best if it is half or less than agent_down_time.
+#   Defaults to: 4
+#
+# [*router_scheduler_driver*]
+#   (optional) Driver to use for scheduling router to a default L3 agent. Could be:
+#   neutron.scheduler.l3_agent_scheduler.ChanceScheduler to schedule a router in a random way
+#   neutron.scheduler.l3_agent_scheduler.LeastRoutersScheduler to allocate on an L3 agent with the least number of routers bound.
+#   Defaults to: neutron.scheduler.l3_agent_scheduler.ChanceScheduler
+#
 
 class neutron::server (
-  $package_ensure     = 'present',
-  $enabled            = true,
-  $auth_password      = false,
-  $auth_type          = 'keystone',
-  $auth_host          = 'localhost',
-  $auth_port          = '35357',
-  $auth_admin_prefix  = false,
-  $auth_tenant        = 'services',
-  $auth_user          = 'neutron',
-  $auth_protocol      = 'http',
-  $auth_uri           = false,
-  $sql_connection     = 'sqlite:////var/lib/neutron/ovs.sqlite',
-  $connection         = 'sqlite:////var/lib/neutron/ovs.sqlite',
-  $max_retries        = '10',
-  $sql_max_retries    = '10',
-  $sql_idle_timeout   = '3600',
-  $idle_timeout       = '3600',
-  $reconnect_interval = '10',
-  $retry_interval     = '10',
-  $log_file           = false,
-  $log_dir            = '/var/log/neutron',
-  $api_workers        = '0'
+  $package_ensure          = 'present',
+  $enabled                 = true,
+  $auth_password           = false,
+  $auth_type               = 'keystone',
+  $auth_host               = 'localhost',
+  $auth_port               = '35357',
+  $auth_admin_prefix       = false,
+  $auth_tenant             = 'services',
+  $auth_user               = 'neutron',
+  $auth_protocol           = 'http',
+  $auth_uri                = false,
+  $sql_connection          = false,
+  $connection              = 'sqlite:////var/lib/neutron/ovs.sqlite',
+  $max_retries             = '10',
+  $sql_max_retries         = false,
+  $sql_idle_timeout        = false,
+  $idle_timeout            = '3600',
+  $reconnect_interval      = false,
+  $retry_interval          = '10',
+  $log_file                = false,
+  $log_dir                 = '/var/log/neutron',
+  $api_workers             = '0',
+  $agent_down_time         = '9',
+  $report_interval         = '4',
+  $router_scheduler_driver = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler'
 ) {
 
   include neutron::params
@@ -166,11 +185,14 @@ class neutron::server (
   }
 
   neutron_config {
-    'DEFAULT/api_workers':     value => $api_workers;
-    'database/connection':     value => $connection_real;
-    'database/idle_timeout':   value => $idle_timeout_real;
-    'database/retry_interval': value => $retry_interval_real;
-    'database/max_retries':    value => $max_retries_real;
+    'DEFAULT/api_workers':             value => $api_workers;
+    'DEFAULT/agent_down_time':         value => $agent_down_time;
+    'DEFAULT/report_interval':         value => $report_interval;
+    'DEFAULT/router_scheduler_driver': value => $router_scheduler_driver;
+    'database/connection':             value => $connection_real;
+    'database/idle_timeout':           value => $idle_timeout_real;
+    'database/retry_interval':         value => $retry_interval_real;
+    'database/max_retries':            value => $max_retries_real;
   }
 
   if $log_file {

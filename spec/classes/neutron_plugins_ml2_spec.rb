@@ -73,17 +73,6 @@ describe 'neutron::plugins::ml2' do
 
     end
 
-    context 'configure ml2 with wrong core_plugin configured' do
-      let :pre_condition do
-        "class { 'neutron':
-          rabbit_password => 'passw0rd',
-          core_plugin     => 'foo' }"
-      end
-      it 'should fails to configure ml2 because core_plugin should contain ML2 class' do
-          expect { subject }.to raise_error(Puppet::Error, /ml2 plugin should be the core_plugin in neutron.conf/)
-      end
-    end
-
     it 'configures ovs plugin' do
       should_not contain_neutron_plugin_ovs('agent/l2_population').with('value' => true)
     end

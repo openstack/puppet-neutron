@@ -70,7 +70,6 @@ describe 'neutron::plugins::ml2' do
         )
         should contain_package('neutron-plugin-ml2').with_before(/Neutron_plugin_ml2\[.+\]/)
       end
-
     end
 
     it 'configures ovs plugin' do
@@ -202,6 +201,36 @@ describe 'neutron::plugins::ml2' do
      end
   end
 
+  shared_examples_for 'neutron plugin ml2 on RedHat' do
+    let :p do
+      default_params.merge(params)
+    end
+
+    context 'when using openvswitch' do
+      before :each do
+        params.merge!(:mechanism_drivers => ['openvswitch'])
+      end
+      it 'installs openvswitch package' do
+        should contain_package('neutron-plugin-ovs').with(
+          :ensure => 'present'
+        )
+        should contain_package('neutron-plugin-ovs').with_before(/Neutron_plugin_ovs\[.+\]/)
+      end
+    end
+
+    context 'when using linuxbridge' do
+      before :each do
+        params.merge!(:mechanism_drivers => ['linuxbridge'])
+      end
+      it 'installs linuxbridge package' do
+        should contain_package('neutron-plugin-linuxbridge').with(
+          :ensure => 'present'
+        )
+        should contain_package('neutron-plugin-linuxbridge').with_before(/Neutron_plugin_linuxbridge\[.+\]/)
+      end
+    end
+  end
+
   context 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }
@@ -224,6 +253,7 @@ describe 'neutron::plugins::ml2' do
     end
 
     it_configures 'neutron plugin ml2'
+    it_configures 'neutron plugin ml2 on RedHat'
   end
 
 end

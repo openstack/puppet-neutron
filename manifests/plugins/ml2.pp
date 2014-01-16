@@ -135,19 +135,41 @@ class neutron::plugins::ml2 (
   }
 
   # Specific plugin configuration
-  if ('openvswitch' in $mechanism_drivers) and ('l2population' in $mechanism_drivers) {
-    neutron_plugin_ovs {
-      'agent/l2_population': value => true;
+  if ('openvswitch' in $mechanism_drivers) {
+    if ($::osfamily == 'RedHat') {
+      package { 'neutron-plugin-ovs':
+        ensure => present,
+        name   => $::neutron::params::ovs_server_package,
+      }
+      Package['neutron-plugin-ovs'] -> Neutron_plugin_ovs<||>
     }
-  } else {
-    neutron_plugin_ovs {
-      'agent/l2_population': value => false;
+    if ('l2population' in $mechanism_drivers) {
+      neutron_plugin_ovs {
+        'agent/l2_population': value => true;
+      }
+    } else {
+      neutron_plugin_ovs {
+        'agent/l2_population': value => false;
+      }
     }
   }
-  if ('linuxbridge' in $mechanism_drivers) and ('l2population' in $mechanism_drivers) {
-    neutron_plugin_linuxbridge {
-      'vxlan/enable_vxlan':  value => true;
-      'vxlan/l2_population': value => true;
+  if ('linuxbridge' in $mechanism_drivers) {
+    if ($::osfamily == 'RedHat') {
+      package { 'neutron-plugin-linuxbridge':
+        ensure => present,
+        name   => $::neutron::params::linuxbridge_server_package,
+      }
+      Package['neutron-plugin-linuxbridge'] -> Neutron_plugin_linuxbridge<||>
+    }
+    if ('l2population' in $mechanism_drivers) {
+      neutron_plugin_linuxbridge {
+        'vxlan/enable_vxlan':  value => true;
+        'vxlan/l2_population': value => true;
+      }
+    } else {
+      neutron_plugin_linuxbridge {
+        'vxlan/l2_population': value => false;
+      }
     }
   }
 

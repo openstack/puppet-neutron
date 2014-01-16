@@ -159,10 +159,6 @@ class neutron::plugins::ml2 (
     }
   }
 
-  if $::neutron::core_plugin != 'neutron.plugins.ml2.plugin.Ml2Plugin' {
-    fail('ml2 plugin should be the core_plugin in neutron.conf')
-  }
-
   if $enable_security_group {
     neutron_plugin_ml2 {
       'securitygroup/firewall_driver': value => $enable_security_group;

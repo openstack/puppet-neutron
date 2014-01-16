@@ -19,11 +19,16 @@
 # [*enable*]
 #   (optional) Enable state for service. Defaults to 'true'.
 #
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 class neutron::agents::linuxbridge (
   $physical_interface_mappings,
   $firewall_driver = 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver',
   $package_ensure  = 'present',
-  $enable          = true
+  $enable          = true,
+  $manage_service  = true
 ) {
 
   include neutron::params
@@ -53,15 +58,17 @@ class neutron::agents::linuxbridge (
     }
   }
 
-  if $enable {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
-  }
-
   neutron_plugin_linuxbridge {
     'LINUX_BRIDGE/physical_interface_mappings': value => $physical_interface_mappings;
     'SECURITYGROUP/firewall_driver':            value => $firewall_driver;
+  }
+
+  if $manage_service {
+    if $enable {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'neutron-plugin-linuxbridge-service':

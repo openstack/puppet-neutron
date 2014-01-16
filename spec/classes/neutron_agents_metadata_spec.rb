@@ -35,6 +35,15 @@ describe 'neutron::agents::metadata' do
       )
     end
 
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not start/stop service' do
+        should contain_service('neutron-metadata').without_ensure
+      end
+    end
+
     it 'configures metadata_agent.ini' do
       should contain_neutron_metadata_agent_config('DEFAULT/debug').with(:value => params[:debug])
       should contain_neutron_metadata_agent_config('DEFAULT/auth_url').with(:value => params[:auth_url])

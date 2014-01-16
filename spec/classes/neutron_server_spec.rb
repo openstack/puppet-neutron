@@ -85,6 +85,15 @@ describe 'neutron::server' do
       should contain_neutron_config('DEFAULT/report_interval').with_value('30')
       should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value('neutron.scheduler.l3_agent_scheduler.ChanceScheduler')
     end
+
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not start/stop service' do
+        should contain_service('neutron-server').without_ensure
+      end
+    end
   end
 
   shared_examples_for 'a neutron server with auth_admin_prefix set' do

@@ -10,6 +10,10 @@
 # [*enabled*]
 #   (optional) Enable state for service. Defaults to 'true'.
 #
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 # [*debug*]
 #   (optional) Show debugging output in log. Defaults to false.
 #
@@ -35,6 +39,7 @@
 class neutron::agents::lbaas (
   $package_ensure         = present,
   $enabled                = true,
+  $manage_service         = true,
   $debug                  = false,
   $interface_driver       = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $device_driver          = 'neutron.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
@@ -45,7 +50,7 @@ class neutron::agents::lbaas (
 
   include neutron::params
 
-  Neutron_config<||>            ~> Service['neutron-lbaas-service']
+  Neutron_config<||>             ~> Service['neutron-lbaas-service']
   Neutron_lbaas_agent_config<||> ~> Service['neutron-lbaas-service']
 
   case $device_driver {
@@ -86,14 +91,16 @@ class neutron::agents::lbaas (
     Package['neutron'] -> Neutron_lbaas_agent_config<||>
   }
 
-  if $enabled {
-    $ensure = 'running'
-  } else {
-    $ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'neutron-lbaas-service':
-    ensure  => $ensure,
+    ensure  => $service_ensure,
     name    => $::neutron::params::lbaas_agent_service,
     enable  => $enabled,
     require => Class['neutron'],

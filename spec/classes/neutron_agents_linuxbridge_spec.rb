@@ -27,6 +27,15 @@ describe 'neutron::agents::linuxbridge' do
       )
     end
 
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not start/stop service' do
+        should contain_service('neutron-plugin-linuxbridge-service').without_ensure
+      end
+    end
+
     it 'configures linuxbridge_conf.ini' do
       should contain_neutron_plugin_linuxbridge('LINUX_BRIDGE/physical_interface_mappings').with(
         :value => params[:physical_interface_mappings]

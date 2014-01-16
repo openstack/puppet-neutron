@@ -10,6 +10,10 @@
 # [*enabled*]
 #   (optional) Enable state for service. Defaults to 'true'.
 #
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 # [*debug*]
 #   (optional) Show debugging output in log. Defaults to false.
 #
@@ -60,6 +64,7 @@
 class neutron::agents::dhcp (
   $package_ensure         = present,
   $enabled                = true,
+  $manage_service         = true,
   $debug                  = false,
   $state_path             = '/var/lib/neutron',
   $resync_interval        = 30,
@@ -135,14 +140,16 @@ class neutron::agents::dhcp (
     Package['neutron'] -> Neutron_dhcp_agent_config<||>
   }
 
-  if $enabled {
-    $ensure = 'running'
-  } else {
-    $ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'neutron-dhcp-service':
-    ensure  => $ensure,
+    ensure  => $service_ensure,
     name    => $::neutron::params::dhcp_agent_service,
     enable  => $enabled,
     require => Class['neutron'],

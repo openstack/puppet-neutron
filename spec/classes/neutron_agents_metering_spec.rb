@@ -81,6 +81,15 @@ describe 'neutron::agents::metering' do
         :require => 'Class[Neutron]'
       )
     end
+
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not start/stop service' do
+        should contain_service('neutron-metering-service').without_ensure
+      end
+    end
   end
 
   context 'on Ubuntu platforms' do

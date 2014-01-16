@@ -27,6 +27,10 @@
 # [*enabled*]
 #   (optional) Enable state for service. Defaults to 'true'.
 #
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 # [*debug*]
 #   (optional) Show debugging output in log. Defaults to false.
 #
@@ -50,6 +54,7 @@
 class neutron::agents::metering (
   $package_ensure   = present,
   $enabled          = true,
+  $manage_service   = true,
   $debug            = false,
   $interface_driver = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $use_namespaces   = true,
@@ -59,7 +64,7 @@ class neutron::agents::metering (
 
   include neutron::params
 
-  Neutron_config<||>            ~> Service['neutron-metering-service']
+  Neutron_config<||>                ~> Service['neutron-metering-service']
   Neutron_metering_agent_config<||> ~> Service['neutron-metering-service']
 
   # The metering agent loads both neutron.ini and its own file.
@@ -87,14 +92,16 @@ class neutron::agents::metering (
     Package['neutron'] -> Neutron_metering_agent_config<||>
   }
 
-  if $enabled {
-    $ensure = 'running'
-  } else {
-    $ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'neutron-metering-service':
-    ensure  => $ensure,
+    ensure  => $service_ensure,
     name    => $::neutron::params::metering_agent_service,
     enable  => $enabled,
     require => Class['neutron'],

@@ -44,11 +44,8 @@ class neutron::agents::lbaas (
 
   case $device_driver {
     /\.haproxy/: {
-      Package['haproxy'] -> Package<| title == 'neutron-lbaas-agent' |>
-      package { 'haproxy':
-        ensure => present,
-        name   => $::neutron::params::haproxy_package,
-      }
+      Package[$::neutron::params::haproxy_package] -> Package<| title == 'neutron-lbaas-agent' |>
+      ensure_packages([$::neutron::params::haproxy_package])
     }
     default: {
       fail("Unsupported device_driver ${device_driver}")

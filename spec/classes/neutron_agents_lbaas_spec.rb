@@ -66,11 +66,10 @@ describe 'neutron::agents::lbaas' do
   shared_examples_for 'haproxy lbaas_driver' do
     it 'installs haproxy packages' do
       if platform_params.has_key?(:lbaas_agent_package)
-        should contain_package('haproxy').with_before('Package[neutron-lbaas-agent]')
+        should contain_package(platform_params[:haproxy_package]).with_before('Package[neutron-lbaas-agent]')
       end
-      should contain_package('haproxy').with(
-        :ensure => 'present',
-        :name   => platform_params[:haproxy_package]
+      should contain_package(platform_params[:haproxy_package]).with(
+        :ensure => 'present'
       )
     end
   end

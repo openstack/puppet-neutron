@@ -31,7 +31,7 @@ describe 'neutron::plugins::nvp' do
       default_params.merge(params)
     end
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'should have' do
       should contain_package('neutron-plugin-nvp').with(

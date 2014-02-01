@@ -61,25 +61,46 @@
 #   (optional) Complete public Identity API endpoint.
 #   Defaults to: $auth_protocol://$auth_host:5000/
 #
-# [*connection*]
+# [*database_connection*]
 #   (optional) Connection url for the neutron database.
-#   Deprecates sql_connection
-#   Defaults to: sqlite:////var/lib/neutron/ovs.sqlite
+#   (Defaults to 'sqlite:////var/lib/neutron/ovs.sqlite')
+#
+# [*sql_connection*]
+#   DEPRECATED: Use database_connection instead.
+#
+# [*connection*]
+#   DEPRECATED: Use database_connection instead.
+#
+# [*database_max_retries*]
+#   (optional) Maximum database connection retries during startup.
+#   (Defaults to 10)
+#
+# [*sql_max_retries*]
+#   DEPRECATED: Use database_max_retries instead.
 #
 # [*max_retries*]
-#   (optional) Database reconnection retry times.
-#   Deprecates sql_max_retries
-#   Defaults to: 10
+#   DEPRECATED: Use database_max_retries instead.
+#
+# [*database_idle_timeout*]
+#   (optional) Timeout before idle database connections are reaped.
+#   Deprecates sql_idle_timeout
+#   (Defaults to 3600)
+#
+# [*sql_idle_timeout*]
+#   DEPRECATED: Use database_idle_timeout instead.
 #
 # [*idle_timeout*]
-#   (optional) Timeout before idle db connections are reaped.
-#   Deprecates sql_idle_timeout
-#   Defaults to: 3600
+#   DEPRECATED: Use database_idle_timeout instead.
+#
+# [*database_retry_interval*]
+#   (optional) Interval between retries of opening a database connection.
+#   (Defaults to 10)
+#
+# [*sql_reconnect_interval*]
+#   DEPRECATED: Use database_retry_interval instead.
 #
 # [*retry_interval*]
-#   (optional) Database reconnection interval in seconds.
-#   Deprecates reconnect_interval
-#   Defaults to: 10
+#   DEPRECATED: Use database_retry_interval instead.
 #
 # [*api_workers*]
 #   (optional) Number of separate worker processes to spawn.
@@ -117,20 +138,25 @@ class neutron::server (
   $auth_user               = 'neutron',
   $auth_protocol           = 'http',
   $auth_uri                = false,
-  $sql_connection          = false,
-  $connection              = 'sqlite:////var/lib/neutron/ovs.sqlite',
-  $max_retries             = '10',
-  $sql_max_retries         = false,
-  $sql_idle_timeout        = false,
-  $idle_timeout            = '3600',
-  $reconnect_interval      = false,
-  $retry_interval          = '10',
+  $database_connection     = 'sqlite:////var/lib/neutron/ovs.sqlite',
+  $database_max_retries    = 10,
+  $database_idle_timeout   = 3600,
+  $database_retry_interval = 10,
   $log_file                = false,
   $log_dir                 = '/var/log/neutron',
   $api_workers             = '0',
   $agent_down_time         = '9',
   $report_interval         = '4',
-  $router_scheduler_driver = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler'
+  $router_scheduler_driver = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
+  # DEPRECATED PARAMETERS
+  $sql_connection          = undef,
+  $connection              = undef,
+  $sql_max_retries         = undef,
+  $max_retries             = undef,
+  $sql_idle_timeout        = undef,
+  $idle_timeout            = undef,
+  $sql_reconnect_interval  = undef,
+  $retry_interval          = undef,
 ) {
 
   include neutron::params
@@ -140,36 +166,48 @@ class neutron::server (
   Neutron_api_config<||> ~> Service['neutron-server']
 
   if $sql_connection {
-    warning('sql_connection deprecated for connection')
-    $connection_real = $sql_connection
+    warning('The sql_connection parameter is deprecated, use database_connection instead.')
+    $database_connection_real = $sql_connection
+  } elsif $connection {
+    warning('The connection parameter is deprecated, use database_connection instead.')
+    $database_connection_real = $connection
   } else {
-    $connection_real = $connection
+    $database_connection_real = $database_connection
   }
 
   if $sql_max_retries {
-    warning('sql_max_retries deprecated for max_retries')
-    $max_retries_real = $sql_max_retries
+    warning('The sql_max_retries parameter is deprecated, use database_max_retries instead.')
+    $database_max_retries_real = $sql_max_retries
+  } elsif $connection {
+    warning('The max_retries parameter is deprecated, use database_max_retries instead.')
+    $database_max_retries_real = $max_retries
   } else {
-    $max_retries_real = $max_retries
+    $database_max_retries_real = $database_max_retries
   }
 
   if $sql_idle_timeout {
-    warning('sql_idle_timeout deprecated for idle_timeout')
-    $idle_timeout_real = $sql_idle_timeout
+    warning('The sql_idle_timeout parameter is deprecated, use database_idle_timeout instead.')
+    $database_idle_timeout_real = $sql_idle_timeout
+  } elsif $idle_timeout {
+    warning('The dle_timeout parameter is deprecated, use database_idle_timeout instead.')
+    $database_idle_timeout_real = $idle_timeout
   } else {
-    $idle_timeout_real = $idle_timeout
+    $database_idle_timeout_real = $database_idle_timeout
   }
 
-  if $reconnect_interval {
-    warning('reconnect_interval deprecated for retry_interval')
-    $retry_interval_real = $reconnect_interval
+  if $sql_reconnect_interval {
+    warning('The sql_reconnect_interval parameter is deprecated, use database_retry_interval instead.')
+    $database_retry_interval_real = $sql_reconnect_interval
+  } elsif $retry_interval {
+    warning('The retry_interval parameter is deprecated, use database_retry_interval instead.')
+    $database_retry_interval_real = $retry_interval
   } else {
-    $retry_interval_real = $retry_interval
+    $database_retry_interval_real = $database_retry_interval
   }
 
-  validate_re($connection_real, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_re($database_connection_real, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
-  case $connection_real {
+  case $database_connection_real {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
       require 'mysql::python'
     }
@@ -180,7 +218,7 @@ class neutron::server (
       $backend_package = 'python-pysqlite2'
     }
     default: {
-      fail("Invalid sql connection: ${connection_real}")
+      fail("Invalid database_connection parameter: ${database_connection_real}")
     }
   }
 
@@ -189,10 +227,10 @@ class neutron::server (
     'DEFAULT/agent_down_time':         value => $agent_down_time;
     'DEFAULT/report_interval':         value => $report_interval;
     'DEFAULT/router_scheduler_driver': value => $router_scheduler_driver;
-    'database/connection':             value => $connection_real;
-    'database/idle_timeout':           value => $idle_timeout_real;
-    'database/retry_interval':         value => $retry_interval_real;
-    'database/max_retries':            value => $max_retries_real;
+    'database/connection':             value => $database_connection_real;
+    'database/idle_timeout':           value => $database_idle_timeout_real;
+    'database/retry_interval':         value => $database_retry_interval_real;
+    'database/max_retries':            value => $database_max_retries_real;
   }
 
   if $log_file {

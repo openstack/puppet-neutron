@@ -101,6 +101,10 @@
 # [*retry_interval*]
 #   DEPRECATED: Use database_retry_interval instead.
 #
+# [*sync_db*]
+#   (optional) Run neutron-db-manage on api nodes after installing the package.
+#   Defaults to true
+#
 # [*api_workers*]
 #   (optional) Number of separate worker processes to spawn.
 #   The default, 0, runs the worker thread in the current process.
@@ -140,6 +144,7 @@ class neutron::server (
   $database_max_retries    = 10,
   $database_idle_timeout   = 3600,
   $database_retry_interval = 10,
+  $sync_db                 = true,
   $api_workers             = '0',
   $agent_down_time         = '9',
   $report_interval         = '4',
@@ -225,6 +230,23 @@ class neutron::server (
     }
     default: {
       fail("Invalid database_connection parameter: ${database_connection_real}")
+    }
+  }
+
+  if $sync_db {
+    if ($::neutron::params::server_package) {
+      # Debian platforms
+      Package<| title == 'neutron-server' |> ~> Exec['neutron-db-sync']
+    } else {
+      # RH platforms
+      Package<| title == 'neutron' |> ~> Exec['neutron-db-sync']
+    }
+    exec { 'neutron-db-sync':
+      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade havana',
+      path        => '/usr/bin',
+      before      => Service['neutron-server'],
+      require     => Neutron_config['database/connection'],
+      refreshonly => true
     }
   }
 

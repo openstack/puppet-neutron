@@ -39,6 +39,14 @@ describe 'neutron::plugins::cisco' do
       params.merge!(params_default)
     end
 
+    it 'should create plugin symbolic link' do
+      should contain_file('/etc/neutron/plugin.ini').with(
+        :ensure  => 'link',
+        :target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
+        :require => 'Package[neutron-plugin-cisco]'
+      )
+    end
+
     it 'should have a plugin config folder' do
       should contain_file('/etc/neutron/plugins').with(
         :ensure => 'directory',
@@ -140,13 +148,6 @@ describe 'neutron::plugins::cisco' do
     end
 
     it_configures 'default cisco plugin'
-    it 'should perform redhat specific configuration' do
-      should contain_file('/etc/neutron/plugin.ini').with(
-        :ensure  => 'link',
-        :target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
-        :require => 'Package[neutron-plugin-cisco]'
-      )
-    end
 
   end
 

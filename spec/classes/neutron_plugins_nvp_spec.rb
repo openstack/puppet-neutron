@@ -44,6 +44,14 @@ describe 'neutron::plugins::nvp' do
       should contain_neutron_config('DEFAULT/core_plugin').with_value('neutron.plugins.nicira.NeutronPlugin.NvpPluginV2')
     end
 
+    it 'should create plugin symbolic link' do
+      should contain_file('/etc/neutron/plugin.ini').with(
+        :ensure  => 'link',
+        :target  => '/etc/neutron/plugins/nicira/nvp.ini',
+        :require => 'Package[neutron-plugin-nvp]'
+      )
+    end
+
     it 'should configure nvp.ini' do
       should contain_neutron_plugin_nvp('DEFAULT/default_tz_uuid').with_value(p[:default_tz_uuid])
       should contain_neutron_plugin_nvp('nvp/metadata_mode').with_value(p[:metadata_mode])

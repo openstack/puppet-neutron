@@ -61,4 +61,13 @@ class neutron::plugins::nvp (
   if $::neutron::core_plugin != 'neutron.plugins.nicira.NeutronPlugin.NvpPluginV2' {
     fail('nvp plugin should be the core_plugin in neutron.conf')
   }
+
+  # In RH, this link is used to start Neutron process but in Debian, it's used only
+  # to manage database synchronization.
+  file {'/etc/neutron/plugin.ini':
+    ensure  => link,
+    target  => '/etc/neutron/plugins/nicira/nvp.ini',
+    require => Package['neutron-plugin-nvp']
+  }
+
 }

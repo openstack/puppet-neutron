@@ -31,6 +31,14 @@ describe 'neutron::plugins::ovs' do
       { :tenant_network_type => 'vlan' }
     end
 
+    it 'should create plugin symbolic link' do
+      should contain_file('/etc/neutron/plugin.ini').with(
+        :ensure  => 'link',
+        :target  => '/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini',
+        :require => 'Package[neutron-plugin-ovs]'
+      )
+    end
+
     it 'should perform default configuration of' do
       should contain_neutron_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
       should contain_package('neutron-plugin-ovs').with(
@@ -185,14 +193,6 @@ describe 'neutron::plugins::ovs' do
 
     let :platform_params do
       { :ovs_server_package => 'openstack-neutron-openvswitch' }
-    end
-
-    it 'should perform redhat specific configuration' do
-      should contain_file('/etc/neutron/plugin.ini').with(
-        :ensure  => 'link',
-        :target  => '/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini',
-        :require => 'Package[neutron-plugin-ovs]'
-      )
     end
 
     it_configures 'neutron ovs plugin'

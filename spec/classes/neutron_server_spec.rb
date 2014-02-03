@@ -23,6 +23,7 @@ describe 'neutron::server' do
       :database_max_retries    => '10',
       :database_idle_timeout   => '3600',
       :database_retry_interval => '10',
+      :sync_db                 => true,
       :api_workers             => '0',
       :agent_down_time         => '9',
       :report_interval         => '4',
@@ -73,6 +74,13 @@ describe 'neutron::server' do
         :enable  => true,
         :ensure  => 'running',
         :require => 'Class[Neutron]'
+      )
+      should contain_exec('neutron-db-sync').with(
+        :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade havana',
+        :path        => '/usr/bin',
+        :before      => 'Service[neutron-server]',
+        :require     => 'Neutron_config[database/connection]',
+        :refreshonly => true
       )
       should contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(
         :ensure => 'absent'
@@ -133,6 +141,29 @@ describe 'neutron::server' do
   shared_examples_for 'a neutron server with removed log_file parameter' do
     before { params.merge!({ :log_file  => '/var/log/neutron/blah.log' })}
     it_raises 'a Puppet::Error', /log_file parameter is removed/
+  end
+
+  shared_examples_for 'a neutron server without database synchronization' do
+    before do
+      params.merge!(
+        :sync_db => false
+      )
+    end
+    it 'should not exec neutron-db-sync' do
+      should_not contain_exec('neutron-db-sync')
+    end
+  end
+
+  shared_examples_for 'a neutron server with log_file specified' do
+    before do
+      params.merge!(
+        :log_file => '/var/log/neutron/server.log'
+      )
+    end
+    it 'configures logging' do
+      should contain_neutron_config('DEFAULT/log_file').with_value(params[:log_file])
+      should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
+    end
   end
 
   shared_examples_for 'a neutron server with deprecated parameters' do
@@ -236,6 +267,7 @@ describe 'neutron::server' do
     it_configures 'a neutron server with database_connection specified'
     it_configures 'a neutron server with removed log_file parameter'
     it_configures 'a neutron server with removed log_dir parameter'
+    it_configures 'a neutron server without database synchronization'
   end
 
   context 'on RedHat platforms' do
@@ -255,5 +287,6 @@ describe 'neutron::server' do
     it_configures 'a neutron server with database_connection specified'
     it_configures 'a neutron server with removed log_file parameter'
     it_configures 'a neutron server with removed log_dir parameter'
+    it_configures 'a neutron server without database synchronization'
   end
 end

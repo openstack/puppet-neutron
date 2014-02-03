@@ -169,12 +169,12 @@ class neutron::plugins::cisco(
     'keystone/tenant'  : value => $keystone_tenant;
   }
 
-  if $::osfamily == 'Redhat' {
-    file {'/etc/neutron/plugin.ini':
-      ensure  => link,
-      target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
-      require => Package['neutron-plugin-cisco'],
-    }
+  # In RH, this link is used to start Neutron process but in Debian, it's used only
+  # to manage database synchronization.
+  file {'/etc/neutron/plugin.ini':
+    ensure  => link,
+    target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
+    require => Package['neutron-plugin-cisco']
   }
 
 

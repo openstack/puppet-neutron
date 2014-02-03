@@ -62,12 +62,12 @@ class neutron::plugins::linuxbridge (
     'VLANS/network_vlan_ranges': value => $network_vlan_ranges;
   }
 
-  if $::osfamily == 'Redhat' {
-    file {'/etc/neutron/plugin.ini':
-      ensure  => link,
-      target  => '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
-      require => Package['neutron-plugin-linuxbridge']
-    }
+  # In RH, this link is used to start Neutron process but in Debian, it's used only
+  # to manage database synchronization.
+  file {'/etc/neutron/plugin.ini':
+    ensure  => link,
+    target  => '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
+    require => Package['neutron-plugin-linuxbridge']
   }
 
 }

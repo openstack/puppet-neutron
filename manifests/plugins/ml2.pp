@@ -111,12 +111,25 @@ class neutron::plugins::ml2 (
   }
 
   # Some platforms do not have a dedicated ml2 plugin package
+  # In RH, the link is used to start Neutron process but in Debian, it's used only
+  # to manage database synchronization.
   if $::neutron::params::ml2_server_package {
     package { 'neutron-plugin-ml2':
       ensure => present,
       name   => $::neutron::params::ml2_server_package,
     }
     Package['neutron-plugin-ml2'] -> Neutron_plugin_ml2<||>
+    file {'/etc/neutron/plugin.ini':
+      ensure  => link,
+      target  => '/etc/neutron/plugins/ml2/ml2_conf.ini',
+      require => Package['neutron-plugin-ml2']
+    }
+  } else {
+      file {'/etc/neutron/plugin.ini':
+        ensure  => link,
+        target  => '/etc/neutron/plugins/ml2/ml2_conf.ini',
+        require => Package['openstack-neutron']
+      }
   }
 
   neutron::plugins::ml2::driver { $type_drivers:
@@ -148,14 +161,6 @@ class neutron::plugins::ml2 (
     neutron_plugin_linuxbridge {
       'vxlan/enable_vxlan':  value => true;
       'vxlan/l2_population': value => true;
-    }
-  }
-
-  if $::osfamily == 'Redhat' {
-    file {'/etc/neutron/plugin.ini':
-      ensure  => link,
-      target  => '/etc/neutron/plugins/ml2/ml2_conf.ini',
-      require => Package['openstack-neutron']
     }
   }
 

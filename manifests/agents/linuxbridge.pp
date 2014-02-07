@@ -44,6 +44,13 @@ class neutron::agents::linuxbridge (
     # linuxbridge agent package. The configuration file for the linuxbridge
     # agent is provided by the neutron linuxbridge plugin package.
     Package['neutron-plugin-linuxbridge'] -> Neutron_plugin_linuxbridge<||>
+
+    if ! defined(Package['neutron-plugin-linuxbridge']) {
+      package { 'neutron-plugin-linuxbridge':
+        ensure  => $package_ensure,
+        name    => $::neutron::params::linuxbridge_server_package,
+      }
+    }
   }
 
   if $enable {

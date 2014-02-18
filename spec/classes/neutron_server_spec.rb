@@ -27,7 +27,8 @@ describe 'neutron::server' do
       :api_workers             => '0',
       :agent_down_time         => '9',
       :report_interval         => '4',
-      :router_scheduler_driver => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler'}
+      :router_scheduler_driver => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
+      :mysql_module            => '0.9'}
   end
 
   shared_examples_for 'a neutron server' do

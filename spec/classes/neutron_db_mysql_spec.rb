@@ -7,7 +7,9 @@ describe 'neutron::db::mysql' do
   end
 
   let :params do
-    { :password => 'passw0rd' }
+    { :password => 'passw0rd',
+      :mysql_module => '0.9'
+    }
   end
   let :facts do
       { :osfamily => 'Debian' }

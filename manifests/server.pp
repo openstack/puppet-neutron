@@ -128,7 +128,11 @@
 #   neutron.scheduler.l3_agent_scheduler.LeastRoutersScheduler to allocate on an L3 agent with the least number of routers bound.
 #   Defaults to: neutron.scheduler.l3_agent_scheduler.ChanceScheduler
 #
-
+# [*mysql_module*]
+#   (optional) Mysql puppet module version to use. Tested versions
+#   include 0.9 and 2.2
+#   Defaults to: '0.9'
+#
 class neutron::server (
   $package_ensure          = 'present',
   $enabled                 = true,
@@ -150,6 +154,7 @@ class neutron::server (
   $agent_down_time         = '9',
   $report_interval         = '4',
   $router_scheduler_driver = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
+  $mysql_module            = '0.9',
   # DEPRECATED PARAMETERS
   $sql_connection          = undef,
   $connection              = undef,
@@ -221,7 +226,12 @@ class neutron::server (
 
   case $database_connection_real {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
-      require 'mysql::python'
+      if ($mysql_module >= 2.2) {
+        require 'mysql::bindings'
+        require 'mysql::bindings::python'
+      } else {
+        require 'mysql::python'
+      }
     }
     /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
       $backend_package = 'python-psycopg2'

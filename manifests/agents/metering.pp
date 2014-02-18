@@ -99,8 +99,4 @@ class neutron::agents::metering (
     enable  => $enabled,
     require => Class['neutron'],
   }
-
-  if $::neutron::service_plugins !~ /neutron\.services\.metering\.metering_plugin\.MeteringPlugin/ {
-    fail('metering_plugin class should be part of service_plugins in neutron.conf')
-  }
 }

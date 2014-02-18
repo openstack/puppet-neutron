@@ -89,7 +89,7 @@ class neutron::agents::ovs (
       'OVS/local_ip':         value => $local_ip;
     }
 
-    if $tunnel_types {
+    if size($tunnel_types) > 0 {
       neutron_plugin_ovs {
         'agent/tunnel_types': value => join($tunnel_types, ',');
       }

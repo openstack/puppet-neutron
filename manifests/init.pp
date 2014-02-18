@@ -31,27 +31,13 @@
 #
 # [*core_plugin*]
 #   (optional) Neutron plugin provider
-#   Defaults to neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2 (Open-vSwitch)
-#   Could be:
-#   neutron.plugins.bigswitch.plugin.NeutronRestProxyV2
-#   neutron.plugins.brocade.NeutronPlugin.BrocadePluginV2
-#   neutron.plugins.cisco.network_plugin.PluginV2
-#   neutron.plugins.linuxbridge.lb_neutron_plugin.LinuxBridgePluginV2
-#   neutron.plugins.midonet.plugin.MidonetPluginV2
-#   neutron.plugins.ml2.plugin.Ml2Plugin
-#   neutron.plugins.nec.nec_plugin.NECPluginV2
-#   neutron.plugins.nicira.NeutronPlugin.NvpPluginV2
-#   neutron.plugins.plumgrid.plumgrid_plugin.plumgrid_plugin.NeutronPluginPLUMgridV2
-#   neutron.plugins.ryu.ryu_neutron_plugin.RyuNeutronPluginV2
+#   Defaults to openvswitch
+#   Could be bigswitch, brocade, cisco, embrane, hyperv, linuxbridge, midonet, ml2, mlnx, nec, nicira, plumgrid, ryu
 #
 # [*service_plugins*]
 #   (optional) Advanced service modules.
 #   Could be an array that can have these elements:
-#   neutron.services.firewall.fwaas_plugin.FirewallPlugin
-#   neutron.services.loadbalancer.plugin.LoadBalancerPlugin
-#   neutron.services.vpn.plugin.VPNDriverPlugin
-#   neutron.services.metering.metering_plugin.MeteringPlugin
-#   neutron.services.l3_router.l3_router_plugin.L3RouterPlugin
+#   router, firewall, lbaas, vpnaas, metering
 #   Defaults to empty
 #
 # [*auth_strategy*]
@@ -141,7 +127,7 @@ class neutron (
   $debug                       = false,
   $bind_host                   = '0.0.0.0',
   $bind_port                   = '9696',
-  $core_plugin                 = 'neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2',
+  $core_plugin                 = 'openvswitch',
   $service_plugins             = undef,
   $auth_strategy               = 'keystone',
   $base_mac                    = 'fa:16:3e:00:00:00',

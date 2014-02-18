@@ -6,7 +6,7 @@ describe 'neutron' do
     { :package_ensure      => 'present',
       :verbose             => false,
       :debug               => false,
-      :core_plugin         => 'neutron.plugins.linuxbridge.lb_neutron_plugin.LinuxBridgePluginV2',
+      :core_plugin         => 'linuxbridge',
       :rabbit_host         => '127.0.0.1',
       :rabbit_port         => 5672,
       :rabbit_hosts        => false,
@@ -159,12 +159,12 @@ describe 'neutron' do
   shared_examples_for 'with service_plugins' do
     before do
       params.merge!(
-        :service_plugins => ['neutron.services.firewall.fwaas_plugin.FirewallPlugin','neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.vpn.plugin.VPNDriverPlugin']
+        :service_plugins => ['router','firewall','lbaas','vpnaas','metering']
       )
     end
 
     it do
-      should contain_neutron_config('DEFAULT/service_plugins').with_value('neutron.services.firewall.fwaas_plugin.FirewallPlugin,neutron.services.loadbalancer.plugin.LoadBalancerPlugin,neutron.services.vpn.plugin.VPNDriverPlugin')
+      should contain_neutron_config('DEFAULT/service_plugins').with_value('router,firewall,lbaas,vpnaas,metering')
     end
 
   end

@@ -8,7 +8,7 @@ class { 'neutron':
   rabbit_password       => 'password',
   rabbit_user           => 'guest',
   rabbit_host           => 'localhost',
-  service_plugins       => ['neutron.services.metering.metering_plugin.MeteringPlugin']
+  service_plugins       => ['metering']
 }
 
 # The API server talks to keystone for authorisation

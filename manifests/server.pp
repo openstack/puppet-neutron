@@ -14,9 +14,11 @@
 #
 # [*log_file*]
 #   (optional) Where to log
+#   Defaults to false
 #
 # [*log_dir*]
-#   (optional) Directory to store logs
+#   (optional) Directory where logs should be stored
+#   If set to boolean false, it will not log to any directory
 #   Defaults to /var/log/neutron
 #
 # [*auth_password*]
@@ -239,9 +241,16 @@ class neutron::server (
       'DEFAULT/log_dir':  ensure => absent;
     }
   } else {
-    neutron_config {
-      'DEFAULT/log_dir':  value  => $log_dir;
-      'DEFAULT/log_file': ensure => absent;
+    if $log_dir {
+      neutron_config {
+        'DEFAULT/log_dir':  value  => $log_dir;
+        'DEFAULT/log_file': ensure => absent;
+      }
+    } else {
+      neutron_config {
+        'DEFAULT/log_dir':  ensure => absent;
+        'DEFAULT/log_file': ensure => absent;
+      }
     }
   }
 

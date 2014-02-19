@@ -36,6 +36,9 @@ module Puppet::Parser::Functions
         if ((second_id - first_id) < 0 )
           raise Puppet::Error, "network vlan ranges are invalid."
         end
+      elsif m = /^([^:]+)?(:\d+)?$/.match(range)
+        # Either only name of physical network or single vlan id has
+        # been passed. This is also correct.
       elsif range
         raise Puppet::Error, "network vlan ranges are invalid."
       end

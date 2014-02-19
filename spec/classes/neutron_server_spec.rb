@@ -159,6 +159,17 @@ describe 'neutron::server' do
     end
   end
 
+  shared_examples_for 'a neutron server with logging disabled' do
+    before { params.merge!(
+      :log_file => false,
+      :log_dir  => false
+    )}
+    it {
+      should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
+      should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
+    }
+  end
+
   shared_examples_for 'a neutron server with database connection specified' do
     before do
       params.merge!(
@@ -197,6 +208,7 @@ describe 'neutron::server' do
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
     it_configures 'a neutron server with log_file specified'
+    it_configures 'a neutron server with logging disabled'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
     it_configures 'a neutron server with deprecated sql_connection'
@@ -215,6 +227,7 @@ describe 'neutron::server' do
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
     it_configures 'a neutron server with log_file specified'
+    it_configures 'a neutron server with logging disabled'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
     it_configures 'a neutron server with deprecated sql_connection'

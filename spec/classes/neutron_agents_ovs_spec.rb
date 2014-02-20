@@ -29,7 +29,7 @@ describe 'neutron::agents::ovs' do
       default_params.merge(params)
     end
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'configures ovs_neutron_plugin.ini' do
       should contain_neutron_plugin_ovs('AGENT/polling_interval').with_value(p[:polling_interval])

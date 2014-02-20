@@ -50,7 +50,7 @@ describe 'neutron' do
 
   shared_examples_for 'a neutron base installation' do
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'configures neutron configuration folder' do
       should contain_file('/etc/neutron/').with(

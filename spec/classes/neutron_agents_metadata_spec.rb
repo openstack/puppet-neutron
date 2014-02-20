@@ -23,7 +23,7 @@ describe 'neutron::agents::metadata' do
 
   shared_examples_for 'neutron metadata agent' do
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'configures neutron metadata agent service' do
       should contain_service('neutron-metadata').with(

@@ -28,7 +28,7 @@ describe 'neutron::agents::dhcp' do
       default_params.merge(params)
     end
 
-    it { should include_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it_configures 'dnsmasq dhcp_driver'
 

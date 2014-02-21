@@ -33,11 +33,13 @@ class neutron::plugins::plumgrid (
   package { 'neutron-plugin-plumgrid':
     ensure  => $package_ensure,
     name    => $::neutron::params::plumgrid_plugin_package,
+    configfiles => replace,
   }
 
   package { 'plumgrid-pythonlib':
     ensure  => $package_ensure,
     name    => $::neutron::params::plumgrid_pythonlib_package,
+    configfiles => replace,
   }
 
   file { 'remove plumgrid.ini':

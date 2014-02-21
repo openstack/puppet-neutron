@@ -199,6 +199,7 @@ class neutron (
   package { 'neutron':
     ensure => $package_ensure,
     name   => $::neutron::params::package_name,
+    configfiles => replace,
   }
 
   neutron_config {

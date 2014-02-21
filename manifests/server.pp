@@ -274,6 +274,7 @@ class neutron::server (
     package { 'neutron-server':
       ensure => $package_ensure,
       name   => $::neutron::params::server_package,
+      configfiles => replace,
     }
   } else {
     # Some platforms (RedHat) does not provide a neutron-server package.

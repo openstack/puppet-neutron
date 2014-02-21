@@ -20,14 +20,10 @@ describe 'neutron::server' do
       :auth_port               => '35357',
       :auth_tenant             => 'services',
       :auth_user               => 'neutron',
-      :sql_connection          => false,
-      :connection              => 'sqlite:////var/lib/neutron/ovs.sqlite',
-      :sql_max_retries         => '10',
-      :max_retries             => '10',
-      :sql_idle_timeout        => '3600',
-      :idle_timeout            => '3600',
-      :reconnect_interval      => '10',
-      :retry_interval          => '10',
+      :database_connection     => 'sqlite:////var/lib/neutron/ovs.sqlite',
+      :database_max_retries    => '10',
+      :database_idle_timeout   => '3600',
+      :database_retry_interval => '10',
       :api_workers             => '0',
       :agent_down_time         => '9',
       :report_interval         => '4',
@@ -40,13 +36,14 @@ describe 'neutron::server' do
     end
 
     it 'should perform default database configuration of' do
-      should contain_neutron_config('database/connection').with_value(p[:connection])
-      should contain_neutron_config('database/max_retries').with_value(p[:max_retries])
-      should contain_neutron_config('database/idle_timeout').with_value(p[:idle_timeout])
-      should contain_neutron_config('database/retry_interval').with_value(p[:retry_interval])
+      should contain_neutron_config('database/connection').with_value(p[:database_connection])
+      should contain_neutron_config('database/max_retries').with_value(p[:database_max_retries])
+      should contain_neutron_config('database/idle_timeout').with_value(p[:database_idle_timeout])
+      should contain_neutron_config('database/retry_interval').with_value(p[:database_retry_interval])
     end
 
     it { should contain_class('neutron::params') }
+
     it 'configures logging' do
       should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
       should contain_neutron_config('DEFAULT/log_dir').with_value(p[:log_dir])
@@ -110,7 +107,6 @@ describe 'neutron::server' do
     end
   end
 
-
   shared_examples_for 'a neutron server with some incorrect auth_admin_prefix set' do
     [ '/keystone/', 'keystone/', 'keystone' ].each do |auth_admin_prefix|
       describe "with keystone_auth_admin_prefix containing incorrect value #{auth_admin_prefix}" do
@@ -147,15 +143,50 @@ describe 'neutron::server' do
     end
   end
 
-  shared_examples_for 'a neutron server with deprecated sql_connection' do
-    before do
-      params.merge!(
-        :sql_connection => 'sqlite:////var/lib/neutron/ovs-deprecated_parameter.sqlite',
-        :connection     => 'sqlite:////var/lib/neutron/ovs-IGNORED_parameter.sqlite'
-      )
+  shared_examples_for 'a neutron server with deprecated parameters' do
+
+    context 'first generation' do
+      before do
+        params.merge!({
+          :sql_connection          => 'sqlite:////var/lib/neutron/ovs-deprecated_parameter.sqlite',
+          :database_connection     => 'sqlite:////var/lib/neutron/ovs-IGNORED_parameter.sqlite',
+          :sql_max_retries         => 20,
+          :database_max_retries    => 90,
+          :sql_idle_timeout        => 21,
+          :database_idle_timeout   => 91,
+          :sql_reconnect_interval  => 22,
+          :database_retry_interval => 92,
+        })
+      end
+
+      it 'configures database connection with deprecated parameters' do
+        should contain_neutron_config('database/connection').with_value(params[:sql_connection])
+        should contain_neutron_config('database/max_retries').with_value(params[:sql_max_retries])
+        should contain_neutron_config('database/idle_timeout').with_value(params[:sql_idle_timeout])
+        should contain_neutron_config('database/retry_interval').with_value(params[:sql_reconnect_interval])
+      end
     end
-    it 'configures database connection' do
-      should contain_neutron_config('database/connection').with_value(params[:sql_connection])
+
+    context 'second generation' do
+      before do
+        params.merge!({
+          :connection              => 'sqlite:////var/lib/neutron/ovs-deprecated_parameter.sqlite',
+          :database_connection     => 'sqlite:////var/lib/neutron/ovs-IGNORED_parameter.sqlite',
+          :max_retries             => 20,
+          :database_max_retries    => 90,
+          :idle_timeout            => 21,
+          :database_idle_timeout   => 91,
+          :retry_interval          => 22,
+          :database_retry_interval => 92,
+        })
+      end
+
+      it 'configures database connection with deprecated parameters' do
+        should contain_neutron_config('database/connection').with_value(params[:connection])
+        should contain_neutron_config('database/max_retries').with_value(params[:max_retries])
+        should contain_neutron_config('database/idle_timeout').with_value(params[:idle_timeout])
+        should contain_neutron_config('database/retry_interval').with_value(params[:retry_interval])
+      end
     end
   end
 
@@ -170,14 +201,14 @@ describe 'neutron::server' do
     }
   end
 
-  shared_examples_for 'a neutron server with database connection specified' do
+  shared_examples_for 'a neutron server with database_connection specified' do
     before do
       params.merge!(
-        :connection => 'sqlite:////var/lib/neutron/ovs-TEST_parameter.sqlite'
+        :database_connection => 'sqlite:////var/lib/neutron/ovs-TEST_parameter.sqlite'
       )
     end
     it 'configures database connection' do
-      should contain_neutron_config('database/connection').with_value(params[:connection])
+      should contain_neutron_config('database/connection').with_value(params[:database_connection])
     end
   end
 
@@ -211,8 +242,8 @@ describe 'neutron::server' do
     it_configures 'a neutron server with logging disabled'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
-    it_configures 'a neutron server with deprecated sql_connection'
-    it_configures 'a neutron server with database connection specified'
+    it_configures 'a neutron server with deprecated parameters'
+    it_configures 'a neutron server with database_connection specified'
   end
 
   context 'on RedHat platforms' do
@@ -230,7 +261,7 @@ describe 'neutron::server' do
     it_configures 'a neutron server with logging disabled'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
-    it_configures 'a neutron server with deprecated sql_connection'
-    it_configures 'a neutron server with database connection specified'
+    it_configures 'a neutron server with deprecated parameters'
+    it_configures 'a neutron server with database_connection specified'
   end
 end

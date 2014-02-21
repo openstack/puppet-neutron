@@ -38,18 +38,27 @@
 # [*metadata_port*]
 #   The TCP port of the metadata service. Defaults to 8775.
 #
+# [*metadata_workers*]
+#   (optional) Number of separate worker processes to spawn.
+#   The default, 0, runs the worker thread in the current process.
+#   Greater than 0 launches that number of child processes as workers.
+#   The parent process manages them. Having more workers will help to improve performances.
+#   Defaults to: 0
+#
+
 class neutron::agents::metadata (
   $auth_password,
   $shared_secret,
-  $package_ensure = 'present',
-  $enabled        = true,
-  $debug          = false,
-  $auth_tenant    = 'services',
-  $auth_user      = 'neutron',
-  $auth_url       = 'http://localhost:35357/v2.0',
-  $auth_region    = 'RegionOne',
-  $metadata_ip    = '127.0.0.1',
-  $metadata_port  = '8775'
+  $package_ensure   = 'present',
+  $enabled          = true,
+  $debug            = false,
+  $auth_tenant      = 'services',
+  $auth_user        = 'neutron',
+  $auth_url         = 'http://localhost:35357/v2.0',
+  $auth_region      = 'RegionOne',
+  $metadata_ip      = '127.0.0.1',
+  $metadata_port    = '8775',
+  $metadata_workers = '0'
   ) {
 
   include neutron::params
@@ -68,6 +77,7 @@ class neutron::agents::metadata (
     'DEFAULT/nova_metadata_ip':               value => $metadata_ip;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret;
+    'DEFAULT/metadata_workers':               value => $metadata_workers;
   }
 
   if $::neutron::params::metadata_agent_package {

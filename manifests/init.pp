@@ -125,6 +125,15 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults to LOG_USER
 #
+# [*log_file*]
+#   (optional) Where to log
+#   Defaults to false
+#
+# [*log_dir*]
+#   (optional) Directory where logs should be stored
+#   If set to boolean false, it will not log to any directory
+#   Defaults to /var/log/neutron
+#
 class neutron (
   $enabled                     = true,
   $package_ensure              = 'present',
@@ -165,6 +174,8 @@ class neutron (
   $qpid_reconnect_interval     = 0,
   $use_syslog                  = false,
   $log_facility                = 'LOG_USER',
+  $log_file                    = false,
+  $log_dir                     = '/var/log/neutron',
 ) {
 
   include neutron::params
@@ -206,6 +217,25 @@ class neutron (
     'DEFAULT/control_exchange':        value => $control_exchange;
     'DEFAULT/rpc_backend':             value => $rpc_backend;
     'AGENT/root_helper':               value => $root_helper;
+  }
+
+  if $log_file {
+    neutron_config {
+      'DEFAULT/log_file': value  => $log_file;
+      'DEFAULT/log_dir':  ensure => absent;
+    }
+  } else {
+    if $log_dir {
+      neutron_config {
+        'DEFAULT/log_dir':  value  => $log_dir;
+        'DEFAULT/log_file': ensure => absent;
+      }
+    } else {
+      neutron_config {
+        'DEFAULT/log_dir':  ensure => absent;
+        'DEFAULT/log_file': ensure => absent;
+      }
+    }
   }
 
   if $service_plugins {

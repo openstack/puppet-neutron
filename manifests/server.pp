@@ -13,13 +13,10 @@
 #   Defaults to true
 #
 # [*log_file*]
-#   (optional) Where to log
-#   Defaults to false
+#   REMOVED: Use log_file of neutron class instead.
 #
 # [*log_dir*]
-#   (optional) Directory where logs should be stored
-#   If set to boolean false, it will not log to any directory
-#   Defaults to /var/log/neutron
+#   REMOVED: Use log_dir of neutron class instead.
 #
 # [*auth_password*]
 #   (optional) The password to use for authentication (keystone)
@@ -149,8 +146,6 @@ class neutron::server (
   $database_idle_timeout   = 3600,
   $database_retry_interval = 10,
   $sync_db                 = true,
-  $log_file                = false,
-  $log_dir                 = '/var/log/neutron',
   $api_workers             = '0',
   $agent_down_time         = '9',
   $report_interval         = '4',
@@ -164,6 +159,8 @@ class neutron::server (
   $idle_timeout            = undef,
   $sql_reconnect_interval  = undef,
   $retry_interval          = undef,
+  $log_dir                 = undef,
+  $log_file                = undef,
 ) {
 
   include neutron::params
@@ -212,6 +209,14 @@ class neutron::server (
     $database_retry_interval_real = $database_retry_interval
   }
 
+  if $log_dir {
+    fail('The log_dir parameter is removed, use log_dir of neutron class instead.')
+  }
+
+  if $log_file {
+    fail('The log_file parameter is removed, use log_file of neutron class instead.')
+  }
+
   validate_re($database_connection_real, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   case $database_connection_real {
@@ -255,25 +260,6 @@ class neutron::server (
     'database/idle_timeout':           value => $database_idle_timeout_real;
     'database/retry_interval':         value => $database_retry_interval_real;
     'database/max_retries':            value => $database_max_retries_real;
-  }
-
-  if $log_file {
-    neutron_config {
-      'DEFAULT/log_file': value  => $log_file;
-      'DEFAULT/log_dir':  ensure => absent;
-    }
-  } else {
-    if $log_dir {
-      neutron_config {
-        'DEFAULT/log_dir':  value  => $log_dir;
-        'DEFAULT/log_file': ensure => absent;
-      }
-    } else {
-      neutron_config {
-        'DEFAULT/log_dir':  ensure => absent;
-        'DEFAULT/log_file': ensure => absent;
-      }
-    }
   }
 
   if $enabled {

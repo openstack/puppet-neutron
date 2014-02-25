@@ -12,7 +12,8 @@ describe 'neutron' do
       :rabbit_hosts        => false,
       :rabbit_user         => 'guest',
       :rabbit_password     => 'guest',
-      :rabbit_virtual_host => '/'
+      :rabbit_virtual_host => '/',
+      :log_dir             => '/var/log/neutron'
     }
   end
 
@@ -39,11 +40,19 @@ describe 'neutron' do
         it_configures 'a neutron base installation'
         it_configures 'rabbit HA with multiple hosts'
       end
+
+      it 'configures logging' do
+        should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
+        should contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
+      end
+
     end
 
     it_configures 'with syslog disabled'
     it_configures 'with syslog enabled'
     it_configures 'with syslog enabled and custom settings'
+    it_configures 'with log_file specified'
+    it_configures 'with logging disabled'
     it_configures 'without service_plugins'
     it_configures 'with service_plugins'
   end
@@ -150,6 +159,29 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/use_syslog').with_value(true)
       should contain_neutron_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
     end
+  end
+
+  shared_examples_for 'with log_file specified' do
+    before do
+      params.merge!(
+        :log_file => '/var/log/neutron/server.log'
+      )
+    end
+    it 'configures logging' do
+      should contain_neutron_config('DEFAULT/log_file').with_value(params[:log_file])
+      should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
+    end
+  end
+
+  shared_examples_for 'with logging disabled' do
+    before { params.merge!(
+      :log_file => false,
+      :log_dir  => false
+    )}
+    it {
+      should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
+      should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
+    }
   end
 
   shared_examples_for 'without service_plugins' do

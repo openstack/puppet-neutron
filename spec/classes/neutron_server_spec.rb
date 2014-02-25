@@ -14,7 +14,6 @@ describe 'neutron::server' do
   let :default_params do
     { :package_ensure          => 'present',
       :enabled                 => true,
-      :log_dir                 => '/var/log/neutron',
       :auth_type               => 'keystone',
       :auth_host               => 'localhost',
       :auth_port               => '35357',
@@ -44,11 +43,6 @@ describe 'neutron::server' do
     end
 
     it { should contain_class('neutron::params') }
-
-    it 'configures logging' do
-      should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/log_dir').with_value(p[:log_dir])
-    end
 
     it 'configures authentication middleware' do
       should contain_neutron_api_config('filter:authtoken/auth_host').with_value(p[:auth_host]);
@@ -139,6 +133,16 @@ describe 'neutron::server' do
     it_raises 'a Puppet::Error', /auth_password must be set/
   end
 
+  shared_examples_for 'a neutron server with removed log_dir parameter' do
+    before { params.merge!({ :log_dir  => '/var/log/neutron' })}
+    it_raises 'a Puppet::Error', /log_dir parameter is removed/
+  end
+
+  shared_examples_for 'a neutron server with removed log_file parameter' do
+    before { params.merge!({ :log_file  => '/var/log/neutron/blah.log' })}
+    it_raises 'a Puppet::Error', /log_file parameter is removed/
+  end
+
   shared_examples_for 'a neutron server without database synchronization' do
     before do
       params.merge!(
@@ -148,29 +152,6 @@ describe 'neutron::server' do
     it 'should not exec neutron-db-sync' do
       should_not contain_exec('neutron-db-sync')
     end
-  end
-
-  shared_examples_for 'a neutron server with log_file specified' do
-    before do
-      params.merge!(
-        :log_file => '/var/log/neutron/server.log'
-      )
-    end
-    it 'configures logging' do
-      should contain_neutron_config('DEFAULT/log_file').with_value(params[:log_file])
-      should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
-    end
-  end
-
-  shared_examples_for 'a neutron server with logging disabled' do
-    before { params.merge!(
-      :log_file => false,
-      :log_dir  => false
-    )}
-    it {
-      should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
-    }
   end
 
   shared_examples_for 'a neutron server with deprecated parameters' do
@@ -257,13 +238,13 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
-    it_configures 'a neutron server with log_file specified'
-    it_configures 'a neutron server with logging disabled'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
     it_configures 'a neutron server with deprecated parameters'
     it_configures 'a neutron server with database_connection specified'
     it_configures 'a neutron server without database synchronization'
+    it_configures 'a neutron server with removed log_file parameter'
+    it_configures 'a neutron server with removed log_dir parameter'
   end
 
   context 'on RedHat platforms' do
@@ -277,12 +258,12 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
-    it_configures 'a neutron server with log_file specified'
-    it_configures 'a neutron server with logging disabled'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
     it_configures 'a neutron server with deprecated parameters'
     it_configures 'a neutron server with database_connection specified'
     it_configures 'a neutron server without database synchronization'
+    it_configures 'a neutron server with removed log_file parameter'
+    it_configures 'a neutron server with removed log_dir parameter'
   end
 end

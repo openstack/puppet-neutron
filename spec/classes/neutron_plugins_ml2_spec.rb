@@ -62,6 +62,13 @@ describe 'neutron::plugins::ml2' do
       should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('neutron.agent.firewall.NoopFirewallDriver')
     end
 
+    it 'should create plugin symbolic link' do
+      should contain_file('/etc/neutron/plugin.ini').with(
+        :ensure  => 'link',
+        :target  => '/etc/neutron/plugins/ml2/ml2_conf.ini'
+      )
+    end
+
     it 'installs ml2 package (if any)' do
       if platform_params.has_key?(:ml2_server_package)
         should contain_package('neutron-plugin-ml2').with(

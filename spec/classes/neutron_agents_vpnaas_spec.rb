@@ -88,16 +88,35 @@ describe 'neutron::agents::vpnaas' do
     end
   end
 
-
-  context 'on Debian platforms' do
+  context 'on Ubuntu platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      {
+        :operatingsystem => 'Ubuntu',
+        :osfamily        => 'Debian'
+      }
     end
 
     let :platform_params do
       { :openswan_package   =>  'openswan',
         :vpnaas_agent_package => 'neutron-plugin-vpn-agent',
-        :vpnaas_agent_service => 'neutron-vpnaas-agent' }
+        :vpnaas_agent_service => 'neutron-plugin-vpn-agent' }
+    end
+
+    it_configures 'neutron vpnaas agent'
+  end
+
+  context 'on Debian platforms' do
+    let :facts do
+      {
+        :operatingsystem => 'Debian',
+        :osfamily        => 'Debian'
+      }
+    end
+
+    let :platform_params do
+      { :openswan_package   =>  'openswan',
+        :vpnaas_agent_package => 'neutron-vpn-agent',
+        :vpnaas_agent_service => 'neutron-vpn-agent' }
     end
 
     it_configures 'neutron vpnaas agent'

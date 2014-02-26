@@ -94,8 +94,13 @@ class neutron::params {
       $metering_agent_service = 'neutron-metering-agent'
     }
 
-    $vpnaas_agent_package = 'neutron-plugin-vpn-agent'
-    $vpnaas_agent_service = 'neutron-vpnaas-agent'
+    if($::operatingsystem == 'Ubuntu') {
+      $vpnaas_agent_package = 'neutron-plugin-vpn-agent'
+      $vpnaas_agent_service = 'neutron-plugin-vpn-agent'
+    } else {
+      $vpnaas_agent_package = 'neutron-vpn-agent'
+      $vpnaas_agent_service = 'neutron-vpn-agent'
+    }
     $openswan_package     = 'openswan'
 
     $metadata_agent_package = 'neutron-metadata-agent'

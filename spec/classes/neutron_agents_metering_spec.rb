@@ -90,7 +90,7 @@ describe 'neutron::agents::metering' do
 
     let :platform_params do
       { :metering_agent_package => 'neutron-plugin-metering-agent',
-        :metering_agent_service => 'neutron-metering-agent' }
+        :metering_agent_service => 'neutron-plugin-metering-agent' }
     end
 
     it_configures 'neutron metering agent'

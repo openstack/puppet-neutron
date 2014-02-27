@@ -82,8 +82,13 @@ class neutron::params {
 
     $haproxy_package   = 'haproxy'
 
-    $metering_agent_package = 'neutron-plugin-metering-agent'
-    $metering_agent_service = 'neutron-metering-agent'
+    if($::operatingsystem == 'Ubuntu') {
+      $metering_agent_package = 'neutron-plugin-metering-agent'
+      $metering_agent_service = 'neutron-plugin-metering-agent'
+    } else {
+      $metering_agent_package = 'neutron-metering-agent'
+      $metering_agent_service = 'neutron-metering-agent'
+    }
 
     if($::operatingsystem == 'Ubuntu') {
       $vpnaas_agent_package = 'neutron-plugin-vpn-agent'

@@ -83,13 +83,32 @@ describe 'neutron::agents::metering' do
     end
   end
 
-  context 'on Debian platforms' do
+  context 'on Ubuntu platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      {
+        :operatingsystem => 'Ubuntu',
+        :osfamily        => 'Debian'
+      }
     end
 
     let :platform_params do
       { :metering_agent_package => 'neutron-plugin-metering-agent',
+        :metering_agent_service => 'neutron-plugin-metering-agent' }
+    end
+
+    it_configures 'neutron metering agent'
+  end
+
+  context 'on Debian platforms' do
+    let :facts do
+      {
+        :operatingsystem => 'Debian',
+        :osfamily        => 'Debian'
+      }
+    end
+
+    let :platform_params do
+      { :metering_agent_package => 'neutron-metering-agent',
         :metering_agent_service => 'neutron-metering-agent' }
     end
 

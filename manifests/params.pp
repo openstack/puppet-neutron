@@ -82,11 +82,20 @@ class neutron::params {
 
     $haproxy_package   = 'haproxy'
 
-    $metering_agent_package = 'neutron-plugin-metering-agent'
-    $metering_agent_service = 'neutron-plugin-metering-agent'
+    if($::operatingsystem == 'Ubuntu') {
+      $metering_agent_package = 'neutron-plugin-metering-agent'
+      $metering_agent_service = 'neutron-plugin-metering-agent'
 
-    $vpnaas_agent_package = 'neutron-plugin-vpn-agent'
-    $vpnaas_agent_service = 'neutron-plugin-vpn-agent'
+      $vpnaas_agent_package = 'neutron-plugin-vpn-agent'
+      $vpnaas_agent_service = 'neutron-plugin-vpn-agent'
+    } else {
+      $metering_agent_package = 'neutron-metering-agent'
+      $metering_agent_service = 'neutron-metering-agent'
+
+      $vpnaas_agent_package = 'neutron-vpn-agent'
+      $vpnaas_agent_service = 'neutron-vpn-agent'
+    }
+
     $openswan_package     = 'openswan'
 
     $metadata_agent_package = 'neutron-metadata-agent'

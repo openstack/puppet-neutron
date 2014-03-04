@@ -36,6 +36,17 @@ class neutron::services::fwaas (
   $driver  = 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver'
 ) {
 
+  include neutron::params
+  if $::neutron::params::l3_agent_package {
+    ensure_resource( 'package', $::neutron::params::l3_agent_package,
+      { 'ensure' => $neutron::package_ensure })
+    Package[$::neutron::params::l3_agent_package] -> Neutron_fwaas_service_config<||>
+  } else {
+    ensure_resource( 'package', $::neutron::params::package_name,
+      { 'ensure' => $neutron::package_ensure })
+    Package[$::neutron::params::package_name] -> Neutron_fwaas_service_config<||>
+  }
+
   neutron_fwaas_service_config {
     'fwaas/enabled': value => $enabled;
     'fwaas/driver':  value => $driver;

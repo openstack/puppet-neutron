@@ -78,6 +78,25 @@ describe 'neutron::keystone::auth' do
 
   end
 
+  describe 'when overriding admin_protocol and internal_protocol' do
+
+    let :params do
+      {
+        :password          => 'neutron_password',
+        :admin_protocol    => 'https',
+        :internal_protocol => 'https',
+      }
+    end
+
+    it { should contain_keystone_endpoint('RegionOne/neutron').with(
+      :ensure       => 'present',
+      :public_url   => "http://127.0.0.1:9696/",
+      :admin_url    => "https://127.0.0.1:9696/",
+      :internal_url => "https://127.0.0.1:9696/"
+    ) }
+
+  end
+
   describe 'when overriding auth name' do
 
     let :params do

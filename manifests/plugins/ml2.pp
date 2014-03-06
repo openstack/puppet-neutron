@@ -128,7 +128,7 @@ class neutron::plugins::ml2 (
       file {'/etc/neutron/plugin.ini':
         ensure  => link,
         target  => '/etc/neutron/plugins/ml2/ml2_conf.ini',
-        require => Package['openstack-neutron']
+        require => Package['neutron']
       }
   }
 

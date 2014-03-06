@@ -23,7 +23,7 @@ describe 'neutron::server' do
       :database_max_retries    => '10',
       :database_idle_timeout   => '3600',
       :database_retry_interval => '10',
-      :sync_db                 => true,
+      :sync_db                 => false,
       :api_workers             => '0',
       :agent_down_time         => '9',
       :report_interval         => '4',
@@ -75,13 +75,7 @@ describe 'neutron::server' do
         :ensure  => 'running',
         :require => 'Class[Neutron]'
       )
-      should contain_exec('neutron-db-sync').with(
-        :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade havana',
-        :path        => '/usr/bin',
-        :before      => 'Service[neutron-server]',
-        :require     => 'Neutron_config[database/connection]',
-        :refreshonly => true
-      )
+      should_not contain_exec('neutron-db-sync')
       should contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(
         :ensure => 'absent'
       )
@@ -146,11 +140,17 @@ describe 'neutron::server' do
   shared_examples_for 'a neutron server without database synchronization' do
     before do
       params.merge!(
-        :sync_db => false
+        :sync_db => true
       )
     end
-    it 'should not exec neutron-db-sync' do
-      should_not contain_exec('neutron-db-sync')
+    it 'should exec neutron-db-sync' do
+      should contain_exec('neutron-db-sync').with(
+        :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade havana',
+        :path        => '/usr/bin',
+        :before      => 'Service[neutron-server]',
+        :require     => 'Neutron_config[database/connection]',
+        :refreshonly => true
+      )
     end
   end
 

@@ -103,7 +103,7 @@
 #
 # [*sync_db*]
 #   (optional) Run neutron-db-manage on api nodes after installing the package.
-#   Defaults to true
+#   Defaults to false
 #
 # [*api_workers*]
 #   (optional) Number of separate worker processes to spawn.
@@ -144,7 +144,7 @@ class neutron::server (
   $database_max_retries    = 10,
   $database_idle_timeout   = 3600,
   $database_retry_interval = 10,
-  $sync_db                 = true,
+  $sync_db                 = false,
   $api_workers             = '0',
   $agent_down_time         = '9',
   $report_interval         = '4',

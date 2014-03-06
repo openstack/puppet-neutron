@@ -28,8 +28,14 @@
 # [*public_address*]
 #   Public address for endpoint. Defaults to '127.0.0.1'.
 #
+# [*admin_protocol*]
+#   Protocol for admin endpoint. Defaults to 'http'.
+#
 # [*admin_address*]
 #   Admin address for endpoint. Defaults to '127.0.0.1'.
+#
+# [*internal_protocol*]
+#   Protocol for internal endpoint. Defaults to 'http'.
 #
 # [*internal_address*]
 #   Internal address for endpoint. Defaults to '127.0.0.1'.
@@ -52,7 +58,9 @@ class neutron::keystone::auth (
   $service_type       = 'network',
   $public_protocol    = 'http',
   $public_address     = '127.0.0.1',
+  $admin_protocol     = 'http',
   $admin_address      = '127.0.0.1',
+  $internal_protocol  = 'http',
   $internal_address   = '127.0.0.1',
   $port               = '9696',
   $public_port        = undef,
@@ -88,8 +96,8 @@ class neutron::keystone::auth (
     keystone_endpoint { "${region}/${auth_name}":
       ensure       => present,
       public_url   => "${public_protocol}://${public_address}:${real_public_port}/",
-      internal_url => "http://${internal_address}:${port}/",
-      admin_url    => "http://${admin_address}:${port}/",
+      internal_url => "${internal_protocol}://${internal_address}:${port}/",
+      admin_url    => "${admin_protocol}://${admin_address}:${port}/",
     }
 
   }

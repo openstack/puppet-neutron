@@ -27,14 +27,20 @@
 # [*user_group*]
 #   (optional) The user group. Defaults to nogroup.
 #
+# [*manage_haproxy_package*]
+#   (optional) Whether to manage the haproxy package.
+#   Disable this if you are using the puppetlabs-haproxy module
+#   Defaults to true
+#
 class neutron::agents::lbaas (
-  $package_ensure   = present,
-  $enabled          = true,
-  $debug            = false,
-  $interface_driver = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $device_driver    = 'neutron.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
-  $use_namespaces   = true,
-  $user_group       = 'nogroup',
+  $package_ensure         = present,
+  $enabled                = true,
+  $debug                  = false,
+  $interface_driver       = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $device_driver          = 'neutron.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
+  $use_namespaces         = true,
+  $user_group             = 'nogroup',
+  $manage_haproxy_package = true,
 ) {
 
   include neutron::params
@@ -45,7 +51,10 @@ class neutron::agents::lbaas (
   case $device_driver {
     /\.haproxy/: {
       Package[$::neutron::params::haproxy_package] -> Package<| title == 'neutron-lbaas-agent' |>
-      ensure_packages([$::neutron::params::haproxy_package])
+
+      if $manage_haproxy_package {
+        ensure_packages([$::neutron::params::haproxy_package])
+      }
     }
     default: {
       fail("Unsupported device_driver ${device_driver}")

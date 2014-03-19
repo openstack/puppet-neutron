@@ -220,8 +220,8 @@ class neutron (
 
   if $log_file {
     neutron_config {
-      'DEFAULT/log_file': value  => $log_file;
-      'DEFAULT/log_dir':  ensure => absent;
+      'DEFAULT/log_file': value => $log_file;
+      'DEFAULT/log_dir':  value => $log_dir;
     }
   } else {
     if $log_dir {

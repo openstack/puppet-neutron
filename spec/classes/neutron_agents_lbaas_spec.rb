@@ -18,6 +18,7 @@ describe 'neutron::agents::lbaas' do
       :device_driver    => 'neutron.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
       :use_namespaces   => true,
       :user_group       => 'nogroup',
+      :manage_haproxy_package  => true
     }
   end
 
@@ -30,6 +31,7 @@ describe 'neutron::agents::lbaas' do
     it { should contain_class('neutron::params') }
 
     it_configures 'haproxy lbaas_driver'
+    it_configures 'haproxy lbaas_driver without package'
 
     it 'configures lbaas_agent.ini' do
       should contain_neutron_lbaas_agent_config('DEFAULT/debug').with_value(p[:debug]);
@@ -74,10 +76,28 @@ describe 'neutron::agents::lbaas' do
     end
   end
 
+  shared_examples_for 'haproxy lbaas_driver without package' do
+    let :pre_condition do
+      "package { 'haproxy':
+         ensure => 'present'
+       }
+      class { 'neutron': rabbit_password => 'passw0rd' }"
+    end
+    before do
+      params.merge!(:manage_haproxy_package => false)
+    end
+    it 'installs haproxy package via haproxy module' do
+      should contain_package(platform_params[:haproxy_package]).with(
+        :ensure => 'present'
+      )
+    end
+  end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily => 'Debian',
+        :concat_basedir => '/dne'
+      }
     end
 
     let :platform_params do
@@ -91,7 +111,9 @@ describe 'neutron::agents::lbaas' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily => 'RedHat',
+        :concat_basedir => '/dne'
+      }
     end
 
     let :platform_params do

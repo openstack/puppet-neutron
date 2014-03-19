@@ -12,14 +12,17 @@ describe provider_class do
 
   let :subnet_attrs do
     {
-      :name            => subnet_name,
-      :ensure          => 'present',
-      :cidr            => '10.0.0.0/24',
-      :ip_version      => '4',
-      :gateway_ip      => '10.0.0.1',
-      :enable_dhcp     => 'False',
-      :network_name    => 'net1',
-      :tenant_id       => '',
+      :name             => subnet_name,
+      :ensure           => 'present',
+      :cidr             => '10.0.0.0/24',
+      :ip_version       => '4',
+      :gateway_ip       => '10.0.0.1',
+      :enable_dhcp      => 'False',
+      :network_name     => 'net1',
+      :tenant_id        => '',
+      :allocation_pools => 'start=7.0.0.1,end=7.0.0.10',
+      :dns_nameservers  => '8.8.8.8',
+      :host_routes      => 'destination=12.0.0.0/24,nexthop=10.0.0.1',
     }
   end
 
@@ -46,6 +49,24 @@ describe provider_class do
       provider.enable_dhcp=('True')
     end
 
+    it 'should call subnet-update to change dns_nameservers' do
+      provider.expects(:auth_neutron).with('subnet-update',
+                                           [subnet_name,
+                                           '--dns-nameservers',
+                                           'list=true',
+                                           '9.9.9.9'])
+      provider.dns_nameservers=(['9.9.9.9'])
+    end
+
+    it 'should call subnet-update to change host_routes' do
+      provider.expects(:auth_neutron).with('subnet-update',
+                                           [subnet_name,
+                                            '--host-routes',
+                                            'type=dict',
+                                            'list=true',
+                                            'destination=12.0.0.0/24,nexthop=10.0.0.2'])
+      provider.host_routes=(['destination=12.0.0.0/24,nexthop=10.0.0.2'])
+    end
   end
 
 end

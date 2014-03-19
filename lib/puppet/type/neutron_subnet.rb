@@ -23,11 +23,11 @@ Puppet::Type.newtype(:neutron_subnet) do
     newvalues('4', '6')
   end
 
-  newproperty(:allocation_pools) do
-    desc 'Sub-ranges of cidr available for dynamic allocation to ports'
-    validate do |v|
-      raise(Puppet::Error, 'This is a read only property')
-    end
+  newproperty(:allocation_pools, :array_matching => :all) do
+    desc <<-EOT
+    Array of Sub-ranges of cidr available for dynamic allocation to ports.
+    Syntax:["start=IPADDR,end=IPADDR", ...]
+    EOT
   end
 
   newproperty(:gateway_ip) do
@@ -42,21 +42,18 @@ Puppet::Type.newtype(:neutron_subnet) do
     end
   end
 
-  newproperty(:host_routes) do
+  newproperty(:host_routes, :array_matching => :all) do
     desc <<-EOT
-      Routes that should be used by devices with IPs from this subnet
-      (not including local subnet route).
+    Array of routes that should be used by devices with IPs from this subnet
+    (not including local subnet route).
+    Syntax:["destination=CIDR,nexhop=IP_ADDR", ...]
     EOT
-    validate do |v|
-      raise(Puppet::Error, 'This is a read only property')
-    end
   end
 
-  newproperty(:dns_nameservers) do
-    desc 'DNS name servers used by hosts in this subnet.'
-    validate do |v|
-      raise(Puppet::Error, 'This is a read only property')
-    end
+  newproperty(:dns_nameservers, :array_matching => :all) do
+    desc <<-EOT
+    'Array of DNS name servers used by hosts in this subnet.'
+    EOT
   end
 
   newproperty(:network_id) do

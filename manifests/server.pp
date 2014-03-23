@@ -115,12 +115,12 @@
 # [*agent_down_time*]
 #   (optional) Seconds to regard the agent as down; should be at least twice
 #   report_interval, to be sure the agent is down for good.
-#   Defaults to: 9
+#   Defaults to: 75
 #
 # [*report_interval*]
 #   (optional) Seconds between nodes reporting state to server; should be less than
 #   agent_down_time, best if it is half or less than agent_down_time.
-#   Defaults to: 4
+#   Defaults to: 30
 #
 # [*router_scheduler_driver*]
 #   (optional) Driver to use for scheduling router to a default L3 agent. Could be:
@@ -151,8 +151,8 @@ class neutron::server (
   $database_retry_interval = 10,
   $sync_db                 = false,
   $api_workers             = '0',
-  $agent_down_time         = '9',
-  $report_interval         = '4',
+  $agent_down_time         = '75',
+  $report_interval         = '30',
   $router_scheduler_driver = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
   $mysql_module            = '0.9',
   # DEPRECATED PARAMETERS

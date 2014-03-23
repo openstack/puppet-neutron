@@ -25,8 +25,8 @@ describe 'neutron::server' do
       :database_retry_interval => '10',
       :sync_db                 => false,
       :api_workers             => '0',
-      :agent_down_time         => '9',
-      :report_interval         => '4',
+      :agent_down_time         => '75',
+      :report_interval         => '30',
       :router_scheduler_driver => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
       :mysql_module            => '0.9'}
   end
@@ -81,8 +81,8 @@ describe 'neutron::server' do
         :ensure => 'absent'
       )
       should contain_neutron_config('DEFAULT/api_workers').with_value('0')
-      should contain_neutron_config('DEFAULT/agent_down_time').with_value('9')
-      should contain_neutron_config('DEFAULT/report_interval').with_value('4')
+      should contain_neutron_config('DEFAULT/agent_down_time').with_value('75')
+      should contain_neutron_config('DEFAULT/report_interval').with_value('30')
       should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value('neutron.scheduler.l3_agent_scheduler.ChanceScheduler')
     end
   end

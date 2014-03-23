@@ -37,7 +37,8 @@ describe 'neutron::plugins::ml2' do
       :tunnel_id_ranges      => ['20:100'],
       :vxlan_group           => '224.0.0.1',
       :vni_ranges            => ['10:100'],
-      :enable_security_group => false }
+      :enable_security_group => false,
+      :firewall_driver       => true }
   end
 
   let :params do
@@ -59,6 +60,7 @@ describe 'neutron::plugins::ml2' do
       should contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
       should contain_neutron_plugin_ml2('ml2/tenant_network_types').with_value(p[:tenant_network_types].join(','))
       should contain_neutron_plugin_ml2('ml2/mechanism_drivers').with_value(p[:mechanism_drivers].join(','))
+      should contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('false')
       should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('neutron.agent.firewall.NoopFirewallDriver')
     end
 
@@ -202,7 +204,8 @@ describe 'neutron::plugins::ml2' do
        before :each do
          params.merge!(:enable_security_group => true)
        end
-       it 'should set firewall_driver to true' do
+       it 'should set enable_security_group to true' do
+         should contain_neutron_plugin_ml2('securitygroup/enable_security_group').with('value' => true)
          should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with('value' => true)
        end
      end

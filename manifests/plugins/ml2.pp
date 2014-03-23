@@ -89,6 +89,12 @@
 #   mechanisms) with different configurations, we need to set something to the
 #   firewall_driver flag to enable security group API.
 #   Defaults to false.
+#
+# [*firewall_driver*]
+#   (optionnal) Set a firewall driver value.
+#   If enable_security_group is enabled, it should be either true or a custom
+#   firewall driver.
+#   Defaults to true.
 
 class neutron::plugins::ml2 (
   $type_drivers          = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
@@ -99,7 +105,8 @@ class neutron::plugins::ml2 (
   $tunnel_id_ranges      = ['20:100'],
   $vxlan_group           = '224.0.0.1',
   $vni_ranges            = ['10:100'],
-  $enable_security_group = false
+  $enable_security_group = false,
+  $firewall_driver       = true
 ) {
 
   include neutron::params
@@ -142,9 +149,10 @@ class neutron::plugins::ml2 (
 
   # Configure ml2_conf.ini
   neutron_plugin_ml2 {
-    'ml2/type_drivers':         value => join($type_drivers, ',');
-    'ml2/tenant_network_types': value => join($tenant_network_types, ',');
-    'ml2/mechanism_drivers':    value => join($mechanism_drivers, ',');
+    'ml2/type_drivers':                     value => join($type_drivers, ',');
+    'ml2/tenant_network_types':             value => join($tenant_network_types, ',');
+    'ml2/mechanism_drivers':                value => join($mechanism_drivers, ',');
+    'securitygroup/enable_security_group':  value => $enable_security_group;
   }
 
   # Specific plugin configuration
@@ -188,7 +196,7 @@ class neutron::plugins::ml2 (
 
   if $enable_security_group {
     neutron_plugin_ml2 {
-      'securitygroup/firewall_driver': value => $enable_security_group;
+      'securitygroup/firewall_driver': value => $firewall_driver;
     }
   } else {
     neutron_plugin_ml2 {

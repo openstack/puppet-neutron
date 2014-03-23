@@ -83,18 +83,6 @@
 #   Min value is 0 and Max value is 16777215.
 #   Default to empty.
 #
-# [*enable_security_group*]
-#   (optionnal) Enable the security group API or not.
-#   Since the ML2 plugin can concurrently support different L2 agents (or other
-#   mechanisms) with different configurations, we need to set something to the
-#   firewall_driver flag to enable security group API.
-#   Defaults to false.
-#
-# [*firewall_driver*]
-#   (optionnal) Set a firewall driver value.
-#   If enable_security_group is enabled, it should be either true or a custom
-#   firewall driver.
-#   Defaults to true.
 
 class neutron::plugins::ml2 (
   $type_drivers          = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
@@ -105,8 +93,9 @@ class neutron::plugins::ml2 (
   $tunnel_id_ranges      = ['20:100'],
   $vxlan_group           = '224.0.0.1',
   $vni_ranges            = ['10:100'],
-  $enable_security_group = false,
-  $firewall_driver       = true
+  # DEPRECATED PARAMS
+  $enable_security_group = undef,
+  $firewall_driver       = undef
 ) {
 
   include neutron::params
@@ -155,25 +144,6 @@ class neutron::plugins::ml2 (
     'securitygroup/enable_security_group':  value => $enable_security_group;
   }
 
-  # Specific plugin configuration
-  if ('openvswitch' in $mechanism_drivers) {
-    if ($::osfamily == 'RedHat') {
-      ensure_resource('package', 'neutron-plugin-ovs', {
-        ensure => present,
-        name   => $::neutron::params::ovs_server_package,
-      })
-      Package['neutron-plugin-ovs'] -> Neutron_plugin_ovs<||>
-    }
-    if ('l2population' in $mechanism_drivers) {
-      neutron_plugin_ovs {
-        'agent/l2_population': value => true;
-      }
-    } else {
-      neutron_plugin_ovs {
-        'agent/l2_population': value => false;
-      }
-    }
-  }
   if ('linuxbridge' in $mechanism_drivers) {
     if ($::osfamily == 'RedHat') {
       package { 'neutron-plugin-linuxbridge':
@@ -195,13 +165,10 @@ class neutron::plugins::ml2 (
   }
 
   if $enable_security_group {
-    neutron_plugin_ml2 {
-      'securitygroup/firewall_driver': value => $firewall_driver;
-    }
-  } else {
-    neutron_plugin_ml2 {
-      'securitygroup/firewall_driver': value => 'neutron.agent.firewall.NoopFirewallDriver';
-    }
+    warning('enable_security_group is deprecated. Security is managed by the firewall_drive value in ::neutron::agents::ml2::ovs.')
   }
 
+  if $firewall_driver {
+    warning('firewall_driver value is set in ::neutron::agents::ml2::ovs, argument ignored.')
+  }
 }

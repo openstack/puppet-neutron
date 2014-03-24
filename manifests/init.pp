@@ -67,7 +67,7 @@
 #
 # [*dhcp_lease_duration*]
 #   (optional) DHCP lease
-#   Defaults to 120 seconds
+#   Defaults to 86400 seconds
 #
 # [*dhcp_agents_per_network*]
 #   (optional) Number of DHCP agents scheduled to host a network.
@@ -146,7 +146,7 @@ class neutron (
   $auth_strategy               = 'keystone',
   $base_mac                    = 'fa:16:3e:00:00:00',
   $mac_generation_retries      = 16,
-  $dhcp_lease_duration         = 120,
+  $dhcp_lease_duration         = 86400,
   $dhcp_agents_per_network     = 1,
   $allow_bulk                  = true,
   $allow_overlapping_ips       = false,

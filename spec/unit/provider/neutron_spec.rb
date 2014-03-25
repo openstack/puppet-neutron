@@ -119,11 +119,12 @@ describe Puppet::Provider::Neutron do
     it 'should parse multi-valued attributes into a key-list pair' do
       output = <<-EOT
 subnets="subnet1
-subnet2"
+subnet2
+subnet3"
       EOT
       klass.expects(:auth_neutron).returns(output)
       result = klass.get_neutron_resource_attrs('foo', 'id')
-      result.should eql({"subnets" => ['subnet1', 'subnet2']})
+      result.should eql({"subnets" => ['subnet1', 'subnet2', 'subnet3']})
     end
 
   end

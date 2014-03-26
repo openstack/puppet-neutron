@@ -121,6 +121,28 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 Release Notes
 -------------
 
+**3.1.0**
+
+* Added VXLAN support.
+* Configures security group when using ML2 plugin.
+* Ensures installation of ML2 plugin.
+* Fixed server deprecated warnings.
+* Tuned report and downtime intervals for l2 agent.
+* Added support for neutron nvp plugin.
+* Ensures linuxbridge dependency is installed on RHEL.
+* Improved L3 scheduler support.
+* Fixed improper test for tunnel_types param.
+* Allows log_dir to be set to false in order to disable file logging.
+* Improves consistency with other puppet modules for OpenStack by prefixing database related parameters with database.
+* Removed strict checks for vlan_ranges.
+* Fixed neutron-metering-agent package for Ubuntu.
+* Fixed VPNaaS service name for Ubuntu.
+* Fixed FWaaS race condition.
+* Fixed ML2 package dependency for Ubuntu.
+* Removed erronious check for service_plugins.
+* Added support for https auth endpoints.
+* Makes haproxy package management optional.
+
 **3.0.0**
 
 * Major release for OpenStack Havana.

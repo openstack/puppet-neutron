@@ -29,9 +29,9 @@ Puppet::Type.type(:neutron_subnet).provide(
         :cidr                      => attrs['cidr'],
         :ip_version                => attrs['ip_version'],
         :gateway_ip                => attrs['gateway_ip'],
-        :allocation_pools          => attrs['allocation_pools'],
-        :host_routes               => attrs['host_routes'],
-        :dns_nameservers           => attrs['dns_nameservers'],
+        :allocation_pools          => parse_allocation_pool(attrs['allocation_pools']),
+        :host_routes               => parse_host_routes(attrs['host_routes']),
+        :dns_nameservers           => parse_dns_nameservers(attrs['dns_nameservers']),
         :enable_dhcp               => attrs['enable_dhcp'],
         :network_id                => attrs['network_id'],
         :tenant_id                 => attrs['tenant_id']
@@ -46,6 +46,33 @@ Puppet::Type.type(:neutron_subnet).provide(
         resources[name].provider = provider
       end
     end
+  end
+
+  def self.parse_allocation_pool(values)
+    allocation_pools = []
+    for value in Array(values)
+      matchdata = /\{\s*"start"\s*:\s*"(.*)"\s*,\s*"end"\s*:\s*"(.*)"\s*\}/.match(value)
+      start_ip = matchdata[1]
+      end_ip = matchdata[2]
+      allocation_pools << "start=#{start_ip},end=#{end_ip}"
+    end
+    return allocation_pools
+  end
+
+  def self.parse_host_routes(values)
+    host_routes = []
+    for value in Array(values)
+      matchdata = /\{\s*"destination"\s*:\s*"(.*)"\s*,\s*"nexthop"\s*:\s*"(.*)"\s*\}/.match(value)
+      destination = matchdata[1]
+      nexthop = matchdata[2]
+      host_routes << "destination=#{destination},nexthop=#{nexthop}"
+    end
+    return host_routes
+  end
+
+  def self.parse_dns_nameservers(values)
+    # just enforce that this is actually an array
+    return Array(values)
   end
 
   def exists?
@@ -65,6 +92,24 @@ Puppet::Type.type(:neutron_subnet).provide(
 
     if @resource[:enable_dhcp]
       opts << "--enable-dhcp=#{@resource[:enable_dhcp]}"
+    end
+
+    if @resource[:allocation_pools]
+      Array(@resource[:allocation_pools]).each do |allocation_pool|
+        opts << "--allocation-pool=#{allocation_pool}"
+      end
+    end
+
+    if @resource[:dns_nameservers]
+      Array(@resource[:dns_nameservers]).each do |nameserver|
+        opts << "--dns-nameserver=#{nameserver}"
+      end
+    end
+
+    if @resource[:host_routes]
+      Array(@resource[:host_routes]).each do |host_route|
+        opts << "--host-route=#{host_route}"
+      end
     end
 
     if @resource[:tenant_name]
@@ -93,9 +138,9 @@ Puppet::Type.type(:neutron_subnet).provide(
         :cidr                      => attrs['cidr'],
         :ip_version                => attrs['ip_version'],
         :gateway_ip                => attrs['gateway_ip'],
-        :allocation_pools          => attrs['allocation_pools'],
-        :host_routes               => attrs['host_routes'],
-        :dns_nameservers           => attrs['dns_nameservers'],
+        :allocation_pools          => self.class.parse_allocation_pool(attrs['allocation_pools']),
+        :host_routes               => self.class.parse_host_routes(attrs['host_routes']),
+        :dns_nameservers           => self.class.parse_dns_nameservers(attrs['dns_nameservers']),
         :enable_dhcp               => attrs['enable_dhcp'],
         :network_id                => attrs['network_id'],
         :tenant_id                 => attrs['tenant_id'],
@@ -118,10 +163,27 @@ Puppet::Type.type(:neutron_subnet).provide(
     auth_neutron('subnet-update', "--enable-dhcp=#{value}", name)
   end
 
+  def dns_nameservers=(values)
+    opts = ["#{name}", "--dns-nameservers", "list=true"]
+    for value in values
+      opts << value
+    end
+    auth_neutron('subnet-update', opts)
+  end
+
+  def host_routes=(values)
+    opts = ["#{name}", "--host-routes", "type=dict", "list=true"]
+    for value in values
+      opts << value
+    end
+    auth_neutron('subnet-update', opts)
+  end
+
   [
    :cidr,
    :ip_version,
    :network_id,
+   :allocation_pools,
    :tenant_id,
   ].each do |attr|
      define_method(attr.to_s + "=") do |value|

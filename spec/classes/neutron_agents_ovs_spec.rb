@@ -9,6 +9,7 @@ describe 'neutron::agents::ovs' do
 
   let :default_params do
     { :package_ensure       => 'present',
+      :manage_service       => true,
       :enabled              => true,
       :bridge_uplinks       => [],
       :bridge_mappings      => [],
@@ -68,6 +69,20 @@ describe 'neutron::agents::ovs' do
         :ensure  => 'running',
         :require => 'Class[Neutron]'
       )
+    end
+
+    context 'when not installing ovs agent package' do
+      before :each do
+        params.merge!(:package_ensure => 'absent')
+      end
+      it 'uninstalls neutron ovs agent package' do
+        if platform_params.has_key?(:ovs_agent_package)
+          should contain_package('neutron-plugin-ovs-agent').with(
+            :name   => platform_params[:ovs_agent_package],
+            :ensure => p[:package_ensure]
+          )
+        end
+      end
     end
 
     context 'when supplying a firewall driver' do

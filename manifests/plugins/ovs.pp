@@ -83,9 +83,15 @@ class neutron::plugins::ovs (
   } else {
     # This might be set by the user for the gre or vxlan case where
     # provider networks are in use
-    validate_network_vlan_ranges($network_vlan_ranges)
+    if !is_array($network_vlan_ranges) {
+      $arr_network_vlan_ranges = strip(split($network_vlan_ranges, ','))
+    } else {
+      $arr_network_vlan_ranges = $network_vlan_ranges
+    }
+
+    validate_network_vlan_ranges($arr_network_vlan_ranges)
     neutron_plugin_ovs {
-      'OVS/network_vlan_ranges': value => $network_vlan_ranges
+      'OVS/network_vlan_ranges': value => join($arr_network_vlan_ranges, ',');
     }
   }
 

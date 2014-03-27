@@ -168,6 +168,20 @@ describe 'neutron::plugins::ovs' do
       end
       it { should contain_neutron_plugin_ovs('OVS/network_vlan_ranges').with_value(params[:network_vlan_ranges]) }
     end
+
+    context 'with comma separated vlan ranges' do
+      let :params do
+        { :network_vlan_ranges => 'physint1:1000:2000,physext1:100:200' }
+      end
+      it { should contain_neutron_plugin_ovs('OVS/network_vlan_ranges').with_value(params[:network_vlan_ranges]) }
+    end
+
+    context 'with vlan ranges in array' do
+      let :params do
+        { :network_vlan_ranges => ['physint1:1000:2000', 'physext1:100:200'] }
+      end
+      it { should contain_neutron_plugin_ovs('OVS/network_vlan_ranges').with_value(params[:network_vlan_ranges].join(',')) }
+    end
   end
 
   context 'on Debian platforms' do

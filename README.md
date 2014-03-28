@@ -121,6 +121,12 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 Release Notes
 -------------
 
+**3.2.0**
+
+* Added write support for dns, allocation pools, and host routes to Neutron router provider.
+* Fixed multi-line attribute detection in base Neutron provider.
+* Fixed bugs with neutron router gateway id parsing.
+
 **3.1.0**
 
 * Added VXLAN support.

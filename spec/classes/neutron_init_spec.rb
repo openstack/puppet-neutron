@@ -164,12 +164,13 @@ describe 'neutron' do
   shared_examples_for 'with log_file specified' do
     before do
       params.merge!(
-        :log_file => '/var/log/neutron/server.log'
+        :log_file => '/var/log/neutron/server.log',
+        :log_dir  => '/tmp/log/neutron'
       )
     end
     it 'configures logging' do
       should contain_neutron_config('DEFAULT/log_file').with_value(params[:log_file])
-      should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
+      should contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
     end
   end
 

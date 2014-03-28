@@ -116,7 +116,7 @@ correctly configured.")
       else
         # Handle the case of a list of values
         v = line.gsub(/\A"|"\Z/, '')
-        attrs[last_key] = [attrs[last_key], v]
+        attrs[last_key] = [attrs[last_key], v].flatten
       end
     end
     return attrs

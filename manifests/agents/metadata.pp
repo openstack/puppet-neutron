@@ -29,6 +29,12 @@
 # [*auth_url*]
 #   The URL used to validate tokens. Defaults to 'http://localhost:35357/v2.0'.
 #
+# [*auth_insecure*]
+#   turn off verification of the certificate for ssl (Defaults to false)
+#
+# [*auth_ca_cert*]
+#   CA cert to check against with for ssl keystone. (Defaults to undef)
+#
 # [*auth_region*]
 #   The authentication region. Defaults to 'RegionOne'.
 #
@@ -55,6 +61,8 @@ class neutron::agents::metadata (
   $auth_tenant      = 'services',
   $auth_user        = 'neutron',
   $auth_url         = 'http://localhost:35357/v2.0',
+  $auth_insecure    = false,
+  $auth_ca_cert     = undef,
   $auth_region      = 'RegionOne',
   $metadata_ip      = '127.0.0.1',
   $metadata_port    = '8775',
@@ -70,6 +78,7 @@ class neutron::agents::metadata (
   neutron_metadata_agent_config {
     'DEFAULT/debug':                          value => $debug;
     'DEFAULT/auth_url':                       value => $auth_url;
+    'DEFAULT/auth_insecure':                  value => $auth_insecure;
     'DEFAULT/auth_region':                    value => $auth_region;
     'DEFAULT/admin_tenant_name':              value => $auth_tenant;
     'DEFAULT/admin_user':                     value => $auth_user;
@@ -78,6 +87,16 @@ class neutron::agents::metadata (
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret;
     'DEFAULT/metadata_workers':               value => $metadata_workers;
+  }
+
+  if $auth_ca_cert {
+    neutron_metadata_agent_config {
+      'DEFAULT/auth_ca_cert':                 value => $auth_ca_cert;
+    }
+  } else {
+    neutron_metadata_agent_config {
+      'DEFAULT/auth_ca_cert':                 ensure => absent;
+    }
   }
 
   if $::neutron::params::metadata_agent_package {

@@ -171,11 +171,9 @@ class neutron::plugins::cisco(
 
   # In RH, this link is used to start Neutron process but in Debian, it's used only
   # to manage database synchronization.
-  file {'/etc/neutron/plugin.ini':
+  ensure_resource('file', '/etc/neutron/plugin.ini', {
     ensure  => link,
-    target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
-    require => Package['neutron-plugin-cisco']
-  }
-
-
+    target  => '/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini',
+    require => Package['neutron-plugin-ovs']
+  })
 }

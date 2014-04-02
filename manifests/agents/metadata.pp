@@ -16,6 +16,10 @@
 # [*enabled*]
 #   State of the service. Defaults to true.
 #
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 # [*debug*]
 #   Debug. Defaults to false.
 #
@@ -57,6 +61,7 @@ class neutron::agents::metadata (
   $shared_secret,
   $package_ensure   = 'present',
   $enabled          = true,
+  $manage_service   = true,
   $debug            = false,
   $auth_tenant      = 'services',
   $auth_user        = 'neutron',
@@ -109,14 +114,16 @@ class neutron::agents::metadata (
     }
   }
 
-  if $enabled {
-    $ensure = 'running'
-  } else {
-    $ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'neutron-metadata':
-    ensure  => $ensure,
+    ensure  => $service_ensure,
     name    => $::neutron::params::metadata_agent_service,
     enable  => $enabled,
     require => Class['neutron'],

@@ -12,6 +12,10 @@
 #   (optional) The state of the service
 #   Defaults to true
 #
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 # [*log_file*]
 #   REMOVED: Use log_file of neutron class instead.
 #
@@ -136,6 +140,7 @@
 class neutron::server (
   $package_ensure          = 'present',
   $enabled                 = true,
+  $manage_service          = true,
   $auth_password           = false,
   $auth_type               = 'keystone',
   $auth_host               = 'localhost',
@@ -272,12 +277,6 @@ class neutron::server (
     'database/max_retries':            value => $database_max_retries_real;
   }
 
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
-  }
-
   if ($::neutron::params::server_package) {
     Package['neutron-server'] -> Neutron_api_config<||>
     Package['neutron-server'] -> Neutron_config<||>
@@ -350,6 +349,14 @@ class neutron::server (
 
     }
 
+  }
+
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'neutron-server':

@@ -72,6 +72,15 @@ describe 'neutron::agents::dhcp' do
       )
     end
 
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not start/stop service' do
+        should contain_service('neutron-dhcp-service').without_ensure
+      end
+    end
+
     context 'when enabling isolated metadata only' do
       before :each do
         params.merge!(:enable_isolated_metadata => true, :enable_metadata_network => false)

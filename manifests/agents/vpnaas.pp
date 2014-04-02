@@ -27,6 +27,10 @@
 # [*enabled*]
 #   (optional) Enable state for service. Defaults to 'true'.
 #
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 # [*vpn_device_driver*]
 #   (optional) Defaults to 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver'.
 #
@@ -36,13 +40,14 @@
 class neutron::agents::vpnaas (
   $package_ensure              = present,
   $enabled                     = true,
+  $manage_service              = true,
   $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $ipsec_status_check_interval = '60'
 ) {
 
   include neutron::params
 
-  Neutron_config<||>            ~> Service['neutron-vpnaas-service']
+  Neutron_config<||>              ~> Service['neutron-vpnaas-service']
   Neutron_vpnaas_agent_config<||> ~> Service['neutron-vpnaas-service']
 
   case $vpn_device_driver {
@@ -79,14 +84,16 @@ class neutron::agents::vpnaas (
     Package['neutron'] -> Neutron_vpnaas_agent_config<||>
   }
 
-  if $enabled {
-    $ensure = 'running'
-  } else {
-    $ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'neutron-vpnaas-service':
-    ensure  => $ensure,
+    ensure  => $service_ensure,
     name    => $::neutron::params::vpnaas_agent_service,
     enable  => $enabled,
     require => Class['neutron'],

@@ -14,6 +14,10 @@
 #   (optional) The state of the service
 #   Defaults to true
 #
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 # [*debug*]
 #   (optional) Print debug info in logs
 #   Defaults to false
@@ -74,6 +78,7 @@
 class neutron::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
+  $manage_service               = true,
   $debug                        = false,
   $external_network_bridge      = 'br-ex',
   $use_namespaces               = true,
@@ -134,14 +139,16 @@ class neutron::agents::l3 (
     Package['neutron'] -> Neutron_l3_agent_config<||>
   }
 
-  if $enabled {
-    $ensure = 'running'
-  } else {
-    $ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'neutron-l3':
-    ensure  => $ensure,
+    ensure  => $service_ensure,
     name    => $::neutron::params::l3_agent_service,
     enable  => $enabled,
     require => Class['neutron'],

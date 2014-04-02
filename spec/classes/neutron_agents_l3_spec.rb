@@ -75,6 +75,14 @@ describe 'neutron::agents::l3' do
       )
     end
 
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not start/stop service' do
+        should contain_service('neutron-l3').without_ensure
+      end
+    end
   end
 
   shared_examples_for 'neutron l3 agent with network_device_mtu specified' do

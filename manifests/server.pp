@@ -192,7 +192,7 @@ class neutron::server (
   if $sql_max_retries {
     warning('The sql_max_retries parameter is deprecated, use database_max_retries instead.')
     $database_max_retries_real = $sql_max_retries
-  } elsif $connection {
+  } elsif $max_retries {
     warning('The max_retries parameter is deprecated, use database_max_retries instead.')
     $database_max_retries_real = $max_retries
   } else {

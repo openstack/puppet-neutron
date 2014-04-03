@@ -35,7 +35,8 @@ Puppet::Type.type(:neutron_router_interface).provide(
         instances_ << new(
             :ensure                    => :present,
             :name                      => name,
-            :id                        => port_hash['id']
+            :id                        => port_hash['id'],
+            :port                      => port_hash['name']
             )
       end
     end
@@ -56,8 +57,15 @@ Puppet::Type.type(:neutron_router_interface).provide(
   end
 
   def create
-    results = auth_neutron("router-interface-add", '--format=shell',
-                           resource[:name].split(':', 2))
+    router,subnet = resource[:name].split(':', 2)
+    port = resource[:port]
+    args = ["router-interface-add", "--format=shell", router]
+    if port
+      args << "port=#{port}"
+    else
+      args << "subnet=#{subnet}"
+    end
+    results = auth_neutron(args)
 
     if results =~ /Added interface.* to router/
       @property_hash = {
@@ -75,11 +83,6 @@ Puppet::Type.type(:neutron_router_interface).provide(
 
   def subnet_name
     name.split(':', 2).last
-  end
-
-  def id
-    # TODO: Need to look this up for newly-added resources since it is
-    # not returned on creation
   end
 
   def destroy

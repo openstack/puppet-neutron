@@ -31,7 +31,10 @@ Puppet::Type.newtype(:neutron_subnet) do
   end
 
   newproperty(:gateway_ip) do
-    desc 'The default gateway used by devices in this subnet'
+    desc <<-EOT
+    The default gateway provided by DHCP to devices in this subnet.  If set to
+    '' then no gateway IP address will be provided via DHCP.
+    EOT
   end
 
   newproperty(:enable_dhcp) do

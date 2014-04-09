@@ -119,12 +119,9 @@
 # [*agent_down_time*]
 #   (optional) Seconds to regard the agent as down; should be at least twice
 #   report_interval, to be sure the agent is down for good.
+#   agent_down_time is a config for neutron-server, set by class neutron::server
+#   report_interval is a config for neutron agents, set by class neutron
 #   Defaults to: 75
-#
-# [*report_interval*]
-#   (optional) Seconds between nodes reporting state to server; should be less than
-#   agent_down_time, best if it is half or less than agent_down_time.
-#   Defaults to: 30
 #
 # [*router_scheduler_driver*]
 #   (optional) Driver to use for scheduling router to a default L3 agent. Could be:
@@ -157,7 +154,6 @@ class neutron::server (
   $sync_db                 = false,
   $api_workers             = '0',
   $agent_down_time         = '75',
-  $report_interval         = '30',
   $router_scheduler_driver = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
   $mysql_module            = '0.9',
   # DEPRECATED PARAMETERS
@@ -171,6 +167,7 @@ class neutron::server (
   $retry_interval          = undef,
   $log_dir                 = undef,
   $log_file                = undef,
+  $report_interval         = undef,
 ) {
 
   include neutron::params
@@ -227,6 +224,10 @@ class neutron::server (
     fail('The log_file parameter is removed, use log_file of neutron class instead.')
   }
 
+  if $report_interval {
+    fail('The report_interval is removed, use report_interval of neutron class instead.')
+  }
+
   validate_re($database_connection_real, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   case $database_connection_real {
@@ -269,7 +270,6 @@ class neutron::server (
   neutron_config {
     'DEFAULT/api_workers':             value => $api_workers;
     'DEFAULT/agent_down_time':         value => $agent_down_time;
-    'DEFAULT/report_interval':         value => $report_interval;
     'DEFAULT/router_scheduler_driver': value => $router_scheduler_driver;
     'database/connection':             value => $database_connection_real;
     'database/idle_timeout':           value => $database_idle_timeout_real;

@@ -77,6 +77,13 @@
 #   (optional) Enables network namespaces
 #   Defaults to false
 #
+# [*report_interval*]
+#   (optional) Seconds between nodes reporting state to server; should be less than
+#   agent_down_time, best if it is half or less than agent_down_time.
+#   agent_down_time is a config for neutron-server, set by class neutron::server
+#   report_interval is a config for neutron agents, set by class neutron
+#   Defaults to: 30
+#
 # [*control_exchange*]
 #   (optional) What RPC queue/exchange to use
 #   Defaults to neutron
@@ -148,6 +155,7 @@ class neutron (
   $allow_sorting               = false,
   $allow_overlapping_ips       = false,
   $root_helper                 = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+  $report_interval             = '30',
   $control_exchange            = 'neutron',
   $rpc_backend                 = 'neutron.openstack.common.rpc.impl_kombu',
   $rabbit_password             = false,
@@ -216,6 +224,7 @@ class neutron (
     'DEFAULT/control_exchange':        value => $control_exchange;
     'DEFAULT/rpc_backend':             value => $rpc_backend;
     'AGENT/root_helper':               value => $root_helper;
+    'agent/report_interval':           value => $report_interval;
   }
 
   if $log_file {

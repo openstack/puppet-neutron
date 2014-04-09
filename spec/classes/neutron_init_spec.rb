@@ -13,7 +13,8 @@ describe 'neutron' do
       :rabbit_user         => 'guest',
       :rabbit_password     => 'guest',
       :rabbit_virtual_host => '/',
-      :log_dir             => '/var/log/neutron'
+      :log_dir             => '/var/log/neutron',
+      :report_interval     => '30',
     }
   end
 
@@ -109,6 +110,7 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/allow_overlapping_ips').with_value(false)
       should contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
       should contain_neutron_config('AGENT/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
+      should contain_neutron_config('agent/report_interval').with_value('30')
     end
   end
 

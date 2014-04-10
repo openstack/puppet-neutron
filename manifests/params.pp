@@ -37,8 +37,8 @@ class neutron::params {
     $metering_agent_package = false
     $metering_agent_service = 'neutron-metering-agent'
 
-    $vpnaas_agent_package = false
-    $vpnaas_agent_service = 'neutron-vpnaas-agent'
+    $vpnaas_agent_package = 'openstack-neutron-vpn-agent'
+    $vpnaas_agent_service = 'neutron-vpn-agent'
     $openswan_package     = 'openswan'
 
     $l3_agent_package   = false

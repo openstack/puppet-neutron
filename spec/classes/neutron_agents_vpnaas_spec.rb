@@ -144,7 +144,8 @@ describe 'neutron::agents::vpnaas' do
 
     let :platform_params do
       { :openswan_package   => 'openswan',
-        :vpnaas_agent_service => 'neutron-vpnaas-agent'}
+        :vpnaas_agent_package => 'openstack-neutron-vpn-agent',
+        :vpnaas_agent_service => 'neutron-vpn-agent'}
     end
 
     it_configures 'neutron vpnaas agent'

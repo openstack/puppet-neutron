@@ -93,8 +93,6 @@ class neutron::agents::vpnaas (
       name    => $::neutron::params::vpnaas_agent_package,
     }
   } else {
-    # Some platforms (RedHat) do not provide a neutron VPNaaS agent package.
-    # The neutron VPNaaS agent config file is provided by the neutron package.
     Package['neutron'] -> Neutron_vpnaas_agent_config<||>
   }
 

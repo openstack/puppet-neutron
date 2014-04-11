@@ -24,7 +24,7 @@ class neutron::db::mysql (
       charset      => $charset,
       collate      => $collate,
       require      => Class['mysql::server'],
-    }
+    } -> Service <| title == 'neutron-server' |>
   } else {
     require mysql::python
 

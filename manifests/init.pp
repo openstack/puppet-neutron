@@ -223,7 +223,7 @@ class neutron (
     'DEFAULT/allow_overlapping_ips':   value => $allow_overlapping_ips;
     'DEFAULT/control_exchange':        value => $control_exchange;
     'DEFAULT/rpc_backend':             value => $rpc_backend;
-    'AGENT/root_helper':               value => $root_helper;
+    'agent/root_helper':               value => $root_helper;
     'agent/report_interval':           value => $report_interval;
   }
 

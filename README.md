@@ -121,6 +121,15 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 Release Notes
 -------------
 
+**3.3.0**
+
+* Added neutron_port resource.
+* Added external network bridge for vpn agent.
+* Changed dhcp_lease_duration to Havana default of 86400
+* Fixed VPNaaS installation for Red Hat systems.
+* Fixed conflicting symlink.
+* Fixed network_vlan_ranges parameter for OVS plugin
+
 **3.2.0**
 
 * Added write support for dns, allocation pools, and host routes to Neutron router provider.

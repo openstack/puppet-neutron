@@ -67,6 +67,14 @@ describe provider_class do
                                             'destination=12.0.0.0/24,nexthop=10.0.0.2'])
       provider.host_routes=(['destination=12.0.0.0/24,nexthop=10.0.0.2'])
     end
+
+    it 'should not update if dns_nameservers are empty' do
+      provider.dns_nameservers=('')
+    end
+
+    it 'should not update if host_routes are empty' do
+      provider.host_routes=('')
+    end
   end
 
 end

@@ -50,6 +50,7 @@ Puppet::Type.type(:neutron_subnet).provide(
 
   def self.parse_allocation_pool(values)
     allocation_pools = []
+    return [] if values.empty?
     for value in Array(values)
       matchdata = /\{\s*"start"\s*:\s*"(.*)"\s*,\s*"end"\s*:\s*"(.*)"\s*\}/.match(value)
       start_ip = matchdata[1]
@@ -61,6 +62,7 @@ Puppet::Type.type(:neutron_subnet).provide(
 
   def self.parse_host_routes(values)
     host_routes = []
+    return [] if values.empty?
     for value in Array(values)
       matchdata = /\{\s*"destination"\s*:\s*"(.*)"\s*,\s*"nexthop"\s*:\s*"(.*)"\s*\}/.match(value)
       destination = matchdata[1]
@@ -164,19 +166,23 @@ Puppet::Type.type(:neutron_subnet).provide(
   end
 
   def dns_nameservers=(values)
-    opts = ["#{name}", "--dns-nameservers", "list=true"]
-    for value in values
-      opts << value
+    unless values.empty?
+      opts = ["#{name}", "--dns-nameservers", "list=true"]
+      for value in values
+        opts << value
+      end
+      auth_neutron('subnet-update', opts)
     end
-    auth_neutron('subnet-update', opts)
   end
 
   def host_routes=(values)
-    opts = ["#{name}", "--host-routes", "type=dict", "list=true"]
-    for value in values
-      opts << value
+    unless values.empty?
+      opts = ["#{name}", "--host-routes", "type=dict", "list=true"]
+      for value in values
+        opts << value
+      end
+      auth_neutron('subnet-update', opts)
     end
-    auth_neutron('subnet-update', opts)
   end
 
   [

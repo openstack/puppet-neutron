@@ -34,7 +34,7 @@ class neutron::params {
 
     $haproxy_package   = 'haproxy'
 
-    $metering_agent_package = false
+    $metering_agent_package = 'openstack-neutron-metering-agent'
     $metering_agent_service = 'neutron-metering-agent'
 
     $vpnaas_agent_package = 'openstack-neutron-vpn-agent'

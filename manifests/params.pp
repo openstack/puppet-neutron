@@ -93,7 +93,8 @@ class neutron::params {
     $metadata_agent_package = 'neutron-metadata-agent'
     $metadata_agent_service = 'neutron-metadata-agent'
 
-    $dnsmasq_packages   = ['dnsmasq-base', 'dnsmasq-utils']
+    $dnsmasq-base_package = ['dnsmasq-base']
+    $dnsmasq-utils_package = ['dnsmasq-utils']
 
     $isc_dhcp_packages  = ['isc-dhcp-server']
 

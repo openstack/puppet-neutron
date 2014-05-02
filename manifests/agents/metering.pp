@@ -87,8 +87,7 @@ class neutron::agents::metering (
       name    => $::neutron::params::metering_agent_package,
     }
   } else {
-    # Some platforms (RedHat) do not provide a neutron metering agent package.
-    # The neutron metering agent config file is provided by the neutron package.
+    # Default dependency if the system does not provide a neutron metering agent package.
     Package['neutron'] -> Neutron_metering_agent_config<||>
   }
 

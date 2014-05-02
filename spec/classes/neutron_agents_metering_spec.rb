@@ -111,7 +111,8 @@ describe 'neutron::agents::metering' do
     end
 
     let :platform_params do
-      { :metering_agent_service => 'neutron-metering-agent' }
+      { :metering_agent_package => 'openstack-neutron-metering-agent',
+        :metering_agent_service => 'neutron-metering-agent' }
     end
 
     it_configures 'neutron metering agent'

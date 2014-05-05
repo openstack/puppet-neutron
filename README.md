@@ -1,6 +1,8 @@
 neutron
 ===================================
 
+4.0.0 - 2014.1.0 - Icehouse
+
 #### Table of Contents
 
 1. [Overview - What is the neutron module?](#overview)
@@ -121,6 +123,38 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 
 Release Notes
 -------------
+
+**4.0.0**
+
+* Stable Icehouse release.
+* Added Neutron-Nova interactions support.
+* Added external network bridge and interface driver for vpn agent.
+* Added support for puppetlabs-mysql 2.2 and greater.
+* Added neutron::config to handle additional custom options.
+* Added https support to metadata agent.
+* Added manage_service paraneter.
+* Added quota parameters.
+* Added support to configure ovs without installing package.
+* Added support for optional haproxy package management.
+* Added support to configure plugins by name rather than class name.
+* Added multi-worker support.
+* Added isolated network support.
+* Updated security group option for ml2 plugin.
+* Updated packaging changes for Red Hat and Ubuntu systems.
+* Updated parameter defaults to track upstream (Icehouse).
+* Fixed bug for subnets with empty values.
+* Fixed typos and misconfiguration in neutron.conf.
+* Fixed max_retries parameter warning.
+* Fixed database creation bugs.
+
+**3.3.0**
+
+* Added neutron_port resource.
+* Added external network bridge for vpn agent.
+* Changed dhcp_lease_duration to Havana default of 86400
+* Fixed VPNaaS installation for Red Hat systems.
+* Fixed conflicting symlink.
+* Fixed network_vlan_ranges parameter for OVS plugin
 
 **3.2.0**
 

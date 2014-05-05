@@ -1,5 +1,5 @@
 name 'puppetlabs-neutron'
-version '4.0.0-devel'
+version '4.0.0'
 
 author 'Joe Topjian,Endre Karlson,Emilien Macchi,Dan Bode,Dmitry Ukov,Edgar Magana,Robert Starmer,Ian Wells,Daneyon Hansen'
 license 'Apache License 2.0'
@@ -10,7 +10,7 @@ description 'Puppet module to install and configure the OpenStack network servic
 
 dependency 'puppetlabs/inifile', '>=1.0.0 <2.0.0'
 dependency 'puppetlabs/keystone', '>=4.0.0 <5.0.0'
-dependency 'puppetlabs/mysql', '>=0.9.0 <1.0.0'
+dependency 'puppetlabs/mysql', '>=0.9.0 <3.0.0'
 dependency 'puppetlabs/nova', '>=4.0.0 <5.0.0'
 dependency 'puppetlabs/stdlib', '>=3.2.0'
 dependency 'puppetlabs/vswitch', '>=0.2.0 <1.0.0'

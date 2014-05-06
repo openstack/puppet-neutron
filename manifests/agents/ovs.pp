@@ -124,12 +124,10 @@ class neutron::agents::ovs (
     Package['neutron-plugin-ovs'] -> Neutron_plugin_ovs<||>
     Package['neutron-plugin-ovs'] -> Service['ovs-cleanup-service']
 
-    if ! defined(Package['neutron-plugin-ovs']) {
-      package { 'neutron-plugin-ovs':
-        ensure  => $package_ensure,
-        name    => $::neutron::params::ovs_server_package,
-      }
-    }
+    ensure_resource('package', 'neutron-plugin-ovs', {
+      ensure => $package_ensure,
+      name   => $::neutron::params::ovs_server_package,
+    })
   }
 
   if $manage_service {

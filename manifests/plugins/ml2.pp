@@ -158,10 +158,10 @@ class neutron::plugins::ml2 (
   # Specific plugin configuration
   if ('openvswitch' in $mechanism_drivers) {
     if ($::osfamily == 'RedHat') {
-      package { 'neutron-plugin-ovs':
+      ensure_resource('package', 'neutron-plugin-ovs', {
         ensure => present,
         name   => $::neutron::params::ovs_server_package,
-      }
+      })
       Package['neutron-plugin-ovs'] -> Neutron_plugin_ovs<||>
     }
     if ('l2population' in $mechanism_drivers) {

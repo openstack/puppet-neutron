@@ -52,6 +52,9 @@ describe 'neutron' do
     it_configures 'with SSL enabled'
     it_configures 'with SSL disabled'
     it_configures 'with SSL wrongly configured'
+    it_configures 'with SSL socket options set'
+    it_configures 'with SSL socket options set with wrong parameters'
+    it_configures 'with SSL socket options set to false'
     it_configures 'with syslog disabled'
     it_configures 'with syslog enabled'
     it_configures 'with syslog enabled and custom settings'
@@ -133,6 +136,50 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
       should contain_neutron_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end
+  end
+
+  shared_examples_for 'with SSL socket options set' do
+    before do
+      params.merge!(
+        :use_ssl         => true,
+        :cert_file       => '/path/to/cert',
+        :key_file        => '/path/to/key',
+        :ca_file         => '/path/to/ca'
+      )
+    end
+
+    it { should contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
+    it { should contain_neutron_config('DEFAULT/ssl_cert_file').with_value('/path/to/cert') }
+    it { should contain_neutron_config('DEFAULT/ssl_key_file').with_value('/path/to/key') }
+    it { should contain_neutron_config('DEFAULT/ssl_ca_file').with_value('/path/to/ca') }
+  end
+
+  shared_examples_for 'with SSL socket options set with wrong parameters' do
+    before do
+      params.merge!(
+        :use_ssl         => true,
+        :key_file        => '/path/to/key',
+        :ca_file         => '/path/to/ca'
+      )
+    end
+
+    it_raises 'a Puppet::Error', /The cert_file parameter is required when use_ssl is set to true/
+  end
+
+  shared_examples_for 'with SSL socket options set to false' do
+    before do
+      params.merge!(
+        :use_ssl         => false,
+        :cert_file       => false,
+        :key_file        => false,
+        :ca_file         => false
+      )
+    end
+
+    it { should contain_neutron_config('DEFAULT/use_ssl').with_value('false') }
+    it { should contain_neutron_config('DEFAULT/ssl_cert_file').with_ensure('absent') }
+    it { should contain_neutron_config('DEFAULT/ssl_key_file').with_ensure('absent') }
+    it { should contain_neutron_config('DEFAULT/ssl_ca_file').with_ensure('absent') }
   end
 
   shared_examples_for 'with syslog disabled' do

@@ -21,7 +21,8 @@ class neutron::agents::ovs (
   $tunnel_bridge        = 'br-tun',
   $vxlan_udp_port       = 4789,
   $polling_interval     = 2,
-  $firewall_driver      = 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+  $firewall_driver      = 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
+  $veth_mtu             = undef
 ) {
 
   include neutron::params
@@ -149,5 +150,11 @@ class neutron::agents::ovs (
         enable => $enabled,
       }
     }
+  }
+
+  if $veth_mtu {
+    neutron_plugin_ovs { 'AGENT/veth_mtu': value => $veth_mtu }
+  } else {
+    neutron_plugin_ovs { 'AGENT/veth_mtu': ensure => absent }
   }
 }

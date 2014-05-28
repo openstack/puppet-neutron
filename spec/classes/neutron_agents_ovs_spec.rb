@@ -18,7 +18,9 @@ describe 'neutron::agents::ovs' do
       :local_ip             => false,
       :tunnel_bridge        => 'br-tun',
       :polling_interval     => 2,
-      :firewall_driver     => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver' }
+      :firewall_driver      => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
+      :veth_mtu             => ''
+    }
   end
 
   let :params do
@@ -40,6 +42,7 @@ describe 'neutron::agents::ovs' do
       should contain_neutron_plugin_ovs('OVS/enable_tunneling').with_value(false)
       should contain_neutron_plugin_ovs('OVS/tunnel_bridge').with_ensure('absent')
       should contain_neutron_plugin_ovs('OVS/local_ip').with_ensure('absent')
+      should contain_neutron_plugin_ovs('AGENT/veth_mtu').with_ensure('absent')
     end
 
     it 'configures vs_bridge' do
@@ -69,6 +72,16 @@ describe 'neutron::agents::ovs' do
         :ensure  => 'running',
         :require => 'Class[Neutron]'
       )
+    end
+
+    context 'with veth_mtu set' do
+      before :each do
+        params.merge(:veth_mtu => '9000')
+      end
+
+      it 'should set the veth_mtu on the ovs agent' do
+        should contain_neutron_plugin_ovs('AGENT/veth_mtu').with_value(params[:veth_mtu])
+      end
     end
 
     context 'when not installing ovs agent package' do

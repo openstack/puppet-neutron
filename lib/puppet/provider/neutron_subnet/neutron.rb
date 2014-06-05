@@ -28,7 +28,7 @@ Puppet::Type.type(:neutron_subnet).provide(
         :id                        => attrs['id'],
         :cidr                      => attrs['cidr'],
         :ip_version                => attrs['ip_version'],
-        :gateway_ip                => attrs['gateway_ip'],
+        :gateway_ip                => parse_gateway_ip(attrs['gateway_ip']),
         :allocation_pools          => parse_allocation_pool(attrs['allocation_pools']),
         :host_routes               => parse_host_routes(attrs['host_routes']),
         :dns_nameservers           => parse_dns_nameservers(attrs['dns_nameservers']),
@@ -46,6 +46,11 @@ Puppet::Type.type(:neutron_subnet).provide(
         resources[name].provider = provider
       end
     end
+  end
+
+  def self.parse_gateway_ip(value)
+    return '' if value.nil?
+    return value
   end
 
   def self.parse_allocation_pool(values)
@@ -89,7 +94,11 @@ Puppet::Type.type(:neutron_subnet).provide(
     end
 
     if @resource[:gateway_ip]
-      opts << "--gateway-ip=#{@resource[:gateway_ip]}"
+      if @resource[:gateway_ip] == ''
+        opts << '--no-gateway'
+      else
+        opts << "--gateway-ip=#{@resource[:gateway_ip]}"
+      end
     end
 
     if @resource[:enable_dhcp]
@@ -139,7 +148,7 @@ Puppet::Type.type(:neutron_subnet).provide(
         :id                        => attrs['id'],
         :cidr                      => attrs['cidr'],
         :ip_version                => attrs['ip_version'],
-        :gateway_ip                => attrs['gateway_ip'],
+        :gateway_ip                => self.class.parse_gateway_ip(attrs['gateway_ip']),
         :allocation_pools          => self.class.parse_allocation_pool(attrs['allocation_pools']),
         :host_routes               => self.class.parse_host_routes(attrs['host_routes']),
         :dns_nameservers           => self.class.parse_dns_nameservers(attrs['dns_nameservers']),
@@ -158,7 +167,11 @@ Puppet::Type.type(:neutron_subnet).provide(
   end
 
   def gateway_ip=(value)
-    auth_neutron('subnet-update', "--gateway-ip=#{value}", name)
+    if value == ''
+      auth_neutron('subnet-update', '--no-gateway', name)
+    else
+      auth_neutron('subnet-update', "--gateway-ip=#{value}", name)
+    end
   end
 
   def enable_dhcp=(value)

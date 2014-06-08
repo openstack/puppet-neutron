@@ -19,6 +19,7 @@ describe 'neutron::agents::metadata' do
       :metadata_ip      => '127.0.0.1',
       :metadata_port    => '8775',
       :metadata_workers => '2',
+      :metadata_backlog => '4096',
       :shared_secret    => 'metadata-secret'
     }
   end
@@ -57,6 +58,7 @@ describe 'neutron::agents::metadata' do
       should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_ip').with(:value => params[:metadata_ip])
       should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_port').with(:value => params[:metadata_port])
       should contain_neutron_metadata_agent_config('DEFAULT/metadata_workers').with(:value => params[:metadata_workers])
+      should contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => params[:metadata_backlog])
       should contain_neutron_metadata_agent_config('DEFAULT/metadata_proxy_shared_secret').with(:value => params[:shared_secret])
     end
   end

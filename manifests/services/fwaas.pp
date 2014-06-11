@@ -30,18 +30,35 @@
 #   (optional) FWaaS Driver to use
 #   Defaults to 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver'
 #
+# [*vpnaas_agent_package*]
+#   (optional) Use VPNaaS agent package instead of L3 agent package on debian platforms
+#   RedHat platforms won't take care of this parameter
+#   true/false
+#   Defaults to false
+#
 
 class neutron::services::fwaas (
-  $enabled = true,
-  $driver  = 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver'
+  $enabled              = true,
+  $driver               = 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
+  $vpnaas_agent_package = false
 ) {
 
   include neutron::params
-  if $::neutron::params::l3_agent_package {
-    ensure_resource( 'package', $::neutron::params::l3_agent_package,
-      { 'ensure' => $neutron::package_ensure })
-    Package[$::neutron::params::l3_agent_package] -> Neutron_fwaas_service_config<||>
-  } else {
+
+  if ($::osfamily == 'Debian') {
+    # Debian platforms
+    if $vpnaas_agent_package {
+      ensure_resource( 'package', $::neutron::params::vpnaas_agent_package,
+        { 'ensure' => $neutron::package_ensure })
+      Package[$::neutron::params::vpnaas_agent_package] -> Neutron_fwaas_service_config<||>
+    }
+    else {
+      ensure_resource( 'package', $::neutron::params::l3_agent_package,
+        { 'ensure' => $neutron::package_ensure })
+      Package[$::neutron::params::l3_agent_package] -> Neutron_fwaas_service_config<||>
+    }
+  } elsif($::osfamily == 'Redhat') {
+    # RH platforms
     ensure_resource( 'package', $::neutron::params::package_name,
       { 'ensure' => $neutron::package_ensure })
     Package[$::neutron::params::package_name] -> Neutron_fwaas_service_config<||>

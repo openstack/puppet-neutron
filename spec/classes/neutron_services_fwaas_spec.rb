@@ -21,13 +21,18 @@
 require 'spec_helper'
 
 describe 'neutron::services::fwaas' do
+  let :pre_condition do
+    "class { 'neutron': rabbit_password => 'passw0rd' }"
+  end
+
   let :params do
     {}
   end
 
   let :default_params do
-    { :driver   => 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
-      :enabled  => true }
+    { :driver               => 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
+      :enabled              => true,
+      :vpnaas_agent_package => false }
   end
 
   shared_examples_for 'neutron fwaas service plugin' do
@@ -36,10 +41,8 @@ describe 'neutron::services::fwaas' do
     end
 
     it 'configures driver in fwaas_driver.ini' do
-      params_hash.each_pair do |config,value|
-        should contain_neutron_fwaas_service_config('fwaas/driver').with_value('neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver')
-        should contain_neutron_fwaas_service_config('fwaas/enabled').with_value('true')
-      end
+      should contain_neutron_fwaas_service_config('fwaas/driver').with_value('neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver')
+      should contain_neutron_fwaas_service_config('fwaas/enabled').with_value('true')
     end
   end
 
@@ -49,11 +52,36 @@ describe 'neutron::services::fwaas' do
     end
 
     let :platform_params do
-      { :l3_agent_package => 'neutron-l3-agent' }
+      { :l3_agent_package     => 'neutron-l3-agent',
+        :vpnaas_agent_package => 'neutron-vpn-agent'}
     end
 
     it_configures 'neutron fwaas service plugin'
 
+    it 'installs neutron l3 agent package' do
+      should contain_package('neutron-l3-agent').with_ensure('present')
+    end
+  end
+
+  context 'on Debian platforms with VPNaaS' do
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+
+    let :platform_params do
+      { :l3_agent_package     => 'neutron-l3-agent',
+        :vpnaas_agent_package => 'neutron-vpn-agent' }
+    end
+
+    let :params do
+      { :vpnaas_agent_package => true }
+    end
+
+    it_configures 'neutron fwaas service plugin'
+
+    it 'installs neutron vpnaas agent package' do
+      should contain_package('neutron-vpn-agent').with_ensure('present')
+    end
   end
 
   context 'on Red Hat platforms' do

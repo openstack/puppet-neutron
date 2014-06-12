@@ -31,8 +31,12 @@ class Puppet::Provider::Neutron < Puppet::Provider
     conf = neutron_conf
     if conf and conf['keystone_authtoken'] and
         auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?}
-      return Hash[ auth_keys.map \
+      creds = Hash[ auth_keys.map \
                    { |k| [k, conf['keystone_authtoken'][k].strip] } ]
+      if conf['DEFAULT'] and !conf['DEFAULT']['nova_region_name'].nil?
+        creds['nova_region_name'] = conf['DEFAULT']['nova_region_name']
+      end
+      return creds
     else
       raise(Puppet::Error, "File: #{conf_filename} does not contain all \
 required sections.  Neutron types will not work if neutron is not \
@@ -68,6 +72,9 @@ correctly configured.")
       :OS_TENANT_NAME => q['admin_tenant_name'],
       :OS_PASSWORD    => q['admin_password']
     }
+    if q.key?('nova_region_name')
+      authenv[:OS_REGION_NAME] = q['nova_region_name']
+    end
     begin
       withenv authenv do
         neutron(args)

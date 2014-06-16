@@ -145,7 +145,6 @@ class neutron::agents::ovs (
     }
     if $::neutron::params::ovs_cleanup_service {
       service {'ovs-cleanup-service':
-        ensure => $service_ensure,
         name   => $::neutron::params::ovs_cleanup_service,
         enable => $enabled,
       }

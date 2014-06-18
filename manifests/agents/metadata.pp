@@ -68,6 +68,7 @@ class neutron::agents::metadata (
     'DEFAULT/nova_metadata_ip':               value => $metadata_ip;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret;
+    'DEFAULT/metadata_proxy_socket':          value =>'$state_path/metadata_proxy';
   }
 
   if $::neutron::params::metadata_agent_package {

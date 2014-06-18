@@ -95,3 +95,6 @@ class Plumlib(object):
 
     def delete_floatingip(self, floating_ip_org, id):
         self.plumlib.delete_floatingip(floating_ip_org, id)
+
+    def disassociate_floatingips(self, floating_ip, port_id):
+        self.plumlib.disassociate_floatingips(floating_ip, port_id)

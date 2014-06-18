@@ -74,7 +74,7 @@ describe 'Puppet::Type.type(:nova_admin_tenant_id_setter)' do
         it 'should create a resource' do
             resource = Puppet::Type::Nova_admin_tenant_id_setter.new(params)
             provider = provider_class.new(resource)
-            expect(provider.exists?).to be_falsey
+            expect(provider.exists?).to be_false
             expect(provider.create).to be_nil
         end
     end
@@ -98,7 +98,7 @@ describe 'Puppet::Type.type(:nova_admin_tenant_id_setter)' do
         it 'should receive an api error' do
             resource = Puppet::Type::Nova_admin_tenant_id_setter.new(params)
             provider = provider_class.new(resource)
-            expect(provider.exists?).to be_falsey
+            expect(provider.exists?).to be_false
             expect { provider.create }.to raise_error KeystoneAPIError, /Unable to find matching tenant/
         end
     end
@@ -123,7 +123,7 @@ describe 'Puppet::Type.type(:nova_admin_tenant_id_setter)' do
         it 'should receive an api error' do
             resource = Puppet::Type::Nova_admin_tenant_id_setter.new(params)
             provider = provider_class.new(resource)
-            expect(provider.exists?).to be_falsey
+            expect(provider.exists?).to be_false
             expect { provider.create }.to raise_error KeystoneAPIError, /Found multiple matches for tenant name/
         end
     end
@@ -140,7 +140,7 @@ describe 'Puppet::Type.type(:nova_admin_tenant_id_setter)' do
         it 'should receive an authentication error' do
             resource = Puppet::Type::Nova_admin_tenant_id_setter.new(params)
             provider = provider_class.new(resource)
-            expect(provider.exists?).to be_falsey
+            expect(provider.exists?).to be_false
             expect { provider.create }.to raise_error KeystoneAPIError
         end
     end
@@ -154,7 +154,7 @@ describe 'Puppet::Type.type(:nova_admin_tenant_id_setter)' do
         it 'should receive a connection error' do
             resource = Puppet::Type::Nova_admin_tenant_id_setter.new(params)
             provider = provider_class.new(resource)
-            expect(provider.exists?).to be_falsey
+            expect(provider.exists?).to be_false
             expect { provider.create }.to raise_error KeystoneConnectionError
         end
     end
@@ -168,7 +168,7 @@ describe 'Puppet::Type.type(:nova_admin_tenant_id_setter)' do
         it 'should receive a connection error' do
             resource = Puppet::Type::Nova_admin_tenant_id_setter.new(params)
             provider = provider_class.new(resource)
-            expect(provider.exists?).to be_falsey
+            expect(provider.exists?).to be_false
             expect { provider.create }.to raise_error KeystoneConnectionError
         end
     end

@@ -9,6 +9,8 @@ class neutron::plugins::plumgrid (
   $pg_username          = undef,
   $pg_password          = undef,
   $pg_servertimeout     = undef,
+  $enable_metadata_agent = false,
+  $fabric_eth            = 'eth1'
 
 ) {
 
@@ -20,7 +22,8 @@ class neutron::plugins::plumgrid (
   Package[$::neutron::params::plumgrid_plugin_package] -> File['remove plumgrid.ini']
   File['remove plumgrid.ini'] -> Service<| title == 'neutron-server' |>
   Package[$::neutron::params::plumgrid_plugin_package] -> Package[$::neutron::params::plumgrid_pythonlib_package]
-  Package[$::neutron::params::plumgrid_pythonlib_package] ~> Service<| title == 'neutron-server' |>
+  Package[$::neutron::params::plumgrid_pythonlib_package] -> Neutron_plumlib_plumgrid<||>
+  Neutron_plumlib_plumgrid<||> ~> Service<| title == 'neutron-server' |>
 
   if $::osfamily == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
@@ -90,4 +93,20 @@ class neutron::plugins::plumgrid (
     }
   }
 
+  if $enable_metadata_agent {
+    file { [ "/etc/neutron/rootwrap.d" ]:
+          ensure => directory,
+    }
+    file {'/etc/neutron/rootwrap.d/plumlib.filters':
+      owner => root,
+      group => root,
+      mode => 0600,
+      content => template('neutron/plumlib.filters.erb'),
+      require => File['/etc/neutron/rootwrap.d'],
+    }
+    neutron_plumlib_plumgrid {
+    'PLUMgridLibrary/fabric_eth':             value => $fabric_eth;
+    'PLUMgridMetadata/enable_pg_metadata' :   value => 'True';
+  }
+   }
 }

@@ -124,6 +124,14 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 Release Notes
 -------------
 
+**4.1.0**
+
+* Added parameter to set veth MTU.
+* Added RabbitMQ SSL support.
+* Added support for '' as a valid value for gateway_ip.
+* Fixed potential OVS resource duplication.
+* Pinned major gems.
+
 **4.0.0**
 
 * Stable Icehouse release.

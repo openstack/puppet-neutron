@@ -10,6 +10,7 @@
 
 require 'rubygems'
 require 'net/http'
+require 'net/https'
 require 'json'
 
 class KeystoneError < Puppet::Error
@@ -30,9 +31,9 @@ end
 #   A parsed URL (returned from URI.parse)
 def handle_request(req, url)
     begin
-        res = Net::HTTP.start(url.host, url.port) {|http|
-            http.request(req)
-        }
+        http = Net::HTTP.new(url.host, url.port)
+        http.use_ssl = url.scheme == 'https'
+        res = http.request(req)
 
         if res.code != '200'
             raise KeystoneAPIError, "Received error response from Keystone server at #{url}: #{res.message}"
@@ -98,7 +99,7 @@ def keystone_v2_authenticate(auth_url,
 
     res = handle_request(req, url)
     data = JSON.parse res.body
-    return data['access']['token']['id'], data
+    return data['access']['token']['id']
 end
 
 # Queries a Keystone server to a list of all tenants.
@@ -126,14 +127,12 @@ end
 
 Puppet::Type.type(:nova_admin_tenant_id_setter).provide(:ruby) do
     def authenticate
-        token, authinfo = keystone_v2_authenticate(
-            @resource[:auth_url],
-            @resource[:auth_username],
-            @resource[:auth_password],
-            nil,
-            @resource[:auth_tenant_name])
-
-        return token
+        keystone_v2_authenticate(
+          @resource[:auth_url],
+          @resource[:auth_username],
+          @resource[:auth_password],
+          nil,
+          @resource[:auth_tenant_name])
     end
 
     def find_tenant_by_name (token)

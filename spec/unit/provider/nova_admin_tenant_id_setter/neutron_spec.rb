@@ -173,5 +173,27 @@ describe 'Puppet::Type.type(:nova_admin_tenant_id_setter)' do
         end
     end
 
+    context 'when using secure keystone endpoint' do
+        before :each do
+            params.merge!(:auth_url => "https://127.0.0.1:35357/v2.0")
+            stub_request(:post, "https://127.0.0.1:35357/v2.0/tokens").
+                to_return(:status => 200,
+                          :body => auth_response.to_json,
+                          :headers => {})
+            stub_request(:get, "https://127.0.0.1:35357/v2.0/tenants").
+                with(:headers => {'X-Auth-Token'=>'TOKEN'}).
+                to_return(:status => 200,
+                          :body => tenants_response.to_json,
+                          :headers => {})
+        end
+
+        it 'should create a resource' do
+            resource = Puppet::Type::Nova_admin_tenant_id_setter.new(params)
+            provider = provider_class.new(resource)
+            expect(provider.exists?).to be_false
+            expect(provider.create).to be_nil
+        end
+    end
+
 end
 

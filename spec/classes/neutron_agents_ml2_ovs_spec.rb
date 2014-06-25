@@ -178,6 +178,7 @@ describe 'neutron::agents::ml2::ovs' do
     end
 
     it_configures 'neutron plugin ovs agent with ml2 plugin'
+
     it 'configures neutron ovs cleanup service' do
       should contain_service('ovs-cleanup-service').with(
         :name    => platform_params[:ovs_cleanup_service],
@@ -187,5 +188,11 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_package('neutron-ovs-agent').with_before(/Service\[ovs-cleanup-service\]/)
     end
 
+    it 'links from ovs config to plugin config' do
+      should contain_file('/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini').with(
+        :ensure => 'link',
+        :target => '/etc/neutron/plugin.ini'
+      )
+    end
   end
 end

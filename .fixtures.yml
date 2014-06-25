@@ -10,5 +10,6 @@ fixtures:
       ref:  'origin/0.x'
     "nova": "git://github.com/stackforge/puppet-nova.git"
     "vswitch": "git://github.com/stackforge/puppet-vswitch"
+    'sysctl': 'git://github.com/duritong/puppet-sysctl.git'
   symlinks:
     "neutron": "#{source_dir}"

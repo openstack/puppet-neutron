@@ -13,6 +13,9 @@ class neutron::params {
     $ovs_agent_service   = 'neutron-openvswitch-agent'
     $ovs_server_package  = 'openstack-neutron-openvswitch'
     $ovs_cleanup_service = 'neutron-ovs-cleanup'
+    $ovs_package         = 'openvswitch'
+    $libnl_package       = 'libnl'
+    $package_provider    = 'rpm'
 
     $linuxbridge_agent_package  = false
     $linuxbridge_agent_service  = 'neutron-linuxbridge-agent'
@@ -68,6 +71,9 @@ class neutron::params {
     $ovs_agent_service   = 'neutron-plugin-openvswitch-agent'
     $ovs_server_package  = 'neutron-plugin-openvswitch'
     $ovs_cleanup_service = false
+    $ovs_package         = 'openvswitch-switch'
+    $libnl_package       = 'libnl1'
+    $package_provider    = 'dpkg'
 
     $linuxbridge_agent_package  = 'neutron-plugin-linuxbridge-agent'
     $linuxbridge_agent_service  = 'neutron-plugin-linuxbridge-agent'

@@ -204,7 +204,14 @@ class neutron::agents::ml2::ovs (
       package { 'neutron-ovs-agent':
         ensure  => $package_ensure,
         name    => $::neutron::params::ovs_server_package,
-      }
+      } ->
+      # https://bugzilla.redhat.com/show_bug.cgi?id=1087647
+      # Causes init script for agent to load the old ovs file
+      # instead of the ml2 config file.
+      file { '/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini':
+        ensure => link,
+        target => '/etc/neutron/plugin.ini'
+      } ~> Service<| title == 'neutron-ovs-agent-service' |>
     }
   }
 

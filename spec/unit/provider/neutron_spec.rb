@@ -64,6 +64,15 @@ describe Puppet::Provider::Neutron do
       klass.get_auth_endpoint.should == auth_endpoint
     end
 
+    it 'should find region_name if specified' do
+      conf = {
+        'keystone_authtoken' => credential_hash,
+        'DEFAULT' => { 'nova_region_name' => 'REGION_NAME' }
+      }
+      klass.expects(:neutron_conf).returns(conf)
+      klass.neutron_credentials['nova_region_name'] == 'REGION_NAME'
+    end
+
   end
 
   describe 'when invoking the neutron cli' do
@@ -76,6 +85,21 @@ describe Puppet::Provider::Neutron do
         :OS_PASSWORD    => credential_hash['admin_password'],
       }
       klass.expects(:get_neutron_credentials).with().returns(credential_hash)
+      klass.expects(:withenv).with(authenv)
+      klass.auth_neutron('test_retries')
+    end
+
+    it 'should set region in the environment if needed' do
+      authenv = {
+        :OS_AUTH_URL    => auth_endpoint,
+        :OS_USERNAME    => credential_hash['admin_user'],
+        :OS_TENANT_NAME => credential_hash['admin_tenant_name'],
+        :OS_PASSWORD    => credential_hash['admin_password'],
+        :OS_REGION_NAME => 'REGION_NAME',
+      }
+
+      cred_hash = credential_hash.merge({'nova_region_name' => 'REGION_NAME'})
+      klass.expects(:get_neutron_credentials).with().returns(cred_hash)
       klass.expects(:withenv).with(authenv)
       klass.auth_neutron('test_retries')
     end

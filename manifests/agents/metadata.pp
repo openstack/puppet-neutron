@@ -55,6 +55,10 @@
 #   The parent process manages them. Having more workers will help to improve performances.
 #   Defaults to: 0
 #
+# [*metadata_backlog*]
+#   (optional) Number of backlog requests to configure the metadata server socket with.
+#   Defaults to 4096
+#
 
 class neutron::agents::metadata (
   $auth_password,
@@ -71,7 +75,8 @@ class neutron::agents::metadata (
   $auth_region      = 'RegionOne',
   $metadata_ip      = '127.0.0.1',
   $metadata_port    = '8775',
-  $metadata_workers = '0'
+  $metadata_workers = '0',
+  $metadata_backlog = '4096'
   ) {
 
   include neutron::params
@@ -92,6 +97,7 @@ class neutron::agents::metadata (
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret;
     'DEFAULT/metadata_workers':               value => $metadata_workers;
+    'DEFAULT/metadata_backlog':               value => $metadata_backlog;
   }
 
   if $auth_ca_cert {

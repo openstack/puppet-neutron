@@ -99,7 +99,7 @@ class neutron::plugins::ml2 (
 
   include neutron::params
 
-  Neutron_plugin_ml2<||> ~> Service['neutron-server']
+  Neutron_plugin_ml2<||> ~> Service <| title == 'neutron-server' |>
 
   # test mechanism drivers
   validate_array($mechanism_drivers)

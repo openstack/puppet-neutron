@@ -46,11 +46,7 @@ describe 'neutron::agents::ovs' do
     end
 
     it 'configures vs_bridge' do
-      should contain_vs_bridge(p[:integration_bridge]).with(
-        :ensure  => 'present',
-        :before => 'Service[neutron-plugin-ovs-service]'
-      )
-      should_not contain_vs_brige(p[:integration_bridge])
+      should contain_vs_bridge(p[:integration_bridge]).with_ensure('present')
     end
 
     it 'installs neutron ovs agent package' do
@@ -148,10 +144,7 @@ describe 'neutron::agents::ovs' do
           should contain_neutron_plugin_ovs('OVS/enable_tunneling').with_value(true)
           should contain_neutron_plugin_ovs('OVS/tunnel_bridge').with_value(default_params[:tunnel_bridge])
           should contain_neutron_plugin_ovs('OVS/local_ip').with_value('127.0.0.1')
-          should contain_vs_bridge(default_params[:tunnel_bridge]).with(
-            :ensure  => 'present',
-            :before => 'Service[neutron-plugin-ovs-service]'
-          )
+          should contain_vs_bridge(default_params[:tunnel_bridge]).with_ensure('present')
         end
       end
 

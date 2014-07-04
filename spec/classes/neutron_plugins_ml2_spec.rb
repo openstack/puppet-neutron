@@ -178,7 +178,22 @@ describe 'neutron::plugins::ml2' do
       {}
     end
 
-    it_configures 'neutron plugin ml2'
+    context 'on Ubuntu operating systems' do
+      before do
+        facts.merge!({:operatingsystem => 'Ubuntu'})
+        platform_params.merge!(:ml2_server_package => 'neutron-plugin-ml2')
+      end
+
+      it_configures 'neutron plugin ml2'
+    end
+
+    context 'on non-Ubuntu operating systems' do
+      before do
+        facts.merge!({:operatingsystem => 'Debian'})
+      end
+
+      it_configures 'neutron plugin ml2'
+    end
   end
 
   context 'on RedHat platforms' do

@@ -57,7 +57,11 @@ class neutron::params {
     $server_service     = 'neutron-server'
     $client_package     = 'python-neutronclient'
 
-    $ml2_server_package = false
+    if $::operatingsystem == 'Ubuntu' {
+      $ml2_server_package = 'neutron-plugin-ml2'
+    } else {
+      $ml2_server_package = false
+    }
 
     $ovs_agent_package   = 'neutron-plugin-openvswitch-agent'
     $ovs_agent_service   = 'neutron-plugin-openvswitch-agent'

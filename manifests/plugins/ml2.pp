@@ -103,16 +103,15 @@ class neutron::plugins::ml2 (
 
   include neutron::params
 
-  Neutron_plugin_ml2<||> ~> Service <| title == 'neutron-server' |>
+  Neutron_plugin_ml2<||> ~> Service<| title == 'neutron-server' |>
 
-  # test mechanism drivers
   validate_array($mechanism_drivers)
   if ! $mechanism_drivers {
     warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')
   }
 
-  # In RH, the link is used to start Neutron process but in Debian,
-  # it's used only to manage database synchronization.
+  # In RH, the link is used to start Neutron process but in Debian, it's used only
+  # to manage database synchronization.
   file {'/etc/neutron/plugin.ini':
     ensure  => link,
     target  => '/etc/neutron/plugins/ml2/ml2_conf.ini'
@@ -138,32 +137,10 @@ class neutron::plugins::ml2 (
     vxlan_group         => $vxlan_group,
   }
 
-  # Configure ml2_conf.ini
   neutron_plugin_ml2 {
     'ml2/type_drivers':                     value => join($type_drivers, ',');
     'ml2/tenant_network_types':             value => join($tenant_network_types, ',');
     'ml2/mechanism_drivers':                value => join($mechanism_drivers, ',');
     'securitygroup/enable_security_group':  value => $enable_security_group;
   }
-
-  if ('linuxbridge' in $mechanism_drivers) {
-    if ($::osfamily == 'RedHat') {
-      package { 'neutron-plugin-linuxbridge':
-        ensure => present,
-        name   => $::neutron::params::linuxbridge_server_package,
-      }
-      Package['neutron-plugin-linuxbridge'] -> Neutron_plugin_linuxbridge<||>
-    }
-    if ('l2population' in $mechanism_drivers) {
-      neutron_plugin_linuxbridge {
-        'vxlan/enable_vxlan':  value => true;
-        'vxlan/l2_population': value => true;
-      }
-    } else {
-      neutron_plugin_linuxbridge {
-        'vxlan/l2_population': value => false;
-      }
-    }
-  }
-
 }

@@ -65,6 +65,10 @@
 #   (optional) The MTU size for the interfaces managed by neutron
 #   Defaults to undef
 #
+# [*dhcp_agent_notification*]
+#   (optional) Allow sending resource operation notification to DHCP agent.
+#   Defaults to true
+#
 # [*allow_bulk*]
 #   (optional) Enable bulk crud operations
 #   Defaults to true
@@ -193,6 +197,7 @@ class neutron (
   $dhcp_lease_duration         = 86400,
   $dhcp_agents_per_network     = 1,
   $network_device_mtu          = undef,
+  $dhcp_agent_notification     = true,
   $allow_bulk                  = true,
   $allow_pagination            = false,
   $allow_sorting               = false,
@@ -293,6 +298,7 @@ class neutron (
     'DEFAULT/mac_generation_retries':  value => $mac_generation_retries;
     'DEFAULT/dhcp_lease_duration':     value => $dhcp_lease_duration;
     'DEFAULT/dhcp_agents_per_network': value => $dhcp_agents_per_network;
+    'DEFAULT/dhcp_agent_notification': value => $dhcp_agent_notification;
     'DEFAULT/allow_bulk':              value => $allow_bulk;
     'DEFAULT/allow_pagination':        value => $allow_pagination;
     'DEFAULT/allow_sorting':           value => $allow_sorting;

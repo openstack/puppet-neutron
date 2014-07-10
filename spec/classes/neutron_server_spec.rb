@@ -25,6 +25,7 @@ describe 'neutron::server' do
       :database_retry_interval => '10',
       :sync_db                 => false,
       :api_workers             => '0',
+      :rpc_workers             => '0',
       :agent_down_time         => '75',
       :router_scheduler_driver => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
       :mysql_module            => '0.9'}
@@ -81,9 +82,10 @@ describe 'neutron::server' do
       should contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(
         :ensure => 'absent'
       )
-      should contain_neutron_config('DEFAULT/api_workers').with_value('0')
-      should contain_neutron_config('DEFAULT/agent_down_time').with_value('75')
-      should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value('neutron.scheduler.l3_agent_scheduler.ChanceScheduler')
+      should contain_neutron_config('DEFAULT/api_workers').with_value(p[:api_workers])
+      should contain_neutron_config('DEFAULT/rpc_workers').with_value(p[:rpc_workers])
+      should contain_neutron_config('DEFAULT/agent_down_time').with_value(p[:agent_down_time])
+      should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
     end
 
     context 'with manage_service as false' do

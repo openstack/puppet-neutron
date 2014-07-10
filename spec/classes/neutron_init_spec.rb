@@ -3,18 +3,19 @@ require 'spec_helper'
 describe 'neutron' do
 
   let :params do
-    { :package_ensure      => 'present',
-      :verbose             => false,
-      :debug               => false,
-      :core_plugin         => 'linuxbridge',
-      :rabbit_host         => '127.0.0.1',
-      :rabbit_port         => 5672,
-      :rabbit_hosts        => false,
-      :rabbit_user         => 'guest',
-      :rabbit_password     => 'guest',
-      :rabbit_virtual_host => '/',
-      :log_dir             => '/var/log/neutron',
-      :report_interval     => '30',
+    { :package_ensure        => 'present',
+      :verbose               => false,
+      :debug                 => false,
+      :core_plugin           => 'linuxbridge',
+      :rabbit_host           => '127.0.0.1',
+      :rabbit_port           => 5672,
+      :rabbit_hosts          => false,
+      :rabbit_user           => 'guest',
+      :rabbit_password       => 'guest',
+      :rabbit_virtual_host   => '/',
+      :kombu_reconnect_delay => '1.0',
+      :log_dir               => '/var/log/neutron',
+      :report_interval       => '30',
     }
   end
 
@@ -101,6 +102,7 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
       should contain_neutron_config('DEFAULT/rabbit_password').with_secret( true )
       should contain_neutron_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      should contain_neutron_config('DEFAULT/kombu_reconnect_delay').with_value( params[:kombu_reconnect_delay] )
     end
 
     it 'configures neutron.conf' do

@@ -124,6 +124,13 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 Release Notes
 -------------
 
+**4.2.0**
+
+* Added ml2/ovs support.
+* Added multi-region support.
+* Set default metadata backlog to 4096.
+* Fixed neutron-server refresh bug.
+
 **4.1.0**
 
 * Added parameter to set veth MTU.

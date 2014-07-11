@@ -8,7 +8,6 @@ describe 'neutron::db::mysql' do
 
   let :params do
     { :password => 'passw0rd',
-      :mysql_module => '2.2'
     }
   end
   let :facts do
@@ -21,7 +20,12 @@ describe 'neutron::db::mysql' do
       { :osfamily => 'Debian' }
     end
 
-    it { should contain_class('neutron::db::mysql') }
+    it { should contain_openstacklib__db__mysql('neutron').with(
+      :user          => 'neutron',
+      :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
+      :host          => '127.0.0.1',
+      :charset       => 'utf8'
+     ) }
   end
 
   context 'on RedHat platforms' do
@@ -29,7 +33,12 @@ describe 'neutron::db::mysql' do
       { :osfamily => 'RedHat' }
     end
 
-    it { should contain_class('neutron::db::mysql') }
+    it { should contain_openstacklib__db__mysql('neutron').with(
+      :user          => 'neutron',
+      :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
+      :host          => '127.0.0.1',
+      :charset       => 'utf8'
+     ) }
   end
 
   describe "overriding allowed_hosts param to array" do
@@ -40,16 +49,6 @@ describe 'neutron::db::mysql' do
       }
     end
 
-    it {should_not contain_neutron__db__mysql__host_access("127.0.0.1").with(
-      :user     => 'neutron',
-      :password => 'neutronpass',
-      :database => 'neutron'
-    )}
-    it {should contain_neutron__db__mysql__host_access("%").with(
-      :user     => 'neutron',
-      :password => 'neutronpass',
-      :database => 'neutron'
-    )}
   end
 
   describe "overriding allowed_hosts param to string" do
@@ -60,11 +59,6 @@ describe 'neutron::db::mysql' do
       }
     end
 
-    it {should contain_neutron__db__mysql__host_access("192.168.1.1").with(
-      :user     => 'neutron',
-      :password => 'neutronpass2',
-      :database => 'neutron'
-    )}
   end
 
   describe "overriding allowed_hosts param equals to host param " do
@@ -75,11 +69,6 @@ describe 'neutron::db::mysql' do
       }
     end
 
-    it {should_not contain_neutron__db__mysql__host_access("127.0.0.1").with(
-      :user     => 'neutron',
-      :password => 'neutronpass2',
-      :database => 'neutron'
-    )}
   end
 end
 

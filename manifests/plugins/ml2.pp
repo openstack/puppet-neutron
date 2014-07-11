@@ -83,6 +83,11 @@
 #   Min value is 0 and Max value is 16777215.
 #   Default to empty.
 #
+# [*enable_security_group*]
+#   (optional) Controls if neutron security group is enabled or not.
+#   It should be false when you use nova security group.
+#   Defaults to true.
+#
 
 class neutron::plugins::ml2 (
   $type_drivers          = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
@@ -93,8 +98,7 @@ class neutron::plugins::ml2 (
   $tunnel_id_ranges      = ['20:100'],
   $vxlan_group           = '224.0.0.1',
   $vni_ranges            = ['10:100'],
-  # DEPRECATED PARAMS
-  $enable_security_group = undef
+  $enable_security_group = true
 ) {
 
   include neutron::params

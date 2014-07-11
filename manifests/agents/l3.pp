@@ -70,6 +70,7 @@
 # [*network_device_mtu*]
 #   (optional) The MTU size for the interfaces managed by the L3 agent
 #   Defaults to undef
+#   Should be deprecated in the next major release in favor of a global parameter
 #
 # [*router_delete_namespaces*]
 #   (optional) namespaces can be deleted cleanly on the host running the L3 agent
@@ -117,10 +118,12 @@ class neutron::agents::l3 (
   }
 
   if $network_device_mtu {
+    warning('The neutron::l3_agent::newtork_device_mtu parameter is deprecated, use neutron::newtork_device_mtu instead.')
     neutron_l3_agent_config {
       'DEFAULT/network_device_mtu':           value => $network_device_mtu;
     }
   } else {
+    warning('The neutron::l3_agent::newtork_device_mtu parameter is deprecated, use neutron::newtork_device_mtu instead.')
     neutron_l3_agent_config {
       'DEFAULT/network_device_mtu':           ensure => absent;
     }

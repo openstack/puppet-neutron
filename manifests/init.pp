@@ -61,6 +61,10 @@
 #   This enables redundant DHCP agents for configured networks.
 #   Defaults to 1
 #
+# [*network_device_mtu*]
+#   (optional) The MTU size for the interfaces managed by neutron
+#   Defaults to undef
+#
 # [*allow_bulk*]
 #   (optional) Enable bulk crud operations
 #   Defaults to true
@@ -188,6 +192,7 @@ class neutron (
   $mac_generation_retries      = 16,
   $dhcp_lease_duration         = 86400,
   $dhcp_agents_per_network     = 1,
+  $network_device_mtu          = undef,
   $allow_bulk                  = true,
   $allow_pagination            = false,
   $allow_sorting               = false,
@@ -316,6 +321,17 @@ class neutron (
       }
     }
   }
+
+  if $network_device_mtu {
+    neutron_config {
+      'DEFAULT/network_device_mtu':           value => $network_device_mtu;
+    }
+  } else {
+    neutron_config {
+      'DEFAULT/network_device_mtu':           ensure => absent;
+    }
+  }
+
 
   if $service_plugins {
     if is_array($service_plugins) {

@@ -105,6 +105,7 @@ describe 'neutron::plugins::cisco' do
         with_value(params[:keystone_username])
       should contain_neutron_plugin_cisco_credentials('keystone/password').\
         with_value(params[:keystone_password])
+      should contain_neutron_plugin_cisco_credentials('keystone/password').with_secret( true )
       should contain_neutron_plugin_cisco_credentials('keystone/auth_url').\
         with_value(params[:keystone_auth_url])
       should contain_neutron_plugin_cisco_credentials('keystone/tenant').\

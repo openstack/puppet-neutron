@@ -347,7 +347,7 @@ class neutron (
 
     neutron_config {
       'DEFAULT/rabbit_userid':       value => $rabbit_user;
-      'DEFAULT/rabbit_password':     value => $rabbit_password;
+      'DEFAULT/rabbit_password':     value => $rabbit_password, secret => true;
       'DEFAULT/rabbit_virtual_host': value => $rabbit_virtual_host;
       'DEFAULT/rabbit_use_ssl':      value => $rabbit_use_ssl;
     }
@@ -375,7 +375,7 @@ class neutron (
       'DEFAULT/qpid_hostname':               value => $qpid_hostname;
       'DEFAULT/qpid_port':                   value => $qpid_port;
       'DEFAULT/qpid_username':               value => $qpid_username;
-      'DEFAULT/qpid_password':               value => $qpid_password;
+      'DEFAULT/qpid_password':               value => $qpid_password, secret => true;
       'DEFAULT/qpid_heartbeat':              value => $qpid_heartbeat;
       'DEFAULT/qpid_protocol':               value => $qpid_protocol;
       'DEFAULT/qpid_tcp_nodelay':            value => $qpid_tcp_nodelay;

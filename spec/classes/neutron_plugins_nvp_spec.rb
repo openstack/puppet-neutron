@@ -58,6 +58,7 @@ describe 'neutron::plugins::nvp' do
       should contain_neutron_plugin_nvp('DEFAULT/nvp_controllers').with_value(p[:nvp_controllers].join(','))
       should contain_neutron_plugin_nvp('DEFAULT/nvp_user').with_value(p[:nvp_user])
       should contain_neutron_plugin_nvp('DEFAULT/nvp_password').with_value(p[:nvp_password])
+      should contain_neutron_plugin_nvp('DEFAULT/nvp_password').with_secret( true )
       should_not contain_neutron_plugin_nvp('DEFAULT/default_l3_gw_service_uuid').with_value(p[:default_l3_gw_service_uuid])
     end
 

@@ -48,7 +48,7 @@ class neutron::plugins::nvp (
     'DEFAULT/default_tz_uuid': value => $default_tz_uuid;
     'DEFAULT/nvp_controllers': value => join($nvp_controllers, ',');
     'DEFAULT/nvp_user':        value => $nvp_user;
-    'DEFAULT/nvp_password':    value => $nvp_password;
+    'DEFAULT/nvp_password':    value => $nvp_password, secret => true;
     'nvp/metadata_mode':       value => 'access_network';
   }
 

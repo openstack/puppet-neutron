@@ -91,7 +91,7 @@ class neutron::server::notifications (
     'DEFAULT/nova_url':                           value => $nova_url;
     'DEFAULT/nova_admin_auth_url':                value => $nova_admin_auth_url;
     'DEFAULT/nova_admin_username':                value => $nova_admin_username;
-    'DEFAULT/nova_admin_password':                value => $nova_admin_password;
+    'DEFAULT/nova_admin_password':                value => $nova_admin_password, secret => true;
     'DEFAULT/nova_region_name':                   value => $nova_region_name;
   }
 

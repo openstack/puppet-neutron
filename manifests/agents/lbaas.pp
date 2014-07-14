@@ -55,8 +55,7 @@ class neutron::agents::lbaas (
 
   case $device_driver {
     /\.haproxy/: {
-      Package[$::neutron::params::haproxy_package] -> Package<| title == 'neutron-lbaas-agent' |>
-
+      Package <| title == $::neutron::params::haproxy_package |> -> Package <| title == 'neutron-lbaas-agent' |>
       if $manage_haproxy_package {
         ensure_packages([$::neutron::params::haproxy_package])
       }

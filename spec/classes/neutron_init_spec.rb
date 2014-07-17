@@ -111,6 +111,7 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/dhcp_lease_duration').with_value(86400)
       should contain_neutron_config('DEFAULT/dhcp_agents_per_network').with_value(1)
       should contain_neutron_config('DEFAULT/network_device_mtu').with_ensure('absent')
+      should contain_neutron_config('DEFAULT/dhcp_agent_notification').with_value(true)
       should contain_neutron_config('DEFAULT/allow_bulk').with_value(true)
       should contain_neutron_config('DEFAULT/allow_pagination').with_value(false)
       should contain_neutron_config('DEFAULT/allow_sorting').with_value(false)

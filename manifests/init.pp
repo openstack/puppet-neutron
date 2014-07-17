@@ -185,7 +185,7 @@ class neutron (
   $debug                       = false,
   $bind_host                   = '0.0.0.0',
   $bind_port                   = '9696',
-  $core_plugin                 = 'openvswitch',
+  $core_plugin                 = 'neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2',
   $service_plugins             = undef,
   $auth_strategy               = 'keystone',
   $base_mac                    = 'fa:16:3e:00:00:00',

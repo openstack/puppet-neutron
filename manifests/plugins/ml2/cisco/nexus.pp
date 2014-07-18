@@ -22,6 +22,7 @@ class neutron::plugins::ml2::cisco::nexus (
   $nexus_config = undef,
 )
 {
+
   if !$nexus_config {
     fail('No nexus config specified')
   }
@@ -41,23 +42,7 @@ class neutron::plugins::ml2::cisco::nexus (
     content => template('neutron/ml2_conf_cisco.ini.erb'),
   } ~> Service['neutron-server']
 
-  file {'/var/lib/neutron/.ssh':
-    ensure  => directory,
-    owner   => 'neutron',
-    require => Package['neutron-server']
-  }
-
   create_resources(neutron::plugins::ml2::cisco::nexus_creds, $nexus_config)
 
-  if $::osfamily == 'Debian' {
-    file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path    => '/etc/default/neutron-server',
-      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::cisco_ml2_config_file}",
-      require => [ Package['neutron-server'],
-                    Package['neutron-plugin-ml2']],
-      notify  => Service['neutron-server'],
-    }
-  }
 }
 

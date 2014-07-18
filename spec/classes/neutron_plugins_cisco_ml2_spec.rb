@@ -57,12 +57,6 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
       )
     end
 
-    it 'configures /etc/default/neutron-server' do
-      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
-        :line => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/ml2/ml2_conf_cisco.ini',
-        :require => ['Package[neutron-server]', 'Package[neutron-plugin-ml2]']
-      )
-    end
   end
 
 end

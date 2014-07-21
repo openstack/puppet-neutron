@@ -38,6 +38,7 @@ class neutron::agents::ovs (
     Neutron_plugin_ovs<||> ~> Service['neutron-plugin-ovs-service']
     Neutron::Plugins::Ovs::Bridge<||> -> Service['neutron-plugin-ovs-service']
     Neutron::Plugins::Ovs::Port<||> -> Service['neutron-plugin-ovs-service']
+    Vs_bridge<||> -> Service['neutron-plugin-ovs-service']
   }
 
   if ($bridge_mappings != []) {
@@ -78,7 +79,6 @@ class neutron::agents::ovs (
 
   vs_bridge { $integration_bridge:
     ensure => present,
-    before => Service['neutron-plugin-ovs-service'],
   }
 
   if $enable_tunneling {

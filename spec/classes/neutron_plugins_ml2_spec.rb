@@ -25,10 +25,7 @@ describe 'neutron::plugins::ml2' do
   let :pre_condition do
     "class { 'neutron':
       rabbit_password => 'passw0rd',
-      core_plugin     => 'neutron.plugins.ml2.plugin.Ml2Plugin' }
-
-     class { 'neutron::server':
-      auth_password => 'test'}"
+      core_plugin     => 'neutron.plugins.ml2.plugin.Ml2Plugin' }"
   end
 
   let :default_params do

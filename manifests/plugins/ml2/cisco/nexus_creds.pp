@@ -16,15 +16,16 @@ define neutron::plugins::ml2::cisco::nexus_creds(
   $ssh_port
 ) {
 
-  neutron_plugin_cisco_credentials {
-    "${username}/username": value => $username;
-    "${password}/password": value => $password;
+  file {'/var/lib/neutron/.ssh':
+    ensure  => directory,
+    owner   => 'neutron',
+    require => Package['neutron-server']
   }
 
   exec {'nexus_creds':
     unless  => "/bin/cat /var/lib/neutron/.ssh/known_hosts | /bin/grep ${username}",
-    command => "/usr/bin/ssh-keyscan -t rsa ${username} >> /var/lib/neutron/.ssh/known_hosts",
+    command => "/usr/bin/ssh-keyscan -t rsa ${ip_address} >> /var/lib/neutron/.ssh/known_hosts",
     user    => 'neutron',
-    require => Package['neutron-server']
+    require => [Package['neutron-server'], File['/var/lib/neutron/.ssh']]
   }
 }

@@ -57,7 +57,7 @@ Puppet::Type.type(:neutron_subnet).provide(
     allocation_pools = []
     return [] if values.empty?
     for value in Array(values)
-      matchdata = /\{\s*"start"\s*:\s*"(.*)"\s*,\s*"end"\s*:\s*"(.*)"\s*\}/.match(value)
+      matchdata = /\{\s*"start"\s*:\s*"(.*)"\s*,\s*"end"\s*:\s*"(.*)"\s*\}/.match(value.gsub(/\\"/,'"'))
       start_ip = matchdata[1]
       end_ip = matchdata[2]
       allocation_pools << "start=#{start_ip},end=#{end_ip}"

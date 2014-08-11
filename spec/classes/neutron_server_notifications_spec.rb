@@ -53,6 +53,7 @@ describe 'neutron::server::notifications' do
             should contain_neutron_config('DEFAULT/nova_admin_auth_url').with_value('http://127.0.0.1:35357/v2.0')
             should contain_neutron_config('DEFAULT/nova_admin_username').with_value('nova')
             should contain_neutron_config('DEFAULT/nova_admin_password').with_value('secrete')
+            should contain_neutron_config('DEFAULT/nova_admin_password').with_secret( true )
             should contain_neutron_config('DEFAULT/nova_region_name').with_value('RegionOne')
             should contain_neutron_config('DEFAULT/nova_admin_tenant_id').with_value('UUID')
         end
@@ -78,6 +79,7 @@ describe 'neutron::server::notifications' do
                 should contain_neutron_config('DEFAULT/nova_admin_auth_url').with_value('http://keystone:35357/v2.0')
                 should contain_neutron_config('DEFAULT/nova_admin_username').with_value('joe')
                 should contain_neutron_config('DEFAULT/nova_admin_password').with_value('secrete')
+                should contain_neutron_config('DEFAULT/nova_admin_password').with_secret( true )
                 should contain_neutron_config('DEFAULT/nova_region_name').with_value('MyRegion')
                 should contain_neutron_config('DEFAULT/nova_admin_tenant_id').with_value('UUID2')
             end

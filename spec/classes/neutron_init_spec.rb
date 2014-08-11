@@ -97,6 +97,7 @@ describe 'neutron' do
     it 'configures credentials for rabbit' do
       should contain_neutron_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_user] )
       should contain_neutron_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      should contain_neutron_config('DEFAULT/rabbit_password').with_secret( true )
       should contain_neutron_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
 

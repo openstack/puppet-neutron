@@ -92,7 +92,7 @@ class neutron::agents::metadata (
     'DEFAULT/auth_region':                    value => $auth_region;
     'DEFAULT/admin_tenant_name':              value => $auth_tenant;
     'DEFAULT/admin_user':                     value => $auth_user;
-    'DEFAULT/admin_password':                 value => $auth_password;
+    'DEFAULT/admin_password':                 value => $auth_password, secret => true;
     'DEFAULT/nova_metadata_ip':               value => $metadata_ip;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret;

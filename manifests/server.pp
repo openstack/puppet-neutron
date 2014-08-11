@@ -272,7 +272,7 @@ class neutron::server (
     'DEFAULT/api_workers':             value => $api_workers;
     'DEFAULT/agent_down_time':         value => $agent_down_time;
     'DEFAULT/router_scheduler_driver': value => $router_scheduler_driver;
-    'database/connection':             value => $database_connection_real;
+    'database/connection':             value => $database_connection_real, secret => true;
     'database/idle_timeout':           value => $database_idle_timeout_real;
     'database/retry_interval':         value => $database_retry_interval_real;
     'database/max_retries':            value => $database_max_retries_real;
@@ -303,7 +303,7 @@ class neutron::server (
         'keystone_authtoken/auth_protocol':     value => $auth_protocol;
         'keystone_authtoken/admin_tenant_name': value => $auth_tenant;
         'keystone_authtoken/admin_user':        value => $auth_user;
-        'keystone_authtoken/admin_password':    value => $auth_password;
+        'keystone_authtoken/admin_password':    value => $auth_password, secret => true;
       }
 
       neutron_api_config {
@@ -312,7 +312,7 @@ class neutron::server (
         'filter:authtoken/auth_protocol':     value => $auth_protocol;
         'filter:authtoken/admin_tenant_name': value => $auth_tenant;
         'filter:authtoken/admin_user':        value => $auth_user;
-        'filter:authtoken/admin_password':    value => $auth_password;
+        'filter:authtoken/admin_password':    value => $auth_password, secret => true;
       }
 
       if $auth_admin_prefix {

@@ -55,6 +55,7 @@ describe 'neutron::agents::metadata' do
       should contain_neutron_metadata_agent_config('DEFAULT/admin_tenant_name').with(:value => params[:auth_tenant])
       should contain_neutron_metadata_agent_config('DEFAULT/admin_user').with(:value => params[:auth_user])
       should contain_neutron_metadata_agent_config('DEFAULT/admin_password').with(:value => params[:auth_password])
+      should contain_neutron_metadata_agent_config('DEFAULT/admin_password').with_secret( true )
       should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_ip').with(:value => params[:metadata_ip])
       should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_port').with(:value => params[:metadata_port])
       should contain_neutron_metadata_agent_config('DEFAULT/metadata_workers').with(:value => params[:metadata_workers])

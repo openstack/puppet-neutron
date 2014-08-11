@@ -37,6 +37,7 @@ describe 'neutron::server' do
 
     it 'should perform default database configuration of' do
       should contain_neutron_config('database/connection').with_value(p[:database_connection])
+      should contain_neutron_config('database/connection').with_secret( true )
       should contain_neutron_config('database/max_retries').with_value(p[:database_max_retries])
       should contain_neutron_config('database/idle_timeout').with_value(p[:database_idle_timeout])
       should contain_neutron_config('database/retry_interval').with_value(p[:database_retry_interval])
@@ -50,6 +51,7 @@ describe 'neutron::server' do
       should contain_neutron_api_config('filter:authtoken/admin_tenant_name').with_value(p[:auth_tenant]);
       should contain_neutron_api_config('filter:authtoken/admin_user').with_value(p[:auth_user]);
       should contain_neutron_api_config('filter:authtoken/admin_password').with_value(p[:auth_password]);
+      should contain_neutron_api_config('filter:authtoken/admin_password').with_secret( true )
       should contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(:ensure => 'absent')
       should contain_neutron_api_config('filter:authtoken/auth_uri').with_value("http://localhost:5000/");
     end

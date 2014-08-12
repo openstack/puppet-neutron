@@ -183,6 +183,32 @@ describe 'neutron' do
     it { should contain_neutron_config('DEFAULT/ssl_ca_file').with_ensure('absent') }
   end
 
+  shared_examples_for 'with SSL socket options set and no ca_file' do
+    before do
+      params.merge!(
+        :use_ssl         => true,
+        :cert_file       => '/path/to/cert',
+        :key_file        => '/path/to/key'
+      )
+    end
+
+    it { should contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
+    it { should contain_neutron_config('DEFAULT/ssl_cert_file').with_value('/path/to/cert') }
+    it { should contain_neutron_config('DEFAULT/ssl_key_file').with_value('/path/to/key') }
+    it { should contain_neutron_config('DEFAULT/ssl_ca_file').with_ensure('absent') }
+  end
+
+  shared_examples_for 'with SSL socket options disabled with ca_file' do
+    before do
+      params.merge!(
+        :use_ssl         => false,
+        :ca_file         => '/path/to/ca'
+      )
+    end
+
+    it_raises 'a Puppet::Error', /The ca_file parameter requires that use_ssl to be set to true/
+  end
+
   shared_examples_for 'with syslog disabled' do
     it { should contain_neutron_config('DEFAULT/use_syslog').with_value(false) }
   end

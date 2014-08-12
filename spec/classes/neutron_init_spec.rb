@@ -49,9 +49,11 @@ describe 'neutron' do
 
     end
 
-    it_configures 'with SSL enabled'
+    it_configures 'with SSL enabled with kombu'
+    it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
     it_configures 'with SSL wrongly configured'
+    it_configures 'with SSL and kombu wrongly configured'
     it_configures 'with SSL socket options set'
     it_configures 'with SSL socket options set with wrong parameters'
     it_configures 'with SSL socket options set to false'
@@ -215,7 +217,7 @@ describe 'neutron' do
     it { should contain_neutron_config('DEFAULT/use_syslog').with_value(false) }
   end
 
-  shared_examples_for 'with SSL enabled' do
+  shared_examples_for 'with SSL enabled with kombu' do
     before do
       params.merge!(
         :rabbit_use_ssl     => true,
@@ -235,13 +237,26 @@ describe 'neutron' do
     end
   end
 
+  shared_examples_for 'with SSL enabled without kombu' do
+    before do
+      params.merge!(
+        :rabbit_use_ssl     => true
+      )
+    end
+
+    it do
+      should contain_neutron_config('DEFAULT/rabbit_use_ssl').with_value('true')
+      should contain_neutron_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      should contain_neutron_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      should contain_neutron_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      should contain_neutron_config('DEFAULT/kombu_ssl_version').with_value('SSLv3')
+    end
+  end
+
   shared_examples_for 'with SSL disabled' do
     before do
       params.merge!(
         :rabbit_use_ssl     => false,
-        :kombu_ssl_ca_certs => 'undef',
-        :kombu_ssl_certfile => 'undef',
-        :kombu_ssl_keyfile  => 'undef',
         :kombu_ssl_version  => 'SSLv3'
       )
     end
@@ -258,28 +273,44 @@ describe 'neutron' do
   shared_examples_for 'with SSL wrongly configured' do
     before do
       params.merge!(
+        :rabbit_use_ssl     => false
+      )
+    end
+
+    context 'with SSL disabled' do
+
+      context 'with kombu_ssl_ca_certs parameter' do
+        before { params.merge!(:kombu_ssl_ca_certs => '/path/to/ssl/ca/certs') }
+        it_raises 'a Puppet::Error', /The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true/
+      end
+
+      context 'with kombu_ssl_certfile parameter' do
+        before { params.merge!(:kombu_ssl_certfile => '/path/to/ssl/cert/file') }
+        it_raises 'a Puppet::Error', /The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true/
+      end
+
+      context 'with kombu_ssl_keyfile parameter' do
+        before { params.merge!(:kombu_ssl_keyfile => '/path/to/ssl/keyfile') }
+        it_raises 'a Puppet::Error', /The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true/
+      end
+    end
+
+  end
+
+  shared_examples_for 'with SSL and kombu wrongly configured' do
+    before do
+      params.merge!(
         :rabbit_use_ssl     => true,
-        :kombu_ssl_ca_certs => 'undef',
-        :kombu_ssl_certfile => 'undef',
-        :kombu_ssl_keyfile  => 'undef'
+        :kombu_ssl_certfile  => '/path/to/ssl/cert/file',
+        :kombu_ssl_keyfile  => '/path/to/ssl/keyfile'
       )
     end
 
     context 'without required parameters' do
 
-      context 'without kombu_ssl_ca_certs parameter' do
-        before { params.delete(:kombu_ssl_ca_certs) }
-        it_raises 'a Puppet::Error', /The kombu_ssl_ca_certs parameter is required when rabbit_use_ssl is set to true/
-      end
-
-      context 'without kombu_ssl_certfile parameter' do
-        before { params.delete(:kombu_ssl_certfile) }
-        it_raises 'a Puppet::Error', /The kombu_ssl_certfile parameter is required when rabbit_use_ssl is set to true/
-      end
-
       context 'without kombu_ssl_keyfile parameter' do
         before { params.delete(:kombu_ssl_keyfile) }
-        it_raises 'a Puppet::Error', /The kombu_ssl_keyfile parameter is required when rabbit_use_ssl is set to true/
+        it_raises 'a Puppet::Error', /The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together/
       end
     end
 

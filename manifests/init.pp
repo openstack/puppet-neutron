@@ -248,12 +248,13 @@ class neutron (
     if !$cert_file {
       fail('The cert_file parameter is required when use_ssl is set to true')
     }
-    if !$ca_file {
-      fail('The ca_file parameter is required when use_ssl is set to true')
-    }
     if !$key_file {
       fail('The key_file parameter is required when use_ssl is set to true')
     }
+  }
+
+  if $ca_file and !$use_ssl {
+    fail('The ca_file parameter requires that use_ssl to be set to true')
   }
 
   if $rabbit_use_ssl {
@@ -410,7 +411,11 @@ class neutron (
     neutron_config {
       'DEFAULT/ssl_cert_file' : value => $cert_file;
       'DEFAULT/ssl_key_file'  : value => $key_file;
-      'DEFAULT/ssl_ca_file'   : value => $ca_file;
+    }
+    if $ca_file {
+      neutron_config { 'DEFAULT/ssl_ca_file'   : value => $ca_file; }
+    } else {
+      neutron_config { 'DEFAULT/ssl_ca_file'   : ensure => absent; }
     }
   } else {
     neutron_config {

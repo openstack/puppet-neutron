@@ -112,6 +112,17 @@ class neutron::plugins::ml2 (
     warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')
   }
 
+  if $::osfamily == 'Debian' {
+    file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
+      path    => '/etc/default/neutron-server',
+      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugin.ini',
+      require => File['/etc/neutron/plugin.ini'],
+    }
+    File_line['/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG']
+    ~> Service<| title == 'neutron-server' |>
+  }
+
   # In RH, the link is used to start Neutron process but in Debian, it's used only
   # to manage database synchronization.
   file {'/etc/neutron/plugin.ini':

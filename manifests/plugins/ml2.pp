@@ -98,7 +98,8 @@ class neutron::plugins::ml2 (
   $tunnel_id_ranges      = ['20:100'],
   $vxlan_group           = '224.0.0.1',
   $vni_ranges            = ['10:100'],
-  $enable_security_group = true
+  $enable_security_group = true,
+  $package_ensure        = 'present'
 ) {
 
   include neutron::params
@@ -131,7 +132,7 @@ class neutron::plugins::ml2 (
   # Some platforms do not have a dedicated ml2 plugin package
   if $::neutron::params::ml2_server_package {
     package { 'neutron-plugin-ml2':
-      ensure => present,
+      ensure => $package_ensure,
       name   => $::neutron::params::ml2_server_package,
     }
     Package['neutron-plugin-ml2'] -> Neutron_plugin_ml2<||>

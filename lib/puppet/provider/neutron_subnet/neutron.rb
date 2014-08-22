@@ -101,8 +101,10 @@ Puppet::Type.type(:neutron_subnet).provide(
       end
     end
 
-    if @resource[:enable_dhcp]
-      opts << "--enable-dhcp=#{@resource[:enable_dhcp]}"
+    if @resource[:enable_dhcp] == 'False'
+      opts << "--disable-dhcp"
+    else
+      opts << "--enable-dhcp"
     end
 
     if @resource[:allocation_pools]
@@ -175,7 +177,11 @@ Puppet::Type.type(:neutron_subnet).provide(
   end
 
   def enable_dhcp=(value)
-    auth_neutron('subnet-update', "--enable-dhcp=#{value}", name)
+    if value == 'False'
+      auth_neutron('subnet-update', "--disable-dhcp", name)
+    else
+      auth_neutron('subnet-update', "--enable-dhcp", name)
+    end
   end
 
   def dns_nameservers=(values)

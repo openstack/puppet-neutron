@@ -51,7 +51,7 @@ describe provider_class do
 
     it 'should call subnet-update to change enable_dhcp' do
       provider.expects(:auth_neutron).with('subnet-update',
-                                           '--enable-dhcp=True',
+                                           '--enable-dhcp',
                                            subnet_name)
       provider.enable_dhcp=('True')
     end
@@ -84,4 +84,24 @@ describe provider_class do
     end
   end
 
+  describe 'when updating a subnet (reverse)' do
+    let :subnet_attrs_mod do
+      subnet_attrs.merge!({:enable_dhcp => 'True'})
+    end
+    let :resource do
+      Puppet::Type::Neutron_subnet.new(subnet_attrs_mod)
+    end
+
+    let :provider do
+      provider_class.new(resource)
+    end
+
+
+    it 'should call subnet-update to change enable_dhcp' do
+      provider.expects(:auth_neutron).with('subnet-update',
+                                           '--disable-dhcp',
+                                           subnet_name)
+      provider.enable_dhcp=('False')
+    end
+  end
 end

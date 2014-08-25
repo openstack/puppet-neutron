@@ -83,6 +83,11 @@
 #   (optional) Firewall driver for realizing neutron security group function.
 #   Defaults to 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'.
 #
+# [*network_vlan_ranges*]
+#   (optional) ovs vlan network ranges , List of <physical_network>:<start id>:<end id> eg: physnet1:100:200
+#   if type_drivers is vlan, this options can't empty
+#   Defaults to empty List
+#
 class neutron::agents::ml2::ovs (
   $package_ensure        = 'present',
   $enabled               = true,
@@ -97,7 +102,8 @@ class neutron::agents::ml2::ovs (
   $polling_interval      = 2,
   $l2_population         = false,
   $arp_responder         = false,
-  $firewall_driver       = 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+  $firewall_driver       = 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
+  $network_vlan_ranges   = []
 ) {
 
   include neutron::params
@@ -180,9 +186,11 @@ class neutron::agents::ml2::ovs (
     }
   } else {
     neutron_plugin_ml2 {
+      'agent/tunnel_types': ensure => absent;
       'ovs/enable_tunneling': value  => false;
       'ovs/tunnel_bridge':    ensure => absent;
       'ovs/local_ip':         ensure => absent;
+      'ovs/network_vlan_ranges': value => $network_vlan_ranges;
     }
   }
 

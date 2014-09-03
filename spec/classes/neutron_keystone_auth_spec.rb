@@ -116,4 +116,20 @@ describe 'neutron::keystone::auth' do
 
   end
 
+  describe 'when overriding service name' do
+
+    let :params do
+      {
+        :service_name => 'neutron_service',
+        :password     => 'neutron_password'
+      }
+    end
+
+    it { should contain_keystone_user('neutron') }
+    it { should contain_keystone_user_role('neutron@services') }
+    it { should contain_keystone_service('neutron_service') }
+    it { should contain_keystone_endpoint('RegionOne/neutron_service') }
+
+  end
+
 end

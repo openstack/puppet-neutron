@@ -19,6 +19,9 @@
 # [*configure_endpoint*]
 #   Should Neutron endpoint be configured? Defaults to 'true'.
 #
+# [*service_name*]
+#   Name of the service. Defaults to the value of auth_name.
+#
 # [*service_type*]
 #   Type of service. Defaults to 'network'.
 #
@@ -55,6 +58,7 @@ class neutron::keystone::auth (
   $email              = 'neutron@localhost',
   $tenant             = 'services',
   $configure_endpoint = true,
+  $service_name       = undef,
   $service_type       = 'network',
   $public_protocol    = 'http',
   $public_address     = '127.0.0.1',
@@ -67,8 +71,14 @@ class neutron::keystone::auth (
   $region             = 'RegionOne'
 ) {
 
+  if $service_name == undef {
+    $real_service_name = $auth_name
+  } else {
+    $real_service_name = $service_name
+  }
+
   Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'neutron-server' |>
-  Keystone_endpoint["${region}/${auth_name}"]  ~> Service <| name == 'neutron-server' |>
+  Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'neutron-server' |>
 
   if ! $public_port {
     $real_public_port = $port
@@ -86,14 +96,14 @@ class neutron::keystone::auth (
     ensure  => present,
     roles   => 'admin',
   }
-  keystone_service { $auth_name:
+  keystone_service { $real_service_name:
     ensure      => present,
     type        => $service_type,
     description => 'Neutron Networking Service',
   }
 
   if $configure_endpoint {
-    keystone_endpoint { "${region}/${auth_name}":
+    keystone_endpoint { "${region}/${real_service_name}":
       ensure       => present,
       public_url   => "${public_protocol}://${public_address}:${real_public_port}/",
       internal_url => "${internal_protocol}://${internal_address}:${port}/",

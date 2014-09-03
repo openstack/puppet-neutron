@@ -137,9 +137,7 @@
 #   Defaults to: neutron.scheduler.l3_agent_scheduler.ChanceScheduler
 #
 # [*mysql_module*]
-#   (optional) Mysql puppet module version to use. Tested versions
-#   include 0.9 and 2.2
-#   Defaults to: '2.2'
+#   (optional) Deprecated. Does nothing.
 #
 class neutron::server (
   $package_ensure          = 'present',
@@ -163,8 +161,8 @@ class neutron::server (
   $rpc_workers             = '0',
   $agent_down_time         = '75',
   $router_scheduler_driver = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
-  $mysql_module            = '2.2',
   # DEPRECATED PARAMETERS
+  $mysql_module            = undef,
   $sql_connection          = undef,
   $connection              = undef,
   $sql_max_retries         = undef,
@@ -184,6 +182,10 @@ class neutron::server (
   Nova_admin_tenant_id_setter<||> ~> Service['neutron-server']
   Neutron_config<||>     ~> Service['neutron-server']
   Neutron_api_config<||> ~> Service['neutron-server']
+
+  if $mysql_module {
+    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
+  }
 
   if $sql_connection {
     warning('The sql_connection parameter is deprecated, use database_connection instead.')
@@ -241,12 +243,8 @@ class neutron::server (
 
   case $database_connection_real {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
-      if ($mysql_module >= 2.2) {
-        require 'mysql::bindings'
-        require 'mysql::bindings::python'
-      } else {
-        require 'mysql::python'
-      }
+      require 'mysql::bindings'
+      require 'mysql::bindings::python'
     }
     /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
       $backend_package = 'python-psycopg2'

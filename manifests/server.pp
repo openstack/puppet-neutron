@@ -111,17 +111,19 @@
 #
 # [*api_workers*]
 #   (optional) Number of separate worker processes to spawn.
-#   The default, 0, runs the worker thread in the current process.
+#   The default, count of machine's processors, runs the worker thread in the
+#   current process.
 #   Greater than 0 launches that number of child processes as workers.
 #   The parent process manages them.
-#   Defaults to: 0
+#   Defaults to: $::processorcount
 #
 # [*rpc_workers*]
 #   (optional) Number of separate RPC worker processes to spawn.
-#   The default, 0, runs the worker thread in the current process.
+#   The default, count of machine's processors, runs the worker thread in the
+#   current process.
 #   Greater than 0 launches that number of child processes as workers.
 #   The parent process manages them.
-#   Defaults to: 0
+#   Defaults to: $::processorcount
 #
 # [*agent_down_time*]
 #   (optional) Seconds to regard the agent as down; should be at least twice
@@ -157,8 +159,8 @@ class neutron::server (
   $database_idle_timeout   = 3600,
   $database_retry_interval = 10,
   $sync_db                 = false,
-  $api_workers             = '0',
-  $rpc_workers             = '0',
+  $api_workers             = $::processorcount,
+  $rpc_workers             = $::processorcount,
   $agent_down_time         = '75',
   $router_scheduler_driver = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
   # DEPRECATED PARAMETERS

@@ -50,10 +50,11 @@
 #
 # [*metadata_workers*]
 #   (optional) Number of separate worker processes to spawn.
-#   The default, 0, runs the worker thread in the current process.
+#   The default, count of machine's processors, runs the worker thread in the
+#   current process.
 #   Greater than 0 launches that number of child processes as workers.
 #   The parent process manages them. Having more workers will help to improve performances.
-#   Defaults to: 0
+#   Defaults to: $::processorcount
 #
 # [*metadata_backlog*]
 #   (optional) Number of backlog requests to configure the metadata server socket with.
@@ -75,7 +76,7 @@ class neutron::agents::metadata (
   $auth_region      = 'RegionOne',
   $metadata_ip      = '127.0.0.1',
   $metadata_port    = '8775',
-  $metadata_workers = '0',
+  $metadata_workers = $::processorcount,
   $metadata_backlog = '4096'
   ) {
 

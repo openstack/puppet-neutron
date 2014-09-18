@@ -76,6 +76,29 @@
 #   (optional) namespaces can be deleted cleanly on the host running the L3 agent
 #   Defaults to False
 #
+# [*ha_enabled*]
+#   (optional) Enabled or not HA for L3 agent.
+#   Defaults to false
+#
+# [*ha_vrrp_auth_type*]
+#   (optional) VRRP authentication type. Can be AH or PASS.
+#   Defaults to "PASS"
+#
+# [*ha_vrrp_auth_password*]
+#   (optional) VRRP authentication password. Required if ha_enabled = true.
+#   Defaults to undef
+#
+# [*ha_vrrp_advert_int*]
+#   (optional) The advertisement interval in seconds.
+#   Defaults to '2'
+#
+# [*agent_mode*]
+#   (optional) The working mode for the agent.
+#   'legacy': default behavior (without DVR)
+#   'dvr': enable DVR for an L3 agent running on compute node (DVR in production)
+#   'dvr_snat': enable DVR with centralized SNAT support (DVR for single-host, for testing only)
+#   Defaults to 'legacy'
+#
 class neutron::agents::l3 (
   $package_ensure               = 'present',
   $enabled                      = true,
@@ -93,13 +116,26 @@ class neutron::agents::l3 (
   $periodic_fuzzy_delay         = '5',
   $enable_metadata_proxy        = true,
   $network_device_mtu           = undef,
-  $router_delete_namespaces     = false
+  $router_delete_namespaces     = false,
+  $ha_enabled                   = false,
+  $ha_vrrp_auth_type            = 'PASS',
+  $ha_vrrp_auth_password        = undef,
+  $ha_vrrp_advert_int           = '3',
+  $agent_mode                   = 'legacy',
 ) {
 
   include neutron::params
 
   Neutron_config<||>          ~> Service['neutron-l3']
   Neutron_l3_agent_config<||> ~> Service['neutron-l3']
+
+  if $ha_enabled {
+    neutron_l3_agent_config {
+      'DEFAULT/ha_vrrp_auth_type':     value => $ha_vrrp_auth_type;
+      'DEFAULT/ha_vrrp_auth_password': value => $ha_vrrp_auth_password;
+      'DEFAULT/ha_vrrp_advert_int':    value => $ha_vrrp_advert_int;
+    }
+  }
 
   neutron_l3_agent_config {
     'DEFAULT/debug':                        value => $debug;
@@ -115,6 +151,7 @@ class neutron::agents::l3 (
     'DEFAULT/periodic_fuzzy_delay':         value => $periodic_fuzzy_delay;
     'DEFAULT/enable_metadata_proxy':        value => $enable_metadata_proxy;
     'DEFAULT/router_delete_namespaces':     value => $router_delete_namespaces;
+    'DEFAULT/agent_mode':                   value => $agent_mode;
   }
 
   if $network_device_mtu {

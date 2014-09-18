@@ -22,7 +22,12 @@ describe 'neutron::agents::l3' do
       :periodic_fuzzy_delay         => '5',
       :enable_metadata_proxy        => true,
       :network_device_mtu           => nil,
-      :router_delete_namespaces     => false }
+      :router_delete_namespaces     => false,
+      :ha_enabled                   => false,
+      :ha_vrrp_auth_type            => 'PASS',
+      :ha_vrrp_auth_password        => nil,
+      :ha_vrrp_advert_int           => '3',
+      :agent_mode                   => 'legacy' }
   end
 
   let :params do
@@ -81,6 +86,27 @@ describe 'neutron::agents::l3' do
       end
       it 'should not start/stop service' do
         should contain_service('neutron-l3').without_ensure
+      end
+    end
+
+    context 'with DVR' do
+      before :each do
+        params.merge!(:agent_mode => 'dvr')
+      end
+      it 'should enable DVR mode' do
+        should contain_neutron_l3_agent_config('DEFAULT/agent_mode').with_value(p[:agent_mode])
+      end
+    end
+
+    context 'with HA routers' do
+      before :each do
+        params.merge!(:ha_enabled            => true,
+                      :ha_vrrp_auth_password => 'secrete')
+      end
+      it 'should configure VRRP' do
+        should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_value(p[:ha_vrrp_auth_type])
+        should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_value(p[:ha_vrrp_auth_password])
+        should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value(p[:ha_vrrp_advert_int])
       end
     end
   end

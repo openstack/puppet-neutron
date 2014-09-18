@@ -153,44 +153,71 @@
 # [*mysql_module*]
 #   (optional) Deprecated. Does nothing.
 #
+# [*router_distributed*]
+#   (optional) Setting the "router_distributed" flag to "True" will default to the creation
+#   of distributed tenant routers.
+#   Also can be the type of the router on the create request (admin-only attribute).
+#   Defaults to false
+#
+# [*l3_ha*]
+#   (optional) Enable high availability for virtual routers.
+#   Defaults to false
+#
+# [*max_l3_agents_per_router*]
+#   (optional) Maximum number of l3 agents which a HA router will be scheduled on. If set to '0', a router will be scheduled on every agent.
+#   Defaults to '3'
+#
+# [*min_l3_agents_per_router*]
+#   (optional) Minimum number of l3 agents which a HA router will be scheduled on.
+#   Defaults to '2'
+#
+# [*l3_ha_net_cidr*]
+#   (optional) CIDR of the administrative network if HA mode is enabled.
+#   Defaults to '169.254.192.0/18'
+#
 class neutron::server (
-  $package_ensure          = 'present',
-  $enabled                 = true,
-  $manage_service          = true,
-  $auth_password           = false,
-  $auth_type               = 'keystone',
-  $auth_host               = 'localhost',
-  $auth_port               = '35357',
-  $auth_admin_prefix       = false,
-  $auth_tenant             = 'services',
-  $auth_user               = 'neutron',
-  $auth_protocol           = 'http',
-  $auth_uri                = false,
-  $database_connection     = 'sqlite:////var/lib/neutron/ovs.sqlite',
-  $database_max_retries    = 10,
-  $database_idle_timeout   = 3600,
-  $database_retry_interval = 10,
-  $database_min_pool_size  = 1,
-  $database_max_pool_size  = 10,
-  $database_max_overflow   = 20,
-  $sync_db                 = false,
-  $api_workers             = $::processorcount,
-  $rpc_workers             = $::processorcount,
-  $agent_down_time         = '75',
-  $router_scheduler_driver = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
+  $package_ensure           = 'present',
+  $enabled                  = true,
+  $manage_service           = true,
+  $auth_password            = false,
+  $auth_type                = 'keystone',
+  $auth_host                = 'localhost',
+  $auth_port                = '35357',
+  $auth_admin_prefix        = false,
+  $auth_tenant              = 'services',
+  $auth_user                = 'neutron',
+  $auth_protocol            = 'http',
+  $auth_uri                 = false,
+  $database_connection      = 'sqlite:////var/lib/neutron/ovs.sqlite',
+  $database_max_retries     = 10,
+  $database_idle_timeout    = 3600,
+  $database_retry_interval  = 10,
+  $database_min_pool_size   = 1,
+  $database_max_pool_size   = 10,
+  $database_max_overflow    = 20,
+  $sync_db                  = false,
+  $api_workers              = $::processorcount,
+  $rpc_workers              = $::processorcount,
+  $agent_down_time          = '75',
+  $router_scheduler_driver  = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
+  $router_distributed       = false,
+  $l3_ha                    = false,
+  $max_l3_agents_per_router = 3,
+  $min_l3_agents_per_router = 2,
+  $l3_ha_net_cidr           = '169.254.192.0/18',
   # DEPRECATED PARAMETERS
-  $mysql_module            = undef,
-  $sql_connection          = undef,
-  $connection              = undef,
-  $sql_max_retries         = undef,
-  $max_retries             = undef,
-  $sql_idle_timeout        = undef,
-  $idle_timeout            = undef,
-  $sql_reconnect_interval  = undef,
-  $retry_interval          = undef,
-  $log_dir                 = undef,
-  $log_file                = undef,
-  $report_interval         = undef,
+  $mysql_module             = undef,
+  $sql_connection           = undef,
+  $connection               = undef,
+  $sql_max_retries          = undef,
+  $max_retries              = undef,
+  $sql_idle_timeout         = undef,
+  $idle_timeout             = undef,
+  $sql_reconnect_interval   = undef,
+  $retry_interval           = undef,
+  $log_dir                  = undef,
+  $log_file                 = undef,
+  $report_interval          = undef,
 ) {
 
   include neutron::params
@@ -199,6 +226,19 @@ class neutron::server (
   Nova_admin_tenant_id_setter<||> ~> Service['neutron-server']
   Neutron_config<||>     ~> Service['neutron-server']
   Neutron_api_config<||> ~> Service['neutron-server']
+
+  if $l3_ha {
+    if $min_l3_agents_per_router <= $max_l3_agents_per_router or $max_l3_agents_per_router == '0' {
+      neutron_config {
+        'DEFAULT/ha_enabled':               value => true;
+        'DEFAULT/max_l3_agents_per_router': value => $max_l3_agents_per_router;
+        'DEFAULT/min_l3_agents_per_router': value => $min_l3_agents_per_router;
+        'DEFAULT/l3_ha_net_cidr':           value => $l3_ha_net_cidr;
+      }
+    } else {
+      fail('min_l3_agents_per_router should be less than or equal to max_l3_agents_per_router.')
+    }
+  }
 
   if $mysql_module {
     warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
@@ -296,6 +336,7 @@ class neutron::server (
     'DEFAULT/rpc_workers':             value => $rpc_workers;
     'DEFAULT/agent_down_time':         value => $agent_down_time;
     'DEFAULT/router_scheduler_driver': value => $router_scheduler_driver;
+    'DEFAULT/router_distributed':      value => $router_distributed;
     'database/connection':             value => $database_connection_real, secret => true;
     'database/idle_timeout':           value => $database_idle_timeout_real;
     'database/retry_interval':         value => $database_retry_interval_real;

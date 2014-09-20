@@ -111,7 +111,7 @@ class neutron::plugins::ml2 (
     warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')
   }
 
-  if $::osfamily == 'Debian' {
+  if $::operatingsystem == 'Ubuntu' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
       path    => '/etc/default/neutron-server',
       match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',

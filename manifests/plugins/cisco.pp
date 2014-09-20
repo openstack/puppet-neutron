@@ -109,7 +109,7 @@ class neutron::plugins::cisco(
     Package['neutron'] -> Neutron_plugin_cisco_l2network<||>
   }
 
-  if $::osfamily == 'Debian' {
+  if $::operatingsystem == 'Ubuntu' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
       path    => '/etc/default/neutron-server',
       match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',

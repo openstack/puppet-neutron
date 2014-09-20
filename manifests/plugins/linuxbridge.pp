@@ -35,7 +35,7 @@ class neutron::plugins::linuxbridge (
   Neutron_plugin_linuxbridge<||> ~> Service<| title == 'neutron-server' |>
   Package['neutron-plugin-linuxbridge'] -> Service<| title == 'neutron-server' |>
 
-  if $::osfamily == 'Debian' {
+  if $::operatingsystem == 'Ubuntu' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
       path    => '/etc/default/neutron-server',
       match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',

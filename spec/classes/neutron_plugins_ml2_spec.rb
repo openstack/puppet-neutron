@@ -182,6 +182,21 @@ describe 'neutron::plugins::ml2' do
         end
       end
     end
+
+    context 'on Ubuntu operating systems' do
+      before do
+        facts.merge!({:operatingsystem => 'Ubuntu'})
+      end
+
+      it 'configures /etc/default/neutron-server' do
+        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
+          :path    => '/etc/default/neutron-server',
+          :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+          :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugin.ini',
+          :require => ['File[/etc/neutron/plugin.ini]']
+        )
+      end
+    end
   end
 
   context 'on Debian platforms' do
@@ -191,15 +206,6 @@ describe 'neutron::plugins::ml2' do
 
     let :platform_params do
       {}
-    end
-
-    it 'configures /etc/default/neutron-server' do
-      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
-        :path    => '/etc/default/neutron-server',
-        :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-        :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugin.ini',
-        :require => ['File[/etc/neutron/plugin.ini]']
-      )
     end
 
     context 'on Ubuntu operating systems' do

@@ -41,9 +41,7 @@ describe 'neutron::plugins::linuxbridge' do
         :require => 'Package[neutron-plugin-linuxbridge]'
       )
     end
-
   end
-
 
   context 'on Debian platforms' do
     let :facts do
@@ -54,12 +52,29 @@ describe 'neutron::plugins::linuxbridge' do
       { :linuxbridge_plugin_package => 'neutron-plugin-linuxbridge' }
     end
 
-    it_configures 'neutron linuxbridge plugin'
-    it 'configures /etc/default/neutron-server' do
-      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
-        :line => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
-        :require => ['Package[neutron-plugin-linuxbridge]', 'Package[neutron-server]']
-      )
+    context 'on Ubuntu operating systems' do
+      before do
+        facts.merge!({:operatingsystem => 'Ubuntu'})
+      end
+
+      it 'configures /etc/default/neutron-server' do
+        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
+          :path    => '/etc/default/neutron-server',
+          :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+          :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
+          :require => ['Package[neutron-plugin-linuxbridge]', 'Package[neutron-server]'],
+          :notify  => 'Service[neutron-server]'
+        )
+      end
+      it_configures 'neutron linuxbridge plugin'
+    end
+
+    context 'on Debian operating systems' do
+      before do
+        facts.merge!({:operatingsystem => 'Debian'})
+      end
+
+      it_configures 'neutron linuxbridge plugin'
     end
   end
 

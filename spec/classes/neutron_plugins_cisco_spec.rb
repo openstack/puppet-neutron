@@ -134,12 +134,29 @@ describe 'neutron::plugins::cisco' do
       { :osfamily => 'Debian' }
     end
 
-    it_configures 'default cisco plugin'
-    it 'configures /etc/default/neutron-server' do
-      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
-        :line => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/cisco/cisco_plugins.ini',
-        :require => ['Package[neutron-server]', 'Package[neutron-plugin-cisco]']
-      )
+    context 'on Ubuntu operating systems' do
+      before do
+        facts.merge!({:operatingsystem => 'Ubuntu'})
+      end
+
+      it 'configures /etc/default/neutron-server' do
+        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
+          :path    => '/etc/default/neutron-server',
+          :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+          :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/cisco/cisco_plugins.ini',
+          :require => ['Package[neutron-server]', 'Package[neutron-plugin-cisco]'],
+          :notify  => 'Service[neutron-server]'
+        )
+      end
+      it_configures 'default cisco plugin'
+    end
+
+    context 'on Debian operating systems' do
+      before do
+        facts.merge!({:operatingsystem => 'Debian'})
+      end
+
+      it_configures 'default cisco plugin'
     end
   end
 

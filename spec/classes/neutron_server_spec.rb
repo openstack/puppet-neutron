@@ -23,6 +23,9 @@ describe 'neutron::server' do
       :database_max_retries    => '10',
       :database_idle_timeout   => '3600',
       :database_retry_interval => '10',
+      :database_min_pool_size  => '1',
+      :database_max_pool_size  => '10',
+      :database_max_overflow   => '20',
       :sync_db                 => false,
       :agent_down_time         => '75',
       :router_scheduler_driver => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
@@ -40,6 +43,9 @@ describe 'neutron::server' do
       should contain_neutron_config('database/max_retries').with_value(p[:database_max_retries])
       should contain_neutron_config('database/idle_timeout').with_value(p[:database_idle_timeout])
       should contain_neutron_config('database/retry_interval').with_value(p[:database_retry_interval])
+      should contain_neutron_config('database/min_pool_size').with_value(p[:database_min_pool_size])
+      should contain_neutron_config('database/max_pool_size').with_value(p[:database_max_pool_size])
+      should contain_neutron_config('database/max_overflow').with_value(p[:database_max_overflow])
     end
 
     it { should contain_class('neutron::params') }

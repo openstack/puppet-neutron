@@ -105,6 +105,18 @@
 # [*retry_interval*]
 #   DEPRECATED: Use database_retry_interval instead.
 #
+# [*database_min_pool_size*]
+#   (optional) Minimum number of SQL connections to keep open in a pool.
+#   Defaults to: 1
+#
+# [*database_max_pool_size*]
+#   (optional) Maximum number of SQL connections to keep open in a pool.
+#   Defaults to: 10
+#
+# [*database_max_overflow*]
+#   (optional) If set, use this value for max_overflow with sqlalchemy.
+#   Defaults to: 20
+#
 # [*sync_db*]
 #   (optional) Run neutron-db-manage on api nodes after installing the package.
 #   Defaults to false
@@ -158,6 +170,9 @@ class neutron::server (
   $database_max_retries    = 10,
   $database_idle_timeout   = 3600,
   $database_retry_interval = 10,
+  $database_min_pool_size  = 1,
+  $database_max_pool_size  = 10,
+  $database_max_overflow   = 20,
   $sync_db                 = false,
   $api_workers             = $::processorcount,
   $rpc_workers             = $::processorcount,
@@ -285,6 +300,9 @@ class neutron::server (
     'database/idle_timeout':           value => $database_idle_timeout_real;
     'database/retry_interval':         value => $database_retry_interval_real;
     'database/max_retries':            value => $database_max_retries_real;
+    'database/min_pool_size':          value => $database_min_pool_size;
+    'database/max_pool_size':          value => $database_max_pool_size;
+    'database/max_overflow':           value => $database_max_overflow;
   }
 
   if ($::neutron::params::server_package) {

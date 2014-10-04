@@ -43,7 +43,11 @@ class neutron::params {
 
     $vpnaas_agent_package = 'openstack-neutron-vpn-agent'
     $vpnaas_agent_service = 'neutron-vpn-agent'
-    $openswan_package     = 'openswan'
+    if $::operatingsystemrelease =~ /^7.*/ {
+      $openswan_package     = 'libreswan'
+    } else {
+      $openswan_package     = 'openswan'
+    }
 
     $l3_agent_package   = false
     $l3_agent_service   = 'neutron-l3-agent'

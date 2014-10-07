@@ -2,6 +2,8 @@
 class neutron::params {
 
   if($::osfamily == 'Redhat') {
+    $nobody_user_group    = 'nobody'
+
     $package_name       = 'openstack-neutron'
     $server_package     = false
     $server_service     = 'neutron-server'
@@ -59,6 +61,8 @@ class neutron::params {
     $kernel_headers     = "linux-headers-${::kernelrelease}"
 
   } elsif($::osfamily == 'Debian') {
+
+    $nobody_user_group    = 'nogroup'
 
     $package_name       = 'neutron-common'
     $server_package     = 'neutron-server'

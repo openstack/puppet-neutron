@@ -138,6 +138,7 @@ class neutron::plugins::ml2 (
     Package['neutron-plugin-ml2'] -> Neutron_plugin_ml2<||>
     Package['neutron-plugin-ml2'] -> File['/etc/neutron/plugin.ini']
   } else {
+    Package <| title == 'neutron-server' |> -> Neutron_plugin_ml2<||>
     Package['neutron'] -> File['/etc/neutron/plugin.ini']
   }
 

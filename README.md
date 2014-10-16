@@ -1,7 +1,7 @@
 neutron
 ===================================
 
-4.0.0 - 2014.1.0 - Icehouse
+4.3.0 - 2014.1.0 - Icehouse
 
 #### Table of Contents
 
@@ -123,6 +123,21 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 
 Release Notes
 -------------
+
+**4.3.0**
+
+* Added parameter to specify number of RPC workers to spawn
+* Added ability to manage Neutron ML2 plugin
+* Fixed ssl parameter requirements when using kombu and rabbit
+* Added ability to hide secret neutron configs from logs and fixed password leaking
+* Added neutron plugin config file specification in neutron-server config
+* Fixed installation of ML2 plugin on Ubuntu
+* Added support for Cisco ML2 Mech Driver
+* Fixed quotas parameters in neutron config
+* Added parameter to configure dhcp_agent_notification in neutron config
+* Added class for linuxbridge support
+* Fixed neutron-server restart
+* Undeprecated enable_security_group parameter
 
 **4.2.0**
 

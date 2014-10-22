@@ -105,12 +105,18 @@ describe Puppet::Provider::Neutron do
     end
 
     ['[Errno 111] Connection refused',
-     '(HTTP 400)'].reverse.each do |valid_message|
+     '400-{\'message\': \'\'}',
+     '(HTTP 400)',
+     '503 Service Unavailable',
+     '504 Gateway Time-out',
+     'Maximum attempts reached',
+     'Unauthorized: bad credentials',
+     'Max retries exceeded'].reverse.each do |valid_message|
       it "should retry when neutron cli returns with error #{valid_message}" do
         klass.expects(:get_neutron_credentials).with().returns({})
-        klass.expects(:sleep).with(10).returns(nil)
+        klass.expects(:sleep).with(2).returns(nil)
         klass.expects(:neutron).twice.with(['test_retries']).raises(
-          Exception, valid_message).then.returns('')
+          Puppet::ExecutionFailure, valid_message).then.returns('')
         klass.auth_neutron('test_retries')
       end
     end

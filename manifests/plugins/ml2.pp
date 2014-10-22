@@ -161,4 +161,7 @@ class neutron::plugins::ml2 (
   if $firewall_driver {
     warning('firewall_driver value is set in ::neutron::agents::ml2::ovs, argument ignored.')
   }
+
+  Neutron_plugin_ml2<||> ~> Exec<| title == 'neutron-db-sync' |>
+
 }

@@ -227,6 +227,7 @@ class neutron::server (
   Nova_admin_tenant_id_setter<||> ~> Service['neutron-server']
   Neutron_config<||>     ~> Service['neutron-server']
   Neutron_api_config<||> ~> Service['neutron-server']
+  Class['neutron::policy'] ~> Service['neutron-server']
 
   if $l3_ha {
     if $min_l3_agents_per_router <= $max_l3_agents_per_router or $max_l3_agents_per_router == '0' {
@@ -351,6 +352,7 @@ class neutron::server (
     Package['neutron-server'] -> Neutron_api_config<||>
     Package['neutron-server'] -> Neutron_config<||>
     Package['neutron-server'] -> Service['neutron-server']
+    Package['neutron-server'] -> Class['neutron::policy']
     package { 'neutron-server':
       ensure => $package_ensure,
       name   => $::neutron::params::server_package,
@@ -358,6 +360,7 @@ class neutron::server (
   } else {
     # Some platforms (RedHat) does not provide a neutron-server package.
     # The neutron api config file is provided by the neutron package.
+    Package['neutron'] -> Class['neutron::policy']
     Package['neutron'] -> Neutron_api_config<||>
   }
 

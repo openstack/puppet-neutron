@@ -23,7 +23,6 @@ class neutron::policy (
   }
   class { 'openstacklib::policy' :
     policies => $policies,
-    before   => Service['neutron-server'],
   }
 
 }

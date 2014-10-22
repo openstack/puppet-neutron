@@ -54,6 +54,7 @@ describe 'neutron::server' do
     end
 
     it { should contain_class('neutron::params') }
+    it { should contain_class('neutron::policy') }
 
     it 'configures authentication middleware' do
       should contain_neutron_api_config('filter:authtoken/auth_host').with_value(p[:auth_host]);

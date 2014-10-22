@@ -273,6 +273,7 @@ class neutron::server (
       require     => Neutron_config['database/connection'],
       refreshonly => true
     }
+    Neutron_config<||> ~> Exec['neutron-db-sync']
   }
 
   neutron_config {

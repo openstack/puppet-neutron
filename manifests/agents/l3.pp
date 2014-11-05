@@ -99,29 +99,37 @@
 #   'dvr_snat': enable DVR with centralized SNAT support (DVR for single-host, for testing only)
 #   Defaults to 'legacy'
 #
+# [*allow_automatic_l3agent_failover*]
+#   (optional) Automatically reschedule routers from offline L3 agents to online
+#   L3 agents.
+#   This is another way to run virtual routers in highly available way but with slow
+#   failover performances compared to Keepalived feature in Neutron L3 Agent.
+#   Defaults to 'False'
+#
 class neutron::agents::l3 (
-  $package_ensure               = 'present',
-  $enabled                      = true,
-  $manage_service               = true,
-  $debug                        = false,
-  $external_network_bridge      = 'br-ex',
-  $use_namespaces               = true,
-  $interface_driver             = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $router_id                    = undef,
-  $gateway_external_network_id  = undef,
-  $handle_internal_only_routers = true,
-  $metadata_port                = '9697',
-  $send_arp_for_ha              = '3',
-  $periodic_interval            = '40',
-  $periodic_fuzzy_delay         = '5',
-  $enable_metadata_proxy        = true,
-  $network_device_mtu           = undef,
-  $router_delete_namespaces     = false,
-  $ha_enabled                   = false,
-  $ha_vrrp_auth_type            = 'PASS',
-  $ha_vrrp_auth_password        = undef,
-  $ha_vrrp_advert_int           = '3',
-  $agent_mode                   = 'legacy',
+  $package_ensure                   = 'present',
+  $enabled                          = true,
+  $manage_service                   = true,
+  $debug                            = false,
+  $external_network_bridge          = 'br-ex',
+  $use_namespaces                   = true,
+  $interface_driver                 = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $router_id                        = undef,
+  $gateway_external_network_id      = undef,
+  $handle_internal_only_routers     = true,
+  $metadata_port                    = '9697',
+  $send_arp_for_ha                  = '3',
+  $periodic_interval                = '40',
+  $periodic_fuzzy_delay             = '5',
+  $enable_metadata_proxy            = true,
+  $network_device_mtu               = undef,
+  $router_delete_namespaces         = false,
+  $ha_enabled                       = false,
+  $ha_vrrp_auth_type                = 'PASS',
+  $ha_vrrp_auth_password            = undef,
+  $ha_vrrp_advert_int               = '3',
+  $agent_mode                       = 'legacy',
+  $allow_automatic_l3agent_failover = false,
 ) {
 
   include neutron::params
@@ -138,20 +146,21 @@ class neutron::agents::l3 (
   }
 
   neutron_l3_agent_config {
-    'DEFAULT/debug':                        value => $debug;
-    'DEFAULT/external_network_bridge':      value => $external_network_bridge;
-    'DEFAULT/use_namespaces':               value => $use_namespaces;
-    'DEFAULT/interface_driver':             value => $interface_driver;
-    'DEFAULT/router_id':                    value => $router_id;
-    'DEFAULT/gateway_external_network_id':  value => $gateway_external_network_id;
-    'DEFAULT/handle_internal_only_routers': value => $handle_internal_only_routers;
-    'DEFAULT/metadata_port':                value => $metadata_port;
-    'DEFAULT/send_arp_for_ha':              value => $send_arp_for_ha;
-    'DEFAULT/periodic_interval':            value => $periodic_interval;
-    'DEFAULT/periodic_fuzzy_delay':         value => $periodic_fuzzy_delay;
-    'DEFAULT/enable_metadata_proxy':        value => $enable_metadata_proxy;
-    'DEFAULT/router_delete_namespaces':     value => $router_delete_namespaces;
-    'DEFAULT/agent_mode':                   value => $agent_mode;
+    'DEFAULT/debug':                            value => $debug;
+    'DEFAULT/external_network_bridge':          value => $external_network_bridge;
+    'DEFAULT/use_namespaces':                   value => $use_namespaces;
+    'DEFAULT/interface_driver':                 value => $interface_driver;
+    'DEFAULT/router_id':                        value => $router_id;
+    'DEFAULT/gateway_external_network_id':      value => $gateway_external_network_id;
+    'DEFAULT/handle_internal_only_routers':     value => $handle_internal_only_routers;
+    'DEFAULT/metadata_port':                    value => $metadata_port;
+    'DEFAULT/send_arp_for_ha':                  value => $send_arp_for_ha;
+    'DEFAULT/periodic_interval':                value => $periodic_interval;
+    'DEFAULT/periodic_fuzzy_delay':             value => $periodic_fuzzy_delay;
+    'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;
+    'DEFAULT/router_delete_namespaces':         value => $router_delete_namespaces;
+    'DEFAULT/agent_mode':                       value => $agent_mode;
+    'DEFAULT/allow_automatic_l3agent_failover': value => $allow_automatic_l3agent_failover;
   }
 
   if $network_device_mtu {

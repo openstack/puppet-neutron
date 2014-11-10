@@ -16,8 +16,9 @@ describe 'neutron::policy' do
     end
 
     it 'set up the policies' do
-      should contain_class('openstacklib::policy').with({
-        :policies => params[:policies]
+      should contain_openstacklib__policy__base('context_is_admin').with({
+        :key   => 'context_is_admin',
+        :value => 'foo:bar'
       })
     end
   end

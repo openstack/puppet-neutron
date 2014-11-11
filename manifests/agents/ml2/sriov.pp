@@ -70,6 +70,7 @@ class neutron::agents::ml2::sriov (
   package { 'neutron-sriov-nic-agent':
     ensure => $package_ensure,
     name   => $::neutron::params::sriov_nic_agent_package,
+    tag    => 'openstack',
   }
 
   if $enabled {

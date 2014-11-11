@@ -96,6 +96,7 @@ class neutron::agents::vpnaas (
     package { 'neutron-vpnaas-agent':
       ensure => $package_ensure,
       name   => $::neutron::params::vpnaas_agent_package,
+      tag    => 'openstack',
     }
   } else {
     Package['neutron'] -> Neutron_vpnaas_agent_config<||>

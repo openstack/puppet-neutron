@@ -35,7 +35,8 @@ describe 'neutron::agents::ml2::sriov' do
     it 'installs neutron sriov-nic agent package' do
       is_expected.to contain_package('neutron-sriov-nic-agent').with(
         :name   => platform_params[:sriov_nic_agent_package],
-        :ensure => p[:package_ensure]
+        :ensure => p[:package_ensure],
+        :tag    => 'openstack'
       )
       is_expected.to contain_package('neutron-sriov-nic-agent').with_before(/Neutron_plugin_ml2\[.+\]/)
     end

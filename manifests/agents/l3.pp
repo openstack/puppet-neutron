@@ -180,6 +180,7 @@ class neutron::agents::l3 (
       ensure  => $package_ensure,
       name    => $::neutron::params::l3_agent_package,
       require => Package['neutron'],
+      tag     => 'openstack',
     }
   } else {
     # Some platforms (RedHat) does not provide a neutron L3 agent package.

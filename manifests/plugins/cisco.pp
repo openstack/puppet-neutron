@@ -122,6 +122,7 @@ class neutron::plugins::cisco(
   package { 'neutron-plugin-cisco':
     ensure => $package_ensure,
     name   => $::neutron::params::cisco_server_package,
+    tag    => 'openstack',
   }
 
 

@@ -72,7 +72,8 @@ describe 'neutron::agents::vpnaas' do
       if platform_params.has_key?(:vpnaas_agent_package)
         is_expected.to contain_package('neutron-vpnaas-agent').with(
           :name   => platform_params[:vpnaas_agent_package],
-          :ensure => p[:package_ensure]
+          :ensure => p[:package_ensure],
+          :tag    => 'openstack'
         )
         is_expected.to contain_package('neutron').with_before(/Package\[neutron-vpnaas-agent\]/)
         is_expected.to contain_package('neutron-vpnaas-agent').with_before(/Neutron_vpnaas_agent_config\[.+\]/)

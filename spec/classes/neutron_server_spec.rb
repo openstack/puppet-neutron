@@ -72,7 +72,8 @@ describe 'neutron::server' do
       if platform_params.has_key?(:server_package)
         is_expected.to contain_package('neutron-server').with(
           :name   => platform_params[:server_package],
-          :ensure => p[:package_ensure]
+          :ensure => p[:package_ensure],
+          :tag    => 'openstack'
         )
         is_expected.to contain_package('neutron-server').with_before(/Neutron_api_config\[.+\]/)
         is_expected.to contain_package('neutron-server').with_before(/Neutron_config\[.+\]/)

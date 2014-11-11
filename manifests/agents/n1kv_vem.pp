@@ -182,6 +182,7 @@ class neutron::agents::n1kv_vem (
       ensure   => $n1kv_version,
       provider => $::neutron::params::package_provider,
       source   => $vemtgtimg,
+      tag      => 'openstack',
       require  => File[$vemtgtimg]
     }
   } else {
@@ -198,7 +199,8 @@ class neutron::agents::n1kv_vem (
       }
     }
     package {'nexus1000v':
-      ensure => $package_ensure
+      ensure => $package_ensure,
+      tag    => 'openstack',
     }
   }
 

@@ -53,7 +53,8 @@ describe 'neutron::agents::dhcp' do
       if platform_params.has_key?(:dhcp_agent_package)
         is_expected.to contain_package('neutron-dhcp-agent').with(
           :name   => platform_params[:dhcp_agent_package],
-          :ensure => p[:package_ensure]
+          :ensure => p[:package_ensure],
+          :tag    => 'openstack'
         )
         is_expected.to contain_package('neutron').with_before(/Package\[neutron-dhcp-agent\]/)
         is_expected.to contain_package('neutron-dhcp-agent').with_before(/Neutron_dhcp_agent_config\[.+\]/)

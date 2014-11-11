@@ -36,7 +36,8 @@ describe 'neutron::plugins::nvp' do
     it 'should have' do
       is_expected.to contain_package('neutron-plugin-nvp').with(
                  :name   => platform_params[:nvp_server_package],
-                 :ensure => p[:package_ensure]
+                 :ensure => p[:package_ensure],
+                 :tag    => 'openstack'
              )
     end
 

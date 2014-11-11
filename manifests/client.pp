@@ -17,6 +17,7 @@ class neutron::client (
   package { 'python-neutronclient':
     ensure => $package_ensure,
     name   => $::neutron::params::client_package,
+    tag    => 'openstack',
   }
 
 }

@@ -51,6 +51,7 @@ class neutron::plugins::linuxbridge (
   package { 'neutron-plugin-linuxbridge':
     ensure => $package_ensure,
     name   => $::neutron::params::linuxbridge_server_package,
+    tag    => 'openstack',
   }
 
   if $sql_connection {

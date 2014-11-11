@@ -51,7 +51,8 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
 
     it 'installs ncclient package' do
       is_expected.to contain_package('python-ncclient').with(
-        :ensure => 'installed'
+        :ensure => 'installed',
+        :tag    => 'openstack'
       )
     end
 

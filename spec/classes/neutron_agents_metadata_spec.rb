@@ -93,7 +93,8 @@ describe 'neutron::agents::metadata' do
     it 'installs neutron metadata agent package' do
       is_expected.to contain_package('neutron-metadata').with(
         :ensure => params[:package_ensure],
-        :name   => platform_params[:metadata_agent_package]
+        :name   => platform_params[:metadata_agent_package],
+        :tag    => 'openstack'
       )
     end
 

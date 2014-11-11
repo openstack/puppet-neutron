@@ -136,6 +136,7 @@ class neutron::agents::metadata (
       ensure  => $package_ensure,
       name    => $::neutron::params::metadata_agent_package,
       require => Package['neutron'],
+      tag     => 'openstack',
     }
   }
 

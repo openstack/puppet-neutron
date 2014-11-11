@@ -83,8 +83,8 @@ class neutron::agents::lbaas (
   package { 'neutron-lbaas-agent':
     ensure => $package_ensure,
     name   => $::neutron::params::lbaas_agent_package,
+    tag    => 'openstack',
   }
-
   if $manage_service {
     if $enabled {
       $service_ensure = 'running'

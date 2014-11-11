@@ -117,6 +117,7 @@ class neutron::agents::ovs (
     package { 'neutron-plugin-ovs-agent':
       ensure => $package_ensure,
       name   => $::neutron::params::ovs_agent_package,
+      tag    => 'openstack',
     }
   } else {
     # Some platforms (RedHat) do not provide a separate
@@ -128,6 +129,7 @@ class neutron::agents::ovs (
     ensure_resource('package', 'neutron-plugin-ovs', {
       ensure => $package_ensure,
       name   => $::neutron::params::ovs_server_package,
+      tag    => 'openstack',
     })
   }
 

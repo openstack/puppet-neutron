@@ -12,6 +12,7 @@ require 'rubygems'
 require 'net/http'
 require 'net/https'
 require 'json'
+require 'puppet/util/inifile'
 
 class KeystoneError < Puppet::Error
 end
@@ -126,6 +127,8 @@ def keystone_v2_tenants(auth_url,
 end
 
 Puppet::Type.type(:nova_admin_tenant_id_setter).provide(:ruby) do
+    @tenant_id = nil
+
     def authenticate
         keystone_v2_authenticate(
           @resource[:auth_url],
@@ -144,11 +147,17 @@ Puppet::Type.type(:nova_admin_tenant_id_setter).provide(:ruby) do
     end
 
     def exists?
-        false
+      ini_file  = Puppet::Util::IniConfig::File.new
+      ini_file.read("/etc/neutron/neutron.conf")
+      ini_file['DEFAULT'] && ini_file['DEFAULT']['nova_admin_tenant_id'] && ini_file['DEFAULT']['nova_admin_tenant_id'] == tenant_id
     end
 
     def create
         config
+    end
+
+    def tenant_id
+      @tenant_id ||= get_tenant_id
     end
 
     # This looks for the tenant specified by the 'tenant_name' parameter to
@@ -174,7 +183,7 @@ Puppet::Type.type(:nova_admin_tenant_id_setter).provide(:ruby) do
 
     def config
         Puppet::Type.type(:neutron_config).new(
-            {:name => 'DEFAULT/nova_admin_tenant_id', :value => "#{get_tenant_id}"}
+            {:name => 'DEFAULT/nova_admin_tenant_id', :value => "#{tenant_id}"}
         ).create
     end
 

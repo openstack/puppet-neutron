@@ -94,37 +94,24 @@ class neutron::keystone::auth (
 
   Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'neutron-server' |>
 
-  if $configure_user {
-    keystone_user { $auth_name:
-      ensure   => present,
-      password => $password,
-      email    => $email,
-      tenant   => $tenant,
-    }
-  }
-
   if $configure_user_role {
     Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'neutron-server' |>
-
-    keystone_user_role { "${auth_name}@${tenant}":
-      ensure => present,
-      roles  => 'admin',
-    }
   }
 
-  keystone_service { $real_service_name:
-    ensure      => present,
-    type        => $service_type,
-    description => 'Neutron Networking Service',
+  keystone::resource::service_identity { $auth_name:
+    configure_user      => $configure_user,
+    configure_user_role => $configure_user_role,
+    configure_endpoint  => $configure_endpoint,
+    service_type        => $service_type,
+    service_description => 'Neutron Networking Service',
+    service_name        => $real_service_name,
+    region              => $region,
+    password            => $password,
+    email               => $email,
+    tenant              => $tenant,
+    public_url          => "${public_protocol}://${public_address}:${real_public_port}/",
+    admin_url           => "${admin_protocol}://${admin_address}:${port}/",
+    internal_url        => "${internal_protocol}://${internal_address}:${port}/",
   }
 
-  if $configure_endpoint {
-    keystone_endpoint { "${region}/${real_service_name}":
-      ensure       => present,
-      public_url   => "${public_protocol}://${public_address}:${real_public_port}/",
-      internal_url => "${internal_protocol}://${internal_address}:${port}/",
-      admin_url    => "${admin_protocol}://${admin_address}:${port}/",
-    }
-
-  }
 }

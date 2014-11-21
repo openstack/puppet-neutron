@@ -92,10 +92,10 @@ class neutron::keystone::auth (
     $real_public_port = $public_port
   }
 
-  Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'neutron-server' |>
+  Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| title == 'neutron-server' |>
 
   if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'neutron-server' |>
+    Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| title == 'neutron-server' |>
   }
 
   keystone::resource::service_identity { $auth_name:

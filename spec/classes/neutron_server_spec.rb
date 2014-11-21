@@ -94,6 +94,7 @@ describe 'neutron::server' do
       should contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(
         :ensure => 'absent'
       )
+      should contain_service('neutron-server').with_name('neutron-server')
       should contain_neutron_config('DEFAULT/api_workers').with_value(facts[:processorcount])
       should contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:processorcount])
       should contain_neutron_config('DEFAULT/agent_down_time').with_value(p[:agent_down_time])
@@ -150,6 +151,15 @@ describe 'neutron::server' do
       end
       it 'should fail to configure HA routerd' do
         expect { subject }.to raise_error(Puppet::Error, /min_l3_agents_per_router should be less than or equal to max_l3_agents_per_router./)
+      end
+    end
+
+    context 'with custom service name' do
+      before :each do
+        params.merge!(:service_name => 'custom-service-name')
+      end
+      it 'should configure proper service name' do
+        should contain_service('neutron-server').with_name('custom-service-name')
       end
     end
   end

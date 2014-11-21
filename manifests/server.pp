@@ -16,6 +16,10 @@
 #   (optional) Whether to start/stop the service
 #   Defaults to true
 #
+# [*service_name*]
+#   (optional) The name of the neutron-server service
+#   Defaults to 'neutron-server'
+#
 # [*log_file*]
 #   REMOVED: Use log_file of neutron class instead.
 #
@@ -189,6 +193,7 @@ class neutron::server (
   $package_ensure           = 'present',
   $enabled                  = true,
   $manage_service           = true,
+  $service_name             = $::neutron::params::server_service,
   $auth_password            = false,
   $auth_type                = 'keystone',
   $auth_host                = 'localhost',
@@ -388,7 +393,7 @@ class neutron::server (
 
   service { 'neutron-server':
     ensure     => $service_ensure,
-    name       => $::neutron::params::server_service,
+    name       => $service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,

@@ -9,10 +9,6 @@ describe 'neutron::plugins::ovs' do
   let :default_params do
    {
      :package_ensure       => 'present',
-     :sql_connection       => false,
-     :sql_max_retries      => false,
-     :sql_idle_timeout     => false,
-     :reconnect_interval   => false,
      :tunnel_id_ranges     => '1:1000',
      :network_vlan_ranges  => 'physnet1:1000:2000'
    }

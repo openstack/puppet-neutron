@@ -207,14 +207,6 @@ class neutron::server (
   $l3_ha_net_cidr           = '169.254.192.0/18',
   # DEPRECATED PARAMETERS
   $mysql_module             = undef,
-  $sql_connection           = undef,
-  $connection               = undef,
-  $sql_max_retries          = undef,
-  $max_retries              = undef,
-  $sql_idle_timeout         = undef,
-  $idle_timeout             = undef,
-  $sql_reconnect_interval   = undef,
-  $retry_interval           = undef,
   $log_dir                  = undef,
   $log_file                 = undef,
   $report_interval          = undef,
@@ -246,61 +238,9 @@ class neutron::server (
     warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
   }
 
-  if $sql_connection {
-    warning('The sql_connection parameter is deprecated, use database_connection instead.')
-    $database_connection_real = $sql_connection
-  } elsif $connection {
-    warning('The connection parameter is deprecated, use database_connection instead.')
-    $database_connection_real = $connection
-  } else {
-    $database_connection_real = $database_connection
-  }
+  validate_re($database_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
-  if $sql_max_retries {
-    warning('The sql_max_retries parameter is deprecated, use database_max_retries instead.')
-    $database_max_retries_real = $sql_max_retries
-  } elsif $max_retries {
-    warning('The max_retries parameter is deprecated, use database_max_retries instead.')
-    $database_max_retries_real = $max_retries
-  } else {
-    $database_max_retries_real = $database_max_retries
-  }
-
-  if $sql_idle_timeout {
-    warning('The sql_idle_timeout parameter is deprecated, use database_idle_timeout instead.')
-    $database_idle_timeout_real = $sql_idle_timeout
-  } elsif $idle_timeout {
-    warning('The dle_timeout parameter is deprecated, use database_idle_timeout instead.')
-    $database_idle_timeout_real = $idle_timeout
-  } else {
-    $database_idle_timeout_real = $database_idle_timeout
-  }
-
-  if $sql_reconnect_interval {
-    warning('The sql_reconnect_interval parameter is deprecated, use database_retry_interval instead.')
-    $database_retry_interval_real = $sql_reconnect_interval
-  } elsif $retry_interval {
-    warning('The retry_interval parameter is deprecated, use database_retry_interval instead.')
-    $database_retry_interval_real = $retry_interval
-  } else {
-    $database_retry_interval_real = $database_retry_interval
-  }
-
-  if $log_dir {
-    fail('The log_dir parameter is removed, use log_dir of neutron class instead.')
-  }
-
-  if $log_file {
-    fail('The log_file parameter is removed, use log_file of neutron class instead.')
-  }
-
-  if $report_interval {
-    fail('The report_interval is removed, use report_interval of neutron class instead.')
-  }
-
-  validate_re($database_connection_real, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
-
-  case $database_connection_real {
+  case $database_connection {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
       require 'mysql::bindings'
       require 'mysql::bindings::python'
@@ -312,7 +252,7 @@ class neutron::server (
       $backend_package = 'python-pysqlite2'
     }
     default: {
-      fail("Invalid database_connection parameter: ${database_connection_real}")
+      fail("Invalid database_connection parameter: ${database_connection}")
     }
   }
 
@@ -339,10 +279,10 @@ class neutron::server (
     'DEFAULT/agent_down_time':         value => $agent_down_time;
     'DEFAULT/router_scheduler_driver': value => $router_scheduler_driver;
     'DEFAULT/router_distributed':      value => $router_distributed;
-    'database/connection':             value => $database_connection_real, secret => true;
-    'database/idle_timeout':           value => $database_idle_timeout_real;
-    'database/retry_interval':         value => $database_retry_interval_real;
-    'database/max_retries':            value => $database_max_retries_real;
+    'database/connection':             value => $database_connection, secret => true;
+    'database/idle_timeout':           value => $database_idle_timeout;
+    'database/retry_interval':         value => $database_retry_interval;
+    'database/max_retries':            value => $database_max_retries;
     'database/min_pool_size':          value => $database_min_pool_size;
     'database/max_pool_size':          value => $database_max_pool_size;
     'database/max_overflow':           value => $database_max_overflow;

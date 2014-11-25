@@ -7,10 +7,6 @@
 #
 class neutron::plugins::ovs (
   $package_ensure       = 'present',
-  $sql_connection       = false,
-  $sql_max_retries      = false,
-  $sql_idle_timeout     = false,
-  $reconnect_interval   = false,
   $tenant_network_type  = 'vlan',
   # NB: don't need tunnel ID range when using VLANs,
   # *but* you do need the network vlan range regardless of type,
@@ -35,22 +31,6 @@ class neutron::plugins::ovs (
       ensure  => $package_ensure,
       name    => $::neutron::params::ovs_server_package,
     }
-  }
-
-  if $sql_connection {
-    warning('sql_connection is deprecated for connection in the neutron::server class')
-  }
-
-  if $sql_max_retries {
-    warning('sql_max_retries is deprecated for max_retries in the neutron::server class')
-  }
-
-  if $sql_idle_timeout {
-    warning('sql_idle_timeout is deprecated for idle_timeout in the neutron::server class')
-  }
-
-  if $reconnect_interval {
-    warning('reconnect_interval is deprecated for retry_interval in the neutron::server class')
   }
 
   neutron_plugin_ovs {

@@ -191,16 +191,6 @@ describe 'neutron::server' do
     it_raises 'a Puppet::Error', /auth_password must be set/
   end
 
-  shared_examples_for 'a neutron server with removed log_dir parameter' do
-    before { params.merge!({ :log_dir  => '/var/log/neutron' })}
-    it_raises 'a Puppet::Error', /log_dir parameter is removed/
-  end
-
-  shared_examples_for 'a neutron server with removed log_file parameter' do
-    before { params.merge!({ :log_file  => '/var/log/neutron/blah.log' })}
-    it_raises 'a Puppet::Error', /log_file parameter is removed/
-  end
-
   shared_examples_for 'a neutron server without database synchronization' do
     before do
       params.merge!(
@@ -215,53 +205,6 @@ describe 'neutron::server' do
         :require     => 'Neutron_config[database/connection]',
         :refreshonly => true
       )
-    end
-  end
-
-  shared_examples_for 'a neutron server with deprecated parameters' do
-
-    context 'first generation' do
-      before do
-        params.merge!({
-          :sql_connection          => 'sqlite:////var/lib/neutron/ovs-deprecated_parameter.sqlite',
-          :database_connection     => 'sqlite:////var/lib/neutron/ovs-IGNORED_parameter.sqlite',
-          :sql_max_retries         => 20,
-          :database_max_retries    => 90,
-          :sql_idle_timeout        => 21,
-          :database_idle_timeout   => 91,
-          :sql_reconnect_interval  => 22,
-          :database_retry_interval => 92,
-        })
-      end
-
-      it 'configures database connection with deprecated parameters' do
-        should contain_neutron_config('database/connection').with_value(params[:sql_connection])
-        should contain_neutron_config('database/max_retries').with_value(params[:sql_max_retries])
-        should contain_neutron_config('database/idle_timeout').with_value(params[:sql_idle_timeout])
-        should contain_neutron_config('database/retry_interval').with_value(params[:sql_reconnect_interval])
-      end
-    end
-
-    context 'second generation' do
-      before do
-        params.merge!({
-          :connection              => 'sqlite:////var/lib/neutron/ovs-deprecated_parameter.sqlite',
-          :database_connection     => 'sqlite:////var/lib/neutron/ovs-IGNORED_parameter.sqlite',
-          :max_retries             => 20,
-          :database_max_retries    => 90,
-          :idle_timeout            => 21,
-          :database_idle_timeout   => 91,
-          :retry_interval          => 22,
-          :database_retry_interval => 92,
-        })
-      end
-
-      it 'configures database connection with deprecated parameters' do
-        should contain_neutron_config('database/connection').with_value(params[:connection])
-        should contain_neutron_config('database/max_retries').with_value(params[:max_retries])
-        should contain_neutron_config('database/idle_timeout').with_value(params[:idle_timeout])
-        should contain_neutron_config('database/retry_interval').with_value(params[:retry_interval])
-      end
     end
   end
 
@@ -305,11 +248,8 @@ describe 'neutron::server' do
     it_configures 'a neutron server with broken authentication'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
-    it_configures 'a neutron server with deprecated parameters'
     it_configures 'a neutron server with database_connection specified'
     it_configures 'a neutron server without database synchronization'
-    it_configures 'a neutron server with removed log_file parameter'
-    it_configures 'a neutron server with removed log_dir parameter'
   end
 
   context 'on RedHat platforms' do
@@ -326,10 +266,7 @@ describe 'neutron::server' do
     it_configures 'a neutron server with broken authentication'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
-    it_configures 'a neutron server with deprecated parameters'
     it_configures 'a neutron server with database_connection specified'
     it_configures 'a neutron server without database synchronization'
-    it_configures 'a neutron server with removed log_file parameter'
-    it_configures 'a neutron server with removed log_dir parameter'
   end
 end

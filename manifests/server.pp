@@ -144,6 +144,16 @@
 #   report_interval is a config for neutron agents, set by class neutron
 #   Defaults to: 75
 #
+# [*state_path*]
+#   (optional) Where to store dnsmasq state files. This directory must be
+#   writable by the user executing the agent
+#   Defaults to: /var/lib/neutron
+#
+# [*lock_path*]
+#   (optional) Where to store dnsmasq lock files. This directory must be
+#   writable by the user executing the agent
+#   Defaults to: /var/lib/neutron/lock
+#
 # [*router_scheduler_driver*]
 #   (optional) Driver to use for scheduling router to a default L3 agent. Could be:
 #   neutron.scheduler.l3_agent_scheduler.ChanceScheduler to schedule a router in a random way
@@ -199,6 +209,8 @@ class neutron::server (
   $api_workers              = $::processorcount,
   $rpc_workers              = $::processorcount,
   $agent_down_time          = '75',
+  $state_path               = '/var/lib/neutron',
+  $lock_path                = '/var/lib/neutron/lock',
   $router_scheduler_driver  = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
   $router_distributed       = false,
   $l3_ha                    = false,
@@ -278,6 +290,8 @@ class neutron::server (
     'DEFAULT/rpc_workers':             value => $rpc_workers;
     'DEFAULT/agent_down_time':         value => $agent_down_time;
     'DEFAULT/router_scheduler_driver': value => $router_scheduler_driver;
+    'DEFAULT/state_path':              value => $state_path;
+    'DEFAULT/lock_path':               value => $lock_path;
     'DEFAULT/router_distributed':      value => $router_distributed;
     'database/connection':             value => $database_connection, secret => true;
     'database/idle_timeout':           value => $database_idle_timeout;

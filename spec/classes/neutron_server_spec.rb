@@ -121,7 +121,7 @@ describe 'neutron::server' do
         params.merge!(:l3_ha => true)
       end
       it 'should enable HA routers' do
-        should contain_neutron_config('DEFAULT/ha_enabled').with_value(true)
+        should contain_neutron_config('DEFAULT/l3_ha').with_value(true)
         should contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value('3')
         should contain_neutron_config('DEFAULT/min_l3_agents_per_router').with_value('2')
         should contain_neutron_config('DEFAULT/l3_ha_net_cidr').with_value('169.254.192.0/18')

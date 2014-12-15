@@ -395,7 +395,7 @@ describe 'neutron' do
     end
 
     it do
-      should contina_neutron_config('DEFAULT/network_device_mtu').with_value(params[:newtork_device_mtu])
+      should contain_neutron_config('DEFAULT/network_device_mtu').with_value(params[:network_device_mtu])
     end
   end
 

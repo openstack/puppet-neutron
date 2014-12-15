@@ -169,7 +169,6 @@ class neutron::agents::l3 (
       'DEFAULT/network_device_mtu':           value => $network_device_mtu;
     }
   } else {
-    warning('The neutron::l3_agent::network_device_mtu parameter is deprecated, use neutron::network_device_mtu instead.')
     neutron_l3_agent_config {
       'DEFAULT/network_device_mtu':           ensure => absent;
     }

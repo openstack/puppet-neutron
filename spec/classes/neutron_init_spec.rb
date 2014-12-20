@@ -123,6 +123,8 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/allow_overlapping_ips').with_value(false)
       should contain_neutron_config('DEFAULT/api_extensions_path').with_value(nil)
       should contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
+      should contain_neutron_config('DEFAULT/state_path').with_value('/var/lib/neutron')
+      should contain_neutron_config('DEFAULT/lock_path').with_value('/var/lib/neutron/lock')
       should contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       should contain_neutron_config('agent/report_interval').with_value('30')
     end
@@ -367,6 +369,17 @@ describe 'neutron' do
     it {
       should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
       should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
+    }
+  end
+
+  shared_examples_for 'with state and lock paths set' do
+    before { params.merge!(
+      :state_path => 'state_path',
+      :lock_path  => 'lock_path'
+    )}
+    it {
+      should contain_neutron_config('DEFAULT/state_path').with_value('state_path')
+      should contain_neutron_config('DEFAULT/lock_path').with_value('lock_path')
     }
   end
 

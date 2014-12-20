@@ -28,8 +28,6 @@ describe 'neutron::server' do
       :database_max_overflow    => '20',
       :sync_db                  => false,
       :agent_down_time          => '75',
-      :state_path               => '/var/lib/neutron',
-      :lock_path                => '/var/lib/neutron/lock',
       :router_scheduler_driver  => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
       :router_distributed       => false,
       :l3_ha                    => false,
@@ -99,8 +97,6 @@ describe 'neutron::server' do
       should contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:processorcount])
       should contain_neutron_config('DEFAULT/agent_down_time').with_value(p[:agent_down_time])
       should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
-      should contain_neutron_config('DEFAULT/state_path').with_value(p[:state_path])
-      should contain_neutron_config('DEFAULT/lock_path').with_value(p[:lock_path])
     end
 
     context 'with manage_service as false' do
@@ -160,6 +156,17 @@ describe 'neutron::server' do
       end
       it 'should configure proper service name' do
         should contain_service('neutron-server').with_name('custom-service-name')
+      end
+    end
+
+    context 'with state_path and lock_path parameters' do
+      before :each do
+        params.merge!(:state_path => 'state_path',
+                      :lock_path  => 'lock_path' )
+      end
+      it 'should override state_path and lock_path from base class' do
+        should contain_neutron_config('DEFAULT/state_path').with_value(p[:state_path])
+        should contain_neutron_config('DEFAULT/lock_path').with_value(p[:lock_path])
       end
     end
   end

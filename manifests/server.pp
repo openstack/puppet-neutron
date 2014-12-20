@@ -149,14 +149,10 @@
 #   Defaults to: 75
 #
 # [*state_path*]
-#   (optional) Where to store dnsmasq state files. This directory must be
-#   writable by the user executing the agent
-#   Defaults to: /var/lib/neutron
+#   (optional) Deprecated.  Use state_path parameter on base neutron class instead.
 #
 # [*lock_path*]
-#   (optional) Where to store dnsmasq lock files. This directory must be
-#   writable by the user executing the agent
-#   Defaults to: /var/lib/neutron/lock
+#   (optional) Deprecated.  Use lock_path parameter on base neutron class instead.
 #
 # [*router_scheduler_driver*]
 #   (optional) Driver to use for scheduling router to a default L3 agent. Could be:
@@ -214,8 +210,6 @@ class neutron::server (
   $api_workers              = $::processorcount,
   $rpc_workers              = $::processorcount,
   $agent_down_time          = '75',
-  $state_path               = '/var/lib/neutron',
-  $lock_path                = '/var/lib/neutron/lock',
   $router_scheduler_driver  = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
   $router_distributed       = false,
   $l3_ha                    = false,
@@ -227,6 +221,8 @@ class neutron::server (
   $log_dir                  = undef,
   $log_file                 = undef,
   $report_interval          = undef,
+  $state_path               = undef,
+  $lock_path                = undef,
 ) {
 
   include neutron::params
@@ -295,8 +291,6 @@ class neutron::server (
     'DEFAULT/rpc_workers':             value => $rpc_workers;
     'DEFAULT/agent_down_time':         value => $agent_down_time;
     'DEFAULT/router_scheduler_driver': value => $router_scheduler_driver;
-    'DEFAULT/state_path':              value => $state_path;
-    'DEFAULT/lock_path':               value => $lock_path;
     'DEFAULT/router_distributed':      value => $router_distributed;
     'database/connection':             value => $database_connection, secret => true;
     'database/idle_timeout':           value => $database_idle_timeout;
@@ -305,6 +299,28 @@ class neutron::server (
     'database/min_pool_size':          value => $database_min_pool_size;
     'database/max_pool_size':          value => $database_max_pool_size;
     'database/max_overflow':           value => $database_max_overflow;
+  }
+
+  if $state_path {
+    # If we got state_path here, display deprecation warning and override the value from
+    # the base class.  This preserves the behavior of before state_path was deprecated.
+
+    warning('The state_path parameter is deprecated.  Use the state_path parameter on the base neutron class instead.')
+
+    Neutron_config <| title == 'DEFAULT/state_path' |> {
+      value => $state_path,
+    }
+  }
+
+  if $lock_path {
+    # If we got lock_path here, display deprecation warning and override the value from
+    # the base class.  This preserves the behavior of before lock_path was deprecated.
+
+    warning('The lock_path parameter is deprecated.  Use the lock_path parameter on the base neutron class instead.')
+
+    Neutron_config <| title == 'DEFAULT/lock_path' |> {
+      value  => $lock_path,
+    }
   }
 
   if ($::neutron::params::server_package) {

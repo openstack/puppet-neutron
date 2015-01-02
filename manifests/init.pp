@@ -128,7 +128,7 @@
 #   (optional) SSL version to use (valid only if SSL enabled).
 #   Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
 #   available on some distributions.
-#   Defaults to 'SSLv3'
+#   Defaults to 'TLSv1'
 #
 # [*qpid_hostname*]
 # [*qpid_port*]
@@ -211,7 +211,7 @@ class neutron (
   $kombu_ssl_ca_certs          = undef,
   $kombu_ssl_certfile          = undef,
   $kombu_ssl_keyfile           = undef,
-  $kombu_ssl_version           = 'SSLv3',
+  $kombu_ssl_version           = 'TLSv1',
   $qpid_hostname               = 'localhost',
   $qpid_port                   = '5672',
   $qpid_username               = 'guest',

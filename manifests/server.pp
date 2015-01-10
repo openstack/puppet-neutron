@@ -277,11 +277,12 @@ class neutron::server (
       # RH platforms
       Package<| title == 'neutron' |> ~> Exec['neutron-db-sync']
     }
+
     exec { 'neutron-db-sync':
       command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head',
       path        => '/usr/bin',
       before      => Service['neutron-server'],
-      require     => Neutron_config['database/connection'],
+      subscribe   => Neutron_config['database/connection'],
       refreshonly => true
     }
   }

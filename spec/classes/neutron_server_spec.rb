@@ -250,7 +250,41 @@ describe 'neutron::server' do
       })
     end
     it 'configures auth_uri' do
-      should contain_neutron_api_config('filter:authtoken/auth_uri').with_value("https://foo.bar:1234/");
+      should contain_neutron_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:1234/");
+    end
+  end
+
+  describe "with custom keystone identity_uri" do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+    before do
+      params.merge!({
+        :identity_uri => 'https://foo.bar:1234/',
+      })
+    end
+    it 'configures identity_uri' do
+      should contain_neutron_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
+    end
+  end
+
+  describe "with custom keystone identity_uri and auth_uri" do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+    before do
+      params.merge!({
+        :identity_uri => 'https://foo.bar:35357/',
+        :auth_uri => 'https://foo.bar:5000/v2.0/',
+      })
+    end
+    it 'configures identity_uri and auth_uri but deprecates old auth settings' do
+      should contain_neutron_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
+      should contain_neutron_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
+      should contain_neutron_config('keystone_authtoken/auth_admin_prefix').with(:ensure => 'absent')
+      should contain_neutron_config('keystone_authtoken/auth_port').with(:ensure => 'absent')
+      should contain_neutron_config('keystone_authtoken/auth_protocol').with(:ensure => 'absent')
+      should contain_neutron_config('keystone_authtoken/auth_host').with(:ensure => 'absent')
     end
   end
 

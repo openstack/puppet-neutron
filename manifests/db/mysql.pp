@@ -58,4 +58,5 @@ class neutron::db::mysql (
     allowed_hosts => $allowed_hosts,
   }
   ::Openstacklib::Db::Mysql['neutron'] ~> Service <| title == 'neutron-server' |>
+  ::Openstacklib::Db::Mysql['neutron'] ~> Exec <| title == 'neutron-db-sync' |>
 }

@@ -41,5 +41,5 @@ class neutron::db::postgresql(
   }
 
   ::Openstacklib::Db::Postgresql['neutron'] ~> Service <| title == 'neutron-server' |>
-
+  ::Openstacklib::Db::Postgresql['neutron'] ~> Exec <| title == 'neutron-db-sync' |>
 }

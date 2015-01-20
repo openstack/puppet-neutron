@@ -101,7 +101,7 @@ correctly configured.")
         else
           wait = end_time - current_time
           Puppet::debug("Non-fatal error: \"#{e.message}\"")
-          notice("Neutron API not avalaible. Wait up to #{wait} sec.")
+          notice("Neutron API not available. Wait up to #{wait} sec.")
         end
         sleep(2)
         # Note(xarses): Don't remove, we know that there is one of the

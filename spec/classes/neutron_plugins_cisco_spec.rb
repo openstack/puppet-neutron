@@ -42,8 +42,8 @@ describe 'neutron::plugins::cisco' do
     it 'should create plugin symbolic link' do
       should contain_file('/etc/neutron/plugin.ini').with(
         :ensure  => 'link',
-        :target  => '/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini',
-        :require => 'Package[neutron-plugin-ovs]'
+        :target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
+        :require => 'Package[neutron-plugin-cisco]'
       )
     end
 

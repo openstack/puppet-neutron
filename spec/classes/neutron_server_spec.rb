@@ -251,6 +251,11 @@ describe 'neutron::server' do
     end
     it 'configures auth_uri' do
       should contain_neutron_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:1234/");
+      # since only auth_uri is set the deprecated auth parameters should
+      # still get set in case they are still in use
+      should contain_neutron_config('keystone_authtoken/auth_host').with_value('localhost');
+      should contain_neutron_config('keystone_authtoken/auth_port').with_value('35357');
+      should contain_neutron_config('keystone_authtoken/auth_protocol').with_value('http');
     end
   end
 
@@ -265,6 +270,11 @@ describe 'neutron::server' do
     end
     it 'configures identity_uri' do
       should contain_neutron_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
+      # since only auth_uri is set the deprecated auth parameters should
+      # still get set in case they are still in use
+      should contain_neutron_config('keystone_authtoken/auth_host').with_value('localhost');
+      should contain_neutron_config('keystone_authtoken/auth_port').with_value('35357');
+      should contain_neutron_config('keystone_authtoken/auth_protocol').with_value('http');
     end
   end
 

@@ -360,7 +360,7 @@ class neutron::server (
       }
 
       # if both auth_uri and identity_uri are set we skip these deprecated settings entirely
-      if !$auth_uri or !identity_uri {
+      if !$auth_uri or !$identity_uri {
 
         if $auth_admin_prefix {
           warning('The auth_admin_prefix parameter is deprecated. Please use auth_uri and identity_uri instead.')

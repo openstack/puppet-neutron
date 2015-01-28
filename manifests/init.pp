@@ -379,7 +379,7 @@ class neutron (
     }
   }
 
-  if $rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' {
+  if $rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' or $rpc_backend == 'rabbit' {
     if ! $rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }

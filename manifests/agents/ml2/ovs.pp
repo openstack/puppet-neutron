@@ -228,6 +228,7 @@ class neutron::agents::ml2::ovs (
 
   if $enabled {
     $service_ensure = 'running'
+    Neutron_config<||> ~> Service['neutron-ovs-agent-service']
   } else {
     $service_ensure = 'stopped'
   }

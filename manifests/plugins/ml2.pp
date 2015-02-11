@@ -59,14 +59,14 @@
 #   well as ranges of VLAN tags on each available for
 #   allocation to tenant networks.
 #   Should be an array with vlan_min = 1 & vlan_max = 4094 (IEEE 802.1Q)
-#   Default to empty.
+#   Default to ['physnet1:1000:2999'].
 #
 # [*tunnel_id_ranges*]
 #   (optional) Comma-separated list of <tun_min>:<tun_max> tuples
 #   enumerating ranges of GRE tunnel IDs that are
 #   available for tenant network allocation
 #   Should be an array with tun_max +1 - tun_min > 1000000
-#   Default to empty.
+#   Default to ['20:100'].
 #
 # [*vxlan_group*]
 #   (optional) Multicast group for VXLAN.
@@ -74,14 +74,14 @@
 #   broadcast traffic to this multicast group. When left unconfigured, will
 #   disable multicast VXLAN mode
 #   Should be an Multicast IP (v4 or v6) address.
-#   Default to 'None'.
+#   Default to '224.0.0.1'.
 #
 # [*vni_ranges*]
 #   (optional) Comma-separated list of <vni_min>:<vni_max> tuples
 #   enumerating ranges of VXLAN VNI IDs that are
 #   available for tenant network allocation.
 #   Min value is 0 and Max value is 16777215.
-#   Default to empty.
+#   Default to ['10:100'].
 #
 # [*enable_security_group*]
 #   (optional) Controls if neutron security group is enabled or not.

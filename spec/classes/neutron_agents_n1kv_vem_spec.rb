@@ -17,7 +17,7 @@ describe 'neutron::agents::n1kv_vem' do
 
   it 'install n1kv-vem' do
     should contain_package('libnl').with_before('Package[nexus1000v]')
-    should contain_package('openvswitch').with_before('Package[nexus1000v]')
+    should contain_service('openvswitch').with_notify('Package[nexus1000v]')
     should contain_package('nexus1000v').with_notify('Service[nexus1000v]')
     should contain_service('nexus1000v').with_ensure('running')
   end
@@ -66,7 +66,9 @@ describe 'neutron::agents::n1kv_vem' do
     {
       :n1kv_vsm_ip        => '9.0.0.1',
       :n1kv_vsm_domain_id => 900,
-      :host_mgmt_intf     => 'eth9'
+      :host_mgmt_intf     => 'eth9',
+      :portdb             => 'ovs',
+      :fastpath_flood     => 'disable'
     }
     end
     it do
@@ -77,11 +79,15 @@ describe 'neutron::agents::n1kv_vem' do
       should contain_file('/etc/n1kv/n1kv.conf') \
         .with_content(/^host-mgmt-intf eth9/)
       should contain_file('/etc/n1kv/n1kv.conf') \
+        .with_content(/^portdb ovs/)
+      should contain_file('/etc/n1kv/n1kv.conf') \
         .without_content(/^phys/)
       should contain_file('/etc/n1kv/n1kv.conf') \
         .without_content(/^virt/)
       should contain_file('/etc/n1kv/n1kv.conf') \
         .with_content(/^node-type compute/)
+      should contain_file('/etc/n1kv/n1kv.conf') \
+        .with_content(/^fastpath-flood disable/)
     end
   end
 
@@ -96,6 +102,34 @@ describe 'neutron::agents::n1kv_vem' do
         .with_content(/^node-type network/)
       should contain_file('/etc/n1kv/n1kv.conf') \
         .without_content(/^node-type compute/)
+    end
+  end
+
+  context 'verify portdb' do
+    let :params do
+    {
+      :portdb             => 'vem',
+    }
+    end
+    it do
+      should contain_file('/etc/n1kv/n1kv.conf') \
+        .with_content(/^portdb vem/)
+      should contain_file('/etc/n1kv/n1kv.conf') \
+        .without_content(/^portdb ovs/)
+    end
+  end
+
+  context 'verify fastpath_flood' do
+    let :params do
+    {
+      :fastpath_flood     => 'enable',
+    }
+    end
+    it do
+      should contain_file('/etc/n1kv/n1kv.conf') \
+        .with_content(/^fastpath-flood enable/)
+      should contain_file('/etc/n1kv/n1kv.conf') \
+        .without_content(/^fastpath-flood disable/)
     end
   end
 

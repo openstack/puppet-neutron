@@ -116,7 +116,7 @@ class neutron::plugins::ml2 (
   $sriov_agent_required      = false,
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Neutron_plugin_ml2<||> ~> Service<| title == 'neutron-server' |>
 
@@ -139,8 +139,8 @@ class neutron::plugins::ml2 (
   # In RH, the link is used to start Neutron process but in Debian, it's used only
   # to manage database synchronization.
   file {'/etc/neutron/plugin.ini':
-    ensure  => link,
-    target  => '/etc/neutron/plugins/ml2/ml2_conf.ini'
+    ensure => link,
+    target => '/etc/neutron/plugins/ml2/ml2_conf.ini'
   }
 
   # Some platforms do not have a dedicated ml2 plugin package

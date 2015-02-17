@@ -78,7 +78,7 @@ class neutron::agents::dhcp (
   $enable_metadata_network  = false
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Neutron_config<||>            ~> Service['neutron-dhcp-service']
   Neutron_dhcp_agent_config<||> ~> Service['neutron-dhcp-service']
@@ -131,8 +131,8 @@ class neutron::agents::dhcp (
     Package['neutron-dhcp-agent'] -> Neutron_config<||>
     Package['neutron-dhcp-agent'] -> Neutron_dhcp_agent_config<||>
     package { 'neutron-dhcp-agent':
-      ensure  => $package_ensure,
-      name    => $::neutron::params::dhcp_agent_package,
+      ensure => $package_ensure,
+      name   => $::neutron::params::dhcp_agent_package,
     }
   } else {
     # Some platforms (RedHat) do not provide a neutron DHCP agent package.

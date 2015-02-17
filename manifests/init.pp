@@ -266,7 +266,7 @@ class neutron (
   $lock_path                   = '/var/lib/neutron/lock',
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Package['neutron'] -> Neutron_config<||>
   Package['neutron'] -> Nova_Admin_Tenant_Id_Setter<||>
@@ -305,8 +305,8 @@ class neutron (
   }
 
   file { '/etc/neutron':
-    ensure  => directory,
-    mode    => '0750',
+    ensure => directory,
+    mode   => '0750',
   }
 
   file { '/etc/neutron/neutron.conf': }

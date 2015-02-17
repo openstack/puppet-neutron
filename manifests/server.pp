@@ -226,8 +226,8 @@ class neutron::server (
   $lock_path                = undef,
 ) {
 
-  include neutron::params
-  include neutron::policy
+  include ::neutron::params
+  include ::neutron::policy
   require keystone::python
 
   Nova_admin_tenant_id_setter<||> ~> Service['neutron-server']

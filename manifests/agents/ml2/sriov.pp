@@ -55,7 +55,7 @@ class neutron::agents::ml2::sriov (
   $exclude_devices            = [],
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Neutron_plugin_ml2<||> ~> Service['neutron-sriov-nic-agent-service']
 
@@ -68,8 +68,8 @@ class neutron::agents::ml2::sriov (
 
   Package['neutron-sriov-nic-agent'] -> Neutron_plugin_ml2<||>
   package { 'neutron-sriov-nic-agent':
-    ensure  => $package_ensure,
-    name    => $::neutron::params::sriov_nic_agent_package,
+    ensure => $package_ensure,
+    name   => $::neutron::params::sriov_nic_agent_package,
   }
 
   if $enabled {

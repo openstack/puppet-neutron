@@ -43,7 +43,7 @@ class neutron::services::fwaas (
   $vpnaas_agent_package = false
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   if ($::osfamily == 'Debian') {
     # Debian platforms

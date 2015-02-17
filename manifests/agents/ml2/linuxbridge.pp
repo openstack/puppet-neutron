@@ -71,7 +71,7 @@ class neutron::agents::ml2::linuxbridge (
   validate_array($tunnel_types)
   validate_array($physical_interface_mappings)
 
-  include neutron::params
+  include ::neutron::params
 
   Package['neutron-plugin-linuxbridge-agent'] -> Neutron_plugin_linuxbridge<||>
   Neutron_plugin_linuxbridge<||> ~> Service['neutron-plugin-linuxbridge-agent']
@@ -127,16 +127,16 @@ class neutron::agents::ml2::linuxbridge (
 
   if $::neutron::params::linuxbridge_agent_package {
     package { 'neutron-plugin-linuxbridge-agent':
-      ensure  => $package_ensure,
-      name    => $::neutron::params::linuxbridge_agent_package,
+      ensure => $package_ensure,
+      name   => $::neutron::params::linuxbridge_agent_package,
     }
   } else {
     # Some platforms (RedHat) do not provide a separate
     # neutron plugin linuxbridge agent package.
     if ! defined(Package['neutron-plugin-linuxbridge-agent']) {
       package { 'neutron-plugin-linuxbridge-agent':
-        ensure  => $package_ensure,
-        name    => $::neutron::params::linuxbridge_server_package,
+        ensure => $package_ensure,
+        name   => $::neutron::params::linuxbridge_server_package,
       }
     }
   }

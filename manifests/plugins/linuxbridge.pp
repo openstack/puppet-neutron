@@ -28,7 +28,7 @@ class neutron::plugins::linuxbridge (
   $package_ensure      = 'present'
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Package['neutron'] -> Package['neutron-plugin-linuxbridge']
   Package['neutron-plugin-linuxbridge'] -> Neutron_plugin_linuxbridge<||>

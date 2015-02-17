@@ -31,7 +31,7 @@ class neutron::agents::linuxbridge (
   $manage_service  = true
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Neutron_config<||>             ~> Service['neutron-plugin-linuxbridge-service']
   Neutron_plugin_linuxbridge<||> ~> Service<| title == 'neutron-plugin-linuxbridge-service' |>
@@ -52,8 +52,8 @@ class neutron::agents::linuxbridge (
 
     if ! defined(Package['neutron-plugin-linuxbridge']) {
       package { 'neutron-plugin-linuxbridge':
-        ensure  => $package_ensure,
-        name    => $::neutron::params::linuxbridge_server_package,
+        ensure => $package_ensure,
+        name   => $::neutron::params::linuxbridge_server_package,
       }
     }
   }
@@ -72,8 +72,8 @@ class neutron::agents::linuxbridge (
   }
 
   service { 'neutron-plugin-linuxbridge-service':
-    ensure  => $service_ensure,
-    name    => $::neutron::params::linuxbridge_agent_service,
-    enable  => $enable,
+    ensure => $service_ensure,
+    name   => $::neutron::params::linuxbridge_agent_service,
+    enable => $enable,
   }
 }

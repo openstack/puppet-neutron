@@ -88,7 +88,7 @@ class neutron::agents::metadata (
   $metadata_memory_cache_ttl = 5,
   ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Package['neutron'] -> Neutron_metadata_agent_config<||>
   Neutron_config<||> ~> Service['neutron-metadata']

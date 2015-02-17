@@ -106,7 +106,7 @@ class neutron::agents::n1kv_vem (
   $manage_service       = true
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 

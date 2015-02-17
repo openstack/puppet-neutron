@@ -12,7 +12,7 @@ class neutron::client (
   $package_ensure = present
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   package { 'python-neutronclient':
     ensure => $package_ensure,

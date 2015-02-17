@@ -19,7 +19,7 @@ class neutron::plugins::ovs (
   $vxlan_udp_port       = 4789
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Package['neutron'] -> Package['neutron-plugin-ovs']
   Package['neutron-plugin-ovs'] -> Neutron_plugin_ovs<||>
@@ -28,8 +28,8 @@ class neutron::plugins::ovs (
 
   if ! defined(Package['neutron-plugin-ovs']) {
     package { 'neutron-plugin-ovs':
-      ensure  => $package_ensure,
-      name    => $::neutron::params::ovs_server_package,
+      ensure => $package_ensure,
+      name   => $::neutron::params::ovs_server_package,
     }
   }
 

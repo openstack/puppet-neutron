@@ -49,7 +49,7 @@ class neutron::agents::lbaas (
   $manage_haproxy_package = true,
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Neutron_config<||>             ~> Service['neutron-lbaas-service']
   Neutron_lbaas_agent_config<||> ~> Service['neutron-lbaas-service']
@@ -82,8 +82,8 @@ class neutron::agents::lbaas (
     Package['neutron-lbaas-agent'] -> Neutron_config<||>
     Package['neutron-lbaas-agent'] -> Neutron_lbaas_agent_config<||>
     package { 'neutron-lbaas-agent':
-      ensure  => $package_ensure,
-      name    => $::neutron::params::lbaas_agent_package,
+      ensure => $package_ensure,
+      name   => $::neutron::params::lbaas_agent_package,
     }
   } else {
     # Some platforms (RedHat) do not provide a neutron LBaaS agent package.

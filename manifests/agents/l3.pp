@@ -132,7 +132,7 @@ class neutron::agents::l3 (
   $allow_automatic_l3agent_failover = false,
 ) {
 
-  include neutron::params
+  include ::neutron::params
 
   Neutron_config<||>          ~> Service['neutron-l3']
   Neutron_l3_agent_config<||> ~> Service['neutron-l3']

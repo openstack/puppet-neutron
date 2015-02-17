@@ -25,7 +25,7 @@ class neutron::agents::ovs (
   $veth_mtu             = undef
 ) {
 
-  include neutron::params
+  include ::neutron::params
   require vswitch::ovs
 
   if $enable_tunneling and ! $local_ip {
@@ -115,8 +115,8 @@ class neutron::agents::ovs (
   if $::neutron::params::ovs_agent_package {
     Package['neutron-plugin-ovs-agent'] -> Neutron_plugin_ovs<||>
     package { 'neutron-plugin-ovs-agent':
-      ensure  => $package_ensure,
-      name    => $::neutron::params::ovs_agent_package,
+      ensure => $package_ensure,
+      name   => $::neutron::params::ovs_agent_package,
     }
   } else {
     # Some platforms (RedHat) do not provide a separate

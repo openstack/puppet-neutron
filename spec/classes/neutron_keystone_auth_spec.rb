@@ -175,4 +175,17 @@ describe 'neutron::keystone::auth' do
 
   end
 
+  describe 'when disabling endpoint configuration' do
+
+    let :params do
+      {
+        :password           => 'neutron_password',
+        :configure_endpoint => false
+      }
+    end
+
+    it { is_expected.to_not contain_keystone_endpoint('RegionOne/neutron') }
+
+  end
+
 end

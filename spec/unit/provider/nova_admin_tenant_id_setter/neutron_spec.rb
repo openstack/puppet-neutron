@@ -77,6 +77,19 @@ describe 'Puppet::Type.type(:nova_admin_tenant_id_setter)' do
             expect(provider.exists?).to be_false
             expect(provider.create).to be_nil
         end
+
+        context 'when tenant id already set' do
+            it 'should create a resource, with exists? true' do
+                mock = { 'DEFAULT' => { 'nova_admin_tenant_id' => 'UUID_SERVICES' } }
+                Puppet::Util::IniConfig::File.expects(:new).returns(mock)
+                mock.expects(:read).with('/etc/neutron/neutron.conf')
+
+                resource = Puppet::Type::Nova_admin_tenant_id_setter.new(params)
+                provider = provider_class.new(resource)
+                expect(provider.exists?).to be_true
+                expect(provider.create).to be_nil
+            end
+        end
     end
 
     # What happens if we ask for a tenant that does not exist?

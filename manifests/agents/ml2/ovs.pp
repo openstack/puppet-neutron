@@ -221,7 +221,7 @@ class neutron::agents::ml2::ovs (
       # instead of the ml2 config file.
       file { '/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini':
         ensure => link,
-        target => '/etc/neutron/plugin.ini'
+        target => '/etc/neutron/plugins/ml2/ml2_conf.ini'
       } ~> Service<| title == 'neutron-ovs-agent-service' |>
     }
   }

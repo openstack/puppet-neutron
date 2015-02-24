@@ -169,6 +169,11 @@
 #   Also can be the type of the router on the create request (admin-only attribute).
 #   Defaults to false
 #
+# [*allow_automatic_l3agent_failover*]
+#   (optional) Allow automatic rescheduling of routers from dead L3 agents with
+#   admin_state_up set to True to alive agents.
+#   Defaults to false
+#
 # [*l3_ha*]
 #   (optional) Enable high availability for virtual routers.
 #   Defaults to false
@@ -186,44 +191,45 @@
 #   Defaults to '169.254.192.0/18'
 #
 class neutron::server (
-  $package_ensure           = 'present',
-  $enabled                  = true,
-  $manage_service           = true,
-  $service_name             = $::neutron::params::server_service,
-  $auth_password            = false,
-  $auth_type                = 'keystone',
-  $auth_tenant              = 'services',
-  $auth_user                = 'neutron',
-  $auth_uri                 = false,
-  $identity_uri             = false,
-  $database_connection      = 'sqlite:////var/lib/neutron/ovs.sqlite',
-  $database_max_retries     = 10,
-  $database_idle_timeout    = 3600,
-  $database_retry_interval  = 10,
-  $database_min_pool_size   = 1,
-  $database_max_pool_size   = 10,
-  $database_max_overflow    = 20,
-  $sync_db                  = false,
-  $api_workers              = $::processorcount,
-  $rpc_workers              = $::processorcount,
-  $agent_down_time          = '75',
-  $router_scheduler_driver  = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
-  $router_distributed       = false,
-  $l3_ha                    = false,
-  $max_l3_agents_per_router = 3,
-  $min_l3_agents_per_router = 2,
-  $l3_ha_net_cidr           = '169.254.192.0/18',
+  $package_ensure                   = 'present',
+  $enabled                          = true,
+  $manage_service                   = true,
+  $service_name                     = $::neutron::params::server_service,
+  $auth_password                    = false,
+  $auth_type                        = 'keystone',
+  $auth_tenant                      = 'services',
+  $auth_user                        = 'neutron',
+  $auth_uri                         = false,
+  $identity_uri                     = false,
+  $database_connection              = 'sqlite:////var/lib/neutron/ovs.sqlite',
+  $database_max_retries             = 10,
+  $database_idle_timeout            = 3600,
+  $database_retry_interval          = 10,
+  $database_min_pool_size           = 1,
+  $database_max_pool_size           = 10,
+  $database_max_overflow            = 20,
+  $sync_db                          = false,
+  $api_workers                      = $::processorcount,
+  $rpc_workers                      = $::processorcount,
+  $agent_down_time                  = '75',
+  $router_scheduler_driver          = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
+  $router_distributed               = false,
+  $allow_automatic_l3agent_failover = false,
+  $l3_ha                            = false,
+  $max_l3_agents_per_router         = 3,
+  $min_l3_agents_per_router         = 2,
+  $l3_ha_net_cidr                   = '169.254.192.0/18',
   # DEPRECATED PARAMETERS
-  $auth_host                = 'localhost',
-  $auth_port                = '35357',
-  $auth_protocol            = 'http',
-  $auth_admin_prefix        = false,
-  $mysql_module             = undef,
-  $log_dir                  = undef,
-  $log_file                 = undef,
-  $report_interval          = undef,
-  $state_path               = undef,
-  $lock_path                = undef,
+  $auth_host                        = 'localhost',
+  $auth_port                        = '35357',
+  $auth_protocol                    = 'http',
+  $auth_admin_prefix                = false,
+  $mysql_module                     = undef,
+  $log_dir                          = undef,
+  $log_file                         = undef,
+  $report_interval                  = undef,
+  $state_path                       = undef,
+  $lock_path                        = undef,
 ) {
 
   include ::neutron::params
@@ -289,18 +295,19 @@ class neutron::server (
   }
 
   neutron_config {
-    'DEFAULT/api_workers':             value => $api_workers;
-    'DEFAULT/rpc_workers':             value => $rpc_workers;
-    'DEFAULT/agent_down_time':         value => $agent_down_time;
-    'DEFAULT/router_scheduler_driver': value => $router_scheduler_driver;
-    'DEFAULT/router_distributed':      value => $router_distributed;
-    'database/connection':             value => $database_connection, secret => true;
-    'database/idle_timeout':           value => $database_idle_timeout;
-    'database/retry_interval':         value => $database_retry_interval;
-    'database/max_retries':            value => $database_max_retries;
-    'database/min_pool_size':          value => $database_min_pool_size;
-    'database/max_pool_size':          value => $database_max_pool_size;
-    'database/max_overflow':           value => $database_max_overflow;
+    'DEFAULT/api_workers':                      value => $api_workers;
+    'DEFAULT/rpc_workers':                      value => $rpc_workers;
+    'DEFAULT/agent_down_time':                  value => $agent_down_time;
+    'DEFAULT/router_scheduler_driver':          value => $router_scheduler_driver;
+    'DEFAULT/router_distributed':               value => $router_distributed;
+    'DEFAULT/allow_automatic_l3agent_failover': value => $allow_automatic_l3agent_failover;
+    'database/connection':                      value => $database_connection, secret => true;
+    'database/idle_timeout':                    value => $database_idle_timeout;
+    'database/retry_interval':                  value => $database_retry_interval;
+    'database/max_retries':                     value => $database_max_retries;
+    'database/min_pool_size':                   value => $database_min_pool_size;
+    'database/max_pool_size':                   value => $database_max_pool_size;
+    'database/max_overflow':                    value => $database_max_overflow;
   }
 
   if $state_path {

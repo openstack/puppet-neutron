@@ -27,8 +27,7 @@ describe 'neutron::agents::l3' do
       :ha_vrrp_auth_type                => 'PASS',
       :ha_vrrp_auth_password            => nil,
       :ha_vrrp_advert_int               => '3',
-      :agent_mode                       => 'legacy',
-      :allow_automatic_l3agent_failover => false }
+      :agent_mode                       => 'legacy' }
   end
 
   let :params do
@@ -57,7 +56,6 @@ describe 'neutron::agents::l3' do
       should contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value(p[:enable_metadata_proxy])
       should contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_ensure('absent')
       should contain_neutron_l3_agent_config('DEFAULT/router_delete_namespaces').with_value(p[:router_delete_namespaces])
-      should contain_neutron_l3_agent_config('DEFAULT/allow_automatic_l3agent_failover').with_value(p[:allow_automatic_l3agent_failover])
     end
 
     it 'installs neutron l3 agent package' do

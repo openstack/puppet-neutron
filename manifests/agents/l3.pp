@@ -100,11 +100,7 @@
 #   Defaults to 'legacy'
 #
 # [*allow_automatic_l3agent_failover*]
-#   (optional) Automatically reschedule routers from offline L3 agents to online
-#   L3 agents.
-#   This is another way to run virtual routers in highly available way but with slow
-#   failover performances compared to Keepalived feature in Neutron L3 Agent.
-#   Defaults to 'False'
+#   DEPRECATED: Has no effect in this class. Use the same parameter in neutron::server instead.
 #
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
@@ -129,6 +125,7 @@ class neutron::agents::l3 (
   $ha_vrrp_auth_password            = undef,
   $ha_vrrp_advert_int               = '3',
   $agent_mode                       = 'legacy',
+  # DEPRECATED PARAMETERS
   $allow_automatic_l3agent_failover = false,
 ) {
 
@@ -136,6 +133,10 @@ class neutron::agents::l3 (
 
   Neutron_config<||>          ~> Service['neutron-l3']
   Neutron_l3_agent_config<||> ~> Service['neutron-l3']
+
+  if $allow_automatic_l3agent_failover {
+    notice('parameter allow_automatic_l3agent_failover is deprecated, use parameter in neutron::server instead')
+  }
 
   if $ha_enabled {
     neutron_l3_agent_config {
@@ -160,7 +161,6 @@ class neutron::agents::l3 (
     'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;
     'DEFAULT/router_delete_namespaces':         value => $router_delete_namespaces;
     'DEFAULT/agent_mode':                       value => $agent_mode;
-    'DEFAULT/allow_automatic_l3agent_failover': value => $allow_automatic_l3agent_failover;
   }
 
   if $network_device_mtu {

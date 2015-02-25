@@ -12,28 +12,29 @@ describe 'neutron::server' do
   end
 
   let :default_params do
-    { :package_ensure           => 'present',
-      :enabled                  => true,
-      :auth_type                => 'keystone',
-      :auth_host                => 'localhost',
-      :auth_port                => '35357',
-      :auth_tenant              => 'services',
-      :auth_user                => 'neutron',
-      :database_connection      => 'sqlite:////var/lib/neutron/ovs.sqlite',
-      :database_max_retries     => '10',
-      :database_idle_timeout    => '3600',
-      :database_retry_interval  => '10',
-      :database_min_pool_size   => '1',
-      :database_max_pool_size   => '10',
-      :database_max_overflow    => '20',
-      :sync_db                  => false,
-      :agent_down_time          => '75',
-      :router_scheduler_driver  => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
-      :router_distributed       => false,
-      :l3_ha                    => false,
-      :max_l3_agents_per_router => '3',
-      :min_l3_agents_per_router => '2',
-      :l3_ha_net_cidr           => '169.254.192.0/18'
+    { :package_ensure                   => 'present',
+      :enabled                          => true,
+      :auth_type                        => 'keystone',
+      :auth_host                        => 'localhost',
+      :auth_port                        => '35357',
+      :auth_tenant                      => 'services',
+      :auth_user                        => 'neutron',
+      :database_connection              => 'sqlite:////var/lib/neutron/ovs.sqlite',
+      :database_max_retries             => '10',
+      :database_idle_timeout            => '3600',
+      :database_retry_interval          => '10',
+      :database_min_pool_size           => '1',
+      :database_max_pool_size           => '10',
+      :database_max_overflow            => '20',
+      :sync_db                          => false,
+      :agent_down_time                  => '75',
+      :router_scheduler_driver          => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
+      :router_distributed               => false,
+      :l3_ha                            => false,
+      :max_l3_agents_per_router         => '3',
+      :min_l3_agents_per_router         => '2',
+      :l3_ha_net_cidr                   => '169.254.192.0/18',
+      :allow_automatic_l3agent_failover => false
     }
   end
 
@@ -167,6 +168,12 @@ describe 'neutron::server' do
       it 'should override state_path and lock_path from base class' do
         should contain_neutron_config('DEFAULT/state_path').with_value(p[:state_path])
         should contain_neutron_config('DEFAULT/lock_path').with_value(p[:lock_path])
+      end
+    end
+
+    context 'with allow_automatic_l3agent_failover in neutron.conf' do
+      it 'should configure allow_automatic_l3agent_failover' do
+        should contain_neutron_config('DEFAULT/allow_automatic_l3agent_failover').with_value(p[:allow_automatic_l3agent_failover])
       end
     end
   end

@@ -59,9 +59,9 @@ class neutron::services::fwaas (
     }
   } elsif($::osfamily == 'Redhat') {
     # RH platforms
-    ensure_resource( 'package', $::neutron::params::package_name,
+    ensure_resource( 'package', $::neutron::params::fwaas_package,
       { 'ensure' => $neutron::package_ensure })
-    Package[$::neutron::params::package_name] -> Neutron_fwaas_service_config<||>
+    Package[$::neutron::params::fwaas_package] -> Neutron_fwaas_service_config<||>
   }
 
   neutron_fwaas_service_config {

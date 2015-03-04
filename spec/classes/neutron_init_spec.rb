@@ -65,6 +65,8 @@ describe 'neutron' do
     it_configures 'with logging disabled'
     it_configures 'without service_plugins'
     it_configures 'with service_plugins'
+    it_configures 'without memcache_servers'
+    it_configures 'with memcache_servers'
   end
 
   shared_examples_for 'a neutron base installation' do
@@ -396,6 +398,23 @@ describe 'neutron' do
 
     it do
       should contain_neutron_config('DEFAULT/service_plugins').with_value('router,firewall,lbaas,vpnaas,metering')
+    end
+
+  end
+
+  shared_examples_for 'without memcache_servers' do
+    it { should contain_neutron_config('DEFAULT/memcached_servers').with_ensure('absent') }
+  end
+
+  shared_examples_for 'with memcache_servers' do
+    before do
+      params.merge!(
+        :memcache_servers => ['memcache1','memcache2','memcache3']
+      )
+    end
+
+    it do
+      should contain_neutron_config('DEFAULT/memcached_servers').with_value('memcache1,memcache2,memcache3')
     end
 
   end

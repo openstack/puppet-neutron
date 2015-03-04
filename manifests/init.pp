@@ -97,6 +97,10 @@
 #   report_interval is a config for neutron agents, set by class neutron
 #   Defaults to: 30
 #
+# [memcache_servers]
+#   List of memcache servers in format of server:port.
+#   Optional. Defaults to false. Example: ['localhost:11211']
+#
 # [*control_exchange*]
 #   (optional) What RPC queue/exchange to use
 #   Defaults to neutron
@@ -227,6 +231,7 @@ class neutron (
   $api_extensions_path         = undef,
   $root_helper                 = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $report_interval             = '30',
+  $memcache_servers            = false,
   $control_exchange            = 'neutron',
   $rpc_backend                 = 'neutron.openstack.common.rpc.impl_kombu',
   $rabbit_password             = false,
@@ -295,6 +300,10 @@ class neutron (
   }
   if ($kombu_ssl_certfile and !$kombu_ssl_keyfile) or ($kombu_ssl_keyfile and !$kombu_ssl_certfile) {
     fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
+  }
+
+  if $memcache_servers {
+    validate_array($memcache_servers)
   }
 
   File {
@@ -378,6 +387,17 @@ class neutron (
       fail('service_plugins should be an array.')
     }
   }
+
+  if $memcache_servers {
+    neutron_config {
+      'DEFAULT/memcached_servers':  value => join($memcache_servers, ',');
+    }
+  } else {
+    neutron_config {
+      'DEFAULT/memcached_servers':  ensure => absent;
+    }
+  }
+
 
   if $rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' {
     if ! $rabbit_password {

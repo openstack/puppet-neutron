@@ -90,11 +90,14 @@ describe 'neutron::services::fwaas' do
     end
 
     let :platform_params do
-      { :package_name => 'openstack-neutron' }
+      { :fwaas_package => 'openstack-neutron-fwaas' }
     end
 
     it_configures 'neutron fwaas service plugin'
 
+    it 'installs neutron fwaas service package' do
+      should contain_package('openstack-neutron-fwaas').with_ensure('present')
+    end
   end
 
 end

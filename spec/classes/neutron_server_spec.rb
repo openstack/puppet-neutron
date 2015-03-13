@@ -130,6 +130,15 @@ describe 'neutron::server' do
       end
     end
 
+    context 'with HA routers disabled' do
+      before :each do
+        params.merge!(:l3_ha => false)
+      end
+      it 'should disable HA routers' do
+        is_expected.to contain_neutron_config('DEFAULT/l3_ha').with_value(false)
+      end
+    end
+
     context 'with HA routers enabled with unlimited l3 agents per router' do
       before :each do
         params.merge!(:l3_ha                    => true,

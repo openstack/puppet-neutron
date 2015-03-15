@@ -75,21 +75,40 @@ correctly configured.")
     if q.key?('nova_region_name')
       authenv[:OS_REGION_NAME] = q['nova_region_name']
     end
-    begin
-      withenv authenv do
-        neutron(args)
-      end
-    rescue Exception => e
-      if (e.message =~ /\[Errno 111\] Connection refused/) or
-          (e.message =~ /\(HTTP 400\)/)
-        sleep 10
+    rv = nil
+    timeout = 120
+    end_time = Time.now.to_i + timeout
+    loop do
+      begin
         withenv authenv do
-          neutron(args)
+          rv = neutron(args)
         end
-      else
-       raise(e)
+        break
+      rescue Puppet::ExecutionFailure => e
+        if ! e.message =~ /(\(HTTP\s+400\))|
+              (400-\{\'message\'\:\s+\'\'\})|
+              (\[Errno 111\]\s+Connection\s+refused)|
+              (503\s+Service\s+Unavailable)|
+              (504\s+Gateway\s+Time-out)|
+              (\:\s+Maximum\s+attempts\s+reached)|
+              (Unauthorized\:\s+bad\s+credentials)|
+              (Max\s+retries\s+exceeded)/
+          raise(e)
+        end
+        current_time = Time.now.to_i
+        if current_time > end_time
+          break
+        else
+          wait = end_time - current_time
+          Puppet::debug("Non-fatal error: \"#{e.message}\"")
+          notice("Neutron API not avalaible. Wait up to #{wait} sec.")
+        end
+        sleep(2)
+        # Note(xarses): Don't remove, we know that there is one of the
+        # Recoverable erros above, So we will retry a few more times
       end
     end
+    return rv
   end
 
   def auth_neutron(*args)

@@ -31,6 +31,9 @@ class neutron::params {
     $cisco_config_file     = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
     $cisco_ml2_config_file = '/etc/neutron/plugins/ml2/ml2_conf_cisco.ini'
 
+    $midonet_server_package = 'python-neutron-plugin-midonet'
+    $midonet_config_file    = '/etc/neutron/plugins/midonet/midonet.ini'
+
     $nvp_server_package = 'openstack-neutron-nicira'
 
     $dhcp_agent_package = false
@@ -99,6 +102,9 @@ class neutron::params {
     $cisco_server_package  = 'neutron-plugin-cisco'
     $cisco_config_file     = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
     $cisco_ml2_config_file = '/etc/neutron/plugins/ml2/ml2_conf_cisco.ini'
+
+    $midonet_server_package = 'python-neutron-plugin-midonet'
+    $midonet_config_file    = '/etc/neutron/plugins/midonet/midonet.ini'
 
     $nvp_server_package = 'neutron-plugin-nicira'
 

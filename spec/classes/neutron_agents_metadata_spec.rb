@@ -25,10 +25,10 @@ describe 'neutron::agents::metadata' do
 
   shared_examples_for 'neutron metadata agent' do
 
-    it { should contain_class('neutron::params') }
+    it { is_expected.to contain_class('neutron::params') }
 
     it 'configures neutron metadata agent service' do
-      should contain_service('neutron-metadata').with(
+      is_expected.to contain_service('neutron-metadata').with(
         :name    => platform_params[:metadata_agent_service],
         :enable  => params[:enabled],
         :ensure => 'running',
@@ -41,26 +41,26 @@ describe 'neutron::agents::metadata' do
         params.merge!(:manage_service => false)
       end
       it 'should not start/stop service' do
-        should contain_service('neutron-metadata').without_ensure
+        is_expected.to contain_service('neutron-metadata').without_ensure
       end
     end
 
     it 'configures metadata_agent.ini' do
-      should contain_neutron_metadata_agent_config('DEFAULT/debug').with(:value => params[:debug])
-      should contain_neutron_metadata_agent_config('DEFAULT/auth_url').with(:value => params[:auth_url])
-      should contain_neutron_metadata_agent_config('DEFAULT/auth_insecure').with(:value => params[:auth_insecure])
-      should contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with_ensure('absent')
-      should contain_neutron_metadata_agent_config('DEFAULT/auth_region').with(:value => params[:auth_region])
-      should contain_neutron_metadata_agent_config('DEFAULT/admin_tenant_name').with(:value => params[:auth_tenant])
-      should contain_neutron_metadata_agent_config('DEFAULT/admin_user').with(:value => params[:auth_user])
-      should contain_neutron_metadata_agent_config('DEFAULT/admin_password').with(:value => params[:auth_password])
-      should contain_neutron_metadata_agent_config('DEFAULT/admin_password').with_secret( true )
-      should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_ip').with(:value => params[:metadata_ip])
-      should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_port').with(:value => params[:metadata_port])
-      should contain_neutron_metadata_agent_config('DEFAULT/metadata_workers').with(:value => facts[:processorcount])
-      should contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => params[:metadata_backlog])
-      should contain_neutron_metadata_agent_config('DEFAULT/metadata_proxy_shared_secret').with(:value => params[:shared_secret])
-      should contain_neutron_metadata_agent_config('DEFAULT/cache_url').with(:value => 'memory://?default_ttl=5')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/debug').with(:value => params[:debug])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_url').with(:value => params[:auth_url])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_insecure').with(:value => params[:auth_insecure])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with_ensure('absent')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_region').with(:value => params[:auth_region])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_tenant_name').with(:value => params[:auth_tenant])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_user').with(:value => params[:auth_user])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_password').with(:value => params[:auth_password])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_password').with_secret( true )
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_ip').with(:value => params[:metadata_ip])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_port').with(:value => params[:metadata_port])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_workers').with(:value => facts[:processorcount])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => params[:metadata_backlog])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_proxy_shared_secret').with(:value => params[:shared_secret])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/cache_url').with(:value => 'memory://?default_ttl=5')
     end
   end
 
@@ -74,8 +74,8 @@ describe 'neutron::agents::metadata' do
     end
 
     it 'configures certificate' do
-      should contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with_value('/some/cert')
-      should contain_neutron_metadata_agent_config('DEFAULT/auth_insecure').with_value('true')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with_value('/some/cert')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_insecure').with_value('true')
     end
   end
 
@@ -91,7 +91,7 @@ describe 'neutron::agents::metadata' do
     end
 
     it 'installs neutron metadata agent package' do
-      should contain_package('neutron-metadata').with(
+      is_expected.to contain_package('neutron-metadata').with(
         :ensure => params[:package_ensure],
         :name   => platform_params[:metadata_agent_package]
       )

@@ -49,32 +49,32 @@ describe 'neutron::agents::metering' do
       default_params.merge(params)
     end
 
-    it { should contain_class('neutron::params') }
+    it { is_expected.to contain_class('neutron::params') }
 
     it 'configures metering_agent.ini' do
-      should contain_neutron_metering_agent_config('DEFAULT/debug').with_value(p[:debug]);
-      should contain_neutron_metering_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
-      should contain_neutron_metering_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces]);
-      should contain_neutron_metering_agent_config('DEFAULT/measure_interval').with_value(p[:measure_interval]);
-      should contain_neutron_metering_agent_config('DEFAULT/report_interval').with_value(p[:report_interval]);
+      is_expected.to contain_neutron_metering_agent_config('DEFAULT/debug').with_value(p[:debug]);
+      is_expected.to contain_neutron_metering_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
+      is_expected.to contain_neutron_metering_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces]);
+      is_expected.to contain_neutron_metering_agent_config('DEFAULT/measure_interval').with_value(p[:measure_interval]);
+      is_expected.to contain_neutron_metering_agent_config('DEFAULT/report_interval').with_value(p[:report_interval]);
     end
 
     it 'installs neutron metering agent package' do
       if platform_params.has_key?(:metering_agent_package)
-        should contain_package('neutron-metering-agent').with(
+        is_expected.to contain_package('neutron-metering-agent').with(
           :name   => platform_params[:metering_agent_package],
           :ensure => p[:package_ensure]
         )
-        should contain_package('neutron').with_before(/Package\[neutron-metering-agent\]/)
-        should contain_package('neutron-metering-agent').with_before(/Neutron_metering_agent_config\[.+\]/)
-        should contain_package('neutron-metering-agent').with_before(/Neutron_config\[.+\]/)
+        is_expected.to contain_package('neutron').with_before(/Package\[neutron-metering-agent\]/)
+        is_expected.to contain_package('neutron-metering-agent').with_before(/Neutron_metering_agent_config\[.+\]/)
+        is_expected.to contain_package('neutron-metering-agent').with_before(/Neutron_config\[.+\]/)
       else
-        should contain_package('neutron').with_before(/Neutron_metering_agent_config\[.+\]/)
+        is_expected.to contain_package('neutron').with_before(/Neutron_metering_agent_config\[.+\]/)
       end
     end
 
     it 'configures neutron metering agent service' do
-      should contain_service('neutron-metering-service').with(
+      is_expected.to contain_service('neutron-metering-service').with(
         :name    => platform_params[:metering_agent_service],
         :enable  => true,
         :ensure  => 'running',
@@ -87,7 +87,7 @@ describe 'neutron::agents::metering' do
         params.merge!(:manage_service => false)
       end
       it 'should not start/stop service' do
-        should contain_service('neutron-metering-service').without_ensure
+        is_expected.to contain_service('neutron-metering-service').without_ensure
       end
     end
   end

@@ -32,37 +32,37 @@ describe 'neutron::agents::ovs' do
       default_params.merge(params)
     end
 
-    it { should contain_class('neutron::params') }
+    it { is_expected.to contain_class('neutron::params') }
 
     it 'configures ovs_neutron_plugin.ini' do
-      should contain_neutron_plugin_ovs('AGENT/polling_interval').with_value(p[:polling_interval])
-      should contain_neutron_plugin_ovs('OVS/integration_bridge').with_value(p[:integration_bridge])
-      should contain_neutron_plugin_ovs('SECURITYGROUP/firewall_driver').\
+      is_expected.to contain_neutron_plugin_ovs('AGENT/polling_interval').with_value(p[:polling_interval])
+      is_expected.to contain_neutron_plugin_ovs('OVS/integration_bridge').with_value(p[:integration_bridge])
+      is_expected.to contain_neutron_plugin_ovs('SECURITYGROUP/firewall_driver').\
         with_value(p[:firewall_driver])
-      should contain_neutron_plugin_ovs('OVS/enable_tunneling').with_value(false)
-      should contain_neutron_plugin_ovs('OVS/tunnel_bridge').with_ensure('absent')
-      should contain_neutron_plugin_ovs('OVS/local_ip').with_ensure('absent')
-      should contain_neutron_plugin_ovs('AGENT/veth_mtu').with_ensure('absent')
+      is_expected.to contain_neutron_plugin_ovs('OVS/enable_tunneling').with_value(false)
+      is_expected.to contain_neutron_plugin_ovs('OVS/tunnel_bridge').with_ensure('absent')
+      is_expected.to contain_neutron_plugin_ovs('OVS/local_ip').with_ensure('absent')
+      is_expected.to contain_neutron_plugin_ovs('AGENT/veth_mtu').with_ensure('absent')
     end
 
     it 'configures vs_bridge' do
-      should contain_vs_bridge(p[:integration_bridge]).with_ensure('present')
+      is_expected.to contain_vs_bridge(p[:integration_bridge]).with_ensure('present')
     end
 
     it 'installs neutron ovs agent package' do
       if platform_params.has_key?(:ovs_agent_package)
-        should contain_package('neutron-plugin-ovs-agent').with(
+        is_expected.to contain_package('neutron-plugin-ovs-agent').with(
           :name   => platform_params[:ovs_agent_package],
           :ensure => p[:package_ensure]
         )
-        should contain_package('neutron-plugin-ovs-agent').with_before(/Neutron_plugin_ovs\[.+\]/)
+        is_expected.to contain_package('neutron-plugin-ovs-agent').with_before(/Neutron_plugin_ovs\[.+\]/)
       else
-        should contain_package('neutron-plugin-ovs').with_before(/Neutron_plugin_ovs\[.+\]/)
+        is_expected.to contain_package('neutron-plugin-ovs').with_before(/Neutron_plugin_ovs\[.+\]/)
       end
     end
 
     it 'configures neutron ovs agent service' do
-      should contain_service('neutron-plugin-ovs-service').with(
+      is_expected.to contain_service('neutron-plugin-ovs-service').with(
         :name    => platform_params[:ovs_agent_service],
         :enable  => true,
         :ensure  => 'running',
@@ -76,7 +76,7 @@ describe 'neutron::agents::ovs' do
       end
 
       it 'should set the veth_mtu on the ovs agent' do
-        should contain_neutron_plugin_ovs('AGENT/veth_mtu').with_value(params[:veth_mtu])
+        is_expected.to contain_neutron_plugin_ovs('AGENT/veth_mtu').with_value(params[:veth_mtu])
       end
     end
 
@@ -86,7 +86,7 @@ describe 'neutron::agents::ovs' do
       end
       it 'uninstalls neutron ovs agent package' do
         if platform_params.has_key?(:ovs_agent_package)
-          should contain_package('neutron-plugin-ovs-agent').with(
+          is_expected.to contain_package('neutron-plugin-ovs-agent').with(
             :name   => platform_params[:ovs_agent_package],
             :ensure => p[:package_ensure]
           )
@@ -99,7 +99,7 @@ describe 'neutron::agents::ovs' do
         params.merge!(:firewall_driver => false)
       end
       it 'should configure firewall driver' do
-        should contain_neutron_plugin_ovs('SECURITYGROUP/firewall_driver').with_ensure('absent')
+        is_expected.to contain_neutron_plugin_ovs('SECURITYGROUP/firewall_driver').with_ensure('absent')
       end
     end
 
@@ -109,17 +109,17 @@ describe 'neutron::agents::ovs' do
       end
 
       it 'configures bridge mappings' do
-        should contain_neutron_plugin_ovs('OVS/bridge_mappings')
+        is_expected.to contain_neutron_plugin_ovs('OVS/bridge_mappings')
       end
 
       it 'should configure bridge mappings' do
-        should contain_neutron__plugins__ovs__bridge(params[:bridge_mappings].join(',')).with(
+        is_expected.to contain_neutron__plugins__ovs__bridge(params[:bridge_mappings].join(',')).with(
           :before => 'Service[neutron-plugin-ovs-service]'
         )
       end
 
       it 'should configure bridge uplinks' do
-        should contain_neutron__plugins__ovs__port(params[:bridge_uplinks].join(',')).with(
+        is_expected.to contain_neutron__plugins__ovs__port(params[:bridge_uplinks].join(',')).with(
           :before => 'Service[neutron-plugin-ovs-service]'
         )
       end
@@ -130,21 +130,19 @@ describe 'neutron::agents::ovs' do
         before :each do
           params.merge!(:enable_tunneling => true)
         end
-        it 'should fail' do
-          expect do
-            subject
-          end.to raise_error(Puppet::Error, /Local ip for ovs agent must be set when tunneling is enabled/)
-        end
+
+        it_raises 'a Puppet::Error', /Local ip for ovs agent must be set when tunneling is enabled/
       end
+
       context 'with default params' do
         before :each do
           params.merge!(:enable_tunneling => true, :local_ip => '127.0.0.1' )
         end
         it 'should configure ovs for tunneling' do
-          should contain_neutron_plugin_ovs('OVS/enable_tunneling').with_value(true)
-          should contain_neutron_plugin_ovs('OVS/tunnel_bridge').with_value(default_params[:tunnel_bridge])
-          should contain_neutron_plugin_ovs('OVS/local_ip').with_value('127.0.0.1')
-          should contain_vs_bridge(default_params[:tunnel_bridge]).with_ensure('present')
+          is_expected.to contain_neutron_plugin_ovs('OVS/enable_tunneling').with_value(true)
+          is_expected.to contain_neutron_plugin_ovs('OVS/tunnel_bridge').with_value(default_params[:tunnel_bridge])
+          is_expected.to contain_neutron_plugin_ovs('OVS/local_ip').with_value('127.0.0.1')
+          is_expected.to contain_vs_bridge(default_params[:tunnel_bridge]).with_ensure('present')
         end
       end
 
@@ -157,8 +155,8 @@ describe 'neutron::agents::ovs' do
         end
 
         it 'should perform vxlan network configuration' do
-          should contain_neutron_plugin_ovs('agent/tunnel_types').with_value(params[:tunnel_types])
-          should contain_neutron_plugin_ovs('agent/vxlan_udp_port').with_value(params[:vxlan_udp_port])
+          is_expected.to contain_neutron_plugin_ovs('agent/tunnel_types').with_value(params[:tunnel_types])
+          is_expected.to contain_neutron_plugin_ovs('agent/vxlan_udp_port').with_value(params[:vxlan_udp_port])
         end
       end
     end
@@ -189,11 +187,11 @@ describe 'neutron::agents::ovs' do
 
     it_configures 'neutron plugin ovs agent'
     it 'configures neutron ovs cleanup service' do
-      should contain_service('ovs-cleanup-service').with(
+      is_expected.to contain_service('ovs-cleanup-service').with(
         :name    => platform_params[:ovs_cleanup_service],
         :enable  => true
       )
-      should contain_package('neutron-plugin-ovs').with_before(/Service\[ovs-cleanup-service\]/)
+      is_expected.to contain_package('neutron-plugin-ovs').with_before(/Service\[ovs-cleanup-service\]/)
     end
 
   end

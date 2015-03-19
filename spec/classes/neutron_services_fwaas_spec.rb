@@ -41,8 +41,8 @@ describe 'neutron::services::fwaas' do
     end
 
     it 'configures driver in fwaas_driver.ini' do
-      should contain_neutron_fwaas_service_config('fwaas/driver').with_value('neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver')
-      should contain_neutron_fwaas_service_config('fwaas/enabled').with_value('true')
+      is_expected.to contain_neutron_fwaas_service_config('fwaas/driver').with_value('neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver')
+      is_expected.to contain_neutron_fwaas_service_config('fwaas/enabled').with_value('true')
     end
   end
 
@@ -59,7 +59,7 @@ describe 'neutron::services::fwaas' do
     it_configures 'neutron fwaas service plugin'
 
     it 'installs neutron l3 agent package' do
-      should contain_package('neutron-l3-agent').with_ensure('present')
+      is_expected.to contain_package('neutron-l3-agent').with_ensure('present')
     end
   end
 
@@ -80,7 +80,7 @@ describe 'neutron::services::fwaas' do
     it_configures 'neutron fwaas service plugin'
 
     it 'installs neutron vpnaas agent package' do
-      should contain_package('neutron-vpn-agent').with_ensure('present')
+      is_expected.to contain_package('neutron-vpn-agent').with_ensure('present')
     end
   end
 
@@ -96,7 +96,7 @@ describe 'neutron::services::fwaas' do
     it_configures 'neutron fwaas service plugin'
 
     it 'installs neutron fwaas service package' do
-      should contain_package('openstack-neutron-fwaas').with_ensure('present')
+      is_expected.to contain_package('openstack-neutron-fwaas').with_ensure('present')
     end
   end
 

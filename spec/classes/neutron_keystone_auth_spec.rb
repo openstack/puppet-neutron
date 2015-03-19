@@ -10,24 +10,24 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { should contain_keystone_user('neutron').with(
+    it { is_expected.to contain_keystone_user('neutron').with(
       :ensure   => 'present',
       :password => 'neutron_password',
       :tenant   => 'foobar'
     ) }
 
-    it { should contain_keystone_user_role('neutron@foobar').with(
+    it { is_expected.to contain_keystone_user_role('neutron@foobar').with(
       :ensure  => 'present',
       :roles   => 'admin'
     )}
 
-    it { should contain_keystone_service('neutron').with(
+    it { is_expected.to contain_keystone_service('neutron').with(
       :ensure      => 'present',
       :type        => 'network',
       :description => 'Neutron Networking Service'
     ) }
 
-    it { should contain_keystone_endpoint('RegionOne/neutron').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with(
       :ensure       => 'present',
       :public_url   => "http://127.0.0.1:9696/",
       :admin_url    => "http://127.0.0.1:9696/",
@@ -52,7 +52,7 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { should contain_keystone_endpoint('RegionOne/neutron').with_notify('Service[neutron-server]') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with_notify('Service[neutron-server]') }
   end
 
   describe 'when overriding public_protocol, public_port and public address' do
@@ -69,7 +69,7 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { should contain_keystone_endpoint('RegionOne/neutron').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with(
       :ensure       => 'present',
       :public_url   => "https://10.10.10.10:80/",
       :internal_url => "http://10.10.10.11:81/",
@@ -88,7 +88,7 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { should contain_keystone_endpoint('RegionOne/neutron').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with(
       :ensure       => 'present',
       :public_url   => "http://127.0.0.1:9696/",
       :admin_url    => "https://127.0.0.1:9696/",
@@ -106,13 +106,13 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { should contain_keystone_user('neutrony') }
+    it { is_expected.to contain_keystone_user('neutrony') }
 
-    it { should contain_keystone_user_role('neutrony@services') }
+    it { is_expected.to contain_keystone_user_role('neutrony@services') }
 
-    it { should contain_keystone_service('neutrony') }
+    it { is_expected.to contain_keystone_service('neutrony') }
 
-    it { should contain_keystone_endpoint('RegionOne/neutrony') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutrony') }
 
   end
 
@@ -125,10 +125,10 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { should contain_keystone_user('neutron') }
-    it { should contain_keystone_user_role('neutron@services') }
-    it { should contain_keystone_service('neutron_service') }
-    it { should contain_keystone_endpoint('RegionOne/neutron_service') }
+    it { is_expected.to contain_keystone_user('neutron') }
+    it { is_expected.to contain_keystone_user_role('neutron@services') }
+    it { is_expected.to contain_keystone_service('neutron_service') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron_service') }
 
   end
 
@@ -141,11 +141,11 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { should_not contain_keystone_user('neutron') }
+    it { is_expected.not_to contain_keystone_user('neutron') }
 
-    it { should contain_keystone_user_role('neutron@services') }
+    it { is_expected.to contain_keystone_user_role('neutron@services') }
 
-    it { should contain_keystone_service('neutron').with(
+    it { is_expected.to contain_keystone_service('neutron').with(
       :ensure      => 'present',
       :type        => 'network',
       :description => 'Neutron Networking Service'
@@ -163,11 +163,11 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { should_not contain_keystone_user('neutron') }
+    it { is_expected.not_to contain_keystone_user('neutron') }
 
-    it { should_not contain_keystone_user_role('neutron@services') }
+    it { is_expected.not_to contain_keystone_user_role('neutron@services') }
 
-    it { should contain_keystone_service('neutron').with(
+    it { is_expected.to contain_keystone_service('neutron').with(
       :ensure      => 'present',
       :type        => 'network',
       :description => 'Neutron Networking Service'

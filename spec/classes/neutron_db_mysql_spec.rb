@@ -20,7 +20,7 @@ describe 'neutron::db::mysql' do
       { :osfamily => 'Debian' }
     end
 
-    it { should contain_openstacklib__db__mysql('neutron').with(
+    it { is_expected.to contain_openstacklib__db__mysql('neutron').with(
       :user          => 'neutron',
       :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
       :host          => '127.0.0.1',
@@ -33,7 +33,7 @@ describe 'neutron::db::mysql' do
       { :osfamily => 'RedHat' }
     end
 
-    it { should contain_openstacklib__db__mysql('neutron').with(
+    it { is_expected.to contain_openstacklib__db__mysql('neutron').with(
       :user          => 'neutron',
       :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
       :host          => '127.0.0.1',

@@ -7,7 +7,7 @@ describe 'neutron::client' do
       { :osfamily => 'Debian' }
     end
 
-    it { should contain_class('neutron::client') }
+    it { is_expected.to contain_class('neutron::client') }
   end
 
   context 'on RedHat platforms' do
@@ -15,6 +15,6 @@ describe 'neutron::client' do
       { :osfamily => 'RedHat' }
     end
 
-    it { should contain_class('neutron::client') }
+    it { is_expected.to contain_class('neutron::client') }
   end
 end

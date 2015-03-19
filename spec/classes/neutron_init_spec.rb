@@ -44,8 +44,8 @@ describe 'neutron' do
       end
 
       it 'configures logging' do
-        should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
-        should contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
+        is_expected.to contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
+        is_expected.to contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
       end
 
     end
@@ -71,10 +71,10 @@ describe 'neutron' do
 
   shared_examples_for 'a neutron base installation' do
 
-    it { should contain_class('neutron::params') }
+    it { is_expected.to contain_class('neutron::params') }
 
     it 'configures neutron configuration folder' do
-      should contain_file('/etc/neutron/').with(
+      is_expected.to contain_file('/etc/neutron/').with(
         :ensure  => 'directory',
         :owner   => 'root',
         :group   => 'neutron',
@@ -84,7 +84,7 @@ describe 'neutron' do
     end
 
     it 'configures neutron configuration file' do
-      should contain_file('/etc/neutron/neutron.conf').with(
+      is_expected.to contain_file('/etc/neutron/neutron.conf').with(
         :owner   => 'root',
         :group   => 'neutron',
         :mode    => '0640',
@@ -93,60 +93,60 @@ describe 'neutron' do
     end
 
     it 'installs neutron package' do
-      should contain_package('neutron').with(
+      is_expected.to contain_package('neutron').with(
         :ensure => 'present',
         :name   => platform_params[:common_package_name]
       )
     end
 
     it 'configures credentials for rabbit' do
-      should contain_neutron_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_user] )
-      should contain_neutron_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_neutron_config('DEFAULT/rabbit_password').with_secret( true )
-      should contain_neutron_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      should contain_neutron_config('DEFAULT/kombu_reconnect_delay').with_value( params[:kombu_reconnect_delay] )
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_user] )
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_password').with_secret( true )
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_neutron_config('DEFAULT/kombu_reconnect_delay').with_value( params[:kombu_reconnect_delay] )
     end
 
     it 'configures neutron.conf' do
-      should contain_neutron_config('DEFAULT/verbose').with_value( params[:verbose] )
-      should contain_neutron_config('DEFAULT/bind_host').with_value('0.0.0.0')
-      should contain_neutron_config('DEFAULT/bind_port').with_value('9696')
-      should contain_neutron_config('DEFAULT/auth_strategy').with_value('keystone')
-      should contain_neutron_config('DEFAULT/core_plugin').with_value( params[:core_plugin] )
-      should contain_neutron_config('DEFAULT/base_mac').with_value('fa:16:3e:00:00:00')
-      should contain_neutron_config('DEFAULT/mac_generation_retries').with_value(16)
-      should contain_neutron_config('DEFAULT/dhcp_lease_duration').with_value(86400)
-      should contain_neutron_config('DEFAULT/dhcp_agents_per_network').with_value(1)
-      should contain_neutron_config('DEFAULT/network_device_mtu').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/dhcp_agent_notification').with_value(true)
-      should contain_neutron_config('DEFAULT/allow_bulk').with_value(true)
-      should contain_neutron_config('DEFAULT/allow_pagination').with_value(false)
-      should contain_neutron_config('DEFAULT/allow_sorting').with_value(false)
-      should contain_neutron_config('DEFAULT/allow_overlapping_ips').with_value(false)
-      should contain_neutron_config('DEFAULT/api_extensions_path').with_value(nil)
-      should contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
-      should contain_neutron_config('DEFAULT/state_path').with_value('/var/lib/neutron')
-      should contain_neutron_config('DEFAULT/lock_path').with_value('/var/lib/neutron/lock')
-      should contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
-      should contain_neutron_config('agent/report_interval').with_value('30')
+      is_expected.to contain_neutron_config('DEFAULT/verbose').with_value( params[:verbose] )
+      is_expected.to contain_neutron_config('DEFAULT/bind_host').with_value('0.0.0.0')
+      is_expected.to contain_neutron_config('DEFAULT/bind_port').with_value('9696')
+      is_expected.to contain_neutron_config('DEFAULT/auth_strategy').with_value('keystone')
+      is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value( params[:core_plugin] )
+      is_expected.to contain_neutron_config('DEFAULT/base_mac').with_value('fa:16:3e:00:00:00')
+      is_expected.to contain_neutron_config('DEFAULT/mac_generation_retries').with_value(16)
+      is_expected.to contain_neutron_config('DEFAULT/dhcp_lease_duration').with_value(86400)
+      is_expected.to contain_neutron_config('DEFAULT/dhcp_agents_per_network').with_value(1)
+      is_expected.to contain_neutron_config('DEFAULT/network_device_mtu').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/dhcp_agent_notification').with_value(true)
+      is_expected.to contain_neutron_config('DEFAULT/allow_bulk').with_value(true)
+      is_expected.to contain_neutron_config('DEFAULT/allow_pagination').with_value(false)
+      is_expected.to contain_neutron_config('DEFAULT/allow_sorting').with_value(false)
+      is_expected.to contain_neutron_config('DEFAULT/allow_overlapping_ips').with_value(false)
+      is_expected.to contain_neutron_config('DEFAULT/api_extensions_path').with_value(nil)
+      is_expected.to contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
+      is_expected.to contain_neutron_config('DEFAULT/state_path').with_value('/var/lib/neutron')
+      is_expected.to contain_neutron_config('DEFAULT/lock_path').with_value('/var/lib/neutron/lock')
+      is_expected.to contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
+      is_expected.to contain_neutron_config('agent/report_interval').with_value('30')
     end
   end
 
   shared_examples_for 'rabbit HA with a single virtual host' do
     it 'in neutron.conf' do
-      should_not contain_neutron_config('DEFAULT/rabbit_host')
-      should_not contain_neutron_config('DEFAULT/rabbit_port')
-      should contain_neutron_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts] )
-      should contain_neutron_config('DEFAULT/rabbit_ha_queues').with_value(true)
+      is_expected.not_to contain_neutron_config('DEFAULT/rabbit_host')
+      is_expected.not_to contain_neutron_config('DEFAULT/rabbit_port')
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts] )
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end
   end
 
   shared_examples_for 'rabbit HA with multiple hosts' do
     it 'in neutron.conf' do
-      should_not contain_neutron_config('DEFAULT/rabbit_host')
-      should_not contain_neutron_config('DEFAULT/rabbit_port')
-      should contain_neutron_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
-      should contain_neutron_config('DEFAULT/rabbit_ha_queues').with_value(true)
+      is_expected.not_to contain_neutron_config('DEFAULT/rabbit_host')
+      is_expected.not_to contain_neutron_config('DEFAULT/rabbit_port')
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end
   end
 
@@ -160,10 +160,10 @@ describe 'neutron' do
       )
     end
 
-    it { should contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
-    it { should contain_neutron_config('DEFAULT/ssl_cert_file').with_value('/path/to/cert') }
-    it { should contain_neutron_config('DEFAULT/ssl_key_file').with_value('/path/to/key') }
-    it { should contain_neutron_config('DEFAULT/ssl_ca_file').with_value('/path/to/ca') }
+    it { is_expected.to contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
+    it { is_expected.to contain_neutron_config('DEFAULT/ssl_cert_file').with_value('/path/to/cert') }
+    it { is_expected.to contain_neutron_config('DEFAULT/ssl_key_file').with_value('/path/to/key') }
+    it { is_expected.to contain_neutron_config('DEFAULT/ssl_ca_file').with_value('/path/to/ca') }
   end
 
   shared_examples_for 'with SSL socket options set with wrong parameters' do
@@ -188,10 +188,10 @@ describe 'neutron' do
       )
     end
 
-    it { should contain_neutron_config('DEFAULT/use_ssl').with_value('false') }
-    it { should contain_neutron_config('DEFAULT/ssl_cert_file').with_ensure('absent') }
-    it { should contain_neutron_config('DEFAULT/ssl_key_file').with_ensure('absent') }
-    it { should contain_neutron_config('DEFAULT/ssl_ca_file').with_ensure('absent') }
+    it { is_expected.to contain_neutron_config('DEFAULT/use_ssl').with_value('false') }
+    it { is_expected.to contain_neutron_config('DEFAULT/ssl_cert_file').with_ensure('absent') }
+    it { is_expected.to contain_neutron_config('DEFAULT/ssl_key_file').with_ensure('absent') }
+    it { is_expected.to contain_neutron_config('DEFAULT/ssl_ca_file').with_ensure('absent') }
   end
 
   shared_examples_for 'with SSL socket options set and no ca_file' do
@@ -203,10 +203,10 @@ describe 'neutron' do
       )
     end
 
-    it { should contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
-    it { should contain_neutron_config('DEFAULT/ssl_cert_file').with_value('/path/to/cert') }
-    it { should contain_neutron_config('DEFAULT/ssl_key_file').with_value('/path/to/key') }
-    it { should contain_neutron_config('DEFAULT/ssl_ca_file').with_ensure('absent') }
+    it { is_expected.to contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
+    it { is_expected.to contain_neutron_config('DEFAULT/ssl_cert_file').with_value('/path/to/cert') }
+    it { is_expected.to contain_neutron_config('DEFAULT/ssl_key_file').with_value('/path/to/key') }
+    it { is_expected.to contain_neutron_config('DEFAULT/ssl_ca_file').with_ensure('absent') }
   end
 
   shared_examples_for 'with SSL socket options disabled with ca_file' do
@@ -221,7 +221,7 @@ describe 'neutron' do
   end
 
   shared_examples_for 'with syslog disabled' do
-    it { should contain_neutron_config('DEFAULT/use_syslog').with_value(false) }
+    it { is_expected.to contain_neutron_config('DEFAULT/use_syslog').with_value(false) }
   end
 
   shared_examples_for 'with SSL enabled with kombu' do
@@ -236,11 +236,11 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('DEFAULT/rabbit_use_ssl').with_value('true')
-      should contain_neutron_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
-      should contain_neutron_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
-      should contain_neutron_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
-      should contain_neutron_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -252,11 +252,11 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('DEFAULT/rabbit_use_ssl').with_value('true')
-      should contain_neutron_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -269,11 +269,11 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('DEFAULT/rabbit_use_ssl').with_value('false')
-      should contain_neutron_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/rabbit_use_ssl').with_value('false')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
     end
   end
 
@@ -331,8 +331,8 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('DEFAULT/use_syslog').with_value(true)
-      should contain_neutron_config('DEFAULT/syslog_log_facility').with_value('LOG_USER')
+      is_expected.to contain_neutron_config('DEFAULT/use_syslog').with_value(true)
+      is_expected.to contain_neutron_config('DEFAULT/syslog_log_facility').with_value('LOG_USER')
     end
   end
 
@@ -345,8 +345,8 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('DEFAULT/use_syslog').with_value(true)
-      should contain_neutron_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
+      is_expected.to contain_neutron_config('DEFAULT/use_syslog').with_value(true)
+      is_expected.to contain_neutron_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
     end
   end
 
@@ -358,8 +358,8 @@ describe 'neutron' do
       )
     end
     it 'configures logging' do
-      should contain_neutron_config('DEFAULT/log_file').with_value(params[:log_file])
-      should contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
+      is_expected.to contain_neutron_config('DEFAULT/log_file').with_value(params[:log_file])
+      is_expected.to contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
     end
   end
 
@@ -369,8 +369,8 @@ describe 'neutron' do
       :log_dir  => false
     )}
     it {
-      should contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
-      should contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/log_dir').with_ensure('absent')
     }
   end
 
@@ -380,13 +380,13 @@ describe 'neutron' do
       :lock_path  => 'lock_path'
     )}
     it {
-      should contain_neutron_config('DEFAULT/state_path').with_value('state_path')
-      should contain_neutron_config('DEFAULT/lock_path').with_value('lock_path')
+      is_expected.to contain_neutron_config('DEFAULT/state_path').with_value('state_path')
+      is_expected.to contain_neutron_config('DEFAULT/lock_path').with_value('lock_path')
     }
   end
 
   shared_examples_for 'without service_plugins' do
-    it { should_not contain_neutron_config('DEFAULT/service_plugins') }
+    it { is_expected.not_to contain_neutron_config('DEFAULT/service_plugins') }
   end
 
   shared_examples_for 'with service_plugins' do
@@ -397,13 +397,13 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('DEFAULT/service_plugins').with_value('router,firewall,lbaas,vpnaas,metering')
+      is_expected.to contain_neutron_config('DEFAULT/service_plugins').with_value('router,firewall,lbaas,vpnaas,metering')
     end
 
   end
 
   shared_examples_for 'without memcache_servers' do
-    it { should contain_neutron_config('DEFAULT/memcached_servers').with_ensure('absent') }
+    it { is_expected.to contain_neutron_config('DEFAULT/memcached_servers').with_ensure('absent') }
   end
 
   shared_examples_for 'with memcache_servers' do
@@ -414,7 +414,7 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('DEFAULT/memcached_servers').with_value('memcache1,memcache2,memcache3')
+      is_expected.to contain_neutron_config('DEFAULT/memcached_servers').with_value('memcache1,memcache2,memcache3')
     end
 
   end
@@ -427,7 +427,7 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('DEFAULT/network_device_mtu').with_value(params[:network_device_mtu])
+      is_expected.to contain_neutron_config('DEFAULT/network_device_mtu').with_value(params[:network_device_mtu])
     end
   end
 

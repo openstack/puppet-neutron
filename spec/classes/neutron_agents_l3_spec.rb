@@ -39,40 +39,40 @@ describe 'neutron::agents::l3' do
       default_params.merge(params)
     end
 
-    it { should contain_class('neutron::params') }
+    it { is_expected.to contain_class('neutron::params') }
 
     it 'configures l3_agent.ini' do
-      should contain_neutron_l3_agent_config('DEFAULT/debug').with_value(p[:debug])
-      should contain_neutron_l3_agent_config('DEFAULT/external_network_bridge').with_value(p[:external_network_bridge])
-      should contain_neutron_l3_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces])
-      should contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver])
-      should contain_neutron_l3_agent_config('DEFAULT/router_id').with_value(p[:router_id])
-      should contain_neutron_l3_agent_config('DEFAULT/gateway_external_network_id').with_value(p[:gateway_external_network_id])
-      should contain_neutron_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value(p[:handle_internal_only_routers])
-      should contain_neutron_l3_agent_config('DEFAULT/metadata_port').with_value(p[:metadata_port])
-      should contain_neutron_l3_agent_config('DEFAULT/send_arp_for_ha').with_value(p[:send_arp_for_ha])
-      should contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value(p[:periodic_interval])
-      should contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value(p[:periodic_fuzzy_delay])
-      should contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value(p[:enable_metadata_proxy])
-      should contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_ensure('absent')
-      should contain_neutron_l3_agent_config('DEFAULT/router_delete_namespaces').with_value(p[:router_delete_namespaces])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/debug').with_value(p[:debug])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/external_network_bridge').with_value(p[:external_network_bridge])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/router_id').with_value(p[:router_id])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/gateway_external_network_id').with_value(p[:gateway_external_network_id])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value(p[:handle_internal_only_routers])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/metadata_port').with_value(p[:metadata_port])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/send_arp_for_ha').with_value(p[:send_arp_for_ha])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value(p[:periodic_interval])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value(p[:periodic_fuzzy_delay])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value(p[:enable_metadata_proxy])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_ensure('absent')
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/router_delete_namespaces').with_value(p[:router_delete_namespaces])
     end
 
     it 'installs neutron l3 agent package' do
       if platform_params.has_key?(:l3_agent_package)
-        should contain_package('neutron-l3').with(
+        is_expected.to contain_package('neutron-l3').with(
           :name    => platform_params[:l3_agent_package],
           :ensure  => p[:package_ensure],
           :require => 'Package[neutron]'
         )
-        should contain_package('neutron-l3').with_before(/Neutron_l3_agent_config\[.+\]/)
+        is_expected.to contain_package('neutron-l3').with_before(/Neutron_l3_agent_config\[.+\]/)
       else
-        should contain_package('neutron').with_before(/Neutron_l3_agent_config\[.+\]/)
+        is_expected.to contain_package('neutron').with_before(/Neutron_l3_agent_config\[.+\]/)
       end
     end
 
     it 'configures neutron l3 agent service' do
-      should contain_service('neutron-l3').with(
+      is_expected.to contain_service('neutron-l3').with(
         :name    => platform_params[:l3_agent_service],
         :enable  => true,
         :ensure  => 'running',
@@ -85,7 +85,7 @@ describe 'neutron::agents::l3' do
         params.merge!(:manage_service => false)
       end
       it 'should not start/stop service' do
-        should contain_service('neutron-l3').without_ensure
+        is_expected.to contain_service('neutron-l3').without_ensure
       end
     end
 
@@ -94,7 +94,7 @@ describe 'neutron::agents::l3' do
         params.merge!(:agent_mode => 'dvr')
       end
       it 'should enable DVR mode' do
-        should contain_neutron_l3_agent_config('DEFAULT/agent_mode').with_value(p[:agent_mode])
+        is_expected.to contain_neutron_l3_agent_config('DEFAULT/agent_mode').with_value(p[:agent_mode])
       end
     end
 
@@ -104,9 +104,9 @@ describe 'neutron::agents::l3' do
                       :ha_vrrp_auth_password => 'secrete')
       end
       it 'should configure VRRP' do
-        should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_value(p[:ha_vrrp_auth_type])
-        should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_value(p[:ha_vrrp_auth_password])
-        should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value(p[:ha_vrrp_advert_int])
+        is_expected.to contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_value(p[:ha_vrrp_auth_type])
+        is_expected.to contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_value(p[:ha_vrrp_auth_password])
+        is_expected.to contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value(p[:ha_vrrp_advert_int])
       end
     end
   end
@@ -118,7 +118,7 @@ describe 'neutron::agents::l3' do
       )
     end
     it 'configures network_device_mtu' do
-      should contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_value(params[:network_device_mtu])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_value(params[:network_device_mtu])
     end
   end
 

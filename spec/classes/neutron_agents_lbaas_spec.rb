@@ -27,35 +27,35 @@ describe 'neutron::agents::lbaas' do
       default_params.merge(params)
     end
 
-    it { should contain_class('neutron::params') }
+    it { is_expected.to contain_class('neutron::params') }
 
     it_configures 'haproxy lbaas_driver'
     it_configures 'haproxy lbaas_driver without package'
 
     it 'configures lbaas_agent.ini' do
-      should contain_neutron_lbaas_agent_config('DEFAULT/debug').with_value(p[:debug]);
-      should contain_neutron_lbaas_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
-      should contain_neutron_lbaas_agent_config('DEFAULT/device_driver').with_value(p[:device_driver]);
-      should contain_neutron_lbaas_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces]);
-      should contain_neutron_lbaas_agent_config('haproxy/user_group').with_value(platform_params[:nobody_user_group]);
+      is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/debug').with_value(p[:debug]);
+      is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
+      is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/device_driver').with_value(p[:device_driver]);
+      is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces]);
+      is_expected.to contain_neutron_lbaas_agent_config('haproxy/user_group').with_value(platform_params[:nobody_user_group]);
     end
 
     it 'installs neutron lbaas agent package' do
       if platform_params.has_key?(:lbaas_agent_package)
-        should contain_package('neutron-lbaas-agent').with(
+        is_expected.to contain_package('neutron-lbaas-agent').with(
           :name   => platform_params[:lbaas_agent_package],
           :ensure => p[:package_ensure]
         )
-        should contain_package('neutron').with_before(/Package\[neutron-lbaas-agent\]/)
-        should contain_package('neutron-lbaas-agent').with_before(/Neutron_lbaas_agent_config\[.+\]/)
-        should contain_package('neutron-lbaas-agent').with_before(/Neutron_config\[.+\]/)
+        is_expected.to contain_package('neutron').with_before(/Package\[neutron-lbaas-agent\]/)
+        is_expected.to contain_package('neutron-lbaas-agent').with_before(/Neutron_lbaas_agent_config\[.+\]/)
+        is_expected.to contain_package('neutron-lbaas-agent').with_before(/Neutron_config\[.+\]/)
       else
-        should contain_package('neutron').with_before(/Neutron_lbaas_agent_config\[.+\]/)
+        is_expected.to contain_package('neutron').with_before(/Neutron_lbaas_agent_config\[.+\]/)
       end
     end
 
     it 'configures neutron lbaas agent service' do
-      should contain_service('neutron-lbaas-service').with(
+      is_expected.to contain_service('neutron-lbaas-service').with(
         :name    => platform_params[:lbaas_agent_service],
         :enable  => true,
         :ensure  => 'running',
@@ -68,7 +68,7 @@ describe 'neutron::agents::lbaas' do
         params.merge!(:manage_service => false)
       end
       it 'should not start/stop service' do
-        should contain_service('neutron-lbaas-service').without_ensure
+        is_expected.to contain_service('neutron-lbaas-service').without_ensure
       end
     end
   end
@@ -76,9 +76,9 @@ describe 'neutron::agents::lbaas' do
   shared_examples_for 'haproxy lbaas_driver' do
     it 'installs haproxy packages' do
       if platform_params.has_key?(:lbaas_agent_package)
-        should contain_package(platform_params[:haproxy_package]).with_before('Package[neutron-lbaas-agent]')
+        is_expected.to contain_package(platform_params[:haproxy_package]).with_before('Package[neutron-lbaas-agent]')
       end
-      should contain_package(platform_params[:haproxy_package]).with(
+      is_expected.to contain_package(platform_params[:haproxy_package]).with(
         :ensure => 'present'
       )
     end
@@ -95,7 +95,7 @@ describe 'neutron::agents::lbaas' do
       params.merge!(:manage_haproxy_package => false)
     end
     it 'installs haproxy package via haproxy module' do
-      should contain_package(platform_params[:haproxy_package]).with(
+      is_expected.to contain_package(platform_params[:haproxy_package]).with(
         :ensure => 'present'
       )
     end

@@ -24,7 +24,7 @@ describe 'neutron::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('neutron').with(
+      it { is_expected.to contain_postgresql__server__db('neutron').with(
         :user     => 'neutron',
         :password => 'md5696acd1dd66513a556a18a1beccd03d1'
       )}
@@ -47,7 +47,7 @@ describe 'neutron::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('neutron').with(
+      it { is_expected.to contain_postgresql__server__db('neutron').with(
         :user     => 'neutron',
         :password => 'md5696acd1dd66513a556a18a1beccd03d1'
       )}

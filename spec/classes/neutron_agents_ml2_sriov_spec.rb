@@ -24,24 +24,24 @@ describe 'neutron::agents::ml2::sriov' do
       default_params.merge(params)
     end
 
-    it { should contain_class('neutron::params') }
+    it { is_expected.to contain_class('neutron::params') }
 
     it 'configures ovs_neutron_plugin.ini' do
-      should contain_neutron_plugin_ml2('sriov_nic/polling_interval').with_value(p[:polling_interval])
-      should contain_neutron_plugin_ml2('sriov_nic/exclude_devices').with_value(p[:exclude_devices].join(','))
-      should contain_neutron_plugin_ml2('sriov_nic/physical_device_mappings').with_value(p[:physical_device_mappings].join(','))
+      is_expected.to contain_neutron_plugin_ml2('sriov_nic/polling_interval').with_value(p[:polling_interval])
+      is_expected.to contain_neutron_plugin_ml2('sriov_nic/exclude_devices').with_value(p[:exclude_devices].join(','))
+      is_expected.to contain_neutron_plugin_ml2('sriov_nic/physical_device_mappings').with_value(p[:physical_device_mappings].join(','))
     end
 
     it 'installs neutron sriov-nic agent package' do
-      should contain_package('neutron-sriov-nic-agent').with(
+      is_expected.to contain_package('neutron-sriov-nic-agent').with(
         :name   => platform_params[:sriov_nic_agent_package],
         :ensure => p[:package_ensure]
       )
-      should contain_package('neutron-sriov-nic-agent').with_before(/Neutron_plugin_ml2\[.+\]/)
+      is_expected.to contain_package('neutron-sriov-nic-agent').with_before(/Neutron_plugin_ml2\[.+\]/)
     end
 
     it 'configures neutron ovs agent service' do
-      should contain_service('neutron-sriov-nic-agent-service').with(
+      is_expected.to contain_service('neutron-sriov-nic-agent-service').with(
         :name    => platform_params[:sriov_nic_agent_service],
         :enable  => true,
         :ensure  => 'running',
@@ -56,8 +56,8 @@ describe 'neutron::agents::ml2::sriov' do
       end
 
       it 'configures physical device mappings with exclusion' do
-        should contain_neutron_plugin_ml2('sriov_nic/exclude_devices').with_value(['physnet1:eth2'])
-        should contain_neutron_plugin_ml2('sriov_nic/physical_device_mappings').with_value(['physnet1:eth1'])
+        is_expected.to contain_neutron_plugin_ml2('sriov_nic/exclude_devices').with_value(['physnet1:eth2'])
+        is_expected.to contain_neutron_plugin_ml2('sriov_nic/physical_device_mappings').with_value(['physnet1:eth1'])
       end
     end
   end

@@ -17,10 +17,10 @@ describe 'neutron::agents::linuxbridge' do
 
   shared_examples_for 'neutron linuxbridge agent' do
 
-    it { should contain_class('neutron::params') }
+    it { is_expected.to contain_class('neutron::params') }
 
     it 'configures neutron linuxbridge agent service' do
-      should contain_service('neutron-plugin-linuxbridge-service').with(
+      is_expected.to contain_service('neutron-plugin-linuxbridge-service').with(
         :ensure  => 'running',
         :name    => platform_params[:linuxbridge_agent_service],
         :enable  => params[:enable]
@@ -32,15 +32,15 @@ describe 'neutron::agents::linuxbridge' do
         params.merge!(:manage_service => false)
       end
       it 'should not start/stop service' do
-        should contain_service('neutron-plugin-linuxbridge-service').without_ensure
+        is_expected.to contain_service('neutron-plugin-linuxbridge-service').without_ensure
       end
     end
 
     it 'configures linuxbridge_conf.ini' do
-      should contain_neutron_plugin_linuxbridge('LINUX_BRIDGE/physical_interface_mappings').with(
+      is_expected.to contain_neutron_plugin_linuxbridge('LINUX_BRIDGE/physical_interface_mappings').with(
         :value => params[:physical_interface_mappings]
       )
-      should contain_neutron_plugin_linuxbridge('SECURITYGROUP/firewall_driver').with(
+      is_expected.to contain_neutron_plugin_linuxbridge('SECURITYGROUP/firewall_driver').with(
         :value => params[:firewall_driver]
       )
     end
@@ -60,7 +60,7 @@ describe 'neutron::agents::linuxbridge' do
     it_configures 'neutron linuxbridge agent'
 
     it 'installs neutron linuxbridge agent package' do
-      should contain_package('neutron-plugin-linuxbridge-agent').with(
+      is_expected.to contain_package('neutron-plugin-linuxbridge-agent').with(
         :ensure => params[:package_ensure],
         :name   => platform_params[:linuxbridge_agent_package]
       )
@@ -80,7 +80,7 @@ describe 'neutron::agents::linuxbridge' do
     it_configures 'neutron linuxbridge agent'
 
     it 'installs neutron linuxbridge package' do
-      should contain_package('neutron-plugin-linuxbridge').with(
+      is_expected.to contain_package('neutron-plugin-linuxbridge').with(
         :ensure => params[:package_ensure],
         :name   => platform_params[:linuxbridge_server_package]
       )

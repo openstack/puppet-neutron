@@ -46,16 +46,16 @@ describe 'neutron::server::notifications' do
         end
 
         it 'configure neutron.conf' do
-            should contain_neutron_config('DEFAULT/notify_nova_on_port_status_changes').with_value(true)
-            should contain_neutron_config('DEFAULT/notify_nova_on_port_data_changes').with_value(true)
-            should contain_neutron_config('DEFAULT/send_events_interval').with_value('2')
-            should contain_neutron_config('DEFAULT/nova_url').with_value('http://127.0.0.1:8774/v2')
-            should contain_neutron_config('DEFAULT/nova_admin_auth_url').with_value('http://127.0.0.1:35357/v2.0')
-            should contain_neutron_config('DEFAULT/nova_admin_username').with_value('nova')
-            should contain_neutron_config('DEFAULT/nova_admin_password').with_value('secrete')
-            should contain_neutron_config('DEFAULT/nova_admin_password').with_secret( true )
-            should contain_neutron_config('DEFAULT/nova_region_name').with_value('RegionOne')
-            should contain_neutron_config('DEFAULT/nova_admin_tenant_id').with_value('UUID')
+            is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_status_changes').with_value(true)
+            is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_data_changes').with_value(true)
+            is_expected.to contain_neutron_config('DEFAULT/send_events_interval').with_value('2')
+            is_expected.to contain_neutron_config('DEFAULT/nova_url').with_value('http://127.0.0.1:8774/v2')
+            is_expected.to contain_neutron_config('DEFAULT/nova_admin_auth_url').with_value('http://127.0.0.1:35357/v2.0')
+            is_expected.to contain_neutron_config('DEFAULT/nova_admin_username').with_value('nova')
+            is_expected.to contain_neutron_config('DEFAULT/nova_admin_password').with_value('secrete')
+            is_expected.to contain_neutron_config('DEFAULT/nova_admin_password').with_secret( true )
+            is_expected.to contain_neutron_config('DEFAULT/nova_region_name').with_value('RegionOne')
+            is_expected.to contain_neutron_config('DEFAULT/nova_admin_tenant_id').with_value('UUID')
         end
 
         context 'when overriding parameters' do
@@ -72,16 +72,16 @@ describe 'neutron::server::notifications' do
                 )
             end
             it 'should configure neutron server with overrided parameters' do
-                should contain_neutron_config('DEFAULT/notify_nova_on_port_status_changes').with_value(false)
-                should contain_neutron_config('DEFAULT/notify_nova_on_port_data_changes').with_value(false)
-                should contain_neutron_config('DEFAULT/send_events_interval').with_value('10')
-                should contain_neutron_config('DEFAULT/nova_url').with_value('http://nova:8774/v3')
-                should contain_neutron_config('DEFAULT/nova_admin_auth_url').with_value('http://keystone:35357/v2.0')
-                should contain_neutron_config('DEFAULT/nova_admin_username').with_value('joe')
-                should contain_neutron_config('DEFAULT/nova_admin_password').with_value('secrete')
-                should contain_neutron_config('DEFAULT/nova_admin_password').with_secret( true )
-                should contain_neutron_config('DEFAULT/nova_region_name').with_value('MyRegion')
-                should contain_neutron_config('DEFAULT/nova_admin_tenant_id').with_value('UUID2')
+                is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_status_changes').with_value(false)
+                is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_data_changes').with_value(false)
+                is_expected.to contain_neutron_config('DEFAULT/send_events_interval').with_value('10')
+                is_expected.to contain_neutron_config('DEFAULT/nova_url').with_value('http://nova:8774/v3')
+                is_expected.to contain_neutron_config('DEFAULT/nova_admin_auth_url').with_value('http://keystone:35357/v2.0')
+                is_expected.to contain_neutron_config('DEFAULT/nova_admin_username').with_value('joe')
+                is_expected.to contain_neutron_config('DEFAULT/nova_admin_password').with_value('secrete')
+                is_expected.to contain_neutron_config('DEFAULT/nova_admin_password').with_secret( true )
+                is_expected.to contain_neutron_config('DEFAULT/nova_region_name').with_value('MyRegion')
+                is_expected.to contain_neutron_config('DEFAULT/nova_admin_tenant_id').with_value('UUID2')
             end
         end
 
@@ -89,9 +89,8 @@ describe 'neutron::server::notifications' do
             before :each do
                 params.merge!(:nova_admin_password => '')
             end
-            it 'should fail to configure neutron server' do
-                expect { subject }.to raise_error(Puppet::Error, /nova_admin_password must be set./)
-            end
+
+            it_raises 'a Puppet::Error', /nova_admin_password must be set./
         end
 
         context 'when no nova_admin_tenant_id and nova_admin_tenant_name specified' do
@@ -101,9 +100,8 @@ describe 'neutron::server::notifications' do
                   :nova_admin_tenant_name => ''
                 )
             end
-            it 'should fail to configure neutron server' do
-                expect { subject }.to raise_error(Puppet::Error, /You must provide either nova_admin_tenant_name or nova_admin_tenant_id./)
-            end
+
+            it_raises 'a Puppet::Error', /You must provide either nova_admin_tenant_name or nova_admin_tenant_id./
         end
 
         context 'when providing a tenant name' do
@@ -114,7 +112,7 @@ describe 'neutron::server::notifications' do
                 )
             end
             it 'should configure nova admin tenant id' do
-              should contain_nova_admin_tenant_id_setter('nova_admin_tenant_id').with(
+              is_expected.to contain_nova_admin_tenant_id_setter('nova_admin_tenant_id').with(
                 :ensure           => 'present',
                 :tenant_name      => 'services',
                 :auth_url         => 'http://127.0.0.1:35357/v2.0',

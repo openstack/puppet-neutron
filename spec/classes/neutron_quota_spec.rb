@@ -35,7 +35,7 @@ describe 'neutron::quota' do
 
     it 'configures quota in neutron.conf' do
       params_hash.each_pair do |config,value|
-        should contain_neutron_config("quotas/#{config}").with_value( value )
+        is_expected.to contain_neutron_config("quotas/#{config}").with_value( value )
       end
     end
   end

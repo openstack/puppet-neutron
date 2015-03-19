@@ -16,26 +16,26 @@ describe 'neutron::plugins::linuxbridge' do
 
   shared_examples_for 'neutron linuxbridge plugin' do
 
-    it { should contain_class('neutron::params') }
+    it { is_expected.to contain_class('neutron::params') }
 
     it 'installs neutron linuxbridge plugin package' do
-      should contain_package('neutron-plugin-linuxbridge').with(
+      is_expected.to contain_package('neutron-plugin-linuxbridge').with(
         :ensure => params[:package_ensure],
         :name   => platform_params[:linuxbridge_plugin_package]
       )
     end
 
     it 'configures linuxbridge_conf.ini' do
-      should contain_neutron_plugin_linuxbridge('VLANS/tenant_network_type').with(
+      is_expected.to contain_neutron_plugin_linuxbridge('VLANS/tenant_network_type').with(
         :value => params[:tenant_network_type]
       )
-      should contain_neutron_plugin_linuxbridge('VLANS/network_vlan_ranges').with(
+      is_expected.to contain_neutron_plugin_linuxbridge('VLANS/network_vlan_ranges').with(
         :value => params[:network_vlan_ranges]
       )
     end
 
     it 'should create plugin symbolic link' do
-      should contain_file('/etc/neutron/plugin.ini').with(
+      is_expected.to contain_file('/etc/neutron/plugin.ini').with(
         :ensure  => 'link',
         :target  => '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
         :require => 'Package[neutron-plugin-linuxbridge]'
@@ -58,7 +58,7 @@ describe 'neutron::plugins::linuxbridge' do
       end
 
       it 'configures /etc/default/neutron-server' do
-        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
+        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
           :path    => '/etc/default/neutron-server',
           :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
           :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',

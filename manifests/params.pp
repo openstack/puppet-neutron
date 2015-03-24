@@ -38,7 +38,7 @@ class neutron::params {
 
     $dnsmasq_packages   = ['dnsmasq', 'dnsmasq-utils']
 
-    $lbaas_agent_package = false
+    $lbaas_agent_package = 'openstack-neutron-lbaas'
     $lbaas_agent_service = 'neutron-lbaas-agent'
 
     $haproxy_package   = 'haproxy'

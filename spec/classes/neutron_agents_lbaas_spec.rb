@@ -41,17 +41,13 @@ describe 'neutron::agents::lbaas' do
     end
 
     it 'installs neutron lbaas agent package' do
-      if platform_params.has_key?(:lbaas_agent_package)
-        is_expected.to contain_package('neutron-lbaas-agent').with(
-          :name   => platform_params[:lbaas_agent_package],
-          :ensure => p[:package_ensure]
-        )
-        is_expected.to contain_package('neutron').with_before(/Package\[neutron-lbaas-agent\]/)
-        is_expected.to contain_package('neutron-lbaas-agent').with_before(/Neutron_lbaas_agent_config\[.+\]/)
-        is_expected.to contain_package('neutron-lbaas-agent').with_before(/Neutron_config\[.+\]/)
-      else
-        is_expected.to contain_package('neutron').with_before(/Neutron_lbaas_agent_config\[.+\]/)
-      end
+      is_expected.to contain_package('neutron-lbaas-agent').with(
+        :name   => platform_params[:lbaas_agent_package],
+        :ensure => p[:package_ensure]
+      )
+      is_expected.to contain_package('neutron').with_before(/Package\[neutron-lbaas-agent\]/)
+      is_expected.to contain_package('neutron-lbaas-agent').with_before(/Neutron_lbaas_agent_config\[.+\]/)
+      is_expected.to contain_package('neutron-lbaas-agent').with_before(/Neutron_config\[.+\]/)
     end
 
     it 'configures neutron lbaas agent service' do
@@ -127,6 +123,7 @@ describe 'neutron::agents::lbaas' do
 
     let :platform_params do
       { :haproxy_package     => 'haproxy',
+        :lbaas_agent_package => 'openstack-neutron-lbaas',
         :nobody_user_group   => 'nobody',
         :lbaas_agent_service => 'neutron-lbaas-agent' }
     end

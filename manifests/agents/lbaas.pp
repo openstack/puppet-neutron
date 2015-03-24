@@ -77,18 +77,12 @@ class neutron::agents::lbaas (
     'haproxy/user_group':         value => $user_group;
   }
 
-  if $::neutron::params::lbaas_agent_package {
-    Package['neutron']            -> Package['neutron-lbaas-agent']
-    Package['neutron-lbaas-agent'] -> Neutron_config<||>
-    Package['neutron-lbaas-agent'] -> Neutron_lbaas_agent_config<||>
-    package { 'neutron-lbaas-agent':
-      ensure => $package_ensure,
-      name   => $::neutron::params::lbaas_agent_package,
-    }
-  } else {
-    # Some platforms (RedHat) do not provide a neutron LBaaS agent package.
-    # The neutron LBaaS agent config file is provided by the neutron package.
-    Package['neutron'] -> Neutron_lbaas_agent_config<||>
+  Package['neutron']            -> Package['neutron-lbaas-agent']
+  Package['neutron-lbaas-agent'] -> Neutron_config<||>
+  Package['neutron-lbaas-agent'] -> Neutron_lbaas_agent_config<||>
+  package { 'neutron-lbaas-agent':
+    ensure => $package_ensure,
+    name   => $::neutron::params::lbaas_agent_package,
   }
 
   if $manage_service {

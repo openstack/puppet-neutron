@@ -205,8 +205,7 @@ describe 'neutron::agents::ml2::ovs' do
     it 'configures neutron ovs cleanup service' do
       should contain_service('ovs-cleanup-service').with(
         :name    => platform_params[:ovs_cleanup_service],
-        :enable  => true,
-        :ensure  => 'running'
+        :enable  => true
       )
       should contain_package('neutron-ovs-agent').with_before(/Service\[ovs-cleanup-service\]/)
     end

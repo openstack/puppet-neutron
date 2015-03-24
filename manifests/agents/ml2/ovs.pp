@@ -240,8 +240,8 @@ class neutron::agents::ml2::ovs (
   }
 
   if $::neutron::params::ovs_cleanup_service {
-    service {'ovs-cleanup-service':
-      ensure => $service_ensure,
+    Package['neutron-ovs-agent'] -> Service['ovs-cleanup-service']
+    service { 'ovs-cleanup-service':
       name   => $::neutron::params::ovs_cleanup_service,
       enable => $enabled,
     }

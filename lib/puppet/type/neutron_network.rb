@@ -17,6 +17,7 @@ Puppet::Type.newtype(:neutron_network) do
   newproperty(:admin_state_up) do
     desc 'The administrative status of the network'
     newvalues(/(t|T)rue/, /(f|F)alse/)
+    defaultto 'True'
     munge do |v|
       v.to_s.capitalize
     end
@@ -25,6 +26,7 @@ Puppet::Type.newtype(:neutron_network) do
   newproperty(:shared) do
     desc 'Whether this network should be shared across all tenants or not'
     newvalues(/(t|T)rue/, /(f|F)alse/)
+    defaultto 'False'
     munge do |v|
       v.to_s.capitalize
     end
@@ -61,6 +63,7 @@ Puppet::Type.newtype(:neutron_network) do
   newproperty(:router_external) do
     desc 'Whether this router will route traffic to an external network'
     newvalues(/(t|T)rue/, /(f|F)alse/)
+    defaultto 'False'
     munge do |v|
       v.to_s.capitalize
     end

@@ -166,16 +166,7 @@ class neutron::agents::ml2::ovs (
     neutron_agent_ovs { 'securitygroup/firewall_driver': ensure => absent }
   }
 
-  vs_bridge { $integration_bridge:
-    ensure => present,
-    before => Service['neutron-ovs-agent-service'],
-  }
-
   if $enable_tunneling {
-    vs_bridge { $tunnel_bridge:
-      ensure => present,
-      before => Service['neutron-ovs-agent-service'],
-    }
     neutron_agent_ovs {
       'ovs/enable_tunneling': value => true;
       'ovs/tunnel_bridge':    value => $tunnel_bridge;

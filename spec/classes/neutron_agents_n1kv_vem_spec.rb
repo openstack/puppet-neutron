@@ -68,7 +68,7 @@ describe 'neutron::agents::n1kv_vem' do
       :n1kv_vsm_domain_id => 900,
       :host_mgmt_intf     => 'eth9',
       :portdb             => 'ovs',
-      :fastpath_flood     => 'disable'
+      :fastpath_flood     => 'enable'
     }
     end
     it do
@@ -87,7 +87,7 @@ describe 'neutron::agents::n1kv_vem' do
       is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
         .with_content(/^node-type compute/)
       is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
-        .with_content(/^fastpath-flood disable/)
+        .with_content(/^fastpath-flood enable/)
     end
   end
 
@@ -122,14 +122,14 @@ describe 'neutron::agents::n1kv_vem' do
   context 'verify fastpath_flood' do
     let :params do
     {
-      :fastpath_flood     => 'enable',
+      :fastpath_flood     => 'disable',
     }
     end
     it do
       is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
-        .with_content(/^fastpath-flood enable/)
+        .with_content(/^fastpath-flood disable/)
       is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
-        .without_content(/^fastpath-flood disable/)
+        .without_content(/^fastpath-flood enable/)
     end
   end
 

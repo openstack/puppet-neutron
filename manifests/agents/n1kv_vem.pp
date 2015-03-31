@@ -97,7 +97,7 @@
 #
 # [*fastpath_flood*]
 #   (optional) Handle broadcast floods and unknown pkts in fastpath(KLM)
-#   Defaults to disable
+#   Defaults to enable
 #
 class neutron::agents::n1kv_vem (
   $n1kv_vsm_ip          = '127.0.0.1',
@@ -113,7 +113,7 @@ class neutron::agents::n1kv_vem (
   $enable               = true,
   $manage_service       = true,
   $portdb               = 'ovs',
-  $fastpath_flood       = 'disable'
+  $fastpath_flood       = 'enable'
 ) {
 
   include ::neutron::params

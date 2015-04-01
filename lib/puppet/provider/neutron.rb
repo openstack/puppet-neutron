@@ -76,7 +76,7 @@ correctly configured.")
       authenv[:OS_REGION_NAME] = q['nova_region_name']
     end
     rv = nil
-    timeout = 120
+    timeout = 10
     end_time = Time.now.to_i + timeout
     loop do
       begin

@@ -48,6 +48,9 @@
 # [*metadata_port*]
 #   The TCP port of the metadata service. Defaults to 8775.
 #
+# [*metadata_protocol*]
+#   The protocol to use for requests to Nova metadata server. Defaults to 'http'.
+#
 # [*metadata_workers*]
 #   (optional) Number of separate worker processes to spawn.
 #   The default, count of machine's processors, runs the worker thread in the
@@ -83,6 +86,7 @@ class neutron::agents::metadata (
   $auth_region               = 'RegionOne',
   $metadata_ip               = '127.0.0.1',
   $metadata_port             = '8775',
+  $metadata_protocol         = 'http',
   $metadata_workers          = $::processorcount,
   $metadata_backlog          = '4096',
   $metadata_memory_cache_ttl = 5,
@@ -104,6 +108,7 @@ class neutron::agents::metadata (
     'DEFAULT/admin_password':                 value => $auth_password, secret => true;
     'DEFAULT/nova_metadata_ip':               value => $metadata_ip;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
+    'DEFAULT/nova_metadata_protocol':         value => $metadata_protocol;
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret;
     'DEFAULT/metadata_workers':               value => $metadata_workers;
     'DEFAULT/metadata_backlog':               value => $metadata_backlog;

@@ -63,7 +63,8 @@ describe 'neutron::agents::metering' do
       if platform_params.has_key?(:metering_agent_package)
         is_expected.to contain_package('neutron-metering-agent').with(
           :name   => platform_params[:metering_agent_package],
-          :ensure => p[:package_ensure]
+          :ensure => p[:package_ensure],
+          :tag    => 'openstack'
         )
         is_expected.to contain_package('neutron').with_before(/Package\[neutron-metering-agent\]/)
         is_expected.to contain_package('neutron-metering-agent').with_before(/Neutron_metering_agent_config\[.+\]/)

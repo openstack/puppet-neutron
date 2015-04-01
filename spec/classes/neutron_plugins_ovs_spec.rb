@@ -39,7 +39,8 @@ describe 'neutron::plugins::ovs' do
       is_expected.to contain_neutron_plugin_ovs('OVS/tenant_network_type').with_value(params[:tenant_network_type])
       is_expected.to contain_package('neutron-plugin-ovs').with(
         :name   => platform_params[:ovs_server_package],
-        :ensure => params[:package_ensure]
+        :ensure => params[:package_ensure],
+        :tag    => 'openstack'
       )
       is_expected.not_to contain_class('vswitch::ovs')
     end

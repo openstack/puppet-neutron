@@ -44,7 +44,8 @@ describe 'neutron::agents::ml2::linuxbridge' do
 
         is_expected.to contain_package('neutron-plugin-linuxbridge-agent').with(
           :name   => linuxbridge_agent_package,
-          :ensure => default_params[:package_ensure]
+          :ensure => default_params[:package_ensure],
+          :tag    => 'openstack'
         )
 
         is_expected.to contain_package('neutron-plugin-linuxbridge-agent').with_before(/Neutron_plugin_linuxbridge\[.+\]/)

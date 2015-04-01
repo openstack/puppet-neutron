@@ -62,7 +62,8 @@ describe 'neutron::agents::linuxbridge' do
     it 'installs neutron linuxbridge agent package' do
       is_expected.to contain_package('neutron-plugin-linuxbridge-agent').with(
         :ensure => params[:package_ensure],
-        :name   => platform_params[:linuxbridge_agent_package]
+        :name   => platform_params[:linuxbridge_agent_package],
+        :tag    => 'openstack'
       )
     end
   end
@@ -82,7 +83,8 @@ describe 'neutron::agents::linuxbridge' do
     it 'installs neutron linuxbridge package' do
       is_expected.to contain_package('neutron-plugin-linuxbridge').with(
         :ensure => params[:package_ensure],
-        :name   => platform_params[:linuxbridge_server_package]
+        :name   => platform_params[:linuxbridge_server_package],
+        :tag    => 'openstack'
       )
     end
   end

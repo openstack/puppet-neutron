@@ -53,7 +53,8 @@ describe 'neutron::agents::ovs' do
       if platform_params.has_key?(:ovs_agent_package)
         is_expected.to contain_package('neutron-plugin-ovs-agent').with(
           :name   => platform_params[:ovs_agent_package],
-          :ensure => p[:package_ensure]
+          :ensure => p[:package_ensure],
+          :tag    => 'openstack'
         )
         is_expected.to contain_package('neutron-plugin-ovs-agent').with_before(/Neutron_plugin_ovs\[.+\]/)
       else
@@ -88,7 +89,8 @@ describe 'neutron::agents::ovs' do
         if platform_params.has_key?(:ovs_agent_package)
           is_expected.to contain_package('neutron-plugin-ovs-agent').with(
             :name   => platform_params[:ovs_agent_package],
-            :ensure => p[:package_ensure]
+            :ensure => p[:package_ensure],
+            :tag    => 'openstack'
           )
         end
       end

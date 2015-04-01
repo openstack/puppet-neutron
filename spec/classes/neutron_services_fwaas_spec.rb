@@ -59,7 +59,10 @@ describe 'neutron::services::fwaas' do
     it_configures 'neutron fwaas service plugin'
 
     it 'installs neutron l3 agent package' do
-      is_expected.to contain_package('neutron-l3-agent').with_ensure('present')
+      is_expected.to contain_package('neutron-l3-agent').with(
+        :ensure => 'present',
+        :tag    => 'openstack'
+      )
     end
   end
 
@@ -80,7 +83,10 @@ describe 'neutron::services::fwaas' do
     it_configures 'neutron fwaas service plugin'
 
     it 'installs neutron vpnaas agent package' do
-      is_expected.to contain_package('neutron-vpn-agent').with_ensure('present')
+      is_expected.to contain_package('neutron-vpn-agent').with(
+        :ensure => 'present',
+        :tag    => 'openstack'
+      )
     end
   end
 

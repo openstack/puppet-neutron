@@ -21,7 +21,8 @@ describe 'neutron::plugins::linuxbridge' do
     it 'installs neutron linuxbridge plugin package' do
       is_expected.to contain_package('neutron-plugin-linuxbridge').with(
         :ensure => params[:package_ensure],
-        :name   => platform_params[:linuxbridge_plugin_package]
+        :name   => platform_params[:linuxbridge_plugin_package],
+        :tag    => 'openstack'
       )
     end
 

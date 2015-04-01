@@ -72,7 +72,8 @@ describe 'neutron::plugins::ml2' do
       if platform_params.has_key?(:ml2_server_package)
         is_expected.to contain_package('neutron-plugin-ml2').with(
           :name   => platform_params[:ml2_server_package],
-          :ensure => p[:package_ensure]
+          :ensure => p[:package_ensure],
+          :tag    => 'openstack'
         )
         is_expected.to contain_package('neutron-plugin-ml2').with_before(/Neutron_plugin_ml2\[.+\]/)
       end
@@ -171,7 +172,8 @@ describe 'neutron::plugins::ml2' do
         if platform_params.has_key?(:ml2_server_package)
           is_expected.to contain_package('neutron-plugin-ml2').with(
             :name   => platform_params[:ml2_server_package],
-            :ensure => params[:package_ensure]
+            :ensure => params[:package_ensure],
+            :tag    => 'openstack'
           )
         end
       end

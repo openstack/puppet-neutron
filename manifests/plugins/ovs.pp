@@ -30,6 +30,7 @@ class neutron::plugins::ovs (
     package { 'neutron-plugin-ovs':
       ensure => $package_ensure,
       name   => $::neutron::params::ovs_server_package,
+      tag    => 'openstack',
     }
   }
 

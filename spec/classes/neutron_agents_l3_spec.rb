@@ -63,7 +63,8 @@ describe 'neutron::agents::l3' do
         is_expected.to contain_package('neutron-l3').with(
           :name    => platform_params[:l3_agent_package],
           :ensure  => p[:package_ensure],
-          :require => 'Package[neutron]'
+          :require => 'Package[neutron]',
+          :tag     => 'openstack'
         )
         is_expected.to contain_package('neutron-l3').with_before(/Neutron_l3_agent_config\[.+\]/)
       else

@@ -13,6 +13,10 @@ fixtures:
       ref: "origin/stable/juno"
     "openstacklib": "git://github.com/stackforge/puppet-openstacklib.git"
     "vswitch": "git://github.com/stackforge/puppet-vswitch"
+    'concat':
+      'repo': 'git://github.com/puppetlabs/puppetlabs-concat.git'
+      'ref': '1.2.1'
+    'postgresql': 'git://github.com/puppetlabs/puppet-postgresql.git'
     'sysctl': 'git://github.com/duritong/puppet-sysctl.git'
   symlinks:
     "neutron": "#{source_dir}"

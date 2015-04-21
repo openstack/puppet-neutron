@@ -30,7 +30,7 @@ end
 #   An HTTPRequest object
 # +url+::
 #   A parsed URL (returned from URI.parse)
-def handle_request(req, url)
+def neutron_handle_request(req, url)
     begin
         # There is issue with ipv6 where address has to be in brackets, this causes the
         # underlying ruby TCPSocket to fail. Net::HTTP.new will fail without brackets on
@@ -103,7 +103,7 @@ def keystone_v2_authenticate(auth_url,
     req['content-type'] = 'application/json'
     req.body = post_args.to_json
 
-    res = handle_request(req, url)
+    res = neutron_handle_request(req, url)
     data = JSON.parse res.body
     return data['access']['token']['id']
 end
@@ -126,7 +126,7 @@ def keystone_v2_tenants(auth_url,
     req['content-type'] = 'application/json'
     req['x-auth-token'] = token
 
-    res = handle_request(req, url)
+    res = neutron_handle_request(req, url)
     data = JSON.parse res.body
     data['tenants']
 end

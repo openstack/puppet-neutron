@@ -24,7 +24,7 @@
 #    the database charset. Optional. Defaults to 'utf8'
 #
 #  [*collate*]
-#    the database collation. Optional. Defaults to 'utf8_unicode_ci'
+#    the database collation. Optional. Defaults to 'utf8_general_ci'
 #
 #  [*mysql_module*]
 #   (optional) Deprecated. Does nothing.
@@ -36,7 +36,7 @@ class neutron::db::mysql (
   $host          = '127.0.0.1',
   $allowed_hosts = undef,
   $charset       = 'utf8',
-  $collate       = 'utf8_unicode_ci',
+  $collate       = 'utf8_general_ci',
   $cluster_id    = 'localzone',
   $mysql_module  = undef,
 ) {

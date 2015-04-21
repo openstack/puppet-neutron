@@ -24,7 +24,8 @@ describe 'neutron::db::mysql' do
       :user          => 'neutron',
       :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
       :host          => '127.0.0.1',
-      :charset       => 'utf8'
+      :charset       => 'utf8',
+      :collate       => 'utf8_general_ci',
      ) }
   end
 
@@ -37,7 +38,8 @@ describe 'neutron::db::mysql' do
       :user          => 'neutron',
       :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
       :host          => '127.0.0.1',
-      :charset       => 'utf8'
+      :charset       => 'utf8',
+      :collate       => 'utf8_general_ci',
      ) }
   end
 

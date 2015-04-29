@@ -109,6 +109,18 @@ The following platforms are supported:
 * RHEL 6
 * Fedora 18
 
+Beaker-Rspec
+------------
+
+This module has beaker-rspec tests
+
+To run:
+
+```shell
+bundle install
+bundle exec rspec spec/acceptance
+```
+
 Development
 -----------
 

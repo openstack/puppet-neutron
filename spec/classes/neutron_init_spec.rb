@@ -78,7 +78,6 @@ describe 'neutron' do
         :ensure  => 'directory',
         :owner   => 'root',
         :group   => 'neutron',
-        :mode    => '0750',
         :require => 'Package[neutron]'
       )
     end
@@ -87,7 +86,6 @@ describe 'neutron' do
       is_expected.to contain_file('/etc/neutron/neutron.conf').with(
         :owner   => 'root',
         :group   => 'neutron',
-        :mode    => '0640',
         :require => 'Package[neutron]'
       )
     end

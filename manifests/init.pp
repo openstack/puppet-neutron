@@ -310,12 +310,10 @@ class neutron (
     require => Package['neutron'],
     owner   => 'root',
     group   => 'neutron',
-    mode    => '0640',
   }
 
   file { '/etc/neutron':
     ensure => directory,
-    mode   => '0750',
   }
 
   file { '/etc/neutron/neutron.conf': }

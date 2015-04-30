@@ -46,20 +46,32 @@ describe 'neutron::services::fwaas' do
     end
   end
 
-  context 'on Debian platforms' do
+  context 'on Ubuntu platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
-    end
-
-    let :platform_params do
-      { :l3_agent_package     => 'neutron-l3-agent',
-        :vpnaas_agent_package => 'neutron-vpn-agent'}
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Ubuntu' }
     end
 
     it_configures 'neutron fwaas service plugin'
 
-    it 'installs neutron l3 agent package' do
-      is_expected.to contain_package('neutron-l3-agent').with(
+    it 'installs neutron fwaas package' do
+      is_expected.to contain_package('neutron-fwaas').with(
+        :ensure => 'present',
+        :tag    => 'openstack'
+      )
+    end
+  end
+
+  context 'on Debian platforms without VPNaaS' do
+    let :facts do
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Debian' }
+    end
+
+    it_configures 'neutron fwaas service plugin'
+
+    it 'installs neutron fwaas package' do
+      is_expected.to contain_package('neutron-fwaas').with(
         :ensure => 'present',
         :tag    => 'openstack'
       )
@@ -69,11 +81,6 @@ describe 'neutron::services::fwaas' do
   context 'on Debian platforms with VPNaaS' do
     let :facts do
       { :osfamily => 'Debian' }
-    end
-
-    let :platform_params do
-      { :l3_agent_package     => 'neutron-l3-agent',
-        :vpnaas_agent_package => 'neutron-vpn-agent' }
     end
 
     let :params do
@@ -93,10 +100,6 @@ describe 'neutron::services::fwaas' do
   context 'on Red Hat platforms' do
     let :facts do
       { :osfamily => 'RedHat' }
-    end
-
-    let :platform_params do
-      { :fwaas_package => 'openstack-neutron-fwaas' }
     end
 
     it_configures 'neutron fwaas service plugin'

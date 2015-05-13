@@ -15,7 +15,7 @@ describe 'neutron::agents::lbaas' do
       :enabled          => true,
       :debug            => false,
       :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :device_driver    => 'neutron.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
+      :device_driver    => 'neutron_lbaas.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
       :use_namespaces   => true,
       :manage_haproxy_package  => true
     }

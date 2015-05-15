@@ -29,7 +29,7 @@ describe Puppet::Provider::Neutron do
   end
 
   let :exec_error do
-    /Neutron or Keystone API is not avalaible/
+    /Neutron or Keystone API is not available/
   end
 
   after :each do

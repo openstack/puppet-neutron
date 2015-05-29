@@ -55,7 +55,7 @@ describe 'neutron::services::fwaas' do
     it_configures 'neutron fwaas service plugin'
 
     it 'installs neutron fwaas package' do
-      is_expected.to contain_package('neutron-fwaas').with(
+      is_expected.to contain_package('python-neutron-fwaas').with(
         :ensure => 'present',
         :tag    => 'openstack'
       )
@@ -71,7 +71,7 @@ describe 'neutron::services::fwaas' do
     it_configures 'neutron fwaas service plugin'
 
     it 'installs neutron fwaas package' do
-      is_expected.to contain_package('neutron-fwaas').with(
+      is_expected.to contain_package('python-neutron-fwaas').with(
         :ensure => 'present',
         :tag    => 'openstack'
       )

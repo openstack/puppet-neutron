@@ -142,7 +142,7 @@ class neutron::params {
     $l3_agent_package   = 'neutron-l3-agent'
     $l3_agent_service   = 'neutron-l3-agent'
 
-    $fwaas_package      = 'neutron-fwaas'
+    $fwaas_package      = 'python-neutron-fwaas'
 
     $cliff_package      = 'python-cliff'
     $kernel_headers     = "linux-headers-${::kernelrelease}"

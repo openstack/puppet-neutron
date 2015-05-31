@@ -119,7 +119,7 @@ EOT
   end
 
   def parse_gateway_network_id(external_gateway_info_)
-    match_data = /\{"network_id": "(.*?)"/.match(external_gateway_info_)
+    match_data = /\{"network_id": "(.*?)"/.match(external_gateway_info_.gsub(/\\"/,'"'))
     if match_data
       match_data[1]
     else

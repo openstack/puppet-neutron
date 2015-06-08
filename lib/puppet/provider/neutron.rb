@@ -124,6 +124,10 @@ correctly configured.")
     ids = []
     list = auth_neutron("#{type}-list", '--format=csv',
                         '--column=id', '--quote=none')
+    if list.nil?
+      raise(Puppet::ExecutionFailure, "Can't retrieve #{type}-list because Neutron or Keystone API is not avalaible.")
+    end
+
     (list.split("\n")[1..-1] || []).compact.collect do |line|
       ids << line.strip
     end
@@ -133,6 +137,10 @@ correctly configured.")
   def self.get_neutron_resource_attrs(type, id)
     attrs = {}
     net = auth_neutron("#{type}-show", '--format=shell', id)
+    if net.nil?
+      raise(Puppet::ExecutionFailure, "Can't retrieve #{type}-show because Neutron or Keystone API is not avalaible.")
+    end
+
     last_key = nil
     (net.split("\n") || []).compact.collect do |line|
       if line.include? '='

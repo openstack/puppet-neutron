@@ -28,6 +28,10 @@ describe Puppet::Provider::Neutron do
     /Neutron types will not work/
   end
 
+  let :exec_error do
+    /Neutron or Keystone API is not avalaible/
+  end
+
   after :each do
     klass.reset
   end
@@ -134,6 +138,21 @@ describe Puppet::Provider::Neutron do
       klass.expects(:auth_neutron).returns(output)
       result = klass.list_neutron_resources('foo')
       result.should eql(['net1', 'net2'])
+    end
+
+    it 'should return empty list when there are no neutron resources' do
+      output = <<-EOT
+      EOT
+      klass.stubs(:auth_neutron).returns(output)
+      result = klass.list_neutron_resources('foo')
+      result.should eql([])
+    end
+
+    it 'should fail if resources list is nil' do
+      klass.stubs(:auth_neutron).returns(nil)
+      expect do
+        klass.list_neutron_resources('foo')
+      end.to raise_error(Puppet::Error, exec_error)
     end
 
   end

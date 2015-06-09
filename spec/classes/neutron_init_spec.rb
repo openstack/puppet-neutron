@@ -19,6 +19,12 @@ describe 'neutron' do
     }
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
   shared_examples_for 'neutron' do
 
     context 'and if rabbit_host parameter is provided' do
@@ -432,7 +438,7 @@ describe 'neutron' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      default_facts.merge({ :osfamily => 'Debian' })
     end
 
     let :platform_params do
@@ -444,7 +450,7 @@ describe 'neutron' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     let :platform_params do

@@ -28,6 +28,12 @@ describe 'neutron::quota' do
       :quota_vip                 => 10 }
   end
 
+  let :facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
   shared_examples_for 'neutron quota' do
     let :params_hash do
       default_params.merge(params)

@@ -20,21 +20,27 @@ describe 'neutron::server' do
       :auth_tenant                      => 'services',
       :auth_user                        => 'neutron',
       :database_connection              => 'sqlite:////var/lib/neutron/ovs.sqlite',
-      :database_max_retries             => '10',
-      :database_idle_timeout            => '3600',
-      :database_retry_interval          => '10',
-      :database_min_pool_size           => '1',
-      :database_max_pool_size           => '10',
-      :database_max_overflow            => '20',
+      :database_max_retries             => 10,
+      :database_idle_timeout            => 3600,
+      :database_retry_interval          => 10,
+      :database_min_pool_size           => 1,
+      :database_max_pool_size           => 10,
+      :database_max_overflow            => 20,
       :sync_db                          => false,
-      :agent_down_time                  => '75',
+      :agent_down_time                  => 75,
       :router_scheduler_driver          => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
       :router_distributed               => false,
       :l3_ha                            => false,
-      :max_l3_agents_per_router         => '3',
-      :min_l3_agents_per_router         => '2',
+      :max_l3_agents_per_router         => 3,
+      :min_l3_agents_per_router         => 2,
       :l3_ha_net_cidr                   => '169.254.192.0/18',
       :allow_automatic_l3agent_failover => false
+    }
+  end
+
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
     }
   end
 
@@ -125,8 +131,8 @@ describe 'neutron::server' do
       end
       it 'should enable HA routers' do
         is_expected.to contain_neutron_config('DEFAULT/l3_ha').with_value(true)
-        is_expected.to contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value('3')
-        is_expected.to contain_neutron_config('DEFAULT/min_l3_agents_per_router').with_value('2')
+        is_expected.to contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(3)
+        is_expected.to contain_neutron_config('DEFAULT/min_l3_agents_per_router').with_value(2)
         is_expected.to contain_neutron_config('DEFAULT/l3_ha_net_cidr').with_value('169.254.192.0/18')
       end
     end
@@ -143,18 +149,18 @@ describe 'neutron::server' do
     context 'with HA routers enabled with unlimited l3 agents per router' do
       before :each do
         params.merge!(:l3_ha                    => true,
-                      :max_l3_agents_per_router => '0' )
+                      :max_l3_agents_per_router => 0 )
       end
       it 'should enable HA routers' do
-        is_expected.to contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value('0')
+        is_expected.to contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(0)
       end
     end
 
     context 'with HA routers enabled and wrong parameters' do
       before :each do
         params.merge!(:l3_ha                    => true,
-                      :max_l3_agents_per_router => '2',
-                      :min_l3_agents_per_router => '3' )
+                      :max_l3_agents_per_router => 2,
+                      :min_l3_agents_per_router => 3 )
       end
 
       it_raises 'a Puppet::Error', /min_l3_agents_per_router should be less than or equal to max_l3_agents_per_router./
@@ -254,7 +260,7 @@ describe 'neutron::server' do
 
   describe "with custom keystone auth_uri" do
     let :facts do
-      { :osfamily => 'RedHat' }
+      default_facts.merge({ :osfamily => 'RedHat' })
     end
     before do
       params.merge!({
@@ -273,7 +279,7 @@ describe 'neutron::server' do
 
   describe "with custom keystone identity_uri" do
     let :facts do
-      { :osfamily => 'RedHat' }
+      default_facts.merge({ :osfamily => 'RedHat' })
     end
     before do
       params.merge!({
@@ -292,7 +298,7 @@ describe 'neutron::server' do
 
   describe "with custom keystone identity_uri and auth_uri" do
     let :facts do
-      { :osfamily => 'RedHat' }
+      default_facts.merge({ :osfamily => 'RedHat' })
     end
     before do
       params.merge!({
@@ -312,8 +318,9 @@ describe 'neutron::server' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian',
-        :processorcount => '2' }
+      default_facts.merge(
+        { :osfamily => 'Debian',
+          :processorcount => '2' })
     end
 
     let :platform_params do
@@ -331,8 +338,9 @@ describe 'neutron::server' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat',
-        :processorcount => '2' }
+      default_facts.merge(
+        { :osfamily => 'RedHat',
+          :processorcount => '2' })
     end
 
     let :platform_params do

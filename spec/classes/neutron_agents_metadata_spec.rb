@@ -24,6 +24,13 @@ describe 'neutron::agents::metadata' do
     }
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default',
+      :processorcount            => '2'
+    }
+  end
+
   shared_examples_for 'neutron metadata agent' do
 
     it { is_expected.to contain_class('neutron::params') }
@@ -83,8 +90,9 @@ describe 'neutron::agents::metadata' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian',
-        :processorcount => '2' }
+      default_facts.merge(
+        { :osfamily => 'Debian' }
+      )
     end
 
     let :platform_params do
@@ -107,8 +115,9 @@ describe 'neutron::agents::metadata' do
 
   context 'on Red Hat platforms' do
     let :facts do
-      { :osfamily => 'RedHat',
-        :processorcount => '2' }
+      default_facts.merge(
+        { :osfamily => 'RedHat' }
+      )
     end
 
     let :platform_params do

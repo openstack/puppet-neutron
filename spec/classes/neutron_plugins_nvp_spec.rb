@@ -14,6 +14,12 @@ describe 'neutron::plugins::nvp' do
         :package_ensure => 'present'}
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
   let :params do
     {
         :default_tz_uuid => '0344130f-1add-4e86-b36e-ad1c44fe40dc',
@@ -87,7 +93,7 @@ describe 'neutron::plugins::nvp' do
   begin
     context 'on Debian platforms' do
       let :facts do
-        {:osfamily => 'Debian'}
+        default_facts.merge({:osfamily => 'Debian'})
       end
 
       let :platform_params do
@@ -99,7 +105,7 @@ describe 'neutron::plugins::nvp' do
 
     context 'on RedHat platforms' do
       let :facts do
-        {:osfamily => 'RedHat'}
+        default_facts.merge({:osfamily => 'RedHat'})
       end
 
       let :platform_params do

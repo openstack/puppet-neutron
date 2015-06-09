@@ -18,6 +18,12 @@ describe 'neutron::plugins::midonet' do
   }
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
   shared_examples_for 'neutron midonet plugin' do
 
     let :params do
@@ -47,7 +53,7 @@ describe 'neutron::plugins::midonet' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian'}
+      default_facts.merge({ :osfamily => 'Debian'})
     end
     it 'configures /etc/default/neutron-server' do
       is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
@@ -63,7 +69,7 @@ describe 'neutron::plugins::midonet' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat'}
+      default_facts.merge({ :osfamily => 'RedHat'})
     end
     it_configures 'neutron midonet plugin'
   end

@@ -17,7 +17,7 @@ require 'spec_helper'
 
 describe 'neutron::server::notifications' do
     let :pre_condition do
-        'define keystone_user ($name) {}'
+        'define keystone_user() {}'
     end
 
     let :default_params do
@@ -31,6 +31,12 @@ describe 'neutron::server::notifications' do
             :nova_admin_tenant_name             => 'services',
             :nova_region_name                   => nil,
         }
+    end
+
+    let :default_facts do
+      { :operatingsystem           => 'default',
+        :operatingsystemrelease    => 'default'
+      }
     end
 
     let :params do
@@ -87,7 +93,7 @@ describe 'neutron::server::notifications' do
 
         context 'when no nova_admin_password is specified' do
             before :each do
-                params.merge!(:nova_admin_password => '')
+                params.merge!({ :nova_admin_password => false })
             end
 
             it_raises 'a Puppet::Error', /nova_admin_password must be set./
@@ -95,10 +101,10 @@ describe 'neutron::server::notifications' do
 
         context 'when no nova_admin_tenant_id and nova_admin_tenant_name specified' do
             before :each do
-                params.merge!(
-                  :nova_admin_tenant_id   => '',
-                  :nova_admin_tenant_name => ''
-                )
+                params.merge!({
+                  :nova_admin_tenant_name => false,
+                  :nova_admin_tenant_id   => false,
+                })
             end
 
             it_raises 'a Puppet::Error', /You must provide either nova_admin_tenant_name or nova_admin_tenant_id./
@@ -106,10 +112,10 @@ describe 'neutron::server::notifications' do
 
         context 'when providing a tenant name' do
             before :each do
-                params.merge!(
-                  :nova_admin_tenant_id   => '',
-                  :nova_admin_tenant_name => 'services'
-                )
+                params.merge!({
+                  :nova_admin_tenant_name => 'services',
+                  :nova_admin_tenant_id   => false,
+                })
             end
             it 'should configure nova admin tenant id' do
               is_expected.to contain_nova_admin_tenant_id_setter('nova_admin_tenant_id').with(
@@ -125,7 +131,7 @@ describe 'neutron::server::notifications' do
 
     context 'on Debian platforms' do
         let :facts do
-            { :osfamily => 'Debian' }
+            default_facts.merge({ :osfamily => 'Debian' })
         end
 
         let :platform_params do
@@ -137,7 +143,7 @@ describe 'neutron::server::notifications' do
 
     context 'on RedHat platforms' do
         let :facts do
-            { :osfamily => 'RedHat' }
+            default_facts.merge({ :osfamily => 'RedHat' })
         end
 
         let :platform_params do

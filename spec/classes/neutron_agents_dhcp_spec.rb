@@ -26,6 +26,11 @@ describe 'neutron::agents::dhcp' do
       :enable_metadata_network  => false }
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
 
   shared_examples_for 'neutron dhcp agent' do
     let :p do
@@ -125,8 +130,8 @@ describe 'neutron::agents::dhcp' do
   shared_examples_for 'dnsmasq dhcp_driver' do
     it 'installs dnsmasq packages' do
       if platform_params.has_key?(:dhcp_agent_package)
-        is_expected.to contain_package(platform_params[:dnsmasq_base_package]).with_before('Package[neutron-dhcp-agent]')
-        is_expected.to contain_package(platform_params[:dnsmasq_utils_package]).with_before('Package[neutron-dhcp-agent]')
+        is_expected.to contain_package(platform_params[:dnsmasq_base_package]).with_before(['Package[neutron-dhcp-agent]'])
+        is_expected.to contain_package(platform_params[:dnsmasq_utils_package]).with_before(['Package[neutron-dhcp-agent]'])
       end
       is_expected.to contain_package(platform_params[:dnsmasq_base_package]).with(
         :ensure => 'present',
@@ -142,7 +147,7 @@ describe 'neutron::agents::dhcp' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      default_facts.merge({ :osfamily => 'Debian' })
     end
 
     let :platform_params do
@@ -158,7 +163,7 @@ describe 'neutron::agents::dhcp' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     let :platform_params do

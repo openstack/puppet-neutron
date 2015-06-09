@@ -2,6 +2,12 @@ require 'spec_helper'
 
 describe 'neutron::keystone::auth' do
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
   describe 'with default class parameters' do
     let :params do
       {
@@ -18,7 +24,7 @@ describe 'neutron::keystone::auth' do
 
     it { is_expected.to contain_keystone_user_role('neutron@foobar').with(
       :ensure  => 'present',
-      :roles   => 'admin'
+      :roles   => ['admin']
     )}
 
     it { is_expected.to contain_keystone_service('neutron').with(
@@ -42,7 +48,7 @@ describe 'neutron::keystone::auth' do
     end
 
     let :facts do
-      { :osfamily => 'Debian' }
+      default_facts.merge({ :osfamily => 'Debian' })
     end
 
     let :params do
@@ -52,7 +58,7 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with_notify('Service[neutron-server]') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with_notify(['Service[neutron-server]']) }
   end
 
   describe 'when overriding public_protocol, public_port and public address' do

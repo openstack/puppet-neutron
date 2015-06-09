@@ -2,6 +2,12 @@ require 'spec_helper'
 
 describe 'neutron::policy' do
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
   shared_examples_for 'neutron policies' do
     let :params do
       {
@@ -25,7 +31,7 @@ describe 'neutron::policy' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      default_facts.merge({ :osfamily => 'Debian' })
     end
 
     it_configures 'neutron policies'
@@ -33,7 +39,7 @@ describe 'neutron::policy' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     it_configures 'neutron policies'

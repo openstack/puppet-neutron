@@ -2,9 +2,15 @@ require 'spec_helper'
 
 describe 'neutron::client' do
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      default_facts.merge({ :osfamily => 'Debian' })
     end
 
     it { is_expected.to contain_class('neutron::client') }
@@ -12,7 +18,7 @@ describe 'neutron::client' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     it { is_expected.to contain_class('neutron::client') }

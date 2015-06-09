@@ -43,6 +43,11 @@ describe 'neutron::agents::metering' do
     }
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
 
   shared_examples_for 'neutron metering agent' do
     let :p do
@@ -95,7 +100,7 @@ describe 'neutron::agents::metering' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      default_facts.merge({ :osfamily => 'Debian' })
     end
 
     let :platform_params do
@@ -108,7 +113,7 @@ describe 'neutron::agents::metering' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     let :platform_params do

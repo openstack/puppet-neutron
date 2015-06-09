@@ -17,6 +17,12 @@ describe 'neutron::plugins::plumgrid' do
   }
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
   shared_examples_for 'neutron plumgrid plugin' do
 
     let :params do
@@ -62,7 +68,7 @@ describe 'neutron::plugins::plumgrid' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian'}
+      default_facts.merge({ :osfamily => 'Debian'})
     end
 
     it 'configures /etc/default/neutron-server' do
@@ -80,7 +86,7 @@ describe 'neutron::plugins::plumgrid' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat'}
+      default_facts.merge({ :osfamily => 'RedHat'})
     end
 
     it 'should create plugin symbolic link' do

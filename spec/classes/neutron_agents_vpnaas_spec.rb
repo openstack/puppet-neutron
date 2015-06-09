@@ -39,6 +39,11 @@ describe 'neutron::agents::vpnaas' do
     }
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
 
   shared_examples_for 'neutron vpnaas agent' do
     let :p do
@@ -104,7 +109,7 @@ describe 'neutron::agents::vpnaas' do
   shared_examples_for 'openswan vpnaas_driver' do
     it 'installs openswan packages' do
       if platform_params.has_key?(:vpnaas_agent_package)
-        is_expected.to contain_package('openswan').with_before('Package[neutron-vpnaas-agent]')
+        is_expected.to contain_package('openswan').with_before(['Package[neutron-vpnaas-agent]'])
       end
       is_expected.to contain_package('openswan').with(
         :ensure => 'present',
@@ -115,7 +120,7 @@ describe 'neutron::agents::vpnaas' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      default_facts.merge({ :osfamily => 'Debian' })
     end
 
     let :platform_params do
@@ -129,9 +134,10 @@ describe 'neutron::agents::vpnaas' do
 
   context 'on RedHat 6 platforms' do
     let :facts do
-      { :osfamily                  => 'RedHat',
-        :operatingsystemrelease    => '6.5',
-        :operatingsystemmajrelease => 6 }
+      default_facts.merge(
+        { :osfamily                  => 'RedHat',
+          :operatingsystemrelease    => '6.5',
+          :operatingsystemmajrelease => 6 })
     end
 
     let :platform_params do
@@ -145,9 +151,10 @@ describe 'neutron::agents::vpnaas' do
 
   context 'on RedHat 7 platforms' do
     let :facts do
-      { :osfamily                  => 'RedHat',
-        :operatingsystemrelease    => '7.1.2',
-        :operatingsystemmajrelease => 7 }
+      default_facts.merge(
+        { :osfamily                  => 'RedHat',
+          :operatingsystemrelease    => '7.1.2',
+          :operatingsystemmajrelease => 7 })
     end
 
     let :platform_params do

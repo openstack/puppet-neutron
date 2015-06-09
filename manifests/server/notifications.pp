@@ -80,7 +80,7 @@ class neutron::server::notifications (
     fail('nova_admin_password must be set.')
   }
 
-  if ! ( $nova_admin_tenant_id or $nova_admin_tenant_name ) {
+  if ! ($nova_admin_tenant_id or $nova_admin_tenant_name) {
     fail('You must provide either nova_admin_tenant_name or nova_admin_tenant_id.')
   }
 

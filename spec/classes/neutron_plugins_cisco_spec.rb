@@ -33,6 +33,12 @@ describe 'neutron::plugins::cisco' do
     }
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
   shared_examples_for 'default cisco plugin' do
 
     before do
@@ -131,7 +137,7 @@ describe 'neutron::plugins::cisco' do
   end
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      default_facts.merge({ :osfamily => 'Debian' })
     end
 
     context 'on Ubuntu operating systems' do
@@ -162,7 +168,7 @@ describe 'neutron::plugins::cisco' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     it_configures 'default cisco plugin'

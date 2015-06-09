@@ -21,6 +21,12 @@ describe 'neutron::agents::lbaas' do
     }
   end
 
+  let :default_facts do
+    { :operatingsystem           => 'default',
+      :operatingsystemrelease    => 'default'
+    }
+  end
+
 
   shared_examples_for 'neutron lbaas agent' do
     let :p do
@@ -73,7 +79,7 @@ describe 'neutron::agents::lbaas' do
   shared_examples_for 'haproxy lbaas_driver' do
     it 'installs haproxy packages' do
       if platform_params.has_key?(:lbaas_agent_package)
-        is_expected.to contain_package(platform_params[:haproxy_package]).with_before('Package[neutron-lbaas-agent]')
+        is_expected.to contain_package(platform_params[:haproxy_package]).with_before(['Package[neutron-lbaas-agent]'])
       end
       is_expected.to contain_package(platform_params[:haproxy_package]).with(
         :ensure => 'present'
@@ -100,9 +106,11 @@ describe 'neutron::agents::lbaas' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian',
-        :concat_basedir => '/dne'
-      }
+      default_facts.merge(
+        { :osfamily => 'Debian',
+          :concat_basedir => '/dne'
+        }
+      )
     end
 
     let :platform_params do
@@ -117,9 +125,11 @@ describe 'neutron::agents::lbaas' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat',
-        :concat_basedir => '/dne'
-      }
+      default_facts.merge(
+        { :osfamily => 'RedHat',
+          :concat_basedir => '/dne'
+        }
+      )
     end
 
     let :platform_params do

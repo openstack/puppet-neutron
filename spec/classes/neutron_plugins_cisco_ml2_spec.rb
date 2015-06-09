@@ -24,7 +24,10 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
   end
 
   let :facts do
-    { :osfamily => 'Debian' }
+    { :operatingsystem         => 'default',
+      :operatingsystemrelease  => 'default',
+      :osfamily                => 'Debian'
+    }
   end
 
   context 'fail when missing nexus_config' do

@@ -242,7 +242,7 @@ class neutron::server (
   Class['neutron::policy'] ~> Service['neutron-server']
 
   if $l3_ha {
-    if $min_l3_agents_per_router <= $max_l3_agents_per_router or $max_l3_agents_per_router == '0' {
+    if $min_l3_agents_per_router <= $max_l3_agents_per_router or $max_l3_agents_per_router == 0 {
       neutron_config {
         'DEFAULT/l3_ha':                    value => true;
         'DEFAULT/max_l3_agents_per_router': value => $max_l3_agents_per_router;

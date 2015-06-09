@@ -1,7 +1,10 @@
-*.swp
-spec/fixtures/modules/*
-spec/fixtures/manifests/site.pp
+pkg/
 Gemfile.lock
-.vendor
-.bundle/
 vendor/
+spec/fixtures/
+.vagrant/
+.bundle/
+coverage/
+.idea/
+*.swp
+*.iml

@@ -60,10 +60,13 @@ class { 'neutron::server':
     sql_connection  => 'mysql://neutron:neutron_sql_secret@127.0.0.1/neutron?charset=utf8',
 }
 
-# enable the Open VSwitch plugin server
-class { 'neutron::plugins::ovs':
-    tenant_network_type => 'gre',
-    network_vlan_ranges => 'physnet:1000:2000',
+# ml2 plugin with vxlan as ml2 driver and ovs as mechanism driver
+class { '::neutron::plugins::ml2':
+  type_drivers         => ['vxlan'],
+  tenant_network_types => ['vxlan'],
+  vxlan_group          => '239.1.1.1',
+  mechanism_drivers    => ['openvswitch'],
+  vni_ranges           => ['0:300']
 }
 ```
 
@@ -98,9 +101,11 @@ Limitations
 
 This module supports the following neutron plugins:
 
-* Open vSwitch
-* linuxbridge
-* cisco-neutron
+* Open vSwitch with ML2
+* linuxbridge with ML2
+* cisco-neutron with and without ML2
+* NVP
+* PLUMgrid
 
 The following platforms are supported:
 

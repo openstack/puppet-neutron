@@ -40,7 +40,7 @@
 #   CA cert to check against with for ssl keystone. (Defaults to undef)
 #
 # [*auth_region*]
-#   The authentication region. Defaults to 'RegionOne'.
+#   The authentication region. (Defaults to undef)
 #
 # [*metadata_ip*]
 #   The IP address of the metadata service. Defaults to '127.0.0.1'.
@@ -83,7 +83,7 @@ class neutron::agents::metadata (
   $auth_url                  = 'http://localhost:35357/v2.0',
   $auth_insecure             = false,
   $auth_ca_cert              = undef,
-  $auth_region               = 'RegionOne',
+  $auth_region               = undef,
   $metadata_ip               = '127.0.0.1',
   $metadata_port             = '8775',
   $metadata_protocol         = 'http',
@@ -102,7 +102,6 @@ class neutron::agents::metadata (
     'DEFAULT/debug':                          value => $debug;
     'DEFAULT/auth_url':                       value => $auth_url;
     'DEFAULT/auth_insecure':                  value => $auth_insecure;
-    'DEFAULT/auth_region':                    value => $auth_region;
     'DEFAULT/admin_tenant_name':              value => $auth_tenant;
     'DEFAULT/admin_user':                     value => $auth_user;
     'DEFAULT/admin_password':                 value => $auth_password, secret => true;
@@ -114,23 +113,33 @@ class neutron::agents::metadata (
     'DEFAULT/metadata_backlog':               value => $metadata_backlog;
   }
 
-  if $metadata_memory_cache_ttl {
+  if $auth_region {
     neutron_metadata_agent_config {
-      'DEFAULT/cache_url':                    value => "memory://?default_ttl=${metadata_memory_cache_ttl}";
+      'DEFAULT/auth_region': value => $auth_region;
     }
   } else {
     neutron_metadata_agent_config {
-      'DEFAULT/cache_url':                   ensure => absent;
+      'DEFAULT/auth_region': ensure => absent;
+    }
+  }
+
+  if $metadata_memory_cache_ttl {
+    neutron_metadata_agent_config {
+      'DEFAULT/cache_url': value => "memory://?default_ttl=${metadata_memory_cache_ttl}";
+    }
+  } else {
+    neutron_metadata_agent_config {
+      'DEFAULT/cache_url': ensure => absent;
     }
   }
 
   if $auth_ca_cert {
     neutron_metadata_agent_config {
-      'DEFAULT/auth_ca_cert':                 value => $auth_ca_cert;
+      'DEFAULT/auth_ca_cert': value => $auth_ca_cert;
     }
   } else {
     neutron_metadata_agent_config {
-      'DEFAULT/auth_ca_cert':                 ensure => absent;
+      'DEFAULT/auth_ca_cert': ensure => absent;
     }
   }
 

@@ -29,7 +29,7 @@ describe 'neutron::server::notifications' do
             :nova_admin_auth_url                => 'http://127.0.0.1:35357/v2.0',
             :nova_admin_username                => 'nova',
             :nova_admin_tenant_name             => 'services',
-            :nova_region_name                   => 'RegionOne'
+            :nova_region_name                   => nil,
         }
     end
 
@@ -54,8 +54,8 @@ describe 'neutron::server::notifications' do
             is_expected.to contain_neutron_config('DEFAULT/nova_admin_username').with_value('nova')
             is_expected.to contain_neutron_config('DEFAULT/nova_admin_password').with_value('secrete')
             is_expected.to contain_neutron_config('DEFAULT/nova_admin_password').with_secret( true )
-            is_expected.to contain_neutron_config('DEFAULT/nova_region_name').with_value('RegionOne')
             is_expected.to contain_neutron_config('DEFAULT/nova_admin_tenant_id').with_value('UUID')
+            is_expected.to contain_neutron_config('DEFAULT/nova_region_name').with_ensure('absent')
         end
 
         context 'when overriding parameters' do

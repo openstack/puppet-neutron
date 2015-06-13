@@ -35,10 +35,10 @@ RSpec.configure do |c|
       on host, puppet('module','install','stahnma-epel'), { :acceptable_exit_codes => 0 }
 
       # install puppet modules from git, use master
-      shell('git clone https://git.openstack.org/stackforge/puppet-openstacklib /etc/puppet/modules/openstacklib')
-      shell('git clone https://git.openstack.org/stackforge/puppet-vswitch /etc/puppet/modules/vswitch')
-      shell('git clone https://git.openstack.org/stackforge/puppet-keystone /etc/puppet/modules/keystone')
-      shell('git clone https://git.openstack.org/stackforge/puppet-openstack_extras /etc/puppet/modules/openstack_extras')
+      shell('git clone https://git.openstack.org/openstack/puppet-openstacklib /etc/puppet/modules/openstacklib')
+      shell('git clone https://git.openstack.org/openstack/puppet-vswitch /etc/puppet/modules/vswitch')
+      shell('git clone https://git.openstack.org/openstack/puppet-keystone /etc/puppet/modules/keystone')
+      shell('git clone https://git.openstack.org/openstack/puppet-openstack_extras /etc/puppet/modules/openstack_extras')
       # TODO(EmilienM) Cloning RabbitMQ module for now because we wait for a release including
       # https://github.com/enovance/puppetlabs-rabbitmq/commit/0227f762070ffbbea3c28d6a60174de98fa4cc1c
       shell('git clone https://github.com/puppetlabs/puppetlabs-rabbitmq/ /etc/puppet/modules/rabbitmq')

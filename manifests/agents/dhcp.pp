@@ -29,6 +29,10 @@
 # [*interface_driver*]
 #   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
+# [*dhcp_domain*]
+#   (optional) domain to use for building the hostnames
+#   Defaults to 'openstacklocal'
+#
 # [*dhcp_driver*]
 #   (optional) Defaults to 'neutron.agent.linux.dhcp.Dnsmasq'.
 #
@@ -69,6 +73,7 @@ class neutron::agents::dhcp (
   $state_path             = '/var/lib/neutron',
   $resync_interval        = 30,
   $interface_driver       = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $dhcp_domain            = 'openstacklocal',
   $dhcp_driver            = 'neutron.agent.linux.dhcp.Dnsmasq',
   $root_helper            = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $use_namespaces         = true,
@@ -113,6 +118,7 @@ class neutron::agents::dhcp (
     'DEFAULT/state_path':             value => $state_path;
     'DEFAULT/resync_interval':        value => $resync_interval;
     'DEFAULT/interface_driver':       value => $interface_driver;
+    'DEFAULT/dhcp_domain':            value => $dhcp_domain;
     'DEFAULT/dhcp_driver':            value => $dhcp_driver;
     'DEFAULT/use_namespaces':         value => $use_namespaces;
     'DEFAULT/root_helper':            value => $root_helper;

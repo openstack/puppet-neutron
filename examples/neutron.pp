@@ -32,14 +32,9 @@ class { '::neutron::agents::metering': }
 
 # This plugin configures Neutron for OVS on the server
 # Agent
-class { '::neutron::agents::ovs':
+class { '::neutron::agents::ml2::ovs':
   local_ip         => '192.168.1.1',
   enable_tunneling => true,
-}
-
-# Plugin
-class { '::neutron::plugins::ovs':
-  tenant_network_type => 'gre',
 }
 
 # ml2 plugin with vxlan as ml2 driver and ovs as mechanism driver
@@ -63,12 +58,7 @@ class { '::neutron':
 
 # The agent/plugin combo also needs installed on clients
 # Agent
-class { '::neutron::agents::ovs':
+class { '::neutron::agents::ml2::ovs':
   local_ip         => '192.168.1.11',
   enable_tunneling => true,
-}
-
-# Plugin
-class { '::neutron::plugins::ovs':
-  tenant_network_type => 'gre',
 }

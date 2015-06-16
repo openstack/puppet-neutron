@@ -128,5 +128,14 @@ describe 'basic neutron' do
       apply_manifest(pp, :catch_changes => true)
     end
 
+    describe 'test Neutron OVS agent bridges' do
+      it 'should list OVS bridges' do
+        shell("ovs-vsctl show") do |r|
+          expect(r.stdout).to match(/br-int/)
+          expect(r.stdout).to match(/br-tun/)
+        end
+      end
+    end
+
   end
 end

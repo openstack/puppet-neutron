@@ -1,10 +1,10 @@
 {
   "name": "stackforge-neutron",
-  "version": "5.0.0",
-  "author": "StackForge Contributors",
+  "version": "5.1.0",
+  "author": "OpenStack Contributors",
   "summary": "Puppet module for OpenStack Neutron",
   "license": "Apache-2.0",
-  "source": "git://github.com/stackforge/puppet-neutron.git",
+  "source": "git://github.com/openstack/puppet-neutron.git",
   "project_page": "https://launchpad.net/puppet-neutron",
   "issues_url": "https://bugs.launchpad.net/puppet-neutron",
   "requirements": [

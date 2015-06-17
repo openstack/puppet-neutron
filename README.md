@@ -1,7 +1,7 @@
 neutron
 ===================================
 
-5.0.0 - 2014.2.0 - Juno
+5.1.0 - 2014.2 - Juno
 
 #### Table of Contents
 
@@ -122,6 +122,33 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 
 Release Notes
 -------------
+
+**5.1.0**
+
+* Fix l3_ha enablement
+* spec: pin rspec-puppet to 1.0.1
+* Switch to TLSv1
+* Support SR-IOV mechanism driver in ML2
+* Implement better nova_admin_tenant_id_setter exists? method
+* OVS Agent with ML2: fix symlink on RH plateforms
+* Adding portdb and fastpath_flood to n1kv.conf
+* Make cisco plugin symlink coherent
+* Fix status messages checks for neutron provider
+* Make neutron_plugin_ml2 before db-sync
+* Pin puppetlabs-concat to 1.2.1 in fixtures
+* change default MySQL collate to utf8_general_ci
+* Fix neutron file_line dependency
+* Corrects "ip link set" command
+* Adding vxlan network type support for neutron ML2 plug-in
+* Raise puppet error, if nova-api unavailable
+* Do not run neutron-ovs-cleanup for each Puppet run
+* Unescape value in parse_allocation_pool
+* Fix neutron_network for --router:external setting
+* Add MidoNet plugin support
+* Allow l3_ha to be turned back off after it has been enabled
+* Update .gitreview file for project rename
+* Fix support for auth_uri setting in neutron provider
+* Reduce neutron API timeout to 10 seconds
 
 **5.0.0**
 

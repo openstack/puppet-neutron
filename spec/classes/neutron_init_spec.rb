@@ -56,6 +56,11 @@ describe 'neutron' do
 
     end
 
+    context 'with rabbitmq heartbeat configured' do
+      before { params.merge!( :rabbit_heartbeat_timeout_threshold => '60', :rabbit_heartbeat_rate => '10' ) }
+      it_configures 'rabbit with heartbeat configured'
+    end
+
     it_configures 'with SSL enabled with kombu'
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
@@ -109,6 +114,8 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value( params[:kombu_reconnect_delay] )
     end
 
@@ -152,6 +159,13 @@ describe 'neutron' do
       is_expected.not_to contain_neutron_config('oslo_messaging_rabbit/rabbit_port')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true)
+    end
+  end
+
+  shared_examples_for 'rabbit with heartbeat configured' do
+    it 'in neutron.conf' do
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10')
     end
   end
 

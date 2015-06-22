@@ -16,7 +16,7 @@ neutron
 Overview
 --------
 
-The neutron module is a part of [Stackforge](https://github.com/stackforge), an effort by the Openstack infrastructure team to provide continuous integration testing and code review for Openstack and Openstack community projects not part of the core software. The module itself is used to flexibly configure and manage the network service for Openstack.
+The neutron module is a part of [OpenStack](https://github.com/openstack), an effort by the Openstack infrastructure team to provide continuous integration testing and code review for Openstack and Openstack community projects as part of the core software. The module itself is used to flexibly configure and manage the network service for Openstack.
 
 Module Description
 ------------------
@@ -134,4 +134,4 @@ The puppet-openstack modules follow the Openstack development model. Developer d
 
 Contributors
 ------------
-The github [contributor graph](https://github.com/stackforge/puppet-neutron/graphs/contributors).
+The github [contributor graph](https://github.com/openstack/puppet-neutron/graphs/contributors).

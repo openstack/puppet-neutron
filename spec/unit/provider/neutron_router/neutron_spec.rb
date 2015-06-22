@@ -15,18 +15,40 @@ describe provider_class do
       :name            => router_name,
       :ensure          => 'present',
       :admin_state_up  => 'True',
-      :tenant_id       => '',
+      :tenant_id       => '60f9544eb94c42a6b7e8e98c2be981b1',
     }
   end
 
-  describe 'when updating a router' do
-    let :resource do
-      Puppet::Type::Neutron_router.new(router_attrs)
-    end
+  let :resource do
+    Puppet::Type::Neutron_router.new(router_attrs)
+  end
 
-    let :provider do
-      provider_class.new(resource)
+  let :provider do
+    provider_class.new(resource)
+  end
+
+  describe 'when creating a router' do
+
+    it 'should call router-create with appropriate command line options' do
+      provider.class.stubs(:get_tenant_id).returns(router_attrs[:tenant_id])
+
+      output = 'Created a new router:
+admin_state_up="True"
+external_gateway_info=""
+id="c5f799fa-b3e0-47ca-bdb7-abeff209b816"
+name="router1"
+status="ACTIVE"
+tenant_id="60f9544eb94c42a6b7e8e98c2be981b1"'
+
+      provider.expects(:auth_neutron).with('router-create',
+                                           '--format=shell', ["--tenant_id=#{router_attrs[:tenant_id]}"],
+                                           router_name).returns(output)
+
+      provider.create
     end
+  end
+
+  describe 'when updating a router' do
 
     it 'should call router-update to change admin_state_up' do
       provider.expects(:auth_neutron).with('router-update',

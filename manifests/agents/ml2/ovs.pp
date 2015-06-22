@@ -29,6 +29,10 @@
 #   (required) Whether or not to enable the OVS Agent
 #   Defaults to true
 #
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 # [*bridge_uplinks*]
 #   (optional) List of interfaces to connect to the bridge when doing
 #   bridge mapping.
@@ -91,6 +95,7 @@
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
+  $manage_service             = true,
   $bridge_uplinks             = [],
   $bridge_mappings            = [],
   $integration_bridge         = 'br-int',
@@ -216,10 +221,12 @@ class neutron::agents::ml2::ovs (
     }
   }
 
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'neutron-ovs-agent-service':

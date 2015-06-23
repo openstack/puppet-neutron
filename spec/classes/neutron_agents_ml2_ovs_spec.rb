@@ -80,6 +80,15 @@ describe 'neutron::agents::ml2::ovs' do
       )
     end
 
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not start/stop service' do
+        is_expected.to contain_service('neutron-ovs-agent-service').without_ensure
+      end
+    end
+
     context 'when supplying a firewall driver' do
       before :each do
         params.merge!(:firewall_driver => false)

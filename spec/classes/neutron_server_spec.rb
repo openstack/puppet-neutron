@@ -96,7 +96,7 @@ describe 'neutron::server' do
         :ensure  => 'running',
         :require => 'Class[Neutron]'
       )
-      is_expected.not_to contain_exec('neutron-db-sync')
+      is_expected.not_to contain_class('neutron::db::sync')
       is_expected.to contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(
         :ensure => 'absent'
       )
@@ -236,14 +236,8 @@ describe 'neutron::server' do
         :sync_db => true
       )
     end
-    it 'should exec neutron-db-sync' do
-      is_expected.to contain_exec('neutron-db-sync').with(
-        :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head',
-        :path        => '/usr/bin',
-        :before      => 'Service[neutron-server]',
-        :subscribe   => 'Neutron_config[database/connection]',
-        :refreshonly => true
-      )
+    it 'includes neutron::db::sync' do
+      is_expected.to contain_class('neutron::db::sync')
     end
   end
 

@@ -22,6 +22,7 @@ describe 'basic neutron' do
           class { '::openstack_extras::repo::redhat::redhat':
             release => 'kilo',
           }
+          package { 'openstack-selinux': ensure => 'latest' }
           $package_provider = 'yum'
         }
         default: {

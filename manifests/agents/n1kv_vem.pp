@@ -9,6 +9,10 @@
 #   (required) N1KV VSM(Virtual Supervisor Module) VM's IP.
 #   Defaults to 127.0.0.1
 #
+# [*n1kv_vsm_ipv6*]
+#   (required) N1KV VSM(Virtual Supervisor Module) VM's IP.
+#   Defaults to ::1
+#
 # [*n1kv_vsm_domainid*]
 #   (required) N1KV VSM DomainID.
 #   Defaults to 1000
@@ -101,6 +105,7 @@
 #
 class neutron::agents::n1kv_vem (
   $n1kv_vsm_ip          = '127.0.0.1',
+  $n1kv_vsm_ipv6        = '::1',
   $n1kv_vsm_domain_id   = 1000,
   $host_mgmt_intf       = 'eth1',
   $uplink_profile       = {},

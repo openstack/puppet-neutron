@@ -67,6 +67,7 @@ describe 'neutron::agents::n1kv_vem' do
     let :params do
     {
       :n1kv_vsm_ip        => '9.0.0.1',
+      :n1kv_vsm_ipv6      => '::3',
       :n1kv_vsm_domain_id => 900,
       :host_mgmt_intf     => 'eth9',
       :portdb             => 'ovs',
@@ -76,6 +77,8 @@ describe 'neutron::agents::n1kv_vem' do
     it do
       is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
         .with_content(/^l3control-ipaddr 9.0.0.1/)
+      is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
+        .with_content(/^l3control-ipv6addr ::3/)
       is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
         .with_content(/^switch-domain 900/)
       is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
@@ -90,6 +93,30 @@ describe 'neutron::agents::n1kv_vem' do
         .with_content(/^node-type compute/)
       is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
         .with_content(/^fastpath-flood enable/)
+    end
+  end
+
+  context 'verify n1kv.conf svs-mode with default IPv6 address' do
+    let :params do
+    {
+      :n1kv_vsm_ipv6 => '::1'
+    }
+    end
+    it do
+      is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
+        .without_content(/^svs-mode V6/)
+    end
+  end
+
+  context 'verify n1kv.conf svs-mode with non-default IPv6 address' do
+    let :params do
+    {
+      :n1kv_vsm_ipv6 => '::3'
+    }
+    end
+    it do
+      is_expected.to contain_file('/etc/n1kv/n1kv.conf') \
+        .with_content(/^svs-mode V6/)
     end
   end
 

@@ -42,7 +42,7 @@ RSpec.configure do |c|
       # Install the module being tested
       puppet_module_install(:source => proj_root, :module_name => 'neutron')
       # List modules installed to help with debugging
-      on hosts[0], puppet('module','list'), { :acceptable_exit_codes => 0 }
+      on host, puppet('module','list'), { :acceptable_exit_codes => 0 }
     end
   end
 end

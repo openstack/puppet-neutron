@@ -84,6 +84,8 @@ class neutron::agents::ml2::sriov (
     } else {
       $service_ensure = 'stopped'
     }
+    Package['neutron'] ~> Service['neutron-sriov-nic-agent-service']
+    Package['neutron-sriov-nic-agent'] ~> Service['neutron-sriov-nic-agent-service']
   }
 
   service { 'neutron-sriov-nic-agent-service':

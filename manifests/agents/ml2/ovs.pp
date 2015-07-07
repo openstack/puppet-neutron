@@ -237,6 +237,8 @@ class neutron::agents::ml2::ovs (
     } else {
       $service_ensure = 'stopped'
     }
+    Package['neutron'] ~> Service['neutron-ovs-agent-service']
+    Package['neutron-ovs-agent'] ~> Service['neutron-ovs-agent-service']
   }
 
   service { 'neutron-ovs-agent-service':

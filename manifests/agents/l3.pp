@@ -204,6 +204,10 @@ class neutron::agents::l3 (
     } else {
       $service_ensure = 'stopped'
     }
+    Package['neutron'] ~> Service['neutron-l3']
+    if $::neutron::params::l3_agent_package {
+      Package['neutron-l3'] ~> Service['neutron-l3']
+    }
   }
 
   service { 'neutron-l3':

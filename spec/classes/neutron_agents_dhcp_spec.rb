@@ -80,6 +80,7 @@ describe 'neutron::agents::dhcp' do
         :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
+      is_expected.to contain_service('neutron-dhcp-service').that_subscribes_to('Package[neutron]')
     end
 
     context 'with manage_service as false' do
@@ -172,6 +173,9 @@ describe 'neutron::agents::dhcp' do
 
     it_configures 'neutron dhcp agent'
     it_configures 'neutron dhcp agent with dnsmasq_config_file specified'
+    it 'configures subscription to neutron-dhcp-agent package' do
+      is_expected.to contain_service('neutron-dhcp-service').that_subscribes_to('Package[neutron-dhcp-agent]')
+    end
   end
 
   context 'on RedHat platforms' do

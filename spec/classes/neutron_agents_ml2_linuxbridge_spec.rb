@@ -65,6 +65,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
           :require => 'Class[Neutron]',
           :tag     => 'neutron-service',
         )
+        is_expected.to contain_service('neutron-plugin-linuxbridge-agent').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-plugin-linuxbridge-agent]' ] )
       end
 
       context 'with manage_service as false' do

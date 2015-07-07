@@ -43,6 +43,7 @@ describe 'neutron::agents::metadata' do
         :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
+      is_expected.to contain_service('neutron-metadata').that_subscribes_to('Package[neutron]')
     end
 
     context 'with manage_service as false' do
@@ -111,7 +112,9 @@ describe 'neutron::agents::metadata' do
 
     it_configures 'neutron metadata agent'
     it_configures 'neutron metadata agent with auth_insecure and auth_ca_cert set'
-
+    it 'configures subscription to neutron-metadata package' do
+      is_expected.to contain_service('neutron-metadata').that_subscribes_to('Package[neutron-metadata]')
+    end
   end
 
   context 'on Red Hat platforms' do

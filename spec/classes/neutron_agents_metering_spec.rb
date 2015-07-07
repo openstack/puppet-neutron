@@ -82,6 +82,7 @@ describe 'neutron::agents::metering' do
         :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
+      is_expected.to contain_service('neutron-metering-service').that_subscribes_to('Package[neutron]')
     end
 
     context 'with manage_service as false' do
@@ -114,6 +115,9 @@ describe 'neutron::agents::metering' do
     end
 
     it_configures 'neutron metering agent'
+    it 'configures subscription to neutron-metering-agent package' do
+      is_expected.to contain_service('neutron-metering-service').that_subscribes_to('Package[neutron-metering-agent]')
+    end
   end
 
   context 'on RedHat platforms' do

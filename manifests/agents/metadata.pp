@@ -158,6 +158,10 @@ class neutron::agents::metadata (
     } else {
       $service_ensure = 'stopped'
     }
+    Package['neutron'] ~> Service['neutron-metadata']
+    if $::neutron::params::metadata_agent_package {
+      Package['neutron-metadata'] ~> Service['neutron-metadata']
+    }
   }
 
   service { 'neutron-metadata':

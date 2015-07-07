@@ -172,6 +172,10 @@ class neutron::agents::dhcp (
     } else {
       $service_ensure = 'stopped'
     }
+    Package['neutron'] ~> Service['neutron-dhcp-service']
+    if $::neutron::params::dhcp_agent_package {
+      Package['neutron-dhcp-agent'] ~> Service['neutron-dhcp-service']
+    }
   }
 
   service { 'neutron-dhcp-service':

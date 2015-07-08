@@ -3,6 +3,7 @@ require 'spec_helper'
 require 'puppet/provider/neutron_router/neutron'
 
 provider_class = Puppet::Type.type(:neutron_router).provider(:neutron)
+klass = Puppet::Provider::Neutron
 
 describe provider_class do
 
@@ -68,6 +69,35 @@ tenant_id="60f9544eb94c42a6b7e8e98c2be981b1"'
                                            router_name,
                                            'net1')
       provider.gateway_network_name=('net1')
+    end
+
+  end
+
+  describe 'when parsing an external gateway info' do
+    let :resource do
+      Puppet::Type::Neutron_router.new(router_attrs)
+    end
+
+    let :provider do
+      provider_class.new(resource)
+    end
+
+    after :each do
+      klass.reset
+    end
+
+    it 'should detect a gateway net id' do
+      klass.stubs(:auth_neutron).returns(
+        'external_gateway_info="{\"network_id\": \"1b-b1\", \"enable_snat\": true, \"external_fixed_ips\": [{\"subnet_id\": \"1b-b1\", \"ip_address\": \"1.1.1.1\"}]}"'
+      )
+      result = klass.get_neutron_resource_attrs 'foo', nil
+      expect(provider.parse_gateway_network_id(result['external_gateway_info'])).to eql('1b-b1')
+    end
+
+    it 'should return empty value, if there is no net id found' do
+      klass.stubs(:auth_neutron).returns('external_gateway_info="{}"')
+      result = klass.get_neutron_resource_attrs 'foo', nil
+      expect(provider.parse_gateway_network_id(result['external_gateway_info'])).to eql('')
     end
 
   end

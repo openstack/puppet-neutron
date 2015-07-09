@@ -1,3 +1,51 @@
+##2015-07-08 - 6.0.0
+###Summary
+
+This is a backwards-incompatible major release for OpenStack Kilo.
+
+####Backwards-incompatible changes
+- Remove deprecated parameters
+- Drop OVS & LB monolitic plugins
+- Use libreswan on fedora
+- Move rabbit/kombu settings to oslo_messaging_rabbit section
+- FWaaS: update packaging for Debian & Ubuntu
+- Don't specify a nova region by default
+- Do not create tun and int bridges manually
+
+####Features
+- Puppet 4.x support
+- Refactorise Keystone resources management
+- Add 'state_path' and 'lock_path' to neutron class
+- Add service_name parameter to neutron::server class
+- DB: Added postgresql backend using openstacklib helper
+- Subscribe neutron db sync to db connection setting
+- Ensure DB is provisioned before db-sync
+- Add support for identity_uri
+- Notify the ovs-agent service if the config changes
+- Add portdb and fastpath_flood to n1kv.conf
+- Add fwaas package for Kilo in Red Hat platforms
+- Add memcache_servers parameter to base neutron class
+- Add MidoNet plugin support
+- Add PLUMgrid plugin support
+- Add OpenContrail plugin support
+- Tag all neutron packages
+- Allow to configure Nova metadata protocol
+- Configure OVS mechanism agent configs in its config file
+- Don't manage chmod for /etc/neutron and neutron.conf
+- Introduce public_url, internal_url and admin_url
+- Allow customization of dhcp_domain setting
+- Add manage_service parameter to all agents
+- Add ability to specify auth_region
+
+####Bugfixes
+- Fix l3 agent network_device_mtu deprecation
+- Set allow_automatic_l3agent_failover in neutron.conf instead of l3_agent.ini
+- Fix parsing of network gateway id for router
+
+####Maintenance
+- Acceptance tests with Beaker
+- Fix spec tests for RSpec 3.x and Puppet 4.x
+
 ##2015-06-17 - 5.1.0
 ###Summary
 

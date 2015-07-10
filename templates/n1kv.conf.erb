@@ -29,6 +29,21 @@ switch-domain <%= @n1kv_vsm_domain_id %>
 # restart_on_modify: No
 l3control-ipaddr <%= @n1kv_vsm_ip %>
 
+# TAG: l3control-ipv6addr
+# Description: IPv6 Address of VSM Mgmt I/F
+# Optional: No
+# Default: ::1
+# restart_on_modify: No
+l3control-ipv6addr <%= @n1kv_vsm_ipv6 %>
+
+# Set svs-mode to V6 if IPv6 address for VSM
+# is set to something other than default ::1.
+# This tells VEM to communicate with VSM on
+# IPv6 instead of the default IPv4 option
+<% if @n1kv_vsm_ipv6 != '::1' -%>
+svs-mode V6
+<% end -%>
+
 # TAG: host-mgmt-intf
 # Description: Management interface of the Host
 # Optional: No (on N1KV, we need this

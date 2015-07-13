@@ -287,22 +287,7 @@ class neutron::server (
   }
 
   if $sync_db {
-    if ($::neutron::params::server_package) {
-      # Debian platforms
-      Package<| title == 'neutron-server' |> ~> Exec['neutron-db-sync']
-    } else {
-      # RH platforms
-      Package<| title == 'neutron' |> ~> Exec['neutron-db-sync']
-    }
-
-    exec { 'neutron-db-sync':
-      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head',
-      path        => '/usr/bin',
-      before      => Service['neutron-server'],
-      subscribe   => Neutron_config['database/connection'],
-      refreshonly => true
-    }
-    Neutron_config<||> ~> Exec['neutron-db-sync']
+    include ::neutron::db::sync
   }
 
   neutron_config {

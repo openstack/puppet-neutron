@@ -34,7 +34,7 @@ Setup
 
 ### Installing neutron
 
-    puppet module install puppetlabs/neutron
+    puppet module install openstack/neutron
 
 ### Beginning with neutron
 

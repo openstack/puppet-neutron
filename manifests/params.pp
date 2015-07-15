@@ -56,7 +56,7 @@ class neutron::params {
     $metering_agent_package = 'openstack-neutron-metering-agent'
     $metering_agent_service = 'neutron-metering-agent'
 
-    $vpnaas_agent_package = 'openstack-neutron-vpn-agent'
+    $vpnaas_agent_package = 'openstack-neutron-vpnaas'
     $vpnaas_agent_service = 'neutron-vpn-agent'
     if $::operatingsystemrelease =~ /^7.*/ or $::operatingsystem == 'Fedora' {
       $openswan_package     = 'libreswan'

@@ -143,7 +143,7 @@ describe 'neutron::agents::vpnaas' do
 
     let :platform_params do
       { :openswan_package     => 'openswan',
-        :vpnaas_agent_package => 'openstack-neutron-vpn-agent',
+        :vpnaas_agent_package => 'openstack-neutron-vpnaas',
         :vpnaas_agent_service => 'neutron-vpn-agent'}
     end
 
@@ -160,7 +160,7 @@ describe 'neutron::agents::vpnaas' do
 
     let :platform_params do
       { :openswan_package     => 'libreswan',
-        :vpnaas_agent_package => 'openstack-neutron-vpn-agent',
+        :vpnaas_agent_package => 'openstack-neutron-vpnaas',
         :vpnaas_agent_service => 'neutron-vpn-agent'}
     end
 

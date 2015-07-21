@@ -31,7 +31,33 @@ describe provider_class do
 
   shared_examples 'neutron_network' do
 
-    describe 'when creating a network' do
+    describe 'when creating a non-shared network' do
+
+      it 'should call net-create with appropriate command line options' do
+        provider.class.stubs(:get_tenant_id).returns(net_attrs[:tenant_id])
+
+        output = 'Created a new network:
+admin_state_up="True"
+id="d9ac3494-20ea-406c-a4ba-145923dfadc9"
+name="net1"
+shared="False"
+status="ACTIVE"
+subnets=""
+tenant_id="60f9544eb94c42a6b7e8e98c2be981b1"'
+
+        provider.expects(:auth_neutron).with('net-create',
+                                             '--format=shell', ["--tenant_id=#{net_attrs[:tenant_id]}"],
+                                             net_name).returns(output)
+
+        provider.create
+      end
+    end
+
+    describe 'when creating a shared network' do
+
+      let :local_attrs do
+        attrs = net_attrs.merge({:shared => 'True'})
+      end
 
       it 'should call net-create with appropriate command line options' do
         provider.class.stubs(:get_tenant_id).returns(net_attrs[:tenant_id])

@@ -142,7 +142,7 @@ class neutron::agents::dhcp (
     package { 'neutron-dhcp-agent':
       ensure => $package_ensure,
       name   => $::neutron::params::dhcp_agent_package,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-package'],
     }
   } else {
     # Some platforms (RedHat) do not provide a neutron DHCP agent package.
@@ -163,5 +163,6 @@ class neutron::agents::dhcp (
     name    => $::neutron::params::dhcp_agent_service,
     enable  => $enabled,
     require => Class['neutron'],
+    tag     => 'neutron-service',
   }
 }

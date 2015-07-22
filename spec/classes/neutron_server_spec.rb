@@ -79,7 +79,7 @@ describe 'neutron::server' do
         is_expected.to contain_package('neutron-server').with(
           :name   => platform_params[:server_package],
           :ensure => p[:package_ensure],
-          :tag    => 'openstack'
+          :tag    => ['openstack', 'neutron-package'],
         )
         is_expected.to contain_package('neutron-server').with_before(/Neutron_api_config\[.+\]/)
         is_expected.to contain_package('neutron-server').with_before(/Neutron_config\[.+\]/)
@@ -94,7 +94,8 @@ describe 'neutron::server' do
         :name    => platform_params[:server_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]'
+        :require => 'Class[Neutron]',
+        :tag     => 'neutron-service',
       )
       is_expected.not_to contain_class('neutron::db::sync')
       is_expected.to contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(

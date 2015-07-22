@@ -134,7 +134,7 @@ class neutron::agents::ml2::linuxbridge (
     package { 'neutron-plugin-linuxbridge-agent':
       ensure => $package_ensure,
       name   => $::neutron::params::linuxbridge_agent_package,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-package'],
     }
   } else {
     # Some platforms (RedHat) do not provide a separate
@@ -143,7 +143,7 @@ class neutron::agents::ml2::linuxbridge (
       package { 'neutron-plugin-linuxbridge-agent':
         ensure => $package_ensure,
         name   => $::neutron::params::linuxbridge_server_package,
-        tag    => 'openstack',
+        tag    => ['openstack', 'neutron-package'],
       }
     }
   }
@@ -160,6 +160,7 @@ class neutron::agents::ml2::linuxbridge (
     ensure  => $service_ensure,
     name    => $::neutron::params::linuxbridge_agent_service,
     enable  => $enabled,
-    require => Class['neutron']
+    require => Class['neutron'],
+    tag     => 'neutron-service',
   }
 }

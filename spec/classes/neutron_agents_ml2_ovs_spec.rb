@@ -56,7 +56,7 @@ describe 'neutron::agents::ml2::ovs' do
         is_expected.to contain_package('neutron-ovs-agent').with(
           :name   => platform_params[:ovs_agent_package],
           :ensure => p[:package_ensure],
-          :tag    => 'openstack'
+          :tag    => ['openstack', 'neutron-package'],
         )
         is_expected.to contain_package('neutron-ovs-agent').with_before(/Neutron_agent_ovs\[.+\]/)
       else
@@ -68,7 +68,8 @@ describe 'neutron::agents::ml2::ovs' do
         :name    => platform_params[:ovs_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]'
+        :require => 'Class[Neutron]',
+        :tag     => 'neutron-service',
       )
     end
 

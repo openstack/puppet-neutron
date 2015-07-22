@@ -85,7 +85,7 @@ class neutron::agents::metering (
     package { 'neutron-metering-agent':
       ensure => $package_ensure,
       name   => $::neutron::params::metering_agent_package,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-package'],
     }
   } else {
     # Default dependency if the system does not provide a neutron metering agent package.
@@ -105,5 +105,6 @@ class neutron::agents::metering (
     name    => $::neutron::params::metering_agent_service,
     enable  => $enabled,
     require => Class['neutron'],
+    tag     => 'neutron-service',
   }
 }

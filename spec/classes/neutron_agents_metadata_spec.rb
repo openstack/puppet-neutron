@@ -39,8 +39,9 @@ describe 'neutron::agents::metadata' do
       is_expected.to contain_service('neutron-metadata').with(
         :name    => platform_params[:metadata_agent_service],
         :enable  => params[:enabled],
-        :ensure => 'running',
-        :require => 'Class[Neutron]'
+        :ensure  => 'running',
+        :require => 'Class[Neutron]',
+        :tag     => 'neutron-service',
       )
     end
 
@@ -104,7 +105,7 @@ describe 'neutron::agents::metadata' do
       is_expected.to contain_package('neutron-metadata').with(
         :ensure => params[:package_ensure],
         :name   => platform_params[:metadata_agent_package],
-        :tag    => 'openstack'
+        :tag    => ['openstack', 'neutron-package'],
       )
     end
 

@@ -78,7 +78,7 @@ describe 'neutron::agents::vpnaas' do
         is_expected.to contain_package('neutron-vpnaas-agent').with(
           :name   => platform_params[:vpnaas_agent_package],
           :ensure => p[:package_ensure],
-          :tag    => 'openstack'
+          :tag    => ['openstack', 'neutron-package'],
         )
         is_expected.to contain_package('neutron').with_before(/Package\[neutron-vpnaas-agent\]/)
         is_expected.to contain_package('neutron-vpnaas-agent').with_before(/Neutron_vpnaas_agent_config\[.+\]/)
@@ -92,7 +92,8 @@ describe 'neutron::agents::vpnaas' do
         :name    => platform_params[:vpnaas_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]'
+        :require => 'Class[Neutron]',
+        :tag     => 'neutron-service',
       )
     end
 

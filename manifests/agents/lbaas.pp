@@ -83,7 +83,7 @@ class neutron::agents::lbaas (
   package { 'neutron-lbaas-agent':
     ensure => $package_ensure,
     name   => $::neutron::params::lbaas_agent_package,
-    tag    => 'openstack',
+    tag    => ['openstack', 'neutron-package'],
   }
   if $manage_service {
     if $enabled {
@@ -98,5 +98,6 @@ class neutron::agents::lbaas (
     name    => $::neutron::params::lbaas_agent_service,
     enable  => $enabled,
     require => Class['neutron'],
+    tag     => 'neutron-service',
   }
 }

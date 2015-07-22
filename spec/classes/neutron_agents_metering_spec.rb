@@ -69,7 +69,7 @@ describe 'neutron::agents::metering' do
         is_expected.to contain_package('neutron-metering-agent').with(
           :name   => platform_params[:metering_agent_package],
           :ensure => p[:package_ensure],
-          :tag    => 'openstack'
+          :tag    => ['openstack', 'neutron-package'],
         )
         is_expected.to contain_package('neutron').with_before(/Package\[neutron-metering-agent\]/)
         is_expected.to contain_package('neutron-metering-agent').with_before(/Neutron_metering_agent_config\[.+\]/)
@@ -84,7 +84,8 @@ describe 'neutron::agents::metering' do
         :name    => platform_params[:metering_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]'
+        :require => 'Class[Neutron]',
+        :tag     => 'neutron-service',
       )
     end
 

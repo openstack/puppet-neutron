@@ -50,7 +50,7 @@ describe 'neutron::agents::lbaas' do
       is_expected.to contain_package('neutron-lbaas-agent').with(
         :name   => platform_params[:lbaas_agent_package],
         :ensure => p[:package_ensure],
-        :tag    => 'openstack'
+        :tag    => ['openstack', 'neutron-package'],
       )
       is_expected.to contain_package('neutron').with_before(/Package\[neutron-lbaas-agent\]/)
       is_expected.to contain_package('neutron-lbaas-agent').with_before(/Neutron_lbaas_agent_config\[.+\]/)
@@ -62,7 +62,8 @@ describe 'neutron::agents::lbaas' do
         :name    => platform_params[:lbaas_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]'
+        :require => 'Class[Neutron]',
+        :tag     => 'neutron-service',
       )
     end
 

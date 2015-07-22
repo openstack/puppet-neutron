@@ -105,7 +105,7 @@ describe 'neutron' do
       is_expected.to contain_package('neutron').with(
         :ensure => 'present',
         :name   => platform_params[:common_package_name],
-        :tag    => 'openstack'
+        :tag    => ['openstack', 'neutron-package'],
       )
     end
 

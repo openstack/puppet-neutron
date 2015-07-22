@@ -61,7 +61,7 @@ describe 'neutron::agents::dhcp' do
         is_expected.to contain_package('neutron-dhcp-agent').with(
           :name   => platform_params[:dhcp_agent_package],
           :ensure => p[:package_ensure],
-          :tag    => 'openstack'
+          :tag    => ['openstack', 'neutron-package'],
         )
         is_expected.to contain_package('neutron').with_before(/Package\[neutron-dhcp-agent\]/)
         is_expected.to contain_package('neutron-dhcp-agent').with_before(/Neutron_dhcp_agent_config\[.+\]/)
@@ -76,7 +76,8 @@ describe 'neutron::agents::dhcp' do
         :name    => platform_params[:dhcp_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]'
+        :require => 'Class[Neutron]',
+        :tag     => 'neutron-service',
       )
     end
 

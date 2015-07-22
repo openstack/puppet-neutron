@@ -344,7 +344,7 @@ class neutron (
   package { 'neutron':
     ensure => $package_ensure,
     name   => $::neutron::params::package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'neutron-package'],
   }
 
   neutron_config {

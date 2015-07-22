@@ -150,7 +150,7 @@ class neutron::agents::metadata (
       ensure  => $package_ensure,
       name    => $::neutron::params::metadata_agent_package,
       require => Package['neutron'],
-      tag     => 'openstack',
+      tag     => ['openstack', 'neutron-package'],
     }
   }
 
@@ -167,5 +167,6 @@ class neutron::agents::metadata (
     name    => $::neutron::params::metadata_agent_service,
     enable  => $enabled,
     require => Class['neutron'],
+    tag     => 'neutron-service',
   }
 }

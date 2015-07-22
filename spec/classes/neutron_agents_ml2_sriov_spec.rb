@@ -43,7 +43,7 @@ describe 'neutron::agents::ml2::sriov' do
       is_expected.to contain_package('neutron-sriov-nic-agent').with(
         :name   => platform_params[:sriov_nic_agent_package],
         :ensure => p[:package_ensure],
-        :tag    => 'openstack'
+        :tag    => ['openstack', 'neutron-package'],
       )
       is_expected.to contain_package('neutron-sriov-nic-agent').with_before(/Neutron_plugin_ml2\[.+\]/)
     end
@@ -53,7 +53,8 @@ describe 'neutron::agents::ml2::sriov' do
         :name    => platform_params[:sriov_nic_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]'
+        :require => 'Class[Neutron]',
+        :tag     => 'neutron-service',
       )
     end
 

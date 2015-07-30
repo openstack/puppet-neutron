@@ -24,7 +24,8 @@ describe 'neutron::agents::dhcp' do
       :dnsmasq_config_file    => nil,
       :dhcp_delete_namespaces => false,
       :enable_isolated_metadata => false,
-      :enable_metadata_network  => false }
+      :enable_metadata_network  => false,
+      :dhcp_broadcast_reply   => false }
   end
 
   let :default_facts do
@@ -54,6 +55,7 @@ describe 'neutron::agents::dhcp' do
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_delete_namespaces').with_value(p[:dhcp_delete_namespaces]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(p[:enable_isolated_metadata]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value(p[:enable_metadata_network]);
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value(p[:dhcp_broadcast_reply]);
     end
 
     it 'installs neutron dhcp agent package' do

@@ -80,7 +80,8 @@ class neutron::agents::dhcp (
   $dnsmasq_config_file    = undef,
   $dhcp_delete_namespaces = false,
   $enable_isolated_metadata = false,
-  $enable_metadata_network  = false
+  $enable_metadata_network  = false,
+  $dhcp_broadcast_reply   = false
 ) {
 
   include ::neutron::params
@@ -123,6 +124,7 @@ class neutron::agents::dhcp (
     'DEFAULT/use_namespaces':         value => $use_namespaces;
     'DEFAULT/root_helper':            value => $root_helper;
     'DEFAULT/dhcp_delete_namespaces': value => $dhcp_delete_namespaces;
+    'DEFAULT/dhcp_broadcast_reply':   value => $dhcp_broadcast_reply;
   }
 
   if $dnsmasq_config_file {

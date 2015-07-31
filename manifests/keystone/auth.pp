@@ -32,6 +32,10 @@
 # [*service_type*]
 #   Type of service. Defaults to 'network'.
 #
+# [*service_description*]
+#   Description for keystone service.
+#   (optional) Defaults to 'Neutron Networking Service'.
+#
 # [*region*]
 #   Region for endpoint. Defaults to 'RegionOne'.
 #
@@ -111,6 +115,7 @@ class neutron::keystone::auth (
   $configure_user_role = true,
   $service_name        = undef,
   $service_type        = 'network',
+  $service_description = 'Neutron Networking Service',
   $region              = 'RegionOne',
   $public_url          = 'http://127.0.0.1:9696',
   $admin_url           = 'http://127.0.0.1:9696',
@@ -196,7 +201,7 @@ class neutron::keystone::auth (
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     service_type        => $service_type,
-    service_description => 'Neutron Networking Service',
+    service_description => $service_description,
     service_name        => $real_service_name,
     region              => $region,
     password            => $password,

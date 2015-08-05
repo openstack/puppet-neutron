@@ -39,7 +39,7 @@ describe 'neutron::agents::ml2::ovs' do
 
     it { is_expected.to contain_class('neutron::params') }
 
-    it 'configures ovs_neutron_plugin.ini' do
+    it 'configures plugins/ml2/openvswitch_agent.ini' do
       is_expected.to contain_neutron_agent_ovs('agent/polling_interval').with_value(p[:polling_interval])
       is_expected.to contain_neutron_agent_ovs('agent/l2_population').with_value(p[:l2_population])
       is_expected.to contain_neutron_agent_ovs('agent/arp_responder').with_value(p[:arp_responder])

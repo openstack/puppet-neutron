@@ -43,6 +43,10 @@
 #   Admin token
 #   Defaults to undef
 #
+# [*package_ensure*]
+#   (optional) Ensure state for package.
+#   Defaults to 'present'.
+#
 class neutron::plugins::opencontrail (
   $api_server_ip              = undef,
   $api_server_port            = undef,

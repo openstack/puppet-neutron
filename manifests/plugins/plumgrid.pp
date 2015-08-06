@@ -5,36 +5,51 @@
 # [*director_server*]
 #   IP address of the PLUMgrid Director Server
 #   Defaults to 127.0.0.1
+#
 # [*director_server_port*]
 #   Port of the PLUMgrid Director Server.
 #   Defaults to 443
+#
 # [*username*]
 #   PLUMgrid platform username
+#
 # [*password*]
 #   PLUMgrid platform password
+#
 # [*servertimeout*]
 #   Request timeout duration (seconds) to PLUMgrid paltform
 #   Defaults to 99
+#
 # [*connection*]
 #   Database connection
 #   Defaults to http://127.0.0.1:35357/v2.0
+#
 # [*admin_password*]
 #   Keystone admin password
+#
 # [*controller_priv_host*]
 #   Controller private host IP
 #   Defaults to 127.0.0.1
+#
 # [*auth_protocol*]
 #   Authorization protocol
 #   Defaults to http
+#
 # [*nova_metadata_ip*]
 #   Nova metadata IP
 #   Defaults to 127.0.0.1
+#
 # [*nova_metadata_port*]
 #   Nova metadata port
 #   Defaults to 8775
+#
 # [*metadata_proxy_shared_secret*]
 #   Neutron metadata shared secret key
-
+#
+# [*package_ensure*]
+#   (optional) Ensure state for package.
+#   Defaults to 'present'.
+#
 class neutron::plugins::plumgrid (
   $director_server              = '127.0.0.1',
   $director_server_port         = '443',

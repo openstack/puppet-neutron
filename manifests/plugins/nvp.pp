@@ -21,6 +21,10 @@
 #   To be specified if planning to use logical routers with external gateways.
 #   Defaults to None.
 #
+# [*package_ensure*]
+#   (optional) Ensure state for package.
+#   Defaults to 'present'.
+#
 class neutron::plugins::nvp (
   $default_tz_uuid,
   $nvp_controllers,

@@ -29,6 +29,8 @@
 #  [*mysql_module*]
 #   (optional) Deprecated. Does nothing.
 #
+#  [*cluster_id*]
+#   (optional) Deprecated. Does nothing.
 class neutron::db::mysql (
   $password,
   $dbname        = 'neutron',
@@ -37,8 +39,9 @@ class neutron::db::mysql (
   $allowed_hosts = undef,
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
-  $cluster_id    = 'localzone',
+  # DEPRECATED
   $mysql_module  = undef,
+  $cluster_id    = 'localzone',
 ) {
 
   if $mysql_module {

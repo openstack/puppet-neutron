@@ -65,6 +65,10 @@
 #   This option requires enable_isolated_metadata = True
 #   Defaults to false.
 #
+# [*dhcp_broadcast_reply*]
+#  (optional) Use broadcast in DHCP replies
+#  Defaults to false.
+#
 class neutron::agents::dhcp (
   $package_ensure         = present,
   $enabled                = true,

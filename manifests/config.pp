@@ -21,50 +21,56 @@
 #     DEFAULT/bar:
 #       value: barValue
 #
-# [**server_config**]
+# [*server_config*]
 #   (optional) Manage configuration of neutron.conf
 #
-# [**api_config**]
+# [*api_config*]
 #   (optional) Manage configuration of api-paste.ini
 #
-# [**l3_agent_config**]
+# [*l3_agent_config*]
 #   (optional) Manage configuration of l3_agent.ini
 #
-# [**dhcp_agent_config**]
+# [*dhcp_agent_config*]
 #   (optional) Manage configuration of dhcp_agent.ini
 #
-# [**lbaas_agent_config**]
+# [*lbaas_agent_config*]
 #   (optional) Manage configuration of lbaas_agent.ini
 #
-# [**metadata_agent_config**]
+# [*metadata_agent_config*]
 #   (optional) Manage configuration of metadata_agent.ini
 #
-# [**metering_agent_config**]
+# [*metering_agent_config*]
 #   (optional) Manage configuration of metering_agent.ini
 #
-# [**vpnaas_agent_config**]
+# [*vpnaas_agent_config*]
 #   (optional) Manage configuration of vpn_agent.ini
 #
-# [**plugin_linuxbridge_config**]
+# [*plugin_linuxbridge_config*]
 #   (optional) Manage configuration of linuxbridge_conf.ini
 #
-# [**plugin_cisco_db_conn_config**]
+# [*plugin_cisco_db_conn_config*]
 #   (optional) Manage configuration of plugins/cisco/db_conn.ini
 #
-# [**plugin_cisco_config**]
+# [*plugin_cisco_l2network_config*]
+#   (optional) Manage configuration of plugins/cisco/l2network_plugin.ini
+#
+# [*plugin_cisco_config*]
 #   (optional) Manage configuration of cisco_plugins.ini
 #
-# [**plugin_midonet_config**]
+# [*plugin_midonet_config*]
 #   (optional) Manage configuration of plugins/midonet/midonet.ini
 #
-# [**plugin_plumgrid_config**]
+# [*plugin_plumgrid_config*]
 #   (optional) Manage configuration of plugins/plumgrid/plumgrid.ini
 #
-# [**plugin_opencontrail_config**]
+# [*plugin_opencontrail_config*]
 #   (optional) Manage configuration of plugins/opencontrail/ContrailPlugin.ini
 #
-# [**plugin_ml2_config**]
+# [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
+#
+# [*plugin_ovs_config*]
+#   (optional) Manage configuration of ovs_neutron_plugin.ini
 #
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.

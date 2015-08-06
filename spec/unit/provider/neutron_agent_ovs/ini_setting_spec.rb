@@ -9,6 +9,17 @@ $LOAD_PATH.push(
     'inifile',
     'lib')
 )
+$LOAD_PATH.push(
+  File.join(
+    File.dirname(__FILE__),
+    '..',
+    '..',
+    '..',
+    'fixtures',
+    'modules',
+    'openstacklib',
+    'lib')
+)
 
 require 'spec_helper'
 

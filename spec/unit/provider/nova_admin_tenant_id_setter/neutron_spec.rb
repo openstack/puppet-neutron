@@ -32,12 +32,12 @@ tenants_response = {
     ]
 }
 
-# Stub for ini_setting resource
-Puppet::Type.newtype(:ini_setting) do
+# Stub for openstack_config resource
+Puppet::Type.newtype(:openstack_config) do
 end
 
-# Stub for ini_setting provider
-Puppet::Type.newtype(:ini_setting).provide(:ruby) do
+# Stub for openstack_config provider
+Puppet::Type.newtype(:openstack_config).provide(:ini_setting) do
     def create
     end
 end

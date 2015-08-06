@@ -16,6 +16,11 @@ Puppet::Type.newtype(:neutron_metering_agent_config) do
     end
   end
 
+  newparam(:ensure_absent_val) do
+    desc 'A value that is specified as the value property will behave as if ensure => absent was specified'
+    defaultto('<SERVICE DEFAULT>')
+  end
+
   autorequire(:package) do
     ['neutron', 'neutron-metering-agent']
   end

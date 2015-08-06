@@ -7,10 +7,6 @@ Puppet::Type.newtype(:neutron_plugin_midonet) do
     newvalues(/\S+\/\S+/)
   end
 
-  autorequire(:file) do
-    ['/etc/neutron/plugins/midonet']
-  end
-
   autorequire(:package) do ['neutron'] end
 
   newproperty(:value) do
@@ -46,9 +42,17 @@ Puppet::Type.newtype(:neutron_plugin_midonet) do
     defaultto false
   end
 
+  newparam(:ensure_absent_val) do
+    desc 'A value that is specified as the value property will behave as if ensure => absent was specified'
+    defaultto('<SERVICE DEFAULT>')
+  end
+
+  autorequire(:file) do
+    ['/etc/neutron/plugins/midonet']
+  end
+
   autorequire(:package) do
     'python-neutron-plugin-midonet'
   end
-
 
 end

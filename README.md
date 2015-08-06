@@ -94,6 +94,36 @@ Implementation
 
 neutron is a combination of Puppet manifest and ruby code to deliver configuration and extra functionality through *types* and *providers*.
 
+### Types
+
+#### neutron_config
+
+The `neutron_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/neutron/neutron.conf` file.
+
+```puppet
+neutron_config { 'DEFAULT/verbose' :
+  value => true,
+}
+```
+
+This will write `verbose=true` in the `[DEFAULT]` section.
+
+##### name
+
+Section/setting name to manage from `neutron.conf`
+
+##### value
+
+The value of the setting to be defined.
+
+##### secret
+
+Whether to hide the value from Puppet logs. Defaults to `false`.
+
+##### ensure_absent_val
+
+If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
+
 
 Limitations
 -----------

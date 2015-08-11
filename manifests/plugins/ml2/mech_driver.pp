@@ -24,8 +24,8 @@ define neutron::plugins::ml2::mech_driver (
 ){
   if ($name == 'sriovnicswitch') {
     neutron_plugin_ml2 {
-      'ml2_sriov/supported_pci_vendor_dev': value => join($supported_pci_vendor_devs, ',');
-      'ml2_sriov/agent_required':           value => $sriov_agent_required;
+      'ml2_sriov/supported_pci_vendor_devs': value => join($supported_pci_vendor_devs, ',');
+      'ml2_sriov/agent_required':            value => $sriov_agent_required;
     }
   }
 }

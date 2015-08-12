@@ -15,4 +15,9 @@ Puppet::Type.newtype(:neutron_agent_linuxbridge) do
       value
     end
   end
+
+  autorequire(:package) do
+    'neutron-plugin-linuxbridge-agent'
+  end
+
 end

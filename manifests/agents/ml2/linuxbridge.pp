@@ -78,7 +78,6 @@ class neutron::agents::ml2::linuxbridge (
 
   include ::neutron::params
 
-  Package['neutron-plugin-linuxbridge-agent'] -> Neutron_agent_linuxbridge<||>
   Neutron_agent_linuxbridge<||> ~> Service['neutron-plugin-linuxbridge-agent']
 
   if ('vxlan' in $tunnel_types) {

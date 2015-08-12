@@ -15,4 +15,9 @@ Puppet::Type.newtype(:neutron_vpnaas_agent_config) do
       value
     end
   end
+
+  autorequire(:package) do
+    ['neutron', 'neutron-vpnaas-agent']
+  end
+
 end

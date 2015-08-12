@@ -81,9 +81,6 @@ describe 'neutron::agents::vpnaas' do
           :tag    => ['openstack', 'neutron-package'],
         )
         is_expected.to contain_package('neutron').with_before(/Package\[neutron-vpnaas-agent\]/)
-        is_expected.to contain_package('neutron-vpnaas-agent').with_before(/Neutron_vpnaas_agent_config\[.+\]/)
-      else
-        is_expected.to contain_package('neutron').with_before(/Neutron_vpnaas_agent_config\[.+\]/)
       end
     end
 

@@ -71,10 +71,6 @@ describe 'neutron::agents::metering' do
           :tag    => ['openstack', 'neutron-package'],
         )
         is_expected.to contain_package('neutron').with_before(/Package\[neutron-metering-agent\]/)
-        is_expected.to contain_package('neutron-metering-agent').with_before(/Neutron_metering_agent_config\[.+\]/)
-        is_expected.to contain_package('neutron-metering-agent').with_before(/Neutron_config\[.+\]/)
-      else
-        is_expected.to contain_package('neutron').with_before(/Neutron_metering_agent_config\[.+\]/)
       end
     end
 

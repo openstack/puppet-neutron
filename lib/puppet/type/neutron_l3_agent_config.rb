@@ -15,4 +15,9 @@ Puppet::Type.newtype(:neutron_l3_agent_config) do
       value
     end
   end
+
+  autorequire(:package) do
+    'neutron'
+  end
+
 end

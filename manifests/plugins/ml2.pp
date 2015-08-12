@@ -174,11 +174,9 @@ class neutron::plugins::ml2 (
       name   => $::neutron::params::ml2_server_package,
       tag    => 'openstack',
     }
-    Package['neutron-plugin-ml2'] -> Neutron_plugin_ml2<||>
     Package['neutron-plugin-ml2'] -> File['/etc/neutron/plugin.ini']
     Package['neutron-plugin-ml2'] -> File['/etc/default/neutron-server']
   } else {
-    Package <| title == 'neutron-server' |> -> Neutron_plugin_ml2<||>
     Package['neutron'] -> File['/etc/neutron/plugin.ini']
     Package['neutron'] -> File['/etc/default/neutron-server']
   }

@@ -15,4 +15,9 @@ Puppet::Type.newtype(:neutron_fwaas_service_config) do
       value
     end
   end
+
+  autorequire(:package) do
+    'neutron-fwaas'
+  end
+
 end

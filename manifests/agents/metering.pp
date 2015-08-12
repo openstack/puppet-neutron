@@ -90,16 +90,11 @@ class neutron::agents::metering (
 
   if $::neutron::params::metering_agent_package {
     Package['neutron']            -> Package['neutron-metering-agent']
-    Package['neutron-metering-agent'] -> Neutron_config<||>
-    Package['neutron-metering-agent'] -> Neutron_metering_agent_config<||>
     package { 'neutron-metering-agent':
       ensure => $package_ensure,
       name   => $::neutron::params::metering_agent_package,
       tag    => ['openstack', 'neutron-package'],
     }
-  } else {
-    # Default dependency if the system does not provide a neutron metering agent package.
-    Package['neutron'] -> Neutron_metering_agent_config<||>
   }
 
   if $manage_service {

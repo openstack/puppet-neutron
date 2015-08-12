@@ -7,12 +7,6 @@ Puppet::Type.newtype(:neutron_plugin_opencontrail) do
     newvalues(/\S+\/\S+/)
   end
 
-  autorequire(:file) do
-    ['/etc/neutron/plugins/opencontrail']
-  end
-
-  autorequire(:package) do ['neutron'] end
-
   newproperty(:value) do
     desc 'The value of the setting to be defined.'
     munge do |value|
@@ -44,6 +38,14 @@ Puppet::Type.newtype(:neutron_plugin_opencontrail) do
     newvalues(:true, :false)
 
     defaultto false
+  end
+
+  autorequire(:file) do
+    ['/etc/neutron/plugins/opencontrail']
+  end
+
+  autorequire(:package) do
+    'neutron-plugin-opencontrail'
   end
 
 end

@@ -40,4 +40,8 @@ Puppet::Type.newtype(:neutron_metadata_agent_config) do
     defaultto false
   end
 
+  autorequire(:package) do
+    'neutron'
+  end
+
 end

@@ -316,7 +316,6 @@ class neutron (
 
   include ::neutron::params
 
-  Package['neutron'] -> Neutron_config<||>
   Package['neutron'] -> Nova_Admin_Tenant_Id_Setter<||>
 
   if $use_ssl {

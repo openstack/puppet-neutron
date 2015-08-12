@@ -15,4 +15,9 @@ Puppet::Type.newtype(:neutron_lbaas_agent_config) do
       value
     end
   end
+
+  autorequire(:package) do
+    'neutron-lbaas-agent'
+  end
+
 end

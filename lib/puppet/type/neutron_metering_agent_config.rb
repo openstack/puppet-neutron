@@ -15,4 +15,9 @@ Puppet::Type.newtype(:neutron_metering_agent_config) do
       value
     end
   end
+
+  autorequire(:package) do
+    ['neutron', 'neutron-metering-agent']
+  end
+
 end

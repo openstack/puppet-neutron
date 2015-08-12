@@ -15,4 +15,9 @@ Puppet::Type.newtype(:neutron_agent_ovs) do
       value
     end
   end
+
+  autorequire(:package) do
+    'neutron-ovs-agent'
+  end
+
 end

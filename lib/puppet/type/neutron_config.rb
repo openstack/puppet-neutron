@@ -44,4 +44,8 @@ Puppet::Type.newtype(:neutron_config) do
       provider.create
   end
 
+  autorequire(:package) do
+    'neutron'
+  end
+
 end

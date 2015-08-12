@@ -46,4 +46,9 @@ Puppet::Type.newtype(:neutron_plugin_midonet) do
     defaultto false
   end
 
+  autorequire(:package) do
+    'python-neutron-plugin-midonet'
+  end
+
+
 end

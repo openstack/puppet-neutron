@@ -122,7 +122,6 @@ class neutron::agents::ml2::ovs (
     fail('L2 population must be enabled when DVR and tunneling are enabled')
   }
 
-  Package['neutron-ovs-agent'] -> Neutron_agent_ovs<||>
   Neutron_agent_ovs<||> ~> Service['neutron-ovs-agent-service']
 
   if ($bridge_mappings != []) {

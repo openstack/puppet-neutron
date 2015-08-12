@@ -7,8 +7,6 @@ Puppet::Type.newtype(:neutron_plugin_ml2) do
     newvalues(/\S+\/\S+/)
   end
 
-  autorequire(:package) do ['neutron'] end
-
   newproperty(:value) do
     desc 'The value of the setting to be defined.'
     munge do |value|
@@ -17,4 +15,9 @@ Puppet::Type.newtype(:neutron_plugin_ml2) do
       value
     end
   end
+
+  autorequire(:package) do
+    ['neutron', 'neutron-plugin-ml2']
+  end
+
 end

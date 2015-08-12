@@ -52,8 +52,6 @@ describe 'neutron::agents::lbaas' do
         :tag    => ['openstack', 'neutron-package'],
       )
       is_expected.to contain_package('neutron').with_before(/Package\[neutron-lbaas-agent\]/)
-      is_expected.to contain_package('neutron-lbaas-agent').with_before(/Neutron_lbaas_agent_config\[.+\]/)
-      is_expected.to contain_package('neutron-lbaas-agent').with_before(/Neutron_config\[.+\]/)
     end
 
     it 'configures neutron lbaas agent service' do

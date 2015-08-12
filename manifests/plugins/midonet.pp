@@ -93,11 +93,6 @@ class neutron::plugins::midonet (
     Package['neutron'] -> Neutron_plugin_midonet<||>
   }
 
-  # Although this manifest does not install midonet plugin package because it
-  # is not available in common distro repos, this statement forces you to
-  # have an orchestrator/wrapper manifest that does that job.
-  Package[$::neutron::params::midonet_server_package] -> Neutron_plugin_midonet<||>
-
   neutron_plugin_midonet {
     'MIDONET/midonet_uri':  value => "http://${midonet_api_ip}:${midonet_api_port}/midonet-api";
     'MIDONET/username':     value => $keystone_username;

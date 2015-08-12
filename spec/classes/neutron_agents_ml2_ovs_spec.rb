@@ -58,7 +58,6 @@ describe 'neutron::agents::ml2::ovs' do
           :ensure => p[:package_ensure],
           :tag    => ['openstack', 'neutron-package'],
         )
-        is_expected.to contain_package('neutron-ovs-agent').with_before(/Neutron_agent_ovs\[.+\]/)
       else
       end
     end

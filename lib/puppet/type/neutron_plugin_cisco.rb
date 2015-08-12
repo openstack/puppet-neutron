@@ -7,10 +7,6 @@ Puppet::Type.newtype(:neutron_plugin_cisco) do
     newvalues(/\S+\/\S+/)
   end
 
-  autorequire(:file) do
-    ['/etc/neutron/plugins/cisco']
-  end
-
   newproperty(:value) do
     desc 'The value of the setting to be defined.'
     munge do |value|
@@ -42,6 +38,14 @@ Puppet::Type.newtype(:neutron_plugin_cisco) do
     newvalues(:true, :false)
 
     defaultto false
+  end
+
+  autorequire(:file) do
+    ['/etc/neutron/plugins/cisco']
+  end
+
+  autorequire(:package) do
+    'neutron-plugin-cisco'
   end
 
 end

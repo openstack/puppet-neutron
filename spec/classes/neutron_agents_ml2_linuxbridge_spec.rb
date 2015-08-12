@@ -55,7 +55,6 @@ describe 'neutron::agents::ml2::linuxbridge' do
           :tag    => ['openstack', 'neutron-package'],
         )
 
-        is_expected.to contain_package('neutron-plugin-linuxbridge-agent').with_before(/Neutron_agent_linuxbridge\[.+\]/)
       end
 
       it 'configures neutron linuxbridge agent service' do

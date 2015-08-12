@@ -68,9 +68,7 @@ class neutron::plugins::plumgrid (
 
   include ::neutron::params
 
-  Package[neutron-plugin-plumgrid] -> Neutron_plugin_plumgrid<||>
   Neutron_plugin_plumgrid<||> ~> Service['neutron-server']
-  Package[neutron-plumlib-plumgrid] -> Neutron_plumlib_plumgrid<||>
   Neutron_plumlib_plumgrid<||> ~> Service['neutron-server']
 
   ensure_resource('file', '/etc/neutron/plugins/plumgrid', {

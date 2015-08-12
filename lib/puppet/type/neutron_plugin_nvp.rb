@@ -40,4 +40,8 @@ Puppet::Type.newtype(:neutron_plugin_nvp) do
     defaultto false
   end
 
+  autorequire(:package) do
+    'neutron-plugin-nvp'
+  end
+
 end

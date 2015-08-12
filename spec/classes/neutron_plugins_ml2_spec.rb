@@ -85,7 +85,6 @@ describe 'neutron::plugins::ml2' do
           :ensure => p[:package_ensure],
           :tag    => 'openstack'
         )
-        is_expected.to contain_package('neutron-plugin-ml2').with_before(/Neutron_plugin_ml2\[.+\]/)
       end
     end
 

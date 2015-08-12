@@ -88,8 +88,6 @@ class neutron::agents::lbaas (
   }
 
   Package['neutron']            -> Package['neutron-lbaas-agent']
-  Package['neutron-lbaas-agent'] -> Neutron_config<||>
-  Package['neutron-lbaas-agent'] -> Neutron_lbaas_agent_config<||>
   package { 'neutron-lbaas-agent':
     ensure => $package_ensure,
     name   => $::neutron::params::lbaas_agent_package,

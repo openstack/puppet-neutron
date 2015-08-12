@@ -7,10 +7,6 @@ Puppet::Type.newtype(:neutron_plumlib_plumgrid) do
     newvalues(/\S+\/\S+/)
   end
 
-  autorequire(:file) do
-    ['/etc/neutron/plugins/plumgrid']
-  end
-
   newproperty(:value) do
     desc 'The value of the setting to be defined.'
     munge do |value|
@@ -42,6 +38,14 @@ Puppet::Type.newtype(:neutron_plumlib_plumgrid) do
     newvalues(:true, :false)
 
     defaultto false
+  end
+
+  autorequire(:file) do
+    ['/etc/neutron/plugins/plumgrid']
+  end
+
+  autorequire(:package) do
+    'neutron-plumlib-plumgrid'
   end
 
 end

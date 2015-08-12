@@ -66,9 +66,6 @@
 # [**plugin_ml2_config**]
 #   (optional) Manage configuration of ml2_conf.ini
 #
-# [**plugin_ovs_config**]
-#   (optional) Manage configuration of ovs_neutron_plugin.ini
-#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -89,7 +86,6 @@ class neutron::config (
   $plugin_plumgrid_config        = {},
   $plugin_opencontrail_config    = {},
   $plugin_ml2_config             = {},
-  $plugin_ovs_config             = {},
 ) {
 
   validate_hash($server_config)
@@ -108,7 +104,6 @@ class neutron::config (
   validate_hash($plugin_plumgrid_config)
   validate_hash($plugin_opencontrail_config)
   validate_hash($plugin_ml2_config)
-  validate_hash($plugin_ovs_config)
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_config', $api_config)
@@ -125,5 +120,4 @@ class neutron::config (
   create_resources('neutron_plugin_plumgrid', $plugin_plumgrid_config)
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
-  create_resources('neutron_plugin_ovs', $plugin_ovs_config)
 }

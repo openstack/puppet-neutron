@@ -84,6 +84,8 @@ describe 'basic neutron' do
         rabbit_host           => '127.0.0.1',
         allow_overlapping_ips => true,
         core_plugin           => 'ml2',
+        debug                 => true,
+        verbose               => true,
         service_plugins => [
           'neutron.services.l3_router.l3_router_plugin.L3RouterPlugin',
           'neutron.services.loadbalancer.plugin.LoadBalancerPlugin',
@@ -104,12 +106,13 @@ describe 'basic neutron' do
       }
       class { '::neutron::client': }
       class { '::neutron::quota': }
-      class { '::neutron::agents::dhcp': }
-      class { '::neutron::agents::l3': }
+      class { '::neutron::agents::dhcp': debug => true }
+      class { '::neutron::agents::l3': debug => true }
       class { '::neutron::agents::lbaas':
         device_driver => 'neutron_lbaas.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
+        debug         => true,
       }
-      class { '::neutron::agents::metering': }
+      class { '::neutron::agents::metering': debug => true }
       class { '::neutron::agents::ml2::ovs':
         enable_tunneling => true,
         local_ip         => '127.0.0.1',

@@ -27,9 +27,10 @@ class neutron::params {
     $sriov_nic_agent_service = 'neutron-sriov-nic-agent'
     $sriov_nic_agent_package = 'openstack-neutron-sriov-nic-agent'
 
-    $cisco_server_package  = 'openstack-neutron-cisco'
-    $cisco_config_file     = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
-    $cisco_ml2_config_file = '/etc/neutron/plugins/ml2/ml2_conf_cisco.ini'
+    $cisco_server_package                   = 'openstack-neutron-cisco'
+    $cisco_config_file                      = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
+    # Add templated Cisco Nexus ML2 config to confdir
+    $cisco_ml2_mech_cisco_nexus_config_file = '/etc/neutron/conf.d/neutron-server/ml2_mech_cisco_nexus.ini'
 
     $opencontrail_plugin_package = 'neutron-plugin-contrail'
     $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
@@ -106,9 +107,9 @@ class neutron::params {
     $sriov_nic_agent_service = 'neutron-plugin-sriov-agent'
     $sriov_nic_agent_package = 'neutron-plugin-sriov-agent'
 
-    $cisco_server_package  = 'neutron-plugin-cisco'
-    $cisco_config_file     = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
-    $cisco_ml2_config_file = '/etc/neutron/plugins/ml2/ml2_conf_cisco.ini'
+    $cisco_server_package                   = 'neutron-plugin-cisco'
+    $cisco_config_file                      = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
+    $cisco_ml2_mech_cisco_nexus_config_file = '/etc/neutron/plugins/ml2/ml2_mech_cisco_nexus.ini'
 
     $opencontrail_plugin_package = 'neutron-plugin-contrail'
     $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'

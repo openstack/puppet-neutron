@@ -87,16 +87,7 @@ class neutron::plugins::ml2::cisco::nexus1000v (
   $enable_vif_type_n1kv                 = 'False',
 )
 {
-  if($::osfamily != 'Redhat') {
-    # Current support exists for Redhat family.
-    # Support for Debian will be added in the future.
-    fail("Unsupported osfamily ${::osfamily}")
-  }
-
-  package { 'python-networking-cisco':
-    require => Package['openstack-neutron'],
-    tag     => 'openstack',
-  }
+  include ::neutron::plugins::ml2::cisco
 
   $extension_drivers  = 'cisco_n1kv_ext'
   neutron_plugin_ml2 {

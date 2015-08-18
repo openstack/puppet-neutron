@@ -83,6 +83,9 @@ define neutron::plugins::ml2::type_driver (
   elsif ($name == 'local') {
     warning('local type_driver is useful only for single-box, because it provides no connectivity between hosts')
   }
+  elsif ($name == 'nexus_vxlan') {
+    # Nexus_vxlan type driver has its own class separate from this one
+  }
   else {
     # detect an invalid type_drivers value
     fail('type_driver unknown.')

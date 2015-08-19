@@ -32,7 +32,7 @@
 # [*core_plugin*]
 #   (optional) Neutron plugin provider
 #   Defaults to openvswitch
-#   Could be bigswitch, brocade, cisco, embrane, hyperv, linuxbridge, midonet, ml2, mlnx, nec, nicira, plumgrid, ryu, opencontrail (full path)
+#   Could be bigswitch, brocade, cisco, embrane, hyperv, linuxbridge, midonet, ml2, mlnx, nec, nicira, plumgrid, ryu, nuage, opencontrail (full path)
 #
 #   Example for opencontrail:
 #

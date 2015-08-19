@@ -66,6 +66,9 @@
 # [*plugin_opencontrail_config*]
 #   (optional) Manage configuration of plugins/opencontrail/ContrailPlugin.ini
 #
+# [*plugin_nuage_config*]
+#   (optional) Manage configuration of plugins/nuage/plugin.ini
+#
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
@@ -91,6 +94,7 @@ class neutron::config (
   $plugin_midonet_config         = {},
   $plugin_plumgrid_config        = {},
   $plugin_opencontrail_config    = {},
+  $plugin_nuage_config           = {},
   $plugin_ml2_config             = {},
 ) {
 
@@ -109,6 +113,7 @@ class neutron::config (
   validate_hash($plugin_midonet_config)
   validate_hash($plugin_plumgrid_config)
   validate_hash($plugin_opencontrail_config)
+  validate_hash($plugin_nuage_config)
   validate_hash($plugin_ml2_config)
 
   create_resources('neutron_config', $server_config)
@@ -125,5 +130,6 @@ class neutron::config (
   create_resources('neutron_plugin_midonet', $plugin_midonet_config)
   create_resources('neutron_plugin_plumgrid', $plugin_plumgrid_config)
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
+  create_resources('neutron_plugin_nuage', $plugin_nuage_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
 }

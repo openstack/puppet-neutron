@@ -44,6 +44,8 @@ class neutron::params {
 
     $nvp_server_package = 'openstack-neutron-nicira'
 
+    $nuage_config_file    = '/etc/neutron/plugins/nuage/plugin.ini'
+
     $dhcp_agent_package = false
     $dhcp_agent_service = 'neutron-dhcp-agent'
 
@@ -122,6 +124,8 @@ class neutron::params {
     $plumgrid_config_file       = '/etc/neutron/plugins/plumgrid/plumgrid.ini'
 
     $nvp_server_package = 'neutron-plugin-nicira'
+
+    $nuage_config_file    = '/etc/neutron/plugins/nuage/plugin.ini'
 
     $dhcp_agent_package = 'neutron-dhcp-agent'
     $dhcp_agent_service = 'neutron-dhcp-agent'

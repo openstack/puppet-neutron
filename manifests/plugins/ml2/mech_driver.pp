@@ -17,7 +17,15 @@
 #
 # neutron::plugins::ml2::mech_driver used by neutron::plugins::ml2
 #
-
+# === Parameters:
+#
+# [*supported_pci_vendor_devs*]
+#   (required) Supported PCI vendor devices, defined by vendor_id:product_id according
+#   to the PCI ID Repository. Default enables support for Intel and Mellanox SR-IOV capable NICs
+#
+# [*sriov_agent_required*]
+#   (required) SRIOV neutron agent is required for port binding
+#
 define neutron::plugins::ml2::mech_driver (
   $supported_pci_vendor_devs,
   $sriov_agent_required,

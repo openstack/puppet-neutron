@@ -195,6 +195,10 @@
 #   (optional) CIDR of the administrative network if HA mode is enabled.
 #   Defaults to '169.254.192.0/18'
 #
+# [*report_interval*]
+#   (optional) Deprecated, does nothing.
+#   Defaults to 'undef'.
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,

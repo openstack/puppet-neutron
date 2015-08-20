@@ -1,9 +1,10 @@
+# == Class: neutron::plugins::ml2::cisco::nexus
 #
 # Configure the Mech Driver for cisco neutron plugin
 # More info available here:
 # https://wiki.openstack.org/wiki/Neutron/ML2/MechCiscoNexus
 #
-# === Parameters
+# === Parameters:
 #
 # [*nexus_config*]
 # (required) Nexus switch configuration for ml2_cisco_conf.ini
@@ -93,7 +94,6 @@
 #   when connecting to Nexus switches.
 #   Defaults to false
 #
-
 class neutron::plugins::ml2::cisco::nexus (
   $nexus_config,
   $managed_physical_network,
@@ -135,4 +135,3 @@ class neutron::plugins::ml2::cisco::nexus (
   create_resources(neutron::plugins::ml2::cisco::nexus_creds, $nexus_config)
 
 }
-

@@ -88,6 +88,10 @@
 #   It should be false when you use nova security group.
 #   Defaults to true.
 #
+# [*package_ensure*]
+#   (optional) Ensure state for package.
+#   Defaults to 'present'.
+#
 # [*supported_pci_vendor_devs*]
 #   (optional) Supported PCI vendor devices, defined by
 #   vendor_id:product_id according to the PCI ID

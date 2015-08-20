@@ -100,6 +100,12 @@
 #   module in use needs to load.
 #   Defaults to undef
 #
+# [*root_helper*]
+#  (optional) Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
+#  root filter facility. Change to "sudo" to skip the filtering and just run the command
+#  directly
+#  Defaults to 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf'.
+#
 # [*report_interval*]
 #   (optional) Seconds between nodes reporting state to server; should be less than
 #   agent_down_time, best if it is half or less than agent_down_time.
@@ -107,7 +113,7 @@
 #   report_interval is a config for neutron agents, set by class neutron
 #   Defaults to: 30
 #
-# [memcache_servers]
+# [*memcache_servers*]
 #   List of memcache servers in format of server:port.
 #   Optional. Defaults to false. Example: ['localhost:11211']
 #
@@ -124,6 +130,10 @@
 # [*rabbit_port*]
 # [*rabbit_user*]
 #   (optional) Various rabbitmq settings
+#
+# [*rabbit_virtual_host*]
+#   (optional) virtualhost to use.
+#   Defaults to '/'
 #
 # [*rabbit_hosts*]
 #   (optional) array of rabbitmq servers for HA.

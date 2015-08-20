@@ -17,7 +17,28 @@
 #
 # neutron::plugins::ml2::type_driver used by neutron::plugins::ml2
 #
-
+#  === Parameters:
+#
+# [*flat_networks*]
+#  (required) List of physical_network names with which flat networks can be created.
+#  Use * to allow flat networks with arbitrary physical_network names.
+#
+# [*tunnel_id_ranges*]
+#  (required) Comma-separated list of <tun_min>:<tun_max> tuples enumerating ranges
+#  of GRE tunnel IDs that are available for tenant network allocation
+#
+# [*network_vlan_ranges*]
+#  (required) List of <physical_network>:<vlan_min>:<vlan_max> or <physical_network>
+#  specifying physical_network names usable for VLAN provider and tenant networks, as
+#  well as ranges of VLAN tags on each available for allocation to tenant networks.
+#
+# [*vni_ranges*]
+#  (required) Comma-separated list of <vni_min> tuples enumerating ranges of VXLAN VNI IDs
+#  that are available for tenant network allocation.
+#
+# [*vxlan_group*]
+#  (required) Multicast group for VXLAN. If unset, disables VXLAN multicast mode.
+#
 define neutron::plugins::ml2::type_driver (
   $flat_networks,
   $tunnel_id_ranges,

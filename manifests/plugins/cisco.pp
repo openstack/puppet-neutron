@@ -45,6 +45,42 @@
 # Defaults to undef. This will not set a nexus plugin to use
 # Can be set to neutron.plugins.cisco.nexus.cisco_nexus_plugin_v2.NexusPlugin
 #
+# [*vlan_start*]
+#  (optional) First VLAN for private networks.
+#  Defaults to '100'.
+#
+# [*vlan_end*]
+#  (optional) Last VLAN for private networks.
+#  Defaults to '3000'.
+#
+# [*vlan_name_prefix*]
+#  (optional) VLAN Name prefix
+#  Defaults to 'q-'
+#
+# [*model_class*]
+#  (optional) Model Class
+#  Defaults to 'neutron.plugins.cisco.models.virt_phy_sw_v2.VirtualPhysicalSwitchModelV2'
+#
+# [*max_ports*]
+#  (optional) Number max of ports
+#  Defaults to '100'
+#
+# [*max_port_profiles*]
+#  (optional) Number max of port profiles
+#  Defaults to '65568'
+#
+# [*manager_class*]
+#  (optional) Manager Class
+#  Defaults to 'neutron.plugins.cisco.segmentation.l2network_vlan_mgr_v2.L2NetworkVLANMgr'
+#
+# [*max_networks*]
+#  (optional)
+#  Defaults to '65568'
+#
+# [*package_ensure*]
+#  (optional) the ensure state of the package resource
+#  Defaults to 'present'
+#
 # Other parameters are currently not used by the plugin and
 # can be left unchanged, but in grizzly the plugin will fail
 # to launch if they are not there. The config for Havana will

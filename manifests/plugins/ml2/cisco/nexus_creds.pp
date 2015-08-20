@@ -1,3 +1,4 @@
+# == Define: neutron::plugins::ml2::cisco::nexus_creds
 #
 # Defined type to configure the Cisco Nexus Switch Credentials
 # for use by the ML2 Mech Driver for Cisco Nexus Switches.
@@ -9,16 +10,16 @@
 # neutron::plugins::ml2::cisco::nexus_creds used by
 # neutron::plugins::ml2::cisco::nexus
 #
-# === Parameters
+# === Parameters:
 #
 # [*username*]
-# (required) The username for logging into the switch to manage it.
+# (not used) The username for logging into the switch to manage it.
 #
 # [*password*]
-# (required) The password for logging into the switch to manage it.
+# (not used) The password for logging into the switch to manage it.
 #
 # [*servers*]
-# (required) A hash of server names (key) mapped to the switch's
+# (not used) A hash of server names (key) mapped to the switch's
 # interfaces (value).  For each host connected to a port on the
 # switch, specify the hostname and the Nexus physical port/s
 # (interface/s) it is connected to.  The values in the hash can
@@ -47,10 +48,10 @@
 # (required) The IP address of the switch.
 #
 # [*ssh_port*]
-# (required) The SSH port to use when connecting to the switch.
+# (not used) The SSH port to use when connecting to the switch.
 #
 # [*nve_src_intf*]
-# (optional) Only valid if VXLAN overlay is configured and
+# (not used) Only valid if VXLAN overlay is configured and
 # vxlan_global_config is set to True.
 #
 # The NVE source interface is a loopback interface that is configured on
@@ -63,7 +64,7 @@
 # Defaults to undef.
 #
 # [*physnet*]
-# (optional) Only valid if VXLAN overlay is configured.
+# (not used) Only valid if VXLAN overlay is configured.
 # The physical network name defined in the network_vlan_ranges variable
 # (defined under the ml2_type_vlan section) that this switch is controlling.
 # The configured 'physnet' is the physical network domain that is connected
@@ -72,15 +73,18 @@
 # network. These dynamic vlans may be reused across physical networks.
 #
 # Defaults to undef.
-
+#
 define neutron::plugins::ml2::cisco::nexus_creds(
+  # Not used parameters
   $username,
   $password,
   $servers,
-  $ip_address,
   $ssh_port,
+  # Used parameters
+  $ip_address,
   $nve_src_intf = undef,
   $physnet      = undef,
+
 ) {
   # Ensure Neutron server is installed before configuring ssh keys
   if ($::neutron::params::server_package) {

@@ -38,7 +38,7 @@
 #   bridge mapping.
 #   Defaults to empty list
 #
-# [*bridge_mapping*]
+# [*bridge_mappings*]
 #   (optional) List of <physical_network>:<bridge>
 #   Defaults to empty list
 #

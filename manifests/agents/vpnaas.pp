@@ -37,7 +37,7 @@
 # [*interface_driver*]
 #  (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
-# [*external_network_bridge]
+# [*external_network_bridge*]
 #  (optional) Defaults to undef
 #
 # [*ipsec_status_check_interval*]

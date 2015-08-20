@@ -13,7 +13,7 @@
 #   (required) N1KV VSM(Virtual Supervisor Module) VM's IP.
 #   Defaults to ::1
 #
-# [*n1kv_vsm_domainid*]
+# [*n1kv_vsm_domain_id*]
 #   (required) N1KV VSM DomainID.
 #   Defaults to 1000
 #

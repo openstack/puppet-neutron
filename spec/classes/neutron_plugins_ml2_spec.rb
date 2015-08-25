@@ -67,6 +67,7 @@ describe 'neutron::plugins::ml2' do
       is_expected.to contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
       is_expected.to contain_neutron_plugin_ml2('ml2/tenant_network_types').with_value(p[:tenant_network_types].join(','))
       is_expected.to contain_neutron_plugin_ml2('ml2/mechanism_drivers').with_value(p[:mechanism_drivers].join(','))
+      is_expected.to contain_neutron_plugin_ml2('ml2/extension_drivers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_plugin_ml2('ml2/path_mtu').with_value(p[:path_mtu])
       is_expected.to contain_neutron_plugin_ml2('ml2/physical_network_mtus').with_ensure('absent')
     end
@@ -85,6 +86,16 @@ describe 'neutron::plugins::ml2' do
           :ensure => p[:package_ensure],
           :tag    => 'openstack'
         )
+      end
+    end
+
+    context 'when using extension drivers for ML2 plugin' do
+      before :each do
+        params.merge!(:extension_drivers => ['port_security','qos'])
+      end
+
+      it 'configures extension drivers' do
+        is_expected.to contain_neutron_plugin_ml2('ml2/extension_drivers').with_value(p[:extension_drivers].join(','))
       end
     end
 

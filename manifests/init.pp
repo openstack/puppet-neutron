@@ -43,7 +43,7 @@
 # [*service_plugins*]
 #   (optional) Advanced service modules.
 #   Could be an array that can have these elements:
-#   router, firewall, lbaas, vpnaas, metering
+#   router, firewall, lbaas, vpnaas, metering, qos
 #   Defaults to $::os_service_default
 #
 # [*auth_strategy*]

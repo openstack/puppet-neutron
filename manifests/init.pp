@@ -43,7 +43,7 @@
 # [*service_plugins*]
 #   (optional) Advanced service modules.
 #   Could be an array that can have these elements:
-#   router, firewall, lbaas, vpnaas, metering
+#   router, firewall, lbaas, vpnaas, metering, qos
 #   Defaults to empty
 #
 # [*auth_strategy*]

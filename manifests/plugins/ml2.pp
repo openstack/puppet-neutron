@@ -29,6 +29,11 @@
 #   local, flat, vlan, gre, vxlan
 #   Defaults to ['local', 'flat', 'vlan', 'gre', 'vxlan'].
 #
+# [*extension_drivers*]
+#   (optional) Ordered list of extension driver entrypoints to be loaded
+#   from the neutron.ml2.extension_drivers namespace.
+#   Defaults to [].
+#
 # [*tenant_network_types*]
 #   (optional) Ordered list of network_types to allocate as tenant networks.
 #   The value 'local' is only useful for single-box testing
@@ -118,6 +123,7 @@
 
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
+  $extension_drivers         = [],
   $tenant_network_types      = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
   $mechanism_drivers         = ['openvswitch', 'linuxbridge'],
   $flat_networks             = '*',
@@ -198,6 +204,7 @@ class neutron::plugins::ml2 (
     'ml2/tenant_network_types':             value => join(any2array($tenant_network_types), ',');
     'ml2/mechanism_drivers':                value => join(any2array($mechanism_drivers), ',');
     'ml2/path_mtu':                         value => $path_mtu;
+    'ml2/extension_drivers':                value => join(any2array($extension_drivers), ',');
     'securitygroup/enable_security_group':  value => $enable_security_group;
   }
 

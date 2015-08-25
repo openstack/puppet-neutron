@@ -196,6 +196,10 @@
 #   (optional) Deprecated, does nothing.
 #   Defaults to 'undef'.
 #
+# [*qos_notification_drivers*]
+#   (optional) Drivers list to use to send the update notification
+#   Defaults to [].
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -226,6 +230,7 @@ class neutron::server (
   $max_l3_agents_per_router         = 3,
   $min_l3_agents_per_router         = 2,
   $l3_ha_net_cidr                   = '169.254.192.0/18',
+  $qos_notification_drivers         = [],
   # DEPRECATED PARAMETERS
   $auth_host                        = 'localhost',
   $auth_port                        = '35357',
@@ -300,6 +305,8 @@ class neutron::server (
       value  => $lock_path,
     }
   }
+
+  neutron_config { 'qos/notification_drivers': value => join(any2array($qos_notification_drivers), ',') }
 
   if ($::neutron::params::server_package) {
     Package['neutron-server'] -> Neutron_api_config<||>

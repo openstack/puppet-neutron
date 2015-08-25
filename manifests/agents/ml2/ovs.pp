@@ -109,10 +109,15 @@
 #   (optional) Enable or not ARP Spoofing Protection
 #   Defaults to true
 #
+# [*extensions*]
+#   (optional) Extensions list to use
+#   Defaults to []
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
   $manage_service             = true,
+  $extensions                 = [],
   $bridge_uplinks             = [],
   $bridge_mappings            = [],
   $integration_bridge         = 'br-int',
@@ -182,6 +187,7 @@ class neutron::agents::ml2::ovs (
     'agent/enable_distributed_routing': value => $enable_distributed_routing;
     'agent/drop_flows_on_start':        value => $drop_flows_on_start;
     'agent/prevent_arp_spoofing':       value => $prevent_arp_spoofing;
+    'agent/extensions':                 value => join(any2array($extensions), ',');
     'ovs/integration_bridge':           value => $integration_bridge;
   }
 

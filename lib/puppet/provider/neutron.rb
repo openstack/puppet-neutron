@@ -42,7 +42,7 @@ class Puppet::Provider::Neutron < Puppet::Provider
         creds['auth_uri'] = "#{q['auth_protocol']}://#{q['auth_host']}:#{q['auth_port']}/v2.0/"
       end
       if conf['DEFAULT'] and !conf['DEFAULT']['nova_region_name'].nil?
-        creds['nova_region_name'] = conf['DEFAULT']['nova_region_name']
+        creds['nova_region_name'] = conf['DEFAULT']['nova_region_name'].strip
       end
       return creds
     else

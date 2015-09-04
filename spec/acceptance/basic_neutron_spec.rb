@@ -101,9 +101,8 @@ describe 'basic neutron' do
         debug                 => true,
         verbose               => true,
         service_plugins => [
-          # TODO(emilien) lbaas is now disabled for packaging issues in RDO
-          # see LP#1490990 - should be enabled again later
           'neutron.services.l3_router.l3_router_plugin.L3RouterPlugin',
+          'neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPlugin',
           'neutron.services.metering.metering_plugin.MeteringPlugin',
         ],
       }

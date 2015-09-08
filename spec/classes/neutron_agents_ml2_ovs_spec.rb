@@ -20,7 +20,8 @@ describe 'neutron::agents::ml2::ovs' do
       :arp_responder              => false,
       :drop_flows_on_start        => false,
       :enable_distributed_routing => false,
-      :firewall_driver            => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver' }
+      :firewall_driver            => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
+      :manage_vswitch             => true }
   end
 
   let :default_facts do
@@ -116,6 +117,10 @@ describe 'neutron::agents::ml2::ovs' do
         params.merge!(:bridge_uplinks => ['br-ex:eth2'],:bridge_mappings => ['default:br-ex'])
       end
 
+      it 'should require vswitch::ovs' do
+        is_expected.to contain_class('vswitch::ovs')
+      end
+
       it 'configures bridge mappings' do
         is_expected.to contain_neutron_agent_ovs('ovs/bridge_mappings')
       end
@@ -128,6 +133,32 @@ describe 'neutron::agents::ml2::ovs' do
 
       it 'should configure bridge uplinks' do
         is_expected.to contain_neutron__plugins__ovs__port(params[:bridge_uplinks].join(',')).with(
+          :before => 'Service[neutron-ovs-agent-service]'
+        )
+      end
+    end
+
+    context 'when supplying bridge mappings for provider networks with manage vswitch set to false' do
+      before :each do
+        params.merge!(:bridge_uplinks => ['br-ex:eth2'],:bridge_mappings => ['default:br-ex'], :manage_vswitch => false)
+      end
+
+      it 'should not require vswitch::ovs' do
+        is_expected.not_to contain_class('vswitch::ovs')
+      end
+
+      it 'configures bridge mappings' do
+        is_expected.to contain_neutron_agent_ovs('ovs/bridge_mappings')
+      end
+
+      it 'should not configure bridge mappings' do
+        is_expected.not_to contain_neutron__plugins__ovs__bridge(params[:bridge_mappings].join(',')).with(
+          :before => 'Service[neutron-ovs-agent-service]'
+        )
+      end
+
+      it 'should not configure bridge uplinks' do
+        is_expected.not_to contain_neutron__plugins__ovs__port(params[:bridge_uplinks].join(',')).with(
           :before => 'Service[neutron-ovs-agent-service]'
         )
       end

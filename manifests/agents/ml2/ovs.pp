@@ -92,6 +92,11 @@
 #   for distributed virtual routing.
 #   Defaults to false
 #
+# [*drop_flows_on_start*]
+#   (optional) Set to True to drop all flows during agent start for a clean
+#   flow tables resetting
+#   Defaults to false
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -109,6 +114,7 @@ class neutron::agents::ml2::ovs (
   $arp_responder              = false,
   $firewall_driver            = 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
   $enable_distributed_routing = false,
+  $drop_flows_on_start        = false,
 ) {
 
   include ::neutron::params
@@ -156,6 +162,7 @@ class neutron::agents::ml2::ovs (
     'agent/l2_population':              value => $l2_population;
     'agent/arp_responder':              value => $arp_responder;
     'agent/enable_distributed_routing': value => $enable_distributed_routing;
+    'agent/drop_flows_on_start':        value => $drop_flows_on_start;
     'ovs/integration_bridge':           value => $integration_bridge;
   }
 

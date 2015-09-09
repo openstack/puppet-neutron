@@ -30,6 +30,8 @@ describe 'basic neutron_config resource' do
       File <||> -> Neutron_agent_ovs <||>
       File <||> -> Neutron_plugin_plumgrid <||>
       File <||> -> Neutron_plumlib_plumgrid <||>
+      File <||> -> Neutron_plugin_sriov <||>
+      File <||> -> Neutron_sriov_agent_config <||>
 
       $neutron_directories = ['/etc/neutron',
                               '/etc/neutron/plugins',
@@ -59,7 +61,9 @@ describe 'basic neutron_config resource' do
                          '/etc/neutron/vpn_agent.ini',
                          '/etc/neutron/plugins/midonet/midonet.ini',
                          '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
-                         '/etc/neutron/plugins/plumgrid/plumgrid.ini']
+                         '/etc/neutron/plugins/plumgrid/plumgrid.ini',
+                         '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
+                         '/etc/neutron/plugins/ml2/sriov_agent.ini']
 
       file { $neutron_directories :
         ensure => directory,
@@ -457,13 +461,49 @@ describe 'basic neutron_config resource' do
 
       neutron_plumlib_plumgrid { 'DEFAULT/thisshouldexist2' :
         value             => '<SERVICE DEFAULT>',
-        ensure_absent_val => 'toto',
-      }
+        ensure_absent_val => 'toto', }
 
       neutron_plumlib_plumgrid { 'DEFAULT/thisshouldnotexist2' :
         value             => 'toto',
         ensure_absent_val => 'toto',
       }
+
+      neutron_plugin_sriov { 'DEFAULT/thisshouldexist' :
+        value => 'foo',
+      }
+
+      neutron_plugin_sriov { 'DEFAULT/thisshouldnotexist' :
+        value => '<SERVICE DEFAULT>',
+      }
+
+      neutron_plugin_sriov { 'DEFAULT/thisshouldexist2' :
+        value             => '<SERVICE DEFAULT>',
+        ensure_absent_val => 'toto',
+      }
+
+      neutron_plugin_sriov { 'DEFAULT/thisshouldnotexist2' :
+        value             => 'toto',
+        ensure_absent_val => 'toto',
+      }
+
+      neutron_sriov_agent_config { 'DEFAULT/thisshouldexist' :
+        value => 'foo',
+      }
+
+      neutron_sriov_agent_config { 'DEFAULT/thisshouldnotexist' :
+        value => '<SERVICE DEFAULT>',
+      }
+
+      neutron_sriov_agent_config { 'DEFAULT/thisshouldexist2' :
+        value             => '<SERVICE DEFAULT>',
+        ensure_absent_val => 'toto',
+      }
+
+      neutron_sriov_agent_config { 'DEFAULT/thisshouldnotexist2' :
+        value             => 'toto',
+        ensure_absent_val => 'toto',
+      }
+
       EOS
 
 
@@ -490,7 +530,9 @@ describe 'basic neutron_config resource' do
                        '/etc/neutron/vpn_agent.ini',
                        '/etc/neutron/plugins/midonet/midonet.ini',
                        '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
-                       '/etc/neutron/plugins/plumgrid/plumgrid.ini']
+                       '/etc/neutron/plugins/plumgrid/plumgrid.ini',
+                       '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
+                       '/etc/neutron/plugins/ml2/sriov_agent.ini']
 
     $neutron_files.each do |neutron_conf_file|
       describe file(neutron_conf_file) do

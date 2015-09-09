@@ -51,6 +51,8 @@
 #   that should not be used for virtual networking. excluded_devices is a
 #   semicolon separated list of virtual functions to exclude from network_device.
 #   The network_device in the mapping should appear in the physical_device_mappings list.
+#
+
 class neutron::agents::ml2::sriov (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -62,16 +64,15 @@ class neutron::agents::ml2::sriov (
 
   include ::neutron::params
 
-  Neutron_plugin_ml2<||> ~> Service['neutron-sriov-nic-agent-service']
+  Neutron_sriov_agent_config <||> ~> Service['neutron-sriov-nic-agent-service']
 
-  neutron_plugin_ml2 {
+  neutron_sriov_agent_config {
     'sriov_nic/polling_interval':         value => $polling_interval;
     'sriov_nic/exclude_devices':          value => join($exclude_devices, ',');
     'sriov_nic/physical_device_mappings': value => join($physical_device_mappings, ',');
   }
 
-
-  Package['neutron-sriov-nic-agent'] -> Neutron_plugin_ml2<||>
+  Package['neutron-sriov-nic-agent'] -> Neutron_sriov_agent_config <||>
   package { 'neutron-sriov-nic-agent':
     ensure => $package_ensure,
     name   => $::neutron::params::sriov_nic_agent_package,

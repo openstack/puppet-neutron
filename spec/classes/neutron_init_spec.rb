@@ -86,23 +86,6 @@ describe 'neutron' do
 
     it { is_expected.to contain_class('neutron::params') }
 
-    it 'configures neutron configuration folder' do
-      is_expected.to contain_file('/etc/neutron/').with(
-        :ensure  => 'directory',
-        :owner   => 'root',
-        :group   => 'neutron',
-        :require => 'Package[neutron]'
-      )
-    end
-
-    it 'configures neutron configuration file' do
-      is_expected.to contain_file('/etc/neutron/neutron.conf').with(
-        :owner   => 'root',
-        :group   => 'neutron',
-        :require => 'Package[neutron]'
-      )
-    end
-
     it 'installs neutron package' do
       is_expected.to contain_package('neutron').with(
         :ensure => 'present',

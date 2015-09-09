@@ -348,18 +348,6 @@ class neutron (
     validate_array($memcache_servers)
   }
 
-  File {
-    require => Package['neutron'],
-    owner   => 'root',
-    group   => 'neutron',
-  }
-
-  file { '/etc/neutron':
-    ensure => directory,
-  }
-
-  file { '/etc/neutron/neutron.conf': }
-
   package { 'neutron':
     ensure => $package_ensure,
     name   => $::neutron::params::package_name,

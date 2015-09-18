@@ -16,8 +16,8 @@
 #    'nve_src_intf' => 1,
 #    'physnet' => "physnet1",
 #    'servers' => {
-#      'control01' => "portchannel:20",
-#      'control02' => "portchannel:10"
+#      'control01' => {"ports" => "portchannel:20"},
+#      'control02' => {"ports" => "portchannel:10"}
 #    }}}
 #
 # [*managed_physical_network*]
@@ -124,13 +124,7 @@ class neutron::plugins::ml2::cisco::nexus (
     'ml2_cisco/host_key_checks'           : value => $host_key_checks;
   }
 
-  file { 'nexus_config':
-    path    => $::neutron::params::cisco_ml2_mech_cisco_nexus_config_file,
-    owner   => 'root',
-    group   => 'neutron',
-    mode    => '0644',
-    content => template('neutron/ml2_mech_cisco_nexus_conf.erb'),
-  } ~> Service['neutron-server']
+  create_resources(neutron::plugins::ml2::cisco::nexus_switch, $nexus_config)
 
   create_resources(neutron::plugins::ml2::cisco::nexus_creds, $nexus_config)
 

@@ -38,20 +38,28 @@ class {'::neutron::plugins::ml2::cisco::nexus':
       'nve_src_intf' => 1,
       'physnet'      => 'physnet',
       'servers'      => {
-        'control1' => 'ethernet:1/1',
-        'control2' => 'ethernet:1/2'
+        'control1' => {
+          'ports' => 'ethernet:1/1',
+        },
+        'control2' => {
+          'ports' => 'ethernet:1/2',
+        },
       }
     },
     'n9372-2' => {
       'username'     => 'admin',
       'password'     => 'password',
       'ssh_port'     => 22,
-      'ip_address'   => '127.0.0.1',
+      'ip_address'   => '127.0.0.2',
       'nve_src_intf' => 1,
       'physnet'      => 'physnet',
       'servers'      => {
-        'compute1' => 'ethernet:1/1',
-        'compute2' => 'ethernet:1/2'
+        'compute1' => {
+          'ports' => 'ethernet:1/1',
+        },
+        'compute2' => {
+          'ports' => 'ethernet:1/2',
+        },
       }
     }
   },

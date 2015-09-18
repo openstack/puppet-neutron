@@ -105,6 +105,10 @@
 #   mappings provided as part of the $bridge_mappings parameters.
 #   Defaults to true
 #
+# [*prevent_arp_spoofing*]
+#   (optional) Enable or not ARP Spoofing Protection
+#   Defaults to true
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -124,6 +128,7 @@ class neutron::agents::ml2::ovs (
   $enable_distributed_routing = false,
   $drop_flows_on_start        = false,
   $manage_vswitch             = true,
+  $prevent_arp_spoofing       = true,
 ) {
 
   include ::neutron::params
@@ -176,6 +181,7 @@ class neutron::agents::ml2::ovs (
     'agent/arp_responder':              value => $arp_responder;
     'agent/enable_distributed_routing': value => $enable_distributed_routing;
     'agent/drop_flows_on_start':        value => $drop_flows_on_start;
+    'agent/prevent_arp_spoofing':       value => $prevent_arp_spoofing;
     'ovs/integration_bridge':           value => $integration_bridge;
   }
 

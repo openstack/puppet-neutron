@@ -70,10 +70,6 @@ class neutron::plugins::opencontrail (
     tag    => 'openstack',
   }
 
-  # Although this manifest does not install opencontrail plugin package because it
-  # is not available in common distro repos, this statement forces you to
-  # have an orchestrator/wrapper manifest that does that job.
-  Package[$::neutron::params::opencontrail_plugin_package] -> Neutron_plugin_opencontrail<||>
   Neutron_plugin_opencontrail<||> ~> Service['neutron-server']
 
   ensure_resource('file', '/etc/neutron/plugins/opencontrail', {

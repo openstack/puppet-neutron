@@ -28,6 +28,9 @@ Puppet::Type.newtype(:neutron_subnet) do
     Array of Sub-ranges of cidr available for dynamic allocation to ports.
     Syntax:["start=IPADDR,end=IPADDR", ...]
     EOT
+    def insync?(is)
+      is.to_set == should.to_set
+    end
   end
 
   newproperty(:gateway_ip) do

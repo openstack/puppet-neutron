@@ -93,7 +93,7 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
       end
 
       let :platform_params do
-        { :cisco_ml2_config_file => '/etc/neutron/conf.d/neutron-server/ml2_mech_cisco_nexus.ini' }
+        { :cisco_ml2_config_file => '/etc/neutron/conf.d/neutron-server/ml2_mech_cisco_nexus.conf' }
       end
 
       it_configures 'neutron cisco ml2 nexus plugin'

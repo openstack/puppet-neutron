@@ -85,6 +85,7 @@ describe 'neutron::agents::l3' do
         :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
+      is_expected.to contain_service('neutron-l3').that_subscribes_to('Package[neutron]')
     end
 
     context 'with manage_service as false' do
@@ -150,6 +151,9 @@ describe 'neutron::agents::l3' do
 
     it_configures 'neutron l3 agent'
     it_configures 'neutron l3 agent with network_device_mtu specified'
+    it 'configures neutron-l3 package subscription' do
+      is_expected.to contain_service('neutron-l3').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-l3]' ] )
+    end
   end
 
   context 'on RedHat platforms' do

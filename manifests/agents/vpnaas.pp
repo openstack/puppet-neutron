@@ -105,6 +105,10 @@ class neutron::agents::vpnaas (
     } else {
       $service_ensure = 'stopped'
     }
+    Package['neutron'] ~> Service['neutron-vpnaas-service']
+    if $::neutron::params::vpnaas_agent_package {
+      Package['neutron-vpnaas-agent'] ~> Service['neutron-vpnaas-service']
+    }
   }
 
   service { 'neutron-vpnaas-service':

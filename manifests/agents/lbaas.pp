@@ -99,6 +99,8 @@ class neutron::agents::lbaas (
     } else {
       $service_ensure = 'stopped'
     }
+    Package['neutron'] ~> Service['neutron-lbaas-service']
+    Package['neutron-lbaas-agent'] ~> Service['neutron-lbaas-service']
   }
 
   service { 'neutron-lbaas-service':

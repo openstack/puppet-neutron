@@ -103,6 +103,10 @@ class neutron::agents::metering (
     } else {
       $service_ensure = 'stopped'
     }
+    Package['neutron'] ~> Service['neutron-metering-service']
+    if $::neutron::params::metering_agent_package {
+      Package['neutron-metering-agent'] ~> Service['neutron-metering-service']
+    }
   }
 
   service { 'neutron-metering-service':

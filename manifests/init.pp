@@ -359,6 +359,9 @@ class neutron (
     tag    => ['openstack', 'neutron-package'],
   }
 
+  # Make sure all services get restarted if neutron-common package is upgraded
+  Package['neutron'] ~> Service<| tag == 'neutron-service' |>
+
   neutron_config {
     'DEFAULT/verbose':                 value => $verbose;
     'DEFAULT/debug':                   value => $debug;

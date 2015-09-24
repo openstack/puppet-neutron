@@ -62,6 +62,7 @@ describe 'neutron::agents::lbaas' do
         :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
+      is_expected.to contain_service('neutron-lbaas-service').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-lbaas-agent]' ] )
     end
 
     context 'with manage_service as false' do

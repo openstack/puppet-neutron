@@ -153,6 +153,8 @@ class neutron::agents::ml2::linuxbridge (
     } else {
       $service_ensure = 'stopped'
     }
+    Package['neutron'] ~> Service['neutron-plugin-linuxbridge-agent']
+    Package['neutron-plugin-linuxbridge-agent'] ~> Service['neutron-plugin-linuxbridge-agent']
   }
 
   service { 'neutron-plugin-linuxbridge-agent':

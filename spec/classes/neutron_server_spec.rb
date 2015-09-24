@@ -49,17 +49,7 @@ describe 'neutron::server' do
       default_params.merge(params)
     end
 
-    it 'should perform default database configuration of' do
-      is_expected.to contain_neutron_config('database/connection').with_value(p[:database_connection])
-      is_expected.to contain_neutron_config('database/connection').with_secret( true )
-      is_expected.to contain_neutron_config('database/max_retries').with_value(p[:database_max_retries])
-      is_expected.to contain_neutron_config('database/idle_timeout').with_value(p[:database_idle_timeout])
-      is_expected.to contain_neutron_config('database/retry_interval').with_value(p[:database_retry_interval])
-      is_expected.to contain_neutron_config('database/min_pool_size').with_value(p[:database_min_pool_size])
-      is_expected.to contain_neutron_config('database/max_pool_size').with_value(p[:database_max_pool_size])
-      is_expected.to contain_neutron_config('database/max_overflow').with_value(p[:database_max_overflow])
-    end
-
+    it { is_expected.to contain_class('neutron::db') }
     it { is_expected.to contain_class('neutron::params') }
     it { is_expected.to contain_class('neutron::policy') }
 
@@ -242,17 +232,6 @@ describe 'neutron::server' do
     end
   end
 
-  shared_examples_for 'a neutron server with database_connection specified' do
-    before do
-      params.merge!(
-        :database_connection => 'sqlite:////var/lib/neutron/ovs-TEST_parameter.sqlite'
-      )
-    end
-    it 'configures database connection' do
-      is_expected.to contain_neutron_config('database/connection').with_value(params[:database_connection])
-    end
-  end
-
   describe "with custom keystone auth_uri" do
     let :facts do
       default_facts.merge({ :osfamily => 'RedHat' })
@@ -341,7 +320,6 @@ describe 'neutron::server' do
     it_configures 'a neutron server with broken authentication'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
-    it_configures 'a neutron server with database_connection specified'
     it_configures 'a neutron server without database synchronization'
   end
 
@@ -360,7 +338,6 @@ describe 'neutron::server' do
     it_configures 'a neutron server with broken authentication'
     it_configures 'a neutron server with auth_admin_prefix set'
     it_configures 'a neutron server with some incorrect auth_admin_prefix set'
-    it_configures 'a neutron server with database_connection specified'
     it_configures 'a neutron server without database synchronization'
   end
 end

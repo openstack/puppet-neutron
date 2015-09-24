@@ -75,7 +75,7 @@
 #
 # [*database_connection*]
 #   (optional) Connection url for the neutron database.
-#   (Defaults to 'sqlite:////var/lib/neutron/ovs.sqlite')
+#   (Defaults to undef)
 #
 # [*sql_connection*]
 #   DEPRECATED: Use database_connection instead.
@@ -85,7 +85,7 @@
 #
 # [*database_max_retries*]
 #   (optional) Maximum database connection retries during startup.
-#   (Defaults to 10)
+#   (Defaults to undef)
 #
 # [*sql_max_retries*]
 #   DEPRECATED: Use database_max_retries instead.
@@ -96,7 +96,7 @@
 # [*database_idle_timeout*]
 #   (optional) Timeout before idle database connections are reaped.
 #   Deprecates sql_idle_timeout
-#   (Defaults to 3600)
+#   (Defaults to undef)
 #
 # [*sql_idle_timeout*]
 #   DEPRECATED: Use database_idle_timeout instead.
@@ -116,15 +116,15 @@
 #
 # [*database_min_pool_size*]
 #   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to: 1
+#   Defaults to: undef.
 #
 # [*database_max_pool_size*]
 #   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to: 10
+#   Defaults to: undef.
 #
 # [*database_max_overflow*]
 #   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to: 20
+#   Defaults to: undef.
 #
 # [*sync_db*]
 #   (optional) Run neutron-db-manage on api nodes after installing the package.
@@ -164,9 +164,6 @@
 #   neutron.scheduler.l3_agent_scheduler.ChanceScheduler to schedule a router in a random way
 #   neutron.scheduler.l3_agent_scheduler.LeastRoutersScheduler to allocate on an L3 agent with the least number of routers bound.
 #   Defaults to: neutron.scheduler.l3_agent_scheduler.ChanceScheduler
-#
-# [*mysql_module*]
-#   (optional) Deprecated. Does nothing.
 #
 # [*router_distributed*]
 #   (optional) Setting the "router_distributed" flag to "True" will default to the creation
@@ -211,13 +208,13 @@ class neutron::server (
   $auth_user                        = 'neutron',
   $auth_uri                         = false,
   $identity_uri                     = false,
-  $database_connection              = 'sqlite:////var/lib/neutron/ovs.sqlite',
-  $database_max_retries             = 10,
-  $database_idle_timeout            = 3600,
-  $database_retry_interval          = 10,
-  $database_min_pool_size           = 1,
-  $database_max_pool_size           = 10,
-  $database_max_overflow            = 20,
+  $database_connection              = undef,
+  $database_max_retries             = undef,
+  $database_idle_timeout            = undef,
+  $database_retry_interval          = undef,
+  $database_min_pool_size           = undef,
+  $database_max_pool_size           = undef,
+  $database_max_overflow            = undef,
   $sync_db                          = false,
   $api_workers                      = $::processorcount,
   $rpc_workers                      = $::processorcount,
@@ -234,7 +231,6 @@ class neutron::server (
   $auth_port                        = '35357',
   $auth_protocol                    = 'http',
   $auth_admin_prefix                = false,
-  $mysql_module                     = undef,
   $log_dir                          = undef,
   $log_file                         = undef,
   $report_interval                  = undef,
@@ -242,6 +238,7 @@ class neutron::server (
   $lock_path                        = undef,
 ) {
 
+  include ::neutron::db
   include ::neutron::params
   include ::neutron::policy
   require keystone::python
@@ -269,27 +266,6 @@ class neutron::server (
       }
   }
 
-  if $mysql_module {
-    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
-  }
-
-  validate_re($database_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
-
-  case $database_connection {
-    /mysql:\/\/\S+:\S+@\S+\/\S+/: {
-      require 'mysql::bindings'
-      require 'mysql::bindings::python'
-    }
-    /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
-      $backend_package = 'python-psycopg2'
-    }
-    /sqlite:\/\//: {
-      $backend_package = 'python-pysqlite2'
-    }
-    default: {
-      fail("Invalid database_connection parameter: ${database_connection}")
-    }
-  }
 
   if $sync_db {
     include ::neutron::db::sync
@@ -302,13 +278,6 @@ class neutron::server (
     'DEFAULT/router_scheduler_driver':          value => $router_scheduler_driver;
     'DEFAULT/router_distributed':               value => $router_distributed;
     'DEFAULT/allow_automatic_l3agent_failover': value => $allow_automatic_l3agent_failover;
-    'database/connection':                      value => $database_connection, secret => true;
-    'database/idle_timeout':                    value => $database_idle_timeout;
-    'database/retry_interval':                  value => $database_retry_interval;
-    'database/max_retries':                     value => $database_max_retries;
-    'database/min_pool_size':                   value => $database_min_pool_size;
-    'database/max_pool_size':                   value => $database_max_pool_size;
-    'database/max_overflow':                    value => $database_max_overflow;
   }
 
   if $state_path {

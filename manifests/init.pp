@@ -123,7 +123,7 @@
 
 # [*rpc_backend*]
 #   (optional) what rpc/queuing service to use
-#   Defaults to impl_kombu (rabbitmq)
+#   Defaults to rabbit (rabbitmq)
 #
 # [*rpc_response_timeout*]
 #   (optional) Seconds to wait for a response from a call
@@ -277,7 +277,7 @@ class neutron (
   $report_interval                    = '30',
   $memcache_servers                   = false,
   $control_exchange                   = 'neutron',
-  $rpc_backend                        = 'neutron.openstack.common.rpc.impl_kombu',
+  $rpc_backend                        = 'rabbit',
   $rpc_response_timeout               = 60,
   $rabbit_password                    = false,
   $rabbit_host                        = 'localhost',
@@ -439,7 +439,7 @@ class neutron (
   }
 
 
-  if $rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' {
+  if $rpc_backend == 'rabbit' or $rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' {
     if ! $rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }
@@ -500,7 +500,7 @@ class neutron (
 
   }
 
-  if $rpc_backend == 'neutron.openstack.common.rpc.impl_qpid' {
+  if $rpc_backend == 'qpid' or $rpc_backend == 'neutron.openstack.common.rpc.impl_qpid' {
     neutron_config {
       'DEFAULT/qpid_hostname':               value => $qpid_hostname;
       'DEFAULT/qpid_port':                   value => $qpid_port;

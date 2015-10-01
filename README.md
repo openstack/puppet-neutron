@@ -1,7 +1,7 @@
 neutron
 ===================================
 
-5.1.0 - 2014.2 - Juno
+5.2.0 - 2014.2 - Juno
 
 #### Table of Contents
 
@@ -122,6 +122,13 @@ The github [contributor graph](https://github.com/stackforge/puppet-neutron/grap
 
 Release Notes
 -------------
+
+**5.2.0**
+
+* Add an ability to manage use_stderr parameter
+* Create file /etc/default/neutron-server
+* ml2: Fix typo with ml2_srvio/supported_pci_vendor_devs param
+* Opencontrail: Create neutron::plugins::opencontrail
 
 **5.1.0**
 

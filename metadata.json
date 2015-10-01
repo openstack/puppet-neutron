@@ -1,6 +1,6 @@
 {
   "name": "stackforge-neutron",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "author": "OpenStack Contributors",
   "summary": "Puppet module for OpenStack Neutron",
   "license": "Apache-2.0",

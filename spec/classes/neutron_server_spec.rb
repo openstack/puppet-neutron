@@ -85,7 +85,7 @@ describe 'neutron::server' do
         :enable  => true,
         :ensure  => 'running',
         :require => 'Class[Neutron]',
-        :tag     => 'neutron-service',
+        :tag     => ['neutron-service', 'neutron-db-sync-service'],
       )
       is_expected.not_to contain_class('neutron::db::sync')
       is_expected.to contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(

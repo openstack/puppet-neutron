@@ -6,7 +6,7 @@ class neutron::db::sync {
   include ::neutron::params
 
   Package<| tag == 'neutron-package' |> ~> Exec['neutron-db-sync']
-  Exec['neutron-db-sync'] ~> Service <| tag == 'neutron-service' |>
+  Exec['neutron-db-sync'] ~> Service <| tag == 'neutron-db-sync-service' |>
 
   Neutron_config<||> ~> Exec['neutron-db-sync']
   Neutron_config<| title == 'database/connection' |> ~> Exec['neutron-db-sync']

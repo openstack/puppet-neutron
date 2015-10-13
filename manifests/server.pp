@@ -477,6 +477,6 @@ class neutron::server (
     hasstatus  => true,
     hasrestart => true,
     require    => Class['neutron'],
-    tag        => 'neutron-service',
+    tag        => ['neutron-service', 'neutron-db-sync-service'],
   }
 }

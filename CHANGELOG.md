@@ -1,3 +1,26 @@
+##2015-10-10 - 6.1.0
+### Summary
+
+This is a feature and bugfix release in the Kilo series.
+
+The ml2_sriov/supported_pci_vendor_devs parameter (in ml2 mech driver) was
+previously never applied, this bug was fixed by Sebastien.
+
+The neutron_agent_linuxbridge ini file configuration is different on Ubuntu.
+Colleen has fixed our manifest in order to reflect this packaging change.
+
+####Features
+- Allow deployment when DVR is enabled and L2 pop and tunneling are disabled
+- N1Kv: Adding nexus1000v puppet class
+- N1Kv:Adding params for IPv6 communication with VSM
+
+####Bugfixes
+- Fix neutron_agent_linuxbridge file path
+- ml2: Fix typo with ml2_srvio/supported_pci_vendor_devs param.
+
+####Maintenance
+- acceptance: checkout stable/kilo puppet modules
+
 ##2015-07-08 - 6.0.0
 ###Summary
 

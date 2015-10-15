@@ -190,7 +190,6 @@ class neutron::keystone::auth (
 
   if $configure_endpoint {
     Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| title == 'neutron-server' |>
-    Keystone_endpoint["${region}/${real_service_name}"] -> Nova_admin_tenant_id_setter<||>
   }
 
   if $configure_user_role {

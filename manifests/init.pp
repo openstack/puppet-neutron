@@ -321,8 +321,6 @@ class neutron (
 
   include ::neutron::params
 
-  Package['neutron'] -> Nova_Admin_Tenant_Id_Setter<||>
-
   if $use_ssl {
     if !$cert_file {
       fail('The cert_file parameter is required when use_ssl is set to true')

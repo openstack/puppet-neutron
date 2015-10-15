@@ -109,13 +109,8 @@ class neutron::server::notifications (
       'DEFAULT/nova_admin_tenant_id': value => $nova_admin_tenant_id;
     }
   } else {
-    nova_admin_tenant_id_setter {'nova_admin_tenant_id':
-      ensure           => present,
-      tenant_name      => $nova_admin_tenant_name,
-      auth_url         => $nova_admin_auth_url,
-      auth_username    => $nova_admin_username,
-      auth_password    => $nova_admin_password,
-      auth_tenant_name => $nova_admin_tenant_name,
+    neutron_config {
+      'DEFAULT/nova_admin_tenant_name': value => $nova_admin_tenant_name;
     }
   }
 }

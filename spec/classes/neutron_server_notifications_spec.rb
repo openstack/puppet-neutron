@@ -117,14 +117,8 @@ describe 'neutron::server::notifications' do
                   :nova_admin_tenant_id   => false,
                 })
             end
-            it 'should configure nova admin tenant id' do
-              is_expected.to contain_nova_admin_tenant_id_setter('nova_admin_tenant_id').with(
-                :ensure           => 'present',
-                :tenant_name      => 'services',
-                :auth_url         => 'http://127.0.0.1:35357/v2.0',
-                :auth_password    => 'secrete',
-                :auth_tenant_name => 'services'
-              )
+            it 'should configure nova admin tenant name' do
+              is_expected.to contain_neutron_config('DEFAULT/nova_admin_tenant_name').with_value('services')
             end
         end
     end

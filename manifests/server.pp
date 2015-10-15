@@ -242,7 +242,6 @@ class neutron::server (
   include ::neutron::policy
   require keystone::python
 
-  Nova_admin_tenant_id_setter<||> ~> Service['neutron-server']
   Neutron_config<||>     ~> Service['neutron-server']
   Neutron_api_config<||> ~> Service['neutron-server']
   Class['neutron::policy'] ~> Service['neutron-server']

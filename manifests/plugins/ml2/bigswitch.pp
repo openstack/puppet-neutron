@@ -26,4 +26,5 @@ class neutron::plugins::ml2::bigswitch (
       tag    => 'openstack',
     }
   )
+  warning('python-networking-bigswitch package management is deprecated, it will be dropped in a future release.')
 }

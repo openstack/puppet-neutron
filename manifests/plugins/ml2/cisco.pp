@@ -28,4 +28,5 @@ class neutron::plugins::ml2::cisco (
       tag    => 'openstack',
     }
   )
+  warning('python-networking-cisco package management is deprecated, it will be dropped in a future release.')
 }

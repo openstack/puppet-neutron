@@ -202,12 +202,14 @@ class neutron::agents::n1kv_vem (
         gpgkey   => "${n1kv_source}/RPM-GPG-KEY"
         #proxy   => '_none_',
       }
+      warning('cisco-vem-repo repository management is deprecated, it will be dropped in a future release.')
     }
     package {'nexus1000v':
       ensure => $package_ensure,
       tag    => 'openstack',
     }
   }
+  warning('nexus1000v package management is deprecated, it will be dropped in a future release.')
 
   if $manage_service {
     if $enable {
@@ -220,6 +222,7 @@ class neutron::agents::n1kv_vem (
   service { 'nexus1000v':
     ensure    => $service_ensure,
   }
+  warning('nexus1000v service management is deprecated, it will be dropped in a future release.')
 
   #Upon config change in 'n1kv.conf' execute below 'vemcmd reread config'.
   #No need to restart service.

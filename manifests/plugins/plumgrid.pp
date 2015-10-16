@@ -97,6 +97,7 @@ class neutron::plugins::plumgrid (
     ensure => $package_ensure,
     name   => $::neutron::params::plumgrid_pythonlib_package
   }
+  warning('neutron-plumlib-plumgrid package management is deprecated, it will be dropped in a future release.')
 
   if $::osfamily == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':

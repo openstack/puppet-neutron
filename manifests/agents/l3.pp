@@ -70,7 +70,7 @@
 #
 # [*router_delete_namespaces*]
 #   (optional) namespaces can be deleted cleanly on the host running the L3 agent
-#   Defaults to False
+#   Defaults to true
 #
 # [*ha_enabled*]
 #   (optional) Enabled or not HA for L3 agent.
@@ -122,7 +122,7 @@ class neutron::agents::l3 (
   $periodic_fuzzy_delay             = '5',
   $enable_metadata_proxy            = true,
   $network_device_mtu               = undef,
-  $router_delete_namespaces         = false,
+  $router_delete_namespaces         = true,
   $ha_enabled                       = false,
   $ha_vrrp_auth_type                = 'PASS',
   $ha_vrrp_auth_password            = undef,

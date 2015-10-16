@@ -22,7 +22,7 @@ describe 'neutron::agents::dhcp' do
       :root_helper            => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
       :use_namespaces         => nil,
       :dnsmasq_config_file    => nil,
-      :dhcp_delete_namespaces => false,
+      :dhcp_delete_namespaces => true,
       :enable_isolated_metadata => false,
       :enable_metadata_network  => false,
       :dhcp_broadcast_reply   => false }

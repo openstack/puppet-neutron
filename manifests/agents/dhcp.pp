@@ -47,7 +47,7 @@
 #
 # [*dhcp_delete_namespaces*]
 #   (optional) Delete namespace after removing a dhcp server
-#   Defaults to false.
+#   Defaults to true.
 #
 # [*enable_isolated_metadata*]
 #   (optional) enable metadata support on isolated networks.
@@ -84,7 +84,7 @@ class neutron::agents::dhcp (
   $dhcp_driver              = 'neutron.agent.linux.dhcp.Dnsmasq',
   $root_helper              = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $dnsmasq_config_file      = undef,
-  $dhcp_delete_namespaces   = false,
+  $dhcp_delete_namespaces   = true,
   $enable_isolated_metadata = false,
   $enable_metadata_network  = false,
   $dhcp_broadcast_reply     = false,

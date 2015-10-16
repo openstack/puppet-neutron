@@ -22,7 +22,7 @@ describe 'neutron::agents::l3' do
       :periodic_fuzzy_delay             => '5',
       :enable_metadata_proxy            => true,
       :network_device_mtu               => nil,
-      :router_delete_namespaces         => false,
+      :router_delete_namespaces         => true,
       :ha_enabled                       => false,
       :ha_vrrp_auth_type                => 'PASS',
       :ha_vrrp_auth_password            => nil,

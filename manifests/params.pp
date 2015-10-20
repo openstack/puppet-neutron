@@ -75,7 +75,6 @@ class neutron::params {
 
     $kernel_headers     = "linux-headers-${::kernelrelease}"
 
-    $psycopg_package_name = 'python-psycopg2'
     $sqlite_package_name  = undef
 
   } elsif($::osfamily == 'Debian') {
@@ -155,7 +154,6 @@ class neutron::params {
     $cliff_package      = 'python-cliff'
     $kernel_headers     = "linux-headers-${::kernelrelease}"
 
-    $psycopg_package_name = 'python-psycopg2'
     $sqlite_package_name  = 'python-pysqlite2'
   } else {
 

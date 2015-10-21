@@ -87,15 +87,25 @@ tenant_id="60f9544eb94c42a6b7e8e98c2be981b1"'
     end
 
     it 'should detect a gateway net id' do
-      klass.stubs(:auth_neutron).returns(
-        'external_gateway_info="{\"network_id\": \"1b-b1\", \"enable_snat\": true, \"external_fixed_ips\": [{\"subnet_id\": \"1b-b1\", \"ip_address\": \"1.1.1.1\"}]}"'
-      )
+      output = <<-EOT
+        bla-bla-bla
+
+      [{"Field": "external_gateway_info",
+        "Value": "{\\"network_id\\": \\"1b-b1\\", \\"enable_snat\\": true, \\"external_fixed_ips\\": [{\\"subnet_id\\": \\"1b-b1\\", \\"ip_address\\": \\"1.1.1.1\\"}]}"
+      }]
+      EOT
+      klass.stubs(:auth_neutron).returns(output)
       result = klass.get_neutron_resource_attrs 'foo', nil
       expect(provider.parse_gateway_network_id(result['external_gateway_info'])).to eql('1b-b1')
     end
 
     it 'should return empty value, if there is no net id found' do
-      klass.stubs(:auth_neutron).returns('external_gateway_info="{}"')
+      output = <<-EOT
+        bla-bla-bla
+
+        [{"Field": "external_gateway_info", "Value": "{}"}]
+      EOT
+      klass.stubs(:auth_neutron).returns(output)
       result = klass.get_neutron_resource_attrs 'foo', nil
       expect(provider.parse_gateway_network_id(result['external_gateway_info'])).to eql('')
     end

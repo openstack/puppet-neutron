@@ -19,7 +19,6 @@ describe 'neutron::keystone::auth' do
     it { is_expected.to contain_keystone_user('neutron').with(
       :ensure   => 'present',
       :password => 'neutron_password',
-      :tenant   => 'foobar'
     ) }
 
     it { is_expected.to contain_keystone_user_role('neutron@foobar').with(

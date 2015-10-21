@@ -81,6 +81,7 @@ describe 'neutron' do
     it_configures 'with service_plugins'
     it_configures 'without memcache_servers'
     it_configures 'with memcache_servers'
+    it_configures 'with qpid rpc backend'
   end
 
   shared_examples_for 'a neutron base installation' do
@@ -155,6 +156,55 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10')
     end
+  end
+
+  shared_examples_for 'with qpid rpc backend' do
+    before do
+      params.merge!({ :rpc_backend => 'qpid' })
+    end
+
+    it { is_expected.to contain_neutron_config('DEFAULT/rpc_backend').with_value('qpid') }
+
+    context 'when default params' do
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_username').with_value('guest') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_password').with_value('guest').with_secret(true) }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_hostname').with_value('localhost') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_port').with_value('5672') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_protocol').with_value('tcp') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_heartbeat').with_value('60') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_tcp_nodelay').with_value('true') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_reconnect').with_value('true') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_reconnect_timeout').with_value('0') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_reconnect_limit').with_value('0') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_reconnect_interval_min').with_value('0') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_reconnect_interval_max').with_value('0') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_reconnect_interval').with_value('0') }
+    end
+
+    context 'when passing params' do
+      before do
+        params.merge!({
+          :qpid_password       => 'pass',
+          :qpid_username       => 'guest2',
+          :qpid_hostname       => 'localhost2',
+          :qpid_port           => '5673',
+          :qpid_protocol       => 'udp',
+          :qpid_heartbeat      => '89',
+          :qpid_tcp_nodelay    => 'false',
+          :qpid_reconnect      => 'false',
+        })
+      end
+
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_username').with_value('guest2') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_password').with_value('pass').with_secret(true) }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_hostname').with_value('localhost2') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_port').with_value('5673') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_protocol').with_value('udp') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_heartbeat').with_value('89') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_tcp_nodelay').with_value('false') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_qpid/qpid_reconnect').with_value('false') }
+    end
+
   end
 
   shared_examples_for 'with SSL socket options set' do

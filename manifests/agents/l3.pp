@@ -32,11 +32,11 @@
 #
 # [*router_id*]
 #   (optional) The ID of the external router in neutron
-#   Defaults to blank
+#   Defaults to $::os_service_default
 #
 # [*gateway_external_network_id*]
 #   (optional) The ID of the external network in neutron
-#   Defaults to blank
+#   Defaults to $::os_service_default
 #
 # [*handle_internal_only_routers*]
 #   (optional) L3 Agent will handle non-external routers
@@ -65,7 +65,7 @@
 #
 # [*network_device_mtu*]
 #   (optional) The MTU size for the interfaces managed by the L3 agent
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #   Should be deprecated in the next major release in favor of a global parameter
 #
 # [*router_delete_namespaces*]
@@ -82,7 +82,7 @@
 #
 # [*ha_vrrp_auth_password*]
 #   (optional) VRRP authentication password. Required if ha_enabled = true.
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*ha_vrrp_advert_int*]
 #   (optional) The advertisement interval in seconds.
@@ -104,7 +104,7 @@
 #   (optional) Deprecated. 'True' value will be enforced in future releases.
 #   Allow overlapping IP (Must have kernel build with
 #   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
-#   Defaults to undef.
+#   Defaults to $::os_service_default.
 #
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
@@ -113,24 +113,24 @@ class neutron::agents::l3 (
   $debug                            = false,
   $external_network_bridge          = 'br-ex',
   $interface_driver                 = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $router_id                        = undef,
-  $gateway_external_network_id      = undef,
+  $router_id                        = $::os_service_default,
+  $gateway_external_network_id      = $::os_service_default,
   $handle_internal_only_routers     = true,
   $metadata_port                    = '9697',
   $send_arp_for_ha                  = '3',
   $periodic_interval                = '40',
   $periodic_fuzzy_delay             = '5',
   $enable_metadata_proxy            = true,
-  $network_device_mtu               = undef,
+  $network_device_mtu               = $::os_service_default,
   $router_delete_namespaces         = true,
   $ha_enabled                       = false,
   $ha_vrrp_auth_type                = 'PASS',
-  $ha_vrrp_auth_password            = undef,
+  $ha_vrrp_auth_password            = $::os_service_default,
   $ha_vrrp_advert_int               = '3',
   $agent_mode                       = 'legacy',
   # DEPRECATED PARAMETERS
   $allow_automatic_l3agent_failover = false,
-  $use_namespaces                   = undef,
+  $use_namespaces                   = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -164,24 +164,16 @@ class neutron::agents::l3 (
     'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;
     'DEFAULT/router_delete_namespaces':         value => $router_delete_namespaces;
     'DEFAULT/agent_mode':                       value => $agent_mode;
+    'DEFAULT/network_device_mtu':               value => $network_device_mtu;
+    'DEFAULT/use_namespaces':                   value => $use_namespaces;
   }
 
-  if $use_namespaces != undef {
+  if ! is_service_default ($use_namespaces) {
     warning('The use_namespaces parameter is deprecated and will be removed in future releases')
-    neutron_l3_agent_config {
-      'DEFAULT/use_namespaces':                 value => $use_namespaces;
-    }
   }
 
-  if $network_device_mtu {
+  if ! is_service_default ($network_device_mtu) {
     warning('The neutron::agents::l3::network_device_mtu parameter is deprecated, use neutron::network_device_mtu instead.')
-    neutron_l3_agent_config {
-      'DEFAULT/network_device_mtu':           value => $network_device_mtu;
-    }
-  } else {
-    neutron_l3_agent_config {
-      'DEFAULT/network_device_mtu':           ensure => absent;
-    }
   }
 
   if $::neutron::params::l3_agent_package {

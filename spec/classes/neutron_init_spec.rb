@@ -21,7 +21,7 @@ describe 'neutron' do
     }
   end
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem           => 'default',
       :operatingsystemrelease    => 'default'
     }
@@ -116,14 +116,14 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/mac_generation_retries').with_value(16)
       is_expected.to contain_neutron_config('DEFAULT/dhcp_lease_duration').with_value(86400)
       is_expected.to contain_neutron_config('DEFAULT/dhcp_agents_per_network').with_value(1)
-      is_expected.to contain_neutron_config('DEFAULT/network_device_mtu').with_ensure('absent')
+      is_expected.to contain_neutron_config('DEFAULT/network_device_mtu').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dhcp_agent_notification').with_value(true)
       is_expected.to contain_neutron_config('DEFAULT/advertise_mtu').with_value(false)
       is_expected.to contain_neutron_config('DEFAULT/allow_bulk').with_value(true)
       is_expected.to contain_neutron_config('DEFAULT/allow_pagination').with_value(false)
       is_expected.to contain_neutron_config('DEFAULT/allow_sorting').with_value(false)
       is_expected.to contain_neutron_config('DEFAULT/allow_overlapping_ips').with_value(false)
-      is_expected.to contain_neutron_config('DEFAULT/api_extensions_path').with_value(nil)
+      is_expected.to contain_neutron_config('DEFAULT/api_extensions_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
       is_expected.to contain_neutron_config('DEFAULT/state_path').with_value('/var/lib/neutron')
       is_expected.to contain_neutron_config('DEFAULT/lock_path').with_value('/var/lib/neutron/lock')
@@ -310,9 +310,9 @@ describe 'neutron' do
 
     it do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
     end
   end
@@ -327,9 +327,9 @@ describe 'neutron' do
 
     it do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
     end
   end
@@ -502,7 +502,9 @@ describe 'neutron' do
 
   context 'on Debian platforms' do
     let :facts do
-      default_facts.merge({ :osfamily => 'Debian' })
+      @default_facts.merge(test_facts.merge({
+         :osfamily => 'Debian'
+      }))
     end
 
     let :platform_params do
@@ -514,10 +516,10 @@ describe 'neutron' do
 
   context 'on RedHat platforms' do
     let :facts do
-      default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystemrelease => '7'
-      })
+      @default_facts.merge(test_facts.merge({
+         :osfamily               => 'RedHat',
+         :operatingsystemrelease => '7'
+      }))
     end
 
     let :platform_params do

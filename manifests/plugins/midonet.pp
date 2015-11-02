@@ -17,6 +17,7 @@
 #   service is desirable and defaulted)
 # [*keystone_password*]
 #   Password from which midonet api will authenticate against Keystone
+#   Defaults to $::os_service_default
 # [*keystone_tenant*]
 #   Tenant from which midonet api will authenticate against Keystone (services
 #   tenant is desirable and defaulted)
@@ -69,7 +70,7 @@ class neutron::plugins::midonet (
   $midonet_api_ip    = '127.0.0.1',
   $midonet_api_port  = '8080',
   $keystone_username = 'neutron',
-  $keystone_password = undef,
+  $keystone_password = $::os_service_default,
   $keystone_tenant   = 'services',
   $sync_db           = false
 ) {

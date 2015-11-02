@@ -10,7 +10,7 @@ describe 'neutron::db::postgresql' do
     'include postgresql::server'
   end
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem           => 'default',
       :operatingsystemrelease    => 'default'
     }
@@ -18,11 +18,11 @@ describe 'neutron::db::postgresql' do
 
   context 'on a RedHat osfamily' do
     let :facts do
-      default_facts.merge({
+      @default_facts.merge(test_facts.merge({
         :osfamily                 => 'RedHat',
         :operatingsystemrelease   => '7.0',
         :concat_basedir => '/var/lib/puppet/concat'
-      })
+      }))
     end
 
     context 'with only required parameters' do
@@ -40,12 +40,12 @@ describe 'neutron::db::postgresql' do
 
   context 'on a Debian osfamily' do
     let :facts do
-      default_facts.merge({
+      @default_facts.merge(test_facts.merge({
         :operatingsystemrelease => '7.8',
         :operatingsystem        => 'Debian',
         :osfamily               => 'Debian',
         :concat_basedir => '/var/lib/puppet/concat'
-      })
+      }))
     end
 
     context 'with only required parameters' do

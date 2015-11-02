@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'neutron::keystone::auth' do
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem           => 'default',
       :operatingsystemrelease    => 'default'
     }
@@ -47,7 +47,9 @@ describe 'neutron::keystone::auth' do
     end
 
     let :facts do
-      default_facts.merge({ :osfamily => 'Debian' })
+      @default_facts.merge(test_facts.merge({
+         :osfamily => 'Debian'
+      }))
     end
 
     let :params do

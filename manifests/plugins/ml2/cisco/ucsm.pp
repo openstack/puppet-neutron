@@ -23,7 +23,7 @@
 # [*supported_pci_devs*]
 #   (optional) SR-IOV and VM-FEX vendors supported by this plugin
 #   xxxx:yyyy represents vendor_id:product_id
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #   Example:
 #   [ '2222:3333', '4444:5555' ]
 #
@@ -33,7 +33,7 @@ class neutron::plugins::ml2::cisco::ucsm (
   $ucsm_username,
   $ucsm_password,
   $ucsm_host_list,
-  $supported_pci_devs = undef,
+  $supported_pci_devs = $::os_service_default,
 ) {
   include ::neutron::plugins::ml2::cisco
 

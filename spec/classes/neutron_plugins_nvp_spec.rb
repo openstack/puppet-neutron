@@ -14,7 +14,7 @@ describe 'neutron::plugins::nvp' do
         :package_ensure => 'present'}
   end
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem           => 'default',
       :operatingsystemrelease    => 'default'
     }
@@ -93,7 +93,9 @@ describe 'neutron::plugins::nvp' do
   begin
     context 'on Debian platforms' do
       let :facts do
-        default_facts.merge({:osfamily => 'Debian'})
+        @default_facts.merge(test_facts.merge({
+           :osfamily => 'Debian'
+        }))
       end
 
       let :platform_params do
@@ -105,10 +107,10 @@ describe 'neutron::plugins::nvp' do
 
     context 'on RedHat platforms' do
       let :facts do
-        default_facts.merge({
-          :osfamily               => 'RedHat',
-          :operatingsystemrelease => '7'
-        })
+        @default_facts.merge(test_facts.merge({
+           :osfamily               => 'RedHat',
+           :operatingsystemrelease => '7'
+        }))
       end
 
       let :platform_params do

@@ -25,7 +25,7 @@ describe 'neutron::services::fwaas' do
     "class { 'neutron': rabbit_password => 'passw0rd' }"
   end
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem           => 'default',
       :operatingsystemrelease    => 'default'
     }
@@ -54,9 +54,11 @@ describe 'neutron::services::fwaas' do
 
   context 'on Ubuntu platforms' do
     let :facts do
-      default_facts.merge(
+      @default_facts.merge(test_facts.merge(
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Ubuntu' })
+          :operatingsystem => 'Ubuntu'
+        }
+      ))
     end
 
     it_configures 'neutron fwaas service plugin'
@@ -72,9 +74,11 @@ describe 'neutron::services::fwaas' do
 
   context 'on Debian platforms without VPNaaS' do
     let :facts do
-      default_facts.merge(
+      @default_facts.merge(test_facts.merge(
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian' })
+          :operatingsystem => 'Debian'
+        }
+      ))
     end
 
     it_configures 'neutron fwaas service plugin'
@@ -90,7 +94,9 @@ describe 'neutron::services::fwaas' do
 
   context 'on Debian platforms with VPNaaS' do
     let :facts do
-      default_facts.merge({ :osfamily => 'Debian' })
+      @default_facts.merge(test_facts.merge({
+         :osfamily => 'Debian'
+      }))
     end
 
     let :params do
@@ -109,10 +115,10 @@ describe 'neutron::services::fwaas' do
 
   context 'on Red Hat platforms' do
     let :facts do
-      default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystemrelease => '7'
-      })
+      @default_facts.merge(test_facts.merge({
+         :osfamily               => 'RedHat',
+         :operatingsystemrelease => '7'
+      }))
     end
 
     it_configures 'neutron fwaas service plugin'

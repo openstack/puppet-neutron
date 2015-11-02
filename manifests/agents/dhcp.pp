@@ -43,7 +43,7 @@
 #
 # [*dnsmasq_config_file*]
 #   (optional) Override the default dnsmasq settings with this file.
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*dhcp_delete_namespaces*]
 #   (optional) Delete namespace after removing a dhcp server
@@ -70,7 +70,7 @@
 #   (optional) Deprecated. 'True' value will be enforced in future releases.
 #   Allow overlapping IP (Must have kernel build with
 #   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
-#   Defaults to undef.
+#   Defaults to $::os_service_default.
 #
 class neutron::agents::dhcp (
   $package_ensure           = present,
@@ -83,13 +83,13 @@ class neutron::agents::dhcp (
   $dhcp_domain              = 'openstacklocal',
   $dhcp_driver              = 'neutron.agent.linux.dhcp.Dnsmasq',
   $root_helper              = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $dnsmasq_config_file      = undef,
+  $dnsmasq_config_file      = $::os_service_default,
   $dhcp_delete_namespaces   = true,
   $enable_isolated_metadata = false,
   $enable_metadata_network  = false,
   $dhcp_broadcast_reply     = false,
   # DEPRECATED PARAMETERS
-  $use_namespaces           = undef,
+  $use_namespaces           = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -132,22 +132,13 @@ class neutron::agents::dhcp (
     'DEFAULT/root_helper':            value => $root_helper;
     'DEFAULT/dhcp_delete_namespaces': value => $dhcp_delete_namespaces;
     'DEFAULT/dhcp_broadcast_reply':   value => $dhcp_broadcast_reply;
+    'DEFAULT/dnsmasq_config_file':    value => $dnsmasq_config_file;
   }
 
-  if $use_namespaces != undef {
+  if ! is_service_default ($use_namespaces) {
     warning('The use_namespaces parameter is deprecated and will be removed in future releases')
     neutron_dhcp_agent_config {
       'DEFAULT/use_namespaces':       value => $use_namespaces;
-    }
-  }
-
-  if $dnsmasq_config_file {
-    neutron_dhcp_agent_config {
-      'DEFAULT/dnsmasq_config_file':           value => $dnsmasq_config_file;
-    }
-  } else {
-    neutron_dhcp_agent_config {
-      'DEFAULT/dnsmasq_config_file':           ensure => absent;
     }
   }
 

@@ -55,7 +55,7 @@
 # [*auth_region*]
 #   (optional) The authentication region. Note this value is case-sensitive and
 #   must match the endpoint region defined in Keystone.
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*auth_tenant*]
 #   (optional) The tenant of the auth user
@@ -202,7 +202,7 @@ class neutron::server (
   $manage_service                   = true,
   $service_name                     = $::neutron::params::server_service,
   $auth_password                    = false,
-  $auth_region                      = undef,
+  $auth_region                      = $::os_service_default,
   $auth_type                        = 'keystone',
   $auth_tenant                      = 'services',
   $auth_user                        = 'neutron',
@@ -435,10 +435,8 @@ class neutron::server (
         'filter:authtoken/auth_uri': value => $auth_uri_real;
       }
 
-      if $auth_region {
-        neutron_config {
-          'keystone_authtoken/auth_region': value => $auth_region;
-        }
+      neutron_config {
+        'keystone_authtoken/auth_region': value => $auth_region;
       }
 
       if $identity_uri {

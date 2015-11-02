@@ -44,7 +44,7 @@
 #   (optional) Advanced service modules.
 #   Could be an array that can have these elements:
 #   router, firewall, lbaas, vpnaas, metering
-#   Defaults to empty
+#   Defaults to $::os_service_default
 #
 # [*auth_strategy*]
 #   (optional) How to authenticate
@@ -69,7 +69,7 @@
 #
 # [*network_device_mtu*]
 #   (optional) The MTU size for the interfaces managed by neutron
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*dhcp_agent_notification*]
 #   (optional) Allow sending resource operation notification to DHCP agent.
@@ -98,7 +98,7 @@
 # [*api_extensions_path*]
 #   (optional) Specify additional paths for API extensions that the
 #   module in use needs to load.
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*root_helper*]
 #  (optional) Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
@@ -166,15 +166,15 @@
 #
 # [*kombu_ssl_ca_certs*]
 #   (optional) SSL certification authority file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_certfile*]
 #   (optional) SSL cert file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_keyfile*]
 #   (optional) SSL key file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_version*]
 #   (optional) SSL version to use (valid only if SSL enabled).
@@ -259,20 +259,20 @@ class neutron (
   $bind_host                          = '0.0.0.0',
   $bind_port                          = '9696',
   $core_plugin                        = 'openvswitch',
-  $service_plugins                    = undef,
+  $service_plugins                    = $::os_service_default,
   $auth_strategy                      = 'keystone',
   $base_mac                           = 'fa:16:3e:00:00:00',
   $mac_generation_retries             = 16,
   $dhcp_lease_duration                = 86400,
   $dhcp_agents_per_network            = 1,
-  $network_device_mtu                 = undef,
+  $network_device_mtu                 = $::os_service_default,
   $dhcp_agent_notification            = true,
   $advertise_mtu                      = false,
   $allow_bulk                         = true,
   $allow_pagination                   = false,
   $allow_sorting                      = false,
   $allow_overlapping_ips              = false,
-  $api_extensions_path                = undef,
+  $api_extensions_path                = $::os_service_default,
   $root_helper                        = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $report_interval                    = '30',
   $memcache_servers                   = false,
@@ -288,9 +288,9 @@ class neutron (
   $rabbit_heartbeat_timeout_threshold = 0,
   $rabbit_heartbeat_rate              = 2,
   $rabbit_use_ssl                     = false,
-  $kombu_ssl_ca_certs                 = undef,
-  $kombu_ssl_certfile                 = undef,
-  $kombu_ssl_keyfile                  = undef,
+  $kombu_ssl_ca_certs                 = $::os_service_default,
+  $kombu_ssl_certfile                 = $::os_service_default,
+  $kombu_ssl_keyfile                  = $::os_service_default,
   $kombu_ssl_version                  = 'TLSv1',
   $kombu_reconnect_delay              = '1.0',
   $qpid_hostname                      = 'localhost',
@@ -334,16 +334,16 @@ class neutron (
     fail('The ca_file parameter requires that use_ssl to be set to true')
   }
 
-  if $kombu_ssl_ca_certs and !$rabbit_use_ssl {
+  if ! is_service_default($kombu_ssl_ca_certs) and !$rabbit_use_ssl {
     fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
   }
-  if $kombu_ssl_certfile and !$rabbit_use_ssl {
+  if ! is_service_default($kombu_ssl_certfile) and !$rabbit_use_ssl {
     fail('The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true')
   }
-  if $kombu_ssl_keyfile and !$rabbit_use_ssl {
+  if ! is_service_default($kombu_ssl_keyfile) and !$rabbit_use_ssl {
     fail('The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true')
   }
-  if ($kombu_ssl_certfile and !$kombu_ssl_keyfile) or ($kombu_ssl_keyfile and !$kombu_ssl_certfile) {
+  if (is_service_default($kombu_ssl_certfile) and ! is_service_default($kombu_ssl_keyfile)) or (is_service_default($kombu_ssl_keyfile) and ! is_service_default($kombu_ssl_certfile)) {
     fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
   }
 
@@ -384,6 +384,7 @@ class neutron (
     'DEFAULT/state_path':              value => $state_path;
     'DEFAULT/lock_path':               value => $lock_path;
     'DEFAULT/rpc_response_timeout':    value => $rpc_response_timeout;
+    'DEFAULT/network_device_mtu':      value => $network_device_mtu;
     'agent/root_helper':               value => $root_helper;
     'agent/report_interval':           value => $report_interval;
   }
@@ -407,18 +408,7 @@ class neutron (
     }
   }
 
-  if $network_device_mtu {
-    neutron_config {
-      'DEFAULT/network_device_mtu':           value => $network_device_mtu;
-    }
-  } else {
-    neutron_config {
-      'DEFAULT/network_device_mtu':           ensure => absent;
-    }
-  }
-
-
-  if $service_plugins {
+  if ! is_service_default ($service_plugins) {
     if is_array($service_plugins) {
       neutron_config { 'DEFAULT/service_plugins': value => join($service_plugins, ',') }
     } else {
@@ -459,27 +449,12 @@ class neutron (
       'oslo_messaging_rabbit/heartbeat_rate':               value => $rabbit_heartbeat_rate;
       'oslo_messaging_rabbit/rabbit_use_ssl':               value => $rabbit_use_ssl;
       'oslo_messaging_rabbit/kombu_reconnect_delay':        value => $kombu_reconnect_delay;
+      'oslo_messaging_rabbit/kombu_ssl_ca_certs':           value => $kombu_ssl_ca_certs;
+      'oslo_messaging_rabbit/kombu_ssl_certfile':           value => $kombu_ssl_certfile;
+      'oslo_messaging_rabbit/kombu_ssl_keyfile':            value => $kombu_ssl_keyfile;
     }
 
     if $rabbit_use_ssl {
-
-      if $kombu_ssl_ca_certs {
-        neutron_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs; }
-      } else {
-        neutron_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent; }
-      }
-
-      if $kombu_ssl_certfile or $kombu_ssl_keyfile {
-        neutron_config {
-          'oslo_messaging_rabbit/kombu_ssl_certfile': value => $kombu_ssl_certfile;
-          'oslo_messaging_rabbit/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
-        }
-      } else {
-        neutron_config {
-          'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
-          'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
-        }
-      }
 
       if $kombu_ssl_version {
         neutron_config { 'oslo_messaging_rabbit/kombu_ssl_version':  value => $kombu_ssl_version; }
@@ -489,9 +464,6 @@ class neutron (
 
     } else {
       neutron_config {
-        'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
         'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
       }
     }

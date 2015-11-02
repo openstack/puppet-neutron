@@ -27,7 +27,7 @@ describe 'neutron::plugins::ml2::cisco::ucsm' do
     {}
   end
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem         => 'default',
       :operatingsystemrelease  => 'default',
       :concat_basedir          => '/',
@@ -55,10 +55,11 @@ describe 'neutron::plugins::ml2::cisco::ucsm' do
   begin
     context 'on RedHat platforms' do
       let :facts do
-        default_facts.merge({
-          :osfamily => 'RedHat',
-          :operatingsystemrelease => '7'
-        })
+        @default_facts.merge(test_facts.merge({
+           :osfamily => 'RedHat',
+           :operatingsystemrelease => '7',
+           :osfamily => 'RedHat'
+        }))
       end
 
       it_configures 'neutron cisco ml2 ucsm plugin'

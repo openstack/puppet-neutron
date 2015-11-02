@@ -38,7 +38,7 @@
 #  (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*external_network_bridge*]
-#  (optional) Defaults to undef
+#  (optional) Defaults to $::os_service_default
 #
 # [*ipsec_status_check_interval*]
 #   (optional) Status check interval. Defaults to '60'.
@@ -49,7 +49,7 @@ class neutron::agents::vpnaas (
   $manage_service              = true,
   $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $external_network_bridge     = undef,
+  $external_network_bridge     = $::os_service_default,
   $ipsec_status_check_interval = '60'
 ) {
 
@@ -80,14 +80,8 @@ class neutron::agents::vpnaas (
     'DEFAULT/interface_driver':          value => $interface_driver;
   }
 
-  if ($external_network_bridge) {
-    neutron_vpnaas_agent_config {
-      'DEFAULT/external_network_bridge': value => $external_network_bridge;
-    }
-  } else {
-    neutron_vpnaas_agent_config {
-      'DEFAULT/external_network_bridge': ensure => absent;
-    }
+  neutron_vpnaas_agent_config {
+    'DEFAULT/external_network_bridge': value => $external_network_bridge;
   }
 
   if $::neutron::params::vpnaas_agent_package {

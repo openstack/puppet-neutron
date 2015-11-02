@@ -65,7 +65,7 @@
 # in the transport network. (NB: If no nve_src_intf is defined then a
 # default setting of 0 (creates "loopback0") will be used.)
 #
-# Defaults to undef.
+# Defaults to $::os_service_default.
 #
 # [*physnet*]
 # (optional) Only valid if VXLAN overlay is configured.
@@ -76,7 +76,7 @@
 # a physical network are allocated dynamically and are unique per physical
 # network. These dynamic vlans may be reused across physical networks.
 #
-# Defaults to undef.
+# Defaults to $::os_service_default.
 #
 define neutron::plugins::ml2::cisco::nexus_switch(
   $username,
@@ -85,8 +85,8 @@ define neutron::plugins::ml2::cisco::nexus_switch(
   $ssh_port,
   $servers,
   $switchname   = $title,
-  $nve_src_intf = undef,
-  $physnet      = undef
+  $nve_src_intf = $::os_service_default,
+  $physnet      = $::os_service_default
 ) {
   $section = "ML2_MECH_CISCO_NEXUS:${ip_address}"
   neutron_plugin_ml2 {

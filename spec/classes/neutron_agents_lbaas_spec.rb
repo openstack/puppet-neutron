@@ -21,7 +21,7 @@ describe 'neutron::agents::lbaas' do
     }
   end
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem           => 'default',
       :operatingsystemrelease    => 'default'
     }
@@ -114,11 +114,11 @@ describe 'neutron::agents::lbaas' do
 
   context 'on Debian platforms' do
     let :facts do
-      default_facts.merge(
+      @default_facts.merge(test_facts.merge(
         { :osfamily => 'Debian',
           :concat_basedir => '/dne'
         }
-      )
+      ))
     end
 
     let :platform_params do
@@ -133,12 +133,12 @@ describe 'neutron::agents::lbaas' do
 
   context 'on RedHat platforms' do
     let :facts do
-      default_facts.merge(
-        { :osfamily               => 'RedHat',
-          :operatingsystemrelease => '7',
-          :concat_basedir         => '/dne'
-        }
-      )
+      @default_facts.merge(test_facts.merge(
+         { :osfamily               => 'RedHat',
+           :operatingsystemrelease => '7',
+           :concat_basedir         => '/dne'
+         }
+      ))
     end
 
     let :platform_params do

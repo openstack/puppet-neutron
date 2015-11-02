@@ -24,7 +24,7 @@ describe 'neutron::agents::metadata' do
     }
   end
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem           => 'default',
       :operatingsystemrelease    => 'default',
       :processorcount            => '2'
@@ -59,7 +59,7 @@ describe 'neutron::agents::metadata' do
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/debug').with(:value => params[:debug])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_url').with(:value => params[:auth_url])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_insecure').with(:value => params[:auth_insecure])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with_ensure('absent')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_region').with(:value => params[:auth_region])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_tenant_name').with(:value => params[:auth_tenant])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_user').with(:value => params[:auth_user])
@@ -92,9 +92,9 @@ describe 'neutron::agents::metadata' do
 
   context 'on Debian platforms' do
     let :facts do
-      default_facts.merge(
+      @default_facts.merge(test_facts.merge(
         { :osfamily => 'Debian' }
-      )
+      ))
     end
 
     let :platform_params do
@@ -119,10 +119,10 @@ describe 'neutron::agents::metadata' do
 
   context 'on Red Hat platforms' do
     let :facts do
-      default_facts.merge({
-        :osfamily => 'RedHat',
-        :operatingsystemrelease => '7'
-      })
+      @default_facts.merge(test_facts.merge({
+         :osfamily => 'RedHat',
+         :operatingsystemrelease => '7'
+      }))
     end
 
     let :platform_params do

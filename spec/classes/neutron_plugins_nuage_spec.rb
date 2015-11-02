@@ -9,7 +9,7 @@ describe 'neutron::plugins::nuage' do
      class { 'neutron::server': auth_password => 'password' }"
   end
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem           => 'default',
       :operatingsystemrelease    => 'default'
     }
@@ -54,7 +54,9 @@ describe 'neutron::plugins::nuage' do
   begin
     context 'on Debian platforms' do
       let :facts do
-        default_facts.merge({ :osfamily => 'Debian'})
+        @default_facts.merge(test_facts.merge({
+           :osfamily => 'Debian'
+        }))
       end
 
       it_configures 'neutron plugin nuage'
@@ -62,10 +64,10 @@ describe 'neutron::plugins::nuage' do
 
     context 'on RedHat platforms' do
       let :facts do
-        default_facts.merge({
-          :osfamily               => 'RedHat',
-          :operatingsystemrelease => '7'
-        })
+        @default_facts.merge(test_facts.merge({
+           :osfamily               => 'RedHat',
+           :operatingsystemrelease => '7'
+        }))
       end
 
       it_configures 'neutron plugin nuage'
@@ -74,7 +76,9 @@ describe 'neutron::plugins::nuage' do
   begin
     context 'on Debian platforms' do
       let :facts do
-        default_facts.merge({ :osfamily => 'Debian'})
+        @default_facts.merge(test_facts.merge({
+           :osfamily => 'Debian'
+        }))
       end
 
       it 'configures /etc/default/neutron-server' do
@@ -91,10 +95,10 @@ describe 'neutron::plugins::nuage' do
 
     context 'on RedHat platforms' do
       let :facts do
-        default_facts.merge({
-          :osfamily               => 'RedHat',
-          :operatingsystemrelease => '7'
-        })
+        @default_facts.merge(test_facts.merge({
+           :osfamily               => 'RedHat',
+           :operatingsystemrelease => '7'
+        }))
       end
 
       it 'should create plugin symbolic link' do

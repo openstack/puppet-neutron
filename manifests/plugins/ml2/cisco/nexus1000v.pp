@@ -72,9 +72,9 @@
 # enable_vif_type_n1kv = False
 #
 class neutron::plugins::ml2::cisco::nexus1000v (
-  $n1kv_vsm_ip                          = undef,
-  $n1kv_vsm_username                    = undef,
-  $n1kv_vsm_password                    = undef,
+  $n1kv_vsm_ip                          = $::os_service_default,
+  $n1kv_vsm_username                    = $::os_service_default,
+  $n1kv_vsm_password                    = $::os_service_default,
   $default_policy_profile               = 'default-pp',
   $default_vlan_network_profile         = 'default-vlan-np',
   $default_vxlan_network_profile        = 'default-vxlan-np',

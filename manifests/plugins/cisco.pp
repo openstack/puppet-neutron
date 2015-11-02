@@ -42,7 +42,7 @@
 #
 # [*nexus_plugin*]
 # (optional) The nexus plugin to use
-# Defaults to undef. This will not set a nexus plugin to use
+# Defaults to $::os_service_default. This will not set a nexus plugin to use
 # Can be set to neutron.plugins.cisco.nexus.cisco_nexus_plugin_v2.NexusPlugin
 #
 # [*vlan_start*]
@@ -101,7 +101,7 @@ class neutron::plugins::cisco(
   $keystone_auth_url = 'http://127.0.0.1:35357/v2.0/',
 
   $vswitch_plugin = 'neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2',
-  $nexus_plugin   = undef,
+  $nexus_plugin   = $::os_service_default,
 
   # Plugin minimum configuration
   $vlan_start        = '100',
@@ -162,10 +162,8 @@ class neutron::plugins::cisco(
   }
 
 
-  if $nexus_plugin {
-    neutron_plugin_cisco {
-      'PLUGINS/nexus_plugin' : value => $nexus_plugin;
-    }
+  neutron_plugin_cisco {
+    'PLUGINS/nexus_plugin' : value => $nexus_plugin;
   }
 
   if $vswitch_plugin {

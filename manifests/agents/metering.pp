@@ -54,7 +54,7 @@
 #   (optional) Deprecated. 'True' value will be enforced in future releases.
 #   Allow overlapping IP (Must have kernel build with
 #   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
-#   Defaults to undef.
+#   Defaults to $::os_service_default.
 #
 
 class neutron::agents::metering (
@@ -67,7 +67,7 @@ class neutron::agents::metering (
   $measure_interval = '30',
   $report_interval  = '300',
   # DEPRECATED PARAMETERS
-  $use_namespaces   = undef,
+  $use_namespaces   = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -86,7 +86,7 @@ class neutron::agents::metering (
     'DEFAULT/report_interval':    value => $report_interval;
   }
 
-  if $use_namespaces != undef {
+  if ! is_service_default ($use_namespaces) {
     warning('The use_namespaces parameter is deprecated and will be removed in future releases')
     neutron_metering_agent_config {
       'DEFAULT/use_namespaces':   value => $use_namespaces;

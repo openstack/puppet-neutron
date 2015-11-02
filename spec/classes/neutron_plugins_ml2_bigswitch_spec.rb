@@ -19,7 +19,7 @@ describe 'neutron::plugins::ml2::bigswitch' do
     {}
   end
 
-  let :default_facts do
+  let :test_facts do
     {
       :operatingsystem        => 'default',
       :operatingsystemrelease => 'default',
@@ -44,10 +44,10 @@ describe 'neutron::plugins::ml2::bigswitch' do
 
   context 'on RedHat platforms' do
     let :facts do
-      default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystemrelease => '7'
-      })
+      @default_facts.merge(test_facts.merge({
+         :osfamily               => 'RedHat',
+         :operatingsystemrelease => '7'
+      }))
     end
 
     it_configures 'neutron plugin bigswitch ml2'
@@ -55,7 +55,9 @@ describe 'neutron::plugins::ml2::bigswitch' do
 
   context 'on Debian platforms' do
     let :facts do
-      default_facts.merge({:osfamily => 'Debian'})
+      @default_facts.merge(test_facts.merge({
+         :osfamily => 'Debian'
+      }))
     end
 
     it { is_expected.to raise_error(Puppet::Error, /Unsupported osfamily Debian/) }

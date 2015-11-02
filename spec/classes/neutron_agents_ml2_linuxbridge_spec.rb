@@ -21,7 +21,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
       :firewall_driver  => 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver' }
   end
 
-  let :default_facts do
+  let :test_facts do
     { :operatingsystem           => 'default',
       :operatingsystemrelease    => 'default'
     }
@@ -149,7 +149,9 @@ describe 'neutron::agents::ml2::linuxbridge' do
 
   context 'on Debian platforms' do
     let :facts do
-      default_facts.merge({ :osfamily => 'Debian' })
+      @default_facts.merge(test_facts.merge({
+         :osfamily => 'Debian'
+      }))
     end
 
     let :platform_params do
@@ -162,10 +164,10 @@ describe 'neutron::agents::ml2::linuxbridge' do
 
   context 'on RedHat platforms' do
     let :facts do
-      default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystemrelease => '7'
-      })
+      @default_facts.merge(test_facts.merge({
+         :osfamily               => 'RedHat',
+         :operatingsystemrelease => '7'
+      }))
     end
 
     let :platform_params do

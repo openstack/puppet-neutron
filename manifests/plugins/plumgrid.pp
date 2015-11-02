@@ -12,9 +12,11 @@
 #
 # [*username*]
 #   PLUMgrid platform username
+#   Defaults to $::os_service_default
 #
 # [*password*]
 #   PLUMgrid platform password
+#   Defaults to $::os_service_default
 #
 # [*servertimeout*]
 #   Request timeout duration (seconds) to PLUMgrid paltform
@@ -26,6 +28,7 @@
 #
 # [*admin_password*]
 #   Keystone admin password
+#   Defaults to $::os_service_default
 #
 # [*controller_priv_host*]
 #   Controller private host IP
@@ -45,6 +48,7 @@
 #
 # [*metadata_proxy_shared_secret*]
 #   Neutron metadata shared secret key
+#   Defaults to $::os_service_default
 #
 # [*package_ensure*]
 #   (optional) Ensure state for package.
@@ -53,16 +57,16 @@
 class neutron::plugins::plumgrid (
   $director_server              = '127.0.0.1',
   $director_server_port         = '443',
-  $username                     = undef,
-  $password                     = undef,
+  $username                     = $::os_service_default,
+  $password                     = $::os_service_default,
   $servertimeout                = '99',
   $connection                   = 'http://127.0.0.1:35357/v2.0',
-  $admin_password               = undef,
+  $admin_password               = $::os_service_default,
   $controller_priv_host         = '127.0.0.1',
   $auth_protocol                = 'http',
   $nova_metadata_ip             = '127.0.0.1',
   $nova_metadata_port           = '8775',
-  $metadata_proxy_shared_secret = undef,
+  $metadata_proxy_shared_secret = $::os_service_default,
   $package_ensure               = 'present'
 ) {
 

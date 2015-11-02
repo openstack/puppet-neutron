@@ -76,7 +76,7 @@
 # [*region_name*]
 #   (optional) Name of nova region to use. Useful if keystone manages more than
 #   one region.
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # === Deprecated Parameters
 #
@@ -109,7 +109,7 @@
 #   Deprecated. region_name parameter should be used instead
 #   Name of nova region to use. Useful if keystone manages more than
 #   one region.
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 
 class neutron::server::notifications (
@@ -120,20 +120,20 @@ class neutron::server::notifications (
   $auth_plugin                        = 'password',
   $username                           = 'nova',
   $password                           = false,
-  $tenant_id                          = undef,
+  $tenant_id                          = $::os_service_default,
   $tenant_name                        = 'services',
   $project_domain_id                  = 'default',
   $project_name                       = 'services',
   $user_domain_id                     = 'default',
   $auth_url                           = 'http://127.0.0.1:35357',
-  $region_name                        = undef,
+  $region_name                        = $::os_service_default,
   # DEPRECATED PARAMETERS
   $nova_admin_auth_url                = 'http://127.0.0.1:35357/v2.0',
   $nova_admin_username                = 'nova',
   $nova_admin_tenant_name             = 'services',
-  $nova_admin_tenant_id               = undef,
+  $nova_admin_tenant_id               = $::os_service_default,
   $nova_admin_password                = false,
-  $nova_region_name                   = undef,
+  $nova_region_name                   = $::os_service_default,
 ) {
 
   # Depend on the specified keystone_user resource, if it exists.
@@ -143,23 +143,24 @@ class neutron::server::notifications (
     fail('nova_admin_password or password must be set.')
   }
 
-  if $nova_admin_password and !($nova_admin_tenant_id or $nova_admin_tenant_name) {
+  if $nova_admin_password and is_service_default($nova_admin_tenant_id) and (! $nova_admin_tenant_name) {
     fail('You must provide either nova_admin_tenant_name or nova_admin_tenant_id.')
   }
 
-  if $password and !($tenant_id or $tenant_name) {
+  if $password and is_service_default($tenant_id) and (! $tenant_name) {
     fail('You must provide either tenant_name or tenant_id.')
   }
 
   if $nova_admin_password {
-    warning('nova_admin-* parameters are deprecated and will be removed in a future release')
+    warning('nova_admin-* and nova_region_name parameters are deprecated and will be removed in a future release')
     neutron_config {
       'DEFAULT/nova_admin_auth_url': value => $nova_admin_auth_url;
       'DEFAULT/nova_admin_username': value => $nova_admin_username;
       'DEFAULT/nova_admin_password': value => $nova_admin_password, secret => true;
+      'DEFAULT/nova_region_name':    value => $nova_region_name;
     }
 
-    if $nova_admin_tenant_id {
+    if ! is_service_default ($nova_admin_tenant_id) {
       neutron_config {
         'DEFAULT/nova_admin_tenant_id': value => $nova_admin_tenant_id;
       }
@@ -179,11 +180,15 @@ class neutron::server::notifications (
       'nova/project_domain_id': value => $project_domain_id;
       'nova/project_name':      value => $project_name;
       'nova/user_domain_id':    value => $user_domain_id;
-      'nova/tenant_name':       value => $tenant_name;
+      'nova/region_name':       value => $region_name;
     }
-    if $tenant_id {
+    if ! is_service_default ($tenant_id) {
       neutron_config {
         'nova/tenant_id': value => $tenant_id;
+      }
+    } else {
+      neutron_config {
+        'nova/tenant_name': value => $tenant_name;
       }
     }
   }
@@ -194,26 +199,4 @@ class neutron::server::notifications (
     'DEFAULT/send_events_interval':               value => $send_events_interval;
     'DEFAULT/nova_url':                           value => $nova_url;
   }
-
-  if $nova_region_name {
-    warning('nova_region_name parameter is deprecated and will be removed in a future release')
-    neutron_config {
-      'DEFAULT/nova_region_name': value => $nova_region_name;
-    }
-  } else {
-    neutron_config {
-      'DEFAULT/nova_region_name': ensure => absent;
-    }
-  }
-
-  if $region_name {
-    neutron_config {
-      'nova/region_name': value => $region_name;
-    }
-  } else {
-    neutron_config {
-      'nova/region_name': ensure => absent;
-    }
-  }
-
 }

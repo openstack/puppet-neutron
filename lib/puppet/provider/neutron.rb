@@ -220,12 +220,17 @@ correctly configured.")
     return results
   end
 
-  def self.get_tenant_id(catalog, name)
+  def self.get_tenant_id(catalog, name, domain='Default')
     instance_type = 'keystone_tenant'
     instance = catalog.resource("#{instance_type.capitalize!}[#{name}]")
     if ! instance
       instance = Puppet::Type.type(instance_type).instances.find do |i|
-        i.provider.name == name
+        # We need to check against the Default domain name because of
+        # https://review.openstack.org/#/c/226919/ which changed the naming
+        # format for the tenant to include ::<Domain name>. This should be
+        # removed when we drop the resource without a domain name.
+        # TODO(aschultz): remove ::domain lookup as part of M-cycle
+        i.provider.name == name || i.provider.name == "#{name}::#{domain}"
       end
     end
     if instance

@@ -120,8 +120,9 @@ describe 'basic neutron' do
       class { '::neutron::plugins::ml2':
         type_drivers         => ['vxlan'],
         tenant_network_types => ['vxlan'],
-        mechanism_drivers    => ['openvswitch']
+        mechanism_drivers    => ['openvswitch', 'sriovnicswitch']
       }
+      class { '::neutron::agents::ml2::sriov': }
       EOS
 
 

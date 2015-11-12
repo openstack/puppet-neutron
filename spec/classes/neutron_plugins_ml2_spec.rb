@@ -216,8 +216,8 @@ describe 'neutron::plugins::ml2' do
         )
       end
       it 'configures sriov mechanism driver with agent_enabled' do
-        is_expected.to contain_neutron_plugin_ml2('ml2_sriov/supported_pci_vendor_devs').with_value(['15b3:1004,8086:10ca'])
-        is_expected.to contain_neutron_plugin_ml2('ml2_sriov/agent_required').with_value('true')
+        is_expected.to contain_neutron_plugin_sriov('ml2_sriov/agent_required').with_value('true')
+        is_expected.to contain_neutron_plugin_sriov('ml2_sriov/supported_pci_vendor_devs').with_value(['15b3:1004,8086:10ca'])
       end
     end
 

@@ -30,6 +30,15 @@ describe 'neutron::plugins::nuage' do
 
     it { is_expected.to contain_class('neutron::params') }
 
+    it 'should have a nuage plugin ini file' do
+      is_expected.to contain_file('/etc/neutron/plugins/nuage/plugin.ini').with(
+        :ensure => 'file',
+        :owner  => 'root',
+        :group  => 'neutron',
+        :mode   => '0640'
+      )
+    end
+
     it 'should configure neutron.conf' do
       is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('neutron.plugins.nuage.plugin.NuagePlugin')
     end

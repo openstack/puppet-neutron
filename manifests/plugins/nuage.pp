@@ -49,18 +49,13 @@ class neutron::plugins::nuage (
 
   include ::neutron::params
 
+  File['/etc/neutron/plugins/nuage/plugin.ini'] -> Neutron_plugin_nuage<||>
   Neutron_plugin_nuage<||> ~> Service['neutron-server']
+  Neutron_plugin_nuage<||> ~> Exec<| title == 'neutron-db-sync' |>
 
   file { '/etc/neutron/plugins/nuage':
-    ensure => 'directory',
+    ensure => directory,
   }
-
-  ensure_resource('file', $::neutron::params::nuage_config_file, {
-    ensure => file,
-    owner  => 'root',
-    group  => 'neutron',
-    mode   => '0640'}
-  )
 
   if $::osfamily == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
@@ -72,10 +67,20 @@ class neutron::plugins::nuage (
   }
 
   if $::osfamily == 'Redhat' {
+    File['/etc/neutron/plugin.ini'] ~> Exec<| title == 'neutron-db-sync' |>
     file { '/etc/neutron/plugin.ini':
-      ensure => link,
-      target => $::neutron::params::nuage_config_file,
+      ensure  => link,
+      require => File['/etc/neutron/plugins/nuage/plugin.ini'],
+      target  => $::neutron::params::nuage_config_file,
     }
+  }
+
+  file { '/etc/neutron/plugins/nuage/plugin.ini':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'neutron',
+    require => File['/etc/neutron/plugins/nuage'],
+    mode    => '0640'
   }
 
   $nuage_base_uri_base = '/nuage/api'
@@ -94,8 +99,4 @@ class neutron::plugins::nuage (
     ($::neutron::core_plugin != 'nuage') {
     fail('Nuage plugin should be the core_plugin in neutron.conf')
   }
-
-  Neutron_plugin_nuage<||> ~> Exec<| title == 'neutron-db-sync' |>
-
 }
-

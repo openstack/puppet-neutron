@@ -13,6 +13,23 @@ describe 'neutron::db::sync' do
       )
     end
 
+    describe "overriding extra_params" do
+    let :params do
+      {
+        :extra_params => '--config-file /etc/neutron/neutron.conf',
+      }
+    end
+
+    it {
+        is_expected.to contain_exec('neutron-db-sync').with(
+          :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf upgrade head',
+          :path        => '/usr/bin',
+          :refreshonly => 'true',
+          :logoutput   => 'on_failure'
+        )
+    }
+    end
+
   end
 
   context 'on a RedHat osfamily' do

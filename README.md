@@ -23,7 +23,7 @@ Module Description
 
 The neutron module is an attempt to make Puppet capable of managing the entirety of neutron. This includes manifests to provision such things as keystone endpoints, RPC configurations specific to neutron, database connections, and network driver plugins. Types are shipped as part of the neutron module to assist in manipulation of the Openstack configuration files.
 
-This module is tested in combination with other modules needed to build and leverage an entire Openstack installation. These modules can be found, all pulled together in the [openstack module](https://github.com/stackforge/puppet-openstack).
+This module is tested in combination with other modules needed to build and leverage an entire Openstack installation.
 
 Setup
 -----
@@ -38,7 +38,7 @@ Setup
 
 ### Beginning with neutron
 
-To utilize the neutron module's functionality you will need to declare multiple resources. The following is a modified excerpt from the [openstack module](httpd://github.com/stackforge/puppet-openstack). It provides an example of setting up an Open vSwitch neutron installation. This is not an exhaustive list of all the components needed. We recommend that you consult and understand the [openstack module](https://github.com/stackforge/puppet-openstack) and the [core openstack](http://docs.openstack.org) documentation to assist you in understanding the available deployment options.
+To utilize the neutron module's functionality you will need to declare multiple resources. The following example displays the setting up of an Open vSwitch neutron installation. This is not an exhaustive list of all the components needed. We recommend that you consult and understand the [core openstack](http://docs.openstack.org) documentation to assist you in understanding the available deployment options.
 
 ```puppet
 # enable the neutron service

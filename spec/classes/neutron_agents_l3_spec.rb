@@ -158,7 +158,10 @@ describe 'neutron::agents::l3' do
 
   context 'on RedHat platforms' do
     let :facts do
-      default_facts.merge({ :osfamily => 'RedHat' })
+      default_facts.merge({
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '7'
+      })
     end
 
     let :platform_params do

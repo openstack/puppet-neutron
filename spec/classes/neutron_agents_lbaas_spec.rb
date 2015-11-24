@@ -134,8 +134,9 @@ describe 'neutron::agents::lbaas' do
   context 'on RedHat platforms' do
     let :facts do
       default_facts.merge(
-        { :osfamily => 'RedHat',
-          :concat_basedir => '/dne'
+        { :osfamily               => 'RedHat',
+          :operatingsystemrelease => '7',
+          :concat_basedir         => '/dne'
         }
       )
     end

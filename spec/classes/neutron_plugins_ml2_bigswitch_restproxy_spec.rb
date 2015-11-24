@@ -70,7 +70,10 @@ describe 'neutron::plugins::ml2::bigswitch::restproxy' do
 
   context 'on RedHat platforms' do
     let :facts do
-      default_facts.merge({:osfamily => 'RedHat'})
+      default_facts.merge({
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '7'
+      })
     end
 
     it_configures 'neutron bigswitch ml2 restproxy'

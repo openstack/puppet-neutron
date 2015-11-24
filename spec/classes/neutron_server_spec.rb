@@ -234,7 +234,10 @@ describe 'neutron::server' do
 
   describe "with custom keystone auth_uri" do
     let :facts do
-      default_facts.merge({ :osfamily => 'RedHat' })
+      default_facts.merge({
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '7'
+      })
     end
     before do
       params.merge!({
@@ -253,7 +256,10 @@ describe 'neutron::server' do
 
   describe "with custom keystone identity_uri" do
     let :facts do
-      default_facts.merge({ :osfamily => 'RedHat' })
+      default_facts.merge({
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '7'
+      })
     end
     before do
       params.merge!({
@@ -272,7 +278,10 @@ describe 'neutron::server' do
 
   describe "with custom keystone identity_uri and auth_uri" do
     let :facts do
-      default_facts.merge({ :osfamily => 'RedHat' })
+      default_facts.merge({
+        :osfamily => 'RedHat',
+        :operatingsystemrelease => '7'
+      })
     end
     before do
       params.merge!({
@@ -292,7 +301,10 @@ describe 'neutron::server' do
 
   describe "with custom auth region" do
     let :facts do
-      default_facts.merge({ :osfamily => 'RedHat' })
+      default_facts.merge({
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '7'
+      })
     end
     before do
       params.merge!({
@@ -326,8 +338,10 @@ describe 'neutron::server' do
   context 'on RedHat platforms' do
     let :facts do
       default_facts.merge(
-        { :osfamily => 'RedHat',
-          :processorcount => '2' })
+        { :osfamily               => 'RedHat',
+          :operatingsystemrelease => '7',
+          :processorcount         => '2'
+      })
     end
 
     let :platform_params do

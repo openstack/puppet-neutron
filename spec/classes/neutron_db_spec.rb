@@ -65,7 +65,7 @@ describe 'neutron::db' do
 
   context 'on Redhat platforms' do
     let :facts do
-      { :osfamily => 'RedHat',
+      { :osfamily               => 'RedHat',
         :operatingsystemrelease => '7.1',
       }
     end

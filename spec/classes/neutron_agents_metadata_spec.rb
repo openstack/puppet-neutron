@@ -119,9 +119,10 @@ describe 'neutron::agents::metadata' do
 
   context 'on Red Hat platforms' do
     let :facts do
-      default_facts.merge(
-        { :osfamily => 'RedHat' }
-      )
+      default_facts.merge({
+        :osfamily => 'RedHat',
+        :operatingsystemrelease => '7'
+      })
     end
 
     let :platform_params do

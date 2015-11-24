@@ -49,7 +49,10 @@ describe 'neutron::plugins::ml2::cisco::type_nexus_vxlan' do
   begin
     context 'on RedHat platforms' do
       let :facts do
-        default_facts.merge({:osfamily => 'RedHat'})
+        default_facts.merge({
+          :osfamily               => 'RedHat',
+          :operatingsystemrelease => '7'
+        })
       end
 
       it_configures 'neutron cisco ml2 type nexus vxlan plugin'

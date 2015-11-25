@@ -1,3 +1,74 @@
+##2015-11-25 - 7.0.0
+###Summary
+
+This is a backwards-incompatible major release for OpenStack Liberty.
+
+####Backwards-incompatible changes
+- change section name for AMQP qpid parameters
+- remove deprcated mysql options
+- delete namespaces by default
+- filename change for config-dir for ml2 cisco nexus mech driver
+- unset deprecated parameter use_namespaces by default
+- drop neutron_plugin_ovs type/provider
+
+####Features
+- add driver option for metering agent
+- split SR-IOV configuration file into driver and agent pieces
+- disable third-party software management
+- jumbo frames between instances
+- remove POSIX users, groups, and file modes
+- add support for RabbitMQ connection heartbeat
+- keystone/auth: make service description configurable
+- add tag to package and service resources
+- allow neutron-dhcp-agent broadcast reply
+- add neutron::db::sync and neutron::db
+- add an ability to manage use_stderr parameter
+- reflect provider change in puppet-openstacklib
+- make vswitch optional for ovs agent configuration
+- allow greater flexibility in the kind of parameter passed to ml2.pp
+- deprecate nova_admin_* options
+- drop nova_admin_tenant_id_setter
+- db: Use postgresql lib class for psycopg package
+- allow customization of db sync command line
+- support for Nuage Neutron plugin
+- suport for Big Switch ML2 plugin
+- add an ability to set up drop_flows_on_start option
+- use json output instead plain-text
+- use json instead of regexp to parse subnet data
+- simplify rpc_backend parameter
+- add support for prevent_arp_spoofing option
+- add support for rpc_response_timeout option
+- remove use of template based config from cisco ml2 nexus plugin
+- update Cisco ML2 configuration
+- make package change run the db_sync
+- accommodate for VPNaaS package name change in RDO
+
+####Bugfixes
+- rely on autorequire for config resource ordering
+- make sure Neutron_config is applied before Neutron_network
+- make sure Nova_admin_tenant_id_setter is executed after Keystone_endpoint
+- add workaround for v2 tenant names
+- swap Facter[].value with Facter.value()
+- dbsync should only notify services that use the db
+- map allocation_pool property to set
+- restart Neutron agents if packages are updated
+- remove unecessary constraint between Package and Config resource
+- fix 'shared' parameter check in neutron_network provider
+
+####Maintenance
+- acceptance: enable debug & verbosity for OpenStack logs
+- remove unused variable in params.pp
+- initial msync run for all Puppet OpenStack modules
+- lint: Add and fix missing parameter documentation
+- try to use zuul-cloner to prepare fixtures
+- remove class_parameter_defaults puppet-lint check
+- add test coverage for neutron::db::mysql
+- fix rspec 3.x syntax
+- acceptance: use common bits from puppet-openstack-integration
+- fix unit tests against Puppet 4.3.0
+- acceptance: enable loadbalancer service_plugin
+- acceptance: test OVS bridge listing
+
 ##2015-10-10 - 6.1.0
 ### Summary
 

@@ -45,6 +45,9 @@ class neutron::services::fwaas (
 
   include ::neutron::params
 
+  # FWaaS needs to be enabled before starting Neutron L3 agent
+  Neutron_fwaas_service_config<||> ~> Service['neutron-l3']
+
   if ($::osfamily == 'Debian') {
     # Debian platforms
     if $vpnaas_agent_package {

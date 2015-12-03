@@ -189,21 +189,6 @@
 #   reconnect. See https://review.openstack.org/#/c/76686
 #   Defaults to '1.0'
 #
-# [*qpid_hostname*]
-# [*qpid_port*]
-# [*qpid_username*]
-# [*qpid_password*]
-# [*qpid_heartbeat*]
-# [*qpid_protocol*]
-# [*qpid_tcp_nodelay*]
-# [*qpid_reconnect*]
-# [*qpid_reconnect_timeout*]
-# [*qpid_reconnect_limit*]
-# [*qpid_reconnect_interval*]
-# [*qpid_reconnect_interval_min*]
-# [*qpid_reconnect_interval_max*]
-#   (optional) various QPID options
-#
 # [*use_ssl*]
 #   (optinal) Enable SSL on the API server
 #   Defaults to false, not set
@@ -251,6 +236,22 @@
 #   by the user executing the agent
 #   Defaults to: /var/lib/neutron/lock
 #
+# DEPRECATED PARAMETERS
+#
+# [*qpid_hostname*]
+# [*qpid_port*]
+# [*qpid_username*]
+# [*qpid_password*]
+# [*qpid_heartbeat*]
+# [*qpid_protocol*]
+# [*qpid_tcp_nodelay*]
+# [*qpid_reconnect*]
+# [*qpid_reconnect_timeout*]
+# [*qpid_reconnect_limit*]
+# [*qpid_reconnect_interval*]
+# [*qpid_reconnect_interval_min*]
+# [*qpid_reconnect_interval_max*]
+#
 class neutron (
   $enabled                            = true,
   $package_ensure                     = 'present',
@@ -293,19 +294,6 @@ class neutron (
   $kombu_ssl_keyfile                  = $::os_service_default,
   $kombu_ssl_version                  = 'TLSv1',
   $kombu_reconnect_delay              = '1.0',
-  $qpid_hostname                      = 'localhost',
-  $qpid_port                          = '5672',
-  $qpid_username                      = 'guest',
-  $qpid_password                      = 'guest',
-  $qpid_heartbeat                     = 60,
-  $qpid_protocol                      = 'tcp',
-  $qpid_tcp_nodelay                   = true,
-  $qpid_reconnect                     = true,
-  $qpid_reconnect_timeout             = 0,
-  $qpid_reconnect_limit               = 0,
-  $qpid_reconnect_interval_min        = 0,
-  $qpid_reconnect_interval_max        = 0,
-  $qpid_reconnect_interval            = 0,
   $use_ssl                            = false,
   $cert_file                          = false,
   $key_file                           = false,
@@ -317,6 +305,20 @@ class neutron (
   $log_dir                            = '/var/log/neutron',
   $state_path                         = '/var/lib/neutron',
   $lock_path                          = '/var/lib/neutron/lock',
+  # DEPRECATED PARAMETERS
+  $qpid_hostname                      = undef,
+  $qpid_port                          = undef,
+  $qpid_username                      = undef,
+  $qpid_password                      = undef,
+  $qpid_heartbeat                     = undef,
+  $qpid_protocol                      = undef,
+  $qpid_tcp_nodelay                   = undef,
+  $qpid_reconnect                     = undef,
+  $qpid_reconnect_timeout             = undef,
+  $qpid_reconnect_limit               = undef,
+  $qpid_reconnect_interval_min        = undef,
+  $qpid_reconnect_interval_max        = undef,
+  $qpid_reconnect_interval            = undef,
 ) {
 
   include ::neutron::params
@@ -471,21 +473,7 @@ class neutron (
   }
 
   if $rpc_backend == 'qpid' or $rpc_backend == 'neutron.openstack.common.rpc.impl_qpid' {
-    neutron_config {
-      'oslo_messaging_qpid/qpid_hostname':               value => $qpid_hostname;
-      'oslo_messaging_qpid/qpid_port':                   value => $qpid_port;
-      'oslo_messaging_qpid/qpid_username':               value => $qpid_username;
-      'oslo_messaging_qpid/qpid_password':               value => $qpid_password, secret => true;
-      'oslo_messaging_qpid/qpid_heartbeat':              value => $qpid_heartbeat;
-      'oslo_messaging_qpid/qpid_protocol':               value => $qpid_protocol;
-      'oslo_messaging_qpid/qpid_tcp_nodelay':            value => $qpid_tcp_nodelay;
-      'oslo_messaging_qpid/qpid_reconnect':              value => $qpid_reconnect;
-      'oslo_messaging_qpid/qpid_reconnect_timeout':      value => $qpid_reconnect_timeout;
-      'oslo_messaging_qpid/qpid_reconnect_limit':        value => $qpid_reconnect_limit;
-      'oslo_messaging_qpid/qpid_reconnect_interval_min': value => $qpid_reconnect_interval_min;
-      'oslo_messaging_qpid/qpid_reconnect_interval_max': value => $qpid_reconnect_interval_max;
-      'oslo_messaging_qpid/qpid_reconnect_interval':     value => $qpid_reconnect_interval;
-    }
+    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
   }
 
   # SSL Options

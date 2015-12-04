@@ -15,7 +15,7 @@
 #   Defaults to true
 #
 # [*debug*]
-#   (optional) Show debugging output in log. Defaults to false.
+#   (optional) Show debugging output in log. Defaults to $::os_service_default.
 #
 # [*interface_driver*]
 #   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
@@ -44,7 +44,7 @@ class neutron::agents::lbaas (
   $package_ensure         = present,
   $enabled                = true,
   $manage_service         = true,
-  $debug                  = false,
+  $debug                  = $::os_service_default,
   $interface_driver       = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $device_driver          = 'neutron_lbaas.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
   $user_group             = $::neutron::params::nobody_user_group,

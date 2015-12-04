@@ -151,7 +151,7 @@
 #   report_interval, to be sure the agent is down for good.
 #   agent_down_time is a config for neutron-server, set by class neutron::server
 #   report_interval is a config for neutron agents, set by class neutron
-#   Defaults to: 75
+#   Defaults to: $::os_service_default
 #
 # [*state_path*]
 #   (optional) Deprecated.  Use state_path parameter on base neutron class instead.
@@ -169,12 +169,12 @@
 #   (optional) Setting the "router_distributed" flag to "True" will default to the creation
 #   of distributed tenant routers.
 #   Also can be the type of the router on the create request (admin-only attribute).
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*allow_automatic_l3agent_failover*]
 #   (optional) Allow automatic rescheduling of routers from dead L3 agents with
 #   admin_state_up set to True to alive agents.
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*l3_ha*]
 #   (optional) Enable high availability for virtual routers.
@@ -190,7 +190,7 @@
 #
 # [*l3_ha_net_cidr*]
 #   (optional) CIDR of the administrative network if HA mode is enabled.
-#   Defaults to '169.254.192.0/18'
+#   Defaults to $::os_service_default
 #
 # [*report_interval*]
 #   (optional) Deprecated, does nothing.
@@ -222,14 +222,14 @@ class neutron::server (
   $sync_db                          = false,
   $api_workers                      = $::processorcount,
   $rpc_workers                      = $::processorcount,
-  $agent_down_time                  = '75',
+  $agent_down_time                  = $::os_service_default,
   $router_scheduler_driver          = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
-  $router_distributed               = false,
-  $allow_automatic_l3agent_failover = false,
+  $router_distributed               = $::os_service_default,
+  $allow_automatic_l3agent_failover = $::os_service_default,
   $l3_ha                            = false,
   $max_l3_agents_per_router         = 3,
   $min_l3_agents_per_router         = 2,
-  $l3_ha_net_cidr                   = '169.254.192.0/18',
+  $l3_ha_net_cidr                   = $::os_service_default,
   $qos_notification_drivers         = $::os_service_default,
   # DEPRECATED PARAMETERS
   $auth_host                        = 'localhost',

@@ -16,11 +16,7 @@ describe 'neutron::agents::metadata' do
       :auth_tenant       => 'services',
       :auth_user         => 'neutron',
       :auth_password     => 'password',
-      :metadata_ip       => '127.0.0.1',
-      :metadata_port     => '8775',
-      :metadata_protocol => 'http',
-      :metadata_backlog  => '4096',
-      :shared_secret     => 'metadata-secret'
+      :shared_secret     => 'metadata-secret',
     }
   end
 
@@ -65,13 +61,13 @@ describe 'neutron::agents::metadata' do
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_user').with(:value => params[:auth_user])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_password').with(:value => params[:auth_password])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_password').with_secret( true )
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_ip').with(:value => params[:metadata_ip])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_port').with(:value => params[:metadata_port])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => params[:metadata_protocol])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_ip').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_port').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_workers').with(:value => facts[:processorcount])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => params[:metadata_backlog])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_proxy_shared_secret').with(:value => params[:shared_secret])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/cache_url').with(:value => 'memory://?default_ttl=5')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/cache_url').with(:ensure => 'absent')
     end
   end
 

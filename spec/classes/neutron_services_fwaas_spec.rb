@@ -37,9 +37,7 @@ describe 'neutron::services::fwaas' do
   end
 
   let :default_params do
-    { :driver               => 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
-      :enabled              => true,
-      :vpnaas_agent_package => false }
+    { :vpnaas_agent_package => false }
   end
 
   shared_examples_for 'neutron fwaas service plugin' do
@@ -48,8 +46,8 @@ describe 'neutron::services::fwaas' do
     end
 
     it 'configures driver in fwaas_driver.ini' do
-      is_expected.to contain_neutron_fwaas_service_config('fwaas/driver').with_value('neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver')
-      is_expected.to contain_neutron_fwaas_service_config('fwaas/enabled').with_value('true')
+      is_expected.to contain_neutron_fwaas_service_config('fwaas/driver').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_fwaas_service_config('fwaas/enabled').with_value('<SERVICE DEFAULT>')
     end
   end
 

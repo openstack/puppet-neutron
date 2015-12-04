@@ -35,7 +35,6 @@ describe 'neutron::agents::vpnaas' do
       :enabled                     => true,
       :vpn_device_driver           => 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
       :interface_driver            => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :ipsec_status_check_interval => '60'
     }
   end
 
@@ -56,7 +55,7 @@ describe 'neutron::agents::vpnaas' do
 
     it 'configures vpnaas_agent.ini' do
       is_expected.to contain_neutron_vpnaas_agent_config('vpnagent/vpn_device_driver').with_value(p[:vpn_device_driver]);
-      is_expected.to contain_neutron_vpnaas_agent_config('ipsec/ipsec_status_check_interval').with_value(p[:ipsec_status_check_interval]);
+      is_expected.to contain_neutron_vpnaas_agent_config('ipsec/ipsec_status_check_interval').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_vpnaas_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
       is_expected.to contain_neutron_vpnaas_agent_config('DEFAULT/external_network_bridge').with_value('<SERVICE DEFAULT>');
     end

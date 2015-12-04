@@ -11,21 +11,16 @@ describe 'neutron::agents::dhcp' do
   end
 
   let :default_params do
-    { :package_ensure         => 'present',
-      :enabled                => true,
-      :debug                  => false,
-      :state_path             => '/var/lib/neutron',
-      :resync_interval        => 30,
-      :interface_driver       => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :dhcp_domain            => 'openstacklocal',
-      :dhcp_driver            => 'neutron.agent.linux.dhcp.Dnsmasq',
-      :root_helper            => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-      :use_namespaces         => nil,
-      :dnsmasq_config_file    => nil,
-      :dhcp_delete_namespaces => true,
+    { :package_ensure           => 'present',
+      :enabled                  => true,
+      :state_path               => '/var/lib/neutron',
+      :resync_interval          => 30,
+      :interface_driver         => 'neutron.agent.linux.interface.OVSInterfaceDriver',
+      :dhcp_driver              => 'neutron.agent.linux.dhcp.Dnsmasq',
+      :root_helper              => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
       :enable_isolated_metadata => false,
       :enable_metadata_network  => false,
-      :dhcp_broadcast_reply   => false }
+      :dhcp_delete_namespaces   => true }
   end
 
   let :test_facts do
@@ -44,17 +39,17 @@ describe 'neutron::agents::dhcp' do
     it_configures 'dnsmasq dhcp_driver'
 
     it 'configures dhcp_agent.ini' do
-      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/debug').with_value(p[:debug]);
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/state_path').with_value(p[:state_path]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/resync_interval').with_value(p[:resync_interval]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
-      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_domain').with_value(p[:dhcp_domain]);
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_domain').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_driver').with_value(p[:dhcp_driver]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/root_helper').with_value(p[:root_helper]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_delete_namespaces').with_value(p[:dhcp_delete_namespaces]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(p[:enable_isolated_metadata]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value(p[:enable_metadata_network]);
-      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value(p[:dhcp_broadcast_reply]);
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value('<SERVICE DEFAULT>');
     end
 
     it 'installs neutron dhcp agent package' do

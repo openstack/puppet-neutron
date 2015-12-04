@@ -43,13 +43,13 @@
 #   The authentication region. (Defaults to $::os_service_default)
 #
 # [*metadata_ip*]
-#   The IP address of the metadata service. Defaults to '127.0.0.1'.
+#   The IP address of the metadata service. Defaults to $::os_service_default.
 #
 # [*metadata_port*]
-#   The TCP port of the metadata service. Defaults to 8775.
+#   The TCP port of the metadata service. Defaults to $::os_service_default.
 #
 # [*metadata_protocol*]
-#   The protocol to use for requests to Nova metadata server. Defaults to 'http'.
+#   The protocol to use for requests to Nova metadata server. Defaults to $::os_service_default.
 #
 # [*metadata_workers*]
 #   (optional) Number of separate worker processes to spawn.
@@ -61,14 +61,13 @@
 #
 # [*metadata_backlog*]
 #   (optional) Number of backlog requests to configure the metadata server socket with.
-#   Defaults to 4096
+#   Defaults to $::os_service_default
 #
 # [*metadata_memory_cache_ttl*]
 #   (optional) Specifies time in seconds a metadata cache entry is valid in
 #   memory caching backend.
 #   Set to 0 will cause cache entries to never expire.
 #   Set to $::os_service_default or false to disable cache.
-#   Defaults to 5
 #
 
 class neutron::agents::metadata (
@@ -84,12 +83,12 @@ class neutron::agents::metadata (
   $auth_insecure             = false,
   $auth_ca_cert              = $::os_service_default,
   $auth_region               = $::os_service_default,
-  $metadata_ip               = '127.0.0.1',
-  $metadata_port             = '8775',
-  $metadata_protocol         = 'http',
+  $metadata_ip               = $::os_service_default,
+  $metadata_port             = $::os_service_default,
+  $metadata_protocol         = $::os_service_default,
   $metadata_workers          = $::processorcount,
-  $metadata_backlog          = '4096',
-  $metadata_memory_cache_ttl = 5,
+  $metadata_backlog          = $::os_service_default,
+  $metadata_memory_cache_ttl = $::os_service_default,
   ) {
 
   include ::neutron::params
@@ -114,7 +113,7 @@ class neutron::agents::metadata (
     'DEFAULT/metadata_backlog':               value => $metadata_backlog;
   }
 
-  if ! is_service_default ($metadata_memory_cache_ttl) {
+  if ! is_service_default ($metadata_memory_cache_ttl) and ($metadata_memory_cache_ttl) {
     neutron_metadata_agent_config {
       'DEFAULT/cache_url': value => "memory://?default_ttl=${metadata_memory_cache_ttl}";
     }

@@ -28,7 +28,7 @@
 # [*send_events_interval*]
 #   (optional) Number of seconds between sending events to nova if there are
 #   any events to send.
-#   Defaults to '2'
+#   Defaults to $::os_service_default
 #
 # [*nova_url*]
 #   (optional) URL for connection to nova (Only supports one nova region
@@ -115,7 +115,7 @@
 class neutron::server::notifications (
   $notify_nova_on_port_status_changes = true,
   $notify_nova_on_port_data_changes   = true,
-  $send_events_interval               = '2',
+  $send_events_interval               = $::os_service_default,
   $nova_url                           = 'http://127.0.0.1:8774/v2',
   $auth_plugin                        = 'password',
   $username                           = 'nova',

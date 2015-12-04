@@ -6,49 +6,49 @@
 #
 # [*default_quota*]
 #   (optional) Default number of resources allowed per tenant,
-#   minus for unlimited. Defaults to -1.
+#   minus for unlimited. Defaults to $::os_service_default.
 #
 # [*quota_network*]
 #   (optional) Number of networks allowed per tenant, and minus means unlimited.
-#   Defaults to 10.
+#   Defaults to $::os_service_default.
 #
 # [*quota_subnet*]
 #   (optional) Number of subnets allowed per tenant, and minus means unlimited.
-#   Defaults to 10.
+#   Defaults to $::os_service_default.
 #
 # [*quota_port*]
 #   (optional) Number of ports allowed per tenant, and minus means unlimited.
-#   Defaults to 50.
+#   Defaults to $::os_service_default.
 #
 # [*quota_router*]
 #   (optional) Number of routers allowed per tenant, and minus means unlimited.
-#   Requires L3 extension. Defaults to 10.
+#   Requires L3 extension. Defaults to $::os_service_default.
 #
 # [*quota_floatingip*]
 #   (optional) Number of floating IPs allowed per tenant,
-#   and minus means unlimited. Requires L3 extension. Defaults to 50.
+#   and minus means unlimited. Requires L3 extension. Defaults to $::os_service_default.
 #
 # [*quota_security_group*]
 #   (optional) Number of security groups allowed per tenant,
 #   and minus means unlimited. Requires securitygroup extension.
-#   Defaults to 10.
+#   Defaults to $::os_service_default.
 #
 # [*quota_security_group_rule*]
 #   (optional) Number of security rules allowed per tenant,
 #   and minus means unlimited. Requires securitygroup extension.
-#   Defaults to 100.
+#   Defaults to $::os_service_default.
 #
 # [*quota_driver*]
 #   (optional) Default driver to use for quota checks.
-#   Defaults to 'neutron.db.quota_db.DbQuotaDriver'.
+#   Defaults to $::os_service_default.
 #
 # [*quota_firewall*]
 #   (optional) Number of firewalls allowed per tenant, -1 for unlimited.
-#   Defaults to '1'.
+#   Defaults to $::os_service_default.
 #
 # [*quota_firewall_policy*]
 #   (optional) Number of firewalls policies allowed per tenant, -1 for unlimited.
-#   Defaults to '1'.
+#   Defaults to $::os_service_default.
 #
 # [*quota_firewall_rule*]
 #   (optional) Number of firewalls rules allowed per tenant, -1 for unlimited.
@@ -57,16 +57,16 @@
 # [*quota_health_monitor*]
 #   (optional) Number of health monitors allowed per tenant.
 #   A negative value means unlimited.
-#   Defaults to '-1'.
+#   Defaults to $::os_service_default.
 #
 # [*quota_items*]
 #   (optional) Resource name(s) that are supported in quota features.
-#   Defaults to 'network,subnet,port'.
+#   Defaults to $::os_service_default.
 #
 # [*quota_member*]
 #   (optional) Number of pool members allowed per tenant.
 #   A negative value means unlimited
-#   Defaults to '-1'.
+#   Defaults to $::os_service_default.
 #
 # [*quota_network_gateway*]
 #   (optional) Number of network gateways allowed per tenant, -1 for unlimited.
@@ -79,35 +79,35 @@
 # [*quota_pool*]
 #   (optional) Number of pools allowed per tenant.
 #   A negative value means unlimited.
-#   Defaults to '10'.
+#   Defaults to $::os_service_default.
 #
 # [*quota_vip*]
 #   (optional) Number of vips allowed per tenant.
 #   A negative value means unlimited.
-#   Defaults to '10'.
+#   Defaults to $::os_service_default.
 #
 class neutron::quota (
-  $default_quota             = -1,
-  $quota_network             = 10,
-  $quota_subnet              = 10,
-  $quota_port                = 50,
+  $default_quota             = $::os_service_default,
+  $quota_network             = $::os_service_default,
+  $quota_subnet              = $::os_service_default,
+  $quota_port                = $::os_service_default,
   # l3 extension
-  $quota_router              = 10,
-  $quota_floatingip          = 50,
+  $quota_router              = $::os_service_default,
+  $quota_floatingip          = $::os_service_default,
   # securitygroup extension
-  $quota_security_group      = 10,
-  $quota_security_group_rule = 100,
-  $quota_driver              = 'neutron.db.quota_db.DbQuotaDriver',
-  $quota_firewall            = 1,
-  $quota_firewall_policy     = 1,
+  $quota_security_group      = $::os_service_default,
+  $quota_security_group_rule = $::os_service_default,
+  $quota_driver              = $::os_service_default,
+  $quota_firewall            = $::os_service_default,
+  $quota_firewall_policy     = $::os_service_default,
   $quota_firewall_rule       = -1,
-  $quota_health_monitor      = -1,
-  $quota_items               = 'network,subnet,port',
-  $quota_member              = -1,
+  $quota_health_monitor      = $::os_service_default,
+  $quota_items               = $::os_service_default,
+  $quota_member              = $::os_service_default,
   $quota_network_gateway     = 5,
   $quota_packet_filter       = 100,
-  $quota_pool                = 10,
-  $quota_vip                 = 10
+  $quota_pool                = $::os_service_default,
+  $quota_vip                 = $::os_service_default
 ) {
 
   neutron_config {

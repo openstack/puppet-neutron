@@ -499,6 +499,9 @@ class neutron (
   }
 
   if $rpc_backend == 'qpid' or $rpc_backend == 'neutron.openstack.common.rpc.impl_qpid' {
+
+    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
+
     neutron_config {
       'oslo_messaging_qpid/qpid_hostname':               value => $qpid_hostname;
       'oslo_messaging_qpid/qpid_port':                   value => $qpid_port;

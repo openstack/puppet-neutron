@@ -336,14 +336,16 @@ class neutron (
     fail('The ca_file parameter requires that use_ssl to be set to true')
   }
 
-  if ! is_service_default($kombu_ssl_ca_certs) and !$rabbit_use_ssl {
-    fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
-  }
-  if ! is_service_default($kombu_ssl_certfile) and !$rabbit_use_ssl {
-    fail('The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true')
-  }
-  if ! is_service_default($kombu_ssl_keyfile) and !$rabbit_use_ssl {
-    fail('The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true')
+  if !$rabbit_use_ssl {
+    if ! is_service_default($kombu_ssl_ca_certs) and ($kombu_ssl_ca_certs) {
+      fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
+    }
+    if ! is_service_default($kombu_ssl_certfile) and ($kombu_ssl_certfile) {
+      fail('The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true')
+    }
+    if ! is_service_default($kombu_ssl_keyfile) and ($kombu_ssl_keyfile) {
+      fail('The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true')
+    }
   }
   if (is_service_default($kombu_ssl_certfile) and ! is_service_default($kombu_ssl_keyfile)) or (is_service_default($kombu_ssl_keyfile) and ! is_service_default($kombu_ssl_certfile)) {
     fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
@@ -410,7 +412,7 @@ class neutron (
     }
   }
 
-  if ! is_service_default ($service_plugins) {
+  if ! is_service_default ($service_plugins) and ($service_plugins) {
     if is_array($service_plugins) {
       neutron_config { 'DEFAULT/service_plugins': value => join($service_plugins, ',') }
     } else {

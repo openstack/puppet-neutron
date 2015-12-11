@@ -161,8 +161,10 @@ class neutron::server::notifications (
     }
 
     if ! is_service_default ($nova_admin_tenant_id) {
-      neutron_config {
-        'DEFAULT/nova_admin_tenant_id': value => $nova_admin_tenant_id;
+      if $nova_admin_tenant_id {
+        neutron_config {
+          'DEFAULT/nova_admin_tenant_id': value => $nova_admin_tenant_id;
+        }
       }
     } else {
       neutron_config {
@@ -183,8 +185,10 @@ class neutron::server::notifications (
       'nova/region_name':       value => $region_name;
     }
     if ! is_service_default ($tenant_id) {
-      neutron_config {
-        'nova/tenant_id': value => $tenant_id;
+      if $tenant_id {
+        neutron_config {
+          'nova/tenant_id': value => $tenant_id;
+        }
       }
     } else {
       neutron_config {

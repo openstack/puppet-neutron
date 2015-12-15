@@ -15,7 +15,7 @@
 #   Defaults to true
 #
 # [*debug*]
-#   (optional) Show debugging output in log. Defaults to false.
+#   (optional) Show debugging output in log. Defaults to $::os_service_default.
 #
 # [*state_path*]
 #   (optional) Where to store dnsmasq state files. This directory must be
@@ -31,7 +31,7 @@
 #
 # [*dhcp_domain*]
 #   (optional) domain to use for building the hostnames
-#   Defaults to 'openstacklocal'
+#   Defaults to $::os_service_default
 #
 # [*dhcp_driver*]
 #   (optional) Defaults to 'neutron.agent.linux.dhcp.Dnsmasq'.
@@ -62,7 +62,7 @@
 #
 # [*dhcp_broadcast_reply*]
 #  (optional) Use broadcast in DHCP replies
-#  Defaults to false.
+#  Defaults to $::os_service_default.
 #
 # === Deprecated Parameters
 #
@@ -76,18 +76,18 @@ class neutron::agents::dhcp (
   $package_ensure           = present,
   $enabled                  = true,
   $manage_service           = true,
-  $debug                    = false,
+  $debug                    = $::os_service_default,
   $state_path               = '/var/lib/neutron',
   $resync_interval          = 30,
   $interface_driver         = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_domain              = 'openstacklocal',
+  $dhcp_domain              = $::os_service_default,
   $dhcp_driver              = 'neutron.agent.linux.dhcp.Dnsmasq',
   $root_helper              = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $dnsmasq_config_file      = $::os_service_default,
   $dhcp_delete_namespaces   = true,
   $enable_isolated_metadata = false,
   $enable_metadata_network  = false,
-  $dhcp_broadcast_reply     = false,
+  $dhcp_broadcast_reply     = $::os_service_default,
   # DEPRECATED PARAMETERS
   $use_namespaces           = $::os_service_default,
 ) {

@@ -40,28 +40,28 @@
 #
 # [*handle_internal_only_routers*]
 #   (optional) L3 Agent will handle non-external routers
-#   Defaults to true
+#   Defaults to $::os_service_default
 #
 # [*metadata_port*]
 #   (optional) The port of the metadata server
-#   Defaults to 9697
+#   Defaults to $::os_service_default
 #
 # [*send_arp_for_ha*]
 #   (optional) Send this many gratuitous ARPs for HA setup. Set it below or equal to 0
 #   to disable this feature.
-#   Defaults to 3
+#   Defaults to $::os_service_default
 #
 # [*periodic_interval*]
 #   (optional) seconds between re-sync routers' data if needed
-#   Defaults to 40
+#   Defaults to $::os_service_default
 #
 # [*periodic_fuzzy_delay*]
 #   (optional) seconds to start to sync routers' data after starting agent
-#   Defaults to 5
+#   Defaults to $::os_service_default
 #
 # [*enable_metadata_proxy*]
 #   (optional) can be set to False if the Nova metadata server is not available
-#   Defaults to True
+#   Defaults to $::os_service_default
 #
 # [*network_device_mtu*]
 #   (optional) The MTU size for the interfaces managed by the L3 agent
@@ -115,12 +115,12 @@ class neutron::agents::l3 (
   $interface_driver                 = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $router_id                        = $::os_service_default,
   $gateway_external_network_id      = $::os_service_default,
-  $handle_internal_only_routers     = true,
-  $metadata_port                    = '9697',
-  $send_arp_for_ha                  = '3',
-  $periodic_interval                = '40',
-  $periodic_fuzzy_delay             = '5',
-  $enable_metadata_proxy            = true,
+  $handle_internal_only_routers     = $::os_service_default,
+  $metadata_port                    = $::os_service_default,
+  $send_arp_for_ha                  = $::os_service_default,
+  $periodic_interval                = $::os_service_default,
+  $periodic_fuzzy_delay             = $::os_service_default,
+  $enable_metadata_proxy            = $::os_service_default,
   $network_device_mtu               = $::os_service_default,
   $router_delete_namespaces         = true,
   $ha_enabled                       = false,

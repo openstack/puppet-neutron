@@ -64,8 +64,8 @@ class neutron::agents::metering (
   $debug            = false,
   $interface_driver = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $driver           = 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
-  $measure_interval = '30',
-  $report_interval  = '300',
+  $measure_interval = $::os_service_default,
+  $report_interval  = $::os_service_default,
   # DEPRECATED PARAMETERS
   $use_namespaces   = $::os_service_default,
 ) {

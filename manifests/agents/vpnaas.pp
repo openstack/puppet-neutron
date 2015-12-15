@@ -41,7 +41,7 @@
 #  (optional) Defaults to $::os_service_default
 #
 # [*ipsec_status_check_interval*]
-#   (optional) Status check interval. Defaults to '60'.
+#   (optional) Status check interval. Defaults to $::os_service_default.
 #
 class neutron::agents::vpnaas (
   $package_ensure              = present,
@@ -50,7 +50,7 @@ class neutron::agents::vpnaas (
   $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $external_network_bridge     = $::os_service_default,
-  $ipsec_status_check_interval = '60'
+  $ipsec_status_check_interval = $::os_service_default
 ) {
 
   include ::neutron::params

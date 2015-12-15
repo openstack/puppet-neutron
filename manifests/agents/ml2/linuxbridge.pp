@@ -64,11 +64,11 @@ class neutron::agents::ml2::linuxbridge (
   $manage_service   = true,
   $tunnel_types     = [],
   $local_ip         = false,
-  $vxlan_group      = '224.0.0.1',
-  $vxlan_ttl        = false,
-  $vxlan_tos        = false,
-  $polling_interval = 2,
-  $l2_population    = false,
+  $vxlan_group      = $::os_service_default,
+  $vxlan_ttl        = $::os_service_default,
+  $vxlan_tos        = $::os_service_default,
+  $polling_interval = $::os_service_default,
+  $l2_population    = $::os_service_default,
   $physical_interface_mappings = [],
   $firewall_driver  = 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
 ) {
@@ -86,25 +86,10 @@ class neutron::agents::ml2::linuxbridge (
       fail('The local_ip parameter is required when vxlan tunneling is enabled')
     }
 
-    if $vxlan_group {
-      neutron_agent_linuxbridge { 'vxlan/vxlan_group': value => $vxlan_group }
-    } else {
-      neutron_agent_linuxbridge { 'vxlan/vxlan_group': ensure => absent }
-    }
-
-    if $vxlan_ttl {
-      neutron_agent_linuxbridge { 'vxlan/vxlan_ttl': value => $vxlan_ttl }
-    } else {
-      neutron_agent_linuxbridge { 'vxlan/vxlan_ttl': ensure => absent }
-    }
-
-    if $vxlan_tos {
-      neutron_agent_linuxbridge { 'vxlan/vxlan_tos': value => $vxlan_tos }
-    } else {
-      neutron_agent_linuxbridge { 'vxlan/vxlan_tos': ensure => absent }
-    }
-
     neutron_agent_linuxbridge {
+      'vxlan/vxlan_ttl':     value => $vxlan_ttl;
+      'vxlan/vxlan_group':   value => $vxlan_group;
+      'vxlan/vxlan_tos':     value => $vxlan_tos;
       'vxlan/enable_vxlan':  value => true;
       'vxlan/local_ip':      value => $local_ip;
       'vxlan/l2_population': value => $l2_population;
@@ -113,8 +98,6 @@ class neutron::agents::ml2::linuxbridge (
     neutron_agent_linuxbridge {
       'vxlan/enable_vxlan':  value  => false;
       'vxlan/local_ip':      ensure => absent;
-      'vxlan/vxlan_group':   ensure => absent;
-      'vxlan/l2_population': ensure => absent;
     }
   }
 

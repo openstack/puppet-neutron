@@ -23,12 +23,12 @@
 # === Parameters:
 #
 # [*enabled*]
-#   (required) Whether or not to enable the FWaaS neutron plugin Service
-#   true/false
+#   (optional) Whether or not to enable the FWaaS neutron plugin Service
+#   Defaults to $::os_service_default
 #
 # [*driver*]
 #   (optional) FWaaS Driver to use
-#   Defaults to 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver'
+#   Defaults to $::os_service_default
 #
 # [*vpnaas_agent_package*]
 #   (optional) Use VPNaaS agent package instead of L3 agent package on debian platforms
@@ -38,8 +38,8 @@
 #
 
 class neutron::services::fwaas (
-  $enabled              = true,
-  $driver               = 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
+  $enabled              = $::os_service_default,
+  $driver               = $::os_service_default,
   $vpnaas_agent_package = false
 ) {
 

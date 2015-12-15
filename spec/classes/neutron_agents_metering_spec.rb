@@ -39,8 +39,6 @@ describe 'neutron::agents::metering' do
       :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :driver           => 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
       :use_namespaces   => nil,
-      :measure_interval => '30',
-      :report_interval  => '300'
     }
   end
 
@@ -61,8 +59,8 @@ describe 'neutron::agents::metering' do
       is_expected.to contain_neutron_metering_agent_config('DEFAULT/debug').with_value(p[:debug]);
       is_expected.to contain_neutron_metering_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
       is_expected.to contain_neutron_metering_agent_config('DEFAULT/driver').with_value(p[:driver]);
-      is_expected.to contain_neutron_metering_agent_config('DEFAULT/measure_interval').with_value(p[:measure_interval]);
-      is_expected.to contain_neutron_metering_agent_config('DEFAULT/report_interval').with_value(p[:report_interval]);
+      is_expected.to contain_neutron_metering_agent_config('DEFAULT/measure_interval').with_value('<SERVICE DEFAULT>');
+      is_expected.to contain_neutron_metering_agent_config('DEFAULT/report_interval').with_value('<SERVICE DEFAULT>');
     end
 
     it 'installs neutron metering agent package' do

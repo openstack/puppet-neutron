@@ -7,18 +7,13 @@ describe 'neutron::agents::ml2::linuxbridge' do
   end
 
   let :default_params do
-    { :package_ensure   => 'present',
-      :enabled          => true,
-      :manage_service   => true,
-      :tunnel_types     => [],
-      :local_ip         => false,
-      :vxlan_group      => '224.0.0.1',
-      :vxlan_ttl        => false,
-      :vxlan_tos        => false,
-      :polling_interval => 2,
-      :l2_population    => false,
+    { :package_ensure              => 'present',
+      :enabled                     => true,
+      :manage_service              => true,
+      :tunnel_types                => [],
+      :local_ip                    => false,
       :physical_interface_mappings => [],
-      :firewall_driver  => 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver' }
+      :firewall_driver             => 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver' }
   end
 
   let :test_facts do
@@ -37,7 +32,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
       it { is_expected.to contain_class('neutron::params') }
 
       it 'configures ml2_conf.ini' do
-        is_expected.to contain_neutron_agent_linuxbridge('agent/polling_interval').with_value(default_params[:polling_interval])
+        is_expected.to contain_neutron_agent_linuxbridge('agent/polling_interval').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/physical_interface_mappings').with_value(default_params[:physical_interface_mappings].join(','))
         is_expected.to contain_neutron_agent_linuxbridge('securitygroup/firewall_driver').with_value(default_params[:firewall_driver])
       end
@@ -80,8 +75,8 @@ describe 'neutron::agents::ml2::linuxbridge' do
       it 'does not configre VXLAN tunneling' do
         is_expected.to contain_neutron_agent_linuxbridge('vxlan/enable_vxlan').with_value(false)
         is_expected.to contain_neutron_agent_linuxbridge('vxlan/local_ip').with_ensure('absent')
-        is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_ensure('absent')
-        is_expected.to contain_neutron_agent_linuxbridge('vxlan/l2_population').with_ensure('absent')
+        is_expected.not_to contain_neutron_agent_linuxbridge('vxlan/vxlan_group')
+        is_expected.not_to contain_neutron_agent_linuxbridge('vxlan/l2_population')
       end
     end
 
@@ -97,10 +92,10 @@ describe 'neutron::agents::ml2::linuxbridge' do
         it 'configures ml2_conf.ini' do
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/enable_vxlan').with_value(true)
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/local_ip').with_value(params[:local_ip])
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value(default_params[:vxlan_group])
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_ttl').with_ensure('absent')
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_tos').with_ensure('absent')
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/l2_population').with_value(default_params[:l2_population])
+          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_ttl').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_tos').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_neutron_agent_linuxbridge('vxlan/l2_population').with_value('<SERVICE DEFAULT>')
         end
       end
 

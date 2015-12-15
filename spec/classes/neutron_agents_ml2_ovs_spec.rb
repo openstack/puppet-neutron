@@ -15,14 +15,9 @@ describe 'neutron::agents::ml2::ovs' do
       :enable_tunneling           => false,
       :local_ip                   => false,
       :tunnel_bridge              => 'br-tun',
-      :polling_interval           => 2,
-      :l2_population              => false,
-      :arp_responder              => false,
       :drop_flows_on_start        => false,
-      :enable_distributed_routing => false,
       :firewall_driver            => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
-      :manage_vswitch             => true,
-      :prevent_arp_spoofing       => true }
+      :manage_vswitch             => true }
   end
 
   let :test_facts do
@@ -43,10 +38,10 @@ describe 'neutron::agents::ml2::ovs' do
     it { is_expected.to contain_class('neutron::params') }
 
     it 'configures plugins/ml2/openvswitch_agent.ini' do
-      is_expected.to contain_neutron_agent_ovs('agent/polling_interval').with_value(p[:polling_interval])
-      is_expected.to contain_neutron_agent_ovs('agent/l2_population').with_value(p[:l2_population])
-      is_expected.to contain_neutron_agent_ovs('agent/arp_responder').with_value(p[:arp_responder])
-      is_expected.to contain_neutron_agent_ovs('agent/prevent_arp_spoofing').with_value(p[:prevent_arp_spoofing])
+      is_expected.to contain_neutron_agent_ovs('agent/polling_interval').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_agent_ovs('agent/l2_population').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_agent_ovs('agent/arp_responder').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_agent_ovs('agent/prevent_arp_spoofing').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_agent_ovs('agent/drop_flows_on_start').with_value(p[:drop_flows_on_start])
       is_expected.to contain_neutron_agent_ovs('agent/extensions').with_value(['<SERVICE DEFAULT>'])
       is_expected.to contain_neutron_agent_ovs('ovs/integration_bridge').with_value(p[:integration_bridge])

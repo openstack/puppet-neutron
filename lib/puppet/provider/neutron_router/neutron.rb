@@ -25,6 +25,7 @@ Puppet::Type.type(:neutron_router).provide(
         :admin_state_up            => attrs['admin_state_up'],
         :external_gateway_info     => attrs['external_gateway_info'],
         :status                    => attrs['status'],
+        :distributed               => attrs['distributed'],
         :tenant_id                 => attrs['tenant_id']
       )
     end
@@ -56,6 +57,10 @@ Puppet::Type.type(:neutron_router).provide(
       opts << "--tenant_id=#{tenant_id}"
     elsif @resource[:tenant_id]
       opts << "--tenant_id=#{@resource[:tenant_id]}"
+    end
+
+    if @resource[:distributed]
+      opts << "--distributed=#{@resource[:distributed]}"
     end
 
     results = auth_neutron("router-create", '--format=shell',
@@ -132,7 +137,21 @@ EOT
   end
 
   def admin_state_up=(value)
+    admin_state_up(value)
+  end
+
+  def admin_state_up(value)
     auth_neutron('router-update', "--admin-state-up=#{value}", name)
+  end
+
+  def distributed=(value)
+    results = auth_neutron("router-show", '--format=shell', resource[:name])
+    attrs = self.class.parse_creation_output(results)
+    admin_state_up(false)
+    auth_neutron('router-update', "--distributed=#{value}", name)
+    if attrs['admin_state_up'] == 'True'
+      admin_state_up(true)
+    end
   end
 
 end

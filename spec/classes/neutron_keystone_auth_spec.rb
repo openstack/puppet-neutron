@@ -26,13 +26,12 @@ describe 'neutron::keystone::auth' do
       :roles   => ['admin']
     )}
 
-    it { is_expected.to contain_keystone_service('neutron').with(
+    it { is_expected.to contain_keystone_service('neutron::network').with(
       :ensure      => 'present',
-      :type        => 'network',
       :description => 'Neutron Networking Service'
     ) }
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron::network').with(
       :ensure       => 'present',
       :public_url   => "http://127.0.0.1:9696",
       :admin_url    => "http://127.0.0.1:9696",
@@ -57,7 +56,7 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with_notify(['Service[neutron-server]']) }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron::network').with_notify(['Service[neutron-server]']) }
   end
 
   describe 'with endpoint URL parameters' do
@@ -70,7 +69,7 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron::network').with(
       :ensure       => 'present',
       :public_url   => 'https://10.10.10.10:80',
       :internal_url => 'https://10.10.10.11:81',
@@ -93,7 +92,7 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron::network').with(
       :ensure       => 'present',
       :public_url   => "https://10.10.10.10:80",
       :internal_url => "https://10.10.10.11:81",
@@ -114,9 +113,9 @@ describe 'neutron::keystone::auth' do
 
     it { is_expected.to contain_keystone_user_role('neutrony@services') }
 
-    it { is_expected.to contain_keystone_service('neutrony') }
+    it { is_expected.to contain_keystone_service('neutrony::network') }
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutrony') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutrony::network') }
 
   end
 
@@ -131,8 +130,8 @@ describe 'neutron::keystone::auth' do
 
     it { is_expected.to contain_keystone_user('neutron') }
     it { is_expected.to contain_keystone_user_role('neutron@services') }
-    it { is_expected.to contain_keystone_service('neutron_service') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron_service') }
+    it { is_expected.to contain_keystone_service('neutron_service::network') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron_service::network') }
 
   end
 
@@ -149,9 +148,8 @@ describe 'neutron::keystone::auth' do
 
     it { is_expected.to contain_keystone_user_role('neutron@services') }
 
-    it { is_expected.to contain_keystone_service('neutron').with(
+    it { is_expected.to contain_keystone_service('neutron::network').with(
       :ensure      => 'present',
-      :type        => 'network',
       :description => 'Neutron Networking Service'
     ) }
 
@@ -171,9 +169,8 @@ describe 'neutron::keystone::auth' do
 
     it { is_expected.not_to contain_keystone_user_role('neutron@services') }
 
-    it { is_expected.to contain_keystone_service('neutron').with(
+    it { is_expected.to contain_keystone_service('neutron::network').with(
       :ensure      => 'present',
-      :type        => 'network',
       :description => 'Neutron Networking Service'
     ) }
 
@@ -188,7 +185,7 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { is_expected.to_not contain_keystone_endpoint('RegionOne/neutron') }
+    it { is_expected.to_not contain_keystone_endpoint('RegionOne/neutron::network') }
 
   end
 

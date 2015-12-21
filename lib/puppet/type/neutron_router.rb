@@ -84,6 +84,14 @@ Puppet::Type.newtype(:neutron_router) do
     end
   end
 
+  newproperty(:ha) do
+    desc 'Is router of HA type or not, default depends on L3 HA state.'
+    newvalues(/(t|T)rue/, /(f|F)alse/)
+    munge do |v|
+      v.to_s.capitalize
+    end
+  end
+
   validate do
     if self[:ensure] != :present
       return

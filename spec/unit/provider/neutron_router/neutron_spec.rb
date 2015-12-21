@@ -17,6 +17,7 @@ describe provider_class do
       :ensure          => 'present',
       :admin_state_up  => 'True',
       :distributed     => 'True',
+      :ha              => 'False',
       :tenant_id       => '60f9544eb94c42a6b7e8e98c2be981b1',
     }
   end
@@ -41,11 +42,13 @@ id="c5f799fa-b3e0-47ca-bdb7-abeff209b816"
 name="router1"
 status="ACTIVE"
 distributed="True"
+ha="False"
 tenant_id="60f9544eb94c42a6b7e8e98c2be981b1"'
 
       provider.expects(:auth_neutron).with('router-create',
                                            '--format=shell', ["--tenant_id=#{router_attrs[:tenant_id]}",
-                                                              "--distributed=#{router_attrs[:distributed]}"],
+                                                              "--distributed=#{router_attrs[:distributed]}",
+                                                              "--ha=#{router_attrs[:ha]}"],
                                            router_name).returns(output)
 
       provider.create

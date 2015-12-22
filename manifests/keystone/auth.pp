@@ -189,7 +189,7 @@ class neutron::keystone::auth (
   $real_service_name = pick($service_name, $auth_name)
 
   if $configure_endpoint {
-    Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| title == 'neutron-server' |>
+    Keystone_endpoint["${region}/${real_service_name}::${service_type}"]  ~> Service <| title == 'neutron-server' |>
   }
 
   if $configure_user_role {

@@ -50,26 +50,30 @@ class neutron::plugins::ovs::opendaylight (
   Service<| title == 'opendaylight' |> -> Exec <| title == 'Wait for NetVirt OVSDB to come up' |>
 
   exec { 'Wait for NetVirt OVSDB to come up':
-    command   => "/bin/curl -o /dev/null --fail --silent --head -u ${odl_username}:${odl_password} ${odl_check_url}",
+    command   => "curl -o /dev/null --fail --silent --head -u ${odl_username}:${odl_password} ${odl_check_url}",
     tries     => $retry_count,
     try_sleep => $retry_interval,
+    path      => '/usr/sbin:/usr/bin:/sbin:/bin',
   } ->
   # OVS manager
   exec { 'Set OVS Manager to OpenDaylight':
-    command => "/usr/bin/ovs-vsctl set-manager ${odl_ovsdb_iface}",
-    unless  => "/usr/bin/ovs-vsctl show | /usr/bin/grep 'Manager \"${odl_ovsdb_iface}\"'",
+    command => "ovs-vsctl set-manager ${odl_ovsdb_iface}",
+    unless  => "ovs-vsctl show | grep 'Manager \"${odl_ovsdb_iface}\"'",
+    path    => '/usr/sbin:/usr/bin:/sbin:/bin',
   } ->
   # local ip
   exec { 'Set local_ip Other Option':
-    command => "/usr/bin/ovs-vsctl set Open_vSwitch $(ovs-vsctl get Open_vSwitch . _uuid) other_config:local_ip=${tunnel_ip}",
-    unless  => "/usr/bin/ovs-vsctl list Open_vSwitch | /usr/bin/grep 'local_ip=\"${tunnel_ip}\"'",
+    command => "ovs-vsctl set Open_vSwitch $(ovs-vsctl get Open_vSwitch . _uuid) other_config:local_ip=${tunnel_ip}",
+    unless  => "ovs-vsctl list Open_vSwitch | grep 'local_ip=\"${tunnel_ip}\"'",
+    path    => '/usr/sbin:/usr/bin:/sbin:/bin',
   }
 
   # set mappings for VLAN
   if $provider_mappings {
     exec { 'Set provider_mappings Other Option':
-      command => "/usr/bin/ovs-vsctl set Open_vSwitch $(ovs-vsctl get Open_vSwitch . _uuid) other_config:provider_mappings=${provider_mappings}",
-      unless  => "/usr/bin/ovs-vsctl list Open_vSwitch | /usr/bin/grep 'provider_mappings' | /usr/bin/grep ${provider_mappings}",
+      command => "ovs-vsctl set Open_vSwitch $(ovs-vsctl get Open_vSwitch . _uuid) other_config:provider_mappings=${provider_mappings}",
+      unless  => "ovs-vsctl list Open_vSwitch | grep 'provider_mappings' | grep ${provider_mappings}",
+      path    => '/usr/sbin:/usr/bin:/sbin:/bin',
     }
   }
 }

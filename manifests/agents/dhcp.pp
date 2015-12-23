@@ -53,6 +53,10 @@
 #   (optional) enable metadata support on isolated networks.
 #   Defaults to false.
 #
+# [*enable_force_metadata*]
+#   (optional) enable metadata support on all networks.
+#   Defaults to false.
+#
 # [*enable_metadata_network*]
 #   (optional) Allows for serving metadata requests coming from a dedicated metadata
 #   access network whose cidr is 169.254.169.254/16 (or larger prefix), and is
@@ -86,6 +90,7 @@ class neutron::agents::dhcp (
   $dnsmasq_config_file      = undef,
   $dhcp_delete_namespaces   = true,
   $enable_isolated_metadata = false,
+  $enable_force_metadata    = false,
   $enable_metadata_network  = false,
   $dhcp_broadcast_reply     = false,
   # DEPRECATED PARAMETERS
@@ -110,11 +115,12 @@ class neutron::agents::dhcp (
     }
   }
 
-  if (! $enable_isolated_metadata) and $enable_metadata_network {
-    fail('enable_metadata_network to true requires enable_isolated_metadata also enabled.')
+  if (! ($enable_isolated_metadata or $enable_force_metadata)) and $enable_metadata_network {
+    fail('enable_metadata_network to true requires enable_isolated_metadata or enable_force_metadata also enabled.')
   } else {
     neutron_dhcp_agent_config {
       'DEFAULT/enable_isolated_metadata': value => $enable_isolated_metadata;
+      'DEFAULT/force_metadata':           value => $enable_force_metadata;
       'DEFAULT/enable_metadata_network':  value => $enable_metadata_network;
     }
   }

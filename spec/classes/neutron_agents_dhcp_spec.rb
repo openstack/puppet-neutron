@@ -25,6 +25,7 @@ describe 'neutron::agents::dhcp' do
       :dhcp_delete_namespaces => true,
       :enable_isolated_metadata => false,
       :enable_metadata_network  => false,
+      :enable_force_metadata  => false,
       :dhcp_broadcast_reply   => false }
   end
 
@@ -53,6 +54,7 @@ describe 'neutron::agents::dhcp' do
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/root_helper').with_value(p[:root_helper]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_delete_namespaces').with_value(p[:dhcp_delete_namespaces]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(p[:enable_isolated_metadata]);
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/force_metadata').with_value(p[:enable_force_metadata]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value(p[:enable_metadata_network]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value(p[:dhcp_broadcast_reply]);
     end
@@ -112,12 +114,32 @@ describe 'neutron::agents::dhcp' do
       end
     end
 
-    context 'when enabling metadata networks without enabling isolated metadata' do
+    context 'when enabling metadata networks without enabling isolated metadata or force metadata' do
       before :each do
-        params.merge!(:enable_isolated_metadata => false, :enable_metadata_network => true)
+        params.merge!(:enable_isolated_metadata => false, :enable_force_metadata => false, :enable_metadata_network => true)
       end
 
-      it_raises 'a Puppet::Error', /enable_metadata_network to true requires enable_isolated_metadata also enabled./
+      it_raises 'a Puppet::Error', /enable_metadata_network to true requires enable_isolated_metadata or enable_force_metadata also enabled./
+    end
+
+    context 'when enabling force metadata only' do
+      before :each do
+        params.merge!(:enable_force_metadata => true, :enable_metadata_network => false)
+      end
+      it 'should enable force_metadata only' do
+        is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/force_metadata').with_value('true');
+        is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value('false');
+      end
+    end
+
+    context 'when enabling force metadata with metadata networks' do
+      before :each do
+        params.merge!(:enable_force_metadata => true, :enable_metadata_network => true)
+      end
+      it 'should enable both force_metadata and metadata_network' do
+        is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/force_metadata').with_value('true');
+        is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value('true');
+      end
     end
 
     context 'with use_namespaces as false' do

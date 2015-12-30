@@ -22,10 +22,6 @@
 #   (optional) Print debug info in logs
 #   Defaults to false
 #
-# [*external_network_bridge*]
-#   (optional) The name of the external bridge
-#   Defaults to br-ex
-#
 # [*interface_driver*]
 #   (optional) Driver to interface with neutron
 #   Defaults to OVSInterfaceDriver
@@ -106,12 +102,15 @@
 #   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
 #   Defaults to $::os_service_default.
 #
+# [*external_network_bridge*]
+#   (optional) Deprecated. The name of the external bridge
+#   Defaults to $::os_service_default
+#
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
   $enabled                          = true,
   $manage_service                   = true,
   $debug                            = false,
-  $external_network_bridge          = 'br-ex',
   $interface_driver                 = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $router_id                        = $::os_service_default,
   $gateway_external_network_id      = $::os_service_default,
@@ -131,6 +130,7 @@ class neutron::agents::l3 (
   # DEPRECATED PARAMETERS
   $allow_automatic_l3agent_failover = false,
   $use_namespaces                   = $::os_service_default,
+  $external_network_bridge          = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -139,7 +139,11 @@ class neutron::agents::l3 (
   Neutron_l3_agent_config<||> ~> Service['neutron-l3']
 
   if $allow_automatic_l3agent_failover {
-    notice('parameter allow_automatic_l3agent_failover is deprecated, use parameter in neutron::server instead')
+    warning('parameter allow_automatic_l3agent_failover is deprecated, use parameter in neutron::server instead')
+  }
+
+  if ! is_service_default ($external_network_bridge) {
+    warning('parameter external_network_bridge is deprecated')
   }
 
   if $ha_enabled {

@@ -210,8 +210,10 @@ correctly configured.")
 
     self.find_and_parse_json(cmd_output).each do |port|
       if port['fixed_ips']
-        fixed_ips = JSON.parse(port['fixed_ips'])
-        port['subnet_id'] = fixed_ips['subnet_id']
+        if !port['fixed_ips'].empty?
+          fixed_ips = JSON.parse(port['fixed_ips'])
+          port['subnet_id'] = fixed_ips['subnet_id']
+        end
         port.delete('fixed_ips')
       end
       results << port

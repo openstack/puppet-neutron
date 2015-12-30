@@ -243,6 +243,29 @@ describe Puppet::Provider::Neutron do
       expect(result).to eql(expected)
     end
 
+
+    it 'should handle empty fixed_ips field' do
+      output = '''
+        [
+            {
+                "id": "1345e576-a21f-4c2e-b24a-b245639852ab",
+                "name": "",
+                "mac_address": "fa:16:3e:e3:e6:38",
+                "fixed_ips": ""
+            }
+        ]
+      '''
+      expected =
+       [{ "name"=>"",
+          "id"=>"1345e576-a21f-4c2e-b24a-b245639852ab",
+          "mac_address"=>"fa:16:3e:e3:e6:38"}]
+      klass.expects(:auth_neutron).
+        with('router-port-list', '--format=json', router).
+        returns(output)
+      result = klass.list_router_ports(router)
+      expect(result).to eql(expected)
+    end
+
   end
 
   describe 'when parsing creation output' do

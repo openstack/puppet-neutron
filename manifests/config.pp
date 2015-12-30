@@ -6,7 +6,7 @@
 #
 # [*xxx_config*]
 #   (optional) Allow configuration of arbitrary Neutron xxx specific configurations.
-#   The value is an hash of neutron_config resources. Example:
+#   The value is a hash of neutron_config resources. Example:
 #   server_config =>
 #   { 'DEFAULT/foo' => { value => 'fooValue'},
 #     'DEFAULT/bar' => { value => 'barValue'}

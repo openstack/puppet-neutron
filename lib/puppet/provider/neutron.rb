@@ -1,5 +1,4 @@
 require 'csv'
-require 'json'
 require 'puppet/util/inifile'
 
 class Puppet::Provider::Neutron < Puppet::Provider
@@ -132,91 +131,64 @@ correctly configured.")
     @neutron_credentials = nil
   end
 
-  def self.find_and_parse_json(text)
-    # separate json from any possible garbage around it and parse
-    rv = []
-    if text.is_a? String
-      text = text.split("\n")
-    elsif !text.is_a? Array
-      return rv
-    end
-    found = false
-    (0..text.size-1).reverse_each do |line_no|
-      if text[line_no] =~ /\]\s*$/
-        end_of_json_line_no = line_no
-        (0..end_of_json_line_no).reverse_each do |start_of_json_line_no|
-          if text[start_of_json_line_no] =~ /^\s*\[/
-            begin
-              js_txt = text[start_of_json_line_no..end_of_json_line_no].join('')
-              rv = JSON.parse(js_txt)
-              found = true
-            rescue
-              # do nothing, next iteration please, because found==false
-            end
-          end
-          break if found
-        end
-      end
-      break if found
-    end
-    rv
-  end
-
   def self.list_neutron_resources(type)
     ids = []
-    list = auth_neutron("#{type}-list", '--format=json',
-                        '--column=id')
+    list = auth_neutron("#{type}-list", '--format=csv',
+                        '--column=id', '--quote=none')
     if list.nil?
       raise(Puppet::ExecutionFailure, "Can't retrieve #{type}-list because Neutron or Keystone API is not available.")
     end
 
-    self.find_and_parse_json(list).each do |line|
-      ids << line['id']
+    (list.split("\n")[1..-1] || []).compact.collect do |line|
+      ids << line.strip
     end
-
     return ids
   end
 
   def self.get_neutron_resource_attrs(type, id)
     attrs = {}
-    net = auth_neutron("#{type}-show", '--format=json', id)
+    net = auth_neutron("#{type}-show", '--format=shell', id)
     if net.nil?
       raise(Puppet::ExecutionFailure, "Can't retrieve #{type}-show because Neutron or Keystone API is not available.")
     end
 
-    self.find_and_parse_json(net).each do |line|
-      k = line['Field']
-      v = line['Value']
-      if ['True', 'False'].include? v.to_s.capitalize
-        v = "#{v}".capitalize
-      elsif v.is_a? String and v =~ /\n/
-        v = v.split(/\n/)
-      elsif v.is_a? Numeric
-        v = "#{v}"
+    last_key = nil
+    (net.split("\n") || []).compact.collect do |line|
+      if line.include? '='
+        k, v = line.split('=', 2)
+        attrs[k] = v.gsub(/\A"|"\Z/, '')
+        last_key = k
       else
-        v = "#{v}"
+        # Handle the case of a list of values
+        v = line.gsub(/\A"|"\Z/, '')
+        attrs[last_key] = [attrs[last_key], v].flatten
       end
-      attrs[k] = v
     end
-
     return attrs
   end
 
   def self.list_router_ports(router_name_or_id)
     results = []
     cmd_output = auth_neutron("router-port-list",
-                              '--format=json',
+                              '--format=csv',
                               router_name_or_id)
-
-    self.find_and_parse_json(cmd_output).each do |port|
-      if port['fixed_ips']
-        fixed_ips = JSON.parse(port['fixed_ips'])
-        port['subnet_id'] = fixed_ips['subnet_id']
-        port.delete('fixed_ips')
-      end
-      results << port
+    if ! cmd_output
+      return results
     end
 
+    headers = nil
+    CSV.parse(cmd_output) do |row|
+      if headers == nil
+        headers = row
+      else
+        result = Hash[*headers.zip(row).flatten]
+        match_data = /.*"subnet_id": "(.*)", .*/.match(result['fixed_ips'])
+        if match_data
+          result['subnet_id'] = match_data[1]
+        end
+        results << result
+      end
+    end
     return results
   end
 

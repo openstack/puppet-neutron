@@ -10,6 +10,10 @@ describe provider_class do
     'net1'
   end
 
+  let :subnet_v6_name do
+    'net2'
+  end
+
   let :subnet_attrs do
     {
       :name             => subnet_name,
@@ -26,6 +30,22 @@ describe provider_class do
     }
   end
 
+  let :subnet_v6_attrs do
+    {
+      :name             => subnet_v6_name,
+      :ensure           => 'present',
+      :cidr             => '2001:abcd::/64',
+      :ip_version       => '6',
+      :gateway_ip       => '2001:abcd::1',
+      :enable_dhcp      => 'False',
+      :network_name     => 'net2',
+      :tenant_id        => '60f9544eb94c42a6b7e8e98c2be981b1',
+      :allocation_pools => 'start=2001:abcd::2,end=2001:abcd::ffff:ffff:ffff:fffe',
+      :dns_nameservers  => '2001:4860:4860::8888',
+      :host_routes      => 'destination=2001:abcd:0:1::/64,nexthop=2001:abcd::1',
+    }
+  end
+
   let :resource do
     Puppet::Type::Neutron_subnet.new(subnet_attrs)
   end
@@ -35,7 +55,6 @@ describe provider_class do
   end
 
   describe 'when creating a subnet' do
-
     it 'should call subnet-create with appropriate command line options' do
       provider.class.stubs(:get_tenant_id).returns(subnet_attrs[:tenant_id])
 
@@ -63,6 +82,48 @@ tenant_id="60f9544eb94c42a6b7e8e98c2be981b1"'
                                              "--tenant_id=#{subnet_attrs[:tenant_id]}",
                                              subnet_name],
                                            subnet_attrs[:cidr]).returns(output)
+
+      provider.create
+    end
+  end
+
+  describe 'when creating a ipv6 subnet' do
+
+    let :resource do
+      Puppet::Type::Neutron_subnet.new(subnet_v6_attrs)
+    end
+
+    let :provider do
+      provider_class.new(resource)
+    end
+
+    it 'should call subnet-create with appropriate command line options' do
+      provider.class.stubs(:get_tenant_id).returns(subnet_v6_attrs[:tenant_id])
+
+      output = 'Created a new subnet:
+allocation_pools="{\"start\": \"2001:abcd::2\", \"end\": \"2001:abcd::ffff:ffff:ffff:fffe\"}"
+cidr="2001:abcd::/64"
+dns_nameservers="2001:4860:4860::8888"
+enable_dhcp="False"
+gateway_ip="2001:abcd::1"
+host_routes="{\"nexthop\": \"2001:abcd::1\", \"destination\": \"2001:abcd:0:1::/64\"}"
+id="dd5e0ef1-2c88-4b0b-ba08-7df65be87963"
+ip_version="6"
+name="net1"
+network_id="98873773-aa34-4b87-af05-70903659246f"
+tenant_id="60f9544eb94c42a6b7e8e98c2be981b1"'
+
+      provider.expects(:auth_neutron).with('subnet-create', '--format=shell',
+                                            ["--name=#{subnet_v6_attrs[:name]}",
+                                             "--ip-version=#{subnet_v6_attrs[:ip_version]}",
+                                             "--gateway-ip=#{subnet_v6_attrs[:gateway_ip]}",
+                                             "--disable-dhcp",
+                                             "--allocation-pool=#{subnet_v6_attrs[:allocation_pools]}",
+                                             "--dns-nameserver=#{subnet_v6_attrs[:dns_nameservers]}",
+                                             "--host-route=#{subnet_v6_attrs[:host_routes]}",
+                                             "--tenant_id=#{subnet_v6_attrs[:tenant_id]}",
+                                             subnet_v6_name],
+                                           subnet_v6_attrs[:cidr]).returns(output)
 
       provider.create
     end

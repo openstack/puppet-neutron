@@ -10,7 +10,6 @@ describe 'neutron::agents::l3' do
     { :package_ensure                   => 'present',
       :enabled                          => true,
       :debug                            => false,
-      :external_network_bridge          => 'br-ex',
       :interface_driver                 => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :router_delete_namespaces         => true,
       :ha_enabled                       => false,
@@ -38,7 +37,7 @@ describe 'neutron::agents::l3' do
 
     it 'configures l3_agent.ini' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/debug').with_value(p[:debug])
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/external_network_bridge').with_value(p[:external_network_bridge])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/external_network_bridge').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver])
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/router_id').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/gateway_external_network_id').with_value('<SERVICE DEFAULT>')

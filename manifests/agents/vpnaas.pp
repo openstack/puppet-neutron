@@ -37,11 +37,13 @@
 # [*interface_driver*]
 #  (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
-# [*external_network_bridge*]
-#  (optional) Defaults to $::os_service_default
-#
 # [*ipsec_status_check_interval*]
 #   (optional) Status check interval. Defaults to $::os_service_default.
+#
+# === Deprecated Parameters
+#
+# [*external_network_bridge*]
+#  (optional) Deprecated. Defaults to $::os_service_default
 #
 class neutron::agents::vpnaas (
   $package_ensure              = present,
@@ -78,6 +80,10 @@ class neutron::agents::vpnaas (
     'vpnagent/vpn_device_driver':        value => $vpn_device_driver;
     'ipsec/ipsec_status_check_interval': value => $ipsec_status_check_interval;
     'DEFAULT/interface_driver':          value => $interface_driver;
+  }
+
+  if ! is_service_default ($external_network_bridge) {
+    warning('parameter external_network_bridge is deprecated')
   }
 
   neutron_vpnaas_agent_config {

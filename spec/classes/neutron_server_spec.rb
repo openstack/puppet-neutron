@@ -15,8 +15,6 @@ describe 'neutron::server' do
     { :package_ensure                   => 'present',
       :enabled                          => true,
       :auth_type                        => 'keystone',
-      :auth_host                        => 'localhost',
-      :auth_port                        => '35357',
       :auth_tenant                      => 'services',
       :auth_user                        => 'neutron',
       :database_connection              => 'sqlite:////var/lib/neutron/ovs.sqlite',
@@ -50,14 +48,12 @@ describe 'neutron::server' do
     it { is_expected.to contain_class('neutron::policy') }
 
     it 'configures authentication middleware' do
-      is_expected.to contain_neutron_api_config('filter:authtoken/auth_host').with_value(p[:auth_host]);
-      is_expected.to contain_neutron_api_config('filter:authtoken/auth_port').with_value(p[:auth_port]);
       is_expected.to contain_neutron_api_config('filter:authtoken/admin_tenant_name').with_value(p[:auth_tenant]);
       is_expected.to contain_neutron_api_config('filter:authtoken/admin_user').with_value(p[:auth_user]);
       is_expected.to contain_neutron_api_config('filter:authtoken/admin_password').with_value(p[:auth_password]);
       is_expected.to contain_neutron_api_config('filter:authtoken/admin_password').with_secret( true )
-      is_expected.to contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(:ensure => 'absent')
       is_expected.to contain_neutron_api_config('filter:authtoken/auth_uri').with_value("http://localhost:5000/");
+      is_expected.to contain_neutron_api_config('filter:authtoken/identity_uri').with_value("http://localhost:35357/");
     end
 
     it 'installs neutron server package' do
@@ -84,9 +80,6 @@ describe 'neutron::server' do
         :tag     => ['neutron-service', 'neutron-db-sync-service'],
       )
       is_expected.not_to contain_class('neutron::db::sync')
-      is_expected.to contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(
-        :ensure => 'absent'
-      )
       is_expected.to contain_service('neutron-server').with_name('neutron-server')
       is_expected.to contain_neutron_config('DEFAULT/api_workers').with_value(facts[:processorcount])
       is_expected.to contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:processorcount])
@@ -190,36 +183,6 @@ describe 'neutron::server' do
     end
   end
 
-  shared_examples_for 'a neutron server with auth_admin_prefix set' do
-    [ '/keystone', '/keystone/admin' ].each do |auth_admin_prefix|
-      describe "with keystone_auth_admin_prefix containing incorrect value #{auth_admin_prefix}" do
-        before do
-          params.merge!({
-            :auth_admin_prefix => auth_admin_prefix,
-          })
-        end
-        it do
-          is_expected.to contain_neutron_api_config('filter:authtoken/auth_admin_prefix').with(
-            :value => params[:auth_admin_prefix]
-          )
-        end
-      end
-    end
-  end
-
-  shared_examples_for 'a neutron server with some incorrect auth_admin_prefix set' do
-    [ '/keystone/', 'keystone/', 'keystone' ].each do |auth_admin_prefix|
-      describe "with keystone_auth_admin_prefix containing incorrect value #{auth_admin_prefix}" do
-        before do
-          params.merge!({
-            :auth_admin_prefix => auth_admin_prefix,
-          })
-        end
-        it_raises 'a Puppet::Error', /validate_re\(\): "#{auth_admin_prefix}" does not match/
-      end
-    end
-  end
-
   shared_examples_for 'a neutron server with broken authentication' do
     before do
       params.delete(:auth_password)
@@ -235,50 +198,6 @@ describe 'neutron::server' do
     end
     it 'includes neutron::db::sync' do
       is_expected.to contain_class('neutron::db::sync')
-    end
-  end
-
-  describe "with custom keystone auth_uri" do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7'
-      }))
-    end
-    before do
-      params.merge!({
-        :auth_uri => 'https://foo.bar:1234/',
-      })
-    end
-    it 'configures auth_uri' do
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:1234/");
-      # since only auth_uri is set the deprecated auth parameters should
-      # still get set in case they are still in use
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_host').with_value('localhost');
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_port').with_value('35357');
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_protocol').with_value('http');
-    end
-  end
-
-  describe "with custom keystone identity_uri" do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7'
-      }))
-    end
-    before do
-      params.merge!({
-        :identity_uri => 'https://foo.bar:1234/',
-      })
-    end
-    it 'configures identity_uri' do
-      is_expected.to contain_neutron_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
-      # since only auth_uri is set the deprecated auth parameters should
-      # still get set in case they are still in use
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_host').with_value('localhost');
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_port').with_value('35357');
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_protocol').with_value('http');
     end
   end
 
@@ -298,10 +217,6 @@ describe 'neutron::server' do
     it 'configures identity_uri and auth_uri but deprecates old auth settings' do
       is_expected.to contain_neutron_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
       is_expected.to contain_neutron_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_admin_prefix').with(:ensure => 'absent')
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_port').with(:ensure => 'absent')
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_protocol').with(:ensure => 'absent')
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_host').with(:ensure => 'absent')
     end
   end
 
@@ -337,8 +252,6 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
-    it_configures 'a neutron server with auth_admin_prefix set'
-    it_configures 'a neutron server with some incorrect auth_admin_prefix set'
     it_configures 'a neutron server without database synchronization'
   end
 
@@ -357,8 +270,6 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
-    it_configures 'a neutron server with auth_admin_prefix set'
-    it_configures 'a neutron server with some incorrect auth_admin_prefix set'
     it_configures 'a neutron server without database synchronization'
   end
 end

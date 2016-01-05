@@ -131,9 +131,9 @@ describe Puppet::Provider::Neutron do
 
     it 'should exclude the column header' do
       output = <<-EOT
-        id
-        net1
-        net2
+id
+net1
+net2
       EOT
       klass.expects(:auth_neutron).returns(output)
       result = klass.list_neutron_resources('foo')
@@ -243,4 +243,42 @@ tenant_id="3056a91768d948d399f1d79051a7f221"
 
   end
 
+  describe 'garbage in the csv output' do
+    it '#list_router_ports' do
+      output = <<-EOT
+/usr/lib/python2.7/dist-packages/urllib3/util/ssl_.py:90: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+"id","name","mac_address","fixed_ips"
+"1345e576-a21f-4c2e-b24a-b245639852ab","","fa:16:3e:e3:e6:38","{""subnet_id"": ""839a1d2d-2c6e-44fb-9a2b-9b011dce8c2f"", ""ip_address"": ""10.0.0.1""}"
+      EOT
+      expected = [{ "fixed_ips"=>
+          "{\"subnet_id\": \"839a1d2d-2c6e-44fb-9a2b-9b011dce8c2f\", \
+\"ip_address\": \"10.0.0.1\"}",
+          "name"=>"",
+          "subnet_id"=>"839a1d2d-2c6e-44fb-9a2b-9b011dce8c2f",
+          "id"=>"1345e576-a21f-4c2e-b24a-b245639852ab",
+          "mac_address"=>"fa:16:3e:e3:e6:38"}]
+
+      klass.expects(:auth_neutron).
+        with('router-port-list', '--format=csv', 'router1').
+        returns(output)
+      result = klass.list_router_ports('router1')
+      expect(result).to eql(expected)
+    end
+
+    it '#list_neutron_resources' do
+      output = <<-EOT
+/usr/lib/python2.7/dist-packages/urllib3/util/ssl_.py:90: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+id
+4a305398-d806-46c5-a6aa-dcd6a4a99330
+      EOT
+      klass.expects(:auth_neutron).
+        with('subnet-list', '--format=csv', '--column=id', '--quote=none').
+        returns(output)
+      expected = ['4a305398-d806-46c5-a6aa-dcd6a4a99330']
+      result = klass.list_neutron_resources('subnet')
+      expect(result).to eql(expected)
+    end
+  end
 end

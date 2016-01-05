@@ -133,8 +133,8 @@ correctly configured.")
 
   def self.list_neutron_resources(type)
     ids = []
-    list = auth_neutron("#{type}-list", '--format=csv',
-                        '--column=id', '--quote=none')
+    list = cleanup_csv_with_id(auth_neutron("#{type}-list", '--format=csv',
+                                            '--column=id', '--quote=none'))
     if list.nil?
       raise(Puppet::ExecutionFailure, "Can't retrieve #{type}-list because Neutron or Keystone API is not available.")
     end
@@ -177,7 +177,7 @@ correctly configured.")
     end
 
     headers = nil
-    CSV.parse(cmd_output) do |row|
+    CSV.parse(cleanup_csv(cmd_output)) do |row|
       if headers == nil
         headers = row
       else
@@ -222,4 +222,16 @@ correctly configured.")
     hash
   end
 
+  def self.cleanup_csv(text)
+    # Ignore warnings - assume legitimate output starts with a double quoted
+    # string.  Errors will be caught and raised prior to this
+    text = text.split("\n").drop_while { |line| line !~ /^\".*\"/ }.join("\n")
+    "#{text}\n"
+  end
+
+  def self.cleanup_csv_with_id(text)
+    return nil if text.nil?
+    text = text.split("\n").drop_while { |line| line !~ /^\s*id$/ }.join("\n")
+    "#{text}\n"
+  end
 end

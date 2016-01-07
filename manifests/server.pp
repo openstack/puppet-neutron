@@ -18,7 +18,7 @@
 #
 # [*service_name*]
 #   (optional) The name of the neutron-server service
-#   Defaults to 'neutron-server'
+#   Defaults to $::neutron::params::server_service
 #
 # [*log_file*]
 #   REMOVED: Use log_file of neutron class instead.
@@ -219,10 +219,9 @@ class neutron::server (
   $report_interval                  = undef,
   $state_path                       = undef,
   $lock_path                        = undef,
-) {
+) inherits ::neutron::params {
 
   include ::neutron::db
-  include ::neutron::params
   include ::neutron::policy
   require keystone::python
 

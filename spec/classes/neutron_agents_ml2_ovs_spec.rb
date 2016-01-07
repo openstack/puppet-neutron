@@ -244,7 +244,24 @@ describe 'neutron::agents::ml2::ovs' do
   context 'on Debian platforms' do
     let :facts do
       @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian'
+         :osfamily => 'Debian',
+         :os_package_type => 'debian'
+      }))
+    end
+
+    let :platform_params do
+      { :ovs_agent_package => 'neutron-openvswitch-agent',
+        :ovs_agent_service => 'neutron-openvswitch-agent' }
+    end
+
+    it_configures 'neutron plugin ovs agent with ml2 plugin'
+  end
+
+  context 'on Ubuntu platforms' do
+    let :facts do
+      @default_facts.merge(test_facts.merge({
+         :osfamily => 'Debian',
+         :os_package_type => 'ubuntu'
       }))
     end
 

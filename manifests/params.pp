@@ -95,8 +95,16 @@ class neutron::params {
       $ml2_server_package = false
     }
 
-    $ovs_agent_package   = 'neutron-plugin-openvswitch-agent'
-    $ovs_agent_service   = 'neutron-plugin-openvswitch-agent'
+    case $::os_package_type {
+      'debian': {
+        $ovs_agent_package   = 'neutron-openvswitch-agent'
+        $ovs_agent_service   = 'neutron-openvswitch-agent'
+      }
+      default: {
+        $ovs_agent_package   = 'neutron-plugin-openvswitch-agent'
+        $ovs_agent_service   = 'neutron-plugin-openvswitch-agent'
+      }
+    }
     $ovs_server_package  = 'neutron-plugin-openvswitch'
     $ovs_cleanup_service = false
     $ovs_package         = 'openvswitch-switch'

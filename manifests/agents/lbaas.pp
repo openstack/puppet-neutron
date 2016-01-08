@@ -87,12 +87,12 @@ class neutron::agents::lbaas (
     }
   }
 
-  Package['neutron']            -> Package['neutron-lbaas-agent']
-  package { 'neutron-lbaas-agent':
+  Package['neutron'] -> Package['neutron-lbaas-agent']
+  ensure_resource( 'package', 'neutron-lbaas-agent', {
     ensure => $package_ensure,
     name   => $::neutron::params::lbaas_agent_package,
     tag    => ['openstack', 'neutron-package'],
-  }
+  })
   if $manage_service {
     if $enabled {
       $service_ensure = 'running'

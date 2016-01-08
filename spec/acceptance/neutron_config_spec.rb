@@ -504,6 +504,28 @@ describe 'basic neutron_config resource' do
         ensure_absent_val => 'toto',
       }
 
+      neutron_lbaas_service_config { 'DEFAULT/thisshouldexist' :
+        value => 'foo',
+      }
+
+      neutron_lbaas_service_config { 'DEFAULT/thisshouldexist2' :
+        value             => '<SERVICE DEFAULT>',
+        ensure_absent_val => 'toto',
+      }
+
+      neutron_lbaas_service_config { 'DEFAULT/thisshouldexist3' :
+        value => ['value1', 'value2'],
+      }
+
+      neutron_lbaas_service_config { 'DEFAULT/thisshouldnotexist' :
+        value => '<SERVICE DEFAULT>',
+      }
+
+      neutron_lbaas_service_config { 'DEFAULT/thisshouldnotexist2' :
+        value             => 'toto',
+        ensure_absent_val => 'toto',
+      }
+
       EOS
 
 
@@ -532,7 +554,8 @@ describe 'basic neutron_config resource' do
                        '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
                        '/etc/neutron/plugins/plumgrid/plumgrid.ini',
                        '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
-                       '/etc/neutron/plugins/ml2/sriov_agent.ini']
+                       '/etc/neutron/plugins/ml2/sriov_agent.ini',
+                       '/etc/neutron/neutron_lbaas.conf']
 
     $neutron_files.each do |neutron_conf_file|
       describe file(neutron_conf_file) do
@@ -545,6 +568,11 @@ describe 'basic neutron_config resource' do
           it { is_expected.to_not match /thisshouldnotexist/ }
         end
       end
+    end
+
+    describe file('/etc/neutron/neutron_lbaas.conf') do
+      it { is_expected.to contain('thisshouldexist3=value1') }
+      it { is_expected.to contain('thisshouldexist3=value2') }
     end
 
   end

@@ -20,8 +20,17 @@ Puppet::Type.type(:neutron_subnet).provide(
     'subnet'
   end
 
+  def self.do_not_manage
+    @do_not_manage
+  end
+
+  def self.do_not_manage=(value)
+    @do_not_manage = value
+  end
+
   def self.instances
-    list_neutron_resources(neutron_type).collect do |id|
+    self.do_not_manage = true
+    list = list_neutron_resources(neutron_type).collect do |id|
       attrs = get_neutron_resource_attrs(neutron_type, id)
       new(
         :ensure                    => :present,
@@ -38,6 +47,8 @@ Puppet::Type.type(:neutron_subnet).provide(
         :tenant_id                 => attrs['tenant_id']
       )
     end
+    self.do_not_manage = false
+    list
   end
 
   def self.prefetch(resources)
@@ -88,6 +99,10 @@ Puppet::Type.type(:neutron_subnet).provide(
   end
 
   def create
+    if self.class.do_not_manage
+      fail("Not managing Neutron_subnet[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
+
     opts = ["--name=#{@resource[:name]}"]
 
     if @resource[:ip_version]
@@ -165,11 +180,17 @@ Puppet::Type.type(:neutron_subnet).provide(
   end
 
   def destroy
+    if self.class.do_not_manage
+      fail("Not managing Neutron_subnet[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     auth_neutron('subnet-delete', name)
     @property_hash[:ensure] = :absent
   end
 
   def gateway_ip=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_subnet[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     if value == ''
       auth_neutron('subnet-update', '--no-gateway', name)
     else
@@ -178,6 +199,9 @@ Puppet::Type.type(:neutron_subnet).provide(
   end
 
   def enable_dhcp=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_subnet[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     if value == 'False'
       auth_neutron('subnet-update', "--disable-dhcp", name)
     else
@@ -186,6 +210,9 @@ Puppet::Type.type(:neutron_subnet).provide(
   end
 
   def dns_nameservers=(values)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_subnet[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     unless values.empty?
       opts = ["#{name}", "--dns-nameservers", "list=true"]
       for value in values
@@ -196,6 +223,9 @@ Puppet::Type.type(:neutron_subnet).provide(
   end
 
   def host_routes=(values)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_subnet[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     unless values.empty?
       opts = ["#{name}", "--host-routes", "type=dict", "list=true"]
       for value in values

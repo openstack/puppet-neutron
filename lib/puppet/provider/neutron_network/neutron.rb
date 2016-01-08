@@ -19,8 +19,17 @@ Puppet::Type.type(:neutron_network).provide(
     'net'
   end
 
+  def self.do_not_manage
+    @do_not_manage
+  end
+
+  def self.do_not_manage=(value)
+    @do_not_manage = value
+  end
+
   def self.instances
-    list_neutron_resources(neutron_type).collect do |id|
+    self.do_not_manage = true
+    list = list_neutron_resources(neutron_type).collect do |id|
       attrs = get_neutron_resource_attrs(neutron_type, id)
       new(
         :ensure                    => :present,
@@ -35,6 +44,8 @@ Puppet::Type.type(:neutron_network).provide(
         :tenant_id                 => attrs['tenant_id']
       )
     end
+    self.do_not_manage = false
+    list
   end
 
   def self.prefetch(resources)
@@ -51,6 +62,10 @@ Puppet::Type.type(:neutron_network).provide(
   end
 
   def create
+    if self.class.do_not_manage
+      fail("Not managing Neutron_network[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
+
     network_opts = Array.new
 
     if @resource[:shared] =~ /true/i
@@ -107,19 +122,31 @@ Puppet::Type.type(:neutron_network).provide(
   end
 
   def destroy
+    if self.class.do_not_manage
+      fail("Not managing Neutron_network[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     auth_neutron('net-delete', name)
     @property_hash[:ensure] = :absent
   end
 
   def admin_state_up=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_network[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     auth_neutron('net-update', "--admin_state_up=#{value}", name)
   end
 
   def shared=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_network[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     auth_neutron('net-update', "--shared=#{value}", name)
   end
 
   def router_external=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_network[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     if value == 'False'
       auth_neutron('net-update', "--router:external=#{value}", name)
     else

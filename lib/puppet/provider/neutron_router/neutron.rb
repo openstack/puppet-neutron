@@ -15,8 +15,17 @@ Puppet::Type.type(:neutron_router).provide(
 
   mk_resource_methods
 
+  def self.do_not_manage
+    @do_not_manage
+  end
+
+  def self.do_not_manage=(value)
+    @do_not_manage = value
+  end
+
   def self.instances
-    list_neutron_resources('router').collect do |id|
+    self.do_not_manage = true
+    list = list_neutron_resources('router').collect do |id|
       attrs = get_neutron_resource_attrs('router', id)
       new(
         :ensure                    => :present,
@@ -30,6 +39,8 @@ Puppet::Type.type(:neutron_router).provide(
         :tenant_id                 => attrs['tenant_id']
       )
     end
+    self.do_not_manage = false
+    list
   end
 
   def self.prefetch(resources)
@@ -46,6 +57,10 @@ Puppet::Type.type(:neutron_router).provide(
   end
 
   def create
+    if self.class.do_not_manage
+      fail("Not managing Neutron_router[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
+
     opts = Array.new
 
     if @resource[:admin_state_up] == 'False'
@@ -105,6 +120,9 @@ EOT
   end
 
   def destroy
+    if self.class.do_not_manage
+      fail("Not managing Neutron_router[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     auth_neutron('router-delete', name)
     @property_hash[:ensure] = :absent
   end
@@ -121,6 +139,9 @@ EOT
   end
 
   def gateway_network_name=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_router[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     if value == ''
       auth_neutron('router-gateway-clear', name)
     else
@@ -142,6 +163,9 @@ EOT
   end
 
   def admin_state_up=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_router[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     set_admin_state_up(value)
   end
 
@@ -150,6 +174,9 @@ EOT
   end
 
   def distributed=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_router[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     results = auth_neutron("router-show", '--format=shell', resource[:name])
     attrs = self.class.parse_creation_output(results)
     set_admin_state_up(false)
@@ -160,6 +187,9 @@ EOT
   end
 
   def ha=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_router[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
     results = auth_neutron("router-show", '--format=shell', resource[:name])
     attrs = self.class.parse_creation_output(results)
     set_admin_state_up(false)

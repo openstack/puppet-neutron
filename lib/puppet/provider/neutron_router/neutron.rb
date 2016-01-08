@@ -142,30 +142,30 @@ EOT
   end
 
   def admin_state_up=(value)
-    admin_state_up(value)
+    set_admin_state_up(value)
   end
 
-  def admin_state_up(value)
+  def set_admin_state_up(value)
     auth_neutron('router-update', "--admin-state-up=#{value}", name)
   end
 
   def distributed=(value)
     results = auth_neutron("router-show", '--format=shell', resource[:name])
     attrs = self.class.parse_creation_output(results)
-    admin_state_up(false)
+    set_admin_state_up(false)
     auth_neutron('router-update', "--distributed=#{value}", name)
     if attrs['admin_state_up'] == 'True'
-      admin_state_up(true)
+      set_admin_state_up(true)
     end
   end
 
   def ha=(value)
     results = auth_neutron("router-show", '--format=shell', resource[:name])
     attrs = self.class.parse_creation_output(results)
-    admin_state_up(false)
+    set_admin_state_up(false)
     auth_neutron('router-update', "--ha=#{value}", name)
     if attrs['admin_state_up'] == 'True'
-      admin_state_up(true)
+      set_admin_state_up(true)
     end
   end
 

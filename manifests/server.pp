@@ -198,7 +198,7 @@
 #
 # [*qos_notification_drivers*]
 #   (optional) Drivers list to use to send the update notification
-#   Defaults to [].
+#   Defaults to ['message_queue'].
 #
 class neutron::server (
   $package_ensure                   = 'present',
@@ -230,7 +230,7 @@ class neutron::server (
   $max_l3_agents_per_router         = 3,
   $min_l3_agents_per_router         = 2,
   $l3_ha_net_cidr                   = '169.254.192.0/18',
-  $qos_notification_drivers         = [],
+  $qos_notification_drivers         = ['message_queue'],
   # DEPRECATED PARAMETERS
   $auth_host                        = 'localhost',
   $auth_port                        = '35357',

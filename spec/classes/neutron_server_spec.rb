@@ -96,7 +96,7 @@ describe 'neutron::server' do
       is_expected.to contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:processorcount])
       is_expected.to contain_neutron_config('DEFAULT/agent_down_time').with_value(p[:agent_down_time])
       is_expected.to contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
-      is_expected.to contain_neutron_config('qos/notification_drivers').with_value([''])
+      is_expected.to contain_neutron_config('qos/notification_drivers').with_value(['message_queue'])
     end
 
     context 'with manage_service as false' do

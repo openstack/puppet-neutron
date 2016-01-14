@@ -113,6 +113,14 @@
 #   (optional) Extensions list to use
 #   Defaults to $::os_service_default
 #
+# [*int_peer_patch_port*]
+#   (optional) Peer patch port in integration bridge for tunnel bridge
+#   Defaults to $::os_service_default
+#
+# [*tun_peer_patch_port*]
+#   (optional) Peer patch port in tunnel bridge for integration bridge
+#   Defaults to $::os_service_default
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -134,6 +142,8 @@ class neutron::agents::ml2::ovs (
   $drop_flows_on_start        = false,
   $manage_vswitch             = true,
   $prevent_arp_spoofing       = $::os_service_default,
+  $int_peer_patch_port        = $::os_service_default,
+  $tun_peer_patch_port        = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -201,9 +211,11 @@ class neutron::agents::ml2::ovs (
 
   if $enable_tunneling {
     neutron_agent_ovs {
-      'ovs/enable_tunneling': value => true;
-      'ovs/tunnel_bridge':    value => $tunnel_bridge;
-      'ovs/local_ip':         value => $local_ip;
+      'ovs/enable_tunneling':      value => true;
+      'ovs/tunnel_bridge':         value => $tunnel_bridge;
+      'ovs/local_ip':              value => $local_ip;
+      'ovs/int_peer_patch_port':   value => $int_peer_patch_port;
+      'ovs/tun_peer_patch_port':   value => $tun_peer_patch_port;
     }
 
     if size($tunnel_types) > 0 {
@@ -219,9 +231,11 @@ class neutron::agents::ml2::ovs (
     }
   } else {
     neutron_agent_ovs {
-      'ovs/enable_tunneling': value  => false;
-      'ovs/tunnel_bridge':    ensure => absent;
-      'ovs/local_ip':         ensure => absent;
+      'ovs/enable_tunneling':      value  => false;
+      'ovs/tunnel_bridge':         ensure => absent;
+      'ovs/local_ip':              ensure => absent;
+      'ovs/int_peer_patch_port':   ensure => absent;
+      'ovs/tun_peer_patch_port':   ensure => absent;
     }
   }
 

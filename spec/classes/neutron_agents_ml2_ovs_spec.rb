@@ -17,7 +17,8 @@ describe 'neutron::agents::ml2::ovs' do
       :tunnel_bridge              => 'br-tun',
       :drop_flows_on_start        => false,
       :firewall_driver            => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
-      :manage_vswitch             => true }
+      :manage_vswitch             => true,
+      }
   end
 
   let :test_facts do
@@ -50,6 +51,8 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_neutron_agent_ovs('ovs/enable_tunneling').with_value(false)
       is_expected.to contain_neutron_agent_ovs('ovs/tunnel_bridge').with_ensure('absent')
       is_expected.to contain_neutron_agent_ovs('ovs/local_ip').with_ensure('absent')
+      is_expected.to contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_ensure('absent')
+      is_expected.to contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_ensure('absent')
     end
 
     it 'installs neutron ovs agent package' do
@@ -198,6 +201,8 @@ describe 'neutron::agents::ml2::ovs' do
           is_expected.to contain_neutron_agent_ovs('ovs/enable_tunneling').with_value(true)
           is_expected.to contain_neutron_agent_ovs('ovs/tunnel_bridge').with_value(default_params[:tunnel_bridge])
           is_expected.to contain_neutron_agent_ovs('ovs/local_ip').with_value('127.0.0.1')
+          is_expected.to contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_value('<SERVICE DEFAULT>')
         end
       end
 

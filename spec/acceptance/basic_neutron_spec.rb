@@ -73,6 +73,7 @@ describe 'basic neutron' do
         mechanism_drivers    => ['openvswitch', 'sriovnicswitch']
       }
       class { '::neutron::agents::ml2::sriov': }
+      class { '::neutron::services::lbaas': }
       EOS
 
 

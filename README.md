@@ -80,7 +80,7 @@ the `network_api_class` parameter in nova to use neutron instead of nova-network
 
 ```puppet
 class { 'nova::network::neutron':
-  neutron_admin_password  => 'neutron_admin_secret',
+  neutron_password  => 'neutron_admin_secret',
 }
 ```
 

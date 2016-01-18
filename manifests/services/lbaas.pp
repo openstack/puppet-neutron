@@ -28,6 +28,10 @@
 #
 # [*service_providers*]
 #   (optional) Array of allowed service types or '<SERVICE DEFAULT>'.
+#   Note: The default upstream value is empty.
+#         If you plan to activate LBaaS service, you'll need to set this
+#         parameter otherwise neutron-server won't start correctly.
+#         See https://bugs.launchpad.net/puppet-neutron/+bug/1535382/comments/1
 #   Must be in form <service_type>:<name>:<driver>[:default].
 #   Defaults to $::os_service_default
 #

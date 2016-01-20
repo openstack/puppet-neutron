@@ -7,16 +7,15 @@ describe 'neutron::server' do
   end
 
   let :params do
-    { :auth_password => 'passw0rd',
-      :auth_user     => 'neutron' }
+    { :password    => 'passw0rd',
+      :username    => 'neutron',
+      :tenant_name => 'services' }
   end
 
   let :default_params do
     { :package_ensure                   => 'present',
       :enabled                          => true,
       :auth_type                        => 'keystone',
-      :auth_tenant                      => 'services',
-      :auth_user                        => 'neutron',
       :database_connection              => 'sqlite:////var/lib/neutron/ovs.sqlite',
       :database_max_retries             => 10,
       :database_idle_timeout            => 3600,
@@ -48,12 +47,19 @@ describe 'neutron::server' do
     it { is_expected.to contain_class('neutron::policy') }
 
     it 'configures authentication middleware' do
-      is_expected.to contain_neutron_api_config('filter:authtoken/admin_tenant_name').with_value(p[:auth_tenant]);
-      is_expected.to contain_neutron_api_config('filter:authtoken/admin_user').with_value(p[:auth_user]);
-      is_expected.to contain_neutron_api_config('filter:authtoken/admin_password').with_value(p[:auth_password]);
-      is_expected.to contain_neutron_api_config('filter:authtoken/admin_password').with_secret( true )
-      is_expected.to contain_neutron_api_config('filter:authtoken/auth_uri').with_value("http://localhost:5000/");
-      is_expected.to contain_neutron_api_config('filter:authtoken/identity_uri').with_value("http://localhost:35357/");
+      is_expected.to contain_neutron_config('keystone_authtoken/tenant_name').with_value(p[:tenant_name]);
+      is_expected.to contain_neutron_config('keystone_authtoken/username').with_value(p[:username]);
+      is_expected.to contain_neutron_config('keystone_authtoken/password').with_value(p[:password]);
+      is_expected.to contain_neutron_config('keystone_authtoken/password').with_secret( true )
+      is_expected.to contain_neutron_config('keystone_authtoken/auth_uri').with_value("http://localhost:5000/");
+      is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value("http://localhost:35357/");
+      is_expected.to contain_neutron_config('keystone_authtoken/project_domain_id').with_value("<SERVICE DEFAULT>");
+      is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value("<SERVICE DEFAULT>");
+      is_expected.to contain_neutron_config('keystone_authtoken/user_domain_id').with_value("<SERVICE DEFAULT>");
+      is_expected.not_to contain_neutron_config('keystone_authtoken/admin_tenant_name');
+      is_expected.not_to contain_neutron_config('keystone_authtoken/admin_user');
+      is_expected.not_to contain_neutron_config('keystone_authtoken/admin_password');
+      is_expected.not_to contain_neutron_config('keystone_authtoken/identity_uri');
     end
 
     it 'installs neutron server package' do
@@ -185,9 +191,48 @@ describe 'neutron::server' do
 
   shared_examples_for 'a neutron server with broken authentication' do
     before do
-      params.delete(:auth_password)
+      params.delete(:password)
     end
-    it_raises 'a Puppet::Error', /auth_password must be set/
+    it_raises 'a Puppet::Error', /Either auth_password or password must be set when using keystone authentication/
+  end
+
+  shared_examples_for 'a neutron server with incompatible authentication params' do
+    before do
+      params.merge!(
+        :auth_password => "passw0rd"
+      )
+    end
+    it_raises 'a Puppet::Error', /auth_password and password must not be used together/
+  end
+
+  shared_examples_for 'a neutron server with deprecated authentication params' do
+    before do
+      params.merge!(
+        :auth_user     => "neutron",
+        :auth_password => "passw0rd",
+        :auth_tenant   => "services",
+        :auth_region   => "MyRegion",
+        :identity_uri  => "https://foo.bar:5000/"
+      )
+      params.delete(:password)
+    end
+    it 'configures authentication middleware' do
+      is_expected.to contain_neutron_api_config('filter:authtoken/admin_tenant_name').with_value('services');
+      is_expected.to contain_neutron_api_config('filter:authtoken/admin_user').with_value('neutron');
+      is_expected.to contain_neutron_api_config('filter:authtoken/admin_password').with_value('passw0rd');
+      is_expected.to contain_neutron_api_config('filter:authtoken/admin_password').with_secret( true )
+      is_expected.to contain_neutron_api_config('filter:authtoken/identity_uri').with_value('https://foo.bar:5000/');
+      is_expected.to contain_neutron_config('keystone_authtoken/admin_tenant_name').with_value('services');
+      is_expected.to contain_neutron_config('keystone_authtoken/admin_user').with_value('neutron');
+      is_expected.to contain_neutron_config('keystone_authtoken/admin_password').with_value('passw0rd');
+      is_expected.to contain_neutron_config('keystone_authtoken/admin_password').with_secret( true )
+      is_expected.to contain_neutron_config('keystone_authtoken/identity_uri').with_value('https://foo.bar:5000/');
+      is_expected.to contain_neutron_config('keystone_authtoken/auth_region').with_value('MyRegion');
+      is_expected.not_to contain_neutron_config('keystone_authtoken/tenant_name');
+      is_expected.not_to contain_neutron_config('keystone_authtoken/username');
+      is_expected.not_to contain_neutron_config('keystone_authtoken/password');
+      is_expected.not_to contain_neutron_config('keystone_authtoken/auth_url');
+    end
   end
 
   shared_examples_for 'a neutron server without database synchronization' do
@@ -201,7 +246,7 @@ describe 'neutron::server' do
     end
   end
 
-  describe "with custom keystone identity_uri and auth_uri" do
+  describe "with custom keystone authentication params" do
     let :facts do
       @default_facts.merge(test_facts.merge({
          :osfamily => 'RedHat',
@@ -210,13 +255,20 @@ describe 'neutron::server' do
     end
     before do
       params.merge!({
-        :identity_uri => 'https://foo.bar:35357/',
-        :auth_uri => 'https://foo.bar:5000/v2.0/',
+        :auth_uri          => 'https://foo.bar:5000/',
+        :auth_url          => 'https://foo.bar:35357/v3',
+        :auth_plugin       => 'v3password',
+        :project_domain_id => 'default',
+        :project_name      => 'services',
+        :user_domain_id    => 'default'
       })
     end
-    it 'configures identity_uri and auth_uri but deprecates old auth settings' do
-      is_expected.to contain_neutron_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
+    it 'configures keystone authentication params' do
+      is_expected.to contain_neutron_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/");
+      is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value("https://foo.bar:35357/v3");
+      is_expected.to contain_neutron_config('keystone_authtoken/project_domain_id').with_value("default");
+      is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value("services");
+      is_expected.to contain_neutron_config('keystone_authtoken/user_domain_id').with_value("default");
     end
   end
 
@@ -229,11 +281,11 @@ describe 'neutron::server' do
     end
     before do
       params.merge!({
-        :auth_region => 'MyRegion',
+        :region_name => 'MyRegion',
       })
     end
-    it 'configures auth_region' do
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_region').with_value('MyRegion');
+    it 'configures region_name' do
+      is_expected.to contain_neutron_config('keystone_authtoken/region_name').with_value('MyRegion');
     end
   end
 
@@ -252,6 +304,8 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
+    it_configures 'a neutron server with incompatible authentication params'
+    it_configures 'a neutron server with deprecated authentication params'
     it_configures 'a neutron server without database synchronization'
   end
 
@@ -270,6 +324,8 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
+    it_configures 'a neutron server with incompatible authentication params'
+    it_configures 'a neutron server with deprecated authentication params'
     it_configures 'a neutron server without database synchronization'
   end
 end

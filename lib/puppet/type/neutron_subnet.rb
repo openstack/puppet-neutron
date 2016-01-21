@@ -23,6 +23,16 @@ Puppet::Type.newtype(:neutron_subnet) do
     newvalues('4', '6')
   end
 
+  newproperty(:ipv6_ra_mode) do
+    desc 'The IPv6 RA (Router Advertisement) mode'
+    newvalues('dhcpv6-stateful', 'dhcpv6-stateless', 'slaac')
+  end
+
+  newproperty(:ipv6_address_mode) do
+    desc 'The IPv6 Address mode'
+    newvalues('dhcpv6-stateful', 'dhcpv6-stateless', 'slaac')
+  end
+
   newproperty(:allocation_pools, :array_matching => :all) do
     desc <<-EOT
     Array of Sub-ranges of cidr available for dynamic allocation to ports.
@@ -111,6 +121,12 @@ EOT
 Please provide a value for only one of tenant_name and tenant_id.
 EOT
             )
+    end
+    if (self[:ipv6_ra_mode] || self[:ipv6_address_mode]) && String(self[:ip_version]) != '6'
+      raise(Puppet::Error, <<-EOT
+ipv6_ra_mode and ipv6_address_mode can only be used with ip_version set to '6'
+EOT
+           )
     end
   end
 

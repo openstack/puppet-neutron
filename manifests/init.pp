@@ -164,6 +164,10 @@
 #   (optional) Connect over SSL for RabbitMQ
 #   Defaults to $::os_service_default
 #
+# [*amqp_durable_queues*]
+#   (optional) Define queues as "durable" to rabbitmq.
+#   Defaults to $::os_service_default
+#
 # [*kombu_ssl_ca_certs*]
 #   (optional) SSL certification authority file (valid only if SSL enabled).
 #   Defaults to $::os_service_default
@@ -289,6 +293,7 @@ class neutron (
   $rabbit_heartbeat_timeout_threshold = 0,
   $rabbit_heartbeat_rate              = 2,
   $rabbit_use_ssl                     = $::os_service_default,
+  $amqp_durable_queues                = $::os_service_default,
   $kombu_ssl_ca_certs                 = $::os_service_default,
   $kombu_ssl_certfile                 = $::os_service_default,
   $kombu_ssl_keyfile                  = $::os_service_default,
@@ -460,6 +465,7 @@ class neutron (
       'oslo_messaging_rabbit/kombu_ssl_ca_certs':           value => $kombu_ssl_ca_certs;
       'oslo_messaging_rabbit/kombu_ssl_certfile':           value => $kombu_ssl_certfile;
       'oslo_messaging_rabbit/kombu_ssl_keyfile':            value => $kombu_ssl_keyfile;
+      'oslo_messaging_rabbit/amqp_durable_queues':          value => $amqp_durable_queues;
     }
 
     if ! is_service_default($rabbit_use_ssl) and ($rabbit_use_ssl) {

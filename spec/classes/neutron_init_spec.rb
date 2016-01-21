@@ -58,6 +58,11 @@ describe 'neutron' do
       it_configures 'rabbit with heartbeat configured'
     end
 
+    context 'with rabbitmq durable queues configured' do
+      before { params.merge!( :amqp_durable_queues => true ) }
+      it_configures 'rabbit with durable queues'
+    end
+
     it_configures 'with SSL enabled with kombu'
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
@@ -148,6 +153,12 @@ describe 'neutron' do
     it 'in neutron.conf' do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10')
+    end
+  end
+
+  shared_examples_for 'rabbit with durable queues' do
+    it 'in neutron.conf' do
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true)
     end
   end
 

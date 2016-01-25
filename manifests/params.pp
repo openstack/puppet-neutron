@@ -26,6 +26,11 @@ class neutron::params {
     $sriov_nic_agent_service = 'neutron-sriov-nic-agent'
     $sriov_nic_agent_package = 'openstack-neutron-sriov-nic-agent'
 
+    $bigswitch_lldp_package  = 'openstack-neutron-bigswitch-lldp'
+    $bigswitch_agent_package = 'openstack-neutron-bigswitch-agent'
+    $bigswitch_lldp_service  = 'neutron-bsn-lldp'
+    $bigswitch_agent_service = 'neutron-bsn-agent'
+
     $cisco_server_package                   = 'openstack-neutron-cisco'
     $cisco_config_file                      = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
     # Add templated Cisco Nexus ML2 config to confdir

@@ -199,6 +199,26 @@
 #   (optional) Drivers list to use to send the update notification
 #   Defaults to $::os_service_default.
 #
+# [*ensure_vpnaas_package*]
+#   (optional) Ensures installation of VPNaaS package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
+#   Defaults to false.
+#
+# [*ensure_fwaas_package*]
+#   (optional) Ensures installation of FWaaS package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
+#   Defaults to false.
+#
+# [*ensure_lbaas_package*]
+#   (optional) Ensures installation of LBaaS package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
+#   Defaults to false.
+#
+# [*vpnaas_agent_package*]
+#   (optional) Use VPNaaS agent package instead of L3 agent package on debian platforms
+#   RedHat platforms won't take care of this parameter
+#   true/false
+#   Defaults to false
 # === Deprecated Parameters
 #
 # [*identity_uri*]
@@ -262,6 +282,10 @@ class neutron::server (
   $min_l3_agents_per_router         = 2,
   $l3_ha_net_cidr                   = $::os_service_default,
   $qos_notification_drivers         = $::os_service_default,
+  $ensure_vpnaas_package            = false,
+  $ensure_fwaas_package             = false,
+  $ensure_lbaas_package             = false,
+  $vpnaas_agent_package             = false,
   # DEPRECATED PARAMETERS
   $log_dir                          = undef,
   $log_file                         = undef,
@@ -277,6 +301,50 @@ class neutron::server (
 
   include ::neutron::db
   include ::neutron::policy
+
+  if $ensure_fwaas_package {
+    if ($::osfamily == 'Debian') {
+      # Debian platforms
+      if $vpnaas_agent_package {
+        ensure_resource( 'package', $::neutron::params::vpnaas_agent_package, {
+          'ensure' => $neutron::package_ensure,
+          'tag'    => ['openstack', 'neutron-package'],
+        })
+        Package[$::neutron::params::vpnaas_agent_package] -> Neutron_fwaas_service_config<||>
+      } else {
+        ensure_resource( 'package', 'neutron-fwaas' , {
+          'name'   => $::neutron::params::fwaas_package,
+          'ensure' => $neutron::package_ensure,
+          'tag'    => ['openstack', 'neutron-package'],
+        })
+      }
+    } elsif($::osfamily == 'Redhat') {
+      # RH platforms
+      ensure_resource( 'package', 'neutron-fwaas', {
+        'name'   => $::neutron::params::fwaas_package,
+        'ensure' => $neutron::package_ensure,
+        'tag'    => ['openstack', 'neutron-package'],
+      })
+    }
+  }
+
+  if $ensure_vpnaas_package {
+    ensure_resource( 'package', 'neutron-vpnaas-agent', {
+      'ensure' => $package_ensure,
+      'name'   => $::neutron::params::vpnaas_agent_package,
+      'tag'    => ['openstack', 'neutron-package'],
+    })
+  }
+
+  if $ensure_lbaas_package {
+    ensure_resource( 'package', 'neutron-lbaas-agent', {
+      'ensure' => $package_ensure,
+      'name'   => $::neutron::params::lbaas_agent_package,
+      'tag'    => ['openstack', 'neutron-package'],
+    })
+  }
+
+
 
   Neutron_config<||>     ~> Service['neutron-server']
   Neutron_api_config<||> ~> Service['neutron-server']

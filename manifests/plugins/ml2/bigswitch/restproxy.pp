@@ -33,6 +33,22 @@
 # (optional) Directory where Big Switch controller certificate will be
 # stored. Defaults to '/var/lib/neutron'.
 #
+# [*auth_tenant*]
+# (optional) The tenant of the auth user
+# Defaults to service
+#
+# [*auth_password*]
+# (optional) The password to use for authentication (keystone)
+# Defaults to false.
+#
+# [*auth_user*]
+# (optional) The name of the auth user
+# Defaults to neutron
+#
+# [*auth_url*]
+# (optional) Complete public Identity API endpoint.
+# Defaults to: false
+#
 class neutron::plugins::ml2::bigswitch::restproxy (
   $servers,
   $server_auth,
@@ -42,6 +58,11 @@ class neutron::plugins::ml2::bigswitch::restproxy (
   $neutron_id           = 'neutron',
   $server_ssl           = true,
   $ssl_cert_directory   = '/var/lib/neutron',
+
+  $auth_tenant          = 'service',
+  $auth_password        = false,
+  $auth_user            = 'neutron',
+  $auth_url             = false,
 ) {
   require ::neutron::plugins::ml2::bigswitch
 
@@ -54,5 +75,10 @@ class neutron::plugins::ml2::bigswitch::restproxy (
     'restproxy/neutron_id'            : value => $neutron_id;
     'restproxy/server_ssl'            : value => $server_ssl;
     'restproxy/ssl_cert_directory'    : value => $ssl_cert_directory;
+
+    'restproxy/auth_tenant'           : value => $auth_tenant;
+    'restproxy/auth_password'         : value => $auth_password, secret => true;
+    'restproxy/auth_user'             : value => $auth_user;
+    'restproxy/auth_url'              : value => $auth_url;
   }
 }

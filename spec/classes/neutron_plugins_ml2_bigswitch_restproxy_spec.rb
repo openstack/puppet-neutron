@@ -44,6 +44,11 @@ describe 'neutron::plugins::ml2::bigswitch::restproxy' do
       is_expected.to contain_neutron_plugin_ml2('restproxy/neutron_id').with_value('neutron')
       is_expected.to contain_neutron_plugin_ml2('restproxy/server_ssl').with_value(true)
       is_expected.to contain_neutron_plugin_ml2('restproxy/ssl_cert_directory').with_value('/var/lib/neutron')
+
+      is_expected.to contain_neutron_plugin_ml2('restproxy/auth_tenant').with_value('service')
+      is_expected.to contain_neutron_plugin_ml2('restproxy/auth_password').with_value(false)
+      is_expected.to contain_neutron_plugin_ml2('restproxy/auth_user').with_value('neutron')
+      is_expected.to contain_neutron_plugin_ml2('restproxy/auth_url').with_value(false)
     end
 
     context 'with custom params' do
@@ -63,6 +68,11 @@ describe 'neutron::plugins::ml2::bigswitch::restproxy' do
         is_expected.to contain_neutron_plugin_ml2('restproxy/neutron_id').with_value('openstack')
         is_expected.to contain_neutron_plugin_ml2('restproxy/server_ssl').with_value(false)
         is_expected.to contain_neutron_plugin_ml2('restproxy/ssl_cert_directory').with_value('/var/lib/bigswitch')
+
+        is_expected.to contain_neutron_plugin_ml2('restproxy/auth_tenant').with_value('service')
+        is_expected.to contain_neutron_plugin_ml2('restproxy/auth_password').with_value(false)
+        is_expected.to contain_neutron_plugin_ml2('restproxy/auth_user').with_value('neutron')
+        is_expected.to contain_neutron_plugin_ml2('restproxy/auth_url').with_value(false)
       end
     end
 

@@ -91,12 +91,12 @@ class neutron::agents::vpnaas (
   }
 
   if $::neutron::params::vpnaas_agent_package {
-    Package['neutron']            -> Package['neutron-vpnaas-agent']
-    package { 'neutron-vpnaas-agent':
-      ensure => $package_ensure,
-      name   => $::neutron::params::vpnaas_agent_package,
-      tag    => ['openstack', 'neutron-package'],
-    }
+    Package['neutron'] -> Package['neutron-vpnaas-agent']
+    ensure_resource( 'package', 'neutron-vpnaas-agent', {
+      'ensure' => $package_ensure,
+      'name'   => $::neutron::params::vpnaas_agent_package,
+      'tag'    => ['openstack', 'neutron-package'],
+    })
   }
 
   if $manage_service {

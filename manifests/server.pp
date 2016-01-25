@@ -200,6 +200,54 @@
 #   (optional) Drivers list to use to send the update notification
 #   Defaults to ['message_queue'].
 #
+# [*ensure_vpnaas_package*]
+#   (optional) Ensures installation of VPNaaS package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
+#   Defaults to false.
+#
+# [*ensure_fwaas_package*]
+#   (optional) Ensures installation of FWaaS package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
+#   Defaults to false.
+#
+# [*ensure_lbaas_package*]
+#   (optional) Ensures installation of LBaaS package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
+#   Defaults to false.
+#
+# [*vpnaas_agent_package*]
+#   (optional) Use VPNaaS agent package instead of L3 agent package on debian platforms
+#   RedHat platforms won't take care of this parameter
+#   true/false
+#   Defaults to false
+# === Deprecated Parameters
+#
+# [*identity_uri*]
+#   Deprecated. Auth plugins based authentication should be used instead
+#   (optional) Complete admin Identity API endpoint.
+#   Defaults to: 'http://localhost:35357/'
+#
+# [*auth_region*]
+#   Deprecated. Auth plugins based authentication should be used instead
+#   (optional) The authentication region. Note this value is case-sensitive and
+#   must match the endpoint region defined in Keystone.
+#   Defaults to $::os_service_default
+#
+# [*auth_tenant*]
+#   Deprecated. Auth plugins based authentication should be used instead
+#   (optional) The tenant of the auth user
+#   Defaults to services
+#
+# [*auth_user*]
+#   Deprecated. Auth plugins based authentication should be used instead
+#   (optional) The name of the auth user
+#   Defaults to neutron
+#
+# [*auth_password*]
+#   Deprecated. Auth plugins based authentication should be used instead
+#   (optional) The password to use for authentication (keystone)
+#   Defaults to false. Set a value unless you are using noauth
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -231,6 +279,10 @@ class neutron::server (
   $min_l3_agents_per_router         = 2,
   $l3_ha_net_cidr                   = '169.254.192.0/18',
   $qos_notification_drivers         = ['message_queue'],
+  $ensure_vpnaas_package            = false,
+  $ensure_fwaas_package             = false,
+  $ensure_lbaas_package             = false,
+  $vpnaas_agent_package             = false,
   # DEPRECATED PARAMETERS
   $auth_host                        = 'localhost',
   $auth_port                        = '35357',
@@ -247,6 +299,50 @@ class neutron::server (
   include ::neutron::params
   include ::neutron::policy
   require keystone::python
+
+  if $ensure_fwaas_package {
+    if ($::osfamily == 'Debian') {
+      # Debian platforms
+      if $vpnaas_agent_package {
+        ensure_resource( 'package', $::neutron::params::vpnaas_agent_package, {
+          'ensure' => $neutron::package_ensure,
+          'tag'    => ['openstack', 'neutron-package'],
+        })
+        Package[$::neutron::params::vpnaas_agent_package] -> Neutron_fwaas_service_config<||>
+      } else {
+        ensure_resource( 'package', 'neutron-fwaas' , {
+          'name'   => $::neutron::params::fwaas_package,
+          'ensure' => $neutron::package_ensure,
+          'tag'    => ['openstack', 'neutron-package'],
+        })
+      }
+    } elsif($::osfamily == 'Redhat') {
+      # RH platforms
+      ensure_resource( 'package', 'neutron-fwaas', {
+        'name'   => $::neutron::params::fwaas_package,
+        'ensure' => $neutron::package_ensure,
+        'tag'    => ['openstack', 'neutron-package'],
+      })
+    }
+  }
+
+  if $ensure_vpnaas_package {
+    ensure_resource( 'package', 'neutron-vpnaas-agent', {
+      'ensure' => $package_ensure,
+      'name'   => $::neutron::params::vpnaas_agent_package,
+      'tag'    => ['openstack', 'neutron-package'],
+    })
+  }
+
+  if $ensure_lbaas_package {
+    ensure_resource( 'package', 'neutron-lbaas-agent', {
+      'ensure' => $package_ensure,
+      'name'   => $::neutron::params::lbaas_agent_package,
+      'tag'    => ['openstack', 'neutron-package'],
+    })
+  }
+
+
 
   Neutron_config<||>     ~> Service['neutron-server']
   Neutron_api_config<||> ~> Service['neutron-server']

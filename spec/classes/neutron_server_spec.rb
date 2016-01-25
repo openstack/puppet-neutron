@@ -231,6 +231,21 @@ describe 'neutron::server' do
     it_raises 'a Puppet::Error', /auth_password must be set/
   end
 
+  shared_examples_for 'VPNaaS, FWaaS and LBaaS package installation' do
+    before do
+      params.merge!(
+        :ensure_vpnaas_package => true,
+        :ensure_fwaas_package  => true,
+        :ensure_lbaas_package  => true
+      )
+    end
+    it 'should install *aaS packages' do
+      is_expected.to contain_package('neutron-lbaas-agent')
+      is_expected.to contain_package('neutron-fwaas')
+      is_expected.to contain_package('neutron-vpnaas-agent')
+    end
+  end
+
   shared_examples_for 'a neutron server without database synchronization' do
     before do
       params.merge!(

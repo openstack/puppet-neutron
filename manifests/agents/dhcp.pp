@@ -29,10 +29,6 @@
 # [*interface_driver*]
 #   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
-# [*dhcp_domain*]
-#   (optional) domain to use for building the hostnames
-#   Defaults to $::os_service_default
-#
 # [*dhcp_driver*]
 #   (optional) Defaults to 'neutron.agent.linux.dhcp.Dnsmasq'.
 #
@@ -44,10 +40,6 @@
 # [*dnsmasq_config_file*]
 #   (optional) Override the default dnsmasq settings with this file.
 #   Defaults to $::os_service_default
-#
-# [*dhcp_delete_namespaces*]
-#   (optional) Delete namespace after removing a dhcp server
-#   Defaults to true.
 #
 # [*enable_isolated_metadata*]
 #   (optional) enable metadata support on isolated networks.
@@ -70,6 +62,14 @@
 #
 # === Deprecated Parameters
 #
+# [*dhcp_delete_namespaces*]
+#   (optional) Deprecated. Delete namespace after removing a dhcp server
+#   Defaults to $::os_service_default.
+#
+# [*dhcp_domain*]
+#   (optional) Deprecated. Domain to use for building the hostnames
+#   Defaults to $::os_service_default
+#
 # [*use_namespaces*]
 #   (optional) Deprecated. 'True' value will be enforced in future releases.
 #   Allow overlapping IP (Must have kernel build with
@@ -84,16 +84,16 @@ class neutron::agents::dhcp (
   $state_path               = '/var/lib/neutron',
   $resync_interval          = 30,
   $interface_driver         = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_domain              = $::os_service_default,
   $dhcp_driver              = 'neutron.agent.linux.dhcp.Dnsmasq',
   $root_helper              = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $dnsmasq_config_file      = $::os_service_default,
-  $dhcp_delete_namespaces   = true,
   $enable_isolated_metadata = false,
   $enable_force_metadata    = $::os_service_default,
   $enable_metadata_network  = false,
   $dhcp_broadcast_reply     = $::os_service_default,
   # DEPRECATED PARAMETERS
+  $dhcp_delete_namespaces   = $::os_service_default,
+  $dhcp_domain              = $::os_service_default,
   $use_namespaces           = $::os_service_default,
 ) {
 
@@ -139,6 +139,14 @@ class neutron::agents::dhcp (
     'DEFAULT/dhcp_delete_namespaces': value => $dhcp_delete_namespaces;
     'DEFAULT/dhcp_broadcast_reply':   value => $dhcp_broadcast_reply;
     'DEFAULT/dnsmasq_config_file':    value => $dnsmasq_config_file;
+  }
+
+  if ! is_service_default ($dhcp_delete_namespaces) {
+    warning('The dhcp_delete_namespaces parameter is deprecated and will be removed in future releases')
+  }
+
+  if ! is_service_default ($dhcp_domain) {
+    warning('The dhcp_domain parameter is deprecated and will be removed in future releases')
   }
 
   if ! is_service_default ($use_namespaces) {

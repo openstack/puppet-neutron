@@ -66,6 +66,17 @@ class neutron::agents::vpnaas (
         name   => $::neutron::params::openswan_package,
       }
     }
+    /\.LibreSwan/: {
+      if($::osfamily != 'Redhat') {
+        fail("LibreSwan is not supported on osfamily ${::osfamily}")
+      } else {
+        Package['libreswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
+        package { 'libreswan':
+          ensure => present,
+          name   => $::neutron::params::libreswan_package,
+        }
+      }
+    }
     default: {
       fail("Unsupported vpn_device_driver ${vpn_device_driver}")
     }

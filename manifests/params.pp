@@ -65,6 +65,7 @@ class neutron::params {
     } else {
       $openswan_package     = 'openswan'
     }
+    $libreswan_package     = 'libreswan'
 
     $l3_agent_package   = false
     $l3_agent_service   = 'neutron-l3-agent'
@@ -151,6 +152,7 @@ class neutron::params {
     $vpnaas_agent_service = 'neutron-vpn-agent'
 
     $openswan_package     = 'openswan'
+    $libreswan_package    = false
 
     $metadata_agent_package = 'neutron-metadata-agent'
     $metadata_agent_service = 'neutron-metadata-agent'

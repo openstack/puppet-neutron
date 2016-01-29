@@ -45,6 +45,12 @@ describe 'neutron' do
         it_configures 'rabbit HA with multiple hosts'
       end
 
+      context 'with rabbit_ha_queues set to false and with rabbit_hosts' do
+        before { params.merge!( :rabbit_ha_queues => 'false',
+                                :rabbit_hosts => ['rabbit:5673'] ) }
+        it_configures 'rabbit_ha_queues set to false'
+      end
+
       it 'configures logging' do
         is_expected.to contain_neutron_config('DEFAULT/log_file').with_ensure('absent')
         is_expected.to contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
@@ -161,6 +167,12 @@ describe 'neutron' do
   shared_examples_for 'rabbit with durable queues' do
     it 'in neutron.conf' do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true)
+    end
+  end
+
+  shared_examples_for 'rabbit_ha_queues set to false' do
+    it 'in neutron.conf' do
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(false)
     end
   end
 

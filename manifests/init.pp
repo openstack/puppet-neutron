@@ -149,6 +149,10 @@
 #   multiple RabbitMQ Brokers.
 #   Defaults to false
 #
+# [*rabbit_ha_queues*]
+#   (Optional) Use HA queues in RabbitMQ.
+#   Defaults to undef
+#
 # [*rabbit_heartbeat_timeout_threshold*]
 #   (optional) Number of seconds after which the RabbitMQ broker is considered
 #   down if the heartbeat keepalive fails.  Any value >0 enables heartbeats.
@@ -293,6 +297,7 @@ class neutron (
   $rabbit_host                        = 'localhost',
   $rabbit_hosts                       = false,
   $rabbit_port                        = 5672,
+  $rabbit_ha_queues                   = undef,
   $rabbit_user                        = 'guest',
   $rabbit_virtual_host                = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = 0,
@@ -452,12 +457,20 @@ class neutron (
     }
     if $rabbit_hosts {
       neutron_config { 'oslo_messaging_rabbit/rabbit_hosts':     value  => join($rabbit_hosts, ',') }
-      neutron_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value  => true }
     } else  {
       neutron_config { 'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host }
       neutron_config { 'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port }
       neutron_config { 'oslo_messaging_rabbit/rabbit_hosts':     value => "${rabbit_host}:${rabbit_port}" }
-      neutron_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+    }
+
+    if $rabbit_ha_queues == undef {
+      if $rabbit_hosts {
+        neutron_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => true }
+      } else {
+        neutron_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+      }
+    } else {
+      neutron_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues }
     }
 
     neutron_config {

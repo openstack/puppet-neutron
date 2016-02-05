@@ -136,13 +136,12 @@ class neutron::agents::dhcp (
     'DEFAULT/dhcp_domain':            value => $dhcp_domain;
     'DEFAULT/dhcp_driver':            value => $dhcp_driver;
     'DEFAULT/root_helper':            value => $root_helper;
-    'DEFAULT/dhcp_delete_namespaces': value => $dhcp_delete_namespaces;
     'DEFAULT/dhcp_broadcast_reply':   value => $dhcp_broadcast_reply;
     'DEFAULT/dnsmasq_config_file':    value => $dnsmasq_config_file;
   }
 
   if ! is_service_default ($dhcp_delete_namespaces) {
-    warning('The dhcp_delete_namespaces parameter is deprecated and will be removed in future releases')
+    warning('The dhcp_delete_namespaces parameter was removed in Mitaka, it does not take any affect')
   }
 
   if ! is_service_default ($dhcp_domain) {

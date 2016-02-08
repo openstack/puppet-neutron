@@ -133,6 +133,18 @@ describe 'neutron::agents::vpnaas' do
     it 'configures subscription to neutron-vpnaas-agent package' do
       is_expected.to contain_service('neutron-vpnaas-service').that_subscribes_to('Package[neutron-vpnaas-agent]')
     end
+
+    context 'when configuring the LibreSwan driver' do
+      before do
+      params.merge!(
+        :vpn_device_driver => 'neutron_vpnaas.services.vpn.device_drivers.libreswan_ipsec.LibreSwanDriver'
+      )
+      end
+
+      it 'fails when configuring LibreSwan on Debian' do
+        is_expected.to raise_error(Puppet::Error, /LibreSwan is not supported on osfamily Debian/) 
+      end
+    end
   end
 
   context 'on RedHat 6 platforms' do
@@ -162,10 +174,27 @@ describe 'neutron::agents::vpnaas' do
 
     let :platform_params do
       { :openswan_package     => 'libreswan',
+        :libreswan_package    => 'libreswan',
         :vpnaas_agent_package => 'openstack-neutron-vpnaas',
         :vpnaas_agent_service => 'neutron-vpn-agent'}
     end
 
     it_configures 'neutron vpnaas agent'
+
+    context 'when configuring the LibreSwan driver' do
+      before do
+      params.merge!(
+        :vpn_device_driver => 'neutron_vpnaas.services.vpn.device_drivers.libreswan_ipsec.LibreSwanDriver'
+      )
+      end
+
+      it 'configures LibreSwan' do
+        is_expected.to contain_neutron_vpnaas_agent_config('vpnagent/vpn_device_driver').with_value(params[:vpn_device_driver]);
+        is_expected.to contain_package('libreswan').with(
+          :ensure => 'present',
+          :name   => platform_params[:libreswan_package]
+        )
+        end
+      end
   end
 end

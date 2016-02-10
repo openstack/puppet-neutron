@@ -277,7 +277,6 @@ class neutron::server (
 
   include ::neutron::db
   include ::neutron::policy
-  require keystone::python
 
   Neutron_config<||>     ~> Service['neutron-server']
   Neutron_api_config<||> ~> Service['neutron-server']

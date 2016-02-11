@@ -16,21 +16,21 @@ neutron
 Overview
 --------
 
-The neutron module is a part of [OpenStack](https://github.com/openstack), an effort by the Openstack infrastructure team to provide continuous integration testing and code review for Openstack and Openstack community projects as part of the core software. The module itself is used to flexibly configure and manage the network service for Openstack.
+The neutron module is a part of [OpenStack](https://github.com/openstack), an effort by the OpenStack infrastructure team to provide continuous integration testing and code review for OpenStack and OpenStack community projects as part of the core software. The module itself is used to flexibly configure and manage the network service for OpenStack.
 
 Module Description
 ------------------
 
-The neutron module is an attempt to make Puppet capable of managing the entirety of neutron. This includes manifests to provision such things as keystone endpoints, RPC configurations specific to neutron, database connections, and network driver plugins. Types are shipped as part of the neutron module to assist in manipulation of the Openstack configuration files.
+The neutron module is an attempt to make Puppet capable of managing the entirety of neutron. This includes manifests to provision such things as keystone endpoints, RPC configurations specific to neutron, database connections, and network driver plugins. Types are shipped as part of the neutron module to assist in manipulation of the OpenStack configuration files.
 
-This module is tested in combination with other modules needed to build and leverage an entire Openstack installation.
+This module is tested in combination with other modules needed to build and leverage an entire OpenStack installation.
 
 Setup
 -----
 
 **What the neutron module affects:**
 
-* [Neutron](https://wiki.openstack.org/wiki/Neutron), the network service for Openstack.
+* [Neutron](https://wiki.openstack.org/wiki/Neutron), the network service for OpenStack.
 
 ### Installing neutron
 
@@ -158,7 +158,7 @@ bundle exec rspec spec/acceptance
 Development
 -----------
 
-The puppet-openstack modules follow the Openstack development model. Developer documentation for the entire puppet-openstack project is at:
+The puppet-openstack modules follow the OpenStack development model. Developer documentation for the entire puppet-openstack project is at:
 
 * https://wiki.openstack.org/wiki/Puppet-openstack#Developerdocumentation
 

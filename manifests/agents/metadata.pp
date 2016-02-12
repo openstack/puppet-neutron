@@ -125,6 +125,7 @@ class neutron::agents::metadata (
 
   if $::neutron::params::metadata_agent_package {
     Package['neutron-metadata'] -> Service['neutron-metadata']
+    Package['neutron-metadata'] -> Neutron_metadata_agent_config<||>
     package { 'neutron-metadata':
       ensure  => $package_ensure,
       name    => $::neutron::params::metadata_agent_package,

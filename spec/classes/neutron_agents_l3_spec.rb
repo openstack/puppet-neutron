@@ -11,7 +11,6 @@ describe 'neutron::agents::l3' do
       :enabled                          => true,
       :debug                            => false,
       :interface_driver                 => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :router_delete_namespaces         => true,
       :ha_enabled                       => false,
       :ha_vrrp_auth_type                => 'PASS',
       :ha_vrrp_advert_int               => '3',
@@ -48,7 +47,6 @@ describe 'neutron::agents::l3' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/router_delete_namespaces').with_value(p[:router_delete_namespaces])
     end
 
     it 'installs neutron l3 agent package' do

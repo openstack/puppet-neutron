@@ -64,10 +64,6 @@
 #   Defaults to $::os_service_default
 #   Should be deprecated in the next major release in favor of a global parameter
 #
-# [*router_delete_namespaces*]
-#   (optional) namespaces can be deleted cleanly on the host running the L3 agent
-#   Defaults to true
-#
 # [*ha_enabled*]
 #   (optional) Enabled or not HA for L3 agent.
 #   Defaults to false
@@ -106,6 +102,10 @@
 #   (optional) Deprecated. The name of the external bridge
 #   Defaults to $::os_service_default
 #
+# [*router_delete_namespaces*]
+#   (optional) Deprecated. Namespaces can be deleted cleanly on the host running the L3 agent
+#   Defaults to ::os_service_default
+#
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -121,7 +121,6 @@ class neutron::agents::l3 (
   $periodic_fuzzy_delay             = $::os_service_default,
   $enable_metadata_proxy            = $::os_service_default,
   $network_device_mtu               = $::os_service_default,
-  $router_delete_namespaces         = true,
   $ha_enabled                       = false,
   $ha_vrrp_auth_type                = 'PASS',
   $ha_vrrp_auth_password            = $::os_service_default,
@@ -131,6 +130,7 @@ class neutron::agents::l3 (
   $allow_automatic_l3agent_failover = false,
   $use_namespaces                   = $::os_service_default,
   $external_network_bridge          = $::os_service_default,
+  $router_delete_namespaces         = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -144,6 +144,10 @@ class neutron::agents::l3 (
 
   if ! is_service_default ($external_network_bridge) {
     warning('parameter external_network_bridge is deprecated')
+  }
+
+  if ! is_service_default ($router_delete_namespaces) {
+    warning('parameter router_delete_namespaces was removed in Mitaka, it does not take any affect')
   }
 
   if $ha_enabled {
@@ -166,7 +170,6 @@ class neutron::agents::l3 (
     'DEFAULT/periodic_interval':                value => $periodic_interval;
     'DEFAULT/periodic_fuzzy_delay':             value => $periodic_fuzzy_delay;
     'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;
-    'DEFAULT/router_delete_namespaces':         value => $router_delete_namespaces;
     'DEFAULT/agent_mode':                       value => $agent_mode;
     'DEFAULT/network_device_mtu':               value => $network_device_mtu;
     'DEFAULT/use_namespaces':                   value => $use_namespaces;

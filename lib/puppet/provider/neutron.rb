@@ -26,21 +26,23 @@ class Puppet::Provider::Neutron < Puppet::Provider
   end
 
   def self.get_neutron_credentials
-    auth_keys = ['admin_tenant_name', 'admin_user', 'admin_password']
-    deprecated_auth_url = ['auth_host', 'auth_port', 'auth_protocol']
+    deprecated_auth_keys = ['admin_tenant_name', 'admin_user', 'admin_password', 'identity_uri']
+    auth_keys = ['tenant_name', 'username', 'password', 'auth_url']
     conf = neutron_conf
     if conf and conf['keystone_authtoken'] and
-        auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?} and
-        ( deprecated_auth_url.all?{|k| !conf['keystone_authtoken'][k].nil?} or
-        !conf['keystone_authtoken']['auth_uri'].nil? )
+        !conf['keystone_authtoken']['password'].nil? and
+        auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?}
       creds = Hash[ auth_keys.map \
                    { |k| [k, conf['keystone_authtoken'][k].strip] } ]
-      if !conf['keystone_authtoken']['auth_uri'].nil?
-        creds['auth_uri'] = conf['keystone_authtoken']['auth_uri']
-      else
-        q = conf['keystone_authtoken']
-        creds['auth_uri'] = "#{q['auth_protocol']}://#{q['auth_host']}:#{q['auth_port']}/v2.0/"
+      if !conf['keystone_authtoken']['region_name'].nil?
+        creds['region_name'] = conf['keystone_authtoken']['region_name'].strip
       end
+      return creds
+    elsif conf and conf['keystone_authtoken'] and
+        !conf['keystone_authtoken']['admin_password'].nil? and
+        deprecated_auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?}
+      creds = Hash[ deprecated_auth_keys.map \
+                   { |k| [k, conf['keystone_authtoken'][k].strip] } ]
       if conf['DEFAULT'] and !conf['DEFAULT']['nova_region_name'].nil?
         creds['nova_region_name'] = conf['DEFAULT']['nova_region_name'].strip
       end
@@ -56,19 +58,6 @@ correctly configured.")
     self.class.neutron_credentials
   end
 
-  def self.auth_endpoint
-    @auth_endpoint ||= get_auth_endpoint
-  end
-
-  def self.get_auth_endpoint
-    q = neutron_credentials
-    if q['auth_uri'].nil?
-      return "#{q['auth_protocol']}://#{q['auth_host']}:#{q['auth_port']}/v2.0/"
-    else
-      return "#{q['auth_uri']}".strip
-    end
-  end
-
   def self.neutron_conf
     return @neutron_conf if @neutron_conf
     @neutron_conf = Puppet::Util::IniConfig::File.new
@@ -78,14 +67,25 @@ correctly configured.")
 
   def self.auth_neutron(*args)
     q = neutron_credentials
-    authenv = {
-      :OS_AUTH_URL    => self.auth_endpoint,
-      :OS_USERNAME    => q['admin_user'],
-      :OS_TENANT_NAME => q['admin_tenant_name'],
-      :OS_PASSWORD    => q['admin_password']
-    }
+    if q.key?('admin_password')
+      authenv = {
+        :OS_AUTH_URL    => q['identity_uri'],
+        :OS_USERNAME    => q['admin_user'],
+        :OS_TENANT_NAME => q['admin_tenant_name'],
+        :OS_PASSWORD    => q['admin_password']
+      }
+    else
+      authenv = {
+        :OS_AUTH_URL    => q['auth_url'],
+        :OS_USERNAME    => q['username'],
+        :OS_TENANT_NAME => q['tenant_name'],
+        :OS_PASSWORD    => q['password']
+      }
+    end
     if q.key?('nova_region_name')
       authenv[:OS_REGION_NAME] = q['nova_region_name']
+    elsif q.key?('region_name')
+      authenv[:OS_REGION_NAME] = q['region_name']
     end
     rv = nil
     timeout = 10

@@ -11,17 +11,21 @@ describe Puppet::Provider::Neutron do
 
   let :credential_hash do
     {
-      'auth_host'         => '192.168.56.210',
-      'auth_port'         => '35357',
-      'auth_protocol'     => 'https',
-      'admin_tenant_name' => 'admin_tenant',
-      'admin_user'        => 'admin',
-      'admin_password'    => 'password',
+      'tenant_name' => 'admin_tenant',
+      'username'    => 'admin',
+      'password'    => 'password',
+      'auth_url'    => 'https://192.168.56.210:35357'
     }
   end
 
-  let :auth_endpoint do
-    'https://192.168.56.210:35357/v2.0/'
+  let :deprecated_credential_hash do
+    {
+      'admin_tenant_name' => 'new_tenant',
+      'admin_user'        => 'new_user',
+      'admin_password'    => 'new_password',
+      'identity_uri'      => 'https://192.168.56.210:35357/v2.0',
+      'nova_region_name'  => 'NEW_REGION',
+    }
   end
 
   let :credential_error do
@@ -62,12 +66,6 @@ describe Puppet::Provider::Neutron do
       end.to raise_error(Puppet::Error, credential_error)
     end
 
-    it 'should use specified host/port/protocol in the auth endpoint' do
-      conf = {'keystone_authtoken' => credential_hash}
-      klass.expects(:neutron_conf).returns(conf)
-      expect(klass.get_auth_endpoint).to eq(auth_endpoint)
-    end
-
     it 'should find region_name if specified' do
       conf = {
         'keystone_authtoken' => credential_hash,
@@ -83,26 +81,39 @@ describe Puppet::Provider::Neutron do
 
     it 'should set auth credentials in the environment' do
       authenv = {
-        :OS_AUTH_URL    => auth_endpoint,
-        :OS_USERNAME    => credential_hash['admin_user'],
-        :OS_TENANT_NAME => credential_hash['admin_tenant_name'],
-        :OS_PASSWORD    => credential_hash['admin_password'],
+        :OS_AUTH_URL    => credential_hash['auth_url'],
+        :OS_USERNAME    => credential_hash['username'],
+        :OS_TENANT_NAME => credential_hash['tenant_name'],
+        :OS_PASSWORD    => credential_hash['password'],
       }
       klass.expects(:get_neutron_credentials).with().returns(credential_hash)
       klass.expects(:withenv).with(authenv)
       klass.auth_neutron('test_retries')
     end
 
+    it 'should set deprecated auth credentials in the environment' do
+      authenv = {
+        :OS_AUTH_URL    => deprecated_credential_hash['identity_uri'],
+        :OS_USERNAME    => deprecated_credential_hash['admin_user'],
+        :OS_TENANT_NAME => deprecated_credential_hash['admin_tenant_name'],
+        :OS_PASSWORD    => deprecated_credential_hash['admin_password'],
+        :OS_REGION_NAME => 'NEW_REGION',
+      }
+      klass.expects(:get_neutron_credentials).with().returns(deprecated_credential_hash)
+      klass.expects(:withenv).with(authenv)
+      klass.auth_neutron('test_retries')
+    end
+
     it 'should set region in the environment if needed' do
       authenv = {
-        :OS_AUTH_URL    => auth_endpoint,
-        :OS_USERNAME    => credential_hash['admin_user'],
-        :OS_TENANT_NAME => credential_hash['admin_tenant_name'],
-        :OS_PASSWORD    => credential_hash['admin_password'],
+        :OS_AUTH_URL    => credential_hash['auth_url'],
+        :OS_USERNAME    => credential_hash['username'],
+        :OS_TENANT_NAME => credential_hash['tenant_name'],
+        :OS_PASSWORD    => credential_hash['password'],
         :OS_REGION_NAME => 'REGION_NAME',
       }
 
-      cred_hash = credential_hash.merge({'nova_region_name' => 'REGION_NAME'})
+      cred_hash = credential_hash.merge({'region_name' => 'REGION_NAME'})
       klass.expects(:get_neutron_credentials).with().returns(cred_hash)
       klass.expects(:withenv).with(authenv)
       klass.auth_neutron('test_retries')

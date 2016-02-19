@@ -32,7 +32,7 @@
 #
 # [*auth_plugin*]
 #   (optional) An authentication plugin to use with an OpenStack Identity server.
-#   Defaults to $::os_service_default
+#   Defaults to 'password'
 #
 # [*auth_uri*]
 #   (optional) Complete public Identity API endpoint.
@@ -58,15 +58,15 @@
 #
 # [*project_domain_id*]
 #   (optional) Auth user project's domain ID
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*project_name*]
 #   (optional) Auth user project's name
-#   Defaults to $::os_service_default
+#   Defaults to 'services'
 #
 # [*user_domain_id*]
 #   (optional) Auth user's domain ID
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*region_name*]
 #   (optional) The authentication region
@@ -253,16 +253,16 @@ class neutron::server (
   $manage_service                   = true,
   $service_name                     = $::neutron::params::server_service,
   $auth_type                        = 'keystone',
-  $auth_plugin                      = $::os_service_default,
+  $auth_plugin                      = 'password',
   $auth_uri                         = 'http://localhost:5000/',
   $auth_url                         = 'http://localhost:35357/',
   $username                         = 'neutron',
   $password                         = false,
   $tenant_name                      = 'services',
   $region_name                      = $::os_service_default,
-  $project_domain_id                = $::os_service_default,
-  $project_name                     = $::os_service_default,
-  $user_domain_id                   = $::os_service_default,
+  $project_domain_id                = 'Default',
+  $project_name                     = 'services',
+  $user_domain_id                   = 'Default',
   $database_connection              = undef,
   $database_max_retries             = undef,
   $database_idle_timeout            = undef,
@@ -472,7 +472,17 @@ class neutron::server (
         'keystone_authtoken/project_domain_id': value => $project_domain_id;
         'keystone_authtoken/project_name':      value => $project_name;
         'keystone_authtoken/user_domain_id':    value => $user_domain_id;
-
+        'keystone_authtoken/admin_tenant_name': ensure => absent;
+        'keystone_authtoken/admin_user':        ensure => absent;
+        'keystone_authtoken/admin_password':    ensure => absent;
+        'keystone_authtoken/auth_region':       ensure => absent;
+        'keystone_authtoken/identity_uri':      ensure => absent;
+      }
+      neutron_api_config {
+        'filter:authtoken/admin_tenant_name':   ensure => absent;
+        'filter:authtoken/admin_user':          ensure => absent;
+        'filter:authtoken/admin_password':      ensure => absent;
+        'filter:authtoken/identity_uri':        ensure => absent;
       }
     }
 

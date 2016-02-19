@@ -7,9 +7,13 @@ describe 'neutron::server' do
   end
 
   let :params do
-    { :password    => 'passw0rd',
-      :username    => 'neutron',
-      :tenant_name => 'services' }
+    { :password          => 'passw0rd',
+      :username          => 'neutron',
+      :auth_plugin       => 'password',
+      :project_domain_id => 'Default',
+      :project_name      => 'services',
+      :user_domain_id    => 'Default',
+      :tenant_name       => 'services' }
   end
 
   let :default_params do
@@ -47,19 +51,20 @@ describe 'neutron::server' do
     it { is_expected.to contain_class('neutron::policy') }
 
     it 'configures authentication middleware' do
+      is_expected.to contain_neutron_config('keystone_authtoken/auth_plugin').with_value(p[:auth_plugin]);
       is_expected.to contain_neutron_config('keystone_authtoken/tenant_name').with_value(p[:tenant_name]);
       is_expected.to contain_neutron_config('keystone_authtoken/username').with_value(p[:username]);
       is_expected.to contain_neutron_config('keystone_authtoken/password').with_value(p[:password]);
       is_expected.to contain_neutron_config('keystone_authtoken/password').with_secret( true )
       is_expected.to contain_neutron_config('keystone_authtoken/auth_uri').with_value("http://localhost:5000/");
       is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value("http://localhost:35357/");
-      is_expected.to contain_neutron_config('keystone_authtoken/project_domain_id').with_value("<SERVICE DEFAULT>");
-      is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value("<SERVICE DEFAULT>");
-      is_expected.to contain_neutron_config('keystone_authtoken/user_domain_id').with_value("<SERVICE DEFAULT>");
-      is_expected.not_to contain_neutron_config('keystone_authtoken/admin_tenant_name');
-      is_expected.not_to contain_neutron_config('keystone_authtoken/admin_user');
-      is_expected.not_to contain_neutron_config('keystone_authtoken/admin_password');
-      is_expected.not_to contain_neutron_config('keystone_authtoken/identity_uri');
+      is_expected.to contain_neutron_config('keystone_authtoken/project_domain_id').with_value(p[:project_domain_id]);
+      is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value(p[:project_name]);
+      is_expected.to contain_neutron_config('keystone_authtoken/user_domain_id').with_value(p[:user_domain_id]);
+      is_expected.to contain_neutron_config('keystone_authtoken/admin_tenant_name').with_ensure('absent');
+      is_expected.to contain_neutron_config('keystone_authtoken/admin_user').with_ensure('absent');
+      is_expected.to contain_neutron_config('keystone_authtoken/admin_password').with_ensure('absent');
+      is_expected.to contain_neutron_config('keystone_authtoken/identity_uri').with_ensure('absent');
     end
 
     it 'installs neutron server package' do
@@ -273,17 +278,17 @@ describe 'neutron::server' do
         :auth_uri          => 'https://foo.bar:5000/',
         :auth_url          => 'https://foo.bar:35357/v3',
         :auth_plugin       => 'v3password',
-        :project_domain_id => 'default',
-        :project_name      => 'services',
-        :user_domain_id    => 'default'
+        :project_domain_id => 'non_default',
+        :project_name      => 'new_services',
+        :user_domain_id    => 'non_default'
       })
     end
     it 'configures keystone authentication params' do
       is_expected.to contain_neutron_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/");
       is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value("https://foo.bar:35357/v3");
-      is_expected.to contain_neutron_config('keystone_authtoken/project_domain_id').with_value("default");
-      is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value("services");
-      is_expected.to contain_neutron_config('keystone_authtoken/user_domain_id').with_value("default");
+      is_expected.to contain_neutron_config('keystone_authtoken/project_domain_id').with_value("non_default");
+      is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value("new_services");
+      is_expected.to contain_neutron_config('keystone_authtoken/user_domain_id').with_value("non_default");
     end
   end
 

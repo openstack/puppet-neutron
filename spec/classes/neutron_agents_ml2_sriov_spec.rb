@@ -103,8 +103,8 @@ describe 'neutron::agents::ml2::sriov' do
     end
 
     let :platform_params do
-      { :sriov_nic_agent_package => 'neutron-plugin-sriov-agent',
-        :sriov_nic_agent_service => 'neutron-plugin-sriov-agent' }
+      { :sriov_nic_agent_package => 'neutron-sriov-agent',
+        :sriov_nic_agent_service => 'neutron-sriov-agent' }
     end
 
     it_configures 'neutron sriov-nic agent with ml2 plugin'

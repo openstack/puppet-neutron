@@ -4,11 +4,7 @@ Puppet::Type.type(:neutron_agent_linuxbridge).provide(
 ) do
 
   def file_path
-    if Facter.value(:operatingsystem) == 'Ubuntu'
-      '/etc/neutron/plugins/ml2/ml2_conf.ini'
-    else
-      '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini'
-    end
+    '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini'
   end
 
 end

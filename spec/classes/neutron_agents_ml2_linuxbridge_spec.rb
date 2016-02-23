@@ -150,8 +150,8 @@ describe 'neutron::agents::ml2::linuxbridge' do
     end
 
     let :platform_params do
-      { :linuxbridge_agent_package => 'neutron-plugin-linuxbridge-agent',
-        :linuxbridge_agent_service => 'neutron-plugin-linuxbridge-agent' }
+      { :linuxbridge_agent_package => 'neutron-linuxbridge-agent',
+        :linuxbridge_agent_service => 'neutron-linuxbridge-agent' }
     end
 
     it_configures 'neutron plugin linuxbridge agent with ml2 plugin'

@@ -4,11 +4,7 @@ Puppet::Type.type(:neutron_agent_ovs).provide(
 ) do
 
   def file_path
-    if Facter.value(:operatingsystem) == 'Ubuntu'
-      '/etc/neutron/plugins/ml2/ml2_conf.ini'
-    else
-      '/etc/neutron/plugins/ml2/openvswitch_agent.ini'
-    end
+    '/etc/neutron/plugins/ml2/openvswitch_agent.ini'
   end
 
 end

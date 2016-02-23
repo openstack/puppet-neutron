@@ -65,7 +65,7 @@ class { '::neutron::plugins::ml2':
   tenant_network_types => ['vxlan'],
   vxlan_group          => '239.1.1.1',
   mechanism_drivers    => ['openvswitch'],
-  vni_ranges           => ['0:300']
+  vni_ranges           => ['1:300']
 }
 ```
 

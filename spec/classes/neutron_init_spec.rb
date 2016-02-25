@@ -132,7 +132,7 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/api_extensions_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
       is_expected.to contain_neutron_config('DEFAULT/state_path').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('DEFAULT/lock_path').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('DEFAULT/lock_path').with_value('$state_path/lock')
       is_expected.to contain_neutron_config('DEFAULT/rpc_response_timeout').with_value( '<SERVICE DEFAULT>' )
       is_expected.to contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       is_expected.to contain_neutron_config('agent/report_interval').with_value('<SERVICE DEFAULT>')

@@ -246,7 +246,7 @@
 # [*lock_path*]
 #   (optional) Where to store lock files. This directory must be writeable
 #   by the user executing the agent
-#   Defaults to: $::os_service_default
+#   Defaults to: '$state_path/lock'
 #
 # DEPRECATED PARAMETERS
 #
@@ -319,7 +319,7 @@ class neutron (
   $log_file                           = false,
   $log_dir                            = '/var/log/neutron',
   $state_path                         = $::os_service_default,
-  $lock_path                          = $::os_service_default,
+  $lock_path                          = '$state_path/lock',
   # DEPRECATED PARAMETERS
   $qpid_hostname                      = undef,
   $qpid_port                          = undef,

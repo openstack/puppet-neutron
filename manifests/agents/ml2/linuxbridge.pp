@@ -140,11 +140,18 @@ class neutron::agents::ml2::linuxbridge (
     Package['neutron-plugin-linuxbridge-agent'] ~> Service['neutron-plugin-linuxbridge-agent']
   }
 
+  if $::neutron::rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' {
+    $linuxbridge_agent_subscribe = Neutron_config['oslo_messaging_rabbit/rabbit_hosts']
+  } else {
+    $linuxbridge_agent_subscribe = undef
+  }
+
   service { 'neutron-plugin-linuxbridge-agent':
-    ensure  => $service_ensure,
-    name    => $::neutron::params::linuxbridge_agent_service,
-    enable  => $enabled,
-    require => Class['neutron'],
-    tag     => 'neutron-service',
+    ensure    => $service_ensure,
+    name      => $::neutron::params::linuxbridge_agent_service,
+    enable    => $enabled,
+    require   => Class['neutron'],
+    tag       => 'neutron-service',
+    subscribe => $linuxbridge_agent_subscribe,
   }
 }

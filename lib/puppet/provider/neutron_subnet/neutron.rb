@@ -221,6 +221,19 @@ Puppet::Type.type(:neutron_subnet).provide(
     end
   end
 
+  def allocation_pools=(values)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_subnet[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
+    unless values.empty?
+      opts = ["#{name}", "--allocation-pool"]
+      for value in values
+        opts << value
+      end
+      auth_neutron('subnet-update', opts)
+    end
+  end
+
   def dns_nameservers=(values)
     if self.class.do_not_manage
       fail("Not managing Neutron_subnet[#{@resource[:name]}] due to earlier Neutron API failures.")
@@ -253,7 +266,6 @@ Puppet::Type.type(:neutron_subnet).provide(
    :ipv6_ra_mode,
    :ipv6_address_mode,
    :network_id,
-   :allocation_pools,
    :tenant_id,
   ].each do |attr|
      define_method(attr.to_s + "=") do |value|

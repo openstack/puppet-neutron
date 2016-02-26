@@ -107,6 +107,9 @@ define neutron::plugins::ml2::type_driver (
   elsif ($name == 'nexus_vxlan') {
     # Nexus_vxlan type driver has its own class separate from this one
   }
+  elsif ($name == 'midonet') or ($name == 'uplink') {
+    # midonet type driver has its own class separate from this one
+  }
   else {
     # detect an invalid type_drivers value
     fail('type_driver unknown.')

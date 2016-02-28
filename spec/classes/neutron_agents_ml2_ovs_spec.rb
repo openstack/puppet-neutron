@@ -45,6 +45,8 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_neutron_agent_ovs('agent/prevent_arp_spoofing').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_agent_ovs('agent/drop_flows_on_start').with_value(p[:drop_flows_on_start])
       is_expected.to contain_neutron_agent_ovs('agent/extensions').with_value(['<SERVICE DEFAULT>'])
+      is_expected.to contain_neutron_agent_ovs('ovs/datapath_type').with_value(['<SERVICE DEFAULT>'])
+      is_expected.to contain_neutron_agent_ovs('ovs/vhostuser_socket_dir').with_value(['<SERVICE DEFAULT>'])
       is_expected.to contain_neutron_agent_ovs('ovs/integration_bridge').with_value(p[:integration_bridge])
       is_expected.to contain_neutron_agent_ovs('securitygroup/firewall_driver').\
         with_value(p[:firewall_driver])
@@ -182,6 +184,17 @@ describe 'neutron::agents::ml2::ovs' do
 
       it 'configures extensions' do
         is_expected.to contain_neutron_agent_ovs('agent/extensions').with_value(params[:extensions].join(','))
+      end
+    end
+
+    context 'when supplying DPDK specific options' do
+      before :each do
+        params.merge!(:datapath_type => 'netdev', :vhostuser_socket_dir => '/var/run/openvswitch')
+      end
+
+      it 'configures ovs for DPDK' do
+        is_expected.to contain_neutron_agent_ovs('ovs/datapath_type').with_value(params[:datapath_type])
+        is_expected.to contain_neutron_agent_ovs('ovs/vhostuser_socket_dir').with_value(params[:vhostuser_socket_dir])
       end
     end
 

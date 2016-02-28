@@ -121,6 +121,14 @@
 #   (optional) Peer patch port in tunnel bridge for integration bridge
 #   Defaults to $::os_service_default
 #
+# [*datapath_type*]
+#   (optional) Datapath type for ovs bridges
+#   Defaults to $::os_service_default
+#
+# [*vhostuser_socket_dir*]
+#   (optional) The vhost-user socket directory for OVS
+#   Defaults to $::os_service_default
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -144,6 +152,8 @@ class neutron::agents::ml2::ovs (
   $prevent_arp_spoofing       = $::os_service_default,
   $int_peer_patch_port        = $::os_service_default,
   $tun_peer_patch_port        = $::os_service_default,
+  $datapath_type              = $::os_service_default,
+  $vhostuser_socket_dir       = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -201,6 +211,8 @@ class neutron::agents::ml2::ovs (
     'agent/prevent_arp_spoofing':       value => $prevent_arp_spoofing;
     'agent/extensions':                 value => join(any2array($extensions), ',');
     'ovs/integration_bridge':           value => $integration_bridge;
+    'ovs/datapath_type':                value => $datapath_type;
+    'ovs/vhostuser_socket_dir':         value => $vhostuser_socket_dir;
   }
 
   if $firewall_driver {

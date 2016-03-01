@@ -301,6 +301,8 @@ class neutron::server (
 
   include ::neutron::db
   include ::neutron::policy
+  # Work-around LP#1551974. neutron requires the keystoneclient to auth tokens
+  include ::keystone::client
 
   if $ensure_fwaas_package {
     if ($::osfamily == 'Debian') {

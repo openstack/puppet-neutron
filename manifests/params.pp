@@ -95,10 +95,10 @@ class neutron::params {
     $server_service     = 'neutron-server'
     $client_package     = 'python-neutronclient'
 
-    if $::operatingsystem == 'Ubuntu' {
-      $ml2_server_package = 'neutron-plugin-ml2'
-    } else {
+    if $::os_package_type =='debian' {
       $ml2_server_package = false
+    } else {
+      $ml2_server_package = 'neutron-plugin-ml2'
     }
 
     $ovs_agent_package   = 'neutron-openvswitch-agent'

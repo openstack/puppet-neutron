@@ -509,10 +509,10 @@ class neutron (
 
   # SSL Options
   neutron_config {
-    'DEFAULT/use_ssl':       value => $use_ssl;
-    'DEFAULT/ssl_cert_file': value => $cert_file;
-    'DEFAULT/ssl_key_file':  value => $key_file;
-    'DEFAULT/ssl_ca_file':   value => $ca_file;
+    'DEFAULT/use_ssl': value => $use_ssl;
+    'ssl/cert_file':   value => $cert_file;
+    'ssl/key_file':    value => $key_file;
+    'ssl/ca_file':     value => $ca_file;
   }
 
 }

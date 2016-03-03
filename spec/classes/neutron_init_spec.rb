@@ -187,9 +187,9 @@ describe 'neutron' do
     end
 
     it { is_expected.to contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
-    it { is_expected.to contain_neutron_config('DEFAULT/ssl_cert_file').with_value('/path/to/cert') }
-    it { is_expected.to contain_neutron_config('DEFAULT/ssl_key_file').with_value('/path/to/key') }
-    it { is_expected.to contain_neutron_config('DEFAULT/ssl_ca_file').with_value('/path/to/ca') }
+    it { is_expected.to contain_neutron_config('ssl/cert_file').with_value('/path/to/cert') }
+    it { is_expected.to contain_neutron_config('ssl/key_file').with_value('/path/to/key') }
+    it { is_expected.to contain_neutron_config('ssl/ca_file').with_value('/path/to/ca') }
   end
 
   shared_examples_for 'with SSL socket options set with wrong parameters' do
@@ -207,9 +207,9 @@ describe 'neutron' do
   shared_examples_for 'with SSL socket options left by default' do
 
     it { is_expected.to contain_neutron_config('DEFAULT/use_ssl').with_value('<SERVICE DEFAULT>') }
-    it { is_expected.to contain_neutron_config('DEFAULT/ssl_cert_file').with_value('<SERVICE DEFAULT>') }
-    it { is_expected.to contain_neutron_config('DEFAULT/ssl_key_file').with_value('<SERVICE DEFAULT>') }
-    it { is_expected.to contain_neutron_config('DEFAULT/ssl_ca_file').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_neutron_config('ssl/cert_file').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_neutron_config('ssl/key_file').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_neutron_config('ssl/ca_file').with_value('<SERVICE DEFAULT>') }
   end
 
   shared_examples_for 'with SSL socket options set and no ca_file' do
@@ -222,9 +222,9 @@ describe 'neutron' do
     end
 
     it { is_expected.to contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
-    it { is_expected.to contain_neutron_config('DEFAULT/ssl_cert_file').with_value('/path/to/cert') }
-    it { is_expected.to contain_neutron_config('DEFAULT/ssl_key_file').with_value('/path/to/key') }
-    it { is_expected.to contain_neutron_config('DEFAULT/ssl_ca_file').with_ensure('absent') }
+    it { is_expected.to contain_neutron_config('ssl/cert_file').with_value('/path/to/cert') }
+    it { is_expected.to contain_neutron_config('ssl/key_file').with_value('/path/to/key') }
+    it { is_expected.to contain_neutron_config('ssl/ca_file').with_ensure('absent') }
   end
 
   shared_examples_for 'with SSL socket options disabled with ca_file' do

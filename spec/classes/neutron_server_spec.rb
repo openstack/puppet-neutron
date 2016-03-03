@@ -7,13 +7,13 @@ describe 'neutron::server' do
   end
 
   let :params do
-    { :password          => 'passw0rd',
-      :username          => 'neutron',
-      :auth_plugin       => 'password',
-      :project_domain_id => 'Default',
-      :project_name      => 'services',
-      :user_domain_id    => 'Default',
-      :tenant_name       => 'services' }
+    { :password           => 'passw0rd',
+      :username           => 'neutron',
+      :keystone_auth_type => 'password',
+      :project_domain_id  => 'Default',
+      :project_name       => 'services',
+      :user_domain_id     => 'Default',
+      :tenant_name        => 'services' }
   end
 
   let :default_params do
@@ -51,7 +51,7 @@ describe 'neutron::server' do
     it { is_expected.to contain_class('neutron::policy') }
 
     it 'configures authentication middleware' do
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_plugin').with_value(p[:auth_plugin]);
+      is_expected.to contain_neutron_config('keystone_authtoken/auth_type').with_value(p[:keystone_auth_type]);
       is_expected.to contain_neutron_config('keystone_authtoken/tenant_name').with_value(p[:tenant_name]);
       is_expected.to contain_neutron_config('keystone_authtoken/username').with_value(p[:username]);
       is_expected.to contain_neutron_config('keystone_authtoken/password').with_value(p[:password]);
@@ -174,7 +174,7 @@ describe 'neutron::server' do
       end
       it 'should override state_path and lock_path from base class' do
         is_expected.to contain_neutron_config('DEFAULT/state_path').with_value(p[:state_path])
-        is_expected.to contain_neutron_config('DEFAULT/lock_path').with_value(p[:lock_path])
+        is_expected.to contain_neutron_config('oslo_concurrency/lock_path').with_value(p[:lock_path])
       end
     end
 
@@ -190,6 +190,16 @@ describe 'neutron::server' do
       end
       it 'should configure qos_notification_drivers' do
         is_expected.to contain_neutron_config('qos/notification_drivers').with_value('message_queue')
+      end
+    end
+
+    context 'with deprecated auth_plugin parameter' do
+      before :each do
+        params.merge!(:auth_plugin => 'v2password')
+      end
+      it 'should configure auth_plugin' do
+        is_expected.to contain_neutron_config('keystone_authtoken/auth_plugin').with_value('v2password')
+        is_expected.not_to contain_neutron_config('keystone_authtoken/auth_type')
       end
     end
   end
@@ -275,12 +285,12 @@ describe 'neutron::server' do
     end
     before do
       params.merge!({
-        :auth_uri          => 'https://foo.bar:5000/',
-        :auth_url          => 'https://foo.bar:35357/v3',
-        :auth_plugin       => 'v3password',
-        :project_domain_id => 'non_default',
-        :project_name      => 'new_services',
-        :user_domain_id    => 'non_default'
+        :auth_uri           => 'https://foo.bar:5000/',
+        :auth_url           => 'https://foo.bar:35357/v3',
+        :keystone_auth_type => 'v3password',
+        :project_domain_id  => 'non_default',
+        :project_name       => 'new_services',
+        :user_domain_id     => 'non_default'
       })
     end
     it 'configures keystone authentication params' do

@@ -35,8 +35,9 @@
 #   currently).
 #   Defaults to 'http://127.0.0.1:8774/v2'
 #
-# [*auth_plugin*]
-#   (optional) An authentication plugin to use with an OpenStack Identity server.
+# [*auth_type*]
+#   (optional) An authentication type to use with an OpenStack Identity server.
+#   The value should contain auth plugin name
 #   Defaults to 'password'
 #
 # [*username*]
@@ -111,13 +112,18 @@
 #   one region.
 #   Defaults to $::os_service_default
 #
+# [*auth_plugin*]
+#   Deprecated. auth_type should be used instead
+#   An authentication plugin to use with an OpenStack Identity server.
+#   Defaults to $::os_service_default
+#
 
 class neutron::server::notifications (
   $notify_nova_on_port_status_changes = true,
   $notify_nova_on_port_data_changes   = true,
   $send_events_interval               = $::os_service_default,
   $nova_url                           = 'http://127.0.0.1:8774/v2',
-  $auth_plugin                        = 'password',
+  $auth_type                          = 'password',
   $username                           = 'nova',
   $password                           = false,
   $tenant_id                          = $::os_service_default,
@@ -134,6 +140,7 @@ class neutron::server::notifications (
   $nova_admin_tenant_id               = $::os_service_default,
   $nova_admin_password                = false,
   $nova_region_name                   = $::os_service_default,
+  $auth_plugin                        = $::os_service_default,
 ) {
 
   # Depend on the specified keystone_user resource, if it exists.
@@ -175,7 +182,6 @@ class neutron::server::notifications (
 
   if $password {
     neutron_config {
-      'nova/auth_plugin':       value => $auth_plugin;
       'nova/auth_url':          value => $auth_url;
       'nova/username':          value => $username;
       'nova/password':          value => $password, secret => true;
@@ -183,6 +189,16 @@ class neutron::server::notifications (
       'nova/project_name':      value => $project_name;
       'nova/user_domain_id':    value => $user_domain_id;
       'nova/region_name':       value => $region_name;
+    }
+    if ! is_service_default ($auth_plugin) and ($auth_plugin) {
+      warning('auth_plugin parameter is deprecated, auth_type should be used instead')
+      neutron_config {
+        'nova/auth_plugin': value => $auth_plugin;
+      }
+    } else {
+      neutron_config {
+        'nova/auth_type': value => $auth_type;
+      }
     }
     if ! is_service_default ($tenant_id) {
       if $tenant_id {

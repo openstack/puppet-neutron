@@ -25,7 +25,7 @@ describe 'neutron::server::notifications' do
             :notify_nova_on_port_status_changes => true,
             :notify_nova_on_port_data_changes   => true,
             :nova_url                           => 'http://127.0.0.1:8774/v2',
-            :auth_plugin                        => 'password',
+            :auth_type                          => 'password',
             :username                           => 'nova',
             :tenant_name                        => 'services',
             :project_domain_id                  => 'default',
@@ -60,6 +60,7 @@ describe 'neutron::server::notifications' do
             is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_data_changes').with_value(true)
             is_expected.to contain_neutron_config('DEFAULT/send_events_interval').with_value('<SERVICE DEFAULT>')
             is_expected.to contain_neutron_config('DEFAULT/nova_url').with_value('http://127.0.0.1:8774/v2')
+            is_expected.to contain_neutron_config('nova/auth_type').with_value('password')
             is_expected.to contain_neutron_config('nova/auth_url').with_value('http://127.0.0.1:35357')
             is_expected.to contain_neutron_config('nova/username').with_value('nova')
             is_expected.to contain_neutron_config('nova/password').with_value('secrete')
@@ -72,6 +73,7 @@ describe 'neutron::server::notifications' do
             is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_password')
             is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_password')
             is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_tenant_id')
+            is_expected.not_to contain_neutron_config('nova/auth_plugin')
         end
 
         context 'when overriding parameters' do
@@ -82,7 +84,7 @@ describe 'neutron::server::notifications' do
                     :send_events_interval               => '10',
                     :nova_url                           => 'http://nova:8774/v3',
                     :auth_url                           => 'http://keystone:35357/v2.0',
-                    :auth_plugin                        => 'v2.password',
+                    :auth_type                          => 'v2password',
                     :username                           => 'joe',
                     :region_name                        => 'MyRegion',
                     :tenant_id                          => 'UUID2'
@@ -94,7 +96,7 @@ describe 'neutron::server::notifications' do
                 is_expected.to contain_neutron_config('DEFAULT/send_events_interval').with_value('10')
                 is_expected.to contain_neutron_config('DEFAULT/nova_url').with_value('http://nova:8774/v3')
                 is_expected.to contain_neutron_config('nova/auth_url').with_value('http://keystone:35357/v2.0')
-                is_expected.to contain_neutron_config('nova/auth_plugin').with_value('v2.password')
+                is_expected.to contain_neutron_config('nova/auth_type').with_value('v2password')
                 is_expected.to contain_neutron_config('nova/username').with_value('joe')
                 is_expected.to contain_neutron_config('nova/password').with_value('secrete')
                 is_expected.to contain_neutron_config('nova/password').with_secret( true )
@@ -125,6 +127,18 @@ describe 'neutron::server::notifications' do
                 is_expected.not_to contain_neutron_config('nova/username')
                 is_expected.not_to contain_neutron_config('nova/password')
                 is_expected.not_to contain_neutron_config('nova/tenant_id')
+            end
+        end
+
+        context 'when auth_plugin is provided' do
+            before :each do
+                params.merge!(
+                    :auth_plugin => 'v3password',
+                )
+            end
+            it 'should configure auth_plugin for nova notifications' do
+                is_expected.to contain_neutron_config('nova/auth_plugin').with_value('v3password')
+                is_expected.not_to contain_neutron_config('nova/auth_type')
             end
         end
 

@@ -30,7 +30,7 @@
 #   (optional) What auth system to use
 #   Defaults to 'keystone'. Can other be 'noauth'
 #
-# [*auth_plugin*]
+# [*keystone_auth_type*]
 #   (optional) An authentication plugin to use with an OpenStack Identity server.
 #   Defaults to 'password'
 #
@@ -247,13 +247,18 @@
 #   (optional) The password to use for authentication (keystone)
 #   Defaults to false. Set a value unless you are using noauth
 #
+# [*auth_plugin*]
+#   Deprecated. keystone_auth_type should be used instead
+#   An authentication plugin to use with an OpenStack Identity server.
+#   Defaults to $::os_service_plugin
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
   $manage_service                   = true,
   $service_name                     = $::neutron::params::server_service,
   $auth_type                        = 'keystone',
-  $auth_plugin                      = 'password',
+  $keystone_auth_type               = 'password',
   $auth_uri                         = 'http://localhost:5000/',
   $auth_url                         = 'http://localhost:35357/',
   $username                         = 'neutron',
@@ -297,6 +302,7 @@ class neutron::server (
   $auth_tenant                      = 'services',
   $auth_user                        = 'neutron',
   $identity_uri                     = 'http://localhost:35357/',
+  $auth_plugin                      = $::os_service_default,
 ) inherits ::neutron::params {
 
   include ::neutron::db
@@ -401,7 +407,7 @@ class neutron::server (
 
     warning('The lock_path parameter is deprecated.  Use the lock_path parameter on the base neutron class instead.')
 
-    Neutron_config <| title == 'DEFAULT/lock_path' |> {
+    Neutron_config <| title == 'oslo_concurrency/lock_path' |> {
       value  => $lock_path,
     }
   }
@@ -466,7 +472,6 @@ class neutron::server (
 
       neutron_config {
         'keystone_authtoken/auth_url':          value => $auth_url;
-        'keystone_authtoken/auth_plugin':       value => $auth_plugin;
         'keystone_authtoken/tenant_name':       value => $tenant_name;
         'keystone_authtoken/username':          value => $username;
         'keystone_authtoken/password':          value => $password, secret => true;
@@ -485,6 +490,17 @@ class neutron::server (
         'filter:authtoken/admin_user':          ensure => absent;
         'filter:authtoken/admin_password':      ensure => absent;
         'filter:authtoken/identity_uri':        ensure => absent;
+      }
+
+      if ! is_service_default ($auth_plugin) and ($auth_plugin) {
+        warning('auth_plugin parameter is deprecated, keystone_auth_type should be used instead')
+        neutron_config {
+          'keystone_authtoken/auth_plugin': value => $auth_plugin;
+        }
+      } else {
+        neutron_config {
+          'keystone_authtoken/auth_type': value => $keystone_auth_type;
+        }
       }
     }
 

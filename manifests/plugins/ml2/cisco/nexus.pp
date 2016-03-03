@@ -59,9 +59,12 @@
 #   Defaults to 0
 #
 # [*switch_replay_count*]
-#   (optional) Number of times to attempt config replay with switch.
-#   This variable depends on switch_heartbeat_time being enabled.
-#   Defaults to 3
+#   (optional) This configuration item is OBSOLETE.  The Nexus driver replay
+#   behavior is to continue to attempt to connect to the down Nexus device
+#   with a period equal to the heartbeat time interval. This was previously:
+#      Number of times to attempt config replay with switch.
+#      This variable depends on switch_heartbeat_time being enabled.
+#   Defaults to $::os_service_default
 #
 # [*provider_vlan_auto_create*]
 #   (optional) A flag indicating whether OpenStack networking should manage the
@@ -102,7 +105,7 @@ class neutron::plugins::ml2::cisco::nexus (
   $provider_vlan_name_prefix = 'p-',
   $persistent_switch_config  = false,
   $switch_heartbeat_time     = 0,
-  $switch_replay_count       = 3,
+  $switch_replay_count       = $::os_service_default,
   $provider_vlan_auto_create = true,
   $provider_vlan_auto_trunk  = true,
   $vxlan_global_config       = true,
@@ -110,6 +113,9 @@ class neutron::plugins::ml2::cisco::nexus (
 ) {
   include ::neutron::plugins::ml2::cisco
 
+  if ! is_service_default($switch_replay_count) {
+    warning('The switch_replay_count parameter is obsolete.  The Nexus driver will always attempt replay on reconnect, if enabled.')
+  }
   neutron_plugin_ml2 {
     'ml2_cisco/managed_physical_network'  : value => $managed_physical_network;
     'ml2_cisco/vlan_name_prefix'          : value => $vlan_name_prefix;

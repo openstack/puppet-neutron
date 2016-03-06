@@ -39,6 +39,12 @@
 # [*auth_ca_cert*]
 #   CA cert to check against with for ssl keystone. (Defaults to $::os_service_default)
 #
+# [*nova_client_cert*]
+#   Client certificate for nova metadata api server. (Defaults to $::os_service_default)
+#
+# [*nova_client_priv_key*]
+#   Private key of client certificate. (Defaults to $::os_service_default)
+#
 # [*auth_region*]
 #   The authentication region. (Defaults to $::os_service_default)
 #
@@ -89,6 +95,8 @@ class neutron::agents::metadata (
   $metadata_workers          = $::processorcount,
   $metadata_backlog          = $::os_service_default,
   $metadata_memory_cache_ttl = $::os_service_default,
+  $nova_client_cert          = $::os_service_default,
+  $nova_client_priv_key      = $::os_service_default,
   ) {
 
   include ::neutron::params
@@ -111,6 +119,8 @@ class neutron::agents::metadata (
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret;
     'DEFAULT/metadata_workers':               value => $metadata_workers;
     'DEFAULT/metadata_backlog':               value => $metadata_backlog;
+    'DEFAULT/nova_client_cert':               value => $nova_client_cert;
+    'DEFAULT/nova_client_priv_key':           value => $nova_client_priv_key;
   }
 
   if ! is_service_default ($metadata_memory_cache_ttl) and ($metadata_memory_cache_ttl) {

@@ -56,6 +56,8 @@ describe 'neutron::agents::metadata' do
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_url').with(:value => params[:auth_url])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_insecure').with(:value => params[:auth_insecure])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_cert').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_priv_key').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_region').with(:value => params[:auth_region])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_tenant_name').with(:value => params[:auth_tenant])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_user').with(:value => params[:auth_user])
@@ -73,16 +75,20 @@ describe 'neutron::agents::metadata' do
 
   shared_examples_for 'neutron metadata agent with auth_insecure and auth_ca_cert set' do
     let :params do
-      { :auth_ca_cert  => '/some/cert',
-        :auth_insecure => true,
-        :auth_password => 'blah',
-        :shared_secret => '42'
+      { :auth_ca_cert         => '/some/cert',
+        :auth_insecure        => true,
+        :auth_password        => 'blah',
+        :shared_secret        => '42',
+        :nova_client_cert     => '/nova/cert',
+        :nova_client_priv_key => '/nova/key',
       }
     end
 
     it 'configures certificate' do
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with_value('/some/cert')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_insecure').with_value('true')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_cert').with_value('/nova/cert')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_priv_key').with_value('/nova/key')
     end
   end
 

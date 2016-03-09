@@ -88,24 +88,20 @@ Puppet::Type.type(:neutron_port).provide(
       resource[:network_name]
     )
 
-    if results =~ /Created a new port:/
-      attrs = self.class.parse_creation_output(results)
-      @property_hash = {
-        :ensure         => :present,
-        :name           => resource[:name],
-        :id             => attrs["id"],
-        :status         => attrs["status"],
-        :tenant_id      => attrs["tenant_id"],
-        :network_id     => attrs["network_id"],
-        :admin_state_up => attrs["admin_state_up"],
-        :network_name   => resource[:network_name],
-        :subnet_name    => resource[:subnet_name],
-        :subnet_id      => self.class.parse_subnet_id(attrs["fixed_ips"]),
-        :ip_address     => self.class.parse_ip_address(attrs["fixed_ips"])
-      }
-    else
-      fail("did not get expected message on port creation, got #{results}")
-    end
+    attrs = self.class.parse_creation_output(results)
+    @property_hash = {
+      :ensure         => :present,
+      :name           => resource[:name],
+      :id             => attrs["id"],
+      :status         => attrs["status"],
+      :tenant_id      => attrs["tenant_id"],
+      :network_id     => attrs["network_id"],
+      :admin_state_up => attrs["admin_state_up"],
+      :network_name   => resource[:network_name],
+      :subnet_name    => resource[:subnet_name],
+      :subnet_id      => self.class.parse_subnet_id(attrs["fixed_ips"]),
+      :ip_address     => self.class.parse_ip_address(attrs["fixed_ips"])
+    }
   end
 
   def destroy

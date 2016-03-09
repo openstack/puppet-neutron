@@ -61,36 +61,25 @@ Puppet::Type.type(:neutron_router).provide(
     results = auth_neutron("router-create", '--format=shell',
                            opts, resource[:name])
 
-    if results =~ /Created a new router:/
-      attrs = self.class.parse_creation_output(results)
-      @property_hash = {
-        :ensure                    => :present,
-        :name                      => resource[:name],
-        :id                        => attrs['id'],
-        :admin_state_up            => attrs['admin_state_up'],
-        :external_gateway_info     => attrs['external_gateway_info'],
-        :status                    => attrs['status'],
-        :tenant_id                 => attrs['tenant_id'],
-      }
+    attrs = self.class.parse_creation_output(results)
+    @property_hash = {
+      :ensure                    => :present,
+      :name                      => resource[:name],
+      :id                        => attrs['id'],
+      :admin_state_up            => attrs['admin_state_up'],
+      :external_gateway_info     => attrs['external_gateway_info'],
+      :status                    => attrs['status'],
+      :tenant_id                 => attrs['tenant_id'],
+    }
 
-      if @resource[:gateway_network_name]
-        results = auth_neutron('router-gateway-set',
-                               @resource[:name],
-                               @resource[:gateway_network_name])
-        if results =~ /Set gateway for router/
-          attrs = self.class.get_neutron_resource_attrs('router',
-                                                        @resource[:name])
-          @property_hash[:external_gateway_info] = \
-            attrs['external_gateway_info']
-        else
-          fail(<<-EOT
-did not get expected message on setting router gateway, got #{results}
-EOT
-               )
-        end
-      end
-    else
-      fail("did not get expected message on router creation, got #{results}")
+    if @resource[:gateway_network_name]
+      results = auth_neutron('router-gateway-set',
+                             @resource[:name],
+                             @resource[:gateway_network_name])
+      attrs = self.class.get_neutron_resource_attrs('router',
+                                                    @resource[:name])
+      @property_hash[:external_gateway_info] = \
+        attrs['external_gateway_info']
     end
   end
 

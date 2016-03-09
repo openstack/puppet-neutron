@@ -153,27 +153,23 @@ Puppet::Type.type(:neutron_subnet).provide(
     results = auth_neutron('subnet-create', '--format=shell',
                            opts, resource[:cidr])
 
-    if results =~ /Created a new subnet:/
-      attrs = self.class.parse_creation_output(results)
-      @property_hash = {
-        :ensure                    => :present,
-        :name                      => resource[:name],
-        :id                        => attrs['id'],
-        :cidr                      => attrs['cidr'],
-        :ip_version                => attrs['ip_version'],
-        :ipv6_ra_mode              => attrs['ipv6_ra_mode'],
-        :ipv6_address_mode         => attrs['ipv6_address_mode'],
-        :gateway_ip                => self.class.parse_gateway_ip(attrs['gateway_ip']),
-        :allocation_pools          => self.class.parse_allocation_pool(attrs['allocation_pools']),
-        :host_routes               => self.class.parse_host_routes(attrs['host_routes']),
-        :dns_nameservers           => self.class.parse_dns_nameservers(attrs['dns_nameservers']),
-        :enable_dhcp               => attrs['enable_dhcp'],
-        :network_id                => attrs['network_id'],
-        :tenant_id                 => attrs['tenant_id'],
-      }
-    else
-      fail("did not get expected message on subnet creation, got #{results}")
-    end
+    attrs = self.class.parse_creation_output(results)
+    @property_hash = {
+      :ensure                    => :present,
+      :name                      => resource[:name],
+      :id                        => attrs['id'],
+      :cidr                      => attrs['cidr'],
+      :ip_version                => attrs['ip_version'],
+      :ipv6_ra_mode              => attrs['ipv6_ra_mode'],
+      :ipv6_address_mode         => attrs['ipv6_address_mode'],
+      :gateway_ip                => self.class.parse_gateway_ip(attrs['gateway_ip']),
+      :allocation_pools          => self.class.parse_allocation_pool(attrs['allocation_pools']),
+      :host_routes               => self.class.parse_host_routes(attrs['host_routes']),
+      :dns_nameservers           => self.class.parse_dns_nameservers(attrs['dns_nameservers']),
+      :enable_dhcp               => attrs['enable_dhcp'],
+      :network_id                => attrs['network_id'],
+      :tenant_id                 => attrs['tenant_id'],
+    }
   end
 
   def destroy

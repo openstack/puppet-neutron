@@ -87,23 +87,19 @@ Puppet::Type.type(:neutron_network).provide(
     results = auth_neutron('net-create', '--format=shell',
                            network_opts, resource[:name])
 
-    if results =~ /Created a new network:/
-      attrs = self.class.parse_creation_output(results)
-      @property_hash = {
-        :ensure                    => :present,
-        :name                      => resource[:name],
-        :id                        => attrs['id'],
-        :admin_state_up            => attrs['admin_state_up'],
-        :provider_network_type     => attrs['provider:network_type'],
-        :provider_physical_network => attrs['provider:physical_network'],
-        :provider_segmentation_id  => attrs['provider:segmentation_id'],
-        :router_external           => attrs['router:external'],
-        :shared                    => attrs['shared'],
-        :tenant_id                 => attrs['tenant_id'],
-      }
-    else
-      fail("did not get expected message on network creation, got #{results}")
-    end
+    attrs = self.class.parse_creation_output(results)
+    @property_hash = {
+      :ensure                    => :present,
+      :name                      => resource[:name],
+      :id                        => attrs['id'],
+      :admin_state_up            => attrs['admin_state_up'],
+      :provider_network_type     => attrs['provider:network_type'],
+      :provider_physical_network => attrs['provider:physical_network'],
+      :provider_segmentation_id  => attrs['provider:segmentation_id'],
+      :router_external           => attrs['router:external'],
+      :shared                    => attrs['shared'],
+      :tenant_id                 => attrs['tenant_id'],
+    }
   end
 
   def destroy

@@ -10,12 +10,6 @@ describe 'neutron::agents::metadata' do
     { :package_ensure    => 'present',
       :debug             => false,
       :enabled           => true,
-      :auth_url          => 'http://localhost:35357/v2.0',
-      :auth_insecure     => false,
-      :auth_region       => 'RegionOne',
-      :auth_tenant       => 'services',
-      :auth_user         => 'neutron',
-      :auth_password     => 'password',
       :shared_secret     => 'metadata-secret',
     }
   end
@@ -53,16 +47,9 @@ describe 'neutron::agents::metadata' do
 
     it 'configures metadata_agent.ini' do
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/debug').with(:value => params[:debug])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_url').with(:value => params[:auth_url])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_insecure').with(:value => params[:auth_insecure])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_cert').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_priv_key').with(:value => '<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_region').with(:value => params[:auth_region])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_tenant_name').with(:value => params[:auth_tenant])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_user').with(:value => params[:auth_user])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_password').with(:value => params[:auth_password])
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/admin_password').with_secret( true )
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_ip').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_port').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => '<SERVICE DEFAULT>')
@@ -73,11 +60,9 @@ describe 'neutron::agents::metadata' do
     end
   end
 
-  shared_examples_for 'neutron metadata agent with auth_insecure and auth_ca_cert set' do
+  shared_examples_for 'neutron metadata agent with auth_ca_cert set' do
     let :params do
       { :auth_ca_cert         => '/some/cert',
-        :auth_insecure        => true,
-        :auth_password        => 'blah',
         :shared_secret        => '42',
         :nova_client_cert     => '/nova/cert',
         :nova_client_priv_key => '/nova/key',
@@ -86,7 +71,6 @@ describe 'neutron::agents::metadata' do
 
     it 'configures certificate' do
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with_value('/some/cert')
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_insecure').with_value('true')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_cert').with_value('/nova/cert')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_priv_key').with_value('/nova/key')
     end
@@ -113,7 +97,7 @@ describe 'neutron::agents::metadata' do
     end
 
     it_configures 'neutron metadata agent'
-    it_configures 'neutron metadata agent with auth_insecure and auth_ca_cert set'
+    it_configures 'neutron metadata agent with auth_ca_cert set'
     it 'configures subscription to neutron-metadata package' do
       is_expected.to contain_service('neutron-metadata').that_subscribes_to('Package[neutron-metadata]')
     end
@@ -132,8 +116,6 @@ describe 'neutron::agents::metadata' do
     end
 
     it_configures 'neutron metadata agent'
-    it_configures 'neutron metadata agent with auth_insecure and auth_ca_cert set'
-
+    it_configures 'neutron metadata agent with auth_ca_cert set'
   end
-
 end

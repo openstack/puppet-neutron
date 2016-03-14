@@ -4,9 +4,6 @@
 #
 # === Parameters
 #
-# [*auth_password*]
-#   (required) The password for the administrative user.
-#
 # [*shared_secret*]
 #   (required) Shared secret to validate proxies Neutron metadata requests.
 #
@@ -23,19 +20,6 @@
 # [*debug*]
 #   Debug. Defaults to false.
 #
-# [*auth_tenant*]
-#   The administrative user's tenant name. Defaults to 'services'.
-#
-# [*auth_user*]
-#   The administrative user name for OpenStack Networking.
-#   Defaults to 'neutron'.
-#
-# [*auth_url*]
-#   The URL used to validate tokens. Defaults to 'http://localhost:35357/v2.0'.
-#
-# [*auth_insecure*]
-#   turn off verification of the certificate for ssl (Defaults to false)
-#
 # [*auth_ca_cert*]
 #   CA cert to check against with for ssl keystone. (Defaults to $::os_service_default)
 #
@@ -44,9 +28,6 @@
 #
 # [*nova_client_priv_key*]
 #   Private key of client certificate. (Defaults to $::os_service_default)
-#
-# [*auth_region*]
-#   The authentication region. (Defaults to $::os_service_default)
 #
 # [*metadata_ip*]
 #   The IP address of the metadata service. Defaults to $::os_service_default.
@@ -75,20 +56,33 @@
 #   Set to 0 will cause cache entries to never expire.
 #   Set to $::os_service_default or false to disable cache.
 #
+# === Deprecated Parameters
+# [*auth_password*]
+#   (required) The password for the administrative user (Defaults to undef).
+#
+# [*auth_tenant*]
+#   The administrative user's tenant name (Defaults to undef).
+#
+# [*auth_user*]
+#   The administrative user name for OpenStack Networking (Defaults to undef).
+#
+# [*auth_url*]
+#   The URL used to validate tokens (Defaults to undef).
+#
+# [*auth_insecure*]
+#   turn off verification of the certificate for ssl (Defaults to undef).
+#
+# [*auth_region*]
+#   The authentication region (Defaults to undef).
+#
 
 class neutron::agents::metadata (
-  $auth_password,
   $shared_secret,
   $package_ensure            = 'present',
   $enabled                   = true,
   $manage_service            = true,
   $debug                     = false,
-  $auth_tenant               = 'services',
-  $auth_user                 = 'neutron',
-  $auth_url                  = 'http://localhost:35357/v2.0',
-  $auth_insecure             = false,
   $auth_ca_cert              = $::os_service_default,
-  $auth_region               = $::os_service_default,
   $metadata_ip               = $::os_service_default,
   $metadata_port             = $::os_service_default,
   $metadata_protocol         = $::os_service_default,
@@ -97,6 +91,13 @@ class neutron::agents::metadata (
   $metadata_memory_cache_ttl = $::os_service_default,
   $nova_client_cert          = $::os_service_default,
   $nova_client_priv_key      = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $auth_password             = undef,
+  $auth_tenant               = undef,
+  $auth_user                 = undef,
+  $auth_url                  = undef,
+  $auth_insecure             = undef,
+  $auth_region               = undef,
   ) {
 
   include ::neutron::params
@@ -104,15 +105,33 @@ class neutron::agents::metadata (
   Neutron_config<||> ~> Service['neutron-metadata']
   Neutron_metadata_agent_config<||> ~> Service['neutron-metadata']
 
+  if $auth_password {
+    warning('The auth_password parameter is deprecated and was removed in Mitaka release.')
+  }
+
+  if $auth_tenant {
+    warning('The auth_tenant parameter is deprecated and was removed in Mitaka release.')
+  }
+
+  if $auth_user {
+    warning('The auth_user parameter is deprecated and was removed in Mitaka release.')
+  }
+
+  if $auth_url {
+    warning('The auth_url parameter is deprecated and was removed in Mitaka release.')
+  }
+
+  if $auth_insecure != undef {
+    warning('The auth_insecure parameter is deprecated and was removed in Mitaka release.')
+  }
+
+  if $auth_region {
+    warning('The auth_region parameter is deprecated and was removed in Mitaka release.')
+  }
+
   neutron_metadata_agent_config {
     'DEFAULT/debug':                          value => $debug;
     'DEFAULT/auth_ca_cert':                   value => $auth_ca_cert;
-    'DEFAULT/auth_url':                       value => $auth_url;
-    'DEFAULT/auth_insecure':                  value => $auth_insecure;
-    'DEFAULT/auth_region':                    value => $auth_region;
-    'DEFAULT/admin_tenant_name':              value => $auth_tenant;
-    'DEFAULT/admin_user':                     value => $auth_user;
-    'DEFAULT/admin_password':                 value => $auth_password, secret => true;
     'DEFAULT/nova_metadata_ip':               value => $metadata_ip;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/nova_metadata_protocol':         value => $metadata_protocol;

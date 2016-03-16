@@ -129,6 +129,11 @@
 #   (optional) The vhost-user socket directory for OVS
 #   Defaults to $::os_service_default
 #
+# [*ovsdb_interface*]
+#   (optional) OpenFlow interface to use
+#   Allowed values: ovs-ofctl, native
+#   Defaults to $::os_service_default
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -154,6 +159,7 @@ class neutron::agents::ml2::ovs (
   $tun_peer_patch_port        = $::os_service_default,
   $datapath_type              = $::os_service_default,
   $vhostuser_socket_dir       = $::os_service_default,
+  $ovsdb_interface            = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -169,6 +175,10 @@ class neutron::agents::ml2::ovs (
     if $enable_distributed_routing and ! $l2_population {
       fail('L2 population must be enabled when DVR and tunneling are enabled')
     }
+  }
+
+  if ! (is_service_default($ovsdb_interface)) and ! ($ovsdb_interface =~ /^(ovs-ofctl|native)$/) {
+    fail('A value of $ovsdb_interface is incorrect. The allowed values are ovs-ofctl and native')
   }
 
   Neutron_agent_ovs<||> ~> Service['neutron-ovs-agent-service']
@@ -213,6 +223,7 @@ class neutron::agents::ml2::ovs (
     'ovs/integration_bridge':           value => $integration_bridge;
     'ovs/datapath_type':                value => $datapath_type;
     'ovs/vhostuser_socket_dir':         value => $vhostuser_socket_dir;
+    'ovs/ovsdb_interface':              value => $ovsdb_interface;
   }
 
   if $firewall_driver {

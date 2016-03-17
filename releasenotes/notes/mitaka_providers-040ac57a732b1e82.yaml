@@ -1,0 +1,11 @@
+---
+features:
+  - Neutron_subnet will now be able to update.
+  - Add support for modern authentification to providers.
+  - Add 'distributed' parameter for neutron_router.
+  - Add 'ha' parameter for neutron_router.
+  - Add IPv6 options to Neutron_subnet type.
+  - On providers, correctly parse csv even with extra output.
+  - Add 'desc' parameter for Neutron_router_interface.
+fixes:
+  - Add normal bug fixes here, or remove this section.

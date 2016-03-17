@@ -1,0 +1,9 @@
+---
+features:
+  - Update Cisco ML2 Nexus parameters.
+  - Update PLUMgrid packages & parameters.
+  - Update Nuage orchestration.
+  - Add support for Midonet ML2 driver.
+  - Add support for OpenDaylight driver.
+  - Add support for Bigswitch ML2 driver.
+  - Notify Linuxbridge agent when RabbitMQ parameters change.

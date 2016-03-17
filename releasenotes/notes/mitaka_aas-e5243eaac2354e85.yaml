@@ -1,0 +1,14 @@
+---
+features:
+  - Add ensure_*aas_package booleans for ::neutron::server.
+    In case of installation of neutron API service on standalone node
+    while having enabled FWaaS, VPNaaS or LBaaS as service plugins one
+    has to install their packages otherwise the neutron service will fail
+    to start.
+  - Provide support for VPNaaS service_provider.
+  - Add LBaaS v2 support.
+  - Support the LibreSwan driver for VPNaaS on Red Hat platforms.
+deprecations:
+  - Deprecate _delete_namespaces parameters, not used anymore in Neutron.
+  - Remove deprecated options dhcp_domain & dhcp_delete_namespaces.
+  - Removed deprecated option external_network_bridge.

@@ -9,7 +9,7 @@ describe 'Puppet::Type.type(:neutron_plugin_midonet)' do
 
   it 'should autorequire the package that install the file' do
     catalog = Puppet::Resource::Catalog.new
-    package = Puppet::Type.type(:package).new(:name => 'python-neutron-plugin-midonet')
+    package = Puppet::Type.type(:package).new(:name => 'python-networking-midonet')
     catalog.add_resource package, @neutron_plugin_midonet
     dependency = @neutron_plugin_midonet.autorequire
     expect(dependency.size).to eq(1)

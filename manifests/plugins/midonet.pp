@@ -1,7 +1,7 @@
 # == Class: midonet::neutron_plugin
 #
 # Install and configure Midonet Neutron Plugin. Please note that this manifest
-# does not install the 'python-neutron-midonet-plugin' package, it only
+# does not install the 'python-networking-midonet' package, it only
 # configures Neutron to do so needed for this deployment.  Check out the
 # MidoNet module to do so.
 #

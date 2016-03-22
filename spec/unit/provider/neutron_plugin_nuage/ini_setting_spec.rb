@@ -33,5 +33,23 @@ describe provider_class do
       end
     end
   end
+
+  it 'should ensure absent when <SERVICE DEFAULT> is specified as a value' do
+    resource = Puppet::Type::Neutron_plugin_nuage.new(
+      {:name => 'somename/foo', :value => '<SERVICE DEFAULT>'}
+    )
+    provider = provider_class.new(resource)
+    provider.exists?
+    expect(resource[:ensure]).to eq :absent
+  end
+
+  it 'should ensure absent when value matches ensure_absent_val' do
+    resource = Puppet::Type::Neutron_plugin_nuage.new(
+      {:name => 'somename/foo', :value => 'foo', :ensure_absent_val => 'foo' }
+    )
+    provider = provider_class.new(resource)
+    provider.exists?
+    expect(resource[:ensure]).to eq :absent
+  end
 end
 

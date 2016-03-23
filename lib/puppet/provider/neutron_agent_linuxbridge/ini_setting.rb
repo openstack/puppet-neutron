@@ -4,7 +4,7 @@ Puppet::Type.type(:neutron_agent_linuxbridge).provide(
 ) do
 
   def file_path
-    '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini'
+    '/etc/neutron/plugins/ml2/linuxbridge_agent.ini'
   end
 
 end

@@ -1,0 +1,5 @@
+---
+fixes:
+  - Fixes `bug 1560716
+    <https://bugs.launchpad.net/puppet-neutron/+bug/1560716>`__ so
+    LinuxBridge configuration file path is the correct one for RDO & UCA packaging.

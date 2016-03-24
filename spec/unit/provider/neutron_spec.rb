@@ -11,10 +11,10 @@ describe Puppet::Provider::Neutron do
 
   let :credential_hash do
     {
-      'tenant_name' => 'admin_tenant',
-      'username'    => 'admin',
-      'password'    => 'password',
-      'auth_url'    => 'https://192.168.56.210:35357'
+      'project_name' => 'admin_tenant',
+      'username'     => 'admin',
+      'password'     => 'password',
+      'auth_url'     => 'https://192.168.56.210:35357'
     }
   end
 
@@ -81,10 +81,10 @@ describe Puppet::Provider::Neutron do
 
     it 'should set auth credentials in the environment' do
       authenv = {
-        :OS_AUTH_URL    => credential_hash['auth_url'],
-        :OS_USERNAME    => credential_hash['username'],
-        :OS_TENANT_NAME => credential_hash['tenant_name'],
-        :OS_PASSWORD    => credential_hash['password'],
+        :OS_AUTH_URL     => credential_hash['auth_url'],
+        :OS_USERNAME     => credential_hash['username'],
+        :OS_PROJECT_NAME => credential_hash['project_name'],
+        :OS_PASSWORD     => credential_hash['password'],
       }
       klass.expects(:get_neutron_credentials).with().returns(credential_hash)
       klass.expects(:withenv).with(authenv)
@@ -106,11 +106,11 @@ describe Puppet::Provider::Neutron do
 
     it 'should set region in the environment if needed' do
       authenv = {
-        :OS_AUTH_URL    => credential_hash['auth_url'],
-        :OS_USERNAME    => credential_hash['username'],
-        :OS_TENANT_NAME => credential_hash['tenant_name'],
-        :OS_PASSWORD    => credential_hash['password'],
-        :OS_REGION_NAME => 'REGION_NAME',
+        :OS_AUTH_URL     => credential_hash['auth_url'],
+        :OS_USERNAME     => credential_hash['username'],
+        :OS_PROJECT_NAME => credential_hash['project_name'],
+        :OS_PASSWORD     => credential_hash['password'],
+        :OS_REGION_NAME  => 'REGION_NAME',
       }
 
       cred_hash = credential_hash.merge({'region_name' => 'REGION_NAME'})

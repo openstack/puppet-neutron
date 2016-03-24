@@ -52,10 +52,6 @@
 #   The password to use for authentication (keystone)
 #   Either password or auth_password is required
 #
-# [*tenant_name*]
-#   (optional) The tenant of the auth user
-#   Defaults to 'services'
-#
 # [*project_domain_id*]
 #   (optional) Auth user project's domain ID
 #   Defaults to 'Default'
@@ -252,6 +248,11 @@
 #   An authentication plugin to use with an OpenStack Identity server.
 #   Defaults to $::os_service_plugin
 #
+# [*tenant_name*]
+#   Deprecated. project_name should be used instead
+#   The tenant of the auth user
+#   Defaults to $::os_service_plugin
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -263,7 +264,6 @@ class neutron::server (
   $auth_url                         = 'http://localhost:35357/',
   $username                         = 'neutron',
   $password                         = false,
-  $tenant_name                      = 'services',
   $region_name                      = $::os_service_default,
   $project_domain_id                = 'Default',
   $project_name                     = 'services',
@@ -303,6 +303,7 @@ class neutron::server (
   $auth_user                        = 'neutron',
   $identity_uri                     = 'http://localhost:35357/',
   $auth_plugin                      = $::os_service_default,
+  $tenant_name                      = $::os_service_default,
 ) inherits ::neutron::params {
 
   include ::neutron::db
@@ -470,14 +471,20 @@ class neutron::server (
 
     } else {
 
+      if !is_service_default($tenant_name) {
+        warning('tenant_name configuration option is deprecated in favor of project_name')
+        $project_name_real = $tenant_name
+      } else {
+        $project_name_real = $project_name
+      }
+
       neutron_config {
         'keystone_authtoken/auth_url':          value => $auth_url;
-        'keystone_authtoken/tenant_name':       value => $tenant_name;
         'keystone_authtoken/username':          value => $username;
         'keystone_authtoken/password':          value => $password, secret => true;
         'keystone_authtoken/region_name':       value => $region_name;
         'keystone_authtoken/project_domain_id': value => $project_domain_id;
-        'keystone_authtoken/project_name':      value => $project_name;
+        'keystone_authtoken/project_name':      value => $project_name_real;
         'keystone_authtoken/user_domain_id':    value => $user_domain_id;
         'keystone_authtoken/admin_tenant_name': ensure => absent;
         'keystone_authtoken/admin_user':        ensure => absent;

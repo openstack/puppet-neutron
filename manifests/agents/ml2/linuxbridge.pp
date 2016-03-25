@@ -101,6 +101,16 @@ class neutron::agents::ml2::linuxbridge (
     }
   }
 
+  if size($tunnel_types) > 0 {
+    neutron_agent_linuxbridge {
+      'agent/tunnel_types': value => join($tunnel_types, ',');
+    }
+  } else {
+    neutron_agent_linuxbridge {
+      'agent/tunnel_types': ensure => absent;
+    }
+  }
+
   neutron_agent_linuxbridge {
     'agent/polling_interval':                   value => $polling_interval;
     'linux_bridge/physical_interface_mappings': value => join($physical_interface_mappings, ',');

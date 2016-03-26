@@ -1,0 +1,3 @@
+---
+deprecations:
+  - Deprecate tenant_name option. project_name should be used instead.

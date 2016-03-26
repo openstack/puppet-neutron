@@ -12,8 +12,7 @@ describe 'neutron::server' do
       :keystone_auth_type => 'password',
       :project_domain_id  => 'Default',
       :project_name       => 'services',
-      :user_domain_id     => 'Default',
-      :tenant_name        => 'services' }
+      :user_domain_id     => 'Default'}
   end
 
   let :default_params do
@@ -52,7 +51,6 @@ describe 'neutron::server' do
 
     it 'configures authentication middleware' do
       is_expected.to contain_neutron_config('keystone_authtoken/auth_type').with_value(p[:keystone_auth_type]);
-      is_expected.to contain_neutron_config('keystone_authtoken/tenant_name').with_value(p[:tenant_name]);
       is_expected.to contain_neutron_config('keystone_authtoken/username').with_value(p[:username]);
       is_expected.to contain_neutron_config('keystone_authtoken/password').with_value(p[:password]);
       is_expected.to contain_neutron_config('keystone_authtoken/password').with_secret( true )
@@ -243,7 +241,7 @@ describe 'neutron::server' do
       is_expected.to contain_neutron_config('keystone_authtoken/admin_password').with_secret( true )
       is_expected.to contain_neutron_config('keystone_authtoken/identity_uri').with_value('https://foo.bar:5000/');
       is_expected.to contain_neutron_config('keystone_authtoken/auth_region').with_value('MyRegion');
-      is_expected.not_to contain_neutron_config('keystone_authtoken/tenant_name');
+      is_expected.not_to contain_neutron_config('keystone_authtoken/project_name');
       is_expected.not_to contain_neutron_config('keystone_authtoken/username');
       is_expected.not_to contain_neutron_config('keystone_authtoken/password');
       is_expected.not_to contain_neutron_config('keystone_authtoken/auth_url');

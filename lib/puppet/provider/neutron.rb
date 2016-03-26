@@ -27,7 +27,7 @@ class Puppet::Provider::Neutron < Puppet::Provider
 
   def self.get_neutron_credentials
     deprecated_auth_keys = ['admin_tenant_name', 'admin_user', 'admin_password', 'identity_uri']
-    auth_keys = ['tenant_name', 'username', 'password', 'auth_url']
+    auth_keys = ['project_name', 'username', 'password', 'auth_url']
     conf = neutron_conf
     if conf and conf['keystone_authtoken'] and
         !conf['keystone_authtoken']['password'].nil? and
@@ -76,10 +76,10 @@ correctly configured.")
       }
     else
       authenv = {
-        :OS_AUTH_URL    => q['auth_url'],
-        :OS_USERNAME    => q['username'],
-        :OS_TENANT_NAME => q['tenant_name'],
-        :OS_PASSWORD    => q['password']
+        :OS_AUTH_URL     => q['auth_url'],
+        :OS_USERNAME     => q['username'],
+        :OS_PROJECT_NAME => q['project_name'],
+        :OS_PASSWORD     => q['password']
       }
     end
     if q.key?('nova_region_name')

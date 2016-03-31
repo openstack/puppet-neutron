@@ -155,6 +155,17 @@ describe 'neutron::agents::dhcp' do
     end
   end
 
+  shared_examples_for 'neutron dhcp agent with dnsmasq_dns_servers set' do
+    before do
+      params.merge!(
+        :dnsmasq_dns_servers => ['1.2.3.4','5.6.7.8']
+      )
+    end
+    it 'should set dnsmasq_dns_servers' do
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_servers').with_value(params[:dnsmasq_dns_servers].join(','))
+    end
+  end
+
   shared_examples_for 'dnsmasq dhcp_driver' do
     it 'installs dnsmasq packages' do
       if platform_params.has_key?(:dhcp_agent_package)
@@ -189,6 +200,7 @@ describe 'neutron::agents::dhcp' do
 
     it_configures 'neutron dhcp agent'
     it_configures 'neutron dhcp agent with dnsmasq_config_file specified'
+    it_configures 'neutron dhcp agent with dnsmasq_dns_servers set'
     it 'configures subscription to neutron-dhcp-agent package' do
       is_expected.to contain_service('neutron-dhcp-service').that_subscribes_to('Package[neutron-dhcp-agent]')
     end
@@ -210,5 +222,6 @@ describe 'neutron::agents::dhcp' do
 
     it_configures 'neutron dhcp agent'
     it_configures 'neutron dhcp agent with dnsmasq_config_file specified'
+    it_configures 'neutron dhcp agent with dnsmasq_dns_servers set'
   end
 end

@@ -35,6 +35,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
         is_expected.to contain_neutron_agent_linuxbridge('agent/polling_interval').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/physical_interface_mappings').with_value(default_params[:physical_interface_mappings].join(','))
         is_expected.to contain_neutron_agent_linuxbridge('securitygroup/firewall_driver').with_value(default_params[:firewall_driver])
+        is_expected.to contain_neutron_agent_linuxbridge('agent/tunnel_types').with_ensure('absent')
       end
 
       it 'installs neutron linuxbridge agent package' do
@@ -96,6 +97,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_ttl').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_tos').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/l2_population').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_neutron_agent_linuxbridge('agent/tunnel_types').with_value(params[:tunnel_types])
         end
       end
 

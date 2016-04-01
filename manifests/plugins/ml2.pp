@@ -91,7 +91,11 @@
 # [*enable_security_group*]
 #   (optional) Controls if neutron security group is enabled or not.
 #   It should be false when you use nova security group.
-#   Defaults to true.
+#   Defaults to $::os_service_default.
+#
+# [*firewall_driver*]
+#   (optional) Firewall driver for realizing neutron security group function.
+#   Defaults to $::os_service_default
 #
 # [*package_ensure*]
 #   (optional) Ensure state for package.
@@ -131,7 +135,8 @@ class neutron::plugins::ml2 (
   $tunnel_id_ranges          = '20:100',
   $vxlan_group               = '224.0.0.1',
   $vni_ranges                = '10:100',
-  $enable_security_group     = true,
+  $enable_security_group     = $::os_service_default,
+  $firewall_driver           = $::os_service_default,
   $package_ensure            = 'present',
   $supported_pci_vendor_devs = ['15b3:1004', '8086:10ca'],
   $sriov_agent_required      = false,
@@ -145,6 +150,10 @@ class neutron::plugins::ml2 (
 
   if ! $mechanism_drivers {
     warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')
+  }
+
+  if !is_service_default($enable_security_group) and $enable_security_group and is_service_default($firewall_driver) {
+    warning('Security groups will not work without properly set firewall_driver')
   }
 
   if $::operatingsystem == 'Ubuntu' {
@@ -208,6 +217,7 @@ class neutron::plugins::ml2 (
     'ml2/path_mtu':                         value => $path_mtu;
     'ml2/extension_drivers':                value => join(any2array($extension_drivers), ',');
     'securitygroup/enable_security_group':  value => $enable_security_group;
+    'securitygroup/firewall_driver':        value => $firewall_driver;
   }
 
   if is_service_default($physical_network_mtus) {

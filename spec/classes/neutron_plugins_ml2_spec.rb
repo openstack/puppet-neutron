@@ -70,6 +70,8 @@ describe 'neutron::plugins::ml2' do
       is_expected.to contain_neutron_plugin_ml2('ml2/extension_drivers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_plugin_ml2('ml2/path_mtu').with_value(p[:path_mtu])
       is_expected.to contain_neutron_plugin_ml2('ml2/physical_network_mtus').with_ensure('absent')
+      is_expected.to contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('<SERVICE DEFAULT>')
     end
 
     it 'creates plugin symbolic link' do
@@ -86,6 +88,20 @@ describe 'neutron::plugins::ml2' do
           :ensure => p[:package_ensure],
           :tag    => 'openstack'
         )
+      end
+    end
+
+
+    context 'when overriding security group options' do
+      before :each do
+        params.merge!(
+          :enable_security_group => true,
+          :firewall_driver       => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
+        )
+      end
+      it 'configures enable_security_group and firewall_driver options' do
+        is_expected.to contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('true')
+        is_expected.to contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver')
       end
     end
 

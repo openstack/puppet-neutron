@@ -1,0 +1,7 @@
+---
+fixes:
+  - If Neutron is installed from Ubuntu packages, neutron-server and
+    openvswitch/linuxbridge agents use separate files to load configuration
+    related to ML2 plugin. So in order to use security groups firewall_driver
+    value should be passed to both configuration files
+    (ml2_conf.ini and openvswitch_agent.ini)

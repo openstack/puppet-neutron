@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+      [DEFAULT]/network_device_mtu option is deprecated and will be removed
+      in Newton. However, new [ml2]/segment_mtu is deprecated too according to
+      neutron/common/config.py. New [DEFAULT]/global_physnet_mtu should be used.

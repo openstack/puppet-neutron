@@ -71,7 +71,7 @@
 #   This enables redundant DHCP agents for configured networks.
 #   Defaults to $::os_service_default
 #
-# [*network_device_mtu*]
+# [*global_physnet_mtu*]
 #   (optional) The MTU size for the interfaces managed by neutron
 #   Defaults to $::os_service_default
 #
@@ -263,6 +263,7 @@
 # [*qpid_reconnect_interval*]
 # [*qpid_reconnect_interval_min*]
 # [*qpid_reconnect_interval_max*]
+# [*network_device_mtu*]
 #
 class neutron (
   $enabled                            = true,
@@ -279,7 +280,7 @@ class neutron (
   $dhcp_lease_duration                = $::os_service_default,
   $dns_domain                         = $::os_service_default,
   $dhcp_agents_per_network            = $::os_service_default,
-  $network_device_mtu                 = $::os_service_default,
+  $global_physnet_mtu                 = $::os_service_default,
   $dhcp_agent_notification            = $::os_service_default,
   $advertise_mtu                      = $::os_service_default,
   $allow_bulk                         = $::os_service_default,
@@ -334,6 +335,7 @@ class neutron (
   $qpid_reconnect_interval_min        = undef,
   $qpid_reconnect_interval_max        = undef,
   $qpid_reconnect_interval            = undef,
+  $network_device_mtu                 = undef,
 ) {
 
   include ::neutron::params
@@ -407,7 +409,7 @@ class neutron (
     'DEFAULT/api_extensions_path':     value => $api_extensions_path;
     'DEFAULT/state_path':              value => $state_path;
     'DEFAULT/rpc_response_timeout':    value => $rpc_response_timeout;
-    'DEFAULT/network_device_mtu':      value => $network_device_mtu;
+    'DEFAULT/global_physnet_mtu':      value => pick($network_device_mtu, $global_physnet_mtu);
     'oslo_concurrency/lock_path':      value => $lock_path;
     'agent/root_helper':               value => $root_helper;
     'agent/report_interval':           value => $report_interval;
@@ -505,6 +507,10 @@ class neutron (
 
   if $rpc_backend == 'qpid' or $rpc_backend == 'neutron.openstack.common.rpc.impl_qpid' {
     warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
+  }
+
+  if $network_device_mtu {
+    warning('The neutron::network_device_mtu parameter is deprecated, use neutron::global_physnet_mtu instead.')
   }
 
   # SSL Options

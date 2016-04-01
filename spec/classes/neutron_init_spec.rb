@@ -122,7 +122,7 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/dhcp_lease_duration').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dns_domain').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dhcp_agents_per_network').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('DEFAULT/network_device_mtu').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('DEFAULT/global_physnet_mtu').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dhcp_agent_notification').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/advertise_mtu').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/allow_bulk').with_value('<SERVICE DEFAULT>')
@@ -441,7 +441,19 @@ describe 'neutron' do
 
   end
 
-  shared_examples_for 'with network_device_mtu defined' do
+  shared_examples_for 'with global_physnet_mtu defined' do
+    before do
+      params.merge!(
+        :global_physnet_mtu => 9000
+      )
+    end
+
+    it do
+      is_expected.to contain_neutron_config('DEFAULT/global_physnet_mtu').with_value(params[:global_physnet_mtu])
+    end
+  end
+
+  shared_examples_for 'with deprecated network_device_mtu defined' do
     before do
       params.merge!(
         :network_device_mtu => 9000
@@ -449,7 +461,7 @@ describe 'neutron' do
     end
 
     it do
-      is_expected.to contain_neutron_config('DEFAULT/network_device_mtu').with_value(params[:network_device_mtu])
+      is_expected.to contain_neutron_config('DEFAULT/global_physnet_mtu').with_value(params[:network_device_mtu])
     end
   end
 

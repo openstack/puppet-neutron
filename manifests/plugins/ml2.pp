@@ -181,9 +181,11 @@ class neutron::plugins::ml2 (
     }
     Package['neutron-plugin-ml2'] -> File['/etc/neutron/plugin.ini']
     Package['neutron-plugin-ml2'] -> File['/etc/default/neutron-server']
+    Package['neutron-plugin-ml2'] -> Neutron_plugin_sriov<||>
   } else {
     Package['neutron'] -> File['/etc/neutron/plugin.ini']
     Package['neutron'] -> File['/etc/default/neutron-server']
+    Package['neutron'] -> Neutron_plugin_sriov<||>
   }
 
   neutron::plugins::ml2::type_driver { $type_drivers:

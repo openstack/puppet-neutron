@@ -71,19 +71,9 @@
 #
 # === Deprecated Parameters
 #
-# [*dhcp_delete_namespaces*]
-#   (optional) Deprecated. Delete namespace after removing a dhcp server
-#   Defaults to $::os_service_default.
-#
 # [*dhcp_domain*]
 #   (optional) Deprecated. Domain to use for building the hostnames
 #   Defaults to $::os_service_default
-#
-# [*use_namespaces*]
-#   (optional) Deprecated. 'True' value will be enforced in future releases.
-#   Allow overlapping IP (Must have kernel build with
-#   CONFIG_NET_NS=y and iproute2 package that supports namespaces).
-#   Defaults to $::os_service_default.
 #
 class neutron::agents::dhcp (
   $package_ensure           = present,
@@ -103,9 +93,7 @@ class neutron::agents::dhcp (
   $dhcp_broadcast_reply     = $::os_service_default,
   $purge_config             = false,
   # DEPRECATED PARAMETERS
-  $dhcp_delete_namespaces   = $::os_service_default,
   $dhcp_domain              = $::os_service_default,
-  $use_namespaces           = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -156,19 +144,8 @@ class neutron::agents::dhcp (
     'DEFAULT/dnsmasq_dns_servers':    value => join(any2array($dnsmasq_dns_servers), ',');
   }
 
-  if ! is_service_default ($dhcp_delete_namespaces) {
-    warning('The dhcp_delete_namespaces parameter was removed in Mitaka, it does not take any affect')
-  }
-
   if ! is_service_default ($dhcp_domain) {
     warning('The dhcp_domain parameter is deprecated and will be removed in future releases')
-  }
-
-  if ! is_service_default ($use_namespaces) {
-    warning('The use_namespaces parameter is deprecated and will be removed in future releases')
-    neutron_dhcp_agent_config {
-      'DEFAULT/use_namespaces':       value => $use_namespaces;
-    }
   }
 
   if $::neutron::params::dhcp_agent_package {

@@ -1,0 +1,11 @@
+---
+deprecations:
+  - Deprecated router_id option in l3 agent
+other:
+  - |
+    Removed deprecated (for at least one cycle) options from agents:
+
+    * use_namespaces option from l3/dhcp/lbaas agent
+    * allow_automatic_l3agent_failover from l3 agent
+    * network_device_mtu from l3 agent
+    * auth_password, auth_tenant, auth_user, auth_url, auth_insecure, auth_region from metadata agent

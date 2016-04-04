@@ -61,25 +61,6 @@
 #   in the metadata config.
 #   Defaults to false.
 #
-# === Deprecated Parameters
-# [*auth_password*]
-#   (required) The password for the administrative user (Defaults to undef).
-#
-# [*auth_tenant*]
-#   The administrative user's tenant name (Defaults to undef).
-#
-# [*auth_user*]
-#   The administrative user name for OpenStack Networking (Defaults to undef).
-#
-# [*auth_url*]
-#   The URL used to validate tokens (Defaults to undef).
-#
-# [*auth_insecure*]
-#   turn off verification of the certificate for ssl (Defaults to undef).
-#
-# [*auth_region*]
-#   The authentication region (Defaults to undef).
-#
 
 class neutron::agents::metadata (
   $shared_secret,
@@ -97,43 +78,12 @@ class neutron::agents::metadata (
   $nova_client_cert          = $::os_service_default,
   $nova_client_priv_key      = $::os_service_default,
   $purge_config              = false,
-  # DEPRECATED PARAMETERS
-  $auth_password             = undef,
-  $auth_tenant               = undef,
-  $auth_user                 = undef,
-  $auth_url                  = undef,
-  $auth_insecure             = undef,
-  $auth_region               = undef,
   ) {
 
   include ::neutron::params
 
   Neutron_config<||> ~> Service['neutron-metadata']
   Neutron_metadata_agent_config<||> ~> Service['neutron-metadata']
-
-  if $auth_password {
-    warning('The auth_password parameter is deprecated and was removed in Mitaka release.')
-  }
-
-  if $auth_tenant {
-    warning('The auth_tenant parameter is deprecated and was removed in Mitaka release.')
-  }
-
-  if $auth_user {
-    warning('The auth_user parameter is deprecated and was removed in Mitaka release.')
-  }
-
-  if $auth_url {
-    warning('The auth_url parameter is deprecated and was removed in Mitaka release.')
-  }
-
-  if $auth_insecure != undef {
-    warning('The auth_insecure parameter is deprecated and was removed in Mitaka release.')
-  }
-
-  if $auth_region {
-    warning('The auth_region parameter is deprecated and was removed in Mitaka release.')
-  }
 
   resources { 'neutron_metadata_agent_config':
     purge => $purge_config,

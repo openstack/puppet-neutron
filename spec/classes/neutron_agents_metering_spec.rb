@@ -38,7 +38,6 @@ describe 'neutron::agents::metering' do
       :debug            => false,
       :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :driver           => 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
-      :use_namespaces   => nil,
       :purge_config     => false,
     }
   end
@@ -98,15 +97,6 @@ describe 'neutron::agents::metering' do
       end
       it 'should not start/stop service' do
         is_expected.to contain_service('neutron-metering-service').without_ensure
-      end
-    end
-
-    context 'with use_namespaces as false' do
-      before :each do
-        params.merge!(:use_namespaces => false)
-      end
-      it 'should set use_namespaces option' do
-        is_expected.to contain_neutron_metering_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces])
       end
     end
 

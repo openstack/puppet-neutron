@@ -140,15 +140,6 @@ describe 'neutron::agents::dhcp' do
         is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value('true');
       end
     end
-
-    context 'with use_namespaces as false' do
-      before :each do
-        params.merge!(:use_namespaces => false)
-      end
-      it 'should set use_namespaces option' do
-        is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces])
-      end
-    end
   end
 
   shared_examples_for 'neutron dhcp agent with dnsmasq_config_file specified' do

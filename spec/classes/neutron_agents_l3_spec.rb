@@ -47,7 +47,6 @@ describe 'neutron::agents::l3' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_value('<SERVICE DEFAULT>')
     end
 
     it 'passes purge to resource' do
@@ -106,26 +105,6 @@ describe 'neutron::agents::l3' do
         is_expected.to contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value(p[:ha_vrrp_advert_int])
       end
     end
-
-    context 'with use_namespaces as false' do
-      before :each do
-        params.merge!(:use_namespaces => false)
-      end
-      it 'should set use_namespaces option' do
-        is_expected.to contain_neutron_l3_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces])
-      end
-    end
-  end
-
-  shared_examples_for 'neutron l3 agent with network_device_mtu specified' do
-    before do
-      params.merge!(
-        :network_device_mtu => 9999
-      )
-    end
-    it 'configures network_device_mtu' do
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_value(params[:network_device_mtu])
-    end
   end
 
   context 'on Debian platforms' do
@@ -141,7 +120,6 @@ describe 'neutron::agents::l3' do
     end
 
     it_configures 'neutron l3 agent'
-    it_configures 'neutron l3 agent with network_device_mtu specified'
     it 'configures neutron-l3 package subscription' do
       is_expected.to contain_service('neutron-l3').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-l3]' ] )
     end
@@ -160,6 +138,5 @@ describe 'neutron::agents::l3' do
     end
 
     it_configures 'neutron l3 agent'
-    it_configures 'neutron l3 agent with network_device_mtu specified'
   end
 end

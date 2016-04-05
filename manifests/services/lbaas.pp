@@ -22,10 +22,6 @@
 #
 # === Parameters:
 #
-# [*package_ensure*]
-#   (required) Whether or not to install the LBaaS Neutron plugin package
-#   present
-#
 # [*service_providers*]
 #   (optional) Array of allowed service types or '<SERVICE DEFAULT>'.
 #   Note: The default upstream value is empty.
@@ -35,24 +31,34 @@
 #   Must be in form <service_type>:<name>:<driver>[:default].
 #   Defaults to $::os_service_default
 #
+# === Deprecated Parameters
+#
+# [*package_ensure*]
+#   (optional) Deprecated. Used to install the lbaas v2 agent. This was moved into
+#   neutron::agents::lbaas as the lbaas services handles scheduling of new load balancers
+#   Defaults to false
+#
 class neutron::services::lbaas (
-  $package_ensure    = 'present',
+  $package_ensure    = false,
   $service_providers = $::os_service_default,
 ) {
 
   include ::neutron::params
 
-  # agent package contains both agent and service resources
-  ensure_resource( 'package', 'neutron-lbaas-agent', {
-    ensure => $package_ensure,
-    name   => $::neutron::params::lbaas_agent_package,
-    tag    => ['openstack', 'neutron-package'],
-  })
-
+  if $package_ensure {
+    warning('Package ensure is deprecated. The neutron::agents::lbaas class should be used to install the agent')
+    # agent package contains both agent and service resources
+    ensure_resource( 'package', 'neutron-lbaas-agent', {
+      ensure => $package_ensure,
+      name   => $::neutron::params::lbaas_agent_package,
+      tag    => ['openstack', 'neutron-package'],
+    })
+  }
   if !is_service_default($service_providers) {
     # default value is uncommented setting, so we should not touch it at all
     neutron_lbaas_service_config { 'service_providers/service_provider':
       value => $service_providers,
     }
+    Package<| tag == 'neutron-package' |> -> Neutron_lbaas_service_config<||>
   }
 }

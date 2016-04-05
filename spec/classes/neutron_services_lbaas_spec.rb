@@ -23,8 +23,7 @@ require 'spec_helper'
 describe 'neutron::services::lbaas' do
 
   let :default_params do
-    { :package_ensure    => 'present',
-      :service_providers => '<SERVICE_DEFAULT>'}
+    { :service_providers => '<SERVICE_DEFAULT>'}
   end
 
   shared_examples_for 'neutron lbaas service plugin' do
@@ -32,13 +31,6 @@ describe 'neutron::services::lbaas' do
     context 'with default params' do
       let :params do
         default_params
-      end
-
-      it 'installs lbaas package' do
-        is_expected.to contain_package('neutron-lbaas-agent').with(
-          :ensure => params[:package_ensure],
-          :name   => platform_params[:lbaas_package_name],
-        )
       end
     end
 
@@ -49,13 +41,12 @@ describe 'neutron::services::lbaas' do
         )
       end
 
-      it 'configures neutron_lbaas.conf' do
+      it 'configures neutron.conf' do
         is_expected.to contain_neutron_lbaas_service_config(
           'service_providers/service_provider'
         ).with_value(['provider1', 'provider2'])
       end
     end
-
   end
 
   context 'on Debian platforms' do
@@ -66,7 +57,7 @@ describe 'neutron::services::lbaas' do
     end
 
     let :platform_params do
-      { :lbaas_package_name => 'neutron-lbaas-agent'}
+      {}
     end
 
     it_configures 'neutron lbaas service plugin'
@@ -81,10 +72,9 @@ describe 'neutron::services::lbaas' do
     end
 
     let :platform_params do
-      { :lbaas_package_name => 'openstack-neutron-lbaas'}
+      {}
     end
 
     it_configures 'neutron lbaas service plugin'
   end
-
 end

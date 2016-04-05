@@ -26,6 +26,7 @@ describe 'basic neutron_config resource' do
       File <||> -> Neutron_vpnaas_agent_config <||>
       File <||> -> Neutron_plugin_midonet <||>
       File <||> -> Neutron_plugin_opencontrail <||>
+      File <||> -> Neutron_plugin_ovn <||>
       File <||> -> Neutron_agent_linuxbridge <||>
       File <||> -> Neutron_agent_ovs <||>
       File <||> -> Neutron_plugin_plumgrid <||>
@@ -41,6 +42,7 @@ describe 'basic neutron_config resource' do
                               '/etc/neutron/plugins/nicira',
                               '/etc/neutron/plugins/midonet',
                               '/etc/neutron/plugins/opencontrail',
+                              '/etc/neutron/plugins/networking-ovn',
                               '/etc/neutron/plugins/plumgrid']
 
       $neutron_files = [ '/etc/neutron/api-paste.ini',
@@ -61,6 +63,7 @@ describe 'basic neutron_config resource' do
                          '/etc/neutron/vpn_agent.ini',
                          '/etc/neutron/plugins/midonet/midonet.ini',
                          '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
+                         '/etc/neutron/plugins/networking-ovn/networking-ovn.ini',
                          '/etc/neutron/plugins/plumgrid/plumgrid.ini',
                          '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
                          '/etc/neutron/plugins/ml2/sriov_agent.ini']
@@ -397,6 +400,24 @@ describe 'basic neutron_config resource' do
         ensure_absent_val => 'toto',
       }
 
+      neutron_plugin_ovn { 'DEFAULT/thisshouldexist' :
+        value => 'foo',
+      }
+
+      neutron_plugin_ovn { 'DEFAULT/thisshouldnotexist' :
+        value => '<SERVICE DEFAULT>',
+      }
+
+      neutron_plugin_ovn { 'DEFAULT/thisshouldexist2' :
+        value             => '<SERVICE DEFAULT>',
+        ensure_absent_val => 'toto',
+      }
+
+      neutron_plugin_ovn { 'DEFAULT/thisshouldnotexist2' :
+        value             => 'toto',
+        ensure_absent_val => 'toto',
+      }
+
       neutron_agent_linuxbridge { 'DEFAULT/thisshouldexist' :
         value => 'foo',
       }
@@ -552,6 +573,7 @@ describe 'basic neutron_config resource' do
                        '/etc/neutron/vpn_agent.ini',
                        '/etc/neutron/plugins/midonet/midonet.ini',
                        '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
+                       '/etc/neutron/plugins/networking-ovn/networking-ovn.ini',
                        '/etc/neutron/plugins/plumgrid/plumgrid.ini',
                        '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
                        '/etc/neutron/plugins/ml2/sriov_agent.ini',

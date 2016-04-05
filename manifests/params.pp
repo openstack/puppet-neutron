@@ -42,6 +42,9 @@ class neutron::params {
     $midonet_server_package = 'python-neutron-plugin-midonet'
     $midonet_config_file    = '/etc/neutron/plugins/midonet/midonet.ini'
 
+    $ovn_plugin_package = 'python-networking-ovn'
+    $ovn_config_file    = '/etc/neutron/plugins/networking-ovn/networking-ovn.ini'
+
     $plumgrid_plugin_package    = 'networking-plumgrid'
     $plumgrid_pythonlib_package = 'plumgrid-pythonlib'
     $plumgrid_config_file       = '/etc/neutron/plugins/plumgrid/plumgrid.ini'
@@ -126,6 +129,9 @@ class neutron::params {
 
     $midonet_server_package = 'python-neutron-plugin-midonet'
     $midonet_config_file    = '/etc/neutron/plugins/midonet/midonet.ini'
+
+    $ovn_plugin_package = 'python-networking-ovn'
+    $ovn_config_file    = '/etc/neutron/plugins/networking-ovn/networking-ovn.ini'
 
     $plumgrid_plugin_package    = 'networking-plumgrid'
     $plumgrid_pythonlib_package = 'plumgrid-pythonlib'

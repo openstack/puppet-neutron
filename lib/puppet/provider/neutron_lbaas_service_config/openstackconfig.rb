@@ -4,7 +4,7 @@ Puppet::Type.type(:neutron_lbaas_service_config).provide(
 ) do
 
   def self.file_path
-    '/etc/neutron/neutron_lbaas.conf'
+    '/etc/neutron/neutron.conf'
   end
 
   # added for backwards compatibility with older versions of inifile

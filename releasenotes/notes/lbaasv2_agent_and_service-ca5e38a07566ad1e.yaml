@@ -1,0 +1,9 @@
+---
+features:
+  - Added octavia lbaas v2 services class.
+  - Added haproxy lbaas v2 services class.
+  - Added option to use either v1 or v2 agent in neutron agents lbaas.
+deprecations:
+  - The lbaas v2 agent package ensure in neutron services lbaas
+    has been deprecated, the agent should be installed from
+    neutron agents lbaas.

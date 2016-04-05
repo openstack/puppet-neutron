@@ -3,7 +3,7 @@ Puppet::Type.newtype(:neutron_lbaas_service_config) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from neutron_lbaas.conf'
+    desc 'Section/setting name to manage from neutron.conf'
     newvalues(/\S+\/\S+/)
   end
 
@@ -34,7 +34,7 @@ Puppet::Type.newtype(:neutron_lbaas_service_config) do
   end
 
   autorequire(:package) do
-    'neutron-lbaas-agent'
+    'neutron-server'
   end
 
 end

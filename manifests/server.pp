@@ -358,6 +358,7 @@ class neutron::server (
 
   Neutron_config<||>     ~> Service['neutron-server']
   Neutron_api_config<||> ~> Service['neutron-server']
+  Neutron_lbaas_service_config<||> ~> Service['neutron-server']
   Class['neutron::policy'] ~> Service['neutron-server']
   Neutron_config<||> -> Neutron_network<||>
 
@@ -419,6 +420,7 @@ class neutron::server (
   if ($::neutron::params::server_package) {
     Package['neutron-server'] -> Neutron_api_config<||>
     Package['neutron-server'] -> Neutron_config<||>
+    Package['neutron-server'] -> Neutron_lbaas_service_config<||>
     Package['neutron-server'] -> Service['neutron-server']
     Package['neutron-server'] -> Class['neutron::policy']
     package { 'neutron-server':

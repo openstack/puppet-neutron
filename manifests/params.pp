@@ -61,6 +61,9 @@ class neutron::params {
     $lbaas_agent_package = 'openstack-neutron-lbaas'
     $lbaas_agent_service = 'neutron-lbaas-agent'
 
+    $lbaasv2_agent_package = false
+    $lbaasv2_agent_service = 'neutron-lbaasv2-agent'
+
     $haproxy_package   = 'haproxy'
 
     $metering_agent_package = 'openstack-neutron-metering-agent'
@@ -146,6 +149,9 @@ class neutron::params {
 
     $lbaas_agent_package = 'neutron-lbaas-agent'
     $lbaas_agent_service = 'neutron-lbaas-agent'
+
+    $lbaasv2_agent_package = 'neutron-lbaasv2-agent'
+    $lbaasv2_agent_service = 'neutron-lbaasv2-agent'
 
     $haproxy_package   = 'haproxy'
 

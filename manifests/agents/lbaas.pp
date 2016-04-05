@@ -37,6 +37,14 @@
 #   in the lbaas config.
 #   Defaults to false.
 #
+# [*enable_v1*]
+#   (optional) Whether to use lbaas v1 agent or not.
+#   Defaults to true
+#
+# [*enable_v2*]
+#   (optional) Whether to use lbaas v2 agent or not.
+#   Defaults to false
+#
 class neutron::agents::lbaas (
   $package_ensure         = present,
   $enabled                = true,
@@ -47,12 +55,18 @@ class neutron::agents::lbaas (
   $user_group             = $::neutron::params::nobody_user_group,
   $manage_haproxy_package = true,
   $purge_config           = false,
+  $enable_v1              = true,
+  $enable_v2              = false,
 ) {
 
   include ::neutron::params
 
   Neutron_config<||>             ~> Service['neutron-lbaas-service']
   Neutron_lbaas_agent_config<||> ~> Service['neutron-lbaas-service']
+
+  if $enable_v1 and $enable_v2 {
+    fail('neutron agents LBaaS enable_v1 and enable_v2 parameters cannot both be true')
+  }
 
   case $device_driver {
     /\.haproxy/: {
@@ -86,20 +100,41 @@ class neutron::agents::lbaas (
     name   => $::neutron::params::lbaas_agent_package,
     tag    => ['openstack', 'neutron-package'],
   })
+  if $::osfamily == 'Debian' {
+    ensure_packages(['neutron-lbaasv2-package'], {
+      ensure => $package_ensure,
+      name   => $::neutron::params::lbaasv2_agent_package,
+      tag    => ['openstack', 'neutron-package'],
+    })
+    Package['neutron'] -> Package['neutron-lbaasv2-package']
+  }
   if $manage_service {
-    if $enabled {
-      $service_ensure = 'running'
+    if $enable_v1 {
+      $service_v1_ensure = 'running'
+      $service_v2_ensure = 'stopped'
+    } elsif $enable_v2 {
+      $service_v1_ensure = 'stopped'
+      $service_v2_ensure = 'running'
     } else {
-      $service_ensure = 'stopped'
+      $service_v1_ensure = 'stopped'
+      $service_v2_ensure = 'stopped'
     }
     Package['neutron'] ~> Service['neutron-lbaas-service']
     Package['neutron-lbaas-agent'] ~> Service['neutron-lbaas-service']
   }
 
   service { 'neutron-lbaas-service':
-    ensure  => $service_ensure,
+    ensure  => $service_v1_ensure,
     name    => $::neutron::params::lbaas_agent_service,
-    enable  => $enabled,
+    enable  => $enable_v1,
+    require => Class['neutron'],
+    tag     => 'neutron-service',
+  }
+
+  service { 'neutron-lbaasv2-service':
+    ensure  => $service_v2_ensure,
+    name    => $::neutron::params::lbaasv2_agent_service,
+    enable  => $enable_v2,
     require => Class['neutron'],
     tag     => 'neutron-service',
   }

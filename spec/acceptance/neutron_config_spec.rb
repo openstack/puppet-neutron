@@ -576,8 +576,7 @@ describe 'basic neutron_config resource' do
                        '/etc/neutron/plugins/networking-ovn/networking-ovn.ini',
                        '/etc/neutron/plugins/plumgrid/plumgrid.ini',
                        '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
-                       '/etc/neutron/plugins/ml2/sriov_agent.ini',
-                       '/etc/neutron/neutron_lbaas.conf']
+                       '/etc/neutron/plugins/ml2/sriov_agent.ini']
 
     $neutron_files.each do |neutron_conf_file|
       describe file(neutron_conf_file) do
@@ -592,7 +591,7 @@ describe 'basic neutron_config resource' do
       end
     end
 
-    describe file('/etc/neutron/neutron_lbaas.conf') do
+    describe file('/etc/neutron/neutron.conf') do
       it { is_expected.to contain('thisshouldexist3=value1') }
       it { is_expected.to contain('thisshouldexist3=value2') }
     end

@@ -40,6 +40,11 @@
 # [*ipsec_status_check_interval*]
 #   (optional) Status check interval. Defaults to $::os_service_default.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the vpnaas config.
+#   Defaults to false.
+#
 # === Deprecated Parameters
 #
 # [*external_network_bridge*]
@@ -52,7 +57,8 @@ class neutron::agents::vpnaas (
   $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $external_network_bridge     = $::os_service_default,
-  $ipsec_status_check_interval = $::os_service_default
+  $ipsec_status_check_interval = $::os_service_default,
+  $purge_config                = false,
 ) {
 
   include ::neutron::params
@@ -82,6 +88,10 @@ class neutron::agents::vpnaas (
     default: {
       fail("Unsupported vpn_device_driver ${vpn_device_driver}")
     }
+  }
+
+  resources { 'neutron_vpnaas_agent_config':
+    purge => $purge_config,
   }
 
   # The VPNaaS agent loads both neutron.ini and its own file.

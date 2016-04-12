@@ -14,7 +14,8 @@ describe 'neutron::agents::l3' do
       :ha_enabled                       => false,
       :ha_vrrp_auth_type                => 'PASS',
       :ha_vrrp_advert_int               => '3',
-      :agent_mode                       => 'legacy' }
+      :agent_mode                       => 'legacy',
+      :purge_config                     => false }
   end
 
   let :test_facts do
@@ -47,6 +48,12 @@ describe 'neutron::agents::l3' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_value('<SERVICE DEFAULT>')
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_l3_agent_config').with({
+        :purge => false
+      })
     end
 
     it 'installs neutron l3 agent package' do

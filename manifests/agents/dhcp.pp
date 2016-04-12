@@ -64,6 +64,11 @@
 #  (optional) Use broadcast in DHCP replies
 #  Defaults to $::os_service_default.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the dhcp config.
+#   Defaults to false.
+#
 # === Deprecated Parameters
 #
 # [*dhcp_delete_namespaces*]
@@ -96,6 +101,7 @@ class neutron::agents::dhcp (
   $enable_force_metadata    = $::os_service_default,
   $enable_metadata_network  = false,
   $dhcp_broadcast_reply     = $::os_service_default,
+  $purge_config             = false,
   # DEPRECATED PARAMETERS
   $dhcp_delete_namespaces   = $::os_service_default,
   $dhcp_domain              = $::os_service_default,
@@ -128,6 +134,10 @@ class neutron::agents::dhcp (
       'DEFAULT/force_metadata':           value => $enable_force_metadata;
       'DEFAULT/enable_metadata_network':  value => $enable_metadata_network;
     }
+  }
+
+  resources { 'neutron_dhcp_agent_config':
+    purge => $purge_config,
   }
 
   # The DHCP agent loads both neutron.ini and its own file.

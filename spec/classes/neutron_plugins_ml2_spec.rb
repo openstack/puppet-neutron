@@ -39,7 +39,8 @@ describe 'neutron::plugins::ml2' do
       :vni_ranges            => '10:100',
       :path_mtu              => '0',
       :physical_network_mtus => '',
-      :package_ensure        => 'present' }
+      :package_ensure        => 'present',
+      :purge_config          => false, }
   end
 
   let :test_facts do
@@ -61,6 +62,12 @@ describe 'neutron::plugins::ml2' do
 
     it 'configures neutron.conf' do
         is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('neutron.plugins.ml2.plugin.Ml2Plugin')
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_plugin_ml2').with({
+        :purge => false
+      })
     end
 
     it 'configures ml2_conf.ini' do

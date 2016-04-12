@@ -12,6 +12,7 @@ describe 'neutron' do
       :rabbit_user           => 'guest',
       :rabbit_password       => 'guest',
       :log_dir               => '/var/log/neutron',
+      :purge_config          => false,
     }
   end
 
@@ -99,6 +100,12 @@ describe 'neutron' do
         :name   => platform_params[:common_package_name],
         :tag    => ['openstack', 'neutron-package'],
       )
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_config').with({
+        :purge => false
+      })
     end
 
     it 'configures credentials for rabbit' do

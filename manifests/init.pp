@@ -248,6 +248,11 @@
 #   by the user executing the agent
 #   Defaults to: '$state_path/lock'
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the neutron config.
+#   Defaults to false.
+#
 # DEPRECATED PARAMETERS
 #
 # [*qpid_hostname*]
@@ -321,6 +326,7 @@ class neutron (
   $log_dir                            = '/var/log/neutron',
   $state_path                         = $::os_service_default,
   $lock_path                          = '$state_path/lock',
+  $purge_config                       = false,
   # DEPRECATED PARAMETERS
   $qpid_hostname                      = undef,
   $qpid_port                          = undef,
@@ -382,6 +388,10 @@ class neutron (
 
   # Make sure all services get restarted if neutron-common package is upgraded
   Package['neutron'] ~> Service<| tag == 'neutron-service' |>
+
+  resources { 'neutron_config':
+    purge => $purge_config,
+  }
 
   neutron_config {
     'DEFAULT/verbose':                 value => $verbose;

@@ -13,7 +13,8 @@ describe 'neutron::agents::ml2::linuxbridge' do
       :tunnel_types                => [],
       :local_ip                    => false,
       :physical_interface_mappings => [],
-      :firewall_driver             => 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver' }
+      :firewall_driver             => 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver',
+      :purge_config                => false,}
   end
 
   let :test_facts do
@@ -30,6 +31,12 @@ describe 'neutron::agents::ml2::linuxbridge' do
 
     context 'with default parameters' do
       it { is_expected.to contain_class('neutron::params') }
+
+      it 'passes purge to resource' do
+        is_expected.to contain_resources('neutron_agent_linuxbridge').with({
+          :purge => false
+        })
+      end
 
       it 'configures ml2_conf.ini' do
         is_expected.to contain_neutron_agent_linuxbridge('agent/polling_interval').with_value('<SERVICE DEFAULT>')

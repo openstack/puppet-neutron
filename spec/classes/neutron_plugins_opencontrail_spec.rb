@@ -16,7 +16,8 @@ describe 'neutron::plugins::opencontrail' do
       :keystone_admin_user        => 'admin',
       :keystone_admin_tenant_name => 'admin',
       :keystone_admin_password    => 'admin',
-      :keystone_admin_token       => 'token1'
+      :keystone_admin_token       => 'token1',
+      :purge_config               => false,
     }
   end
 
@@ -34,6 +35,12 @@ describe 'neutron::plugins::opencontrail' do
 
     before do
       params.merge!(default_params)
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_plugin_opencontrail').with({
+        :purge => false
+      })
     end
 
     it 'should perform default configuration of' do

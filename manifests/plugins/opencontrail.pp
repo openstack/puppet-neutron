@@ -47,6 +47,11 @@
 #   (optional) Ensure state for package.
 #   Defaults to 'present'.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the opencontrail config.
+#   Defaults to false.
+#
 class neutron::plugins::opencontrail (
   $api_server_ip              = $::os_service_default,
   $api_server_port            = $::os_service_default,
@@ -58,6 +63,7 @@ class neutron::plugins::opencontrail (
   $keystone_admin_password    = $::os_service_default,
   $keystone_admin_token       = $::os_service_default,
   $package_ensure             = 'present',
+  $purge_config               = false,
 ) {
 
   include ::neutron::params
@@ -103,6 +109,10 @@ class neutron::plugins::opencontrail (
       target  => $::neutron::params::opencontrail_config_file,
       require => Package[$::neutron::params::opencontrail_plugin_package],
     }
+  }
+
+  resources { 'neutron_plugin_opencontrail':
+    purge => $purge_config,
   }
 
   neutron_plugin_opencontrail {

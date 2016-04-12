@@ -23,7 +23,8 @@ describe 'neutron::plugins::nuage' do
         :nuage_vsd_organization => 'vsd',
         :nuage_net_partition_name => 'test',
         :nuage_base_uri_version => 'v3.0',
-        :nuage_cms_id => '7488fae2-7e51-11e5-8bcf-feff819cdc9f'}
+        :nuage_cms_id => '7488fae2-7e51-11e5-8bcf-feff819cdc9f',
+        :purge_config => false,}
   end
 
   shared_examples_for 'neutron plugin nuage' do
@@ -41,6 +42,12 @@ describe 'neutron::plugins::nuage' do
 
     it 'should configure neutron.conf' do
       is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('neutron.plugins.nuage.plugin.NuagePlugin')
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_plugin_nuage').with({
+        :purge => false
+      })
     end
 
     it 'should configure plugin.ini' do

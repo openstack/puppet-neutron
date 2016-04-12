@@ -297,7 +297,7 @@ class neutron::agents::ml2::ovs (
     name    => $::neutron::params::ovs_agent_service,
     enable  => $enabled,
     require => Class['neutron'],
-    tag     => 'neutron-service',
+    tag     => ['neutron-service', 'neutron-db-sync-service'],
   }
 
   if $::neutron::params::ovs_cleanup_service {

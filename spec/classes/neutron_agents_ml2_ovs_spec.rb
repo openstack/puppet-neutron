@@ -75,7 +75,7 @@ describe 'neutron::agents::ml2::ovs' do
         :enable  => true,
         :ensure  => 'running',
         :require => 'Class[Neutron]',
-        :tag     => 'neutron-service',
+        :tag     => ['neutron-service', 'neutron-db-sync-service'],
       )
       is_expected.to contain_service('neutron-ovs-agent-service').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-ovs-agent]' ] )
     end

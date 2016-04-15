@@ -34,6 +34,10 @@
 #   (optional) Flag to determine whether to use ssl connection
 #   to connect to VSD. The default is True
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the nuage config.
+#   Defaults to false.
 #
 class neutron::plugins::nuage (
   $nuage_net_partition_name,
@@ -45,6 +49,7 @@ class neutron::plugins::nuage (
   $nuage_cms_id,
   $nuage_auth_resource    = '/me',
   $nuage_server_ssl       = true,
+  $purge_config           = false,
 ) {
 
   include ::neutron::params
@@ -81,6 +86,10 @@ class neutron::plugins::nuage (
     group   => 'neutron',
     require => File['/etc/neutron/plugins/nuage'],
     mode    => '0640'
+  }
+
+  resources { 'neutron_plugin_nuage':
+    purge => $purge_config,
   }
 
   $nuage_base_uri_base = '/nuage/api'

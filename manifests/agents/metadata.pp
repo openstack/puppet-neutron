@@ -56,6 +56,11 @@
 #   Set to 0 will cause cache entries to never expire.
 #   Set to $::os_service_default or false to disable cache.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the metadata config.
+#   Defaults to false.
+#
 # === Deprecated Parameters
 # [*auth_password*]
 #   (required) The password for the administrative user (Defaults to undef).
@@ -91,6 +96,7 @@ class neutron::agents::metadata (
   $metadata_memory_cache_ttl = $::os_service_default,
   $nova_client_cert          = $::os_service_default,
   $nova_client_priv_key      = $::os_service_default,
+  $purge_config              = false,
   # DEPRECATED PARAMETERS
   $auth_password             = undef,
   $auth_tenant               = undef,
@@ -127,6 +133,10 @@ class neutron::agents::metadata (
 
   if $auth_region {
     warning('The auth_region parameter is deprecated and was removed in Mitaka release.')
+  }
+
+  resources { 'neutron_metadata_agent_config':
+    purge => $purge_config,
   }
 
   neutron_metadata_agent_config {

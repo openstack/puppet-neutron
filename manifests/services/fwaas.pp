@@ -36,11 +36,17 @@
 #   true/false
 #   Defaults to false
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the fwaas config.
+#   Defaults to false.
+#
 
 class neutron::services::fwaas (
   $enabled              = $::os_service_default,
   $driver               = $::os_service_default,
-  $vpnaas_agent_package = false
+  $vpnaas_agent_package = false,
+  $purge_config         = false,
 ) {
 
   include ::neutron::params
@@ -71,6 +77,10 @@ class neutron::services::fwaas (
       'ensure' => $neutron::package_ensure,
       'tag'    => 'openstack'
     })
+  }
+
+  resources { 'neutron_fwaas_service_config':
+    purge => $purge_config,
   }
 
   neutron_fwaas_service_config {

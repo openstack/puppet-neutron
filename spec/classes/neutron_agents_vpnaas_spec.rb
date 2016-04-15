@@ -35,6 +35,7 @@ describe 'neutron::agents::vpnaas' do
       :enabled                     => true,
       :vpn_device_driver           => 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
       :interface_driver            => 'neutron.agent.linux.interface.OVSInterfaceDriver',
+      :purge_config                => false,
     }
   end
 
@@ -52,6 +53,12 @@ describe 'neutron::agents::vpnaas' do
     it { is_expected.to contain_class('neutron::params') }
 
     it_configures 'openswan vpnaas_driver'
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_vpnaas_agent_config').with({
+        :purge => false
+      })
+    end
 
     it 'configures vpnaas_agent.ini' do
       is_expected.to contain_neutron_vpnaas_agent_config('vpnagent/vpn_device_driver').with_value(p[:vpn_device_driver]);

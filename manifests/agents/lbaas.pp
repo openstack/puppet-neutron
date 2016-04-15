@@ -32,6 +32,11 @@
 #   Disable this if you are using the puppetlabs-haproxy module
 #   Defaults to true
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the lbaas config.
+#   Defaults to false.
+#
 # === Deprecated Parameters
 #
 # [*use_namespaces*]
@@ -49,6 +54,7 @@ class neutron::agents::lbaas (
   $device_driver          = 'neutron_lbaas.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
   $user_group             = $::neutron::params::nobody_user_group,
   $manage_haproxy_package = true,
+  $purge_config           = false,
   # DEPRECATED PARAMETERS
   $use_namespaces         = $::os_service_default,
 ) {
@@ -68,6 +74,10 @@ class neutron::agents::lbaas (
     default: {
       fail("Unsupported device_driver ${device_driver}")
     }
+  }
+
+  resources { 'neutron_lbaas_agent_config':
+    purge => $purge_config,
   }
 
   # The LBaaS agent loads both neutron.ini and its own file.

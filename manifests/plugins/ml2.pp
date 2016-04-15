@@ -124,6 +124,11 @@
 #   encapsulated traffic is sent.
 #   Defaults to 0.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the ml2 config.
+#   Defaults to false.
+#
 
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
@@ -142,6 +147,7 @@ class neutron::plugins::ml2 (
   $sriov_agent_required      = false,
   $physical_network_mtus     = $::os_service_default,
   $path_mtu                  = 0,
+  $purge_config              = false,
 ) {
 
   include ::neutron::params
@@ -195,6 +201,10 @@ class neutron::plugins::ml2 (
     Package['neutron'] -> File['/etc/neutron/plugin.ini']
     Package['neutron'] -> File['/etc/default/neutron-server']
     Package['neutron'] -> Neutron_plugin_sriov<||>
+  }
+
+  resources { 'neutron_plugin_ml2':
+    purge => $purge_config,
   }
 
   neutron::plugins::ml2::type_driver { $type_drivers:

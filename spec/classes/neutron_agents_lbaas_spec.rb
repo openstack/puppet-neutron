@@ -16,7 +16,8 @@ describe 'neutron::agents::lbaas' do
       :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :device_driver    => 'neutron_lbaas.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
       :use_namespaces   => nil,
-      :manage_haproxy_package  => true
+      :manage_haproxy_package  => true,
+      :purge_config            => false
     }
   end
 
@@ -36,6 +37,12 @@ describe 'neutron::agents::lbaas' do
 
     it_configures 'haproxy lbaas_driver'
     it_configures 'haproxy lbaas_driver without package'
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_lbaas_agent_config').with({
+        :purge => false
+      })
+    end
 
     it 'configures lbaas_agent.ini' do
       is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>');

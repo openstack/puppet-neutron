@@ -78,6 +78,11 @@
 #   (optional) Ensure state for plugin package.
 #   Defaults to 'present'.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the plumgrid config.
+#   Defaults to false.
+#
 class neutron::plugins::plumgrid (
   $director_server              = '127.0.0.1',
   $director_server_port         = '443',
@@ -97,7 +102,8 @@ class neutron::plugins::plumgrid (
   $l2gateway_sw_username        = $::os_service_default,
   $l2gateway_sw_password        = $::os_service_default,
   $plumlib_package_ensure       = 'present',
-  $package_ensure               = 'present'
+  $package_ensure               = 'present',
+  $purge_config                 = false,
 ) {
 
   include ::neutron::params
@@ -149,6 +155,14 @@ class neutron::plugins::plumgrid (
       target  => $::neutron::params::plumgrid_config_file,
       require => Package['neutron-plugin-plumgrid'],
     }
+  }
+
+  resources { 'neutron_plugin_plumgrid':
+    purge => $purge_config,
+  }
+
+  resources { 'neutron_plumlib_plumgrid':
+    purge => $purge_config,
   }
 
   neutron_plugin_plumgrid {

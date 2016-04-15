@@ -19,6 +19,7 @@ describe 'neutron::plugins::plumgrid' do
     :nova_metadata_ip     => '127.0.0.1',
     :nova_metadata_port   => '8775',
     :connector_type       => 'distributed',
+    :purge_config         => false,
   }
   end
 
@@ -48,6 +49,18 @@ describe 'neutron::plugins::plumgrid' do
       is_expected.to contain_package('neutron-plumlib-plumgrid').with(
         :ensure => 'present'
       )
+    end
+
+    it 'passes purge to resource plugin_plumgrid' do
+      is_expected.to contain_resources('neutron_plugin_plumgrid').with({
+        :purge => false
+      })
+    end
+
+    it 'passes purge to resource plumlib_plumgrid' do
+      is_expected.to contain_resources('neutron_plumlib_plumgrid').with({
+        :purge => false
+      })
     end
 
     it 'should perform default configuration of plumgrid plugin' do

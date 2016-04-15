@@ -134,6 +134,11 @@
 #   Allowed values: ovs-ofctl, native
 #   Defaults to $::os_service_default
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the ovs config.
+#   Defaults to false.
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -160,6 +165,7 @@ class neutron::agents::ml2::ovs (
   $datapath_type              = $::os_service_default,
   $vhostuser_socket_dir       = $::os_service_default,
   $ovsdb_interface            = $::os_service_default,
+  $purge_config               = false,
 ) {
 
   include ::neutron::params
@@ -182,6 +188,10 @@ class neutron::agents::ml2::ovs (
   }
 
   Neutron_agent_ovs<||> ~> Service['neutron-ovs-agent-service']
+
+  resources { 'neutron_agent_ovs':
+    purge => $purge_config,
+  }
 
   if ($bridge_mappings != []) {
     # bridge_mappings are used to describe external networks that are

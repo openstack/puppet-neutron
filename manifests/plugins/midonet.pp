@@ -25,6 +25,11 @@
 #   Whether 'midonet-db-manage' should run to create and/or syncrhonize the database
 #   with MidoNet specific tables. Defaults to false
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the midonet config.
+#   Defaults to false.
+#
 # === Examples
 #
 # An example call would be:
@@ -72,7 +77,8 @@ class neutron::plugins::midonet (
   $keystone_username = 'neutron',
   $keystone_password = $::os_service_default,
   $keystone_tenant   = 'services',
-  $sync_db           = false
+  $sync_db           = false,
+  $purge_config      = false,
 ) {
 
   include ::neutron::params
@@ -92,6 +98,10 @@ class neutron::plugins::midonet (
     Package['neutron-server'] -> Neutron_plugin_midonet<||>
   } else {
     Package['neutron'] -> Neutron_plugin_midonet<||>
+  }
+
+  resources { 'neutron_plugin_midonet':
+    purge => $purge_config,
   }
 
   neutron_plugin_midonet {

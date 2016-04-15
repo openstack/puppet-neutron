@@ -19,7 +19,8 @@ describe 'neutron::agents::dhcp' do
       :dhcp_driver              => 'neutron.agent.linux.dhcp.Dnsmasq',
       :root_helper              => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
       :enable_isolated_metadata => false,
-      :enable_metadata_network  => false }
+      :enable_metadata_network  => false,
+      :purge_config             => false }
   end
 
   let :test_facts do
@@ -75,6 +76,12 @@ describe 'neutron::agents::dhcp' do
         :tag     => 'neutron-service',
       )
       is_expected.to contain_service('neutron-dhcp-service').that_subscribes_to('Package[neutron]')
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_dhcp_agent_config').with({
+        :purge => false
+      })
     end
 
     context 'with manage_service as false' do

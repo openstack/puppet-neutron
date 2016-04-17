@@ -205,11 +205,6 @@
 #   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
 #   Defaults to false.
 #
-# [*ensure_lbaas_package*]
-#   (optional) Ensures installation of LBaaS package before starting API service.
-#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
-#   Defaults to false.
-#
 # [*vpnaas_agent_package*]
 #   (optional) Use VPNaaS agent package instead of L3 agent package on debian platforms
 #   RedHat platforms won't take care of this parameter
@@ -253,6 +248,11 @@
 #   The tenant of the auth user
 #   Defaults to $::os_service_plugin
 #
+# [*ensure_lbaas_package*]
+#   Deprecated. Ensures installation of LBaaS package.
+#   LBaaS agent should be installed from neutron::agents::lbaas. 
+#   Defaults to false.
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -289,7 +289,6 @@ class neutron::server (
   $qos_notification_drivers         = $::os_service_default,
   $ensure_vpnaas_package            = false,
   $ensure_fwaas_package             = false,
-  $ensure_lbaas_package             = false,
   $vpnaas_agent_package             = false,
   # DEPRECATED PARAMETERS
   $log_dir                          = undef,
@@ -304,6 +303,7 @@ class neutron::server (
   $identity_uri                     = 'http://localhost:35357/',
   $auth_plugin                      = $::os_service_default,
   $tenant_name                      = $::os_service_default,
+  $ensure_lbaas_package             = false,
 ) inherits ::neutron::params {
 
   include ::neutron::db
@@ -346,6 +346,7 @@ class neutron::server (
   }
 
   if $ensure_lbaas_package {
+    warning('$ensure_lbaas_package is deprecated. To install lbaas agent the neutron::agents::lbaas class should be used.')
     ensure_resource( 'package', 'neutron-lbaas-agent', {
       'ensure' => $package_ensure,
       'name'   => $::neutron::params::lbaas_agent_package,

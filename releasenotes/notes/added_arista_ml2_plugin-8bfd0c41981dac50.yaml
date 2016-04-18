@@ -1,0 +1,6 @@
+---
+features:
+  - Added neutron::plugins::ml2::arista class to manage the arista
+    ml2 driver.
+  - Added neutron::plugins::ml2::arista::l3_arista class to manage
+    the arista ml2 l3 plugin.

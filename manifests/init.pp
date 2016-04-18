@@ -255,19 +255,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*qpid_hostname*]
-# [*qpid_port*]
-# [*qpid_username*]
-# [*qpid_password*]
-# [*qpid_heartbeat*]
-# [*qpid_protocol*]
-# [*qpid_tcp_nodelay*]
-# [*qpid_reconnect*]
-# [*qpid_reconnect_timeout*]
-# [*qpid_reconnect_limit*]
-# [*qpid_reconnect_interval*]
-# [*qpid_reconnect_interval_min*]
-# [*qpid_reconnect_interval_max*]
 # [*network_device_mtu*]
 #
 class neutron (
@@ -328,19 +315,6 @@ class neutron (
   $lock_path                          = '$state_path/lock',
   $purge_config                       = false,
   # DEPRECATED PARAMETERS
-  $qpid_hostname                      = undef,
-  $qpid_port                          = undef,
-  $qpid_username                      = undef,
-  $qpid_password                      = undef,
-  $qpid_heartbeat                     = undef,
-  $qpid_protocol                      = undef,
-  $qpid_tcp_nodelay                   = undef,
-  $qpid_reconnect                     = undef,
-  $qpid_reconnect_timeout             = undef,
-  $qpid_reconnect_limit               = undef,
-  $qpid_reconnect_interval_min        = undef,
-  $qpid_reconnect_interval_max        = undef,
-  $qpid_reconnect_interval            = undef,
   $network_device_mtu                 = undef,
 ) {
 
@@ -513,10 +487,6 @@ class neutron (
       }
     }
 
-  }
-
-  if $rpc_backend == 'qpid' or $rpc_backend == 'neutron.openstack.common.rpc.impl_qpid' {
-    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
   }
 
   if $network_device_mtu {

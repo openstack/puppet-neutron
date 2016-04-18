@@ -250,7 +250,7 @@
 #
 # [*ensure_lbaas_package*]
 #   Deprecated. Ensures installation of LBaaS package.
-#   LBaaS agent should be installed from neutron::agents::lbaas. 
+#   LBaaS agent should be installed from neutron::agents::lbaas.
 #   Defaults to false.
 #
 class neutron::server (

@@ -141,9 +141,6 @@ class neutron::agents::l3 (
 
   include ::neutron::params
 
-  Neutron_config<||>          ~> Service['neutron-l3']
-  Neutron_l3_agent_config<||> ~> Service['neutron-l3']
-
   if $allow_automatic_l3agent_failover {
     warning('parameter allow_automatic_l3agent_failover is deprecated, use parameter in neutron::server instead')
   }
@@ -208,6 +205,8 @@ class neutron::agents::l3 (
   }
 
   if $manage_service {
+    Neutron_config<||>          ~> Service['neutron-l3']
+    Neutron_l3_agent_config<||> ~> Service['neutron-l3']
     if $enabled {
       $service_ensure = 'running'
     } else {
@@ -217,13 +216,12 @@ class neutron::agents::l3 (
     if $::neutron::params::l3_agent_package {
       Package['neutron-l3'] ~> Service['neutron-l3']
     }
-  }
-
-  service { 'neutron-l3':
-    ensure  => $service_ensure,
-    name    => $::neutron::params::l3_agent_service,
-    enable  => $enabled,
-    require => Class['neutron'],
-    tag     => 'neutron-service',
+    service { 'neutron-l3':
+      ensure  => $service_ensure,
+      name    => $::neutron::params::l3_agent_service,
+      enable  => $enabled,
+      require => Class['neutron'],
+      tag     => 'neutron-service',
+    }
   }
 }

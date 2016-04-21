@@ -70,23 +70,19 @@ describe 'neutron::agents::l3' do
       end
     end
 
-    it 'configures neutron l3 agent service' do
-      is_expected.to contain_service('neutron-l3').with(
-        :name    => platform_params[:l3_agent_service],
-        :enable  => true,
-        :ensure  => 'running',
-        :require => 'Class[Neutron]',
-        :tag     => 'neutron-service',
-      )
-      is_expected.to contain_service('neutron-l3').that_subscribes_to('Package[neutron]')
-    end
-
-    context 'with manage_service as false' do
+    context 'with manage_service as true' do
       before :each do
-        params.merge!(:manage_service => false)
+        params.merge!(:manage_service => true)
       end
-      it 'should not start/stop service' do
-        is_expected.to contain_service('neutron-l3').without_ensure
+      it 'configures neutron l3 agent service' do
+        is_expected.to contain_service('neutron-l3').with(
+          :name    => platform_params[:l3_agent_service],
+          :enable  => true,
+          :ensure  => 'running',
+          :require => 'Class[Neutron]',
+          :tag     => 'neutron-service',
+        )
+        is_expected.to contain_service('neutron-l3').that_subscribes_to('Package[neutron]')
       end
     end
 

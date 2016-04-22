@@ -1,0 +1,5 @@
+---
+features:
+  - Configure oslo related options (database, logging, messaging, policy)
+    using puppet-oslo module.
+    oslo.messaging related default values were changed to $::os_service_default

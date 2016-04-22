@@ -27,6 +27,10 @@ describe 'neutron::policy' do
         :value => 'foo:bar'
       })
     end
+
+    it 'set policy_file in neutron.conf' do
+      is_expected.to contain_neutron_config('oslo_policy/policy_file').with_value(params[:policy_path])
+    end
   end
 
   context 'on Debian platforms' do

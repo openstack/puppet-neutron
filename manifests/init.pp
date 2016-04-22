@@ -127,7 +127,7 @@
 
 # [*rpc_backend*]
 #   (optional) what rpc/queuing service to use
-#   Defaults to rabbit (rabbitmq)
+#   Defaults to $::os_service_default
 #
 # [*rpc_response_timeout*]
 #   (optional) Seconds to wait for a response from a call
@@ -138,6 +138,7 @@
 # [*rabbit_port*]
 # [*rabbit_user*]
 #   (optional) Various rabbitmq settings
+#   Defaults to $::os_service_default
 #
 # [*rabbit_virtual_host*]
 #   (optional) virtualhost to use.
@@ -147,11 +148,11 @@
 #   (optional) array of rabbitmq servers for HA.
 #   A single IP address, such as a VIP, can be used for load-balancing
 #   multiple RabbitMQ Brokers.
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*rabbit_ha_queues*]
 #   (Optional) Use HA queues in RabbitMQ.
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*rabbit_heartbeat_timeout_threshold*]
 #   (optional) Number of seconds after which the RabbitMQ broker is considered
@@ -159,14 +160,14 @@
 #   Heartbeating helps to ensure the TCP connection to RabbitMQ isn't silently
 #   closed, resulting in missed or lost messages from the queue.
 #   (Requires kombu >= 3.0.7 and amqp >= 1.4.0)
-#   Defaults to 0
+#   Defaults to $::os_service_default
 #
 # [*rabbit_heartbeat_rate*]
 #   (optional) How often during the rabbit_heartbeat_timeout_threshold period to
 #   check the heartbeat on RabbitMQ connection.  (i.e. rabbit_heartbeat_rate=2
 #   when rabbit_heartbeat_timeout_threshold=60, the heartbeat will be checked
 #   every 30 seconds.
-#   Defaults to 2
+#   Defaults to $::os_service_default
 #
 # [*rabbit_use_ssl*]
 #   (optional) Connect over SSL for RabbitMQ
@@ -192,7 +193,7 @@
 #   (optional) SSL version to use (valid only if SSL enabled).
 #   Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
 #   available on some distributions.
-#   Defaults to 'TLSv1'
+#   Defaults to $::os_service_default
 #
 # [*kombu_reconnect_delay*]
 #   (optional) The amount of time to wait before attempting to reconnect
@@ -231,7 +232,7 @@
 #
 # [*log_file*]
 #   (optional) Where to log
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*log_dir*]
 #   (optional) Directory where logs should be stored
@@ -284,23 +285,23 @@ class neutron (
   $report_interval                    = $::os_service_default,
   $memcache_servers                   = false,
   $control_exchange                   = 'neutron',
-  $rpc_backend                        = 'rabbit',
+  $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
-  $rabbit_password                    = false,
-  $rabbit_host                        = 'localhost',
-  $rabbit_hosts                       = false,
-  $rabbit_port                        = 5672,
-  $rabbit_ha_queues                   = undef,
-  $rabbit_user                        = 'guest',
+  $rabbit_password                    = $::os_service_default,
+  $rabbit_host                        = $::os_service_default,
+  $rabbit_hosts                       = $::os_service_default,
+  $rabbit_port                        = $::os_service_default,
+  $rabbit_ha_queues                   = $::os_service_default,
+  $rabbit_user                        = $::os_service_default,
   $rabbit_virtual_host                = $::os_service_default,
-  $rabbit_heartbeat_timeout_threshold = 0,
-  $rabbit_heartbeat_rate              = 2,
+  $rabbit_heartbeat_timeout_threshold = $::os_service_default,
+  $rabbit_heartbeat_rate              = $::os_service_default,
   $rabbit_use_ssl                     = $::os_service_default,
   $amqp_durable_queues                = $::os_service_default,
   $kombu_ssl_ca_certs                 = $::os_service_default,
   $kombu_ssl_certfile                 = $::os_service_default,
   $kombu_ssl_keyfile                  = $::os_service_default,
-  $kombu_ssl_version                  = 'TLSv1',
+  $kombu_ssl_version                  = $::os_service_default,
   $kombu_reconnect_delay              = $::os_service_default,
   $use_ssl                            = $::os_service_default,
   $cert_file                          = $::os_service_default,
@@ -309,7 +310,7 @@ class neutron (
   $use_syslog                         = $::os_service_default,
   $use_stderr                         = $::os_service_default,
   $log_facility                       = $::os_service_default,
-  $log_file                           = false,
+  $log_file                           = $::os_service_default,
   $log_dir                            = '/var/log/neutron',
   $state_path                         = $::os_service_default,
   $lock_path                          = '$state_path/lock',
@@ -368,11 +369,6 @@ class neutron (
   }
 
   neutron_config {
-    'DEFAULT/verbose':                 value => $verbose;
-    'DEFAULT/debug':                   value => $debug;
-    'DEFAULT/use_stderr':              value => $use_stderr;
-    'DEFAULT/use_syslog':              value => $use_syslog;
-    'DEFAULT/syslog_log_facility':     value => $log_facility;
     'DEFAULT/bind_host':               value => $bind_host;
     'DEFAULT/bind_port':               value => $bind_port;
     'DEFAULT/auth_strategy':           value => $auth_strategy;
@@ -389,34 +385,25 @@ class neutron (
     'DEFAULT/allow_sorting':           value => $allow_sorting;
     'DEFAULT/allow_overlapping_ips':   value => $allow_overlapping_ips;
     'DEFAULT/control_exchange':        value => $control_exchange;
-    'DEFAULT/rpc_backend':             value => $rpc_backend;
     'DEFAULT/api_extensions_path':     value => $api_extensions_path;
     'DEFAULT/state_path':              value => $state_path;
     'DEFAULT/rpc_response_timeout':    value => $rpc_response_timeout;
     'DEFAULT/global_physnet_mtu':      value => pick($network_device_mtu, $global_physnet_mtu);
-    'oslo_concurrency/lock_path':      value => $lock_path;
     'agent/root_helper':               value => $root_helper;
     'agent/report_interval':           value => $report_interval;
   }
 
-  if $log_file {
-    neutron_config {
-      'DEFAULT/log_file': value => $log_file;
-      'DEFAULT/log_dir':  value => $log_dir;
-    }
-  } else {
-    if $log_dir {
-      neutron_config {
-        'DEFAULT/log_dir':  value  => $log_dir;
-        'DEFAULT/log_file': ensure => absent;
-      }
-    } else {
-      neutron_config {
-        'DEFAULT/log_dir':  ensure => absent;
-        'DEFAULT/log_file': ensure => absent;
-      }
-    }
+  oslo::log { 'neutron_config':
+    verbose             => $verbose,
+    debug               => $debug,
+    use_stderr          => $use_stderr,
+    use_syslog          => $use_syslog,
+    syslog_log_facility => $log_facility,
+    log_file            => $log_file,
+    log_dir             => $log_dir,
   }
+
+  oslo::concurrency { 'neutron_config': lock_path => $lock_path }
 
   if ! is_service_default ($service_plugins) and ($service_plugins) {
     if is_array($service_plugins) {
@@ -437,56 +424,33 @@ class neutron (
   }
 
 
-  if $rpc_backend == 'rabbit' or $rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' {
-    if ! $rabbit_password {
+  if $rpc_backend in [$::os_service_default, 'neutron.openstack.common.rpc.impl_kombu', 'rabbit'] {
+    if is_service_default($rabbit_password) {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }
-    if $rabbit_hosts {
-      neutron_config { 'oslo_messaging_rabbit/rabbit_hosts':     value  => join($rabbit_hosts, ',') }
-    } else  {
-      neutron_config { 'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host }
-      neutron_config { 'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port }
-      neutron_config { 'oslo_messaging_rabbit/rabbit_hosts':     value => "${rabbit_host}:${rabbit_port}" }
-    }
 
-    if $rabbit_ha_queues == undef {
-      if $rabbit_hosts {
-        neutron_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => true }
-      } else {
-        neutron_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
-      }
-    } else {
-      neutron_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues }
+    oslo::messaging::rabbit {'neutron_config':
+      rabbit_userid               => $rabbit_user,
+      rabbit_password             => $rabbit_password,
+      rabbit_virtual_host         => $rabbit_virtual_host,
+      heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
+      heartbeat_rate              => $rabbit_heartbeat_rate,
+      rabbit_use_ssl              => $rabbit_use_ssl,
+      kombu_reconnect_delay       => $kombu_reconnect_delay,
+      kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
+      kombu_ssl_certfile          => $kombu_ssl_certfile,
+      kombu_ssl_keyfile           => $kombu_ssl_keyfile,
+      amqp_durable_queues         => $amqp_durable_queues,
+      rabbit_hosts                => $rabbit_hosts,
+      rabbit_ha_queues            => $rabbit_ha_queues,
+      rabbit_host                 => $rabbit_host,
+      rabbit_port                 => $rabbit_port,
+      kombu_ssl_version           => $kombu_ssl_version,
     }
-
+  } else {
     neutron_config {
-      'oslo_messaging_rabbit/rabbit_userid':                value => $rabbit_user;
-      'oslo_messaging_rabbit/rabbit_password':              value => $rabbit_password, secret => true;
-      'oslo_messaging_rabbit/rabbit_virtual_host':          value => $rabbit_virtual_host;
-      'oslo_messaging_rabbit/heartbeat_timeout_threshold':  value => $rabbit_heartbeat_timeout_threshold;
-      'oslo_messaging_rabbit/heartbeat_rate':               value => $rabbit_heartbeat_rate;
-      'oslo_messaging_rabbit/rabbit_use_ssl':               value => $rabbit_use_ssl;
-      'oslo_messaging_rabbit/kombu_reconnect_delay':        value => $kombu_reconnect_delay;
-      'oslo_messaging_rabbit/kombu_ssl_ca_certs':           value => $kombu_ssl_ca_certs;
-      'oslo_messaging_rabbit/kombu_ssl_certfile':           value => $kombu_ssl_certfile;
-      'oslo_messaging_rabbit/kombu_ssl_keyfile':            value => $kombu_ssl_keyfile;
-      'oslo_messaging_rabbit/amqp_durable_queues':          value => $amqp_durable_queues;
+      'DEFAULT/rpc_backend': value => $rpc_backend;
     }
-
-    if ! is_service_default($rabbit_use_ssl) and ($rabbit_use_ssl) {
-
-      if $kombu_ssl_version {
-        neutron_config { 'oslo_messaging_rabbit/kombu_ssl_version':  value => $kombu_ssl_version; }
-      } else {
-        neutron_config { 'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent; }
-      }
-
-    } else {
-      neutron_config {
-        'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
-      }
-    }
-
   }
 
   if $network_device_mtu {

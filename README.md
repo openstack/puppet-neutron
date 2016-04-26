@@ -132,6 +132,7 @@ This module supports the following neutron plugins:
 
 * Open vSwitch with ML2
 * linuxbridge with ML2
+* Arista with ML2
 * cisco-neutron with and without ML2
 * NVP
 * PLUMgrid

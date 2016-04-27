@@ -69,6 +69,10 @@ Puppet::Type.newtype(:neutron_network) do
     end
   end
 
+  newproperty(:availability_zone_hint) do
+    desc 'The availability zone hint to provide the scheduler'
+  end
+
   # Require the neutron-server service to be running
   autorequire(:service) do
     ['neutron-server']

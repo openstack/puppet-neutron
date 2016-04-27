@@ -50,6 +50,7 @@ describe 'neutron::agents::dhcp' do
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/force_metadata').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value(p[:enable_metadata_network]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value('<SERVICE DEFAULT>');
+      is_expected.to contain_neutron_dhcp_agent_config('AGENT/availability_zone').with_value('<SERVICE DEFAULT>');
     end
 
     it 'installs neutron dhcp agent package' do
@@ -138,6 +139,15 @@ describe 'neutron::agents::dhcp' do
       it 'should enable both force_metadata and metadata_network' do
         is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/force_metadata').with_value('true');
         is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value('true');
+      end
+    end
+
+    context 'when availability zone is set' do
+      before :each do
+        params.merge!(:availability_zone => 'zone1')
+      end
+      it 'should configure availability zone' do
+        is_expected.to contain_neutron_dhcp_agent_config('AGENT/availability_zone').with_value(p[:availability_zone]);
       end
     end
   end

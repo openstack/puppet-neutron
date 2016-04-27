@@ -47,6 +47,7 @@ describe 'neutron::agents::l3' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_l3_agent_config('AGENT/availability_zone').with_value('<SERVICE DEFAULT>')
     end
 
     it 'passes purge to resource' do
@@ -103,6 +104,16 @@ describe 'neutron::agents::l3' do
         is_expected.to contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_value(p[:ha_vrrp_auth_type])
         is_expected.to contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_value(p[:ha_vrrp_auth_password])
         is_expected.to contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value(p[:ha_vrrp_advert_int])
+      end
+    end
+
+    context 'with availability zone' do
+      before :each do
+        params.merge!(:availability_zone => 'zone1')
+      end
+
+      it 'configures availability zone' do
+        is_expected.to contain_neutron_l3_agent_config('AGENT/availability_zone').with_value(p[:availability_zone])
       end
     end
   end

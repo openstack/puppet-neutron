@@ -69,6 +69,11 @@
 #   in the dhcp config.
 #   Defaults to false.
 #
+# [*availability_zone*]
+#   (optional) The availability zone of the agent.
+#   Neutron will only schedule dhcp on the agent based on availability zone
+#   Defaults to $::os_service_default
+#
 # === Deprecated Parameters
 #
 # [*dhcp_domain*]
@@ -92,6 +97,7 @@ class neutron::agents::dhcp (
   $enable_metadata_network  = false,
   $dhcp_broadcast_reply     = $::os_service_default,
   $purge_config             = false,
+  $availability_zone        = $::os_service_default,
   # DEPRECATED PARAMETERS
   $dhcp_domain              = $::os_service_default,
 ) {
@@ -142,6 +148,7 @@ class neutron::agents::dhcp (
     'DEFAULT/dhcp_broadcast_reply':   value => $dhcp_broadcast_reply;
     'DEFAULT/dnsmasq_config_file':    value => $dnsmasq_config_file;
     'DEFAULT/dnsmasq_dns_servers':    value => join(any2array($dnsmasq_dns_servers), ',');
+    'AGENT/availability_zone':        value => $availability_zone;
   }
 
   if ! is_service_default ($dhcp_domain) {

@@ -1,0 +1,6 @@
+---
+features:
+  - Added the configuration options to configure neutron availability zones
+    for server and agents.
+  - Providers updated to being able to configure router/network with availability
+    zone.

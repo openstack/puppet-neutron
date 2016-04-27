@@ -90,6 +90,11 @@
 # [*allow_automatic_l3agent_failover*]
 #   DEPRECATED: Has no effect in this class. Use the same parameter in neutron::server instead.
 #
+# [*availability_zone*]
+#   (optional) The availability zone of the agent.
+#   Neutron will only schedule routers on the agent based on availability zone
+#   Defaults to $::os_service_default
+#
 # === Deprecated Parameters
 #
 # [*use_namespaces*]
@@ -126,6 +131,7 @@ class neutron::agents::l3 (
   $ha_vrrp_auth_password            = $::os_service_default,
   $ha_vrrp_advert_int               = '3',
   $agent_mode                       = 'legacy',
+  $availability_zone                = $::os_service_default,
   # DEPRECATED PARAMETERS
   $allow_automatic_l3agent_failover = false,
   $use_namespaces                   = $::os_service_default,
@@ -173,6 +179,7 @@ class neutron::agents::l3 (
     'DEFAULT/agent_mode':                       value => $agent_mode;
     'DEFAULT/network_device_mtu':               value => $network_device_mtu;
     'DEFAULT/use_namespaces':                   value => $use_namespaces;
+    'AGENT/availability_zone':                  value => $availability_zone;
   }
 
   if ! is_service_default ($use_namespaces) {

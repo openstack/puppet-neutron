@@ -47,6 +47,7 @@ describe 'neutron::agents::l3' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_l3_agent_config('AGENT/availability_zone').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs neutron l3 agent package' do
@@ -112,6 +113,16 @@ describe 'neutron::agents::l3' do
         is_expected.to contain_neutron_l3_agent_config('DEFAULT/use_namespaces').with_value(p[:use_namespaces])
       end
     end
+
+    context 'with availability zone' do
+      before :each do
+        params.merge!(:availability_zone => 'zone1')
+      end
+
+      it 'configures availability zone' do
+        is_expected.to contain_neutron_l3_agent_config('AGENT/availability_zone').with_value(params[:availability_zone])
+      end
+    end
   end
 
   shared_examples_for 'neutron l3 agent with network_device_mtu specified' do
@@ -123,6 +134,7 @@ describe 'neutron::agents::l3' do
     it 'configures network_device_mtu' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/network_device_mtu').with_value(params[:network_device_mtu])
     end
+
   end
 
   context 'on Debian platforms' do

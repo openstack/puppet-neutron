@@ -92,6 +92,10 @@ Puppet::Type.newtype(:neutron_router) do
     end
   end
 
+  newproperty(:availability_zone_hint) do
+    desc 'The availability zone hint to provide the scheduler'
+  end
+
   validate do
     if self[:ensure] != :present
       return

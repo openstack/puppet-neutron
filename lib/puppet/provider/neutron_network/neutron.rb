@@ -41,7 +41,8 @@ Puppet::Type.type(:neutron_network).provide(
         :provider_segmentation_id  => attrs['provider:segmentation_id'],
         :router_external           => attrs['router:external'],
         :shared                    => attrs['shared'],
-        :tenant_id                 => attrs['tenant_id']
+        :tenant_id                 => attrs['tenant_id'],
+        :availability_zone_hint    => attrs['availability_zone_hint']
       )
     end
     self.do_not_manage = false
@@ -99,6 +100,11 @@ Puppet::Type.type(:neutron_network).provide(
       network_opts << '--router:external'
     end
 
+    if @resource[:availability_zone_hint]
+      network_opts << \
+        "--availability-zone-hint=#{@resource[:availability_zone_hint]}"
+    end
+
     results = auth_neutron('net-create', '--format=shell',
                            network_opts, resource[:name])
 
@@ -114,6 +120,7 @@ Puppet::Type.type(:neutron_network).provide(
       :router_external           => attrs['router:external'],
       :shared                    => attrs['shared'],
       :tenant_id                 => attrs['tenant_id'],
+      :availability_zone_hint    => attrs['availability_zone_hint']
     }
   end
 
@@ -148,6 +155,13 @@ Puppet::Type.type(:neutron_network).provide(
     else
       auth_neutron('net-update', "--router:external", name)
     end
+  end
+
+  def availability_zone_hint=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_network[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
+    auth_neutron('net-update', "--availability-zone-hint=#{value}", name)
   end
 
   [

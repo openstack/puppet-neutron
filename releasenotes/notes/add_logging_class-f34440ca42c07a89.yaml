@@ -1,0 +1,9 @@
+---
+features:
+  - |
+      Add logging class to manage olso.log related options
+      init class can still be used for managing the limited number of options
+      Add option _manage_logging_ for init class to make it possible to evaluate
+      logging class separately from init class in one catalog
+deprecations:
+  - _verbose_ option is deprecated and will be removed in future

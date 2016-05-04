@@ -13,13 +13,9 @@
 #   (optional) The state of the package
 #   Defaults to 'present'
 #
-# [*verbose*]
-#   (optional) Verbose logging
-#   Defaults to $::os_service_default
-#
 # [*debug*]
 #   (optional) Print debug messages in the logs
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 # [*bind_host*]
 #   (optional) The IP/interface to bind to
@@ -220,24 +216,29 @@
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 # [*use_stderr*]
 #   (optional) Use stderr for logging
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 # [*log_file*]
 #   (optional) Where to log
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 # [*log_dir*]
 #   (optional) Directory where logs should be stored
 #   If set to boolean false, it will not log to any directory
-#   Defaults to /var/log/neutron
+#   Defaults to undef
+#
+# [*manage_logging*]
+#   (optional) Whether to manage olso.logging options
+#   If set to false, neutron::logging class should be evaluated
+#   Defaults to true.
 #
 # [*state_path*]
 #   (optional) Where to store state files. This directory must be writable
@@ -258,11 +259,14 @@
 #
 # [*network_device_mtu*]
 #
+# [*verbose*]
+#   (optional) Deprecated. Verbose logging
+#   Defaults to undef
+#
 class neutron (
   $enabled                            = true,
   $package_ensure                     = 'present',
-  $verbose                            = $::os_service_default,
-  $debug                              = $::os_service_default,
+  $debug                              = undef,
   $bind_host                          = $::os_service_default,
   $bind_port                          = $::os_service_default,
   $core_plugin                        = 'openvswitch',
@@ -307,19 +311,24 @@ class neutron (
   $cert_file                          = $::os_service_default,
   $key_file                           = $::os_service_default,
   $ca_file                            = $::os_service_default,
-  $use_syslog                         = $::os_service_default,
-  $use_stderr                         = $::os_service_default,
-  $log_facility                       = $::os_service_default,
-  $log_file                           = $::os_service_default,
-  $log_dir                            = '/var/log/neutron',
+  $use_syslog                         = undef,
+  $use_stderr                         = undef,
+  $log_facility                       = undef,
+  $log_file                           = undef,
+  $log_dir                            = undef,
+  $manage_logging                     = true,
   $state_path                         = $::os_service_default,
   $lock_path                          = '$state_path/lock',
   $purge_config                       = false,
   # DEPRECATED PARAMETERS
   $network_device_mtu                 = undef,
+  $verbose                            = undef,
 ) {
 
   include ::neutron::params
+  if $manage_logging {
+    include ::neutron::logging
+  }
 
   if ! is_service_default($use_ssl) and ($use_ssl) {
     if is_service_default($cert_file) {
@@ -391,16 +400,6 @@ class neutron (
     'DEFAULT/global_physnet_mtu':      value => pick($network_device_mtu, $global_physnet_mtu);
     'agent/root_helper':               value => $root_helper;
     'agent/report_interval':           value => $report_interval;
-  }
-
-  oslo::log { 'neutron_config':
-    verbose             => $verbose,
-    debug               => $debug,
-    use_stderr          => $use_stderr,
-    use_syslog          => $use_syslog,
-    syslog_log_facility => $log_facility,
-    log_file            => $log_file,
-    log_dir             => $log_dir,
   }
 
   oslo::concurrency { 'neutron_config': lock_path => $lock_path }

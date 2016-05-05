@@ -44,6 +44,13 @@ describe 'neutron' do
         it_configures 'rabbit_ha_queues set to false'
       end
 
+      context 'with non-default notification options' do
+        before { params.merge!( :notification_driver => 'messagingv2',
+                                :notification_topics => 'notifications',
+                                :notification_transport_url => 'rabbit://me:passwd@host:5672/virtual_host' ) }
+        it_configures 'notification_driver and notification_topics'
+      end
+
       it 'configures logging' do
         is_expected.to contain_neutron_config('DEFAULT/log_file').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
@@ -97,6 +104,12 @@ describe 'neutron' do
       is_expected.to contain_resources('neutron_config').with({
         :purge => false
       })
+    end
+
+    it 'configures messaging notifications' do
+      is_expected.to contain_neutron_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
     end
 
     it 'configures credentials for rabbit' do
@@ -171,6 +184,14 @@ describe 'neutron' do
   shared_examples_for 'rabbit_ha_queues set to false' do
     it 'in neutron.conf' do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(false)
+    end
+  end
+
+  shared_examples_for 'notification_driver and notification_topics' do
+    it 'in neutron.conf' do
+      is_expected.to contain_neutron_config('oslo_messaging_notifications/driver').with_value( params[:notification_driver] )
+      is_expected.to contain_neutron_config('oslo_messaging_notifications/topics').with_value( params[:notification_topics] )
+      is_expected.to contain_neutron_config('oslo_messaging_notifications/transport_url').with_value( params[:notification_transport_url] )
     end
   end
 

@@ -255,6 +255,20 @@
 #   in the neutron config.
 #   Defaults to false.
 #
+# [*notification_driver*]
+#   (optional) Driver or drivers to handle sending notifications.
+#   Value can be a string or a list.
+#   Defaults to $::os_service_default.
+#
+# [*notification_topics*]
+#   (optional) AMQP topic used for OpenStack notifications
+#   Defaults to ::os_service_default
+#
+# [*notification_transport_url*]
+#   (optional) A URL representing the messaging driver to use for
+#   notifications.
+#   Defaults to $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*network_device_mtu*]
@@ -320,6 +334,9 @@ class neutron (
   $state_path                         = $::os_service_default,
   $lock_path                          = '$state_path/lock',
   $purge_config                       = false,
+  $notification_driver                = $::os_service_default,
+  $notification_topics                = $::os_service_default,
+  $notification_transport_url         = $::os_service_default,
   # DEPRECATED PARAMETERS
   $network_device_mtu                 = undef,
   $verbose                            = undef,
@@ -403,6 +420,12 @@ class neutron (
   }
 
   oslo::concurrency { 'neutron_config': lock_path => $lock_path }
+
+  oslo::messaging::notifications { 'neutron_config':
+    driver        => $notification_driver,
+    topics        => $notification_topics,
+    transport_url => $notification_transport_url,
+  }
 
   if ! is_service_default ($service_plugins) and ($service_plugins) {
     if is_array($service_plugins) {

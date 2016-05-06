@@ -1,0 +1,7 @@
+---
+features:
+  - service_providers are configured through neutron::server class.
+issues:
+  - VPNaaS service_provider was being configured in a file not being loaded up
+    by neutron server. It has been consolidated with lbaas service configuration
+    into neutron.conf.

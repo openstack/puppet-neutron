@@ -212,6 +212,20 @@ describe 'neutron::server' do
       it_raises 'a Puppet::Error', /Must pass either networks, subnets, or ports as values for dhcp_load_type/
     end
 
+    context 'with multiple service providers' do
+      before :each do
+        params.merge!(
+          { :service_providers => ['provider1', 'provider2'] }
+        )
+      end
+
+      it 'configures neutron.conf' do
+        is_expected.to contain_neutron_config(
+          'service_providers/service_provider'
+        ).with_value(['provider1', 'provider2'])
+      end
+    end
+
     context 'with availability zone hints set' do
       before :each do
         params.merge!(:dhcp_load_type             => 'networks',

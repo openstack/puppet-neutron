@@ -15,6 +15,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == DEPRECATED
+# This class has been deprecated in favor of using the parameter in
+# neutron::server::service_provider
 #
 # == Class: neutron::services::lbaas
 #
@@ -26,6 +29,8 @@
 #   (optional) Whether to install the lbaas driver package
 #   Defaults to 'present'
 #
+# === Deprecated Parameters
+#
 # [*service_providers*]
 #   (optional) Array of allowed service types or '<SERVICE DEFAULT>'.
 #   Note: The default upstream value is empty.
@@ -34,8 +39,6 @@
 #         See https://bugs.launchpad.net/puppet-neutron/+bug/1535382/comments/1
 #   Must be in form <service_type>:<name>:<driver>[:default].
 #   Defaults to $::os_service_default
-#
-# === Deprecated Parameters
 #
 # [*package_ensure*]
 #   (optional) Deprecated. Used to install the lbaas v2 agent. This was moved into
@@ -57,6 +60,10 @@ class neutron::services::lbaas (
       tag    => ['openstack', 'neutron-package']
     })
   }
+  if !is_service_default($service_providers) {
+    warning('service_providers in neutron::services::lbaas is deprecated in newton release, please use service provider in neutron::server class')
+  }
+
   if $package_ensure {
     warning('Package ensure is deprecated. The neutron::agents::lbaas class should be used to install the agent')
     # agent package contains both agent and service resources

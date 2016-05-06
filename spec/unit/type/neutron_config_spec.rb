@@ -31,12 +31,12 @@ describe 'Puppet::Type.type(:neutron_config)' do
 
   it 'should accept a valid value' do
     @neutron_config[:value] = 'bar'
-    expect(@neutron_config[:value]).to eq('bar')
+    expect(@neutron_config[:value]).to eq(['bar'])
   end
 
   it 'should not accept a value with whitespace' do
     @neutron_config[:value] = 'b ar'
-    expect(@neutron_config[:value]).to eq('b ar')
+    expect(@neutron_config[:value]).to eq(['b ar'])
   end
 
   it 'should accept valid ensure values' do

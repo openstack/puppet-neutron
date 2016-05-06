@@ -15,6 +15,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == DEPRECATED
+# This class has been deprecated in favor of using the parameter in
+# neutron::server::service_provider
 #
 # == Class: neutron::services::vpnaas
 #
@@ -41,6 +44,9 @@ class neutron::services::vpnaas (
 ) {
 
   include ::neutron::params
+  if !is_service_default($service_providers) {
+    warning('service_providers in neutron::services::vpnaas is deprecated in newton release, please use service provider in neutron::server class')
+  }
 
   # agent package contains both agent and service resources
   ensure_resource( 'package', 'neutron-vpnaas-agent', {

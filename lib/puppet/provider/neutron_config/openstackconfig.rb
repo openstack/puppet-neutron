@@ -1,6 +1,6 @@
 Puppet::Type.type(:neutron_config).provide(
-  :ini_setting,
-  :parent => Puppet::Type.type(:openstack_config).provider(:ini_setting)
+  :openstackconfig,
+  :parent => Puppet::Type.type(:openstack_config).provider(:ruby)
 ) do
 
   def file_path

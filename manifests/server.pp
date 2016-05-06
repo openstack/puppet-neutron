@@ -253,6 +253,22 @@
 #   RedHat platforms won't take care of this parameter
 #   true/false
 #   Defaults to false
+#
+# [*service_providers*]
+#   (optional) (Array) Configures the service providers for neutron server.
+#   This needs to be set for lbaas, vpnaas, and fwaas.
+#   Defaults to $::os_service_default
+#
+#   Example:
+#
+#   class { 'neutron::server':
+#     service_providers => [
+#        'LOADBALANCERV2:Octavia:neutron_lbaas.drivers.octavia.driver.OctaviaDriver:default',
+#        'LOADBALANCER:Haproxy:neutron_lbaas.services.loadbalancer.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver',
+#        'VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default'
+#     ]
+#   }
+#
 # === Deprecated Parameters
 #
 # [*identity_uri*]
@@ -328,6 +344,7 @@ class neutron::server (
   $ensure_fwaas_package             = false,
   $ensure_lbaas_package             = false,
   $vpnaas_agent_package             = false,
+  $service_providers                = $::os_service_default,
   # DEPRECATED PARAMETERS
   $log_dir                          = undef,
   $log_file                         = undef,
@@ -353,6 +370,10 @@ class neutron::server (
 
   if !is_service_default($dhcp_load_type) {
     validate_re($dhcp_load_type, ['^networks$', '^subnets$', '^ports$'], 'Must pass either networks, subnets, or ports as values for dhcp_load_type')
+  }
+
+  if !is_service_default($service_providers) {
+    validate_array($service_providers)
   }
 
   if $ensure_fwaas_package {
@@ -437,6 +458,7 @@ class neutron::server (
     'DEFAULT/network_scheduler_driver':         value => $network_scheduler_driver;
     'DEFAULT/dhcp_load_type':                   value => $dhcp_load_type;
     'DEFAULT/default_availability_zones':       value => join(any2array($default_availability_zones), ',');
+    'service_providers/service_provider':       value => $service_providers;
   }
 
   if $state_path {

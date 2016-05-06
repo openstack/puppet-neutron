@@ -226,7 +226,20 @@ describe 'neutron::server' do
         is_expected.to contain_neutron_config('DEFAULT/network_scheduler_driver').with_value('neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler')
         is_expected.to contain_neutron_config('DEFAULT/dhcp_load_type').with_value('networks')
       end
+    end
 
+    context 'with multiple service providers' do
+      before :each do
+        params.merge!(
+          { :service_providers => ['provider1', 'provider2'] }
+        )
+      end
+
+      it 'configures neutron.conf' do
+        is_expected.to contain_neutron_config(
+          'service_providers/service_provider'
+        ).with_value(['provider1', 'provider2'])
+      end
     end
   end
 

@@ -36,7 +36,8 @@ Puppet::Type.type(:neutron_router).provide(
         :status                    => attrs['status'],
         :distributed               => attrs['distributed'],
         :ha                        => attrs['ha'],
-        :tenant_id                 => attrs['tenant_id']
+        :tenant_id                 => attrs['tenant_id'],
+        :availability_zone_hint    => attrs['availability_zone_hint']
       )
     end
     self.do_not_manage = false
@@ -83,6 +84,10 @@ Puppet::Type.type(:neutron_router).provide(
       opts << "--ha=#{@resource[:ha]}"
     end
 
+    if @resource[:availability_zone_hint]
+      opts << "--availability-zone-hint=#{@resource[:availability_zone_hint]}"
+    end
+
     results = auth_neutron("router-create", '--format=shell',
                            opts, resource[:name])
 
@@ -95,6 +100,7 @@ Puppet::Type.type(:neutron_router).provide(
       :external_gateway_info     => attrs['external_gateway_info'],
       :status                    => attrs['status'],
       :tenant_id                 => attrs['tenant_id'],
+      :availability_zone_hint    => attrs['availability_zone_hint']
     }
 
     if @resource[:gateway_network_name]
@@ -188,4 +194,16 @@ Puppet::Type.type(:neutron_router).provide(
     end
   end
 
+  def availability_zone_hint=(value)
+    if self.class.do_not_manage
+      fail("Not managing Neutron_router[#{@resource[:name]}] due to earlier Neutron API failures.")
+    end
+    results = auth_neutron("router-show", '--format=shell', resource[:name])
+    attrs = self.class.parse_creation_output(results)
+    set_admin_state_up(false)
+    auth_neutron('router-update', "--availability-zone-hint=#{value}", name)
+    if attrs['admin_state_up'] == 'True'
+      set_admin_state_up(true)
+    end
+  end
 end

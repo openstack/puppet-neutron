@@ -83,6 +83,11 @@
 #   in the l3 config.
 #   Defaults to false.
 #
+# [*availability_zone*]
+#   (optional) The availability zone of the agent.
+#   Neutron will only schedule routers on the agent based on availability zone
+#   Defaults to $::os_service_default
+#
 # === Deprecated Parameters
 #
 # [*external_network_bridge*]
@@ -112,6 +117,7 @@ class neutron::agents::l3 (
   $ha_vrrp_advert_int               = '3',
   $agent_mode                       = 'legacy',
   $purge_config                     = false,
+  $availability_zone                = $::os_service_default,
   # DEPRECATED PARAMETERS
   $external_network_bridge          = $::os_service_default,
   $router_id                        = $::os_service_default,
@@ -152,6 +158,7 @@ class neutron::agents::l3 (
     'DEFAULT/periodic_fuzzy_delay':             value => $periodic_fuzzy_delay;
     'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;
     'DEFAULT/agent_mode':                       value => $agent_mode;
+    'AGENT/availability_zone':                  value => $availability_zone;
   }
 
   if $::neutron::params::l3_agent_package {

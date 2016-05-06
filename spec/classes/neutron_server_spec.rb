@@ -200,6 +200,32 @@ describe 'neutron::server' do
         is_expected.not_to contain_neutron_config('keystone_authtoken/auth_type')
       end
     end
+
+    context 'with a bad dhcp_load_type value' do
+      before :each do
+        params.merge!(:dhcp_load_type => 'badvalue')
+      end
+
+      it_raises 'a Puppet::Error', /Must pass either networks, subnets, or ports as values for dhcp_load_type/
+    end
+
+    context 'with availability zone hints set' do
+      before :each do
+        params.merge!(:dhcp_load_type             => 'networks',
+                      :router_scheduler_driver    => 'neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler',
+                      :network_scheduler_driver   => 'neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler',
+                      :default_availability_zones => ['zone1', 'zone2']
+        )
+      end
+
+      it 'should configure neutron server for availability zones' do
+        is_expected.to contain_neutron_config('DEFAULT/default_availability_zones').with_value('zone1,zone2')
+        is_expected.to contain_neutron_config('DEFAULT/router_scheduler_driver').with_value('neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler')
+        is_expected.to contain_neutron_config('DEFAULT/network_scheduler_driver').with_value('neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler')
+        is_expected.to contain_neutron_config('DEFAULT/dhcp_load_type').with_value('networks')
+      end
+
+    end
   end
 
   shared_examples_for 'a neutron server with broken authentication' do

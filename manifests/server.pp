@@ -154,10 +154,22 @@
 # [*lock_path*]
 #   (optional) Deprecated.  Use lock_path parameter on base neutron class instead.
 #
+# [*network_scheduler_driver*]
+#   (optional) The scheduler used when scheduling networks
+#   neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler to use availability zone hints scheduling.
+#   Defaults to $::os_service_default
+#
+#   Example:
+#
+#     class { 'neutron':
+#       network_scheduler_driver => 'neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler'
+#     }
+#
 # [*router_scheduler_driver*]
 #   (optional) Driver to use for scheduling router to a default L3 agent. Could be:
 #   neutron.scheduler.l3_agent_scheduler.ChanceScheduler to schedule a router in a random way
 #   neutron.scheduler.l3_agent_scheduler.LeastRoutersScheduler to allocate on an L3 agent with the least number of routers bound.
+#   neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler to use availability zone hints.
 #   Defaults to: neutron.scheduler.l3_agent_scheduler.ChanceScheduler
 #
 # [*router_distributed*]
@@ -165,6 +177,28 @@
 #   of distributed tenant routers.
 #   Also can be the type of the router on the create request (admin-only attribute).
 #   Defaults to $::os_service_default
+#
+# [*dhcp_load_type*]
+#   (optional) The resource type whos load is being reported by the agent.
+#   The expected values are either 'networks', 'subnets', 'ports'.
+#   Defaults to $::os_service_default
+#
+#   Example:
+#
+#     class { 'neutron':
+#       dhcp_load_type => 'networks'
+#     }
+#
+# [*default_availability_zones*]
+#   (optional) A list of availability zones that are picked when availability zone is not specified
+#   The expected input is an array when specified.
+#   Defaults to $::os_service_default
+#
+#   Example:
+#
+#     class { 'neutron':
+#       default_availability_zones => ['zone1', 'zone2']
+#     }
 #
 # [*allow_automatic_l3agent_failover*]
 #   (optional) Allow automatic rescheduling of routers from dead L3 agents with
@@ -281,6 +315,9 @@ class neutron::server (
   $agent_down_time                  = $::os_service_default,
   $router_scheduler_driver          = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
   $router_distributed               = $::os_service_default,
+  $network_scheduler_driver         = $::os_service_default,
+  $dhcp_load_type                   = $::os_service_default,
+  $default_availability_zones       = $::os_service_default,
   $allow_automatic_l3agent_failover = $::os_service_default,
   $l3_ha                            = false,
   $max_l3_agents_per_router         = 3,
@@ -310,6 +347,14 @@ class neutron::server (
   include ::neutron::policy
   # Work-around LP#1551974. neutron requires the keystoneclient to auth tokens
   include ::keystone::client
+
+  if !is_service_default($default_availability_zones) {
+    validate_array($default_availability_zones)
+  }
+
+  if !is_service_default($dhcp_load_type) {
+    validate_re($dhcp_load_type, ['^networks$', '^subnets$', '^ports$'], 'Must pass either networks, subnets, or ports as values for dhcp_load_type')
+  }
 
   if $ensure_fwaas_package {
     if ($::osfamily == 'Debian') {
@@ -391,6 +436,9 @@ class neutron::server (
     'DEFAULT/router_scheduler_driver':          value => $router_scheduler_driver;
     'DEFAULT/router_distributed':               value => $router_distributed;
     'DEFAULT/allow_automatic_l3agent_failover': value => $allow_automatic_l3agent_failover;
+    'DEFAULT/network_scheduler_driver':         value => $network_scheduler_driver;
+    'DEFAULT/dhcp_load_type':                   value => $dhcp_load_type;
+    'DEFAULT/default_availability_zones':       value => join(any2array($default_availability_zones), ',');
   }
 
   if $state_path {

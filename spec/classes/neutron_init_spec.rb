@@ -72,7 +72,6 @@ describe 'neutron' do
     it_configures 'with SSL enabled with kombu'
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
-    it_configures 'with SSL wrongly configured'
     it_configures 'with SSL and kombu wrongly configured'
     it_configures 'with SSL socket options set'
     it_configures 'with SSL socket options set with wrong parameters'
@@ -120,6 +119,9 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value( '<SERVICE DEFAULT>' )
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_missing_consumer_retry_timeout').with_value( '<SERVICE DEFAULT>' )
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value( '<SERVICE DEFAULT>' )
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_compression').with_value( '<SERVICE DEFAULT>' )
     end
 
     it 'configures neutron.conf' do
@@ -266,6 +268,24 @@ describe 'neutron' do
     it { is_expected.to contain_neutron_config('DEFAULT/use_syslog').with_value(false) }
   end
 
+  shared_examples_for 'with non-default kombu options' do
+    before do
+      params.merge!(
+        :kombu_missing_consumer_retry_timeout => '5',
+        :kombu_failover_strategy              => 'shuffle',
+        :kombu_compression                    => 'gzip',
+        :kombu_reconnect_delay                => '30',
+      )
+    end
+
+    it do
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('30')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_missing_consumer_retry_timeout').with_value('5')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('shuffle')
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_compression').with_value('gzip')
+    end
+  end
+
   shared_examples_for 'with SSL enabled with kombu' do
     before do
       params.merge!(
@@ -311,33 +331,6 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
     end
-  end
-
-  shared_examples_for 'with SSL wrongly configured' do
-    before do
-      params.merge!(
-        :rabbit_use_ssl => false
-      )
-    end
-
-    context 'with SSL disabled' do
-
-      context 'with kombu_ssl_ca_certs parameter' do
-        before { params.merge!(:kombu_ssl_ca_certs => '/path/to/ssl/ca/certs') }
-        it_raises 'a Puppet::Error', /The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true/
-      end
-
-      context 'with kombu_ssl_certfile parameter' do
-        before { params.merge!(:kombu_ssl_certfile => '/path/to/ssl/cert/file') }
-        it_raises 'a Puppet::Error', /The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true/
-      end
-
-      context 'with kombu_ssl_keyfile parameter' do
-        before { params.merge!(:kombu_ssl_keyfile => '/path/to/ssl/keyfile') }
-        it_raises 'a Puppet::Error', /The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true/
-      end
-    end
-
   end
 
   shared_examples_for 'with SSL and kombu wrongly configured' do

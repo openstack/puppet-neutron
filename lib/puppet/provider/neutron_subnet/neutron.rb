@@ -29,6 +29,8 @@ Puppet::Type.type(:neutron_subnet).provide(
         :id                        => attrs['id'],
         :cidr                      => attrs['cidr'],
         :ip_version                => attrs['ip_version'],
+        :ipv6_ra_mode              => attrs['ipv6_ra_mode'],
+        :ipv6_address_mode         => attrs['ipv6_address_mode'],
         :gateway_ip                => parse_gateway_ip(attrs['gateway_ip']),
         :allocation_pools          => parse_allocation_pool(attrs['allocation_pools']),
         :host_routes               => parse_host_routes(attrs['host_routes']),
@@ -94,6 +96,14 @@ Puppet::Type.type(:neutron_subnet).provide(
       opts << "--ip-version=#{@resource[:ip_version]}"
     end
 
+    if @resource[:ipv6_ra_mode]
+      opts << "--ipv6-ra-mode=#{@resource[:ipv6_ra_mode]}"
+    end
+
+    if @resource[:ipv6_address_mode]
+      opts << "--ipv6-address-mode=#{@resource[:ipv6_address_mode]}"
+    end
+
     if @resource[:gateway_ip]
       if @resource[:gateway_ip] == ''
         opts << '--no-gateway'
@@ -151,6 +161,8 @@ Puppet::Type.type(:neutron_subnet).provide(
         :id                        => attrs['id'],
         :cidr                      => attrs['cidr'],
         :ip_version                => attrs['ip_version'],
+        :ipv6_ra_mode              => attrs['ipv6_ra_mode'],
+        :ipv6_address_mode         => attrs['ipv6_address_mode'],
         :gateway_ip                => self.class.parse_gateway_ip(attrs['gateway_ip']),
         :allocation_pools          => self.class.parse_allocation_pool(attrs['allocation_pools']),
         :host_routes               => self.class.parse_host_routes(attrs['host_routes']),
@@ -208,6 +220,8 @@ Puppet::Type.type(:neutron_subnet).provide(
   [
    :cidr,
    :ip_version,
+   :ipv6_ra_mode,
+   :ipv6_address_mode,
    :network_id,
    :allocation_pools,
    :tenant_id,

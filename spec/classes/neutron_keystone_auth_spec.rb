@@ -79,29 +79,6 @@ describe 'neutron::keystone::auth' do
     ) }
   end
 
-  describe 'with deprecated endpoint parameters' do
-    let :params do
-      {
-        :password          => 'neutron_password',
-        :public_protocol   => 'https',
-        :public_port       => '80',
-        :public_address    => '10.10.10.10',
-        :port              => '81',
-        :internal_protocol => 'https',
-        :internal_address  => '10.10.10.11',
-        :admin_protocol    => 'https',
-        :admin_address     => '10.10.10.12'
-      }
-    end
-
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron::network').with(
-      :ensure       => 'present',
-      :public_url   => "https://10.10.10.10:80",
-      :internal_url => "https://10.10.10.11:81",
-      :admin_url    => "https://10.10.10.12:81"
-    ) }
-  end
-
   describe 'when overriding auth name' do
 
     let :params do

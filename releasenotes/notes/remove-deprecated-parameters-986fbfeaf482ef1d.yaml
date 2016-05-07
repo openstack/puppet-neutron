@@ -1,0 +1,6 @@
+---
+other:
+  - Remove deprecated parameters for keystone::auth, including
+    port, public_protocol, public_address, public_port, internal_protocol,
+    internal_address, admin_protocol, admin_address. Use the new parameters
+    public_url, admin_url and internal_url instead.

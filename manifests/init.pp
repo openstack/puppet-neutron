@@ -198,6 +198,24 @@
 #   reconnect. See https://review.openstack.org/#/c/76686
 #   Defaults to $::os_service_default
 #
+# [*kombu_missing_consumer_retry_timeout*]
+#   (Optional) How long to wait a missing client beforce abandoning to send it
+#   its replies. This value should not be longer than rpc_response_timeout.
+#   (integer value)
+#   Defaults to $::os_service_default
+#
+# [*kombu_failover_strategy*]
+#   (Optional) Determines how the next RabbitMQ node is chosen in case the one
+#   we are currently connected to becomes unavailable. Takes effect only if
+#   more than one RabbitMQ node is provided in config. (string value)
+#   Defaults to $::os_service_default
+#
+# [*kombu_compression*]
+#   (optional) Possible values are: gzip, bz2. If not set compression will not
+#   be used. This option may notbe available in future versions. EXPERIMENTAL.
+#   (string value)
+#   Defaults to $::os_service_default
+#
 # [*use_ssl*]
 #   (optinal) Enable SSL on the API server
 #   Defaults to $::os_service_default
@@ -278,68 +296,71 @@
 #   Defaults to undef
 #
 class neutron (
-  $enabled                            = true,
-  $package_ensure                     = 'present',
-  $debug                              = undef,
-  $bind_host                          = $::os_service_default,
-  $bind_port                          = $::os_service_default,
-  $core_plugin                        = 'openvswitch',
-  $service_plugins                    = $::os_service_default,
-  $auth_strategy                      = 'keystone',
-  $base_mac                           = $::os_service_default,
-  $mac_generation_retries             = $::os_service_default,
-  $dhcp_lease_duration                = $::os_service_default,
-  $dns_domain                         = $::os_service_default,
-  $dhcp_agents_per_network            = $::os_service_default,
-  $global_physnet_mtu                 = $::os_service_default,
-  $dhcp_agent_notification            = $::os_service_default,
-  $advertise_mtu                      = $::os_service_default,
-  $allow_bulk                         = $::os_service_default,
-  $allow_pagination                   = $::os_service_default,
-  $allow_sorting                      = $::os_service_default,
-  $allow_overlapping_ips              = $::os_service_default,
-  $api_extensions_path                = $::os_service_default,
-  $root_helper                        = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $report_interval                    = $::os_service_default,
-  $memcache_servers                   = false,
-  $control_exchange                   = 'neutron',
-  $rpc_backend                        = $::os_service_default,
-  $rpc_response_timeout               = $::os_service_default,
-  $rabbit_password                    = $::os_service_default,
-  $rabbit_host                        = $::os_service_default,
-  $rabbit_hosts                       = $::os_service_default,
-  $rabbit_port                        = $::os_service_default,
-  $rabbit_ha_queues                   = $::os_service_default,
-  $rabbit_user                        = $::os_service_default,
-  $rabbit_virtual_host                = $::os_service_default,
-  $rabbit_heartbeat_timeout_threshold = $::os_service_default,
-  $rabbit_heartbeat_rate              = $::os_service_default,
-  $rabbit_use_ssl                     = $::os_service_default,
-  $amqp_durable_queues                = $::os_service_default,
-  $kombu_ssl_ca_certs                 = $::os_service_default,
-  $kombu_ssl_certfile                 = $::os_service_default,
-  $kombu_ssl_keyfile                  = $::os_service_default,
-  $kombu_ssl_version                  = $::os_service_default,
-  $kombu_reconnect_delay              = $::os_service_default,
-  $use_ssl                            = $::os_service_default,
-  $cert_file                          = $::os_service_default,
-  $key_file                           = $::os_service_default,
-  $ca_file                            = $::os_service_default,
-  $use_syslog                         = undef,
-  $use_stderr                         = undef,
-  $log_facility                       = undef,
-  $log_file                           = undef,
-  $log_dir                            = undef,
-  $manage_logging                     = true,
-  $state_path                         = $::os_service_default,
-  $lock_path                          = '$state_path/lock',
-  $purge_config                       = false,
-  $notification_driver                = $::os_service_default,
-  $notification_topics                = $::os_service_default,
-  $notification_transport_url         = $::os_service_default,
+  $enabled                              = true,
+  $package_ensure                       = 'present',
+  $debug                                = undef,
+  $bind_host                            = $::os_service_default,
+  $bind_port                            = $::os_service_default,
+  $core_plugin                          = 'openvswitch',
+  $service_plugins                      = $::os_service_default,
+  $auth_strategy                        = 'keystone',
+  $base_mac                             = $::os_service_default,
+  $mac_generation_retries               = $::os_service_default,
+  $dhcp_lease_duration                  = $::os_service_default,
+  $dns_domain                           = $::os_service_default,
+  $dhcp_agents_per_network              = $::os_service_default,
+  $global_physnet_mtu                   = $::os_service_default,
+  $dhcp_agent_notification              = $::os_service_default,
+  $advertise_mtu                        = $::os_service_default,
+  $allow_bulk                           = $::os_service_default,
+  $allow_pagination                     = $::os_service_default,
+  $allow_sorting                        = $::os_service_default,
+  $allow_overlapping_ips                = $::os_service_default,
+  $api_extensions_path                  = $::os_service_default,
+  $root_helper                          = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+  $report_interval                      = $::os_service_default,
+  $memcache_servers                     = false,
+  $control_exchange                     = 'neutron',
+  $rpc_backend                          = $::os_service_default,
+  $rpc_response_timeout                 = $::os_service_default,
+  $rabbit_password                      = $::os_service_default,
+  $rabbit_host                          = $::os_service_default,
+  $rabbit_hosts                         = $::os_service_default,
+  $rabbit_port                          = $::os_service_default,
+  $rabbit_ha_queues                     = $::os_service_default,
+  $rabbit_user                          = $::os_service_default,
+  $rabbit_virtual_host                  = $::os_service_default,
+  $rabbit_heartbeat_timeout_threshold   = $::os_service_default,
+  $rabbit_heartbeat_rate                = $::os_service_default,
+  $rabbit_use_ssl                       = $::os_service_default,
+  $amqp_durable_queues                  = $::os_service_default,
+  $kombu_ssl_ca_certs                   = $::os_service_default,
+  $kombu_ssl_certfile                   = $::os_service_default,
+  $kombu_ssl_keyfile                    = $::os_service_default,
+  $kombu_ssl_version                    = $::os_service_default,
+  $kombu_reconnect_delay                = $::os_service_default,
+  $kombu_missing_consumer_retry_timeout = $::os_service_default,
+  $kombu_failover_strategy              = $::os_service_default,
+  $kombu_compression                    = $::os_service_default,
+  $use_ssl                              = $::os_service_default,
+  $cert_file                            = $::os_service_default,
+  $key_file                             = $::os_service_default,
+  $ca_file                              = $::os_service_default,
+  $use_syslog                           = undef,
+  $use_stderr                           = undef,
+  $log_facility                         = undef,
+  $log_file                             = undef,
+  $log_dir                              = undef,
+  $manage_logging                       = true,
+  $state_path                           = $::os_service_default,
+  $lock_path                            = '$state_path/lock',
+  $purge_config                         = false,
+  $notification_driver                  = $::os_service_default,
+  $notification_topics                  = $::os_service_default,
+  $notification_transport_url           = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $network_device_mtu                 = undef,
-  $verbose                            = undef,
+  $network_device_mtu                   = undef,
+  $verbose                              = undef,
 ) {
 
   include ::neutron::params
@@ -362,19 +383,11 @@ class neutron (
     }
   }
 
-  if ! is_service_default($rabbit_use_ssl) and !($rabbit_use_ssl) {
-    if ! is_service_default($kombu_ssl_ca_certs) and ($kombu_ssl_ca_certs) {
-      fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
-    }
-    if ! is_service_default($kombu_ssl_certfile) and ($kombu_ssl_certfile) {
-      fail('The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true')
-    }
-    if ! is_service_default($kombu_ssl_keyfile) and ($kombu_ssl_keyfile) {
-      fail('The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true')
-    }
-  }
   if (is_service_default($kombu_ssl_certfile) and ! is_service_default($kombu_ssl_keyfile)) or (is_service_default($kombu_ssl_keyfile) and ! is_service_default($kombu_ssl_certfile)) {
     fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
+  }
+  if ! is_service_default($kombu_missing_consumer_retry_timeout) and ! is_service_default($rpc_response_timeout) and ($kombu_missing_consumer_retry_timeout > $rpc_response_timeout) {
+    warning('kombu_missing_consumer_retry_timeout should not be longer than rpc_response_timeout')
   }
 
   if $memcache_servers {
@@ -452,22 +465,25 @@ class neutron (
     }
 
     oslo::messaging::rabbit {'neutron_config':
-      rabbit_userid               => $rabbit_user,
-      rabbit_password             => $rabbit_password,
-      rabbit_virtual_host         => $rabbit_virtual_host,
-      heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
-      heartbeat_rate              => $rabbit_heartbeat_rate,
-      rabbit_use_ssl              => $rabbit_use_ssl,
-      kombu_reconnect_delay       => $kombu_reconnect_delay,
-      kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
-      kombu_ssl_certfile          => $kombu_ssl_certfile,
-      kombu_ssl_keyfile           => $kombu_ssl_keyfile,
-      amqp_durable_queues         => $amqp_durable_queues,
-      rabbit_hosts                => $rabbit_hosts,
-      rabbit_ha_queues            => $rabbit_ha_queues,
-      rabbit_host                 => $rabbit_host,
-      rabbit_port                 => $rabbit_port,
-      kombu_ssl_version           => $kombu_ssl_version,
+      rabbit_userid                        => $rabbit_user,
+      rabbit_password                      => $rabbit_password,
+      rabbit_virtual_host                  => $rabbit_virtual_host,
+      heartbeat_timeout_threshold          => $rabbit_heartbeat_timeout_threshold,
+      heartbeat_rate                       => $rabbit_heartbeat_rate,
+      rabbit_use_ssl                       => $rabbit_use_ssl,
+      kombu_reconnect_delay                => $kombu_reconnect_delay,
+      kombu_missing_consumer_retry_timeout => $kombu_missing_consumer_retry_timeout,
+      kombu_failover_strategy              => $kombu_failover_strategy,
+      kombu_compression                    => $kombu_compression,
+      kombu_ssl_ca_certs                   => $kombu_ssl_ca_certs,
+      kombu_ssl_certfile                   => $kombu_ssl_certfile,
+      kombu_ssl_keyfile                    => $kombu_ssl_keyfile,
+      amqp_durable_queues                  => $amqp_durable_queues,
+      rabbit_hosts                         => $rabbit_hosts,
+      rabbit_ha_queues                     => $rabbit_ha_queues,
+      rabbit_host                          => $rabbit_host,
+      rabbit_port                          => $rabbit_port,
+      kombu_ssl_version                    => $kombu_ssl_version,
     }
   } else {
     neutron_config {

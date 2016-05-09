@@ -423,13 +423,16 @@ class neutron (
     'DEFAULT/allow_pagination':        value => $allow_pagination;
     'DEFAULT/allow_sorting':           value => $allow_sorting;
     'DEFAULT/allow_overlapping_ips':   value => $allow_overlapping_ips;
-    'DEFAULT/control_exchange':        value => $control_exchange;
     'DEFAULT/api_extensions_path':     value => $api_extensions_path;
     'DEFAULT/state_path':              value => $state_path;
-    'DEFAULT/rpc_response_timeout':    value => $rpc_response_timeout;
     'DEFAULT/global_physnet_mtu':      value => pick($network_device_mtu, $global_physnet_mtu);
     'agent/root_helper':               value => $root_helper;
     'agent/report_interval':           value => $report_interval;
+  }
+
+  oslo::messaging::default { 'neutron_config':
+    rpc_response_timeout => $rpc_response_timeout,
+    control_exchange     => $control_exchange
   }
 
   oslo::concurrency { 'neutron_config': lock_path => $lock_path }

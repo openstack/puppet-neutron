@@ -24,7 +24,6 @@ describe 'neutron::server::notifications' do
         {
             :notify_nova_on_port_status_changes => true,
             :notify_nova_on_port_data_changes   => true,
-            :nova_url                           => 'http://127.0.0.1:8774/v2',
             :auth_type                          => 'password',
             :username                           => 'nova',
             :tenant_name                        => 'services',
@@ -59,7 +58,6 @@ describe 'neutron::server::notifications' do
             is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_status_changes').with_value(true)
             is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_data_changes').with_value(true)
             is_expected.to contain_neutron_config('DEFAULT/send_events_interval').with_value('<SERVICE DEFAULT>')
-            is_expected.to contain_neutron_config('DEFAULT/nova_url').with_value('http://127.0.0.1:8774/v2')
             is_expected.to contain_neutron_config('nova/auth_type').with_value('password')
             is_expected.to contain_neutron_config('nova/auth_url').with_value('http://127.0.0.1:35357')
             is_expected.to contain_neutron_config('nova/username').with_value('nova')

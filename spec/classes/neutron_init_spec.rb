@@ -85,6 +85,10 @@ describe 'neutron' do
     it_configures 'without memcache_servers'
     it_configures 'with memcache_servers'
     it_configures 'with dns_domain defined'
+
+    context 'with amqp rpc_backend value' do
+      it_configures 'amqp support'
+    end
   end
 
   shared_examples_for 'a neutron base installation' do
@@ -482,6 +486,60 @@ describe 'neutron' do
 
     it do
       is_expected.to contain_neutron_config('DEFAULT/dns_domain').with_value(params[:dns_domain])
+    end
+  end
+
+  shared_examples_for 'amqp support' do
+    context 'with default parameters' do
+      before { params.merge!( :rpc_backend => 'amqp' ) }
+
+      it { is_expected.to contain_neutron_config('DEFAULT/rpc_backend').with_value('amqp') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/idle_timeout').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/trace').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/ssl_ca_file').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/ssl_cert_file').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/ssl_key_file').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/ssl_key_password').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/allow_insecure_clients').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/username').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>') }
+    end
+
+    context 'with overriden amqp parameters' do
+      before { params.merge!(
+        :rpc_backend        => 'amqp',
+        :amqp_idle_timeout  => '60',
+        :amqp_trace         => true,
+        :amqp_ssl_ca_file   => '/path/to/ca.cert',
+        :amqp_ssl_cert_file => '/path/to/certfile',
+        :amqp_ssl_key_file  => '/path/to/key',
+        :amqp_username      => 'amqp_user',
+        :amqp_password      => 'password',
+      ) }
+
+      it { is_expected.to contain_neutron_config('DEFAULT/rpc_backend').with_value('amqp') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/idle_timeout').with_value('60') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/trace').with_value('true') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/ssl_ca_file').with_value('/path/to/ca.cert') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/ssl_cert_file').with_value('/path/to/certfile') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/ssl_key_file').with_value('/path/to/key') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/allow_insecure_clients').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/username').with_value('amqp_user') }
+      it { is_expected.to contain_neutron_config('oslo_messaging_amqp/password').with_value('password') }
     end
   end
 

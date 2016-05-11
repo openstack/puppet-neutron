@@ -133,6 +133,9 @@ describe 'neutron::server' do
       end
       it 'should disable HA routers' do
         is_expected.to contain_neutron_config('DEFAULT/l3_ha').with_value(false)
+        is_expected.to contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(3)
+        is_expected.to contain_neutron_config('DEFAULT/min_l3_agents_per_router').with_value(2)
+        is_expected.to contain_neutron_config('DEFAULT/l3_ha_net_cidr').with_value('<SERVICE DEFAULT>')
       end
     end
 

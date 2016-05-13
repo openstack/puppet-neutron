@@ -105,10 +105,6 @@
 #   mappings provided as part of the $bridge_mappings parameters.
 #   Defaults to true
 #
-# [*prevent_arp_spoofing*]
-#   (optional) Enable or not ARP Spoofing Protection
-#   Defaults to $::os_service_default
-#
 # [*extensions*]
 #   (optional) Extensions list to use
 #   Defaults to $::os_service_default
@@ -139,6 +135,12 @@
 #   in the ovs config.
 #   Defaults to false.
 #
+# === Deprecated Parameters
+#
+# [*prevent_arp_spoofing*]
+#   (optional) Enable or not ARP Spoofing Protection
+#   Defaults to $::os_service_default
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -159,13 +161,14 @@ class neutron::agents::ml2::ovs (
   $enable_distributed_routing = $::os_service_default,
   $drop_flows_on_start        = false,
   $manage_vswitch             = true,
-  $prevent_arp_spoofing       = $::os_service_default,
   $int_peer_patch_port        = $::os_service_default,
   $tun_peer_patch_port        = $::os_service_default,
   $datapath_type              = $::os_service_default,
   $vhostuser_socket_dir       = $::os_service_default,
   $ovsdb_interface            = $::os_service_default,
   $purge_config               = false,
+  # DEPRECATED PARAMETERS
+  $prevent_arp_spoofing       = $::os_service_default,
 ) {
 
   include ::neutron::params
@@ -185,6 +188,10 @@ class neutron::agents::ml2::ovs (
 
   if ! (is_service_default($ovsdb_interface)) and ! ($ovsdb_interface =~ /^(ovs-ofctl|native)$/) {
     fail('A value of $ovsdb_interface is incorrect. The allowed values are ovs-ofctl and native')
+  }
+
+  if ! is_service_default ($prevent_arp_spoofing) {
+    warning('The prevent_arp_spoofing parameter is deprecated and will be removed in Ocata release')
   }
 
   Neutron_agent_ovs<||> ~> Service['neutron-ovs-agent-service']

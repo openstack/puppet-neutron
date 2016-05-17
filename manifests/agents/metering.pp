@@ -66,10 +66,8 @@ class neutron::agents::metering (
   $purge_config     = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_config<||>                ~> Service['neutron-metering-service']
-  Neutron_metering_agent_config<||> ~> Service['neutron-metering-service']
 
   resources { 'neutron_metering_agent_config':
     purge => $purge_config,
@@ -87,7 +85,6 @@ class neutron::agents::metering (
   }
 
   if $::neutron::params::metering_agent_package {
-    Package['neutron']            -> Package['neutron-metering-agent']
     package { 'neutron-metering-agent':
       ensure => $package_ensure,
       name   => $::neutron::params::metering_agent_package,
@@ -101,17 +98,12 @@ class neutron::agents::metering (
     } else {
       $service_ensure = 'stopped'
     }
-    Package['neutron'] ~> Service['neutron-metering-service']
-    if $::neutron::params::metering_agent_package {
-      Package['neutron-metering-agent'] ~> Service['neutron-metering-service']
-    }
   }
 
   service { 'neutron-metering-service':
-    ensure  => $service_ensure,
-    name    => $::neutron::params::metering_agent_service,
-    enable  => $enabled,
-    require => Class['neutron'],
-    tag     => 'neutron-service',
+    ensure => $service_ensure,
+    name   => $::neutron::params::metering_agent_service,
+    enable => $enabled,
+    tag    => 'neutron-service',
   }
 }

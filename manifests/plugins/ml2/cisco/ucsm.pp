@@ -35,6 +35,8 @@ class neutron::plugins::ml2::cisco::ucsm (
   $ucsm_host_list,
   $supported_pci_devs = $::os_service_default,
 ) {
+
+  include ::neutron::deps
   include ::neutron::plugins::ml2::cisco
 
   neutron_plugin_ml2 {

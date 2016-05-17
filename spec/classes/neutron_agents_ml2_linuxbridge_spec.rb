@@ -65,10 +65,10 @@ describe 'neutron::agents::ml2::linuxbridge' do
           :name    => platform_params[:linuxbridge_agent_service],
           :enable  => true,
           :ensure  => 'running',
-          :require => 'Class[Neutron]',
           :tag     => 'neutron-service',
         )
-        is_expected.to contain_service('neutron-plugin-linuxbridge-agent').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-plugin-linuxbridge-agent]' ] )
+        is_expected.to contain_service('neutron-plugin-linuxbridge-agent').that_subscribes_to('Anchor[neutron::service::begin]')
+        is_expected.to contain_service('neutron-plugin-linuxbridge-agent').that_notifies('Anchor[neutron::service::end]')
       end
 
       context 'with manage_service as false' do

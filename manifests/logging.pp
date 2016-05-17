@@ -132,6 +132,8 @@ class neutron::logging (
   $log_facility                  = undef,
 ) {
 
+  include ::neutron::deps
+
   $debug_real = pick($::neutron::debug,$debug)
   $use_syslog_real = pick($::neutron::use_syslog,$use_syslog)
   $use_stderr_real = pick($::neutron::use_stderr,$use_stderr)

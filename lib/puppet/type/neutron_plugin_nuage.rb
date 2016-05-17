@@ -25,5 +25,9 @@ Puppet::Type.newtype(:neutron_plugin_nuage) do
     'neutron-plugin-nuage'
   end
 
+  autorequire(:file) do
+    '/etc/neutron/plugins/nuage/plugin.ini'
+  end
+
 end
 

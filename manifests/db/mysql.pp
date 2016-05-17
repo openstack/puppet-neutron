@@ -34,8 +34,9 @@ class neutron::db::mysql (
   $allowed_hosts = undef,
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
-  # DEPRECATED
 ) {
+
+  include ::neutron::deps
 
   validate_string($password)
 
@@ -48,6 +49,8 @@ class neutron::db::mysql (
     collate       => $collate,
     allowed_hosts => $allowed_hosts,
   }
-  ::Openstacklib::Db::Mysql['neutron'] ~> Service <| title == 'neutron-server' |>
-  ::Openstacklib::Db::Mysql['neutron'] ~> Exec <| title == 'neutron-db-sync' |>
+
+  Anchor['neutron::db::begin']
+  ~> Class['neutron::db::mysql']
+  ~> Anchor['neutron::db::end']
 }

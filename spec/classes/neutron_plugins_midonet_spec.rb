@@ -38,8 +38,9 @@ describe 'neutron::plugins::midonet' do
     it 'should create plugin symbolic link' do
       is_expected.to contain_file('/etc/neutron/plugin.ini').with(
         :ensure  => 'link',
-        :target  => '/etc/neutron/plugins/midonet/midonet.ini',
-        :require => 'Package[python-networking-midonet]')
+        :target  => '/etc/neutron/plugins/midonet/midonet.ini')
+      is_expected.to contain_file('/etc/neutron/plugin.ini').that_requires('Anchor[neutron::config::begin]')
+      is_expected.to contain_file('/etc/neutron/plugin.ini').that_notifies('Anchor[neutron::config::end]')
     end
 
     it 'passes purge to resource' do
@@ -69,9 +70,9 @@ describe 'neutron::plugins::midonet' do
         :path    => '/etc/default/neutron-server',
         :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
         :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/midonet/midonet.ini',
-        :require => ['Package[neutron-server]', 'Package[python-networking-midonet]'],
-        :notify  => 'Service[neutron-server]'
       )
+      is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+      is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
     end
     it_configures 'neutron midonet plugin'
   end

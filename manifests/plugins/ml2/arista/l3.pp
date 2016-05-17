@@ -56,6 +56,8 @@ class neutron::plugins::ml2::arista::l3(
   $use_vrf                  = $::os_service_default
 
 ) {
+
+  include ::neutron::deps
   require ::neutron::plugins::ml2
 
   if !is_service_default($mlag_config) {

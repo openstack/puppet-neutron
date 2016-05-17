@@ -171,6 +171,7 @@ class neutron::agents::ml2::ovs (
   $prevent_arp_spoofing       = $::os_service_default,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
   if $manage_vswitch {
     require vswitch::ovs
@@ -193,8 +194,6 @@ class neutron::agents::ml2::ovs (
   if ! is_service_default ($prevent_arp_spoofing) {
     warning('The prevent_arp_spoofing parameter is deprecated and will be removed in Ocata release')
   }
-
-  Neutron_agent_ovs<||> ~> Service['neutron-ovs-agent-service']
 
   resources { 'neutron_agent_ovs':
     purge => $purge_config,
@@ -305,20 +304,16 @@ class neutron::agents::ml2::ovs (
     } else {
       $service_ensure = 'stopped'
     }
-    Package['neutron'] ~> Service['neutron-ovs-agent-service']
-    Package['neutron-ovs-agent'] ~> Service['neutron-ovs-agent-service']
   }
 
   service { 'neutron-ovs-agent-service':
-    ensure  => $service_ensure,
-    name    => $::neutron::params::ovs_agent_service,
-    enable  => $enabled,
-    require => Class['neutron'],
-    tag     => ['neutron-service', 'neutron-db-sync-service'],
+    ensure => $service_ensure,
+    name   => $::neutron::params::ovs_agent_service,
+    enable => $enabled,
+    tag    => ['neutron-service', 'neutron-db-sync-service'],
   }
 
   if $::neutron::params::ovs_cleanup_service {
-    Package[['neutron', 'neutron-ovs-agent']] -> Service['ovs-cleanup-service']
     service { 'ovs-cleanup-service':
       name   => $::neutron::params::ovs_cleanup_service,
       enable => $enabled,

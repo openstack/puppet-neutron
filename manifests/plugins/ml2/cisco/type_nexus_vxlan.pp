@@ -25,6 +25,7 @@ class neutron::plugins::ml2::cisco::type_nexus_vxlan (
   $vni_ranges,
   $mcast_ranges,
 ) {
+  include ::neutron::deps
   include ::neutron::plugins::ml2::cisco
 
   neutron_plugin_ml2 {

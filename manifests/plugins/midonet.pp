@@ -81,9 +81,8 @@ class neutron::plugins::midonet (
   $purge_config      = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_plugin_midonet<||> ~> Service['neutron-server']
 
   ensure_resource('file', '/etc/neutron/plugins/midonet', {
     ensure => directory,
@@ -91,14 +90,6 @@ class neutron::plugins::midonet (
     group  => 'neutron',
     mode   => '0640'}
   )
-
-  # Ensure the neutron package is installed before config is set
-  # under both RHEL and Ubuntu
-  if ($::neutron::params::server_package) {
-    Package['neutron-server'] -> Neutron_plugin_midonet<||>
-  } else {
-    Package['neutron'] -> Neutron_plugin_midonet<||>
-  }
 
   resources { 'neutron_plugin_midonet':
     purge => $purge_config,
@@ -113,11 +104,10 @@ class neutron::plugins::midonet (
 
   if $::osfamily == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path    => '/etc/default/neutron-server',
-      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::midonet_config_file}",
-      require => [ Package['neutron-server'], Package[$::neutron::params::midonet_server_package] ],
-      notify  => Service['neutron-server'],
+      path  => '/etc/default/neutron-server',
+      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line  => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::midonet_config_file}",
+      tag   => 'neutron-file-line',
     }
   }
 
@@ -128,21 +118,22 @@ class neutron::plugins::midonet (
   }
   else {
     file {'/etc/neutron/plugin.ini':
-      ensure  => link,
-      target  => $::neutron::params::midonet_config_file,
-      require => Package[$::neutron::params::midonet_server_package]
+      ensure => link,
+      target => $::neutron::params::midonet_config_file,
+      tag    => 'neutron-config-file'
     }
   }
 
   if $sync_db {
-
-    Package<| title == $::neutron::params::midonet_server_package |> ~> Exec['midonet-db-sync']
-
     exec { 'midonet-db-sync':
       command     => 'midonet-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head',
       path        => '/usr/bin',
-      before      => Service['neutron-server'],
-      subscribe   => Neutron_config['database/connection'],
+      subscribe   => [
+        Anchor['neutron::install::end'],
+        Anchor['neutron::config::end'],
+        Anchor['neutron::dbsync::begin']
+      ],
+      notify      => Anchor['neutron::dbsync::end'],
       refreshonly => true
     }
   }

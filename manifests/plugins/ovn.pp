@@ -40,6 +40,7 @@ class neutron::plugins::ovn(
   $vif_type                 = $::os_service_default,
   ) {
 
+  include ::neutron::deps
   include ::neutron::params
 
   if ! is_service_default($ovn_l3_mode) {
@@ -57,10 +58,8 @@ class neutron::plugins::ovn(
   package {'neutron-plugin-ovn':
     ensure => present,
     name   => $::neutron::params::ovn_plugin_package,
-    tag    => 'openstack'
+    tag    => ['neutron-package', 'openstack'],
   }
-
-  Neutron_plugin_ovn<||> ~> Service['neutron-server']
 
   ensure_resource('file', '/etc/neutron/plugins/networking-ovn', {
     ensure => directory,
@@ -69,21 +68,12 @@ class neutron::plugins::ovn(
     mode   => '0640'}
   )
 
-  # Ensure the neutron package is installed before config is set
-  # under both RHEL and Ubuntu
-  if $::neutron::params::server_package {
-    Package['neutron-server'] -> Neutron_plugin_ovn<||>
-  } else {
-    Package['neutron'] -> Neutron_plugin_ovn<||>
-  }
-
   if $::osfamily == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path    => '/etc/default/neutron-server',
-      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::ovn_config_file}",
-      require => [ Package['neutron-server'], Package['neutron-plugin-ovn'] ],
-      notify  => Service['neutron-server'],
+      path  => '/etc/default/neutron-server',
+      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line  => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::ovn_config_file}",
+      tag   => 'neutron-file-line',
     }
   }
 
@@ -92,6 +82,7 @@ class neutron::plugins::ovn(
       ensure  => link,
       target  => $::neutron::params::ovn_config_file,
       require => Package[$::neutron::params::ovn_plugin_package],
+      tag     => 'neutron-config-file',
     }
   }
 

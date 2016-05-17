@@ -123,6 +123,7 @@ class neutron::agents::l3 (
   $router_id                        = $::os_service_default,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
 
   if ! is_service_default ($external_network_bridge) {
@@ -162,37 +163,24 @@ class neutron::agents::l3 (
   }
 
   if $::neutron::params::l3_agent_package {
-    Package['neutron-l3'] -> Neutron_l3_agent_config<||>
     package { 'neutron-l3':
-      ensure  => $package_ensure,
-      name    => $::neutron::params::l3_agent_package,
-      require => Package['neutron'],
-      tag     => ['openstack', 'neutron-package'],
+      ensure => $package_ensure,
+      name   => $::neutron::params::l3_agent_package,
+      tag    => ['openstack', 'neutron-package'],
     }
-  } else {
-    # Some platforms (RedHat) does not provide a neutron L3 agent package.
-    # The neutron L3 agent config file is provided by the neutron package.
-    Package['neutron'] -> Neutron_l3_agent_config<||>
   }
 
   if $manage_service {
-    Neutron_config<||>          ~> Service['neutron-l3']
-    Neutron_l3_agent_config<||> ~> Service['neutron-l3']
     if $enabled {
       $service_ensure = 'running'
     } else {
       $service_ensure = 'stopped'
     }
-    Package['neutron'] ~> Service['neutron-l3']
-    if $::neutron::params::l3_agent_package {
-      Package['neutron-l3'] ~> Service['neutron-l3']
-    }
     service { 'neutron-l3':
-      ensure  => $service_ensure,
-      name    => $::neutron::params::l3_agent_service,
-      enable  => $enabled,
-      require => Class['neutron'],
-      tag     => 'neutron-service',
+      ensure => $service_ensure,
+      name   => $::neutron::params::l3_agent_service,
+      enable => $enabled,
+      tag    => 'neutron-service',
     }
   }
 }

@@ -1,0 +1,10 @@
+---
+prelude: >
+    Add hooks for external install & svc management.
+features:
+  - This adds defined anchor points for external modules to
+    hook into the software install, config and service dependency
+    chain. This allows external modules to manage software
+    installation (virtualenv, containers, etc) and service management
+    (pacemaker) without needing rely on resources that may change or
+    be renamed.

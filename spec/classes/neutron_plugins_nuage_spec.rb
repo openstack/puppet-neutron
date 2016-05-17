@@ -102,8 +102,9 @@ describe 'neutron::plugins::nuage' do
           :path    => '/etc/default/neutron-server',
           :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
           :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/nuage/plugin.ini',
-          :notify  => 'Service[neutron-server]'
         )
+        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
       end
 
       it_configures 'neutron plugin nuage'

@@ -25,6 +25,8 @@ class neutron::plugins::ml2::midonet (
   $project_id = 'services',
 ) {
 
+  include ::neutron::deps
+
   neutron_plugin_ml2 {
     'MIDONET/midonet_uri' : value => $midonet_uri;
     'MIDONET/username'    : value => $username;

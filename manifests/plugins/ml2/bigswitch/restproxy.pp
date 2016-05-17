@@ -64,6 +64,8 @@ class neutron::plugins::ml2::bigswitch::restproxy (
   $auth_user            = 'neutron',
   $auth_url             = false,
 ) {
+
+  include ::neutron::deps
   require ::neutron::plugins::ml2::bigswitch
 
   neutron_plugin_ml2 {

@@ -72,11 +72,11 @@ describe 'neutron::server' do
           :ensure => p[:package_ensure],
           :tag    => ['openstack', 'neutron-package'],
         )
-        is_expected.to contain_package('neutron-server').with_before(/Neutron_api_config\[.+\]/)
-        is_expected.to contain_package('neutron-server').with_before(/Neutron_config\[.+\]/)
-        is_expected.to contain_package('neutron-server').with_before(/Service\[neutron-server\]/)
+        is_expected.to contain_package('neutron-server').that_requires('Anchor[neutron::install::begin]')
+        is_expected.to contain_package('neutron-server').that_notifies('Anchor[neutron::install::end]')
       else
-        is_expected.to contain_package('neutron').with_before(/Neutron_api_config\[.+\]/)
+        is_expected.to contain_package('neutron').that_requires('Anchor[neutron::install::begin]')
+        is_expected.to contain_package('neutron').that_notifies('Anchor[neutron::install::end]')
       end
     end
 
@@ -85,9 +85,10 @@ describe 'neutron::server' do
         :name    => platform_params[:server_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]',
         :tag     => ['neutron-service', 'neutron-db-sync-service'],
       )
+      is_expected.to contain_service('neutron-server').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-server').that_notifies('Anchor[neutron::service::end]')
       is_expected.not_to contain_class('neutron::db::sync')
       is_expected.to contain_service('neutron-server').with_name('neutron-server')
       is_expected.to contain_neutron_config('DEFAULT/api_workers').with_value(facts[:processorcount])

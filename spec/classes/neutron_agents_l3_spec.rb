@@ -61,12 +61,13 @@ describe 'neutron::agents::l3' do
         is_expected.to contain_package('neutron-l3').with(
           :name    => platform_params[:l3_agent_package],
           :ensure  => p[:package_ensure],
-          :require => 'Package[neutron]',
           :tag     => ['openstack', 'neutron-package'],
         )
-        is_expected.to contain_package('neutron-l3').with_before(/Neutron_l3_agent_config\[.+\]/)
+        is_expected.to contain_package('neutron-l3').that_requires('Anchor[neutron::install::begin]')
+        is_expected.to contain_package('neutron-l3').that_notifies('Anchor[neutron::install::end]')
       else
-        is_expected.to contain_package('neutron').with_before(/Neutron_l3_agent_config\[.+\]/)
+        is_expected.to contain_package('neutron').that_requires('Anchor[neutron::install::begin]')
+        is_expected.to contain_package('neutron').that_notifies('Anchor[neutron::install::end]')
       end
     end
 
@@ -79,10 +80,10 @@ describe 'neutron::agents::l3' do
           :name    => platform_params[:l3_agent_service],
           :enable  => true,
           :ensure  => 'running',
-          :require => 'Class[Neutron]',
           :tag     => 'neutron-service',
         )
-        is_expected.to contain_service('neutron-l3').that_subscribes_to('Package[neutron]')
+        is_expected.to contain_service('neutron-l3').that_subscribes_to('Anchor[neutron::service::begin]')
+        is_expected.to contain_service('neutron-l3').that_notifies('Anchor[neutron::service::end]')
       end
     end
 
@@ -132,7 +133,8 @@ describe 'neutron::agents::l3' do
 
     it_configures 'neutron l3 agent'
     it 'configures neutron-l3 package subscription' do
-      is_expected.to contain_service('neutron-l3').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-l3]' ] )
+      is_expected.to contain_service('neutron-l3').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-l3').that_notifies('Anchor[neutron::service::end]')
     end
   end
 

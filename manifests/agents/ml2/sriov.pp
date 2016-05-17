@@ -72,9 +72,8 @@ class neutron::agents::ml2::sriov (
   $purge_config               = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_sriov_agent_config <||> ~> Service['neutron-sriov-nic-agent-service']
 
   resources { 'neutron_sriov_agent_config':
     purge => $purge_config,
@@ -87,7 +86,6 @@ class neutron::agents::ml2::sriov (
     'agent/extensions':                   value => join(any2array($extensions), ',');
   }
 
-  Package['neutron-sriov-nic-agent'] -> Neutron_sriov_agent_config <||>
   package { 'neutron-sriov-nic-agent':
     ensure => $package_ensure,
     name   => $::neutron::params::sriov_nic_agent_package,
@@ -100,16 +98,13 @@ class neutron::agents::ml2::sriov (
     } else {
       $service_ensure = 'stopped'
     }
-    Package['neutron'] ~> Service['neutron-sriov-nic-agent-service']
-    Package['neutron-sriov-nic-agent'] ~> Service['neutron-sriov-nic-agent-service']
   }
 
   service { 'neutron-sriov-nic-agent-service':
-    ensure  => $service_ensure,
-    name    => $::neutron::params::sriov_nic_agent_service,
-    enable  => $enabled,
-    require => Class['neutron'],
-    tag     => 'neutron-service',
+    ensure => $service_ensure,
+    name   => $::neutron::params::sriov_nic_agent_service,
+    enable => $enabled,
+    tag    => 'neutron-service',
   }
 
 }

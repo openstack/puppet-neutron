@@ -66,6 +66,7 @@ class neutron::plugins::opencontrail (
   $purge_config               = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
 
   validate_array($contrail_extensions)
@@ -73,10 +74,8 @@ class neutron::plugins::opencontrail (
   package { 'neutron-plugin-contrail':
     ensure => $package_ensure,
     name   => $::neutron::params::opencontrail_plugin_package,
-    tag    => 'openstack',
+    tag    => ['neutron-package', 'openstack'],
   }
-
-  Neutron_plugin_opencontrail<||> ~> Service['neutron-server']
 
   ensure_resource('file', '/etc/neutron/plugins/opencontrail', {
     ensure => directory,
@@ -85,21 +84,12 @@ class neutron::plugins::opencontrail (
     mode   => '0640'}
   )
 
-  # Ensure the neutron package is installed before config is set
-  # under both RHEL and Ubuntu
-  if ($::neutron::params::server_package) {
-    Package['neutron-server'] -> Neutron_plugin_opencontrail<||>
-  } else {
-    Package['neutron'] -> Neutron_plugin_opencontrail<||>
-  }
-
   if $::osfamily == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path    => '/etc/default/neutron-server',
-      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::opencontrail_config_file}",
-      require => [ Package['neutron-server'], Package[$::neutron::params::opencontrail_plugin_package] ],
-      notify  => Service['neutron-server'],
+      path  => '/etc/default/neutron-server',
+      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line  => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::opencontrail_config_file}",
+      tag   => 'neutron-file-line',
     }
   }
 
@@ -108,6 +98,7 @@ class neutron::plugins::opencontrail (
       ensure  => link,
       target  => $::neutron::params::opencontrail_config_file,
       require => Package[$::neutron::params::opencontrail_plugin_package],
+      tag     => 'neutron-config-file',
     }
   }
 

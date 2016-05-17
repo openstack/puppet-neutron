@@ -49,6 +49,8 @@ class neutron::db (
   $database_db_max_retries = $::os_service_default,
 ) {
 
+  include ::neutron::deps
+
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use neutron::<myparam> if neutron::db::<myparam> isn't specified.
   $database_connection_real = pick($::neutron::server::database_connection, $database_connection)

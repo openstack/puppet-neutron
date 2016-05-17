@@ -44,7 +44,7 @@ describe 'neutron::plugins::nvp' do
       is_expected.to contain_package('neutron-plugin-nvp').with(
                  :name   => platform_params[:nvp_server_package],
                  :ensure => p[:package_ensure],
-                 :tag    => 'openstack'
+                 :tag    => ['neutron-package', 'openstack'],
              )
     end
 
@@ -56,8 +56,9 @@ describe 'neutron::plugins::nvp' do
       is_expected.to contain_file('/etc/neutron/plugin.ini').with(
         :ensure  => 'link',
         :target  => '/etc/neutron/plugins/nicira/nvp.ini',
-        :require => 'Package[neutron-plugin-nvp]'
       )
+      is_expected.to contain_file('/etc/neutron/plugin.ini').that_requires('Anchor[neutron::config::begin]')
+      is_expected.to contain_file('/etc/neutron/plugin.ini').that_notifies('Anchor[neutron::config::end]')
     end
 
     it 'passes purge to resource' do

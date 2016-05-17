@@ -52,31 +52,29 @@ class neutron::plugins::nuage (
   $purge_config           = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  File['/etc/neutron/plugins/nuage/plugin.ini'] -> Neutron_plugin_nuage<||>
-  Neutron_plugin_nuage<||> ~> Service['neutron-server']
-  Neutron_plugin_nuage<||> ~> Exec<| title == 'neutron-db-sync' |>
 
   file { '/etc/neutron/plugins/nuage':
     ensure => directory,
+    tag    => 'neutron-config-file',
   }
 
   if $::osfamily == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path   => '/etc/default/neutron-server',
-      match  => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line   => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::nuage_config_file}",
-      notify => Service['neutron-server'],
+      path  => '/etc/default/neutron-server',
+      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line  => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::nuage_config_file}",
+      tag   => 'neutron-file-line',
     }
   }
 
   if $::osfamily == 'Redhat' {
-    File['/etc/neutron/plugin.ini'] ~> Exec<| title == 'neutron-db-sync' |>
     file { '/etc/neutron/plugin.ini':
       ensure  => link,
       require => File['/etc/neutron/plugins/nuage/plugin.ini'],
       target  => $::neutron::params::nuage_config_file,
+      tag     => 'neutron-config-file',
     }
   }
 
@@ -85,7 +83,8 @@ class neutron::plugins::nuage (
     owner   => 'root',
     group   => 'neutron',
     require => File['/etc/neutron/plugins/nuage'],
-    mode    => '0640'
+    mode    => '0640',
+    tag     => 'neutron-config-file',
   }
 
   resources { 'neutron_plugin_nuage':

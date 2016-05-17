@@ -61,10 +61,8 @@ class neutron::agents::vpnaas (
   $purge_config                = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_config<||>              ~> Service['neutron-vpnaas-service']
-  Neutron_vpnaas_agent_config<||> ~> Service['neutron-vpnaas-service']
 
   case $vpn_device_driver {
     /\.OpenSwan/: {
@@ -72,6 +70,7 @@ class neutron::agents::vpnaas (
       package { 'openswan':
         ensure => present,
         name   => $::neutron::params::openswan_package,
+        tag    => ['neutron-support-package', 'openstack'],
       }
     }
     /\.LibreSwan/: {
@@ -82,6 +81,7 @@ class neutron::agents::vpnaas (
         package { 'libreswan':
           ensure => present,
           name   => $::neutron::params::libreswan_package,
+          tag    => ['neutron-support-package', 'openstack'],
         }
       }
     }
@@ -112,7 +112,6 @@ class neutron::agents::vpnaas (
   }
 
   if $::neutron::params::vpnaas_agent_package {
-    Package['neutron'] -> Package['neutron-vpnaas-agent']
     ensure_resource( 'package', 'neutron-vpnaas-agent', {
       'ensure' => $package_ensure,
       'name'   => $::neutron::params::vpnaas_agent_package,
@@ -126,17 +125,12 @@ class neutron::agents::vpnaas (
     } else {
       $service_ensure = 'stopped'
     }
-    Package['neutron'] ~> Service['neutron-vpnaas-service']
-    if $::neutron::params::vpnaas_agent_package {
-      Package['neutron-vpnaas-agent'] ~> Service['neutron-vpnaas-service']
-    }
   }
 
   service { 'neutron-vpnaas-service':
-    ensure  => $service_ensure,
-    name    => $::neutron::params::vpnaas_agent_service,
-    enable  => $enabled,
-    require => Class['neutron'],
-    tag     => 'neutron-service',
+    ensure => $service_ensure,
+    name   => $::neutron::params::vpnaas_agent_service,
+    enable => $enabled,
+    tag    => 'neutron-service',
   }
 }

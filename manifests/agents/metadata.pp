@@ -80,10 +80,8 @@ class neutron::agents::metadata (
   $purge_config              = false,
   ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_config<||> ~> Service['neutron-metadata']
-  Neutron_metadata_agent_config<||> ~> Service['neutron-metadata']
 
   resources { 'neutron_metadata_agent_config':
     purge => $purge_config,
@@ -113,13 +111,10 @@ class neutron::agents::metadata (
   }
 
   if $::neutron::params::metadata_agent_package {
-    Package['neutron-metadata'] -> Service['neutron-metadata']
-    Package['neutron-metadata'] -> Neutron_metadata_agent_config<||>
     package { 'neutron-metadata':
-      ensure  => $package_ensure,
-      name    => $::neutron::params::metadata_agent_package,
-      require => Package['neutron'],
-      tag     => ['openstack', 'neutron-package'],
+      ensure => $package_ensure,
+      name   => $::neutron::params::metadata_agent_package,
+      tag    => ['openstack', 'neutron-package'],
     }
   }
 
@@ -129,17 +124,12 @@ class neutron::agents::metadata (
     } else {
       $service_ensure = 'stopped'
     }
-    Package['neutron'] ~> Service['neutron-metadata']
-    if $::neutron::params::metadata_agent_package {
-      Package['neutron-metadata'] ~> Service['neutron-metadata']
-    }
   }
 
   service { 'neutron-metadata':
-    ensure  => $service_ensure,
-    name    => $::neutron::params::metadata_agent_service,
-    enable  => $enabled,
-    require => Class['neutron'],
-    tag     => 'neutron-service',
+    ensure => $service_ensure,
+    name   => $::neutron::params::metadata_agent_service,
+    enable => $enabled,
+    tag    => 'neutron-service',
   }
 }

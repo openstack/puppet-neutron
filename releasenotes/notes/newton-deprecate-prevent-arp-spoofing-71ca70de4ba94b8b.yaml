@@ -1,0 +1,4 @@
+---
+deprecations:
+  - The option prevent_arp_spoofing has been deprecated
+    and will be removed in Ocata release.

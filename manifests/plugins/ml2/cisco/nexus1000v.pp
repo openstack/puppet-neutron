@@ -89,9 +89,7 @@ class neutron::plugins::ml2::cisco::nexus1000v (
 {
   include ::neutron::plugins::ml2::cisco
 
-  $extension_drivers  = 'cisco_n1kv_ext'
   neutron_plugin_ml2 {
-    'ml2/extension_drivers'                          : value => $extension_drivers;
     'ml2_cisco_n1kv/n1kv_vsm_ips'                    : value => $n1kv_vsm_ip;
     'ml2_cisco_n1kv/username'                        : value => $n1kv_vsm_username;
     'ml2_cisco_n1kv/password'                        : value => $n1kv_vsm_password;

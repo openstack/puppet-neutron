@@ -129,7 +129,6 @@ describe 'neutron' do
     end
 
     it 'configures neutron.conf' do
-      is_expected.to contain_neutron_config('DEFAULT/verbose').with_value( '<SERVICE DEFAULT>' )
       is_expected.to contain_neutron_config('DEFAULT/bind_host').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/bind_port').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/auth_strategy').with_value('keystone')

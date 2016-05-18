@@ -30,7 +30,6 @@ describe 'neutron::logging' do
      :log_dir => '/var/log',
      :log_file => 'neutron.log',
      :watch_log_file => true,
-     :verbose => true,
      :debug => true,
     }
   end
@@ -61,7 +60,6 @@ describe 'neutron::logging' do
       is_expected.to contain_neutron_config('DEFAULT/log_dir').with(:value => '/var/log/neutron')
       is_expected.to contain_neutron_config('DEFAULT/log_file').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/watch_log_file').with(:value => '<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('DEFAULT/verbose').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/debug').with(:value => '<SERVICE DEFAULT>')
     end
   end
@@ -74,7 +72,6 @@ describe 'neutron::logging' do
       is_expected.to contain_neutron_config('DEFAULT/log_dir').with(:value => '/var/log')
       is_expected.to contain_neutron_config('DEFAULT/log_file').with(:value => 'neutron.log')
       is_expected.to contain_neutron_config('DEFAULT/watch_log_file').with(:value => 'true')
-      is_expected.to contain_neutron_config('DEFAULT/verbose').with(:value => 'true')
       is_expected.to contain_neutron_config('DEFAULT/debug').with(:value => 'true')
     end
   end

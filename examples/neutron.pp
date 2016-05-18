@@ -3,7 +3,6 @@
 # General Neutron stuff
 # Configures everything in neutron.conf
 class { '::neutron':
-  verbose               => true,
   allow_overlapping_ips => true,
   rabbit_password       => 'password',
   rabbit_user           => 'guest',

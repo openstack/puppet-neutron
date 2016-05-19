@@ -1,0 +1,5 @@
+---
+deprecations:
+ - use_syslog in DEFAULT section was deprecated in Mitaka, this parameter
+   has no effect and will be removed in a future release.
+ - log_facility is Deprecated and will be removed after Newton cycle.

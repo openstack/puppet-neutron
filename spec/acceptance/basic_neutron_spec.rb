@@ -35,7 +35,6 @@ describe 'basic neutron' do
         allow_overlapping_ips => true,
         core_plugin           => 'ml2',
         debug                 => true,
-        verbose               => true,
         service_plugins => [
           'neutron.services.l3_router.l3_router_plugin.L3RouterPlugin',
           'neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPlugin',

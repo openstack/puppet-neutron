@@ -4,7 +4,6 @@ class { '::neutron':
   rabbit_host     => '127.0.0.1',
   rabbit_user     => 'neutron',
   rabbit_password => 'rabbit_secret',
-  verbose         => true,
   debug           => true,
 }
 

@@ -105,10 +105,9 @@
 #
 # [*verbose*]
 #   (optional) Deprecated. Verbose logging
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 class neutron::logging (
-  $verbose                       = $::os_service_default,
   $debug                         = $::os_service_default,
   $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
@@ -129,9 +128,10 @@ class neutron::logging (
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $fatal_deprecations            = $::os_service_default,
+  # Deprecated
+  $verbose                       = undef,
 ) {
 
-  $verbose_real = pick($::neutron::verbose,$verbose)
   $debug_real = pick($::neutron::debug,$debug)
   $use_syslog_real = pick($::neutron::use_syslog,$use_syslog)
   $use_stderr_real = pick($::neutron::use_stderr,$use_stderr)
@@ -139,12 +139,11 @@ class neutron::logging (
   $log_file_real = pick($::neutron::log_file,$log_file)
   $log_dir_real = pick($::neutron::log_dir,$log_dir)
 
-  if ! is_service_default($verbose_real) {
-    warning('verbose parameter is deprecated and will be removed.')
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
   }
 
   oslo::log { 'neutron_config':
-    verbose                       => $verbose_real,
     debug                         => $debug_real,
     use_stderr                    => $use_stderr_real,
     use_syslog                    => $use_syslog_real,

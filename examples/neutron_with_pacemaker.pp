@@ -23,7 +23,6 @@
 # sudo pcs constraint colocation add neutron_server_service with neutron_vip
 
 class { '::neutron':
-  verbose               => true,
   allow_overlapping_ips => true,
   service_plugins       => [ 'dhcp', 'l3' ]
 }

@@ -448,6 +448,10 @@ class neutron (
     include ::neutron::logging
   }
 
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
+
   if ! is_service_default($use_ssl) and ($use_ssl) {
     if is_service_default($cert_file) {
       fail('The cert_file parameter is required when use_ssl is set to true')

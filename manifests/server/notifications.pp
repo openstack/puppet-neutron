@@ -158,7 +158,7 @@ class neutron::server::notifications (
     fail('You must provide either tenant_name or tenant_id.')
   }
 
-  if $nova_url {
+  if ! is_service_default ($nova_url) {
     warning('nova_url is deprecated and will be removed after Newton cycle.')
   }
 

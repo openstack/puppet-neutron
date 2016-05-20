@@ -1,3 +1,34 @@
+##2016-05-20 - 7.1.0
+
+###Summary
+
+This is a feature and bugfix release in the Liberty series.
+
+####Features
+
+- Support the LibreSwan driver in Red Hat platforms
+- Add ipv6 options to neutron_subnet type
+- Add ensure_*aas_package booleans for ::neutron::server
+- Change of PLUMgrid plugin package and addition of new parameters
+- Add BigSwitch agent manifest
+- Adds the ability to force metadata with dhcp agent
+- Support of PyMySQL driver for MySQL backend
+- Adds configuration support for OpenDaylight SDN Controller
+- Add parameters for Neutron QoS support
+
+####Bugfixes
+
+- Cisco nexus config manifest - obsolete parameter (switch_replay_count).
+- Add ml2 package requirement to neutron::plugins::ml2::mech_driver
+- FWaaS config needs to notify l3 agent service
+
+
+####Maintenance
+
+- Default qos_notification_drivers to upstream
+- Add deprecation warning for Qpid rpc driver
+
+
 ##2015-11-25 - 7.0.0
 ###Summary
 

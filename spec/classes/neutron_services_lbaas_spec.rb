@@ -32,6 +32,10 @@ describe 'neutron::services::lbaas' do
       let :params do
         default_params
       end
+
+      it 'should contain python-neutron-lbaas package' do
+        is_expected.to contain_package('python-neutron-lbaas').with({ :ensure => 'present' })
+      end
     end
 
     context 'with multiple service providers' do

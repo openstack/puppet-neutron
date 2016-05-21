@@ -52,7 +52,7 @@ Puppet::Type.newtype(:neutron_plugin_midonet) do
   end
 
   autorequire(:package) do
-    'python-neutron-plugin-midonet'
+    'python-networking-midonet'
   end
 
 end

@@ -1,0 +1,10 @@
+---
+fixes:
+  - PLUMgrid neutron plugin assumes the default
+    keystone v2 for a given deployment. The issue
+    is fixed by switching the default config to
+    keystone v3.
+  - PLUMgrid neutron plugin isn't able to specify
+    nova metadata subnet, that is used by PLUMgrid
+    metadata implementation. The issue is fixed
+    by making nova_metadata_subnet configurable.

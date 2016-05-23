@@ -40,7 +40,11 @@
 #
 # [*identity_version*]
 #   Keystone identity version
-#   Defaults to v2.0
+#   Defaults to v3
+#
+# [*user_domain_name*]
+#   Keystone user domain name
+#   Defaults to Default
 #
 # [*nova_metadata_ip*]
 #   Nova metadata IP
@@ -49,6 +53,10 @@
 # [*nova_metadata_port*]
 #   Nova metadata port
 #   Defaults to 8775
+#
+# [*nova_metadata_subnet*]
+#   Nova metadata subnet
+#   Defaults to 127.0.0.1/24
 #
 # [*metadata_proxy_shared_secret*]
 #   Neutron metadata shared secret key
@@ -93,9 +101,11 @@ class neutron::plugins::plumgrid (
   $admin_password               = $::os_service_default,
   $controller_priv_host         = '127.0.0.1',
   $auth_protocol                = 'http',
-  $identity_version             = 'v2.0',
+  $identity_version             = 'v3',
+  $user_domain_name             = 'Default',
   $nova_metadata_ip             = '127.0.0.1',
   $nova_metadata_port           = '8775',
+  $nova_metadata_subnet         = '127.0.0.1/24',
   $metadata_proxy_shared_secret = $::os_service_default,
   $connector_type               = 'distributed',
   $l2gateway_vendor             = $::os_service_default,
@@ -180,10 +190,12 @@ class neutron::plugins::plumgrid (
     'keystone_authtoken/auth_uri':                   value => "${auth_protocol}://${controller_priv_host}:35357/${identity_version}";
     'keystone_authtoken/admin_tenant_name':          value => 'admin';
     'keystone_authtoken/identity_version':           value => $identity_version;
+    'keystone_authtoken/user_domain_name':           value => $user_domain_name;
     'PLUMgridMetadata/enable_pg_metadata' :          value => 'True';
     'PLUMgridMetadata/metadata_mode':                value => 'local';
     'PLUMgridMetadata/nova_metadata_ip':             value => $nova_metadata_ip;
     'PLUMgridMetadata/nova_metadata_port':           value => $nova_metadata_port;
+    'PLUMgridMetadata/nova_metadata_subnet':         value => $nova_metadata_subnet;
     'PLUMgridMetadata/metadata_proxy_shared_secret': value => $metadata_proxy_shared_secret;
     'ConnectorType/connector_type':                  value => $connector_type;
     'l2gateway/vendor':                              value => $l2gateway_vendor;

@@ -22,6 +22,10 @@
 #
 # === Parameters:
 #
+# [*ensure_lbaas_driver_package*]
+#   (optional) Whether to install the lbaas driver package
+#   Defaults to 'present'
+#
 # [*service_providers*]
 #   (optional) Array of allowed service types or '<SERVICE DEFAULT>'.
 #   Note: The default upstream value is empty.
@@ -39,12 +43,20 @@
 #   Defaults to false
 #
 class neutron::services::lbaas (
-  $package_ensure    = false,
-  $service_providers = $::os_service_default,
+  $ensure_lbaas_driver_package = 'present',
+  $service_providers           = $::os_service_default,
+  # DEPRECATED
+  $package_ensure              = false,
 ) {
 
   include ::neutron::params
 
+  if $ensure_lbaas_driver_package {
+    ensure_packages(['python-neutron-lbaas'], {
+      ensure => $ensure_lbaas_driver_package,
+      tag    => ['openstack', 'neutron-package']
+    })
+  }
   if $package_ensure {
     warning('Package ensure is deprecated. The neutron::agents::lbaas class should be used to install the agent')
     # agent package contains both agent and service resources

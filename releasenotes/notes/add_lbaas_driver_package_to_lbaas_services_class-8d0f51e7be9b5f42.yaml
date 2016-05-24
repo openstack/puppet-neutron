@@ -1,0 +1,5 @@
+---
+fixes:
+  - Added python-neutron-lbaas package to be installed with neutron::services::lbaas.
+    this removes a dependency of installing agent on neutron api server to enable
+    the lbaas service.

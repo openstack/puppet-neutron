@@ -296,16 +296,8 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to $::os_service_default
 #
-# [*use_syslog*]
-#   (optional) Use syslog for logging
-#   Defaults to undef
-#
 # [*use_stderr*]
 #   (optional) Use stderr for logging
-#   Defaults to undef
-#
-# [*log_facility*]
-#   (optional) Syslog facility to receive log lines
 #   Defaults to undef
 #
 # [*log_file*]
@@ -357,6 +349,14 @@
 #
 # [*verbose*]
 #   (optional) Deprecated. Verbose logging
+#   Defaults to undef
+#
+# [*use_syslog*]
+#   (optional) Deprecated. Use syslog for logging
+#   Defaults to undef
+#
+# [*log_facility*]
+#   (optional) Deprecated. Syslog facility to receive log lines
 #   Defaults to undef
 #
 class neutron (
@@ -426,9 +426,7 @@ class neutron (
   $cert_file                            = $::os_service_default,
   $key_file                             = $::os_service_default,
   $ca_file                              = $::os_service_default,
-  $use_syslog                           = undef,
   $use_stderr                           = undef,
-  $log_facility                         = undef,
   $log_file                             = undef,
   $log_dir                              = undef,
   $manage_logging                       = true,
@@ -441,6 +439,8 @@ class neutron (
   # DEPRECATED PARAMETERS
   $network_device_mtu                   = undef,
   $verbose                              = undef,
+  $use_syslog                           = undef,
+  $log_facility                         = undef,
 ) {
 
   include ::neutron::params
@@ -450,6 +450,14 @@ class neutron (
 
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
+
+  if $use_syslog {
+    warning('use_syslog is deprecated, has no effect and will be removed in a future release.')
+  }
+
+  if $log_facility {
+    warning('log_facility is deprecated, has no effect and will be removed after Newton cycle.')
   }
 
   if ! is_service_default($use_ssl) and ($use_ssl) {

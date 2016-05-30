@@ -82,6 +82,7 @@ describe 'neutron' do
     it_configures 'without memcache_servers'
     it_configures 'with memcache_servers'
     it_configures 'with dns_domain defined'
+    it_configures 'with transport_url defined'
 
     context 'with amqp rpc_backend value' do
       it_configures 'amqp support'
@@ -146,6 +147,7 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
       is_expected.to contain_neutron_config('DEFAULT/state_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_concurrency/lock_path').with_value('$state_path/lock')
+      is_expected.to contain_neutron_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/rpc_response_timeout').with_value( '<SERVICE DEFAULT>' )
       is_expected.to contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       is_expected.to contain_neutron_config('agent/report_interval').with_value('<SERVICE DEFAULT>')
@@ -447,6 +449,18 @@ describe 'neutron' do
 
     it do
       is_expected.to contain_neutron_config('DEFAULT/dns_domain').with_value(params[:dns_domain])
+    end
+  end
+
+  shared_examples_for 'with transport_url defined' do
+    before do
+      params.merge!(
+        :default_transport_url => 'rabbit://rabbit_user:password@localhost:5673'
+      )
+    end
+
+    it do
+      is_expected.to contain_neutron_config('DEFAULT/transport_url').with_value(params[:default_transport_url])
     end
   end
 

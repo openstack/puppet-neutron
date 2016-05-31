@@ -74,7 +74,6 @@ describe 'neutron::plugins::ml2::cisco::nexus1000v' do
         @default_facts.merge(test_facts.merge({
            :osfamily => 'RedHat',
            :operatingsystemrelease => '7',
-           :osfamily => 'RedHat'
         }))
       end
 

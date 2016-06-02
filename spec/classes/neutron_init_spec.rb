@@ -81,6 +81,7 @@ describe 'neutron' do
     it_configures 'with service_plugins'
     it_configures 'without memcache_servers'
     it_configures 'with memcache_servers'
+    it_configures 'with host defined'
     it_configures 'with dns_domain defined'
     it_configures 'with transport_url defined'
 
@@ -134,6 +135,7 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/base_mac').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/mac_generation_retries').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dhcp_lease_duration').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('DEFAULT/host').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dns_domain').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dhcp_agents_per_network').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/global_physnet_mtu').with_value('<SERVICE DEFAULT>')
@@ -437,6 +439,18 @@ describe 'neutron' do
 
     it do
       is_expected.to contain_neutron_config('DEFAULT/advertise_mtu').with_value(params[:advertise_mtu])
+    end
+  end
+
+  shared_examples_for 'with host defined' do
+    before do
+      params.merge!(
+        :host => 'test-001.example.org'
+      )
+    end
+
+    it do
+      is_expected.to contain_neutron_config('DEFAULT/host').with_value(params[:host])
     end
   end
 

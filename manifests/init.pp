@@ -58,6 +58,10 @@
 #   (optional) DHCP lease
 #   Defaults to $::os_service_default
 #
+# [*host*]
+#   (optional) Hostname to be used by the server, agents and services.
+#   Defaults to $::os_service_default
+#
 # [*dns_domain*]
 #   (optional) Domain to use for building the hostnames
 #   Defaults to $::os_service_default
@@ -379,6 +383,7 @@ class neutron (
   $base_mac                             = $::os_service_default,
   $mac_generation_retries               = $::os_service_default,
   $dhcp_lease_duration                  = $::os_service_default,
+  $host                                 = $::os_service_default,
   $dns_domain                           = $::os_service_default,
   $dhcp_agents_per_network              = $::os_service_default,
   $global_physnet_mtu                   = $::os_service_default,
@@ -516,6 +521,7 @@ class neutron (
     'DEFAULT/base_mac':                value => $base_mac;
     'DEFAULT/mac_generation_retries':  value => $mac_generation_retries;
     'DEFAULT/dhcp_lease_duration':     value => $dhcp_lease_duration;
+    'DEFAULT/host':                    value => $host;
     'DEFAULT/dns_domain':              value => $dns_domain;
     'DEFAULT/dhcp_agents_per_network': value => $dhcp_agents_per_network;
     'DEFAULT/dhcp_agent_notification': value => $dhcp_agent_notification;

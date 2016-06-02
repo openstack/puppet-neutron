@@ -8,6 +8,10 @@
 #   (optional) Print debug messages in the logs
 #   Defaults to $::os_service_default
 #
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults to $::os_service_default
+#
 # [*use_stderr*]
 #   (optional) Use stderr for logging
 #   Defaults to $::os_service_default
@@ -99,16 +103,13 @@
 #   (optional) Deprecated. Verbose logging
 #   Defaults to undef
 #
-# [*use_syslog*]
-#   (optional) Deprecated. Use syslog for logging
-#   Defaults to undef
-#
 # [*log_facility*]
-#   (optional) Deprecated. Syslog facility to receive log lines
+#   (optional) Syslog facility to receive log lines
 #   Defaults to undef
 #
 class neutron::logging (
   $debug                         = $::os_service_default,
+  $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_file                      = $::os_service_default,
   $log_dir                       = '/var/log/neutron',
@@ -128,21 +129,17 @@ class neutron::logging (
   $fatal_deprecations            = $::os_service_default,
   # Deprecated
   $verbose                       = undef,
-  $use_syslog                    = undef,
   $log_facility                  = undef,
 ) {
 
   $debug_real = pick($::neutron::debug,$debug)
+  $use_syslog_real = pick($::neutron::use_syslog,$use_syslog)
   $use_stderr_real = pick($::neutron::use_stderr,$use_stderr)
   $log_file_real = pick($::neutron::log_file,$log_file)
   $log_dir_real = pick($::neutron::log_dir,$log_dir)
 
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
-
-  if $use_syslog {
-    warning('use_syslog is deprecated, has no effect and will be removed in a future release')
   }
 
   if $log_facility {
@@ -152,6 +149,7 @@ class neutron::logging (
   oslo::log { 'neutron_config':
     debug                         => $debug_real,
     use_stderr                    => $use_stderr_real,
+    use_syslog                    => $use_syslog_real,
     syslog_log_facility           => $syslog_log_facility,
     log_file                      => $log_file_real,
     log_dir                       => $log_dir_real,

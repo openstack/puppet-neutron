@@ -76,6 +76,8 @@ describe 'neutron' do
     it_configures 'with SSL socket options set'
     it_configures 'with SSL socket options set with wrong parameters'
     it_configures 'with SSL socket options left by default'
+    it_configures 'with syslog disabled'
+    it_configures 'with syslog enabled'
     it_configures 'with log_file specified'
     it_configures 'without service_plugins'
     it_configures 'with service_plugins'
@@ -263,6 +265,14 @@ describe 'neutron' do
     it_raises 'a Puppet::Error', /The ca_file parameter requires that use_ssl to be set to true/
   end
 
+  shared_examples_for 'with syslog disabled' do
+    before do
+      params.merge!(
+        :use_syslog         => false,
+      )
+    end
+    it { is_expected.to contain_neutron_config('DEFAULT/use_syslog').with_value(false) }
+  end
 
   shared_examples_for 'with non-default kombu options' do
     before do
@@ -346,6 +356,18 @@ describe 'neutron' do
       end
     end
 
+  end
+
+  shared_examples_for 'with syslog enabled' do
+    before do
+      params.merge!(
+        :use_syslog => 'true'
+      )
+    end
+
+    it do
+      is_expected.to contain_neutron_config('DEFAULT/use_syslog').with_value(true)
+    end
   end
 
   shared_examples_for 'with log_file specified' do

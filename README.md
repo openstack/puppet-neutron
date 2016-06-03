@@ -158,7 +158,7 @@ Development
 
 The puppet-openstack modules follow the OpenStack development model. Developer documentation for the entire puppet-openstack project is at:
 
-* https://wiki.openstack.org/wiki/Puppet-openstack#Developerdocumentation
+* http://docs.openstack.org/developer/puppet-openstack-guide/
 
 Contributors
 ------------

@@ -27,7 +27,7 @@
 #   Defaults to 'true'.
 #
 # [*service_name*]
-#   Name of the service. Defaults to the value of auth_name.
+#   Name of the service. Defaults 'neutron'.
 #
 # [*service_type*]
 #   Type of service. Defaults to 'network'.
@@ -68,7 +68,7 @@ class neutron::keystone::auth (
   $configure_endpoint  = true,
   $configure_user      = true,
   $configure_user_role = true,
-  $service_name        = undef,
+  $service_name        = 'neutron',
   $service_type        = 'network',
   $service_description = 'Neutron Networking Service',
   $region              = 'RegionOne',
@@ -77,23 +77,22 @@ class neutron::keystone::auth (
   $internal_url        = 'http://127.0.0.1:9696',
 ) {
 
-  $real_service_name = pick($service_name, $auth_name)
-
   if $configure_endpoint {
-    Keystone_endpoint["${region}/${real_service_name}::${service_type}"]  ~> Service <| title == 'neutron-server' |>
+    Keystone_endpoint["${region}/${service_name}::${service_type}"]  ~> Service <| title == 'neutron-server' |>
   }
 
   if $configure_user_role {
     Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| title == 'neutron-server' |>
   }
 
-  keystone::resource::service_identity { $auth_name:
+  keystone::resource::service_identity { 'neutron':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     service_type        => $service_type,
     service_description => $service_description,
-    service_name        => $real_service_name,
+    service_name        => $service_name,
+    auth_name           => $auth_name,
     region              => $region,
     password            => $password,
     email               => $email,

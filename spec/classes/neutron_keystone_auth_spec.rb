@@ -92,9 +92,9 @@ describe 'neutron::keystone::auth' do
 
     it { is_expected.to contain_keystone_user_role('neutrony@services') }
 
-    it { is_expected.to contain_keystone_service('neutrony::network') }
+    it { is_expected.to contain_keystone_service('neutron::network') }
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutrony::network') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron::network') }
 
   end
 

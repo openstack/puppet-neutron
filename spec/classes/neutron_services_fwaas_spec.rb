@@ -72,7 +72,7 @@ describe 'neutron::services::fwaas' do
     it 'installs neutron fwaas package' do
       is_expected.to contain_package('neutron-fwaas').with(
         :ensure => 'present',
-        :tag    => 'openstack',
+        :tag    => ['neutron-package', 'openstack'],
         :name   => 'python-neutron-fwaas',
       )
     end
@@ -92,7 +92,7 @@ describe 'neutron::services::fwaas' do
     it 'installs neutron fwaas package' do
       is_expected.to contain_package('neutron-fwaas').with(
         :ensure => 'present',
-        :tag    => 'openstack',
+        :tag    => ['neutron-package', 'openstack'],
         :name   => 'python-neutron-fwaas',
       )
     end
@@ -114,7 +114,7 @@ describe 'neutron::services::fwaas' do
     it 'installs neutron vpnaas agent package' do
       is_expected.to contain_package('neutron-vpn-agent').with(
         :ensure => 'present',
-        :tag    => 'openstack'
+        :tag    => ['neutron-package', 'openstack'],
       )
     end
   end

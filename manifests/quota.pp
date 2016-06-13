@@ -110,6 +110,8 @@ class neutron::quota (
   $quota_vip                 = $::os_service_default
 ) {
 
+  include ::neutron::deps
+
   neutron_config {
     'quotas/default_quota':             value => $default_quota;
     'quotas/quota_network':             value => $quota_network;

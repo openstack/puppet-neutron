@@ -52,6 +52,7 @@ class neutron::services::lbaas (
   $package_ensure              = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
 
   if $ensure_lbaas_driver_package {
@@ -78,6 +79,5 @@ class neutron::services::lbaas (
     neutron_lbaas_service_config { 'service_providers/service_provider':
       value => $service_providers,
     }
-    Package<| tag == 'neutron-package' |> -> Neutron_lbaas_service_config<||>
   }
 }

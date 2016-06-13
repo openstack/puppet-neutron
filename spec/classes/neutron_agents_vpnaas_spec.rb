@@ -86,7 +86,8 @@ describe 'neutron::agents::vpnaas' do
           :ensure => p[:package_ensure],
           :tag    => ['openstack', 'neutron-package'],
         )
-        is_expected.to contain_package('neutron').with_before(/Package\[neutron-vpnaas-agent\]/)
+        is_expected.to contain_package('neutron').that_requires('Anchor[neutron::install::begin]')
+        is_expected.to contain_package('neutron').that_notifies('Anchor[neutron::install::end]')
       end
     end
 
@@ -95,10 +96,10 @@ describe 'neutron::agents::vpnaas' do
         :name    => platform_params[:vpnaas_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
-      is_expected.to contain_service('neutron-vpnaas-service').that_subscribes_to('Package[neutron]')
+      is_expected.to contain_service('neutron-vpnaas-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-vpnaas-service').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'with manage_service as false' do
@@ -114,7 +115,7 @@ describe 'neutron::agents::vpnaas' do
   shared_examples_for 'openswan vpnaas_driver' do
     it 'installs openswan packages' do
       if platform_params.has_key?(:vpnaas_agent_package)
-        is_expected.to contain_package('openswan').with_before(['Package[neutron-vpnaas-agent]'])
+        is_expected.to contain_package('openswan')
       end
       is_expected.to contain_package('openswan').with(
         :ensure => 'present',
@@ -138,7 +139,8 @@ describe 'neutron::agents::vpnaas' do
 
     it_configures 'neutron vpnaas agent'
     it 'configures subscription to neutron-vpnaas-agent package' do
-      is_expected.to contain_service('neutron-vpnaas-service').that_subscribes_to('Package[neutron-vpnaas-agent]')
+      is_expected.to contain_service('neutron-vpnaas-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-vpnaas-service').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'when configuring the LibreSwan driver' do

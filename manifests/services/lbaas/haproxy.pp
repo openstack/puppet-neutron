@@ -57,6 +57,8 @@ class neutron::services::lbaas::haproxy(
   $jinja_config_template   = $::os_service_default
 ) {
 
+  include ::neutron::deps
+
   neutron_config {
     'haproxy/interface_driver':         value => $interface_driver;
     'haproxy/periodic_interval':        value => $periodic_interval;

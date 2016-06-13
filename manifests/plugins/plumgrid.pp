@@ -116,11 +116,8 @@ class neutron::plugins::plumgrid (
   $purge_config                 = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_plugin_plumgrid<||> ~> Service['neutron-server']
-  Neutron_plumlib_plumgrid<||> ~> Service['neutron-server']
-  Neutron_plugin_plumgrid<||> ~> Exec<| title == 'neutron-db-sync' |>
 
   ensure_resource('file', '/etc/neutron/plugins/plumgrid', {
     ensure => directory,
@@ -128,16 +125,6 @@ class neutron::plugins::plumgrid (
     group  => 'neutron',
     mode   => '0640'}
   )
-
-  # Ensure the neutron package is installed before config is set
-  # under both RHEL and Ubuntu
-  if ($::neutron::params::server_package) {
-    Package['neutron-server'] -> Neutron_plugin_plumgrid<||>
-    Package['neutron-server'] -> Neutron_plumlib_plumgrid<||>
-  } else {
-    Package['neutron'] -> Neutron_plugin_plumgrid<||>
-    Package['neutron'] -> Neutron_plumlib_plumgrid<||>
-  }
 
   package { 'neutron-plugin-plumgrid':
     ensure => $package_ensure,
@@ -151,19 +138,18 @@ class neutron::plugins::plumgrid (
 
   if $::osfamily == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path    => '/etc/default/neutron-server',
-      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::plumgrid_config_file}",
-      require => [ Package['neutron-server'], Package['neutron-plugin-plumgrid'] ],
-      notify  => Service['neutron-server'],
+      path  => '/etc/default/neutron-server',
+      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line  => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::plumgrid_config_file}",
+      tag   => 'neutron-file-line',
     }
   }
 
   if $::osfamily == 'Redhat' {
     file { '/etc/neutron/plugin.ini':
-      ensure  => link,
-      target  => $::neutron::params::plumgrid_config_file,
-      require => Package['neutron-plugin-plumgrid'],
+      ensure => link,
+      target => $::neutron::params::plumgrid_config_file,
+      tag    => 'neutron-config-file',
     }
   }
 

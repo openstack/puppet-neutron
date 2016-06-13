@@ -56,7 +56,8 @@ describe 'neutron::agents::ml2::sriov' do
         :ensure => p[:package_ensure],
         :tag    => ['openstack', 'neutron-package'],
       )
-      is_expected.to contain_package('neutron-sriov-nic-agent').with_before(/Neutron_sriov_agent_config\[.+\]/)
+      is_expected.to contain_package('neutron-sriov-nic-agent').that_requires('Anchor[neutron::install::begin]')
+      is_expected.to contain_package('neutron-sriov-nic-agent').that_notifies('Anchor[neutron::install::end]')
     end
 
     it 'configures neutron sriov agent service' do
@@ -64,10 +65,10 @@ describe 'neutron::agents::ml2::sriov' do
         :name    => platform_params[:sriov_nic_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
-      is_expected.to contain_service('neutron-sriov-nic-agent-service').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-sriov-nic-agent]' ] )
+      is_expected.to contain_service('neutron-sriov-nic-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-sriov-nic-agent-service').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'with manage_service as false' do

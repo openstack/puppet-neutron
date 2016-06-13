@@ -76,7 +76,8 @@ describe 'neutron::agents::metering' do
           :ensure => p[:package_ensure],
           :tag    => ['openstack', 'neutron-package'],
         )
-        is_expected.to contain_package('neutron').with_before(/Package\[neutron-metering-agent\]/)
+        is_expected.to contain_package('neutron').that_requires('Anchor[neutron::install::begin]')
+        is_expected.to contain_package('neutron').that_notifies('Anchor[neutron::install::end]')
       end
     end
 
@@ -85,10 +86,10 @@ describe 'neutron::agents::metering' do
         :name    => platform_params[:metering_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
-      is_expected.to contain_service('neutron-metering-service').that_subscribes_to('Package[neutron]')
+      is_expected.to contain_service('neutron-metering-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-metering-service').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'with manage_service as false' do
@@ -124,7 +125,8 @@ describe 'neutron::agents::metering' do
 
     it_configures 'neutron metering agent'
     it 'configures subscription to neutron-metering-agent package' do
-      is_expected.to contain_service('neutron-metering-service').that_subscribes_to('Package[neutron-metering-agent]')
+      is_expected.to contain_service('neutron-metering-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-metering-service').that_notifies('Anchor[neutron::service::end]')
     end
   end
 

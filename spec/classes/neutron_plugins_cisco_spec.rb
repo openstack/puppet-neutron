@@ -50,8 +50,9 @@ describe 'neutron::plugins::cisco' do
       is_expected.to contain_file('/etc/neutron/plugin.ini').with(
         :ensure  => 'link',
         :target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
-        :require => 'Package[neutron-plugin-cisco]'
       )
+      is_expected.to contain_file('/etc/neutron/plugin.ini').that_requires('Anchor[neutron::config::begin]')
+      is_expected.to contain_file('/etc/neutron/plugin.ini').that_notifies('Anchor[neutron::config::end]')
     end
 
     it 'should have a plugin config folder' do
@@ -177,9 +178,11 @@ describe 'neutron::plugins::cisco' do
           :path    => '/etc/default/neutron-server',
           :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
           :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/cisco/cisco_plugins.ini',
-          :require => ['Package[neutron-server]', 'Package[neutron-plugin-cisco]'],
-          :notify  => 'Service[neutron-server]'
+          :tag     => 'neutron-file-line',
         )
+        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
+
       end
       it_configures 'default cisco plugin'
     end

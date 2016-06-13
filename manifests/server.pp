@@ -360,6 +360,7 @@ class neutron::server (
   $ensure_lbaas_package             = false,
 ) inherits ::neutron::params {
 
+  include ::neutron::deps
   include ::neutron::db
   include ::neutron::policy
   # Work-around LP#1551974. neutron requires the keystoneclient to auth tokens
@@ -420,14 +421,6 @@ class neutron::server (
     })
   }
 
-
-
-  Neutron_config<||>     ~> Service['neutron-server']
-  Neutron_api_config<||> ~> Service['neutron-server']
-  Neutron_lbaas_service_config<||> ~> Service['neutron-server']
-  Class['neutron::policy'] ~> Service['neutron-server']
-  Neutron_config<||> -> Neutron_network<||>
-
   if $min_l3_agents_per_router <= $max_l3_agents_per_router or $max_l3_agents_per_router == 0 {
     neutron_config {
       'DEFAULT/l3_ha':                    value => $l3_ha;
@@ -482,21 +475,11 @@ class neutron::server (
   neutron_config { 'qos/notification_drivers': value => join(any2array($qos_notification_drivers), ',') }
 
   if ($::neutron::params::server_package) {
-    Package['neutron-server'] -> Neutron_api_config<||>
-    Package['neutron-server'] -> Neutron_config<||>
-    Package['neutron-server'] -> Neutron_lbaas_service_config<||>
-    Package['neutron-server'] -> Service['neutron-server']
-    Package['neutron-server'] -> Class['neutron::policy']
     package { 'neutron-server':
       ensure => $package_ensure,
       name   => $::neutron::params::server_package,
       tag    => ['openstack', 'neutron-package'],
     }
-  } else {
-    # Some platforms (RedHat) does not provide a neutron-server package.
-    # The neutron api config file is provided by the neutron package.
-    Package['neutron'] -> Class['neutron::policy']
-    Package['neutron'] -> Neutron_api_config<||>
   }
 
   neutron_config {
@@ -594,7 +577,6 @@ class neutron::server (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Class['neutron'],
     tag        => ['neutron-service', 'neutron-db-sync-service'],
   }
 }

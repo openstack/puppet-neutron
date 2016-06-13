@@ -93,8 +93,10 @@ describe 'neutron::plugins::ml2' do
         is_expected.to contain_package('neutron-plugin-ml2').with(
           :name   => platform_params[:ml2_server_package],
           :ensure => p[:package_ensure],
-          :tag    => 'openstack'
+          :tag    => ['neutron-package', 'openstack'],
         )
+        is_expected.to contain_package('neutron-plugin-ml2').that_requires('Anchor[neutron::install::begin]')
+        is_expected.to contain_package('neutron-plugin-ml2').that_notifies('Anchor[neutron::install::end]')
       end
     end
 
@@ -236,7 +238,7 @@ describe 'neutron::plugins::ml2' do
           is_expected.to contain_package('neutron-plugin-ml2').with(
             :name   => platform_params[:ml2_server_package],
             :ensure => params[:package_ensure],
-            :tag    => 'openstack'
+            :tag    => ['neutron-package', 'openstack'],
           )
         end
       end
@@ -265,8 +267,9 @@ describe 'neutron::plugins::ml2' do
           :path    => '/etc/default/neutron-server',
           :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
           :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugin.ini',
-          :require => ['File[/etc/default/neutron-server]','File[/etc/neutron/plugin.ini]']
         )
+        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
       end
     end
   end

@@ -121,6 +121,7 @@ class neutron::agents::n1kv_vem (
   $fastpath_flood       = 'enable'
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
   require vswitch::ovs
 
@@ -147,7 +148,8 @@ class neutron::agents::n1kv_vem (
 
   package { 'libnl':
     ensure => $package_ensure,
-    name   => $::neutron::params::libnl_package
+    name   => $::neutron::params::libnl_package,
+    tag    => ['neutron-support-package'],
   }
 
   file {
@@ -187,7 +189,7 @@ class neutron::agents::n1kv_vem (
       ensure   => $n1kv_version,
       provider => $::neutron::params::package_provider,
       source   => $vemtgtimg,
-      tag      => 'openstack',
+      tag      => ['neutron-support-package', 'openstack'],
       require  => File[$vemtgtimg]
     }
   } else {
@@ -206,7 +208,7 @@ class neutron::agents::n1kv_vem (
     }
     package {'nexus1000v':
       ensure => $package_ensure,
-      tag    => 'openstack',
+      tag    => ['neutron-support-package', 'openstack'],
     }
   }
   warning('nexus1000v package management is deprecated, it will be dropped in a future release.')

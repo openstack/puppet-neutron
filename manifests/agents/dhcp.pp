@@ -102,10 +102,8 @@ class neutron::agents::dhcp (
   $dhcp_domain              = $::os_service_default,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_config<||>            ~> Service['neutron-dhcp-service']
-  Neutron_dhcp_agent_config<||> ~> Service['neutron-dhcp-service']
 
   case $dhcp_driver {
     /\.Dnsmasq/: {
@@ -156,18 +154,11 @@ class neutron::agents::dhcp (
   }
 
   if $::neutron::params::dhcp_agent_package {
-    Package['neutron']            -> Package['neutron-dhcp-agent']
-    Package['neutron-dhcp-agent'] -> Neutron_config<||>
-    Package['neutron-dhcp-agent'] -> Neutron_dhcp_agent_config<||>
     package { 'neutron-dhcp-agent':
       ensure => $package_ensure,
       name   => $::neutron::params::dhcp_agent_package,
       tag    => ['openstack', 'neutron-package'],
     }
-  } else {
-    # Some platforms (RedHat) do not provide a neutron DHCP agent package.
-    # The neutron DHCP agent config file is provided by the neutron package.
-    Package['neutron'] -> Neutron_dhcp_agent_config<||>
   }
 
   if $manage_service {
@@ -176,17 +167,12 @@ class neutron::agents::dhcp (
     } else {
       $service_ensure = 'stopped'
     }
-    Package['neutron'] ~> Service['neutron-dhcp-service']
-    if $::neutron::params::dhcp_agent_package {
-      Package['neutron-dhcp-agent'] ~> Service['neutron-dhcp-service']
-    }
   }
 
   service { 'neutron-dhcp-service':
-    ensure  => $service_ensure,
-    name    => $::neutron::params::dhcp_agent_service,
-    enable  => $enabled,
-    require => Class['neutron'],
-    tag     => 'neutron-service',
+    ensure => $service_ensure,
+    name   => $::neutron::params::dhcp_agent_service,
+    enable => $enabled,
+    tag    => 'neutron-service',
   }
 }

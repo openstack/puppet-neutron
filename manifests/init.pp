@@ -457,6 +457,7 @@ class neutron (
   $log_facility                         = undef,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
   if $manage_logging {
     include ::neutron::logging
@@ -501,9 +502,6 @@ class neutron (
     name   => $::neutron::params::package_name,
     tag    => ['openstack', 'neutron-package'],
   }
-
-  # Make sure all services get restarted if neutron-common package is upgraded
-  Package['neutron'] ~> Service<| tag == 'neutron-service' |>
 
   resources { 'neutron_config':
     purge => $purge_config,

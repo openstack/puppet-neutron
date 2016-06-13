@@ -82,9 +82,8 @@ class neutron::agents::ml2::linuxbridge (
   validate_array($tunnel_types)
   validate_array($physical_interface_mappings)
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_agent_linuxbridge<||> ~> Service['neutron-plugin-linuxbridge-agent']
 
   resources { 'neutron_agent_linuxbridge':
     purge => $purge_config,
@@ -156,8 +155,6 @@ class neutron::agents::ml2::linuxbridge (
     } else {
       $service_ensure = 'stopped'
     }
-    Package['neutron'] ~> Service['neutron-plugin-linuxbridge-agent']
-    Package['neutron-plugin-linuxbridge-agent'] ~> Service['neutron-plugin-linuxbridge-agent']
   }
 
   if $::neutron::rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' {
@@ -170,7 +167,6 @@ class neutron::agents::ml2::linuxbridge (
     ensure    => $service_ensure,
     name      => $::neutron::params::linuxbridge_agent_service,
     enable    => $enabled,
-    require   => Class['neutron'],
     tag       => 'neutron-service',
     subscribe => $linuxbridge_agent_subscribe,
   }

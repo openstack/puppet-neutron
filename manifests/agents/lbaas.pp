@@ -59,10 +59,8 @@ class neutron::agents::lbaas (
   $enable_v2              = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_config<||>             ~> Service['neutron-lbaas-service']
-  Neutron_lbaas_agent_config<||> ~> Service['neutron-lbaas-service']
 
   if $enable_v1 and $enable_v2 {
     fail('neutron agents LBaaS enable_v1 and enable_v2 parameters cannot both be true')
@@ -119,23 +117,19 @@ class neutron::agents::lbaas (
       $service_v1_ensure = 'stopped'
       $service_v2_ensure = 'stopped'
     }
-    Package['neutron'] ~> Service['neutron-lbaas-service']
-    Package['neutron-lbaas-agent'] ~> Service['neutron-lbaas-service']
   }
 
   service { 'neutron-lbaas-service':
-    ensure  => $service_v1_ensure,
-    name    => $::neutron::params::lbaas_agent_service,
-    enable  => $enable_v1,
-    require => Class['neutron'],
-    tag     => 'neutron-service',
+    ensure => $service_v1_ensure,
+    name   => $::neutron::params::lbaas_agent_service,
+    enable => $enable_v1,
+    tag    => 'neutron-service',
   }
 
   service { 'neutron-lbaasv2-service':
-    ensure  => $service_v2_ensure,
-    name    => $::neutron::params::lbaasv2_agent_service,
-    enable  => $enable_v2,
-    require => Class['neutron'],
-    tag     => 'neutron-service',
+    ensure => $service_v2_ensure,
+    name   => $::neutron::params::lbaasv2_agent_service,
+    enable => $enable_v2,
+    tag    => 'neutron-service',
   }
 }

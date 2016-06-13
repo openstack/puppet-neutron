@@ -51,6 +51,8 @@ class neutron::plugins::ml2::arista(
   $use_fqdn      = $::os_service_default,
 
 ) {
+
+  include ::neutron::deps
   require ::neutron::plugins::ml2
 
   neutron_plugin_ml2 {

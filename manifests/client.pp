@@ -12,12 +12,13 @@ class neutron::client (
   $package_ensure = present
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
 
   package { 'python-neutronclient':
     ensure => $package_ensure,
     name   => $::neutron::params::client_package,
-    tag    => 'openstack',
+    tag    => ['neutron-support-package', 'openstack'],
   }
 
 }

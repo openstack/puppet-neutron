@@ -102,6 +102,8 @@ class neutron::config (
   $plugin_ml2_config             = {},
 ) {
 
+  include ::neutron::deps
+
   validate_hash($server_config)
   validate_hash($api_config)
   validate_hash($l3_agent_config)

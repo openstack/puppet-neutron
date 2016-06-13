@@ -150,9 +150,8 @@ class neutron::plugins::ml2 (
   $purge_config              = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  Neutron_plugin_ml2<||> ~> Service<| title == 'neutron-server' |>
 
   if ! $mechanism_drivers {
     warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')
@@ -164,27 +163,26 @@ class neutron::plugins::ml2 (
 
   if $::operatingsystem == 'Ubuntu' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path    => '/etc/default/neutron-server',
-      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugin.ini',
-      require => File['/etc/default/neutron-server','/etc/neutron/plugin.ini'],
+      path  => '/etc/default/neutron-server',
+      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line  => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugin.ini',
+      tag   => 'neutron-file-line'
     }
-    Package<| title == 'neutron-server' |>
-    -> File_line['/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG']
-    ~> Service<| title == 'neutron-server' |>
   }
 
   # In RH, the link is used to start Neutron process but in Debian, it's used only
   # to manage database synchronization.
   file {'/etc/neutron/plugin.ini':
     ensure => link,
-    target => '/etc/neutron/plugins/ml2/ml2_conf.ini'
+    target => '/etc/neutron/plugins/ml2/ml2_conf.ini',
+    tag    => 'neutron-config-file',
   }
   file {'/etc/default/neutron-server':
     ensure => present,
     owner  => 'root',
     group  => 'root',
-    mode   => '0644'
+    mode   => '0644',
+    tag    => 'neutron-config-file',
   }
 
   # Some platforms do not have a dedicated ml2 plugin package
@@ -192,15 +190,8 @@ class neutron::plugins::ml2 (
     package { 'neutron-plugin-ml2':
       ensure => $package_ensure,
       name   => $::neutron::params::ml2_server_package,
-      tag    => 'openstack',
+      tag    => ['neutron-package', 'openstack'],
     }
-    Package['neutron-plugin-ml2'] -> File['/etc/neutron/plugin.ini']
-    Package['neutron-plugin-ml2'] -> File['/etc/default/neutron-server']
-    Package['neutron-plugin-ml2'] -> Neutron_plugin_sriov<||>
-  } else {
-    Package['neutron'] -> File['/etc/neutron/plugin.ini']
-    Package['neutron'] -> File['/etc/default/neutron-server']
-    Package['neutron'] -> Neutron_plugin_sriov<||>
   }
 
   resources { 'neutron_plugin_ml2':
@@ -239,5 +230,5 @@ class neutron::plugins::ml2 (
     neutron_plugin_ml2 {
       'ml2/physical_network_mtus': value => join($physical_network_mtus, ',');
     }
-  } Neutron_plugin_ml2<||> ~> Exec<| title == 'neutron-db-sync' |>
+  }
 }

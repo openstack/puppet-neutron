@@ -86,19 +86,13 @@ define neutron::plugins::ml2::cisco::nexus_creds(
   $physnet      = undef,
 
 ) {
-  # Ensure Neutron server is installed before configuring ssh keys
-  if ($::neutron::params::server_package) {
-    Package['neutron-server'] -> File['/var/lib/neutron/.ssh']
-    Package['neutron-server'] -> Exec["nexus_creds_${name}"]
-  } else {
-    Package['neutron'] -> File['/var/lib/neutron/.ssh']
-    Package['neutron'] -> Exec["nexus_creds_${name}"]
-  }
+  include ::neutron::deps
 
   ensure_resource('file', '/var/lib/neutron/.ssh',
     {
       ensure => directory,
       owner  => 'neutron',
+      tag    => 'neutron-config-file',
     }
   )
 
@@ -117,6 +111,6 @@ define neutron::plugins::ml2::cisco::nexus_creds(
     unless  => $check_known_hosts,
     command => "/usr/bin/ssh-keyscan -t rsa ${ip_address} >> /var/lib/neutron/.ssh/known_hosts",
     user    => 'neutron',
-    require => [Exec["ping_test_${name}"], File['/var/lib/neutron/.ssh']]
+    require => [Exec["ping_test_${name}"], Anchor['neutron::config::end']]
   }
 }

@@ -108,9 +108,10 @@ describe 'neutron::plugins::plumgrid' do
         :path    => '/etc/default/neutron-server',
         :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
         :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/plumgrid/plumgrid.ini',
-        :require => ['Package[neutron-server]', 'Package[neutron-plugin-plumgrid]'],
-        :notify  => 'Service[neutron-server]'
+        :tag     => 'neutron-file-line',
       )
+      is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+      is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
     end
 
     it_configures 'neutron plumgrid plugin'
@@ -128,7 +129,9 @@ describe 'neutron::plugins::plumgrid' do
       is_expected.to contain_file('/etc/neutron/plugin.ini').with(
         :ensure  => 'link',
         :target  => '/etc/neutron/plugins/plumgrid/plumgrid.ini',
-        :require => 'Package[neutron-plugin-plumgrid]')
+        :tag     => 'neutron-config-file')
+      is_expected.to contain_file('/etc/neutron/plugin.ini').that_requires('Anchor[neutron::config::begin]')
+      is_expected.to contain_file('/etc/neutron/plugin.ini').that_notifies('Anchor[neutron::config::end]')
     end
 
     it_configures 'neutron plumgrid plugin'

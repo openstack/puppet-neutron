@@ -31,10 +31,10 @@ describe 'neutron::agents::metadata' do
         :name    => platform_params[:metadata_agent_service],
         :enable  => params[:enabled],
         :ensure  => 'running',
-        :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
-      is_expected.to contain_service('neutron-metadata').that_subscribes_to('Package[neutron]')
+      is_expected.to contain_service('neutron-metadata').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-metadata').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'with manage_service as false' do
@@ -106,7 +106,8 @@ describe 'neutron::agents::metadata' do
     it_configures 'neutron metadata agent'
     it_configures 'neutron metadata agent with auth_ca_cert set'
     it 'configures subscription to neutron-metadata package' do
-      is_expected.to contain_service('neutron-metadata').that_subscribes_to('Package[neutron-metadata]')
+      is_expected.to contain_service('neutron-metadata').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-metadata').that_notifies('Anchor[neutron::service::end]')
     end
   end
 

@@ -81,8 +81,9 @@ describe 'neutron::plugins::ovn' do
         :path    => '/etc/default/neutron-server',
         :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
         :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/networking-ovn/networking-ovn.ini',
-        :require => ['Package[neutron-server]', 'Package[neutron-plugin-ovn]'],
-        :notify  => 'Service[neutron-server]')
+        :tag     => 'neutron-file-line')
+      is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+      is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
     end
   end
 

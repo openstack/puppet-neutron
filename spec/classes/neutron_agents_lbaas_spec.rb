@@ -64,10 +64,10 @@ describe 'neutron::agents::lbaas' do
         :name    => platform_params[:lbaas_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]',
         :tag     => 'neutron-service',
       )
-      is_expected.to contain_service('neutron-lbaas-service').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-lbaas-agent]' ] )
+      is_expected.to contain_service('neutron-lbaas-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-lbaas-service').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'with manage_service as false' do

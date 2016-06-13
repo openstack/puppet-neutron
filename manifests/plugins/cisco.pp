@@ -121,9 +121,7 @@ class neutron::plugins::cisco(
   $purge_config      = false,
 )
 {
-  Neutron_plugin_cisco<||> ~> Service['neutron-server']
-  Neutron_plugin_cisco_db_conn<||> ~> Service['neutron-server']
-  Neutron_plugin_cisco_l2network<||> ~> Service['neutron-server']
+  include ::neutron::deps
 
   ensure_resource('file', '/etc/neutron/plugins', {
     ensure => directory,
@@ -139,32 +137,19 @@ class neutron::plugins::cisco(
     mode   => '0640'}
   )
 
-  # Ensure the neutron package is installed before config is set
-  # under both RHEL and Ubuntu
-  if ($::neutron::params::server_package) {
-    Package['neutron-server'] -> Neutron_plugin_cisco<||>
-    Package['neutron-server'] -> Neutron_plugin_cisco_db_conn<||>
-    Package['neutron-server'] -> Neutron_plugin_cisco_l2network<||>
-  } else {
-    Package['neutron'] -> Neutron_plugin_cisco<||>
-    Package['neutron'] -> Neutron_plugin_cisco_db_conn<||>
-    Package['neutron'] -> Neutron_plugin_cisco_l2network<||>
-  }
-
   if $::operatingsystem == 'Ubuntu' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path    => '/etc/default/neutron-server',
-      match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line    => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::cisco_config_file}",
-      require => [ Package['neutron-server'], Package['neutron-plugin-cisco'] ],
-      notify  => Service['neutron-server'],
+      path  => '/etc/default/neutron-server',
+      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+      line  => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::cisco_config_file}",
+      tag   => 'neutron-file-line',
     }
   }
 
   package { 'neutron-plugin-cisco':
     ensure => $package_ensure,
     name   => $::neutron::params::cisco_server_package,
-    tag    => 'openstack',
+    tag    => ['neutron-support-package', 'openstack'],
   }
 
   # Setting purge for all configs
@@ -233,9 +218,9 @@ class neutron::plugins::cisco(
   }
   else {
     file {'/etc/neutron/plugin.ini':
-      ensure  => link,
-      target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
-      require => Package['neutron-plugin-cisco'],
+      ensure => link,
+      target => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
+      tag    => 'neutron-config-file',
     }
   }
 }

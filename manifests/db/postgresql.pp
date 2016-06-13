@@ -32,6 +32,8 @@ class neutron::db::postgresql(
   $privileges = 'ALL',
 ) {
 
+  include ::neutron::deps
+
   ::openstacklib::db::postgresql { 'neutron':
     password_hash => postgresql_password($user, $password),
     dbname        => $dbname,
@@ -40,6 +42,7 @@ class neutron::db::postgresql(
     privileges    => $privileges,
   }
 
-  ::Openstacklib::Db::Postgresql['neutron'] ~> Service <| title == 'neutron-server' |>
-  ::Openstacklib::Db::Postgresql['neutron'] ~> Exec <| title == 'neutron-db-sync' |>
+  Anchor['neutron::db::begin']
+  ~> Class['neutron::db::postgresql']
+  ~> Anchor['neutron::db::end']
 }

@@ -49,25 +49,22 @@ class neutron::services::fwaas (
   $purge_config         = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
-
-  # FWaaS needs to be enabled before starting Neutron L3 agent
-  Neutron_fwaas_service_config<||> ~> Service['neutron-l3']
 
   if ($::osfamily == 'Debian') {
     # Debian platforms
     if $vpnaas_agent_package {
       ensure_resource( 'package', $::neutron::params::vpnaas_agent_package, {
         'ensure' => $neutron::package_ensure,
-        'tag'    => 'openstack'
+        'tag'    => ['neutron-package', 'openstack'],
       })
-      Package[$::neutron::params::vpnaas_agent_package] -> Neutron_fwaas_service_config<||>
     }
     else {
       ensure_resource( 'package', 'neutron-fwaas' , {
         'name'   => $::neutron::params::fwaas_package,
         'ensure' => $neutron::package_ensure,
-        'tag'    => 'openstack'
+        'tag'    => ['neutron-package', 'openstack'],
       })
     }
   } elsif($::osfamily == 'Redhat') {
@@ -75,7 +72,7 @@ class neutron::services::fwaas (
     ensure_resource( 'package', 'neutron-fwaas', {
       'name'   => $::neutron::params::fwaas_package,
       'ensure' => $neutron::package_ensure,
-      'tag'    => 'openstack'
+      'tag'    => ['neutron-package', 'openstack'],
     })
   }
 

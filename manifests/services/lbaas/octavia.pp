@@ -48,6 +48,8 @@ class neutron::services::lbaas::octavia(
   $allocates_vip         = $::os_service_default
 ) {
 
+  include ::neutron::deps
+
   neutron_config {
     'octavia/base_url':              value => $base_url;
     'octavia/request_poll_interval': value => $request_poll_interval;

@@ -81,10 +81,10 @@ describe 'neutron::agents::ml2::ovs' do
         :name    => platform_params[:ovs_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :require => 'Class[Neutron]',
         :tag     => ['neutron-service', 'neutron-db-sync-service'],
       )
-      is_expected.to contain_service('neutron-ovs-agent-service').that_subscribes_to( [ 'Package[neutron]', 'Package[neutron-ovs-agent]' ] )
+      is_expected.to contain_service('neutron-ovs-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-ovs-agent-service').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'with manage_service as false' do
@@ -321,7 +321,8 @@ describe 'neutron::agents::ml2::ovs' do
         :name    => platform_params[:ovs_cleanup_service],
         :enable  => true
       )
-      is_expected.to contain_package('neutron-ovs-agent').with_before(/Service\[ovs-cleanup-service\]/)
+      is_expected.to contain_package('neutron-ovs-agent').that_requires('Anchor[neutron::install::begin]')
+      is_expected.to contain_package('neutron-ovs-agent').that_notifies('Anchor[neutron::install::end]')
     end
   end
 end

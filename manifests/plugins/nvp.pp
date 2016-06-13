@@ -40,16 +40,15 @@ class neutron::plugins::nvp (
   $purge_config      = false,
 ) {
 
+  include ::neutron::deps
   include ::neutron::params
 
   Package['neutron'] -> Package['neutron-plugin-nvp']
-  Neutron_plugin_nvp<||> ~> Service<| title == 'neutron-server' |>
-  Package['neutron-plugin-nvp'] -> Service<| title == 'neutron-server' |>
 
   package { 'neutron-plugin-nvp':
     ensure => $package_ensure,
     name   => $::neutron::params::nvp_server_package,
-    tag    => 'openstack',
+    tag    => ['neutron-package', 'openstack'],
   }
 
   validate_array($nvp_controllers)
@@ -74,9 +73,9 @@ class neutron::plugins::nvp (
   # In RH, this link is used to start Neutron process but in Debian, it's used only
   # to manage database synchronization.
   file {'/etc/neutron/plugin.ini':
-    ensure  => link,
-    target  => '/etc/neutron/plugins/nicira/nvp.ini',
-    require => Package['neutron-plugin-nvp']
+    ensure => link,
+    target => '/etc/neutron/plugins/nicira/nvp.ini',
+    tag    => 'neutron-config-file',
   }
 
 }

@@ -87,6 +87,8 @@ class neutron::plugins::ml2::cisco::nexus1000v (
   $enable_vif_type_n1kv                 = 'False',
 )
 {
+
+  include ::neutron::deps
   include ::neutron::plugins::ml2::cisco
 
   neutron_plugin_ml2 {

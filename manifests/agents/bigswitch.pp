@@ -23,6 +23,8 @@ class neutron::agents::bigswitch (
   $agent_enabled  = false,
 ) {
 
+  include ::neutron::deps
+
   if($::osfamily != 'Redhat') {
     fail("Unsupported osfamily ${::osfamily}")
   }
@@ -32,13 +34,13 @@ class neutron::agents::bigswitch (
   package { 'bigswitch-lldp':
     ensure => $package_ensure,
     name   => $::neutron::params::bigswitch_lldp_package,
-    tag    => 'openstack',
+    tag    => ['neutron-support-package', 'openstack'],
   }
 
   package { 'bigswitch-agent':
     ensure => $package_ensure,
     name   => $::neutron::params::bigswitch_agent_package,
-    tag    => 'openstack',
+    tag    => ['neutron-support-package', 'openstack'],
   }
 
   if $lldp_enabled {
@@ -54,18 +56,16 @@ class neutron::agents::bigswitch (
   }
 
   service { 'bigswitch-lldp':
-    ensure  => $lldp_service_ensure,
-    name    => $::neutron::params::bigswitch_lldp_service,
-    enable  => $lldp_enabled,
-    require => [Class['neutron'], Package['bigswitch-lldp']],
-    tag     => 'neutron-service',
+    ensure => $lldp_service_ensure,
+    name   => $::neutron::params::bigswitch_lldp_service,
+    enable => $lldp_enabled,
+    tag    => 'neutron-service',
   }
 
   service { 'bigswitch-agent':
-    ensure  => $agent_service_ensure,
-    name    => $::neutron::params::bigswitch_agent_service,
-    enable  => $agent_enabled,
-    require => [Class['neutron'], Package['bigswitch-agent']],
-    tag     => 'neutron-service',
+    ensure => $agent_service_ensure,
+    name   => $::neutron::params::bigswitch_agent_service,
+    enable => $agent_enabled,
+    tag    => 'neutron-service',
   }
 }

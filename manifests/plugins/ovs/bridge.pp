@@ -1,5 +1,8 @@
 #
 define neutron::plugins::ovs::bridge {
+
+  include ::neutron::deps
+
   $mapping = split($name, ':')
   $bridge = $mapping[1]
 

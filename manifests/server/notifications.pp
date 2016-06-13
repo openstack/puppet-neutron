@@ -143,6 +143,8 @@ class neutron::server::notifications (
   $nova_url                           = $::os_service_default,
 ) {
 
+  include ::neutron::deps
+
   # Depend on the specified keystone_user resource, if it exists.
   Keystone_user <| title == 'nova' |> -> Class[neutron::server::notifications]
 

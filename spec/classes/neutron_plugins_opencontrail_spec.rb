@@ -73,9 +73,10 @@ describe 'neutron::plugins::opencontrail' do
         :path    => '/etc/default/neutron-server',
         :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
         :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
-        :require => ['Package[neutron-server]', 'Package[neutron-plugin-contrail]'],
-        :notify  => 'Service[neutron-server]'
+        :tag     => 'neutron-file-line',
       )
+      is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+      is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
     end
     it_configures 'neutron opencontrail plugin'
   end

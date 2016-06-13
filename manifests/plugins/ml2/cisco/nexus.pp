@@ -111,6 +111,8 @@ class neutron::plugins::ml2::cisco::nexus (
   $vxlan_global_config       = true,
   $host_key_checks           = false
 ) {
+
+  include ::neutron::deps
   include ::neutron::plugins::ml2::cisco
 
   if ! is_service_default($switch_replay_count) {

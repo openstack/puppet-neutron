@@ -88,6 +88,9 @@ define neutron::plugins::ml2::cisco::nexus_switch(
   $nve_src_intf = $::os_service_default,
   $physnet      = $::os_service_default
 ) {
+
+  include ::neutron::deps
+
   $section = "ML2_MECH_CISCO_NEXUS:${ip_address}"
   neutron_plugin_ml2 {
     "${section}/username":       value => $username;

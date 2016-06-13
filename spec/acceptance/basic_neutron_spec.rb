@@ -26,6 +26,7 @@ describe 'basic neutron' do
         provider             => 'rabbitmqctl',
         require              => Class['rabbitmq'],
       }
+      Rabbitmq_user_permissions['neutron@/'] -> Service<| tag == 'neutron-service' |>
 
       # Neutron resources
       class { '::neutron':
@@ -46,6 +47,11 @@ describe 'basic neutron' do
       }
       class { '::neutron::keystone::auth':
         password => 'a_big_secret',
+      }
+      class { '::neutron::plugins::ml2':
+        type_drivers         => ['vxlan'],
+        tenant_network_types => ['vxlan'],
+        mechanism_drivers    => ['openvswitch', 'sriovnicswitch']
       }
       class { '::neutron::server':
         database_connection => 'mysql+pymysql://neutron:a_big_secret@127.0.0.1/neutron?charset=utf8',
@@ -68,11 +74,6 @@ describe 'basic neutron' do
         enable_tunneling => true,
         local_ip         => '127.0.0.1',
         tunnel_types => ['vxlan'],
-      }
-      class { '::neutron::plugins::ml2':
-        type_drivers         => ['vxlan'],
-        tenant_network_types => ['vxlan'],
-        mechanism_drivers    => ['openvswitch', 'sriovnicswitch']
       }
       class { '::neutron::agents::ml2::sriov': }
       class { '::neutron::services::lbaas::haproxy': }

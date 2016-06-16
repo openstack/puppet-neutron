@@ -263,11 +263,9 @@ describe 'neutron::plugins::ml2' do
       before :each do
         params.merge!(
           :mechanism_drivers    => ['openvswitch', 'sriovnicswitch'],
-          :sriov_agent_required => true,
         )
       end
-      it 'configures sriov mechanism driver with agent_enabled' do
-        is_expected.to contain_neutron_plugin_sriov('ml2_sriov/agent_required').with_value('true')
+      it 'configures sriov mechanism driver' do
         is_expected.to contain_neutron_plugin_sriov('ml2_sriov/supported_pci_vendor_devs').with_value(['15b3:1004,8086:10ca'])
       end
     end

@@ -107,12 +107,6 @@
 #   Repository. Should be an array of devices.
 #   Defaults to ['15b3:1004', '8086:10ca'] (Intel & Mellanox SR-IOV capable NICs)
 #
-# [*sriov_agent_required*]
-#   (optional) SRIOV neutron agent is required for port binding.
-#   Only set to true if SRIOV network adapters support VF link state setting
-#   and if admin state management is desired.
-#   Defaults to false.
-#
 # [*physical_network_mtus*]
 #   (optional) For L2 mechanism drivers, per-physical network MTU setting.
 #   Should be an array with 'physnetX1:9000'.
@@ -134,7 +128,12 @@
 #   the maximum MTU for the driver.
 #   Defaults to $::os_service_default
 #
-
+# DEPRECATED PARAMETERS
+#
+# [*sriov_agent_required*]
+#   (optional) Deprecated.
+#   Defaults to undef.
+#
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
   $extension_drivers         = $::os_service_default,
@@ -149,11 +148,12 @@ class neutron::plugins::ml2 (
   $firewall_driver           = $::os_service_default,
   $package_ensure            = 'present',
   $supported_pci_vendor_devs = ['15b3:1004', '8086:10ca'],
-  $sriov_agent_required      = false,
   $physical_network_mtus     = $::os_service_default,
   $path_mtu                  = 0,
   $purge_config              = false,
-  $max_header_size           = $::os_service_default
+  $max_header_size           = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $sriov_agent_required      = undef,
 ) {
 
   include ::neutron::deps
@@ -213,9 +213,12 @@ class neutron::plugins::ml2 (
     max_header_size     => $max_header_size
   }
 
+  if $sriov_agent_required {
+    warning ('sriov_agent_required is deprecated, has no effect and will be removed in a future release.')
+  }
+
   neutron::plugins::ml2::mech_driver { $mechanism_drivers:
     supported_pci_vendor_devs => $supported_pci_vendor_devs,
-    sriov_agent_required      => $sriov_agent_required,
   }
 
   neutron_plugin_ml2 {

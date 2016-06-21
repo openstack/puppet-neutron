@@ -315,8 +315,11 @@ class neutron::agents::ml2::ovs (
 
   if $::neutron::params::ovs_cleanup_service {
     service { 'ovs-cleanup-service':
-      name   => $::neutron::params::ovs_cleanup_service,
-      enable => $enabled,
+      name    => $::neutron::params::ovs_cleanup_service,
+      enable  => $enabled,
+      # TODO: Remove this require once ovs-cleanup service
+      # script is packaged in neutron-openvswitch package
+      require => Package['neutron'],
     }
   }
 }

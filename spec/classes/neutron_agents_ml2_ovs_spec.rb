@@ -320,7 +320,7 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_service('ovs-cleanup-service').with(
         :name    => platform_params[:ovs_cleanup_service],
         :enable  => true
-      )
+      ).that_requires('Package[neutron]')
       is_expected.to contain_package('neutron-ovs-agent').that_requires('Anchor[neutron::install::begin]')
       is_expected.to contain_package('neutron-ovs-agent').that_notifies('Anchor[neutron::install::end]')
     end

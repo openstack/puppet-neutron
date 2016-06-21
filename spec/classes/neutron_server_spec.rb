@@ -186,6 +186,12 @@ describe 'neutron::server' do
       end
     end
 
+    context 'with allow_automatic_dhcp_failover in neutron.conf' do
+      it 'should configure allow_automatic_dhcp_failover' do
+        is_expected.to contain_neutron_config('DEFAULT/allow_automatic_dhcp_failover').with_value('<SERVICE DEFAULT>')
+      end
+    end
+
     context 'with qos_notification_drivers parameter' do
       before :each do
         params.merge!(:qos_notification_drivers => 'message_queue')

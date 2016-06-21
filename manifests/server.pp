@@ -205,6 +205,11 @@
 #   admin_state_up set to True to alive agents.
 #   Defaults to $::os_service_default
 #
+# [*allow_automatic_dhcp_failover*]
+#   (optional) Allow automatic rescheduling of dhcp from dead dhcp agents with
+#   admin_state_up set to True to alive agents.
+#   Defaults to $::os_service_default
+#
 # [*l3_ha*]
 #   (optional) Enable high availability for virtual routers.
 #   Defaults to false
@@ -339,6 +344,7 @@ class neutron::server (
   $dhcp_load_type                   = $::os_service_default,
   $default_availability_zones       = $::os_service_default,
   $allow_automatic_l3agent_failover = $::os_service_default,
+  $allow_automatic_dhcp_failover    = $::os_service_default,
   $l3_ha                            = false,
   $max_l3_agents_per_router         = 3,
   $min_l3_agents_per_router         = 2,
@@ -449,6 +455,7 @@ class neutron::server (
     'DEFAULT/router_scheduler_driver':          value => $router_scheduler_driver;
     'DEFAULT/router_distributed':               value => $router_distributed;
     'DEFAULT/allow_automatic_l3agent_failover': value => $allow_automatic_l3agent_failover;
+    'DEFAULT/allow_automatic_dhcp_failover':    value => $allow_automatic_dhcp_failover;
     'DEFAULT/network_scheduler_driver':         value => $network_scheduler_driver;
     'DEFAULT/dhcp_load_type':                   value => $dhcp_load_type;
     'DEFAULT/default_availability_zones':       value => join(any2array($default_availability_zones), ',');

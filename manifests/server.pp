@@ -229,6 +229,10 @@
 #   (optional) Drivers list to use to send the update notification
 #   Defaults to $::os_service_default.
 #
+# [*network_auto_schedule*]
+#   (optional) Allow auto scheduling networks to DHCP agent
+#   Defaults to $::os_service_default.
+#
 # [*ensure_vpnaas_package*]
 #   (optional) Ensures installation of VPNaaS package before starting API service.
 #   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
@@ -340,6 +344,7 @@ class neutron::server (
   $min_l3_agents_per_router         = 2,
   $l3_ha_net_cidr                   = $::os_service_default,
   $qos_notification_drivers         = $::os_service_default,
+  $network_auto_schedule            = $::os_service_default,
   $ensure_vpnaas_package            = false,
   $ensure_fwaas_package             = false,
   $vpnaas_agent_package             = false,
@@ -447,6 +452,7 @@ class neutron::server (
     'DEFAULT/network_scheduler_driver':         value => $network_scheduler_driver;
     'DEFAULT/dhcp_load_type':                   value => $dhcp_load_type;
     'DEFAULT/default_availability_zones':       value => join(any2array($default_availability_zones), ',');
+    'DEFAULT/network_auto_schedule':            value => $network_auto_schedule;
     'service_providers/service_provider':       value => $service_providers;
   }
 

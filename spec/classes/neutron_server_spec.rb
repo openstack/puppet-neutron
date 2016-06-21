@@ -195,6 +195,12 @@ describe 'neutron::server' do
       end
     end
 
+    context 'with network_auto_schedule in neutron.conf' do
+      it 'should configure network_auto_schedule' do
+        is_expected.to contain_neutron_config('DEFAULT/network_auto_schedule').with_value('<SERVICE DEFAULT>')
+      end
+    end
+
     context 'with deprecated auth_plugin parameter' do
       before :each do
         params.merge!(:auth_plugin => 'v2password')

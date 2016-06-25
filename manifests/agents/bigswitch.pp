@@ -29,7 +29,12 @@ class neutron::agents::bigswitch (
     fail("Unsupported osfamily ${::osfamily}")
   }
 
-  require ::neutron::plugins::ml2::bigswitch
+  ensure_packages('python-networking-bigswitch',
+    {
+      ensure => $package_ensure,
+      tag    => 'openstack',
+    }
+  )
 
   package { 'bigswitch-lldp':
     ensure => $package_ensure,

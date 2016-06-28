@@ -123,7 +123,7 @@ class neutron::agents::n1kv_vem (
 
   include ::neutron::deps
   include ::neutron::params
-  require vswitch::ovs
+  require ::vswitch::ovs
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 

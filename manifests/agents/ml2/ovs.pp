@@ -174,7 +174,7 @@ class neutron::agents::ml2::ovs (
   include ::neutron::deps
   include ::neutron::params
   if $manage_vswitch {
-    require vswitch::ovs
+    require ::vswitch::ovs
   }
 
   if $enable_tunneling and ! $local_ip {

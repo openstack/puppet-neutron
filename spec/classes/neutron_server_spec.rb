@@ -67,6 +67,7 @@ describe 'neutron::server' do
       is_expected.to contain_neutron_config('keystone_authtoken/admin_user').with_ensure('absent');
       is_expected.to contain_neutron_config('keystone_authtoken/admin_password').with_ensure('absent');
       is_expected.to contain_neutron_config('keystone_authtoken/identity_uri').with_ensure('absent');
+      is_expected.to contain_neutron_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>');
     end
 
     it 'installs neutron server package' do
@@ -340,6 +341,23 @@ describe 'neutron::server' do
       is_expected.to contain_neutron_config('keystone_authtoken/project_domain_name').with_value("non_default");
       is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value("new_services");
       is_expected.to contain_neutron_config('keystone_authtoken/user_domain_name').with_value("non_default");
+    end
+  end
+
+  describe "with keystoneauth memcache servers" do
+    let :facts do
+      @default_facts.merge(test_facts.merge({
+         :osfamily => 'RedHat',
+         :operatingsystemrelease => '7'
+      }))
+    end
+    before do
+      params.merge!({
+        :memcached_servers => '1.1.1.1:11211'
+      })
+    end
+    it 'configures keystone authentication memached servers' do
+        is_expected.to contain_neutron_config('keystone_authtoken/memcached_servers').with_value('1.1.1.1:11211');
     end
   end
 

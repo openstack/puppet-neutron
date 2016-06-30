@@ -1,0 +1,4 @@
+---
+fixes:
+  - Adds the ability to manage the memcached servers for
+    keystone_authtoken in neutron::server

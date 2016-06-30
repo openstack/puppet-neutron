@@ -27,7 +27,7 @@
 #   from the neutron.ml2.type_drivers namespace.
 #   Could be an array that can have these elements:
 #   local, flat, vlan, gre, vxlan
-#   Defaults to ['local', 'flat', 'vlan', 'gre', 'vxlan'].
+#   Defaults to ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'].
 #
 # [*extension_drivers*]
 #   (optional) Ordered list of extension driver entrypoints to be loaded
@@ -129,6 +129,11 @@
 #   in the ml2 config.
 #   Defaults to false.
 #
+# [*max_header_size*]
+#   (optional) Geneve encapsulation header size is dynamic, this value is used to calculate
+#   the maximum MTU for the driver.
+#   Defaults to $::os_service_default
+#
 
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
@@ -148,6 +153,7 @@ class neutron::plugins::ml2 (
   $physical_network_mtus     = $::os_service_default,
   $path_mtu                  = 0,
   $purge_config              = false,
+  $max_header_size           = $::os_service_default
 ) {
 
   include ::neutron::deps
@@ -204,6 +210,7 @@ class neutron::plugins::ml2 (
     network_vlan_ranges => $network_vlan_ranges,
     vni_ranges          => $vni_ranges,
     vxlan_group         => $vxlan_group,
+    max_header_size     => $max_header_size
   }
 
   neutron::plugins::ml2::mech_driver { $mechanism_drivers:

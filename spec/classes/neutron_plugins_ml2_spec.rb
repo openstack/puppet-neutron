@@ -209,6 +209,21 @@ describe 'neutron::plugins::ml2' do
       it_raises  'a Puppet::Error', /vni ranges are invalid./
     end
 
+    context 'when using geneve driver' do
+      before :each do
+        params.merge!(:type_drivers    => ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
+                      :vni_ranges      => ['40:300','500:1000'],
+                      :max_header_size => 50
+        )
+      end
+
+      it 'configures geneve with valid values' do
+        is_expected.to contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
+        is_expected.to contain_neutron_plugin_ml2('ml2_type_geneve/vni_ranges').with_value([p[:vni_ranges].join(',')])
+        is_expected.to contain_neutron_plugin_ml2('ml2_type_geneve/max_header_size').with_value(p[:max_header_size])
+      end
+    end
+
     context 'with path_mtu set' do
       before :each do
         params.merge!(:path_mtu => '9000')

@@ -72,6 +72,11 @@
 #   (optional) Connection url for the neutron database.
 #   (Defaults to undef)
 #
+# [*memcached_servers*]
+#   (optinal) a list of memcached server(s) to use for caching. If left
+#   undefined, tokens will instead be cached in-process.
+#   Defaults to $::os_service_default.
+#
 # [*sql_connection*]
 #   DEPRECATED: Use database_connection instead.
 #
@@ -355,6 +360,7 @@ class neutron::server (
   $ensure_fwaas_package             = false,
   $vpnaas_agent_package             = false,
   $service_providers                = $::os_service_default,
+  $memcached_servers                = $::os_service_default,
   # DEPRECATED PARAMETERS
   $log_dir                          = undef,
   $log_file                         = undef,
@@ -512,6 +518,10 @@ class neutron::server (
       neutron_api_config {
         'filter:authtoken/auth_uri':     value => $auth_uri;
       }
+    }
+
+    neutron_config {
+      'keystone_authtoken/memcached_servers': value => join(any2array($memcached_servers), ',');
     }
 
     if $auth_password {

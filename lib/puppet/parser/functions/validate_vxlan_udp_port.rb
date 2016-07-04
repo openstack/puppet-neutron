@@ -25,7 +25,7 @@ module Puppet::Parser::Functions
 
     # check if port is either default value or one of the private ports
     # according to http://tools.ietf.org/html/rfc6056
-    if value != 4789 or (49151 >= value and value > 65535)
+    if value != 4789 and (49151 >= value or value > 65535)
       raise Puppet::Error, "vxlan udp port is invalid."
     end
   end

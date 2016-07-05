@@ -85,42 +85,18 @@
 #   undefined, tokens will instead be cached in-process.
 #   Defaults to $::os_service_default.
 #
-# [*sql_connection*]
-#   DEPRECATED: Use database_connection instead.
-#
-# [*connection*]
-#   DEPRECATED: Use database_connection instead.
-#
 # [*database_max_retries*]
 #   (optional) Maximum database connection retries during startup.
 #   (Defaults to undef)
-#
-# [*sql_max_retries*]
-#   DEPRECATED: Use database_max_retries instead.
-#
-# [*max_retries*]
-#   DEPRECATED: Use database_max_retries instead.
 #
 # [*database_idle_timeout*]
 #   (optional) Timeout before idle database connections are reaped.
 #   Deprecates sql_idle_timeout
 #   (Defaults to undef)
 #
-# [*sql_idle_timeout*]
-#   DEPRECATED: Use database_idle_timeout instead.
-#
-# [*idle_timeout*]
-#   DEPRECATED: Use database_idle_timeout instead.
-#
 # [*database_retry_interval*]
 #   (optional) Interval between retries of opening a database connection.
 #   (Defaults to 10)
-#
-# [*sql_reconnect_interval*]
-#   DEPRECATED: Use database_retry_interval instead.
-#
-# [*retry_interval*]
-#   DEPRECATED: Use database_retry_interval instead.
 #
 # [*database_min_pool_size*]
 #   (optional) Minimum number of SQL connections to keep open in a pool.

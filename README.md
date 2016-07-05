@@ -51,7 +51,6 @@ class { '::neutron':
 
 # configure authentication
 class { 'neutron::server':
-    auth_host       => '127.0.0.1', # the keystone host address
     auth_password   => 'keystone_neutron_secret',
     sql_connection  => 'mysql://neutron:neutron_sql_secret@127.0.0.1/neutron?charset=utf8',
 }

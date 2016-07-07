@@ -1,5 +1,6 @@
 #
 class neutron::params {
+  include ::openstacklib::defaults
 
   if($::osfamily == 'Redhat') {
     $nobody_user_group    = 'nobody'

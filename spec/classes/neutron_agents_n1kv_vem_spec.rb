@@ -3,9 +3,11 @@ require 'spec_helper'
 describe 'neutron::agents::n1kv_vem' do
 
   let :facts do
-    { :operatingsystem           => 'RedHat',
-      :operatingsystemrelease    => '7',
-      :osfamily => 'RedHat' }
+    OSDefaults.get_facts({
+      :operatingsystem        => 'RedHat',
+      :operatingsystemrelease => '7',
+      :osfamily               => 'RedHat',
+    })
   end
 
   it 'should have a n1kv-vem config file' do

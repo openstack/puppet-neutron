@@ -1,0 +1,10 @@
+---
+upgrade:
+  - Previously OVN plugin for Neutron used to be a core plugin. With
+    the recent changes in networking-ovn project, OVN is plugged in to
+    neutron as an ml2 mechanism driver.
+
+deprecations:
+  - neutron::plugins::ovn is deprecated as it was managing OVN as a 
+    core-plugin. This is deprecated in favor of its ml2 equivalent
+    neutron::plugins::ml2::ovn

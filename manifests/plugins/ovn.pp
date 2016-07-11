@@ -1,3 +1,6 @@
+# == DEPRECATED
+# This class has been deprecated in favor of neutron::plugins::ml2::ovn
+#
 # This class installs and configures the OVN Neutron plugin
 #
 # === Parameters
@@ -40,57 +43,14 @@ class neutron::plugins::ovn(
   $vif_type                 = $::os_service_default,
   ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  warning('neutron::plugins::ovn is deprecated in favor of neutron::plugins::ml2::ovn')
 
-  if ! is_service_default($ovn_l3_mode) {
-    validate_bool($ovn_l3_mode)
+  class { '::neutron::plugins::ml2::ovn':
+    ovn_nb_connection        => $ovsdb_connection,
+    ovsdb_connection_timeout => $ovsdb_connection_timeout,
+    neutron_sync_mode        => $neutron_sync_mode,
+    ovn_l3_mode              => $ovn_l3_mode,
+    vif_type                 => $vif_type
   }
 
-  if ! ( $vif_type in ['ovs', 'vhostuser', $::os_service_default] ) {
-    fail( 'Invalid value for vif_type parameter' )
-  }
-
-  if ! ( $neutron_sync_mode in ['off', 'log', 'repair', $::os_service_default] ) {
-    fail( 'Invalid value for neutron_sync_mode parameter' )
-  }
-
-  package {'neutron-plugin-ovn':
-    ensure => present,
-    name   => $::neutron::params::ovn_plugin_package,
-    tag    => ['neutron-package', 'openstack'],
-  }
-
-  ensure_resource('file', '/etc/neutron/plugins/networking-ovn', {
-    ensure => directory,
-    owner  => 'root',
-    group  => 'neutron',
-    mode   => '0640'}
-  )
-
-  if $::osfamily == 'Debian' {
-    file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path  => '/etc/default/neutron-server',
-      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line  => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::ovn_config_file}",
-      tag   => 'neutron-file-line',
-    }
-  }
-
-  if $::osfamily == 'Redhat' {
-    file { '/etc/neutron/plugin.ini':
-      ensure  => link,
-      target  => $::neutron::params::ovn_config_file,
-      require => Package[$::neutron::params::ovn_plugin_package],
-      tag     => 'neutron-config-file',
-    }
-  }
-
-  neutron_plugin_ovn {
-    'ovn/ovsdb_connection':         value => $ovsdb_connection;
-    'ovn/ovsdb_connection_timeout': value => $ovsdb_connection_timeout;
-    'ovn/neutron_sync_mode':        value => $neutron_sync_mode;
-    'ovn/ovn_l3_mode':              value => $ovn_l3_mode;
-    'ovn/vif_type':                 value => $vif_type;
-  }
 }

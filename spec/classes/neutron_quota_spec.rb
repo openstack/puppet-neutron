@@ -48,7 +48,6 @@ describe 'neutron::quota' do
         :quota_firewall_policy     => 1,
         :quota_firewall_rule       => -1,
         :quota_health_monitor      => -1,
-        :quota_items               => 'network,subnet,port',
         :quota_member              => -1,
         :quota_network_gateway     => 5,
         :quota_packet_filter       => 100,

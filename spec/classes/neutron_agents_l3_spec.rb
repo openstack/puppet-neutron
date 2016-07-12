@@ -39,7 +39,6 @@ describe 'neutron::agents::l3' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/debug').with_value(p[:debug])
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/external_network_bridge').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver])
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/router_id').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/gateway_external_network_id').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/metadata_port').with_value('<SERVICE DEFAULT>')

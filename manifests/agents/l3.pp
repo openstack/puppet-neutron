@@ -94,10 +94,6 @@
 #   (optional) Deprecated. The name of the external bridge
 #   Defaults to $::os_service_default
 #
-# [*router_id*]
-#   (optional) Deprecated. The ID of the external router in neutron
-#   Defaults to $::os_service_default
-#
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -120,7 +116,6 @@ class neutron::agents::l3 (
   $availability_zone                = $::os_service_default,
   # DEPRECATED PARAMETERS
   $external_network_bridge          = $::os_service_default,
-  $router_id                        = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -128,10 +123,6 @@ class neutron::agents::l3 (
 
   if ! is_service_default ($external_network_bridge) {
     warning('parameter external_network_bridge is deprecated')
-  }
-
-  if ! is_service_default ($router_id) {
-    warning('parameter router_id is deprecated and will be removed in future release')
   }
 
   resources { 'neutron_l3_agent_config':
@@ -150,7 +141,6 @@ class neutron::agents::l3 (
     'DEFAULT/debug':                            value => $debug;
     'DEFAULT/external_network_bridge':          value => $external_network_bridge;
     'DEFAULT/interface_driver':                 value => $interface_driver;
-    'DEFAULT/router_id':                        value => $router_id;
     'DEFAULT/gateway_external_network_id':      value => $gateway_external_network_id;
     'DEFAULT/handle_internal_only_routers':     value => $handle_internal_only_routers;
     'DEFAULT/metadata_port':                    value => $metadata_port;

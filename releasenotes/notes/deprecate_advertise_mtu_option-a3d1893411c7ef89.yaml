@@ -1,0 +1,4 @@
+---
+deprecations:
+  - The advertise_mtu option is deprecated, has no effect
+    and will be removed in Ocata.

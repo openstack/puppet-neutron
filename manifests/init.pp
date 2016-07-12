@@ -79,10 +79,6 @@
 #   (optional) Allow sending resource operation notification to DHCP agent.
 #   Defaults to $::os_service_default
 #
-# [*advertise_mtu*]
-#   (optional) VMs will receive DHCP and RA MTU option when the network's preferred MTU is known
-#   Defaults to $::os_service_default
-#
 # [*allow_bulk*]
 #   (optional) Enable bulk crud operations
 #   Defaults to $::os_service_default
@@ -371,6 +367,10 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults to undef
 #
+# [*advertise_mtu*]
+#   (optional) VMs will receive DHCP and RA MTU option when the network's preferred MTU is known
+#   Defaults to undef
+#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
@@ -388,7 +388,6 @@ class neutron (
   $dhcp_agents_per_network              = $::os_service_default,
   $global_physnet_mtu                   = $::os_service_default,
   $dhcp_agent_notification              = $::os_service_default,
-  $advertise_mtu                        = $::os_service_default,
   $allow_bulk                           = $::os_service_default,
   $allow_pagination                     = $::os_service_default,
   $allow_sorting                        = $::os_service_default,
@@ -455,6 +454,7 @@ class neutron (
   $network_device_mtu                   = undef,
   $verbose                              = undef,
   $log_facility                         = undef,
+  $advertise_mtu                        = undef,
 ) {
 
   include ::neutron::deps
@@ -493,6 +493,10 @@ class neutron (
     warning('log_facility is deprecated, has no effect and will be removed after Newton cycle.')
   }
 
+  if $advertise_mtu {
+    warning('advertise_mtu is deprecated, has no effect and will be removed in Ocata.')
+  }
+
   if $memcache_servers {
     validate_array($memcache_servers)
   }
@@ -519,7 +523,6 @@ class neutron (
     'DEFAULT/dns_domain':              value => $dns_domain;
     'DEFAULT/dhcp_agents_per_network': value => $dhcp_agents_per_network;
     'DEFAULT/dhcp_agent_notification': value => $dhcp_agent_notification;
-    'DEFAULT/advertise_mtu':           value => $advertise_mtu;
     'DEFAULT/allow_bulk':              value => $allow_bulk;
     'DEFAULT/allow_pagination':        value => $allow_pagination;
     'DEFAULT/allow_sorting':           value => $allow_sorting;

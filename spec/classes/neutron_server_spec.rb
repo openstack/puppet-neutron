@@ -30,7 +30,6 @@ describe 'neutron::server' do
       :router_scheduler_driver          => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
       :l3_ha                            => false,
       :max_l3_agents_per_router         => 3,
-      :min_l3_agents_per_router         => 2,
     }
   end
 
@@ -126,7 +125,6 @@ describe 'neutron::server' do
       it 'should enable HA routers' do
         is_expected.to contain_neutron_config('DEFAULT/l3_ha').with_value(true)
         is_expected.to contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(3)
-        is_expected.to contain_neutron_config('DEFAULT/min_l3_agents_per_router').with_value(2)
         is_expected.to contain_neutron_config('DEFAULT/l3_ha_net_cidr').with_value('<SERVICE DEFAULT>')
       end
     end
@@ -138,7 +136,6 @@ describe 'neutron::server' do
       it 'should disable HA routers' do
         is_expected.to contain_neutron_config('DEFAULT/l3_ha').with_value(false)
         is_expected.to contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(3)
-        is_expected.to contain_neutron_config('DEFAULT/min_l3_agents_per_router').with_value(2)
         is_expected.to contain_neutron_config('DEFAULT/l3_ha_net_cidr').with_value('<SERVICE DEFAULT>')
       end
     end
@@ -151,16 +148,6 @@ describe 'neutron::server' do
       it 'should enable HA routers' do
         is_expected.to contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(0)
       end
-    end
-
-    context 'with HA routers enabled and wrong parameters' do
-      before :each do
-        params.merge!(:l3_ha                    => true,
-                      :max_l3_agents_per_router => 2,
-                      :min_l3_agents_per_router => 3 )
-      end
-
-      it_raises 'a Puppet::Error', /min_l3_agents_per_router should be less than or equal to max_l3_agents_per_router./
     end
 
     context 'with custom service name' do

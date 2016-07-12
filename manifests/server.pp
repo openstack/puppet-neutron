@@ -207,10 +207,6 @@
 #   (optional) Maximum number of l3 agents which a HA router will be scheduled on. If set to '0', a router will be scheduled on every agent.
 #   Defaults to '3'
 #
-# [*min_l3_agents_per_router*]
-#   (optional) Minimum number of l3 agents which a HA router will be scheduled on.
-#   Defaults to '2'
-#
 # [*l3_ha_net_cidr*]
 #   (optional) CIDR of the administrative network if HA mode is enabled.
 #   Defaults to $::os_service_default
@@ -301,6 +297,10 @@
 #   LBaaS agent should be installed from neutron::agents::lbaas.
 #   Defaults to false.
 #
+# [*min_l3_agents_per_router*]
+#   Deprecated. (optional) Minimum number of l3 agents which a HA router will be scheduled on.
+#   Defaults to undef
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -338,7 +338,6 @@ class neutron::server (
   $allow_automatic_dhcp_failover    = $::os_service_default,
   $l3_ha                            = false,
   $max_l3_agents_per_router         = 3,
-  $min_l3_agents_per_router         = 2,
   $l3_ha_net_cidr                   = $::os_service_default,
   $qos_notification_drivers         = $::os_service_default,
   $network_auto_schedule            = $::os_service_default,
@@ -361,6 +360,7 @@ class neutron::server (
   $auth_plugin                      = $::os_service_default,
   $tenant_name                      = $::os_service_default,
   $ensure_lbaas_package             = false,
+  $min_l3_agents_per_router         = undef,
 ) inherits ::neutron::params {
 
   include ::neutron::deps
@@ -424,23 +424,18 @@ class neutron::server (
     })
   }
 
-  if $min_l3_agents_per_router <= $max_l3_agents_per_router or $max_l3_agents_per_router == 0 {
-    neutron_config {
-      'DEFAULT/l3_ha':                    value => $l3_ha;
-      'DEFAULT/max_l3_agents_per_router': value => $max_l3_agents_per_router;
-      'DEFAULT/min_l3_agents_per_router': value => $min_l3_agents_per_router;
-      'DEFAULT/l3_ha_net_cidr':           value => $l3_ha_net_cidr;
-    }
-  } else {
-    fail('min_l3_agents_per_router should be less than or equal to max_l3_agents_per_router.')
-  }
-
-
   if $sync_db {
     include ::neutron::db::sync
   }
 
+  if $min_l3_agents_per_router {
+    warning('min_l3_agents_per_router is deprecated, has no effect and will be removed for the Ocata release.')
+  }
+
   neutron_config {
+    'DEFAULT/l3_ha':                            value => $l3_ha;
+    'DEFAULT/max_l3_agents_per_router':         value => $max_l3_agents_per_router;
+    'DEFAULT/l3_ha_net_cidr':                   value => $l3_ha_net_cidr;
     'DEFAULT/api_workers':                      value => $api_workers;
     'DEFAULT/rpc_workers':                      value => $rpc_workers;
     'DEFAULT/agent_down_time':                  value => $agent_down_time;

@@ -136,6 +136,10 @@
 #   in the ovs config.
 #   Defaults to false.
 #
+# [*enable_dpdk*]
+#   (optional) Enable or not DPDK with OVS
+#   Defaults to false.
+#
 # === Deprecated Parameters
 #
 # [*prevent_arp_spoofing*]
@@ -172,6 +176,7 @@ class neutron::agents::ml2::ovs (
   $of_interface               = $::os_service_default,
   $ovsdb_interface            = $::os_service_default,
   $purge_config               = false,
+  $enable_dpdk                = false,
   # DEPRECATED PARAMETERS
   $prevent_arp_spoofing       = $::os_service_default,
   $enable_tunneling           = false,
@@ -179,8 +184,25 @@ class neutron::agents::ml2::ovs (
 
   include ::neutron::deps
   include ::neutron::params
+
+  if $enable_dpdk and ! $manage_vswitch {
+    fail('Enabling DPDK without manage vswitch does not have any effect')
+  }
+
+  if $enable_dpdk and is_service_default($datapath_type) {
+    fail('Datapath type for ovs agent must be set when DPDK is enabled')
+  }
+
+  if $enable_dpdk and is_service_default($vhostuser_socket_dir) {
+    fail('vhost user socket directory for ovs agent must be set when DPDK is enabled')
+  }
+
   if $manage_vswitch {
-    require ::vswitch::ovs
+    if $enable_dpdk {
+      require ::vswitch::dpdk
+    } else {
+      require ::vswitch::ovs
+    }
   }
 
   if $enable_tunneling {

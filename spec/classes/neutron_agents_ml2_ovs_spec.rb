@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'neutron::agents::ml2::ovs' do
-
   let :pre_condition do
     "class { 'neutron': rabbit_password => 'passw0rd' }"
   end
@@ -19,6 +18,7 @@ describe 'neutron::agents::ml2::ovs' do
       :firewall_driver            => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
       :manage_vswitch             => true,
       :purge_config               => false,
+      :enable_dpdk                => false,
       }
   end
 
@@ -299,6 +299,14 @@ describe 'neutron::agents::ml2::ovs' do
         end
       end
     end
+
+    context 'when enabling dpdk with manage vswitch disabled' do
+      before :each do
+        params.merge!(:enable_dpdk => true, :manage_vswitch => false)
+      end
+
+      it_raises 'a Puppet::Error',/Enabling DPDK without manage vswitch does not have any effect/
+    end
   end
 
   context 'on Debian platforms' do
@@ -339,6 +347,21 @@ describe 'neutron::agents::ml2::ovs' do
       ).that_requires('Package[neutron]')
       is_expected.to contain_package('neutron-ovs-agent').that_requires('Anchor[neutron::install::begin]')
       is_expected.to contain_package('neutron-ovs-agent').that_notifies('Anchor[neutron::install::end]')
+    end
+
+    context 'when enabling dpdk with manage vswitch is default' do
+      let :pre_condition do
+        "class { 'vswitch::dpdk': core_list => '1,2', memory_channels => '1' }"
+      end
+      before :each do
+        params.merge!(:enable_dpdk => true,
+                      :datapath_type => 'netdev',
+                      :vhostuser_socket_dir => '/var/run/openvswitch')
+      end
+
+      it 'should require vswitch::dpdk' do
+        is_expected.to contain_class('vswitch::dpdk')
+      end
     end
   end
 end

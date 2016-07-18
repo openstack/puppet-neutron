@@ -1,0 +1,5 @@
+---
+features:
+  - Configured Noop firewall driver for SR-IOV agent config.
+    SR-IOV agent only work with NoopFirewallDriver when Security Groups are
+    enabled.

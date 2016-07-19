@@ -87,6 +87,7 @@ describe 'neutron' do
     it_configures 'without memcache_servers'
     it_configures 'with memcache_servers'
     it_configures 'with dns_domain defined'
+    it_configures 'with rootwrap daemon'
   end
 
   shared_examples_for 'a neutron base installation' do
@@ -135,6 +136,7 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('oslo_concurrency/lock_path').with_value('$state_path/lock')
       is_expected.to contain_neutron_config('DEFAULT/rpc_response_timeout').with_value( '<SERVICE DEFAULT>' )
       is_expected.to contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
+      is_expected.to contain_neutron_config('agent/root_helper_daemon').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('agent/report_interval').with_value('<SERVICE DEFAULT>')
     end
   end
@@ -486,6 +488,18 @@ describe 'neutron' do
 
     it do
       is_expected.to contain_neutron_config('DEFAULT/dns_domain').with_value(params[:dns_domain])
+    end
+  end
+
+  shared_examples_for 'with rootwrap daemon' do
+    before do
+      params.merge!(
+        :root_helper_daemon => 'sudo neutron-rootwrap-daemon /etc/neutron/rootwrap.conf'
+      )
+    end
+
+    it do
+      is_expected.to contain_neutron_config('agent/root_helper_daemon').with_value(params[:root_helper_daemon])
     end
   end
 

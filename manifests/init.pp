@@ -110,6 +110,10 @@
 #  directly
 #  Defaults to 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf'.
 #
+# [*root_helper_daemon*]
+#  (optional) Root helper daemon application to use when possible.
+#  Defaults to $::os_service_default.
+#
 # [*report_interval*]
 #   (optional) Seconds between nodes reporting state to server; should be less than
 #   agent_down_time, best if it is half or less than agent_down_time.
@@ -395,6 +399,7 @@ class neutron (
   $allow_overlapping_ips                = $::os_service_default,
   $api_extensions_path                  = $::os_service_default,
   $root_helper                          = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+  $root_helper_daemon                   = $::os_service_default,
   $report_interval                      = $::os_service_default,
   $memcache_servers                     = false,
   $control_exchange                     = 'neutron',
@@ -528,6 +533,7 @@ class neutron (
     'DEFAULT/state_path':              value => $state_path;
     'DEFAULT/global_physnet_mtu':      value => pick($network_device_mtu, $global_physnet_mtu);
     'agent/root_helper':               value => $root_helper;
+    'agent/root_helper_daemon':        value => $root_helper_daemon;
     'agent/report_interval':           value => $report_interval;
   }
 

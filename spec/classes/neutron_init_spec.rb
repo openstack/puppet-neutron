@@ -86,6 +86,7 @@ describe 'neutron' do
     it_configures 'with host defined'
     it_configures 'with dns_domain defined'
     it_configures 'with transport_url defined'
+    it_configures 'with rootwrap daemon'
 
     context 'with amqp rpc_backend value' do
       it_configures 'amqp support'
@@ -154,6 +155,7 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/rpc_response_timeout').with_value( '<SERVICE DEFAULT>' )
       is_expected.to contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
+      is_expected.to contain_neutron_config('agent/root_helper_daemon').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('agent/report_interval').with_value('<SERVICE DEFAULT>')
     end
   end
@@ -497,6 +499,18 @@ describe 'neutron' do
 
     it do
       is_expected.to contain_neutron_config('DEFAULT/transport_url').with_value(params[:default_transport_url])
+    end
+  end
+
+  shared_examples_for 'with rootwrap daemon' do
+    before do
+      params.merge!(
+        :root_helper_daemon => 'sudo neutron-rootwrap-daemon /etc/neutron/rootwrap.conf'
+      )
+    end
+
+    it do
+      is_expected.to contain_neutron_config('agent/root_helper_daemon').with_value(params[:root_helper_daemon])
     end
   end
 

@@ -74,6 +74,20 @@ Puppet::Type.newtype(:neutron_port) do
     desc 'A uuid identifying the tenant which will own the port.'
   end
 
+  newproperty(:binding_host_id) do
+    desc 'A uuid identifying the host where we will bind the port.'
+  end
+
+  newproperty(:binding_profile) do
+    desc 'A dictionary the enables the application running on the host
+          to pass and receive VIF port-specific information to the plug-in.'
+    validate do |value|
+      unless value.class == Hash
+        raise ArgumentError, "Binding profile is not a valid dictionary"
+      end
+    end
+  end
+
   autorequire(:service) do
     ['neutron-server']
   end

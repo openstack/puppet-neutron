@@ -21,17 +21,19 @@ Puppet::Type.type(:neutron_port).provide(
       attrs = get_neutron_resource_attrs("port", id)
       attrs["name"] = attrs["id"] if attrs["name"].empty?
       new(
-        :ensure         => :present,
-        :name           => attrs["name"],
-        :id             => attrs["id"],
-        :status         => attrs["status"],
-        :tenant_id      => attrs["tenant_id"],
-        :network_id     => attrs["network_id"],
-        :admin_state_up => attrs["admin_state_up"],
-        :network_name   => get_network_name(attrs["network_id"]),
-        :subnet_name    => get_subnet_name(parse_subnet_id(attrs["fixed_ips"])),
-        :subnet_id      => parse_subnet_id(attrs["fixed_ips"]),
-        :ip_address     => parse_ip_address(attrs["fixed_ips"])
+        :ensure           => :present,
+        :name             => attrs["name"],
+        :id               => attrs["id"],
+        :status           => attrs["status"],
+        :tenant_id        => attrs["tenant_id"],
+        :network_id       => attrs["network_id"],
+        :admin_state_up   => attrs["admin_state_up"],
+        :network_name     => get_network_name(attrs["network_id"]),
+        :subnet_name      => get_subnet_name(parse_subnet_id(attrs["fixed_ips"])),
+        :subnet_id        => parse_subnet_id(attrs["fixed_ips"]),
+        :ip_address       => parse_ip_address(attrs["fixed_ips"]),
+        :binding_profile  => parse_binding_profile_interface_name(attrs["binding:profile"]),
+        :binding_host_id  => attrs["binding:host_id"],
       )
     end
   end
@@ -80,6 +82,15 @@ Puppet::Type.type(:neutron_port).provide(
       opts << "--tenant_id=#{@resource[:tenant_id]}"
     end
 
+    if @resource[:binding_host_id]
+      opts << "--binding:host_id=#{@resource[:binding_host_id]}"
+    end
+
+    if @resource[:binding_profile]
+      binding_profile_opts = @resource[:binding_profile].map{|k,v| "#{k}=#{v}"}.join(' ')
+      opts << "--binding:profile type=dict #{binding_profile_opts}"
+    end
+
     results = auth_neutron(
       "port-create",
       "--format=shell",
@@ -90,17 +101,19 @@ Puppet::Type.type(:neutron_port).provide(
 
     attrs = self.class.parse_creation_output(results)
     @property_hash = {
-      :ensure         => :present,
-      :name           => resource[:name],
-      :id             => attrs["id"],
-      :status         => attrs["status"],
-      :tenant_id      => attrs["tenant_id"],
-      :network_id     => attrs["network_id"],
-      :admin_state_up => attrs["admin_state_up"],
-      :network_name   => resource[:network_name],
-      :subnet_name    => resource[:subnet_name],
-      :subnet_id      => self.class.parse_subnet_id(attrs["fixed_ips"]),
-      :ip_address     => self.class.parse_ip_address(attrs["fixed_ips"])
+      :ensure         	=> :present,
+      :name           	=> resource[:name],
+      :id             	=> attrs["id"],
+      :status         	=> attrs["status"],
+      :tenant_id      	=> attrs["tenant_id"],
+      :network_id     	=> attrs["network_id"],
+      :admin_state_up 	=> attrs["admin_state_up"],
+      :network_name   	=> resource[:network_name],
+      :subnet_name    	=> resource[:subnet_name],
+      :subnet_id      	=> self.class.parse_subnet_id(attrs["fixed_ips"]),
+      :ip_address     	=> self.class.parse_ip_address(attrs["fixed_ips"]),
+      :binding_profile  => self.class.parse_binding_profile_interface_name(attrs["binding:profile"]),
+      :binding_host_id  => attrs["binding:host_id"],
     }
   end
 
@@ -182,6 +195,15 @@ Puppet::Type.type(:neutron_port).provide(
     else
       ip_addresses.first
     end
+  end
+
+  def self.parse_binding_profile_interface_name(binding_profile_)
+    match_data = /\{"interface_name": "(.*)"\}/.match(binding_profile_)
+      if match_data
+        match_data[1]
+      else
+        nil
+      end
   end
 
 end

@@ -62,6 +62,13 @@
 #   in the sriov config.
 #   Defaults to false.
 #
+# [*number_of_vfs*]
+#   (optional) List of <physical_network>:<number_of_vfs> specifying the number
+#   VFs to be exposed per physical interface.
+#   For example, to configure two inteface with number of VFs, specify
+#   it as "eth1:4,eth2:10"
+#   Defaults to $::os_service_default.
+#
 class neutron::agents::ml2::sriov (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -71,6 +78,7 @@ class neutron::agents::ml2::sriov (
   $exclude_devices            = $::os_service_default,
   $extensions                 = $::os_service_default,
   $purge_config               = false,
+  $number_of_vfs              = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -85,6 +93,10 @@ class neutron::agents::ml2::sriov (
     'sriov_nic/exclude_devices':          value => pick(join(any2array($exclude_devices), ','), $::os_service_default);
     'sriov_nic/physical_device_mappings': value => pick(join(any2array($physical_device_mappings), ','), $::os_service_default);
     'agent/extensions':                   value => join(any2array($extensions), ',');
+  }
+
+  if !is_service_default($number_of_vfs) and !empty($number_of_vfs) {
+    neutron_agent_sriov_numvfs { $number_of_vfs: ensure => present }
   }
 
   package { 'neutron-sriov-nic-agent':

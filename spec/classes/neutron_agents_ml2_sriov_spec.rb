@@ -46,7 +46,9 @@ describe 'neutron::agents::ml2::sriov' do
       is_expected.to contain_neutron_sriov_agent_config('agent/extensions').with_value(['<SERVICE DEFAULT>'])
     end
 
-
+    it 'does not configure numvfs by default' do
+      is_expected.not_to contain_neutron_agents_ml2_sriov_numvfs('<SERVICE DEFAULT>')
+    end
 
     it 'installs neutron sriov-nic agent package' do
       is_expected.to contain_package('neutron-sriov-nic-agent').with(
@@ -67,6 +69,27 @@ describe 'neutron::agents::ml2::sriov' do
       )
       is_expected.to contain_service('neutron-sriov-nic-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
       is_expected.to contain_service('neutron-sriov-nic-agent-service').that_notifies('Anchor[neutron::service::end]')
+    end
+
+    context 'when number_of_vfs is empty' do
+      before :each do
+        params.merge!(:number_of_vfs => "")
+      end
+
+      it 'does not configure numvfs ' do
+        is_expected.not_to contain_neutron_agents_ml2_sriov_numvfs('<SERVICE DEFAULT>')
+      end
+    end
+
+    context 'when number_of_vfs is configured' do
+      before :each do
+        params.merge!(:number_of_vfs => ['eth0:4','eth1:5'])
+      end
+
+      it 'configures numvfs' do
+        is_expected.to contain_neutron_agent_sriov_numvfs('eth0:4').with( :ensure => 'present' )
+        is_expected.to contain_neutron_agent_sriov_numvfs('eth1:5').with( :ensure => 'present')
+      end
     end
 
     context 'with manage_service as false' do

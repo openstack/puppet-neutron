@@ -72,6 +72,9 @@ describe 'neutron::plugins::plumgrid' do
       is_expected.to contain_neutron_plugin_plumgrid('PLUMgridDirector/password').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_plugin_plumgrid('PLUMgridDirector/servertimeout').with_value(params[:servertimeout])
       is_expected.to contain_neutron_plugin_plumgrid('database/connection').with_value(params[:connection])
+      is_expected.to contain_neutron_plugin_plumgrid('l2gateway/vendor').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_plugin_plumgrid('l2gateway/sw_username').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_plugin_plumgrid('l2gateway/sw_password').with_value('<SERVICE DEFAULT>')
     end
 
     it 'should perform default configuration of plumgrid plumlib' do
@@ -89,9 +92,6 @@ describe 'neutron::plugins::plumgrid' do
       is_expected.to contain_neutron_plumlib_plumgrid('PLUMgridMetadata/nova_metadata_subnet').with_value(params[:nova_metadata_subnet])
       is_expected.to contain_neutron_plumlib_plumgrid('PLUMgridMetadata/metadata_proxy_shared_secret').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_plumlib_plumgrid('ConnectorType/connector_type').with_value('distributed')
-      is_expected.to contain_neutron_plumlib_plumgrid('l2gateway/vendor').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_plumlib_plumgrid('l2gateway/sw_username').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_plumlib_plumgrid('l2gateway/sw_password').with_value('<SERVICE DEFAULT>')
     end
 
   end

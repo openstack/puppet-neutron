@@ -1,6 +1,6 @@
 {
   "name": "openstack-neutron",
-  "version": "8.1.0",
+  "version": "8.2.0",
   "author": "OpenStack Contributors",
   "summary": "Puppet module for OpenStack Neutron",
   "license": "Apache-2.0",
@@ -24,11 +24,11 @@
   "description": "Installs and configures OpenStack Neutron (Networking).",
   "dependencies": [
     { "name": "puppetlabs/inifile", "version_requirement": ">=1.4.0 <2.0.0" },
-    { "name": "openstack/keystone", "version_requirement": ">=8.1.0 <9.0.0" },
-    { "name": "openstack/nova", "version_requirement": ">=8.1.0 <9.0.0" },
+    { "name": "openstack/keystone", "version_requirement": ">=8.2.0 <9.0.0" },
+    { "name": "openstack/nova", "version_requirement": ">=8.2.0 <9.0.0" },
     { "name": "puppetlabs/stdlib", "version_requirement": ">=4.9.0 <5.0.0" },
-    { "name": "openstack/vswitch", "version_requirement": ">=4.1.0 <5.0.0" },
+    { "name": "openstack/vswitch", "version_requirement": ">=4.2.0 <5.0.0" },
     { "name": "duritong/sysctl", "version_requirement": ">=0.0.1 <1.0.0" },
-    { "name": "openstack/openstacklib", "version_requirement": ">=8.1.0 <9.0.0" }
+    { "name": "openstack/openstacklib", "version_requirement": ">=8.2.0 <9.0.0" }
   ]
 }

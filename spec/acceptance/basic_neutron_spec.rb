@@ -71,7 +71,6 @@ describe 'basic neutron' do
       }
       class { '::neutron::agents::metering': debug => true }
       class { '::neutron::agents::ml2::ovs':
-        enable_tunneling => true,
         local_ip         => '127.0.0.1',
         tunnel_types     => ['vxlan'],
         # Prior to Newton, the neutron-openvswitch-agent used 'ovs-ofctl' of_interface driver by default.

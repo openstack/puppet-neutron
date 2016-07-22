@@ -12,8 +12,8 @@ describe 'neutron::agents::ml2::ovs' do
       :bridge_uplinks             => [],
       :bridge_mappings            => [],
       :integration_bridge         => 'br-int',
-      :enable_tunneling           => false,
       :local_ip                   => false,
+      :tunnel_types               => [],
       :tunnel_bridge              => 'br-tun',
       :drop_flows_on_start        => false,
       :firewall_driver            => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
@@ -59,7 +59,6 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_neutron_agent_ovs('ovs/integration_bridge').with_value(p[:integration_bridge])
       is_expected.to contain_neutron_agent_ovs('securitygroup/firewall_driver').\
         with_value(p[:firewall_driver])
-      is_expected.to contain_neutron_agent_ovs('ovs/enable_tunneling').with_value(false)
       is_expected.to contain_neutron_agent_ovs('ovs/tunnel_bridge').with_ensure('absent')
       is_expected.to contain_neutron_agent_ovs('ovs/local_ip').with_ensure('absent')
       is_expected.to contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_ensure('absent')
@@ -210,17 +209,16 @@ describe 'neutron::agents::ml2::ovs' do
     context 'when enabling tunneling' do
       context 'without local ip address' do
         before :each do
-          params.merge!(:enable_tunneling => true)
+          params.merge!(:tunnel_types => ['vxlan'])
         end
 
         it_raises 'a Puppet::Error', /Local ip for ovs agent must be set when tunneling is enabled/
       end
       context 'with default params' do
         before :each do
-          params.merge!(:enable_tunneling => true, :local_ip => '127.0.0.1' )
+          params.merge!(:tunnel_types => ['vxlan'], :local_ip => '127.0.0.1' )
         end
         it 'should configure ovs for tunneling' do
-          is_expected.to contain_neutron_agent_ovs('ovs/enable_tunneling').with_value(true)
           is_expected.to contain_neutron_agent_ovs('ovs/tunnel_bridge').with_value(default_params[:tunnel_bridge])
           is_expected.to contain_neutron_agent_ovs('ovs/local_ip').with_value('127.0.0.1')
           is_expected.to contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_value('<SERVICE DEFAULT>')
@@ -230,8 +228,7 @@ describe 'neutron::agents::ml2::ovs' do
 
       context 'with vxlan tunneling' do
         before :each do
-          params.merge!(:enable_tunneling => true,
-                        :local_ip => '127.0.0.1',
+          params.merge!(:local_ip => '127.0.0.1',
                         :tunnel_types => ['vxlan'],
                         :vxlan_udp_port => '4789')
         end
@@ -246,7 +243,7 @@ describe 'neutron::agents::ml2::ovs' do
         before :each do
           params.merge!(:enable_distributed_routing => true,
                         :l2_population              => false,
-                        :enable_tunneling           => true,
+                        :tunnel_types               => ['vxlan'],
                         :local_ip                   => '127.0.0.1' )
         end
 
@@ -257,7 +254,7 @@ describe 'neutron::agents::ml2::ovs' do
         before :each do
           params.merge!(:enable_distributed_routing => true,
                         :l2_population              => false,
-                        :enable_tunneling           => false )
+                        :tunnel_types               => [] )
         end
 
         it 'should enable DVR without L2 population' do

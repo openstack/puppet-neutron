@@ -1,0 +1,7 @@
+---
+deprecations:
+  - The option enable_tunneling has been deprecated as it is no longer used.
+    In order to enable tunneling, tunnel_types should be set to
+    the desired type.
+    If tunnel_types is not set, tunneling will be disabled.
+

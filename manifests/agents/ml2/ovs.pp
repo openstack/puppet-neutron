@@ -46,14 +46,10 @@
 #   (optional) Integration bridge in OVS
 #   Defaults to 'br-int'
 #
-# [*enable_tunneling*]
-#   (optional) Enable or not tunneling
-#   Defaults to false
-#
 # [*tunnel_types*]
 #   (optional) List of types of tunnels to use when utilizing tunnels,
 #   either 'gre' or 'vxlan'.
-#   Defaults to false
+#   Defaults to empty list
 #
 # [*local_ip*]
 #   (optional) Local IP address of GRE tunnel endpoints.
@@ -146,6 +142,10 @@
 #   (optional) Enable or not ARP Spoofing Protection
 #   Defaults to $::os_service_default
 #
+# [*enable_tunneling*]
+#   (optional) Enable or not tunneling
+#   Defaults to false
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -154,7 +154,6 @@ class neutron::agents::ml2::ovs (
   $bridge_uplinks             = [],
   $bridge_mappings            = [],
   $integration_bridge         = 'br-int',
-  $enable_tunneling           = false,
   $tunnel_types               = [],
   $local_ip                   = false,
   $tunnel_bridge              = 'br-tun',
@@ -175,6 +174,7 @@ class neutron::agents::ml2::ovs (
   $purge_config               = false,
   # DEPRECATED PARAMETERS
   $prevent_arp_spoofing       = $::os_service_default,
+  $enable_tunneling           = false,
 ) {
 
   include ::neutron::deps
@@ -183,11 +183,22 @@ class neutron::agents::ml2::ovs (
     require ::vswitch::ovs
   }
 
-  if $enable_tunneling and ! $local_ip {
+  if $enable_tunneling {
+    warning('The enable_tunneling parameter is deprecated.  Please set tunnel_types with the desired type to enable tunneling.')
+  }
+
+  validate_array($tunnel_types)
+  if $enable_tunneling or (size($tunnel_types) > 0) {
+    $enable_tunneling_real = true
+  } else {
+    $enable_tunneling_real = false
+  }
+
+  if $enable_tunneling_real and ! $local_ip {
     fail('Local ip for ovs agent must be set when tunneling is enabled')
   }
 
-  if ($enable_tunneling) and (!is_service_default($enable_distributed_routing)) and (!is_service_default($l2_population)) {
+  if ($enable_tunneling_real) and (!is_service_default($enable_distributed_routing)) and (!is_service_default($l2_population)) {
     if $enable_distributed_routing and ! $l2_population {
       fail('L2 population must be enabled when DVR and tunneling are enabled')
     }
@@ -259,20 +270,15 @@ class neutron::agents::ml2::ovs (
     neutron_agent_ovs { 'securitygroup/firewall_driver': ensure => absent }
   }
 
-  if $enable_tunneling {
+  if $enable_tunneling_real {
     neutron_agent_ovs {
-      'ovs/enable_tunneling':      value => true;
       'ovs/tunnel_bridge':         value => $tunnel_bridge;
       'ovs/local_ip':              value => $local_ip;
       'ovs/int_peer_patch_port':   value => $int_peer_patch_port;
       'ovs/tun_peer_patch_port':   value => $tun_peer_patch_port;
+      'agent/tunnel_types':        value => join($tunnel_types, ',');
     }
 
-    if size($tunnel_types) > 0 {
-      neutron_agent_ovs {
-        'agent/tunnel_types': value => join($tunnel_types, ',');
-      }
-    }
     if 'vxlan' in $tunnel_types {
       validate_vxlan_udp_port($vxlan_udp_port)
       neutron_agent_ovs {
@@ -281,7 +287,6 @@ class neutron::agents::ml2::ovs (
     }
   } else {
     neutron_agent_ovs {
-      'ovs/enable_tunneling':      value  => false;
       'ovs/tunnel_bridge':         ensure => absent;
       'ovs/local_ip':              ensure => absent;
       'ovs/int_peer_patch_port':   ensure => absent;

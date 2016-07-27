@@ -137,7 +137,6 @@ class neutron::config (
   create_resources('neutron_plugin_midonet', $plugin_midonet_config)
   create_resources('neutron_plugin_plumgrid', $plugin_plumgrid_config)
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
-  create_resources('neutron_plugin_ovn', $plugin_ovn_config)
   create_resources('neutron_plugin_nuage', $plugin_nuage_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
 }

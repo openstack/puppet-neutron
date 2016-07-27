@@ -85,7 +85,6 @@ describe 'neutron::config' do
         :plugin_midonet_config         => config_hash,
         :plugin_plumgrid_config        => config_hash,
         :plugin_opencontrail_config    => config_hash,
-        :plugin_ovn_config             => config_hash,
         :plugin_nuage_config           => config_hash,
         :plugin_ml2_config             => config_hash
       }
@@ -131,12 +130,6 @@ describe 'neutron::config' do
       is_expected.to contain_neutron_plugin_opencontrail('DEFAULT/foo').with_value('fooValue')
       is_expected.to contain_neutron_plugin_opencontrail('DEFAULT/bar').with_value('barValue')
       is_expected.to contain_neutron_plugin_opencontrail('DEFAULT/baz').with_ensure('absent')
-    end
-
-    it 'configures arbitrary neutron_plugin_ovn configurations' do
-      is_expected.to contain_neutron_plugin_ovn('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_ovn('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_ovn('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_nuage configurations' do

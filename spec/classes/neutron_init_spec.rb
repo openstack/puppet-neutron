@@ -143,7 +143,6 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/dhcp_agents_per_network').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/global_physnet_mtu').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dhcp_agent_notification').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('DEFAULT/advertise_mtu').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/allow_bulk').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/allow_pagination').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/allow_sorting').with_value('<SERVICE DEFAULT>')
@@ -451,18 +450,6 @@ describe 'neutron' do
 
     it do
       is_expected.to contain_neutron_config('DEFAULT/global_physnet_mtu').with_value(params[:network_device_mtu])
-    end
-  end
-
-  shared_examples_for 'with advertise_mtu defined' do
-    before do
-      params.merge!(
-        :advertise_mtu => true
-      )
-    end
-
-    it do
-      is_expected.to contain_neutron_config('DEFAULT/advertise_mtu').with_value(params[:advertise_mtu])
     end
   end
 

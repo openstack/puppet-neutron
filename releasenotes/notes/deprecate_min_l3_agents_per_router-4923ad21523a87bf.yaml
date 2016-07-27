@@ -1,0 +1,4 @@
+---
+deprecations:
+  - min_l3_agents_per_router is deprecated, has no effect
+    and will be removed for the Ocata release.

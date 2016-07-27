@@ -3,6 +3,9 @@ require 'puppet/util/inifile'
 
 class Puppet::Provider::Neutron < Puppet::Provider
 
+  initvars
+  commands :neutron => 'neutron'
+
   def self.conf_filename
     '/etc/neutron/neutron.conf'
   end

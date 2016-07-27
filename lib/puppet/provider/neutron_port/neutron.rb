@@ -12,8 +12,6 @@ Puppet::Type.type(:neutron_port).provide(
   EOT
   #TODO No security group support
 
-  commands :neutron => "neutron"
-
   mk_resource_methods
 
   def self.instances

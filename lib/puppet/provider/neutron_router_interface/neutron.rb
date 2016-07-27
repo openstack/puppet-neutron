@@ -17,8 +17,6 @@ Puppet::Type.type(:neutron_router_interface).provide(
 
   EOT
 
-  commands :neutron => 'neutron'
-
   mk_resource_methods
 
   def self.instances

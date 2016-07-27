@@ -12,8 +12,6 @@ Puppet::Type.type(:neutron_subnet).provide(
     Assumes that the neutron service is configured on the same host.
   EOT
 
-  commands :neutron => 'neutron'
-
   mk_resource_methods
 
   def self.neutron_type

@@ -11,8 +11,6 @@ Puppet::Type.type(:neutron_router).provide(
     Assumes that the neutron service is configured on the same host.
   EOT
 
-  commands :neutron => 'neutron'
-
   mk_resource_methods
 
   def self.do_not_manage

@@ -9,3 +9,4 @@ other:
     * allow_automatic_l3agent_failover from l3 agent
     * network_device_mtu from l3 agent
     * auth_password, auth_tenant, auth_user, auth_url, auth_insecure, auth_region from metadata agent
+  - Remove all other references to network_device_mtu

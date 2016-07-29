@@ -441,18 +441,6 @@ describe 'neutron' do
     end
   end
 
-  shared_examples_for 'with deprecated network_device_mtu defined' do
-    before do
-      params.merge!(
-        :network_device_mtu => 9000
-      )
-    end
-
-    it do
-      is_expected.to contain_neutron_config('DEFAULT/global_physnet_mtu').with_value(params[:network_device_mtu])
-    end
-  end
-
   shared_examples_for 'with host defined' do
     before do
       params.merge!(

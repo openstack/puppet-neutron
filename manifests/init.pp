@@ -361,8 +361,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*network_device_mtu*]
-#
 # [*verbose*]
 #   (optional) Deprecated. Verbose logging
 #   Defaults to undef
@@ -456,7 +454,6 @@ class neutron (
   $notification_topics                  = $::os_service_default,
   $notification_transport_url           = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $network_device_mtu                   = undef,
   $verbose                              = undef,
   $log_facility                         = undef,
   $advertise_mtu                        = undef,
@@ -534,7 +531,7 @@ class neutron (
     'DEFAULT/allow_overlapping_ips':   value => $allow_overlapping_ips;
     'DEFAULT/api_extensions_path':     value => $api_extensions_path;
     'DEFAULT/state_path':              value => $state_path;
-    'DEFAULT/global_physnet_mtu':      value => pick($network_device_mtu, $global_physnet_mtu);
+    'DEFAULT/global_physnet_mtu':      value => $global_physnet_mtu;
     'agent/root_helper':               value => $root_helper;
     'agent/root_helper_daemon':        value => $root_helper_daemon;
     'agent/report_interval':           value => $report_interval;
@@ -622,10 +619,6 @@ class neutron (
     neutron_config {
       'DEFAULT/rpc_backend': value => $rpc_backend;
     }
-  }
-
-  if $network_device_mtu {
-    warning('The neutron::network_device_mtu parameter is deprecated, use neutron::global_physnet_mtu instead.')
   }
 
   # SSL Options

@@ -69,6 +69,12 @@ describe 'neutron' do
       it_configures 'rabbit with durable queues'
     end
 
+    context 'with rabbitmq non default transient_queues_ttl' do
+      before { params.merge!( :rabbit_transient_queues_ttl => 20 ) }
+      it_configures 'rabbit with non default transient_queues_ttl'
+    end
+
+
     it_configures 'with SSL enabled with kombu'
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
@@ -187,6 +193,12 @@ describe 'neutron' do
   shared_examples_for 'rabbit with durable queues' do
     it 'in neutron.conf' do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true)
+    end
+  end
+
+  shared_examples_for 'rabbit with non default transient_queues_ttl' do
+    it 'in neutron.conf' do
+      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_transient_queues_ttl').with_value(20)
     end
   end
 

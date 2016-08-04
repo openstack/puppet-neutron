@@ -1,0 +1,15 @@
+---
+features:
+  - Configure keystonemiddleware in a consistent way using modern parameters
+deprecations:
+  - neutron::server::keystone_auth_type is deprecated, use neutron::keystone::authtoken::auth_type instead
+  - neutron::server::auth_uri is deprecated, use neutron::keystone::authtoken::auth_uri instead
+  - neutron::server::auth_url is deprecated, use neutron::keystone::authtoken::auth_url instead
+  - neutron::server::username is deprecated, use neutron::keystone::authtoken::username instead
+  - neutron::server::password is deprecated, use neutron::keystone::authtoken::password instead
+  - neutron::server::project_domain_id is deprecated, use neutron::keystone::authtoken::project_domain_name instead
+  - neutron::server::project_domain_name is deprecated, use neutron::keystone::authtoken::project_domain_name instead
+  - neutron::server::project_name is deprecated, use neutron::keystone::authtoken::project_name instead
+  - neutron::server::user_domain_id is deprecated, use neutron::keystone::authtoken::user_domain_name instead
+  - neutron::server::user_domain_name is deprecated, use neutron::keystone::authtoken::user_domain_name instead
+  - neutron::server::region_name is deprecated, use neutron::keystone::authtoken::region_name instead

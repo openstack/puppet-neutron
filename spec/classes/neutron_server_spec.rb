@@ -48,25 +48,6 @@ describe 'neutron::server' do
     it { is_expected.to contain_class('neutron::params') }
     it { is_expected.to contain_class('neutron::policy') }
 
-    it 'configures authentication middleware' do
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_type').with_value(p[:keystone_auth_type]);
-      is_expected.to contain_neutron_config('keystone_authtoken/username').with_value(p[:username]);
-      is_expected.to contain_neutron_config('keystone_authtoken/password').with_value(p[:password]);
-      is_expected.to contain_neutron_config('keystone_authtoken/password').with_secret( true )
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_uri').with_value("http://localhost:5000/");
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value("http://localhost:35357/");
-      is_expected.to contain_neutron_config('keystone_authtoken/project_domain_name').with_value(p[:project_domain_name]);
-      is_expected.to contain_neutron_config('keystone_authtoken/project_domain_id').with_value('<SERVICE DEFAULT>');
-      is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value(p[:project_name]);
-      is_expected.to contain_neutron_config('keystone_authtoken/user_domain_name').with_value(p[:user_domain_name]);
-      is_expected.to contain_neutron_config('keystone_authtoken/user_domain_id').with_value('<SERVICE DEFAULT>');
-      is_expected.to contain_neutron_config('keystone_authtoken/admin_tenant_name').with_ensure('absent');
-      is_expected.to contain_neutron_config('keystone_authtoken/admin_user').with_ensure('absent');
-      is_expected.to contain_neutron_config('keystone_authtoken/admin_password').with_ensure('absent');
-      is_expected.to contain_neutron_config('keystone_authtoken/identity_uri').with_ensure('absent');
-      is_expected.to contain_neutron_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>');
-    end
-
     it 'installs neutron server package' do
       if platform_params.has_key?(:server_package)
         is_expected.to contain_package('neutron-server').with(
@@ -242,7 +223,7 @@ describe 'neutron::server' do
     before do
       params.delete(:password)
     end
-    it_raises 'a Puppet::Error', /password must be set when using keystone authentication/
+    it_raises 'a Puppet::Error', /Please set password for neutron service user/
   end
 
   shared_examples_for 'VPNaaS, FWaaS and LBaaS package installation' do
@@ -268,66 +249,6 @@ describe 'neutron::server' do
     end
     it 'includes neutron::db::sync' do
       is_expected.to contain_class('neutron::db::sync')
-    end
-  end
-
-  describe "with custom keystone authentication params" do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'RedHat',
-         :operatingsystemrelease => '7'
-      }))
-    end
-    before do
-      params.merge!({
-        :auth_uri            => 'https://foo.bar:5000/',
-        :auth_url            => 'https://foo.bar:35357/v3',
-        :keystone_auth_type  => 'v3password',
-        :project_domain_name => 'non_default',
-        :project_name        => 'new_services',
-        :user_domain_name    => 'non_default'
-      })
-    end
-    it 'configures keystone authentication params' do
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/");
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value("https://foo.bar:35357/v3");
-      is_expected.to contain_neutron_config('keystone_authtoken/project_domain_name').with_value("non_default");
-      is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value("new_services");
-      is_expected.to contain_neutron_config('keystone_authtoken/user_domain_name').with_value("non_default");
-    end
-  end
-
-  describe "with keystoneauth memcache servers" do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'RedHat',
-         :operatingsystemrelease => '7'
-      }))
-    end
-    before do
-      params.merge!({
-        :memcached_servers => '1.1.1.1:11211'
-      })
-    end
-    it 'configures keystone authentication memached servers' do
-        is_expected.to contain_neutron_config('keystone_authtoken/memcached_servers').with_value('1.1.1.1:11211');
-    end
-  end
-
-  describe "with custom auth region" do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7'
-      }))
-    end
-    before do
-      params.merge!({
-        :region_name => 'MyRegion',
-      })
-    end
-    it 'configures region_name' do
-      is_expected.to contain_neutron_config('keystone_authtoken/region_name').with_value('MyRegion');
     end
   end
 

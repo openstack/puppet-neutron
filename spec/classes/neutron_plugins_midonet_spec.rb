@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'neutron::plugins::midonet' do
 
   let :pre_condition do
-    "class { 'neutron::server': auth_password => 'password' }
+    "class { 'neutron::server': password => 'password' }
      class { 'neutron': rabbit_password => 'passw0rd' }
      package { 'python-networking-midonet': }"
   end

@@ -256,42 +256,6 @@
 #
 # === Deprecated Parameters
 #
-# [*identity_uri*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   (optional) Complete admin Identity API endpoint.
-#   Defaults to: 'http://localhost:35357/'
-#
-# [*auth_region*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   (optional) The authentication region. Note this value is case-sensitive and
-#   must match the endpoint region defined in Keystone.
-#   Defaults to $::os_service_default
-#
-# [*auth_tenant*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   (optional) The tenant of the auth user
-#   Defaults to services
-#
-# [*auth_user*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   (optional) The name of the auth user
-#   Defaults to neutron
-#
-# [*auth_password*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   (optional) The password to use for authentication (keystone)
-#   Defaults to false. Set a value unless you are using noauth
-#
-# [*auth_plugin*]
-#   Deprecated. keystone_auth_type should be used instead
-#   An authentication plugin to use with an OpenStack Identity server.
-#   Defaults to $::os_service_plugin
-#
-# [*tenant_name*]
-#   Deprecated. project_name should be used instead
-#   The tenant of the auth user
-#   Defaults to $::os_service_plugin
-#
 # [*ensure_lbaas_package*]
 #   Deprecated. Ensures installation of LBaaS package.
 #   LBaaS agent should be installed from neutron::agents::lbaas.
@@ -352,13 +316,6 @@ class neutron::server (
   $report_interval                  = undef,
   $state_path                       = undef,
   $lock_path                        = undef,
-  $auth_password                    = false,
-  $auth_region                      = $::os_service_default,
-  $auth_tenant                      = 'services',
-  $auth_user                        = 'neutron',
-  $identity_uri                     = 'http://localhost:35357/',
-  $auth_plugin                      = $::os_service_default,
-  $tenant_name                      = $::os_service_default,
   $ensure_lbaas_package             = false,
   $min_l3_agents_per_router         = undef,
 ) inherits ::neutron::params {
@@ -488,83 +445,34 @@ class neutron::server (
 
   if ($auth_type == 'keystone') {
 
-    if ($auth_password == false) and ($password == false) {
-      fail('Either auth_password or password must be set when using keystone authentication.')
-    } elsif ($auth_password != false) and ($password != false) {
-      fail('auth_password and password must not be used together.')
-    } else {
-      neutron_config {
-        'keystone_authtoken/auth_uri':     value => $auth_uri;
-      }
-      neutron_api_config {
-        'filter:authtoken/auth_uri':     value => $auth_uri;
-      }
+    if $password == false {
+      fail('password must be set when using keystone authentication.')
     }
 
     neutron_config {
-      'keystone_authtoken/memcached_servers': value => join(any2array($memcached_servers), ',');
+      'keystone_authtoken/auth_type':           value => $keystone_auth_type;
+      'keystone_authtoken/auth_url':            value => $auth_url;
+      'keystone_authtoken/auth_uri':            value => $auth_uri;
+      'keystone_authtoken/username':            value => $username;
+      'keystone_authtoken/password':            value => $password, secret => true;
+      'keystone_authtoken/region_name':         value => $region_name;
+      'keystone_authtoken/project_domain_id':   value => $project_domain_id;
+      'keystone_authtoken/project_domain_name': value => $project_domain_name;
+      'keystone_authtoken/project_name':        value => $project_name;
+      'keystone_authtoken/user_domain_id':      value => $user_domain_id;
+      'keystone_authtoken/user_domain_name':    value => $user_domain_name;
+      'keystone_authtoken/memcached_servers':   value => join(any2array($memcached_servers), ',');
+      'keystone_authtoken/admin_tenant_name':   ensure => absent;
+      'keystone_authtoken/admin_user':          ensure => absent;
+      'keystone_authtoken/admin_password':      ensure => absent;
+      'keystone_authtoken/auth_region':         ensure => absent;
+      'keystone_authtoken/identity_uri':        ensure => absent;
     }
-
-    if $auth_password {
-
-      warning('identity_uri, auth_tenant, auth_user, auth_password, auth_region configuration options are deprecated in favor of auth_plugin and related options')
-      neutron_config {
-        'keystone_authtoken/admin_tenant_name': value => $auth_tenant;
-        'keystone_authtoken/admin_user':        value => $auth_user;
-        'keystone_authtoken/admin_password':    value => $auth_password, secret => true;
-        'keystone_authtoken/auth_region':       value => $auth_region;
-        'keystone_authtoken/identity_uri':      value => $identity_uri;
-      }
-
-      neutron_api_config {
-        'filter:authtoken/admin_tenant_name': value => $auth_tenant;
-        'filter:authtoken/admin_user':        value => $auth_user;
-        'filter:authtoken/admin_password':    value => $auth_password, secret => true;
-        'filter:authtoken/identity_uri':      value => $identity_uri;
-      }
-
-    } else {
-
-      if !is_service_default($tenant_name) {
-        warning('tenant_name configuration option is deprecated in favor of project_name')
-        $project_name_real = $tenant_name
-      } else {
-        $project_name_real = $project_name
-      }
-
-      neutron_config {
-        'keystone_authtoken/auth_url':            value => $auth_url;
-        'keystone_authtoken/username':            value => $username;
-        'keystone_authtoken/password':            value => $password, secret => true;
-        'keystone_authtoken/region_name':         value => $region_name;
-        'keystone_authtoken/project_domain_id':   value => $project_domain_id;
-        'keystone_authtoken/project_domain_name': value => $project_domain_name;
-        'keystone_authtoken/project_name':        value => $project_name_real;
-        'keystone_authtoken/user_domain_id':      value => $user_domain_id;
-        'keystone_authtoken/user_domain_name':    value => $user_domain_name;
-        'keystone_authtoken/admin_tenant_name':   ensure => absent;
-        'keystone_authtoken/admin_user':          ensure => absent;
-        'keystone_authtoken/admin_password':      ensure => absent;
-        'keystone_authtoken/auth_region':         ensure => absent;
-        'keystone_authtoken/identity_uri':        ensure => absent;
-      }
-      neutron_api_config {
-        'filter:authtoken/admin_tenant_name':   ensure => absent;
-        'filter:authtoken/admin_user':          ensure => absent;
-        'filter:authtoken/admin_password':      ensure => absent;
-        'filter:authtoken/identity_uri':        ensure => absent;
-      }
-
-      if ! is_service_default ($auth_plugin) and ($auth_plugin) {
-        warning('auth_plugin parameter is deprecated, keystone_auth_type should be used instead')
-        neutron_config {
-          'keystone_authtoken/auth_plugin': value => $auth_plugin;
-        }
-      } else {
-        neutron_config {
-          'keystone_authtoken/auth_type': value => $keystone_auth_type;
-        }
-      }
+    neutron_api_config {
+      'filter:authtoken/admin_tenant_name':   ensure => absent;
+      'filter:authtoken/admin_user':          ensure => absent;
+      'filter:authtoken/admin_password':      ensure => absent;
+      'filter:authtoken/identity_uri':        ensure => absent;
     }
 
   }

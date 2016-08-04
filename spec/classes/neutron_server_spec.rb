@@ -197,16 +197,6 @@ describe 'neutron::server' do
       end
     end
 
-    context 'with deprecated auth_plugin parameter' do
-      before :each do
-        params.merge!(:auth_plugin => 'v2password')
-      end
-      it 'should configure auth_plugin' do
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_plugin').with_value('v2password')
-        is_expected.not_to contain_neutron_config('keystone_authtoken/auth_type')
-      end
-    end
-
     context 'with a bad dhcp_load_type value' do
       before :each do
         params.merge!(:dhcp_load_type => 'badvalue')
@@ -252,46 +242,7 @@ describe 'neutron::server' do
     before do
       params.delete(:password)
     end
-    it_raises 'a Puppet::Error', /Either auth_password or password must be set when using keystone authentication/
-  end
-
-  shared_examples_for 'a neutron server with incompatible authentication params' do
-    before do
-      params.merge!(
-        :auth_password => "passw0rd"
-      )
-    end
-    it_raises 'a Puppet::Error', /auth_password and password must not be used together/
-  end
-
-  shared_examples_for 'a neutron server with deprecated authentication params' do
-    before do
-      params.merge!(
-        :auth_user     => "neutron",
-        :auth_password => "passw0rd",
-        :auth_tenant   => "services",
-        :auth_region   => "MyRegion",
-        :identity_uri  => "https://foo.bar:5000/"
-      )
-      params.delete(:password)
-    end
-    it 'configures authentication middleware' do
-      is_expected.to contain_neutron_api_config('filter:authtoken/admin_tenant_name').with_value('services');
-      is_expected.to contain_neutron_api_config('filter:authtoken/admin_user').with_value('neutron');
-      is_expected.to contain_neutron_api_config('filter:authtoken/admin_password').with_value('passw0rd');
-      is_expected.to contain_neutron_api_config('filter:authtoken/admin_password').with_secret( true )
-      is_expected.to contain_neutron_api_config('filter:authtoken/identity_uri').with_value('https://foo.bar:5000/');
-      is_expected.to contain_neutron_config('keystone_authtoken/admin_tenant_name').with_value('services');
-      is_expected.to contain_neutron_config('keystone_authtoken/admin_user').with_value('neutron');
-      is_expected.to contain_neutron_config('keystone_authtoken/admin_password').with_value('passw0rd');
-      is_expected.to contain_neutron_config('keystone_authtoken/admin_password').with_secret( true )
-      is_expected.to contain_neutron_config('keystone_authtoken/identity_uri').with_value('https://foo.bar:5000/');
-      is_expected.to contain_neutron_config('keystone_authtoken/auth_region').with_value('MyRegion');
-      is_expected.not_to contain_neutron_config('keystone_authtoken/project_name');
-      is_expected.not_to contain_neutron_config('keystone_authtoken/username');
-      is_expected.not_to contain_neutron_config('keystone_authtoken/password');
-      is_expected.not_to contain_neutron_config('keystone_authtoken/auth_url');
-    end
+    it_raises 'a Puppet::Error', /password must be set when using keystone authentication/
   end
 
   shared_examples_for 'VPNaaS, FWaaS and LBaaS package installation' do
@@ -395,8 +346,6 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
-    it_configures 'a neutron server with incompatible authentication params'
-    it_configures 'a neutron server with deprecated authentication params'
     it_configures 'a neutron server without database synchronization'
   end
 
@@ -415,8 +364,6 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server with broken authentication'
-    it_configures 'a neutron server with incompatible authentication params'
-    it_configures 'a neutron server with deprecated authentication params'
     it_configures 'a neutron server without database synchronization'
   end
 end

@@ -1,0 +1,3 @@
+---
+deprecations:
+  - Remove outdated auth options completely (admin_*)

@@ -29,7 +29,6 @@ class Puppet::Provider::Neutron < Puppet::Provider
   end
 
   def self.get_neutron_credentials
-    deprecated_auth_keys = ['admin_tenant_name', 'admin_user', 'admin_password', 'identity_uri']
     auth_keys = ['project_name', 'username', 'password', 'auth_url']
     conf = neutron_conf
     if conf and conf['keystone_authtoken'] and
@@ -39,15 +38,6 @@ class Puppet::Provider::Neutron < Puppet::Provider
                    { |k| [k, conf['keystone_authtoken'][k].strip] } ]
       if !conf['keystone_authtoken']['region_name'].nil?
         creds['region_name'] = conf['keystone_authtoken']['region_name'].strip
-      end
-      return creds
-    elsif conf and conf['keystone_authtoken'] and
-        !conf['keystone_authtoken']['admin_password'].nil? and
-        deprecated_auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?}
-      creds = Hash[ deprecated_auth_keys.map \
-                   { |k| [k, conf['keystone_authtoken'][k].strip] } ]
-      if conf['DEFAULT'] and !conf['DEFAULT']['nova_region_name'].nil?
-        creds['nova_region_name'] = conf['DEFAULT']['nova_region_name'].strip
       end
       return creds
     else
@@ -70,24 +60,13 @@ correctly configured.")
 
   def self.auth_neutron(*args)
     q = neutron_credentials
-    if q.key?('admin_password')
-      authenv = {
-        :OS_AUTH_URL    => q['identity_uri'],
-        :OS_USERNAME    => q['admin_user'],
-        :OS_TENANT_NAME => q['admin_tenant_name'],
-        :OS_PASSWORD    => q['admin_password']
-      }
-    else
-      authenv = {
-        :OS_AUTH_URL     => q['auth_url'],
-        :OS_USERNAME     => q['username'],
-        :OS_PROJECT_NAME => q['project_name'],
-        :OS_PASSWORD     => q['password']
-      }
-    end
-    if q.key?('nova_region_name')
-      authenv[:OS_REGION_NAME] = q['nova_region_name']
-    elsif q.key?('region_name')
+    authenv = {
+      :OS_AUTH_URL     => q['auth_url'],
+      :OS_USERNAME     => q['username'],
+      :OS_PROJECT_NAME => q['project_name'],
+      :OS_PASSWORD     => q['password']
+    }
+    if q.key?('region_name')
       authenv[:OS_REGION_NAME] = q['region_name']
     end
     rv = nil

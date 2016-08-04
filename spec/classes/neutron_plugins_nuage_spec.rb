@@ -6,7 +6,7 @@ describe 'neutron::plugins::nuage' do
     "class { 'neutron':
       rabbit_password => 'passw0rd',
       core_plugin     => 'neutron.plugins.nuage.plugin.NuagePlugin' }
-     class { 'neutron::server': auth_password => 'password' }"
+     class { 'neutron::server': password => 'password' }"
   end
 
   let :test_facts do

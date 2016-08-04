@@ -55,8 +55,8 @@ describe 'basic neutron' do
       }
       class { '::neutron::server':
         database_connection => 'mysql+pymysql://neutron:a_big_secret@127.0.0.1/neutron?charset=utf8',
-        auth_password       => 'a_big_secret',
-        identity_uri        => 'http://127.0.0.1:35357/',
+        password            => 'a_big_secret',
+        auth_url            => 'http://127.0.0.1:35357/',
         sync_db             => true,
         service_providers   => [
           'LOADBALANCER:Haproxy:neutron_lbaas.services.loadbalancer.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default',

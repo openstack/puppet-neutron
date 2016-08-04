@@ -42,7 +42,7 @@ describe 'neutron::keystone::auth' do
 
   describe 'when configuring neutron-server' do
     let :pre_condition do
-      "class { 'neutron::server': auth_password => 'test' }"
+      "class { 'neutron::server': password => 'test' }"
     end
 
     let :facts do

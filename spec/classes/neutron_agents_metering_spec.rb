@@ -39,6 +39,7 @@ describe 'neutron::agents::metering' do
       :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :driver           => 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
       :use_namespaces   => nil,
+      :purge_config     => false,
     }
   end
 
@@ -54,6 +55,12 @@ describe 'neutron::agents::metering' do
     end
 
     it { is_expected.to contain_class('neutron::params') }
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_metering_agent_config').with({
+        :purge => false
+      })
+    end
 
     it 'configures metering_agent.ini' do
       is_expected.to contain_neutron_metering_agent_config('DEFAULT/debug').with_value(p[:debug]);

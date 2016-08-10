@@ -48,6 +48,11 @@
 #   (optional) Interval between two metering reports.
 #   Defaults to 300.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the metering config.
+#   Defaults to false.
+#
 # === Deprecated Parameters
 #
 # [*use_namespaces*]
@@ -66,6 +71,7 @@ class neutron::agents::metering (
   $driver           = 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
   $measure_interval = $::os_service_default,
   $report_interval  = $::os_service_default,
+  $purge_config     = false,
   # DEPRECATED PARAMETERS
   $use_namespaces   = $::os_service_default,
 ) {
@@ -74,6 +80,10 @@ class neutron::agents::metering (
 
   Neutron_config<||>                ~> Service['neutron-metering-service']
   Neutron_metering_agent_config<||> ~> Service['neutron-metering-service']
+
+  resources { 'neutron_metering_agent_config':
+    purge => $purge_config,
+  }
 
   # The metering agent loads both neutron.ini and its own file.
   # This only lists config specific to the agent.  neutron.ini supplies

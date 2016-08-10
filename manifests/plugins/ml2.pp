@@ -129,6 +129,11 @@
 #   the maximum MTU for the driver.
 #   Defaults to $::os_service_default
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the ml2 config.
+#   Defaults to false.
+#
 
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
@@ -148,6 +153,7 @@ class neutron::plugins::ml2 (
   $physical_network_mtus     = $::os_service_default,
   $path_mtu                  = 0,
   $max_header_size           = $::os_service_default,
+  $purge_config              = false,
 ) {
 
   include ::neutron::params
@@ -201,6 +207,10 @@ class neutron::plugins::ml2 (
     Package['neutron'] -> File['/etc/neutron/plugin.ini']
     Package['neutron'] -> File['/etc/default/neutron-server']
     Package['neutron'] -> Neutron_plugin_sriov<||>
+  }
+
+  resources { 'neutron_plugin_ml2':
+    purge => $purge_config,
   }
 
   neutron::plugins::ml2::type_driver { $type_drivers:

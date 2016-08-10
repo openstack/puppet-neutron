@@ -58,6 +58,11 @@
 #   (optional) Firewall driver for realizing neutron security group function.
 #   Defaults to 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the linuxbridge config.
+#   Defaults to false.
+#
 class neutron::agents::ml2::linuxbridge (
   $package_ensure   = 'present',
   $enabled          = true,
@@ -70,7 +75,8 @@ class neutron::agents::ml2::linuxbridge (
   $polling_interval = $::os_service_default,
   $l2_population    = $::os_service_default,
   $physical_interface_mappings = [],
-  $firewall_driver  = 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
+  $firewall_driver  = 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver',
+  $purge_config     = false,
 ) {
 
   validate_array($tunnel_types)
@@ -79,6 +85,10 @@ class neutron::agents::ml2::linuxbridge (
   include ::neutron::params
 
   Neutron_agent_linuxbridge<||> ~> Service['neutron-plugin-linuxbridge-agent']
+
+  resources { 'neutron_agent_linuxbridge':
+    purge => $purge_config,
+  }
 
   if ('vxlan' in $tunnel_types) {
 

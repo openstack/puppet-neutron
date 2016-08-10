@@ -37,12 +37,19 @@ describe 'neutron::services::fwaas' do
   end
 
   let :default_params do
-    { :vpnaas_agent_package => false }
+    { :vpnaas_agent_package => false,
+      :purge_config         => false, }
   end
 
   shared_examples_for 'neutron fwaas service plugin' do
     let :params_hash do
       default_params.merge(params)
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_fwaas_service_config').with({
+        :purge => false
+      })
     end
 
     it 'configures driver in fwaas_driver.ini' do

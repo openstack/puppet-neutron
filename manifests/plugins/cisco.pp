@@ -81,6 +81,11 @@
 #  (optional) the ensure state of the package resource
 #  Defaults to 'present'
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the cisco config.
+#   Defaults to false.
+#
 # Other parameters are currently not used by the plugin and
 # can be left unchanged, but in grizzly the plugin will fail
 # to launch if they are not there. The config for Havana will
@@ -112,7 +117,8 @@ class neutron::plugins::cisco(
   $max_port_profiles = '65568',
   $manager_class     = 'neutron.plugins.cisco.segmentation.l2network_vlan_mgr_v2.L2NetworkVLANMgr',
   $max_networks      = '65568',
-  $package_ensure    = 'present'
+  $package_ensure    = 'present',
+  $purge_config      = false,
 )
 {
   Neutron_plugin_cisco<||> ~> Service['neutron-server']
@@ -161,6 +167,22 @@ class neutron::plugins::cisco(
     tag    => 'openstack',
   }
 
+  # Setting purge for all configs
+  resources { 'neutron_plugin_cisco':
+    purge => $purge_config,
+  }
+
+  resources { 'neutron_plugin_cisco_db_conn':
+    purge => $purge_config,
+  }
+
+  resources { 'neutron_plugin_cisco_l2network':
+    purge => $purge_config,
+  }
+
+  resources { 'neutron_plugin_cisco_credentials':
+    purge => $purge_config,
+  }
 
   neutron_plugin_cisco {
     'PLUGINS/nexus_plugin' : value => $nexus_plugin;

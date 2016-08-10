@@ -14,6 +14,7 @@ describe 'neutron::agents::ml2::sriov' do
       :exclude_devices            => [],
       :polling_interval           => 2,
       :supported_pci_vendor_devs  => [],
+      :purge_config               => false,
     }
   end
 
@@ -33,6 +34,12 @@ describe 'neutron::agents::ml2::sriov' do
     end
 
     it { is_expected.to contain_class('neutron::params') }
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_sriov_agent_config').with({
+        :purge => false
+      })
+    end
 
     it 'configures /etc/neutron/plugins/ml2/sriov_agent.ini' do
       is_expected.to contain_neutron_sriov_agent_config('sriov_nic/polling_interval').with_value(p[:polling_interval])

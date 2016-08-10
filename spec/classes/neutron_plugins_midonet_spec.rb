@@ -14,7 +14,8 @@ describe 'neutron::plugins::midonet' do
     :midonet_api_port  => '8080',
     :keystone_username => 'neutron',
     :keystone_password => 'test_midonet',
-    :keystone_tenant   => 'services'
+    :keystone_tenant   => 'services',
+    :purge_config      => false, 
   }
   end
 
@@ -39,6 +40,12 @@ describe 'neutron::plugins::midonet' do
         :ensure  => 'link',
         :target  => '/etc/neutron/plugins/midonet/midonet.ini',
         :require => 'Package[python-neutron-plugin-midonet]')
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_plugin_midonet').with({
+        :purge => false
+      })
     end
 
     it 'should perform default configuration of' do

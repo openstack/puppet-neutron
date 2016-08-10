@@ -25,13 +25,19 @@
 #   (optional) Ensure state for package.
 #   Defaults to 'present'.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the nvp config.
+#   Defaults to false.
+#
 class neutron::plugins::nvp (
   $default_tz_uuid,
   $nvp_controllers,
   $nvp_user,
   $nvp_password,
   $default_l3_gw_service_uuid = $::os_service_default,
-  $package_ensure    = 'present'
+  $package_ensure    = 'present',
+  $purge_config      = false,
 ) {
 
   include ::neutron::params
@@ -47,6 +53,10 @@ class neutron::plugins::nvp (
   }
 
   validate_array($nvp_controllers)
+
+  resources { 'neutron_plugin_nvp':
+    purge => $purge_config,
+  }
 
   neutron_plugin_nvp {
     'DEFAULT/default_tz_uuid':            value => $default_tz_uuid;

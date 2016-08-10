@@ -95,6 +95,11 @@
 #   Neutron will only schedule routers on the agent based on availability zone
 #   Defaults to $::os_service_default
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the l3 config.
+#   Defaults to false.
+#
 # === Deprecated Parameters
 #
 # [*use_namespaces*]
@@ -132,6 +137,7 @@ class neutron::agents::l3 (
   $ha_vrrp_advert_int               = '3',
   $agent_mode                       = 'legacy',
   $availability_zone                = $::os_service_default,
+  $purge_config                     = false,
   # DEPRECATED PARAMETERS
   $allow_automatic_l3agent_failover = false,
   $use_namespaces                   = $::os_service_default,
@@ -154,6 +160,10 @@ class neutron::agents::l3 (
 
   if ! is_service_default ($router_delete_namespaces) {
     warning('parameter router_delete_namespaces was removed in Mitaka, it does not take any affect')
+  }
+
+  resources { 'neutron_l3_agent_config':
+    purge => $purge_config,
   }
 
   if $ha_enabled {

@@ -11,6 +11,7 @@ describe 'neutron::agents::metadata' do
       :debug             => false,
       :enabled           => true,
       :shared_secret     => 'metadata-secret',
+      :purge_config      => false,
     }
   end
 
@@ -43,6 +44,12 @@ describe 'neutron::agents::metadata' do
       it 'should not start/stop service' do
         is_expected.to contain_service('neutron-metadata').without_ensure
       end
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_metadata_agent_config').with({
+        :purge => false
+      })
     end
 
     it 'configures metadata_agent.ini' do

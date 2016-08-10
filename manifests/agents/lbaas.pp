@@ -40,6 +40,11 @@
 #   (optional) Whether to use lbaas v2 agent or not.
 #   Defaults to false
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the lbaas config.
+#   Defaults to false.
+#
 # === Deprecated Parameters
 #
 # [*use_namespaces*]
@@ -59,6 +64,7 @@ class neutron::agents::lbaas (
   $manage_haproxy_package = true,
   $enable_v1              = true,
   $enable_v2              = false,
+  $purge_config           = false,
   # DEPRECATED PARAMETERS
   $use_namespaces         = $::os_service_default,
 ) {
@@ -82,6 +88,10 @@ class neutron::agents::lbaas (
     default: {
       fail("Unsupported device_driver ${device_driver}")
     }
+  }
+
+  resources { 'neutron_lbaas_agent_config':
+    purge => $purge_config,
   }
 
   # The LBaaS agent loads both neutron.ini and its own file.

@@ -11,7 +11,8 @@ describe 'neutron::plugins::nvp' do
   let :default_params do
     {
         :metadata_mode  => 'access_network',
-        :package_ensure => 'present'}
+        :package_ensure => 'present',
+        :purge_config   => false,}
   end
 
   let :test_facts do
@@ -57,6 +58,12 @@ describe 'neutron::plugins::nvp' do
         :target  => '/etc/neutron/plugins/nicira/nvp.ini',
         :require => 'Package[neutron-plugin-nvp]'
       )
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('neutron_plugin_nvp').with({
+        :purge => false
+      })
     end
 
     it 'should configure nvp.ini' do

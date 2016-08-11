@@ -34,11 +34,11 @@
 #   Defaults to true
 #
 # [*physical_device_mappings*]
-#   (optional) List of <physical_network>:<physical device>
+#   (optional) Array of <physical_network>:<physical device>
 #   All physical networks listed in network_vlan_ranges
 #   on the server should have mappings to appropriate
 #   interfaces on each agent.
-#   Defaults to empty list
+#   Value should be of type array, Defaults to $::os_service_default
 #
 # [*polling_interval*]
 #   (optional) The number of seconds the agent will wait between
@@ -46,11 +46,12 @@
 #   Defaults to '2"
 #
 # [*exclude_devices*]
-#   (optional) List of <network_device>:<excluded_devices> mapping
+#   (optional) Array of <network_device>:<excluded_devices> mapping
 #   network_device to the agent's node-specific list of virtual functions
 #   that should not be used for virtual networking. excluded_devices is a
 #   semicolon separated list of virtual functions to exclude from network_device.
 #   The network_device in the mapping should appear in the physical_device_mappings list.
+#   Value should be of type array, Defaults to $::os_service_default
 #
 # [*extensions*]
 #   (optional) Extensions list to use
@@ -65,9 +66,9 @@ class neutron::agents::ml2::sriov (
   $package_ensure             = 'present',
   $enabled                    = true,
   $manage_service             = true,
-  $physical_device_mappings   = [],
+  $physical_device_mappings   = $::os_service_default,
   $polling_interval           = 2,
-  $exclude_devices            = [],
+  $exclude_devices            = $::os_service_default,
   $extensions                 = $::os_service_default,
   $purge_config               = false,
 ) {
@@ -81,8 +82,8 @@ class neutron::agents::ml2::sriov (
 
   neutron_sriov_agent_config {
     'sriov_nic/polling_interval':         value => $polling_interval;
-    'sriov_nic/exclude_devices':          value => join($exclude_devices, ',');
-    'sriov_nic/physical_device_mappings': value => join($physical_device_mappings, ',');
+    'sriov_nic/exclude_devices':          value => pick(join(any2array($exclude_devices), ','), $::os_service_default);
+    'sriov_nic/physical_device_mappings': value => pick(join(any2array($physical_device_mappings), ','), $::os_service_default);
     'agent/extensions':                   value => join(any2array($extensions), ',');
   }
 

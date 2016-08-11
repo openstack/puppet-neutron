@@ -10,8 +10,6 @@ describe 'neutron::agents::ml2::sriov' do
     { :package_ensure             => 'present',
       :enabled                    => true,
       :manage_service             => true,
-      :physical_device_mappings   => [],
-      :exclude_devices            => [],
       :polling_interval           => 2,
       :supported_pci_vendor_devs  => [],
       :purge_config               => false,
@@ -43,8 +41,8 @@ describe 'neutron::agents::ml2::sriov' do
 
     it 'configures /etc/neutron/plugins/ml2/sriov_agent.ini' do
       is_expected.to contain_neutron_sriov_agent_config('sriov_nic/polling_interval').with_value(p[:polling_interval])
-      is_expected.to contain_neutron_sriov_agent_config('sriov_nic/exclude_devices').with_value(p[:exclude_devices].join(','))
-      is_expected.to contain_neutron_sriov_agent_config('sriov_nic/physical_device_mappings').with_value(p[:physical_device_mappings].join(','))
+      is_expected.to contain_neutron_sriov_agent_config('sriov_nic/exclude_devices').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_sriov_agent_config('sriov_nic/physical_device_mappings').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_sriov_agent_config('agent/extensions').with_value(['<SERVICE DEFAULT>'])
     end
 
@@ -89,6 +87,18 @@ describe 'neutron::agents::ml2::sriov' do
       it 'configures physical device mappings with exclusion' do
         is_expected.to contain_neutron_sriov_agent_config('sriov_nic/exclude_devices').with_value(['physnet1:eth2'])
         is_expected.to contain_neutron_sriov_agent_config('sriov_nic/physical_device_mappings').with_value(['physnet1:eth1'])
+      end
+    end
+
+    context 'when supplying empty device mapping' do
+      before :each do
+        params.merge!(:physical_device_mappings => "",
+                      :exclude_devices          => "")
+      end
+
+      it 'configures physical device mappings with exclusion' do
+        is_expected.to contain_neutron_sriov_agent_config('sriov_nic/exclude_devices').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_neutron_sriov_agent_config('sriov_nic/physical_device_mappings').with_value('<SERVICE DEFAULT>')
       end
     end
 

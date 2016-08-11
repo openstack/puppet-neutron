@@ -1,0 +1,4 @@
+---
+deprecations:
+  - quota_items is deprecated, has no effect and
+    will be removed after Newton cycle.

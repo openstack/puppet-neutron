@@ -59,10 +59,6 @@
 #   A negative value means unlimited.
 #   Defaults to $::os_service_default.
 #
-# [*quota_items*]
-#   (optional) Resource name(s) that are supported in quota features.
-#   Defaults to $::os_service_default.
-#
 # [*quota_member*]
 #   (optional) Number of pool members allowed per tenant.
 #   A negative value means unlimited
@@ -86,6 +82,12 @@
 #   A negative value means unlimited.
 #   Defaults to $::os_service_default.
 #
+# DEPRECATED PARAMATERS
+#
+# [*quota_items*]
+#   (optional) Resource name(s) that are supported in quota features.
+#   Defaults to undef
+#
 class neutron::quota (
   $default_quota             = $::os_service_default,
   $quota_network             = $::os_service_default,
@@ -102,15 +104,21 @@ class neutron::quota (
   $quota_firewall_policy     = $::os_service_default,
   $quota_firewall_rule       = -1,
   $quota_health_monitor      = $::os_service_default,
-  $quota_items               = $::os_service_default,
   $quota_member              = $::os_service_default,
   $quota_network_gateway     = 5,
   $quota_packet_filter       = 100,
   $quota_pool                = $::os_service_default,
-  $quota_vip                 = $::os_service_default
+  $quota_vip                 = $::os_service_default,
+  #DEPRECATED PAMAMETERS
+  $quota_items               = undef,
+  
 ) {
 
   include ::neutron::deps
+
+  if $quota_items {
+    warning('quota_items is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   neutron_config {
     'quotas/default_quota':             value => $default_quota;
@@ -126,7 +134,6 @@ class neutron::quota (
     'quotas/quota_firewall_policy':     value => $quota_firewall_policy;
     'quotas/quota_firewall_rule':       value => $quota_firewall_rule;
     'quotas/quota_health_monitor':      value => $quota_health_monitor;
-    'quotas/quota_items':               value => $quota_items;
     'quotas/quota_member':              value => $quota_member;
     'quotas/quota_network_gateway':     value => $quota_network_gateway;
     'quotas/quota_packet_filter':       value => $quota_packet_filter;

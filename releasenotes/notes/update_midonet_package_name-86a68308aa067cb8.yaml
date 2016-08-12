@@ -1,0 +1,7 @@
+---
+fixes:
+  - The package name for the midonet neutron plugin previously used
+    an older naming syntax from times passed that no longer existed
+    in current repositories. To fix this issue the package name was
+    updated to "python-networking-midonet" which is provided by third
+    repository from Midokura.

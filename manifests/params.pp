@@ -39,7 +39,7 @@ class neutron::params {
     $opencontrail_plugin_package = 'neutron-plugin-contrail'
     $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
 
-    $midonet_server_package = 'python-neutron-plugin-midonet'
+    $midonet_server_package = 'python-networking-midonet'
     $midonet_config_file    = '/etc/neutron/plugins/midonet/midonet.ini'
 
     $plumgrid_plugin_package    = 'networking-plumgrid'
@@ -127,7 +127,7 @@ class neutron::params {
     $opencontrail_plugin_package = 'neutron-plugin-contrail'
     $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
 
-    $midonet_server_package = 'python-neutron-plugin-midonet'
+    $midonet_server_package = 'python-networking-midonet'
     $midonet_config_file    = '/etc/neutron/plugins/midonet/midonet.ini'
 
     $plumgrid_plugin_package    = 'networking-plumgrid'

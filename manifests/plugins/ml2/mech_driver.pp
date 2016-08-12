@@ -33,5 +33,22 @@ define neutron::plugins::ml2::mech_driver (
     neutron_plugin_sriov {
       'ml2_sriov/supported_pci_vendor_devs': value => join(any2array($supported_pci_vendor_devs), ',');
     }
+    case $::osfamily {
+      'RedHat': {
+        file { '/etc/neutron/conf.d/neutron-server/ml2_conf_sriov.conf':
+          ensure => link,
+          target => '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
+        }
+      }
+      /^(Debian|Ubuntu)$/: {
+          file_line { 'DAEMON_ARGS':
+            path => '/etc/default/neutron-server',
+            line => 'DAEMON_ARGS="$DAEMON_ARGS --config-file /etc/neutron/plugins/ml2/ml2_conf_sriov.ini"',
+          }
+      }
+      default: {
+        fail("Unsupported osfamily ${::osfamily}")
+      }
+    }
   }
 }

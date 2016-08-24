@@ -51,6 +51,7 @@ Puppet::Type.type(:neutron_port).provide(
 
   def create
     opts = Array.new
+    dict_opts = Array.new
 
     if @resource[:admin_state_up] == "False"
       opts << "--admin-state-down"
@@ -60,14 +61,14 @@ Puppet::Type.type(:neutron_port).provide(
       # The spec says that multiple ip addresses may be specified, but this
       # doesn't seem to work yet.
       opts << "--fixed-ip"
-      opts << @resource[:ip_address].map{|ip|"ip_address=#{ip}"}.join(',')
+      opts << resource[:ip_address].map{|ip|"ip_address=#{ip}"}.join(',')
     end
 
     if @resource[:subnet_name]
       # The spec says that multiple subnets may be specified, but this doesn't
       # seem to work yet.
       opts << "--fixed-ip"
-      opts << @resource[:subnet_name].map{|s|"subnet_id=#{s}"}.join(',')
+      opts << resource[:subnet_name].map{|s|"subnet_id=#{s}"}.join(',')
     end
 
     if @resource[:tenant_name]
@@ -86,7 +87,9 @@ Puppet::Type.type(:neutron_port).provide(
 
     if @resource[:binding_profile]
       binding_profile_opts = @resource[:binding_profile].map{|k,v| "#{k}=#{v}"}.join(' ')
-      opts << "--binding:profile type=dict #{binding_profile_opts}"
+      dict_opts << "--binding:profile"
+      dict_opts << "type=dict"
+      dict_opts << "#{binding_profile_opts}"
     end
 
     results = auth_neutron(
@@ -94,7 +97,8 @@ Puppet::Type.type(:neutron_port).provide(
       "--format=shell",
       "--name=#{resource[:name]}",
       opts,
-      resource[:network_name]
+      resource[:network_name],
+      dict_opts
     )
 
     attrs = self.class.parse_creation_output(results)

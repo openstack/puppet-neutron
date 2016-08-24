@@ -1,0 +1,11 @@
+---
+fixes:
+  - Parameters of type dict must be at the end of the
+    shell command to not cause conflict with the network name.
+    Neutron cli picks up the network name as the first parameter
+    without "--" prefix, thus tresting type=dict as the network
+    name instead of the real network name because it comes before.
+    By providing the special dictionary type commands after the
+    network name the behaviour of the cli is bypassed and neutron
+    takes the network name and proceeds interpreting parameters
+    with special format ( not in the form of --<param>=<value> )

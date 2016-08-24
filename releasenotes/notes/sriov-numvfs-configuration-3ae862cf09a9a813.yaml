@@ -1,0 +1,3 @@
+---
+features:
+  - Added a provider to configure VFs for SR-IOV interface

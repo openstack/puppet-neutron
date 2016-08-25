@@ -128,6 +128,11 @@
 #   the maximum MTU for the driver.
 #   Defaults to $::os_service_default
 #
+# [*overlay_ip_version*]
+#   (optional) Configures the IP version used for all overlay network endpoints. Valid values
+#   are 4 and 6.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*sriov_agent_required*]
@@ -152,6 +157,7 @@ class neutron::plugins::ml2 (
   $path_mtu                  = 0,
   $purge_config              = false,
   $max_header_size           = $::os_service_default,
+  $overlay_ip_version        = $::os_service_default,
   # DEPRECATED PARAMETERS
   $sriov_agent_required      = undef,
 ) {
@@ -165,6 +171,10 @@ class neutron::plugins::ml2 (
 
   if !is_service_default($enable_security_group) and $enable_security_group and is_service_default($firewall_driver) {
     warning('Security groups will not work without properly set firewall_driver')
+  }
+
+  if !is_service_default($overlay_ip_version) and !($overlay_ip_version in [4, 6]) {
+    fail('Invalid IP version for overlay_ip_version')
   }
 
   if $::operatingsystem == 'Ubuntu' {
@@ -227,6 +237,7 @@ class neutron::plugins::ml2 (
     'ml2/mechanism_drivers':                value => join(any2array($mechanism_drivers), ',');
     'ml2/path_mtu':                         value => $path_mtu;
     'ml2/extension_drivers':                value => join(any2array($extension_drivers), ',');
+    'ml2/overlay_ip_version':               value => $overlay_ip_version;
     'securitygroup/enable_security_group':  value => $enable_security_group;
     'securitygroup/firewall_driver':        value => $firewall_driver;
   }

@@ -124,9 +124,6 @@ class neutron::agents::dhcp (
       Package[$::neutron::params::dnsmasq_packages] -> Package<| title == 'neutron-dhcp-agent' |>
       ensure_packages($::neutron::params::dnsmasq_packages)
     }
-    /^midonet.*/: {
-      ensure_packages($::neutron::params::midonet_server_package)
-    }
     default: {
       fail("Unsupported dhcp_driver ${dhcp_driver}")
     }

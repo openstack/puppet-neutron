@@ -30,6 +30,10 @@
 #   in the midonet config.
 #   Defaults to false.
 #
+# [*package_ensure*]
+#   Whether to install the latest package, or a version for midonet plugin
+#   Defaults to 'present'.
+#
 # === Examples
 #
 # An example call would be:
@@ -79,19 +83,17 @@ class neutron::plugins::midonet (
   $keystone_tenant   = 'services',
   $sync_db           = false,
   $purge_config      = false,
+  $package_ensure    = 'present'
 ) {
 
   include ::neutron::params
-
   Neutron_plugin_midonet<||> ~> Service['neutron-server']
-
   ensure_resource('file', '/etc/neutron/plugins/midonet', {
     ensure => directory,
     owner  => 'root',
     group  => 'neutron',
     mode   => '0640'}
   )
-
   # Ensure the neutron package is installed before config is set
   # under both RHEL and Ubuntu
   if ($::neutron::params::server_package) {
@@ -101,8 +103,14 @@ class neutron::plugins::midonet (
   }
 
   resources { 'neutron_plugin_midonet':
-    purge => $purge_config,
-  }
+  purge => $purge_config,
+}
+
+  package { 'python-networking-midonet':
+    ensure => $package_ensure,
+    name   => $::neutron::params::midonet_server_package,
+    tag    => ['neutron-package', 'openstack'],
+    }
 
   neutron_plugin_midonet {
     'MIDONET/midonet_uri':  value => "http://${midonet_api_ip}:${midonet_api_port}/midonet-api";
@@ -110,7 +118,6 @@ class neutron::plugins::midonet (
     'MIDONET/password':     value => $keystone_password, secret =>true;
     'MIDONET/project_id':   value => $keystone_tenant;
   }
-
   if $::osfamily == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
       path    => '/etc/default/neutron-server',
@@ -120,7 +127,6 @@ class neutron::plugins::midonet (
       notify  => Service['neutron-server'],
     }
   }
-
   # In RH, this link is used to start Neutron process but in Debian, it's used only
   # to manage database synchronization.
   if defined(File['/etc/neutron/plugin.ini']) {
@@ -133,18 +139,15 @@ class neutron::plugins::midonet (
       require => Package[$::neutron::params::midonet_server_package]
     }
   }
-
   if $sync_db {
-
     Package<| title == $::neutron::params::midonet_server_package |> ~> Exec['midonet-db-sync']
-
     exec { 'midonet-db-sync':
-      command     => 'midonet-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head',
+      command     => 'neutron-db-manage --subproject networking-midonet upgrade head',
       path        => '/usr/bin',
       before      => Service['neutron-server'],
+      require     => Exec['neutron-db-sync'],
       subscribe   => Neutron_config['database/connection'],
       refreshonly => true
     }
   }
 }
-

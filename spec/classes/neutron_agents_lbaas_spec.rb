@@ -14,7 +14,7 @@ describe 'neutron::agents::lbaas' do
     { :package_ensure   => 'present',
       :enabled          => true,
       :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :device_driver    => 'neutron_lbaas.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
+      :device_driver    => 'neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver',
       :manage_haproxy_package  => true,
       :purge_config            => false
     }
@@ -51,23 +51,23 @@ describe 'neutron::agents::lbaas' do
     end
 
     it 'installs neutron lbaas agent package' do
-      is_expected.to contain_package('neutron-lbaas-agent').with(
+      is_expected.to contain_package('neutron-lbaasv2-agent').with(
         :name   => platform_params[:lbaas_agent_package],
         :ensure => p[:package_ensure],
         :tag    => ['openstack', 'neutron-package'],
       )
-      is_expected.to contain_package('neutron').with_before(/Package\[neutron-lbaas-agent\]/)
+      is_expected.to contain_package('neutron').with_before(/Package\[neutron-lbaasv2-agent\]/)
     end
 
     it 'configures neutron lbaas agent service' do
-      is_expected.to contain_service('neutron-lbaas-service').with(
+      is_expected.to contain_service('neutron-lbaasv2-service').with(
         :name    => platform_params[:lbaas_agent_service],
         :enable  => true,
         :ensure  => 'running',
         :tag     => 'neutron-service',
       )
-      is_expected.to contain_service('neutron-lbaas-service').that_subscribes_to('Anchor[neutron::service::begin]')
-      is_expected.to contain_service('neutron-lbaas-service').that_notifies('Anchor[neutron::service::end]')
+      is_expected.to contain_service('neutron-lbaasv2-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      is_expected.to contain_service('neutron-lbaasv2-service').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'with manage_service as false' do
@@ -75,7 +75,9 @@ describe 'neutron::agents::lbaas' do
         params.merge!(:manage_service => false)
       end
       it 'should not start/stop service' do
-        is_expected.to contain_service('neutron-lbaas-service').without_ensure
+        is_expected.to contain_service('neutron-lbaasv2-service').with(
+          :ensure => 'stopped',
+        )
       end
     end
   end
@@ -83,7 +85,7 @@ describe 'neutron::agents::lbaas' do
   shared_examples_for 'haproxy lbaas_driver' do
     it 'installs haproxy packages' do
       if platform_params.has_key?(:lbaas_agent_package)
-        is_expected.to contain_package(platform_params[:haproxy_package]).with_before(['Package[neutron-lbaas-agent]'])
+        is_expected.to contain_package(platform_params[:haproxy_package]).with_before(['Package[neutron-lbaasv2-agent]'])
       end
       is_expected.to contain_package(platform_params[:haproxy_package]).with(
         :ensure => 'present'
@@ -119,9 +121,9 @@ describe 'neutron::agents::lbaas' do
 
     let :platform_params do
       { :haproxy_package     =>  'haproxy',
-        :lbaas_agent_package => 'neutron-lbaas-agent',
+        :lbaas_agent_package => 'neutron-lbaasv2-agent',
         :nobody_user_group   => 'nogroup',
-        :lbaas_agent_service => 'neutron-lbaas-agent' }
+        :lbaas_agent_service => 'neutron-lbaasv2-agent' }
     end
 
     it_configures 'neutron lbaas agent'
@@ -141,7 +143,7 @@ describe 'neutron::agents::lbaas' do
       { :haproxy_package     => 'haproxy',
         :lbaas_agent_package => 'openstack-neutron-lbaas',
         :nobody_user_group   => 'nobody',
-        :lbaas_agent_service => 'neutron-lbaas-agent' }
+        :lbaas_agent_service => 'neutron-lbaasv2-agent' }
     end
 
     it_configures 'neutron lbaas agent'

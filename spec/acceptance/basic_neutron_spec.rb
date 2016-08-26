@@ -36,11 +36,7 @@ describe 'basic neutron' do
         allow_overlapping_ips => true,
         core_plugin           => 'ml2',
         debug                 => true,
-        service_plugins => [
-          'neutron.services.l3_router.l3_router_plugin.L3RouterPlugin',
-          'neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPlugin',
-          'neutron.services.metering.metering_plugin.MeteringPlugin',
-        ],
+        service_plugins       => ['router', 'metering'],
       }
       class { '::neutron::db::mysql':
         password => 'a_big_secret',
@@ -59,7 +55,7 @@ describe 'basic neutron' do
         auth_url            => 'http://127.0.0.1:35357/',
         sync_db             => true,
         service_providers   => [
-          'LOADBALANCER:Haproxy:neutron_lbaas.services.loadbalancer.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default',
+          'LOADBALANCERV2:Haproxy:neutron_lbaas.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver'
         ],
       }
       class { '::neutron::client': }

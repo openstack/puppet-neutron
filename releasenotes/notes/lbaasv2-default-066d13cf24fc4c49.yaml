@@ -1,0 +1,9 @@
+---
+upgrade:
+  - Switch-on lbaasv2 by default instead of lbaasv2 to follow what upstream Neutron is doing
+    in https://review.openstack.org/286381 and also switch default device_driver to be
+    neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver
+
+deprecations:
+  - enable_v1 and enable_v2 are deprecated in neutron::agents::lbaas.
+  - LBaaS v1 deployment is not supported anymore.

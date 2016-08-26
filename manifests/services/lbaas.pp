@@ -68,9 +68,9 @@ class neutron::services::lbaas (
   if $package_ensure {
     warning('Package ensure is deprecated. The neutron::agents::lbaas class should be used to install the agent')
     # agent package contains both agent and service resources
-    ensure_resource( 'package', 'neutron-lbaas-agent', {
+    ensure_resource( 'package', 'neutron-lbaasv2-agent', {
       ensure => $package_ensure,
-      name   => $::neutron::params::lbaas_agent_package,
+      name   => $::neutron::params::lbaasv2_agent_package,
       tag    => ['openstack', 'neutron-package'],
     })
   }

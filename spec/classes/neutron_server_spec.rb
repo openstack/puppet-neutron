@@ -254,7 +254,7 @@ describe 'neutron::server' do
       )
     end
     it 'should install *aaS packages' do
-      is_expected.to contain_package('neutron-lbaas-agent')
+      is_expected.to contain_package('neutron-lbaasv2-agent')
       is_expected.to contain_package('neutron-fwaas')
       is_expected.to contain_package('neutron-vpnaas-agent')
     end

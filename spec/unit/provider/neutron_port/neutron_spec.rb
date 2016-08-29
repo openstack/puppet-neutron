@@ -49,7 +49,8 @@ tenant_id="60f9544eb94c42a6b7e8e98c2be981b1"'
       provider.expects(:auth_neutron).with('port-create',
                                            '--format=shell', "--name=#{port_attrs[:name]}",
                                            ["--tenant_id=#{port_attrs[:tenant_id]}"],
-                                           port_attrs[:network_name]).returns(output)
+                                           port_attrs[:network_name],
+                                           []).returns(output)
 
       provider.create
     end
@@ -98,9 +99,9 @@ binding_profile="{\"interface_name\": \"eth1\"}"'
                                            '--format=shell', "--name=#{port_attrs[:name]}",
                                            ["--tenant_id=#{port_attrs[:tenant_id]}",
                                             "--binding:host_id=#{port_attrs[:binding_host_id]}",
-                                            "--binding:profile type=dict interface_name=#{port_attrs[:binding_profile]['interface_name']}",
                                           ],
-                                           port_attrs[:network_name]).returns(output)
+                                           port_attrs[:network_name],
+                                           ['--binding:profile','type=dict','interface_name=eth1']).returns(output)
 
       provider.create
     end

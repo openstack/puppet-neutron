@@ -1,0 +1,3 @@
+---
+features:
+  - Add `overlay_ip_version` options support to ml2 plugin settings.

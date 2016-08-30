@@ -83,14 +83,6 @@
 #   (optional) Enable bulk crud operations
 #   Defaults to $::os_service_default
 #
-# [*allow_pagination*]
-#   (optional) Enable pagination
-#   Defaults to $::os_service_default
-#
-# [*allow_sorting*]
-#   (optional) Enable sorting
-#   Defaults to $::os_service_default
-#
 # [*allow_overlapping_ips*]
 #   (optional) Enables network namespaces
 #   Defaults to $::os_service_default
@@ -373,6 +365,14 @@
 #   (optional) VMs will receive DHCP and RA MTU option when the network's preferred MTU is known
 #   Defaults to undef
 #
+# [*allow_sorting*]
+#   (optional) Enable sorting
+#   Defaults to undef
+#
+# [*allow_pagination*]
+#   (optional) Enable pagination
+#   Defaults to undef
+#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
@@ -391,8 +391,6 @@ class neutron (
   $global_physnet_mtu                   = $::os_service_default,
   $dhcp_agent_notification              = $::os_service_default,
   $allow_bulk                           = $::os_service_default,
-  $allow_pagination                     = $::os_service_default,
-  $allow_sorting                        = $::os_service_default,
   $allow_overlapping_ips                = $::os_service_default,
   $api_extensions_path                  = $::os_service_default,
   $root_helper                          = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
@@ -457,6 +455,8 @@ class neutron (
   $verbose                              = undef,
   $log_facility                         = undef,
   $advertise_mtu                        = undef,
+  $allow_pagination                     = undef,
+  $allow_sorting                        = undef,
 ) {
 
   include ::neutron::deps
@@ -499,6 +499,14 @@ class neutron (
     warning('advertise_mtu is deprecated, has no effect and will be removed in Ocata.')
   }
 
+  if $allow_sorting {
+    warning('allow_sorting is deprecated, has no effect and will be removed in a future release.')
+  }
+
+  if $allow_pagination {
+    warning('allow_pagination is deprecated, has no effect and will be removed in a future release.')
+  }
+
   if $memcache_servers {
     validate_array($memcache_servers)
   }
@@ -526,8 +534,6 @@ class neutron (
     'DEFAULT/dhcp_agents_per_network': value => $dhcp_agents_per_network;
     'DEFAULT/dhcp_agent_notification': value => $dhcp_agent_notification;
     'DEFAULT/allow_bulk':              value => $allow_bulk;
-    'DEFAULT/allow_pagination':        value => $allow_pagination;
-    'DEFAULT/allow_sorting':           value => $allow_sorting;
     'DEFAULT/allow_overlapping_ips':   value => $allow_overlapping_ips;
     'DEFAULT/api_extensions_path':     value => $api_extensions_path;
     'DEFAULT/state_path':              value => $state_path;

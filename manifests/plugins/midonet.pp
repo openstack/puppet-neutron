@@ -30,6 +30,10 @@
 #   in the midonet config.
 #   Defaults to false.
 #
+# [*package_ensure*]
+#   Whether to install the latest package, or a version for midonet plugin
+#   Defaults to 'present'.
+#
 # === Examples
 #
 # An example call would be:
@@ -79,6 +83,7 @@ class neutron::plugins::midonet (
   $keystone_tenant   = 'services',
   $sync_db           = false,
   $purge_config      = false,
+  $package_ensure    = 'present'
 ) {
 
   include ::neutron::deps
@@ -94,6 +99,12 @@ class neutron::plugins::midonet (
   resources { 'neutron_plugin_midonet':
     purge => $purge_config,
   }
+
+  package { 'python-networking-midonet':
+    ensure => $package_ensure,
+    name   => $::neutron::params::midonet_server_package,
+    tag    => ['neutron-package', 'openstack'],
+    }
 
   neutron_plugin_midonet {
     'MIDONET/midonet_uri':  value => "http://${midonet_api_ip}:${midonet_api_port}/midonet-api";
@@ -125,17 +136,18 @@ class neutron::plugins::midonet (
   }
 
   if $sync_db {
+    Package<| title == 'python-networking-midonet' |> ~> Exec['midonet-db-sync']
     exec { 'midonet-db-sync':
-      command     => 'midonet-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head',
+      command     => 'neutron-db-manage --subproject networking-midonet upgrade head',
       path        => '/usr/bin',
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],
-        Anchor['neutron::dbsync::begin']
+        Anchor['neutron::dbsync::begin'],
+        Exec['neutron-db-sync']
       ],
       notify      => Anchor['neutron::dbsync::end'],
       refreshonly => true
     }
   }
 }
-

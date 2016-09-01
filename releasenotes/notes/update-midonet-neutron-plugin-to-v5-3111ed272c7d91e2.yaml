@@ -1,0 +1,7 @@
+---
+features:
+      - Midonet v5.x plugin doesn't rely anymore
+        on a custom DHCP agent, also it only uses
+        a subproject for db sync instead of the old
+        method of overriding the neutron-db-sync
+        completelly.

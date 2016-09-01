@@ -4,8 +4,7 @@ describe 'neutron::plugins::midonet' do
 
   let :pre_condition do
     "class { 'neutron::server': password => 'password' }
-     class { 'neutron': rabbit_password => 'passw0rd' }
-     package { 'python-networking-midonet': }"
+     class { 'neutron': rabbit_password => 'passw0rd' }"
   end
 
   let :default_params do
@@ -15,7 +14,7 @@ describe 'neutron::plugins::midonet' do
     :keystone_username => 'neutron',
     :keystone_password => 'test_midonet',
     :keystone_tenant   => 'services',
-    :purge_config      => false, 
+    :purge_config      => false,
   }
   end
 
@@ -34,6 +33,11 @@ describe 'neutron::plugins::midonet' do
     before do
       params.merge!(default_params)
     end
+
+    it 'should install package python-networking-midonet' do
+      is_expected.to contain_package('python-networking-midonet').with(
+        :ensure  => 'present')
+    end    
 
     it 'should create plugin symbolic link' do
       is_expected.to contain_file('/etc/neutron/plugin.ini').with(

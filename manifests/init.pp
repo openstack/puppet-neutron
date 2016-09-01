@@ -171,6 +171,12 @@
 #   (optional) Connect over SSL for RabbitMQ
 #   Defaults to $::os_service_default
 #
+# [*rabbit_transient_queues_ttl*]
+#   (optional) Positive integer representing duration in seconds for queue
+#   TTL (x-expires). Queues which are unused for the duration of the TTL are
+#   automatically deleted. The parameter affects only reply and fanout queues.
+#   Defaults to $::os_service_default
+#
 # [*amqp_durable_queues*]
 #   (optional) Define queues as "durable" to rabbitmq.
 #   Defaults to $::os_service_default
@@ -411,6 +417,7 @@ class neutron (
   $rabbit_heartbeat_timeout_threshold   = $::os_service_default,
   $rabbit_heartbeat_rate                = $::os_service_default,
   $rabbit_use_ssl                       = $::os_service_default,
+  $rabbit_transient_queues_ttl          = $::os_service_default,
   $amqp_durable_queues                  = $::os_service_default,
   $kombu_ssl_ca_certs                   = $::os_service_default,
   $kombu_ssl_certfile                   = $::os_service_default,
@@ -588,6 +595,7 @@ class neutron (
       heartbeat_timeout_threshold          => $rabbit_heartbeat_timeout_threshold,
       heartbeat_rate                       => $rabbit_heartbeat_rate,
       rabbit_use_ssl                       => $rabbit_use_ssl,
+      rabbit_transient_queues_ttl          => $rabbit_transient_queues_ttl,
       kombu_reconnect_delay                => $kombu_reconnect_delay,
       kombu_missing_consumer_retry_timeout => $kombu_missing_consumer_retry_timeout,
       kombu_failover_strategy              => $kombu_failover_strategy,

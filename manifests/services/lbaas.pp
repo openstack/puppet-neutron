@@ -29,6 +29,21 @@
 #   (optional) Whether to install the lbaas driver package
 #   Defaults to 'present'
 #
+# [*cert_manager_type*]
+#   (optional) Certificate manager type to use for lbaas.
+#   Defaults to $::os_service_default
+#   Example: barbican
+#
+# [*cert_storage_path*]
+#   (optional) The location to store certificates locally.
+#   Defaults to $::os_service_default
+#   Example: /var/lib/neutron-lbaas/certificates/
+#
+# [*barbican_auth*]
+#  (optional) Name of the barbican authentication method to use.
+#  Defaults to $::os_service_default
+#  Example: barbican_acl_auth
+#
 # === Deprecated Parameters
 #
 # [*service_providers*]
@@ -46,6 +61,9 @@
 #   Defaults to false
 #
 class neutron::services::lbaas (
+  $cert_manager_type           = $::os_service_default,
+  $cert_storage_path           = $::os_service_default,
+  $barbican_auth               = $::os_service_default,
   $ensure_lbaas_driver_package = 'present',
   $service_providers           = $::os_service_default,
   # DEPRECATED
@@ -59,6 +77,12 @@ class neutron::services::lbaas (
       ensure => $ensure_lbaas_driver_package,
       tag    => ['openstack', 'neutron-package']
     })
+  }
+
+  neutron_config {
+    'certificates/cert_manager_type':           value => $cert_manager_type;
+    'certificates/storage_path':                value => $cert_storage_path;
+    'certificates/barbican_auth':               value => $barbican_auth;
   }
 
   if $package_ensure {

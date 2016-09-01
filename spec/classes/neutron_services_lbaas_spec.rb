@@ -36,6 +36,29 @@ describe 'neutron::services::lbaas' do
       it 'should contain python-neutron-lbaas package' do
         is_expected.to contain_package('python-neutron-lbaas').with({ :ensure => 'present' })
       end
+
+      it 'should set certificates options with service defaults' do
+        is_expected.to contain_neutron_config('certificates/cert_manager_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_neutron_config('certificates/storage_path').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_neutron_config('certificates/barbican_auth').with_value('<SERVICE DEFAULT>')
+      end
+    end
+
+    context 'with certificate manager options' do
+      before :each do
+        params.merge!(
+          { :cert_manager_type => 'barbican',
+            :cert_storage_path => '/var/lib/neutron-lbaas/certificates/',
+            :barbican_auth     => 'barbican_acl_auth'
+          }
+        )
+
+        it 'should configure certificates section' do
+          is_expected.to contain_neutron_config('certificates/cert_manager_type').with_value('barbican')
+          is_expected.to contain_neutron_config('certificates/storage_path').with_value('/var/lib/neutron-lbaas/certificates/')
+          is_expected.to contain_neutron_config('certificates/barbican_auth').with_value('barbican_acl_auth')
+        end
+      end
     end
 
     context 'with multiple service providers' do

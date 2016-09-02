@@ -18,7 +18,7 @@ class neutron::db::sync(
   include ::neutron::params
 
   exec { 'neutron-db-sync':
-    command     => "neutron-db-manage ${extra_params} upgrade head",
+    command     => "neutron-db-manage ${extra_params} upgrade heads",
     path        => '/usr/bin',
     refreshonly => true,
     logoutput   => on_failure,

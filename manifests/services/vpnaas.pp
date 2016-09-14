@@ -45,7 +45,8 @@ class neutron::services::vpnaas (
 
   include ::neutron::params
   if !is_service_default($service_providers) {
-    warning('service_providers in neutron::services::vpnaas is deprecated in newton release, please use service provider in neutron::server class')
+    warning('service_providers in neutron::services::vpnaas is deprecated in newton release, \
+            please use service provider in neutron::server class')
   }
 
   # agent package contains both agent and service resources

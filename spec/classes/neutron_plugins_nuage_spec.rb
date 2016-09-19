@@ -5,7 +5,7 @@ describe 'neutron::plugins::nuage' do
   let :pre_condition do
     "class { 'neutron':
       rabbit_password => 'passw0rd',
-      core_plugin     => 'neutron.plugins.nuage.plugin.NuagePlugin' }
+      core_plugin     => 'nuage_neutron.plugins.nuage.plugin.NuagePlugin' }
      class { 'neutron::server': password => 'password' }"
   end
 
@@ -41,7 +41,7 @@ describe 'neutron::plugins::nuage' do
     end
 
     it 'should configure neutron.conf' do
-      is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('neutron.plugins.nuage.plugin.NuagePlugin')
+      is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('nuage_neutron.plugins.nuage.plugin.NuagePlugin')
     end
 
     it 'passes purge to resource' do

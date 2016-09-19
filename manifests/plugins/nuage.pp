@@ -104,7 +104,7 @@ class neutron::plugins::nuage (
     'RESTPROXY/cms_id':                     value => $nuage_cms_id;
   }
 
-  if ($::neutron::core_plugin != 'neutron.plugins.nuage.plugin.NuagePlugin') and
+  if ($::neutron::core_plugin != 'nuage_neutron.plugins.nuage.plugin.NuagePlugin') and
     ($::neutron::core_plugin != 'nuage') {
     fail('Nuage plugin should be the core_plugin in neutron.conf')
   }

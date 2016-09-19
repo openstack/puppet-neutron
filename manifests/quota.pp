@@ -111,7 +111,6 @@ class neutron::quota (
   $quota_vip                 = $::os_service_default,
   #DEPRECATED PAMAMETERS
   $quota_items               = undef,
-  
 ) {
 
   include ::neutron::deps

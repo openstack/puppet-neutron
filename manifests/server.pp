@@ -395,7 +395,9 @@ class neutron::server (
   }
 
   if !is_service_default($dhcp_load_type) {
-    validate_re($dhcp_load_type, ['^networks$', '^subnets$', '^ports$'], 'Must pass either networks, subnets, or ports as values for dhcp_load_type')
+    validate_re($dhcp_load_type,
+                ['^networks$', '^subnets$', '^ports$'],
+                'Must pass either networks, subnets, or ports as values for dhcp_load_type')
   }
 
   if !is_service_default($service_providers) {

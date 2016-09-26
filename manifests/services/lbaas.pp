@@ -87,8 +87,8 @@ class neutron::services::lbaas (
   }
 
   if !is_service_default($service_providers) {
-    warning('service_providers in neutron::services::lbaas is deprecated in newton \
-            release, please use service provider in neutron::server class')
+    warning("service_providers in neutron::services::lbaas is deprecated in newton \
+release, please use service provider in neutron::server class")
   }
 
   if $package_ensure {

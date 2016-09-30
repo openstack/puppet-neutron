@@ -39,12 +39,10 @@
 #   The protocol to use for requests to Nova metadata server. Defaults to $::os_service_default.
 #
 # [*metadata_workers*]
-#   (optional) Number of separate worker processes to spawn.
-#   The default, count of machine's processors, runs the worker thread in the
-#   current process.
-#   Greater than 0 launches that number of child processes as workers.
-#   The parent process manages them. Having more workers will help to improve performances.
-#   Defaults to: $::processorcount
+#   (optional) Number of separate worker processes to spawn.  Greater than 0
+#   launches that number of child processes as workers.  The parent process
+#   manages them.
+#   Defaults to: $::os_workers
 #
 # [*metadata_backlog*]
 #   (optional) Number of backlog requests to configure the metadata server socket with.
@@ -72,7 +70,7 @@ class neutron::agents::metadata (
   $metadata_ip               = $::os_service_default,
   $metadata_port             = $::os_service_default,
   $metadata_protocol         = $::os_service_default,
-  $metadata_workers          = $::processorcount,
+  $metadata_workers          = $::os_workers,
   $metadata_backlog          = $::os_service_default,
   $metadata_memory_cache_ttl = $::os_service_default,
   $nova_client_cert          = $::os_service_default,

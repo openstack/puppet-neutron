@@ -74,8 +74,8 @@ describe 'neutron::server' do
       is_expected.to contain_service('neutron-server').that_notifies('Anchor[neutron::service::end]')
       is_expected.not_to contain_class('neutron::db::sync')
       is_expected.to contain_service('neutron-server').with_name('neutron-server')
-      is_expected.to contain_neutron_config('DEFAULT/api_workers').with_value(facts[:processorcount])
-      is_expected.to contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:processorcount])
+      is_expected.to contain_neutron_config('DEFAULT/api_workers').with_value(facts[:os_workers])
+      is_expected.to contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:os_workers])
       is_expected.to contain_neutron_config('DEFAULT/agent_down_time').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
       is_expected.to contain_neutron_config('qos/notification_drivers').with_value('<SERVICE DEFAULT>')
@@ -255,8 +255,7 @@ describe 'neutron::server' do
   context 'on Debian platforms' do
     let :facts do
       @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian',
-         :processorcount => '2'
+         :osfamily       => 'Debian',
       }))
     end
 
@@ -275,7 +274,6 @@ describe 'neutron::server' do
       @default_facts.merge(test_facts.merge({
           :osfamily               => 'RedHat',
           :operatingsystemrelease => '7',
-          :processorcount         => '2'
       }))
     end
 

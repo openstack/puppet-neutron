@@ -24,9 +24,10 @@
 # Defaults to 'tcp:127.0.0.1:6640'
 #
 # [*provider_mappings*]
-# (optional) bridge mappings required if using VLAN
-# tenant type.  Example: provider_mappings=br-ex:eth0
-# Defaults to false
+# (optional) List of <physical_network>:<nic/bridge>
+# Required for VLAN provider networks.
+# Required for Flat provider networks when using new NetVirt
+# Defaults to empty list
 #
 # [*retry_interval*]
 # (optional) The time (in seconds) to wait between ODL availability checks
@@ -38,11 +39,11 @@
 #
 class neutron::plugins::ovs::opendaylight (
   $tunnel_ip,
-  $odl_username      = 'admin',
-  $odl_password      = 'admin',
-  $odl_check_url     = 'http://127.0.0.1:8080/restconf/operational/network-topology:network-topology/topology/netvirt:1',
-  $odl_ovsdb_iface   = 'tcp:127.0.0.1:6640',
-  $provider_mappings = false,
+  $odl_username       = 'admin',
+  $odl_password       = 'admin',
+  $odl_check_url      = 'http://127.0.0.1:8080/restconf/operational/network-topology:network-topology/topology/netvirt:1',
+  $odl_ovsdb_iface    = 'tcp:127.0.0.1:6640',
+  $provider_mappings  = [],
   $retry_interval     = 60,
   $retry_count        = 20,
 ) {
@@ -71,11 +72,12 @@ class neutron::plugins::ovs::opendaylight (
     path    => '/usr/sbin:/usr/bin:/sbin:/bin',
   }
 
-  # set mappings for VLAN
-  if $provider_mappings {
+  # set mappings for VLAN or Flat provider networks
+  if $provider_mappings and ! empty($provider_mappings) {
+    $pr_map_str = join(any2array($provider_mappings), ',')
     exec { 'Set provider_mappings Other Option':
-      command => "ovs-vsctl set Open_vSwitch $(ovs-vsctl get Open_vSwitch . _uuid) other_config:provider_mappings=${provider_mappings}",
-      unless  => "ovs-vsctl list Open_vSwitch | grep 'provider_mappings' | grep ${provider_mappings}",
+      command => "ovs-vsctl set Open_vSwitch $(ovs-vsctl get Open_vSwitch . _uuid) other_config:provider_mappings=${pr_map_str}",
+      unless  => "ovs-vsctl list Open_vSwitch | grep 'provider_mappings' | grep ${pr_map_str}",
       path    => '/usr/sbin:/usr/bin:/sbin:/bin',
     }
   }

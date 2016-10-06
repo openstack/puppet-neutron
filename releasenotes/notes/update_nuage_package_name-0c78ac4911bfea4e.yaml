@@ -1,0 +1,5 @@
+---
+fixes:
+  - The package name for nuage neutron plugin changed due to
+    decomposition of vendor plugins from neutron package to
+    per-vendor packages.

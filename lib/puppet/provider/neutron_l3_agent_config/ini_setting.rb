@@ -1,4 +1,5 @@
-require 'puppet/provider/neutron'
+require File.join(File.dirname(__FILE__), '..','..','..',
+                  'puppet/provider/neutron')
 
 Puppet::Type.type(:neutron_l3_agent_config).provide(
   :ini_setting,

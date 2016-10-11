@@ -110,10 +110,6 @@
 #   report_interval is a config for neutron agents, set by class neutron
 #   Defaults to: $::os_service_default
 #
-# [*memcache_servers*]
-#   List of memcache servers in format of server:port.
-#   Optional. Defaults to false. Example: ['localhost:11211']
-#
 # [*control_exchange*]
 #   (optional) What RPC queue/exchange to use
 #   Defaults to neutron
@@ -380,6 +376,9 @@
 #   (optional) Enable pagination
 #   Defaults to undef
 #
+# [*memcache_servers*]
+#   (optional) This option is deprecated an has no effect.
+#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
@@ -403,7 +402,6 @@ class neutron (
   $root_helper                          = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $root_helper_daemon                   = $::os_service_default,
   $report_interval                      = $::os_service_default,
-  $memcache_servers                     = false,
   $control_exchange                     = 'neutron',
   $default_transport_url                = $::os_service_default,
   $rpc_backend                          = $::os_service_default,
@@ -465,6 +463,7 @@ class neutron (
   $advertise_mtu                        = undef,
   $allow_pagination                     = undef,
   $allow_sorting                        = undef,
+  $memcache_servers                     = undef,
 ) {
 
   include ::neutron::deps
@@ -518,7 +517,7 @@ class neutron (
   }
 
   if $memcache_servers {
-    validate_array($memcache_servers)
+    warning('memcache_servers option is deprecated, has no effect and will be removed after Ocata.')
   }
 
   package { 'neutron':
@@ -574,17 +573,6 @@ class neutron (
       fail('service_plugins should be an array.')
     }
   }
-
-  if $memcache_servers {
-    neutron_config {
-      'DEFAULT/memcached_servers':  value => join($memcache_servers, ',');
-    }
-  } else {
-    neutron_config {
-      'DEFAULT/memcached_servers':  ensure => absent;
-    }
-  }
-
 
   if $rpc_backend in [$::os_service_default, 'neutron.openstack.common.rpc.impl_kombu', 'rabbit'] {
     if is_service_default($rabbit_password) {

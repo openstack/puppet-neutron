@@ -87,8 +87,6 @@ describe 'neutron' do
     it_configures 'with log_file specified'
     it_configures 'without service_plugins'
     it_configures 'with service_plugins'
-    it_configures 'without memcache_servers'
-    it_configures 'with memcache_servers'
     it_configures 'with host defined'
     it_configures 'with dns_domain defined'
     it_configures 'with transport_url defined'
@@ -418,23 +416,6 @@ describe 'neutron' do
 
     it do
       is_expected.to contain_neutron_config('DEFAULT/service_plugins').with_value('router,firewall,lbaas,vpnaas,metering,qos')
-    end
-
-  end
-
-  shared_examples_for 'without memcache_servers' do
-    it { is_expected.to contain_neutron_config('DEFAULT/memcached_servers').with_ensure('absent') }
-  end
-
-  shared_examples_for 'with memcache_servers' do
-    before do
-      params.merge!(
-        :memcache_servers => ['memcache1','memcache2','memcache3']
-      )
-    end
-
-    it do
-      is_expected.to contain_neutron_config('DEFAULT/memcached_servers').with_value('memcache1,memcache2,memcache3')
     end
 
   end

@@ -1,0 +1,5 @@
+---
+deprecations:
+  - Deprecate the memcache_servers parameter in init.pp since
+    Neutron does not have the memcached_servers configuration
+    in the DEFAULT section in neutron.conf

@@ -204,6 +204,11 @@
 #   (optional) The strategy to use for authentication.
 #   Defaults to 'keystone'
 #
+# [*enable_proxy_headers_parsing*]
+#   (Optional) Enable paste middleware to handle SSL requests through
+#   HTTPProxyToWSGI middleware.
+#   Defaults to $::os_service_default.
+#
 # === Deprecated Parameters
 #
 # [*ensure_lbaas_package*]
@@ -305,6 +310,7 @@ class neutron::server (
   $vpnaas_agent_package             = false,
   $service_providers                = $::os_service_default,
   $auth_strategy                    = 'keystone',
+  $enable_proxy_headers_parsing     = $::os_service_default,
   # DEPRECATED PARAMETERS
   $log_dir                          = undef,
   $log_file                         = undef,
@@ -517,6 +523,10 @@ class neutron::server (
       'filter:authtoken/identity_uri':        ensure => absent;
     }
 
+  }
+
+  oslo::middleware { 'neutron_config':
+    enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
   }
 
   if $manage_service {

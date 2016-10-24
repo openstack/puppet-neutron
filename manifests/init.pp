@@ -356,10 +356,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*verbose*]
-#   (optional) Deprecated. Verbose logging
-#   Defaults to undef
-#
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
 #   Defaults to undef
@@ -458,7 +454,6 @@ class neutron (
   $notification_topics                  = $::os_service_default,
   $notification_transport_url           = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $verbose                              = undef,
   $log_facility                         = undef,
   $advertise_mtu                        = undef,
   $allow_pagination                     = undef,
@@ -470,10 +465,6 @@ class neutron (
   include ::neutron::params
   if $manage_logging {
     include ::neutron::logging
-  }
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
   }
 
   if ! is_service_default($use_ssl) and ($use_ssl) {

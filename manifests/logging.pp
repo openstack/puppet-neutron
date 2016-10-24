@@ -99,10 +99,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*verbose*]
-#   (optional) Deprecated. Verbose logging
-#   Defaults to undef
-#
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
 #   Defaults to undef
@@ -128,7 +124,6 @@ class neutron::logging (
   $instance_uuid_format          = $::os_service_default,
   $fatal_deprecations            = $::os_service_default,
   # Deprecated
-  $verbose                       = undef,
   $log_facility                  = undef,
 ) {
 
@@ -139,10 +134,6 @@ class neutron::logging (
   $use_stderr_real = pick($::neutron::use_stderr,$use_stderr)
   $log_file_real = pick($::neutron::log_file,$log_file)
   $log_dir_real = pick($::neutron::log_dir,$log_dir)
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   if $log_facility {
     warning('log_facility is deprecated, has no effect and will be removed after Newton cycle. Please use syslog_log_facility instead.')

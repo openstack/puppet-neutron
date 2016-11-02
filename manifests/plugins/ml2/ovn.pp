@@ -76,11 +76,11 @@ class neutron::plugins::ml2::ovn(
   )
 
   neutron_plugin_ml2 {
-    'ml2_ovn/ovn_nb_connection'        : value => $ovn_nb_connection;
-    'ml2_ovn/ovn_sb_connection'        : value => $ovn_sb_connection;
-    'ml2_ovn/ovsdb_connection_timeout' : value => $ovsdb_connection_timeout;
-    'ml2_ovn/neutron_sync_mode'        : value => $neutron_sync_mode;
-    'ml2_ovn/ovn_l3_mode'              : value => $ovn_l3_mode;
-    'ml2_ovn/vif_type'                 : value => $vif_type;
+    'ovn/ovn_nb_connection'        : value => $ovn_nb_connection;
+    'ovn/ovn_sb_connection'        : value => $ovn_sb_connection;
+    'ovn/ovsdb_connection_timeout' : value => $ovsdb_connection_timeout;
+    'ovn/neutron_sync_mode'        : value => $neutron_sync_mode;
+    'ovn/ovn_l3_mode'              : value => $ovn_l3_mode;
+    'ovn/vif_type'                 : value => $vif_type;
   }
 }

@@ -35,12 +35,12 @@ describe 'neutron::plugins::ml2::ovn' do
     end
 
     it 'should perform default configuration of' do
-      is_expected.to contain_neutron_plugin_ml2('ml2_ovn/ovn_nb_connection').with_value(params[:ovn_nb_connection])
-      is_expected.to contain_neutron_plugin_ml2('ml2_ovn/ovn_sb_connection').with_value(params[:ovn_sb_connection])
-      is_expected.to contain_neutron_plugin_ml2('ml2_ovn/ovsdb_connection_timeout').with_value(params[:ovsdb_connection_timeout])
-      is_expected.to contain_neutron_plugin_ml2('ml2_ovn/neutron_sync_mode').with_value(params[:neutron_sync_mode])
-      is_expected.to contain_neutron_plugin_ml2('ml2_ovn/ovn_l3_mode').with_value(params[:ovn_l3_mode])
-      is_expected.to contain_neutron_plugin_ml2('ml2_ovn/vif_type').with_value(params[:vif_type])
+      is_expected.to contain_neutron_plugin_ml2('ovn/ovn_nb_connection').with_value(params[:ovn_nb_connection])
+      is_expected.to contain_neutron_plugin_ml2('ovn/ovn_sb_connection').with_value(params[:ovn_sb_connection])
+      is_expected.to contain_neutron_plugin_ml2('ovn/ovsdb_connection_timeout').with_value(params[:ovsdb_connection_timeout])
+      is_expected.to contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(params[:neutron_sync_mode])
+      is_expected.to contain_neutron_plugin_ml2('ovn/ovn_l3_mode').with_value(params[:ovn_l3_mode])
+      is_expected.to contain_neutron_plugin_ml2('ovn/vif_type').with_value(params[:vif_type])
     end
 
   end
@@ -64,7 +64,7 @@ describe 'neutron::plugins::ml2::ovn' do
       params[:vif_type] = 'invalid'
       is_expected.to raise_error(Puppet::Error, /Invalid value for vif_type parameter/)
       params.delete(:vif_type)
-      is_expected.to contain_neutron_plugin_ml2('ml2_ovn/vif_type').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_plugin_ml2('ovn/vif_type').with_value('<SERVICE DEFAULT>')
     end
   end
 

@@ -25,11 +25,16 @@
 # Defaults to $::os_service_default
 # Example: 'http://127.0.0.1:8080/controller/nb/v2/neutron'
 #
+# [*ovsdb_connection*]
+# (optional) The URI used to connect to the local OVSDB server
+# Defaults to 'tcp:127.0.0.1:6639'
+#
 class neutron::plugins::ml2::opendaylight (
-  $package_ensure    = 'present',
-  $odl_username      = $::os_service_default,
-  $odl_password      = $::os_service_default,
-  $odl_url           = $::os_service_default,
+  $package_ensure     = 'present',
+  $odl_username       = $::os_service_default,
+  $odl_password       = $::os_service_default,
+  $odl_url            = $::os_service_default,
+  $ovsdb_connection   = 'tcp:127.0.0.1:6639',
 ) {
 
   include ::neutron::deps
@@ -46,5 +51,9 @@ class neutron::plugins::ml2::opendaylight (
     'ml2_odl/username': value => $odl_username;
     'ml2_odl/password': value => $odl_password;
     'ml2_odl/url':      value => $odl_url;
+  }
+
+  neutron_config {
+    'OVS/ovsdb_connection': value => $ovsdb_connection;
   }
 }

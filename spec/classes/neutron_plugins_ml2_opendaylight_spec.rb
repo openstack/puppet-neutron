@@ -11,10 +11,11 @@ describe 'neutron::plugins::ml2::opendaylight' do
 
   let :default_params do
     {
-      :package_ensure => 'present',
-      :odl_username   => '<SERVICE DEFAULT>',
-      :odl_password   => '<SERVICE DEFAULT>',
-      :odl_url        => '<SERVICE DEFAULT>',
+      :package_ensure   => 'present',
+      :odl_username     => '<SERVICE DEFAULT>',
+      :odl_password     => '<SERVICE DEFAULT>',
+      :odl_url          => '<SERVICE DEFAULT>',
+      :ovsdb_connection => 'tcp:127.0.0.1:6639'
     }
   end
 
@@ -47,6 +48,10 @@ describe 'neutron::plugins::ml2::opendaylight' do
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/password').with_value(params[:odl_password])
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/username').with_value(params[:odl_username])
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/url').with_value(params[:odl_url])
+    end
+
+    it 'configures neutron server settings' do
+      is_expected.to contain_neutron_config('OVS/ovsdb_connection').with_value(params[:ovsdb_connection])
     end
   end
 

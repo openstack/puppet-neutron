@@ -128,23 +128,6 @@
 #   (optional) Seconds to wait for a response from a call
 #   Defaults to $::os_service_default
 #
-# [*rabbit_password*]
-# [*rabbit_host*]
-# [*rabbit_port*]
-# [*rabbit_user*]
-#   (optional) Various rabbitmq settings
-#   Defaults to $::os_service_default
-#
-# [*rabbit_virtual_host*]
-#   (optional) virtualhost to use.
-#   Defaults to $::os_service_default
-#
-# [*rabbit_hosts*]
-#   (optional) array of rabbitmq servers for HA.
-#   A single IP address, such as a VIP, can be used for load-balancing
-#   multiple RabbitMQ Brokers.
-#   Defaults to $::os_service_default
-#
 # [*rabbit_ha_queues*]
 #   (Optional) Use HA queues in RabbitMQ.
 #   Defaults to $::os_service_default
@@ -375,6 +358,23 @@
 # [*memcache_servers*]
 #   (optional) This option is deprecated an has no effect.
 #
+# [*rabbit_password*]
+# [*rabbit_host*]
+# [*rabbit_port*]
+# [*rabbit_user*]
+#   (optional) Various rabbitmq settings
+#   Defaults to $::os_service_default
+#
+# [*rabbit_virtual_host*]
+#   (optional) virtualhost to use.
+#   Defaults to $::os_service_default
+#
+# [*rabbit_hosts*]
+#   (optional) array of rabbitmq servers for HA.
+#   A single IP address, such as a VIP, can be used for load-balancing
+#   multiple RabbitMQ Brokers.
+#   Defaults to $::os_service_default
+#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
@@ -402,13 +402,7 @@ class neutron (
   $default_transport_url                = $::os_service_default,
   $rpc_backend                          = $::os_service_default,
   $rpc_response_timeout                 = $::os_service_default,
-  $rabbit_password                      = $::os_service_default,
-  $rabbit_host                          = $::os_service_default,
-  $rabbit_hosts                         = $::os_service_default,
-  $rabbit_port                          = $::os_service_default,
   $rabbit_ha_queues                     = $::os_service_default,
-  $rabbit_user                          = $::os_service_default,
-  $rabbit_virtual_host                  = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold   = $::os_service_default,
   $rabbit_heartbeat_rate                = $::os_service_default,
   $rabbit_use_ssl                       = $::os_service_default,
@@ -459,6 +453,12 @@ class neutron (
   $allow_pagination                     = undef,
   $allow_sorting                        = undef,
   $memcache_servers                     = undef,
+  $rabbit_password                      = $::os_service_default,
+  $rabbit_host                          = $::os_service_default,
+  $rabbit_hosts                         = $::os_service_default,
+  $rabbit_port                          = $::os_service_default,
+  $rabbit_user                          = $::os_service_default,
+  $rabbit_virtual_host                  = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -511,6 +511,17 @@ class neutron (
     warning('memcache_servers option is deprecated, has no effect and will be removed after Ocata.')
   }
 
+  if !is_service_default($rabbit_host) or
+    !is_service_default($rabbit_hosts) or
+    !is_service_default($rabbit_password) or
+    !is_service_default($rabbit_port) or
+    !is_service_default($rabbit_user) or
+    !is_service_default($rabbit_virtual_host) {
+    warning("neutron::rabbit_host, neutron::rabbit_hosts, neutron::rabbit_password, \
+neutron::rabbit_port, neutron::rabbit_user and neutron::rabbit_virtual_host are \
+deprecated. Please use neutron::default_transport_url instead.")
+  }
+
   package { 'neutron':
     ensure => $package_ensure,
     name   => $::neutron::params::package_name,
@@ -546,7 +557,7 @@ class neutron (
   oslo::messaging::default { 'neutron_config':
     transport_url        => $default_transport_url,
     rpc_response_timeout => $rpc_response_timeout,
-    control_exchange     => $control_exchange
+    control_exchange     => $control_exchange,
   }
 
   oslo::concurrency { 'neutron_config': lock_path => $lock_path }
@@ -566,7 +577,7 @@ class neutron (
   }
 
   if $rpc_backend in [$::os_service_default, 'neutron.openstack.common.rpc.impl_kombu', 'rabbit'] {
-    if is_service_default($rabbit_password) {
+    if is_service_default($default_transport_url) and is_service_default($rabbit_password) {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }
 

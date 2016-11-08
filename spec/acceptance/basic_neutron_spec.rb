@@ -30,9 +30,7 @@ describe 'basic neutron' do
 
       # Neutron resources
       class { '::neutron':
-        rabbit_user           => 'neutron',
-        rabbit_password       => 'an_even_bigger_secret',
-        rabbit_host           => '127.0.0.1',
+        default_transport_url => 'rabbit://neutron:an_even_bigger_secret@127.0.0.1:5672/',
         allow_overlapping_ips => true,
         core_plugin           => 'ml2',
         debug                 => true,

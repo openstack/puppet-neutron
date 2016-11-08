@@ -158,7 +158,10 @@ class neutron::agents::ml2::linuxbridge (
   }
 
   if $::neutron::rpc_backend == 'neutron.openstack.common.rpc.impl_kombu' {
-    $linuxbridge_agent_subscribe = Neutron_config['oslo_messaging_rabbit/rabbit_hosts']
+    $linuxbridge_agent_subscribe = [
+      Neutron_config['oslo_messaging_rabbit/rabbit_hosts'],
+      Neutron_config['DEFAULT/transport_url']
+    ]
   } else {
     $linuxbridge_agent_subscribe = undef
   }

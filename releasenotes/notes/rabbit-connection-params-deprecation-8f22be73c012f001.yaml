@@ -1,0 +1,6 @@
+---
+deprecations:
+  - neutron::rabbit_host, neutron::rabbit_hosts, neutron::rabbit_password,
+    neutron::rabbit_port, neutron::rabbit_user and
+    neutron::rabbit_virtual_host are deprecated.
+    neutron::default_transport_url should be used instead.

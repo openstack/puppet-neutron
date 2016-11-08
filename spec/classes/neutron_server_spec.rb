@@ -3,22 +3,20 @@ require 'spec_helper'
 describe 'neutron::server' do
 
   let :pre_condition do
-    "class { 'neutron': rabbit_password => 'passw0rd' }"
+    "class { 'neutron': rabbit_password => 'passw0rd' }
+     class { '::neutron::keystone::authtoken':
+       password => 'passw0rd',
+     }"
   end
 
   let :params do
-    { :password            => 'passw0rd',
-      :username            => 'neutron',
-      :keystone_auth_type  => 'password',
-      :project_domain_name => 'Default',
-      :project_name        => 'services',
-      :user_domain_name    => 'Default'}
+    {}
   end
 
   let :default_params do
     { :package_ensure                   => 'present',
       :enabled                          => true,
-      :auth_type                        => 'keystone',
+      :auth_strategy                    => 'keystone',
       :database_connection              => 'sqlite:////var/lib/neutron/ovs.sqlite',
       :database_max_retries             => 10,
       :database_idle_timeout            => 3600,
@@ -228,13 +226,6 @@ describe 'neutron::server' do
     end
   end
 
-  shared_examples_for 'a neutron server with broken authentication' do
-    before do
-      params.delete(:password)
-    end
-    it_raises 'a Puppet::Error', /Please set password for neutron service user/
-  end
-
   shared_examples_for 'VPNaaS, FWaaS and LBaaS package installation' do
     before do
       params.merge!(
@@ -274,7 +265,6 @@ describe 'neutron::server' do
     end
 
     it_configures 'a neutron server'
-    it_configures 'a neutron server with broken authentication'
     it_configures 'a neutron server without database synchronization'
   end
 
@@ -291,7 +281,6 @@ describe 'neutron::server' do
     end
 
     it_configures 'a neutron server'
-    it_configures 'a neutron server with broken authentication'
     it_configures 'a neutron server without database synchronization'
   end
 end

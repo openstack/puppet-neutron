@@ -3,7 +3,10 @@ require 'spec_helper'
 describe 'neutron::plugins::plumgrid' do
 
   let :pre_condition do
-    "class { 'neutron::server': password => 'password' }
+    "class { '::neutron::keystone::authtoken':
+      password => 'passw0rd',
+     }
+     class { 'neutron::server': }
      class { 'neutron': rabbit_password => 'passw0rd' }"
   end
 
@@ -78,9 +81,6 @@ describe 'neutron::plugins::plumgrid' do
     end
 
     it 'should perform default configuration of plumgrid plumlib' do
-      is_expected.to contain_neutron_plumlib_plumgrid('keystone_authtoken/admin_user').with_value('admin')
-      is_expected.to contain_neutron_plumlib_plumgrid('keystone_authtoken/admin_password').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_plumlib_plumgrid('keystone_authtoken/admin_tenant_name').with_value('admin')
       auth_uri = params[:auth_protocol] + "://" + params[:controller_priv_host] + ":" + "35357/" + params[:identity_version];
       is_expected.to contain_neutron_plumlib_plumgrid('keystone_authtoken/auth_uri').with_value(auth_uri)
       is_expected.to contain_neutron_plumlib_plumgrid('keystone_authtoken/identity_version').with_value(params[:identity_version])

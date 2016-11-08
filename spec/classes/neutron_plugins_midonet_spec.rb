@@ -3,7 +3,10 @@ require 'spec_helper'
 describe 'neutron::plugins::midonet' do
 
   let :pre_condition do
-    "class { 'neutron::server': password => 'password' }
+    "class { '::neutron::keystone::authtoken':
+      password => 'passw0rd',
+     }
+     class { 'neutron::server': }
      class { 'neutron': rabbit_password => 'passw0rd' }"
   end
 
@@ -37,7 +40,7 @@ describe 'neutron::plugins::midonet' do
     it 'should install package python-networking-midonet' do
       is_expected.to contain_package('python-networking-midonet').with(
         :ensure  => 'present')
-    end    
+    end
 
     it 'should create plugin symbolic link' do
       is_expected.to contain_file('/etc/neutron/plugin.ini').with(

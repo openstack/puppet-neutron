@@ -49,10 +49,11 @@ describe 'basic neutron' do
         tenant_network_types => ['vxlan'],
         mechanism_drivers    => ['openvswitch'],
       }
+      class { '::neutron::keystone::authtoken':
+        password            => 'a_big_secret',
+      }
       class { '::neutron::server':
         database_connection => 'mysql+pymysql://neutron:a_big_secret@127.0.0.1/neutron?charset=utf8',
-        password            => 'a_big_secret',
-        auth_url            => 'http://127.0.0.1:35357/',
         sync_db             => true,
         service_providers   => [
           'LOADBALANCERV2:Haproxy:neutron_lbaas.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver'

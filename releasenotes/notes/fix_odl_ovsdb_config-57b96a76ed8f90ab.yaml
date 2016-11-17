@@ -1,0 +1,12 @@
+---
+fixes:
+  - Neutron modified the way that Agents connect to OVSDB
+    server to configure OVS tap ports, etc by using the
+    OVSDB server URI rather than the ovs-vsctl client.
+    In ODL deployments, OVSDB server is never configured
+    to listen on a port and therefore Neutron Agent
+    configuration fails.  This fixes that problem by
+    configuring multiple managers, including a local
+    listener by default on a non-standard port for OVSDB
+    server.  This way Neutron Agents are able to talk to
+    OVSDB while OVS is also still connected to ODL.

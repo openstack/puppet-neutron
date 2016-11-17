@@ -23,6 +23,10 @@
 # (optional) The ODL southbound interface for OVSDB
 # Defaults to 'tcp:127.0.0.1:6640'
 #
+# [*ovsdb_server_iface*]
+# (optional) The interface for OVSDB local server to listen on
+# Defaults to 'ptcp:6639:127.0.0.1'
+#
 # [*provider_mappings*]
 # (optional) List of <physical_network>:<nic/bridge>
 # Required for VLAN provider networks.
@@ -43,6 +47,7 @@ class neutron::plugins::ovs::opendaylight (
   $odl_password       = 'admin',
   $odl_check_url      = 'http://127.0.0.1:8080/restconf/operational/network-topology:network-topology/topology/netvirt:1',
   $odl_ovsdb_iface    = 'tcp:127.0.0.1:6640',
+  $ovsdb_server_iface = 'ptcp:6639:127.0.0.1',
   $provider_mappings  = [],
   $retry_interval     = 60,
   $retry_count        = 20,
@@ -61,8 +66,8 @@ class neutron::plugins::ovs::opendaylight (
   } ->
   # OVS manager
   exec { 'Set OVS Manager to OpenDaylight':
-    command => "ovs-vsctl set-manager ${odl_ovsdb_iface}",
-    unless  => "ovs-vsctl show | grep 'Manager \"${odl_ovsdb_iface}\"'",
+    command => "ovs-vsctl set-manager ${ovsdb_server_iface} ${odl_ovsdb_iface}",
+    unless  => "ovs-vsctl show | grep 'Manager \"${ovsdb_server_iface} ${odl_ovsdb_iface}\"'",
     path    => '/usr/sbin:/usr/bin:/sbin:/bin',
   } ->
   # local ip

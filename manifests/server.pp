@@ -220,63 +220,6 @@
 #   Deprecated. (optional) Minimum number of l3 agents which a HA router will be scheduled on.
 #   Defaults to undef
 #
-# [*keystone_auth_type*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::auth_type instead.
-#   Defaults to undef
-#
-# [*auth_uri*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::auth_uri
-#   Defaults to undef
-#
-# [*auth_url*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::auth_url instead
-#   Defaults to undef
-#
-# [*username*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::username instead
-#   Defaults to undef
-#
-# [*password*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::password
-#   Defaults to undef
-#
-# [*project_domain_id*]
-#   Deprecated. Auth user project's domain ID
-#   Defaults to $::os_service_default
-#
-# [*project_domain_name*]
-#   (optional) Deprecated
-#   Use neutron::keystone::authtoken::project_domain_name instead
-#   Defaults to undef
-#
-# [*project_name*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::project_name
-#   instead
-#   Defaults to undef
-#
-# [*user_domain_id*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::
-#   Defaults to $::os_service_default
-#
-# [*user_domain_name*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::user_domain_name
-#   instead
-#   Defaults to undef
-#
-# [*region_name*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::region_name
-#   instead.
-#   Defaults to undef
-#
-# [*memcached_servers*]
-#   (optional) Deprecated Use neutron::keystone::authtoken::memcached_servers
-#   instead
-#   Defaults to undef
-#
-# [*auth_type*]
-#   (optional) Deprecated Use auth_strategy instead.
-#   Defaults to undef
-#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -319,19 +262,6 @@ class neutron::server (
   $lock_path                        = undef,
   $ensure_lbaas_package             = false,
   $min_l3_agents_per_router         = undef,
-  $keystone_auth_type               = undef,
-  $auth_uri                         = undef,
-  $auth_url                         = undef,
-  $username                         = undef,
-  $password                         = undef,
-  $region_name                      = undef,
-  $project_domain_name              = undef,
-  $project_name                     = undef,
-  $user_domain_name                 = undef,
-  $memcached_servers                = undef,
-  $project_domain_id                = $::os_service_default,
-  $user_domain_id                   = $::os_service_default,
-  $auth_type                        = undef,
 ) inherits ::neutron::params {
 
   include ::neutron::deps
@@ -339,58 +269,6 @@ class neutron::server (
   include ::neutron::policy
   # Work-around LP#1551974. neutron requires the keystoneclient to auth tokens
   include ::keystone::client
-
-  if $auth_type {
-    warning('neutron::server::auth_type is deprecated, use neutron::server::auth_strategy instead.')
-  }
-
-  if $keystone_auth_type {
-    warning('neutron::server::keystone_auth_type is deprecated, use neutron::keystone::authtoken::auth_type instead.')
-  }
-
-  if $auth_uri {
-    warning('neutron::server::auth_uri is deprecated, use neutron::keystone::authtoken::auth_uri instead.')
-  }
-
-  if $auth_url {
-    warning('neutron::server::auth_url is deprecated, use neutron::keystone::authtoken::auth_url instead.')
-  }
-
-  if $username {
-    warning('neutron::server::username is deprecated, use neutron::keystone::authtoken::username instead.')
-  }
-
-  if $password {
-    warning('neutron::server::password is deprecated, use neutron::keystone::authtoken::password instead.')
-  }
-
-  if ! is_service_default($project_domain_id) {
-    warning('neutron::server::project_domain_id is deprecated, use neutron::keystone::authtoken::project_domain_name instead.')
-  }
-
-  if $project_domain_name {
-    warning('neutron::server::project_domain_name is deprecated, use neutron::keystone::authtoken::project_domain_name instead.')
-  }
-
-  if $project_name {
-    warning('neutron::server::project_name is deprecated, use neutron::keystone::authtoken::project_name instead.')
-  }
-
-  if ! is_service_default($user_domain_id) {
-    warning('neutron::server::user_domain_id is deprecated, use neutron::keystone::authtoken::user_domain_name instead.')
-  }
-
-  if $user_domain_name {
-    warning('neutron::server::user_domain_name is deprecated, use neutron::keystone::authtoken::user_domain_name instead.')
-  }
-
-  if $region_name {
-    warning('neutron::server::region_name is deprecated, use neutron::keystone::authtoken::region_name instead.')
-  }
-
-  if $memcached_servers {
-    warning('neutron::server::memcached_servers is deprecated, use neutron::keystone::authtoken::memcached_servers instead')
-  }
 
   if !is_service_default($default_availability_zones) {
     validate_array($default_availability_zones)
@@ -507,12 +385,7 @@ class neutron::server (
     }
   }
 
-  neutron_config {
-    'DEFAULT/auth_type': value => $auth_type;
-  }
-
-  $auth_strategy_real = pick($auth_type, $auth_strategy)
-  if ($auth_strategy_real == 'keystone') {
+  if ($auth_strategy == 'keystone') {
 
     include ::neutron::keystone::authtoken
 

@@ -223,32 +223,21 @@ class neutron::keystone::authtoken(
   $token_cache_time               = $::os_service_default,
 ) {
 
-  if is_service_default($password) and ! $::neutron::server::password {
+  if is_service_default($password) {
     fail('Please set password for neutron service user')
   }
 
-  $auth_uri_real            = pick($::neutron::server::auth_uri,$auth_uri)
-  $auth_url_real            = pick($::neutron::server::auth_url,$auth_url)
-  $auth_type_real           = pick($::neutron::server::keystone_auth_type,$auth_type)
-  $memcached_servers_real   = pick($::neutron::server::memcached_servers,$memcached_servers)
-  $password_real            = pick($::neutron::server::password,$password)
-  $project_domain_name_real = pick($::neutron::server::project_domain_name,$project_domain_name)
-  $project_name_real        = pick($::neutron::server::project_name,$project_name)
-  $region_name_real         = pick($::neutron::server::region_name,$region_name)
-  $username_real            = pick($::neutron::server::username,$username)
-  $user_domain_name_real    = pick($::neutron::server::user_domain_name,$user_domain_name)
-
   keystone::resource::authtoken { 'neutron_config':
-    username                       => $username_real,
-    password                       => $password_real,
-    project_name                   => $project_name_real,
-    auth_url                       => $auth_url_real,
-    auth_uri                       => $auth_uri_real,
+    username                       => $username,
+    password                       => $password,
+    project_name                   => $project_name,
+    auth_url                       => $auth_url,
+    auth_uri                       => $auth_uri,
     auth_version                   => $auth_version,
-    auth_type                      => $auth_type_real,
+    auth_type                      => $auth_type,
     auth_section                   => $auth_section,
-    user_domain_name               => $user_domain_name_real,
-    project_domain_name            => $project_domain_name_real,
+    user_domain_name               => $user_domain_name,
+    project_domain_name            => $project_domain_name,
     insecure                       => $insecure,
     cache                          => $cache,
     cafile                         => $cafile,
@@ -269,11 +258,10 @@ class neutron::keystone::authtoken(
     memcache_security_strategy     => $memcache_security_strategy,
     memcache_use_advanced_pool     => $memcache_use_advanced_pool,
     memcache_pool_unused_timeout   => $memcache_pool_unused_timeout,
-    memcached_servers              => $memcached_servers_real,
-    region_name                    => $region_name_real,
+    memcached_servers              => $memcached_servers,
+    region_name                    => $region_name,
     revocation_cache_time          => $revocation_cache_time,
     signing_dir                    => $signing_dir,
     token_cache_time               => $token_cache_time,
   }
 }
-

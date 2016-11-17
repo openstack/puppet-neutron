@@ -22,7 +22,10 @@ require 'spec_helper'
 describe 'neutron::plugins::ml2::arista::l3' do
 
   let :pre_condition do
-    "class { 'neutron::server': password => 'password'}
+    "class { '::neutron::keystone::authtoken':
+      password => 'passw0rd',
+     }
+     class { 'neutron::server': }
      class { 'neutron':
       rabbit_password => 'passw0rd',
       core_plugin     => 'neutron.plugins.ml2.plugin.Ml2Plugin' }"

@@ -1,0 +1,15 @@
+---
+other:
+  - removed deprecated neutron::server::keystone_auth_type
+  - removed deprecated neutron::server::auth_uri
+  - removed deprecated neutron::server::auth_url
+  - removed deprecated neutron::server::username
+  - removed deprecated neutron::server::password
+  - removed deprecated neutron::server::project_domain_id
+  - removed deprecated neutron::server::project_domain_name
+  - removed deprecated neutron::server::project_name
+  - removed deprecated neutron::server::user_domain_id
+  - removed deprecated neutron::server::user_domain_name
+  - removed deprecated neutron::server::region_name
+  - removed deprecated neutron::server::memcached_servers
+  - removed deprecated neutron::server::auth_type

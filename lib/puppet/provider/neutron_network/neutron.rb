@@ -25,6 +25,15 @@ Puppet::Type.type(:neutron_network).provide(
     @do_not_manage = value
   end
 
+  def self.search_attr(attrs,attr)
+    if attrs.key?(attr)
+      attrs[attr]
+    else
+      attr_rep = attr.gsub(':','_')
+      attrs[attr_rep]
+    end
+  end
+
   def self.instances
     self.do_not_manage = true
     list = list_neutron_resources(neutron_type).collect do |id|
@@ -34,10 +43,10 @@ Puppet::Type.type(:neutron_network).provide(
         :name                      => attrs['name'],
         :id                        => attrs['id'],
         :admin_state_up            => attrs['admin_state_up'],
-        :provider_network_type     => attrs['provider:network_type'],
-        :provider_physical_network => attrs['provider:physical_network'],
-        :provider_segmentation_id  => attrs['provider:segmentation_id'],
-        :router_external           => attrs['router:external'],
+        :provider_network_type     => search_attr(attrs,'provider:network_type'),
+        :provider_physical_network => search_attr(attrs,'provider:physical_network'),
+        :provider_segmentation_id  => search_attr(attrs,'provider:segmentation_id'),
+        :router_external           => search_attr(attrs,'router:external'),
         :shared                    => attrs['shared'],
         :tenant_id                 => attrs['tenant_id'],
         :availability_zone_hint    => attrs['availability_zone_hint']
@@ -112,10 +121,10 @@ Puppet::Type.type(:neutron_network).provide(
       :name                      => resource[:name],
       :id                        => attrs['id'],
       :admin_state_up            => attrs['admin_state_up'],
-      :provider_network_type     => attrs['provider:network_type'],
-      :provider_physical_network => attrs['provider:physical_network'],
-      :provider_segmentation_id  => attrs['provider:segmentation_id'],
-      :router_external           => attrs['router:external'],
+      :provider_network_type     => self.class.search_attr(attrs,'provider:network_type'),
+      :provider_physical_network => self.class.search_attr(attrs,'provider:physical_network'),
+      :provider_segmentation_id  => self.class.search_attr(attrs,'provider:segmentation_id'),
+      :router_external           => self.class.search_attr(attrs,'router:external'),
       :shared                    => attrs['shared'],
       :tenant_id                 => attrs['tenant_id'],
       :availability_zone_hint    => attrs['availability_zone_hint']

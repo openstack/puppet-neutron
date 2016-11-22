@@ -30,6 +30,10 @@
 #   (optional) FWaaS Driver to use
 #   Defaults to $::os_service_default
 #
+# [*agent_version*]
+#   (optional) Version of FWaaS API.
+#   Defaults to $::os_service_default
+#
 # [*vpnaas_agent_package*]
 #   (optional) Use VPNaaS agent package instead of L3 agent package on debian platforms
 #   RedHat platforms won't take care of this parameter
@@ -45,6 +49,7 @@
 class neutron::services::fwaas (
   $enabled              = $::os_service_default,
   $driver               = $::os_service_default,
+  $agent_version        = $::os_service_default,
   $vpnaas_agent_package = false,
   $purge_config         = false,
 ) {
@@ -80,8 +85,15 @@ class neutron::services::fwaas (
     purge => $purge_config,
   }
 
+  neutron_config {
+    'fwaas/enabled':       value => $enabled;
+    'fwaas/driver':        value => $driver;
+    'fwaas/agent_version': value => $agent_version;
+  }
+
   neutron_fwaas_service_config {
-    'fwaas/enabled': value => $enabled;
-    'fwaas/driver':  value => $driver;
+    'fwaas/enabled':       value => $enabled;
+    'fwaas/driver':        value => $driver;
+    'fwaas/agent_version': value => $agent_version;
   }
 }

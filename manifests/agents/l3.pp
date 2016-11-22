@@ -88,6 +88,10 @@
 #   Neutron will only schedule routers on the agent based on availability zone
 #   Defaults to $::os_service_default
 #
+# [*extensions*]
+#   (optional) L3 agent extensions to enable.
+#   Defaults to $::os_service_default
+#
 # === Deprecated Parameters
 #
 # [*external_network_bridge*]
@@ -114,6 +118,7 @@ class neutron::agents::l3 (
   $agent_mode                       = 'legacy',
   $purge_config                     = false,
   $availability_zone                = $::os_service_default,
+  $extensions                       = $::os_service_default,
   # DEPRECATED PARAMETERS
   $external_network_bridge          = $::os_service_default,
 ) {
@@ -150,6 +155,7 @@ class neutron::agents::l3 (
     'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;
     'DEFAULT/agent_mode':                       value => $agent_mode;
     'AGENT/availability_zone':                  value => $availability_zone;
+    'AGENT/extensions':                         value => $extensions;
   }
 
   if $::neutron::params::l3_agent_package {

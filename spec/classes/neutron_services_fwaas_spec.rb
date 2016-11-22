@@ -55,6 +55,13 @@ describe 'neutron::services::fwaas' do
     it 'configures driver in fwaas_driver.ini' do
       is_expected.to contain_neutron_fwaas_service_config('fwaas/driver').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_fwaas_service_config('fwaas/enabled').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_fwaas_service_config('fwaas/agent_version').with_value('<SERVICE DEFAULT>')
+    end
+
+    it 'configures driver in neutron.conf' do
+      is_expected.to contain_neutron_config('fwaas/driver').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('fwaas/enabled').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('fwaas/agent_version').with_value('<SERVICE DEFAULT>')
     end
   end
 

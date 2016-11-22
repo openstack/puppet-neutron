@@ -47,6 +47,7 @@ describe 'neutron::agents::l3' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('AGENT/availability_zone').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_l3_agent_config('AGENT/extensions').with_value('<SERVICE DEFAULT>')
     end
 
     it 'passes purge to resource' do

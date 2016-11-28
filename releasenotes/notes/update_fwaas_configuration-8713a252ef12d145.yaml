@@ -1,0 +1,5 @@
+---
+features:
+  - Allow to configure extensions in neutron l3 agent.
+  - Allow to configure agent_version in fwaas sections.
+  - Configure fwaas section in neutron.conf.

@@ -22,12 +22,6 @@ describe 'neutron::agents::ml2::ovs' do
       }
   end
 
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
-    }
-  end
-
   let :params do
     {}
   end
@@ -309,37 +303,11 @@ describe 'neutron::agents::ml2::ovs' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian',
-         :os_package_type => 'debian'
-      }))
-    end
-
-    let :platform_params do
-      { :ovs_agent_package => 'neutron-openvswitch-agent',
-        :ovs_agent_service => 'neutron-openvswitch-agent' }
-    end
-
-    it_configures 'neutron plugin ovs agent with ml2 plugin'
+  shared_examples_for 'neutron::agents::ml2::ovs on Debian' do
+    # placeholder for debian specific tests
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7'
-      }))
-    end
-
-    let :platform_params do
-      { :ovs_cleanup_service => 'neutron-ovs-cleanup',
-        :ovs_agent_service   => 'neutron-openvswitch-agent' }
-    end
-
-    it_configures 'neutron plugin ovs agent with ml2 plugin'
-
+  shared_examples_for 'neutron::agents::ml2::ovs on RedHat' do
     it 'configures neutron ovs cleanup service' do
       is_expected.to contain_service('ovs-cleanup-service').with(
         :name    => platform_params[:ovs_cleanup_service],
@@ -362,6 +330,31 @@ describe 'neutron::agents::ml2::ovs' do
       it 'should require vswitch::dpdk' do
         is_expected.to contain_class('vswitch::dpdk')
       end
+    end
+
+  end
+
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :ovs_agent_package => 'neutron-openvswitch-agent',
+            :ovs_agent_service => 'neutron-openvswitch-agent' }
+        when 'RedHat'
+          { :ovs_cleanup_service => 'neutron-ovs-cleanup',
+            :ovs_agent_service   => 'neutron-openvswitch-agent' }
+        end
+      end
+
+      it_behaves_like 'neutron plugin ovs agent with ml2 plugin'
+      it_behaves_like "neutron::agents::ml2::ovs on #{facts[:osfamily]}"
     end
   end
 end

@@ -9,7 +9,13 @@ describe 'neutron::db::sync' do
         :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade heads',
         :path        => '/usr/bin',
         :refreshonly => 'true',
-        :logoutput   => 'on_failure'
+        :try_sleep   => 5,
+        :tries       => 10,
+        :logoutput   => 'on_failure',
+        :subscribe   => ['Anchor[neutron::install::end]',
+                         'Anchor[neutron::config::end]',
+                         'Anchor[neutron::dbsync::begin]'],
+        :notify      => 'Anchor[neutron::dbsync::end]',
       )
     end
 
@@ -25,7 +31,13 @@ describe 'neutron::db::sync' do
           :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf upgrade heads',
           :path        => '/usr/bin',
           :refreshonly => 'true',
-          :logoutput   => 'on_failure'
+          :try_sleep   => 5,
+          :tries       => 10,
+          :logoutput   => 'on_failure',
+          :subscribe   => ['Anchor[neutron::install::end]',
+                           'Anchor[neutron::config::end]',
+                           'Anchor[neutron::dbsync::begin]'],
+          :notify      => 'Anchor[neutron::dbsync::end]',
         )
     }
     end

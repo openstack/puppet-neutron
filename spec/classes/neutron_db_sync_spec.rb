@@ -6,7 +6,7 @@ describe 'neutron::db::sync' do
 
     it 'runs neutron-db-sync' do
       is_expected.to contain_exec('neutron-db-sync').with(
-        :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade heads',
+        :command     => 'neutron-db-manage  upgrade heads',
         :path        => '/usr/bin',
         :refreshonly => 'true',
         :try_sleep   => 5,

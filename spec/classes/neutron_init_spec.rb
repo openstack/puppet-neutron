@@ -4,7 +4,7 @@ describe 'neutron' do
 
   let :params do
     { :package_ensure        => 'present',
-      :core_plugin           => 'linuxbridge',
+      :core_plugin           => 'ml2',
       :auth_strategy         => 'keystone',
       :rabbit_password       => 'guest',
       :log_dir               => '/var/log/neutron',

@@ -96,9 +96,9 @@ class neutron::agents::ml2::linuxbridge (
     }
 
     neutron_agent_linuxbridge {
-      'vxlan/vxlan_ttl':     value => $vxlan_ttl;
+      'vxlan/ttl':           value => $vxlan_ttl;
       'vxlan/vxlan_group':   value => $vxlan_group;
-      'vxlan/vxlan_tos':     value => $vxlan_tos;
+      'vxlan/tos':           value => $vxlan_tos;
       'vxlan/enable_vxlan':  value => true;
       'vxlan/local_ip':      value => $local_ip;
       'vxlan/l2_population': value => $l2_population;

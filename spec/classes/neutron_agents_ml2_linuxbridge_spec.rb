@@ -101,8 +101,8 @@ describe 'neutron::agents::ml2::linuxbridge' do
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/enable_vxlan').with_value(true)
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/local_ip').with_value(params[:local_ip])
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_ttl').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_tos').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_neutron_agent_linuxbridge('vxlan/ttl').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_neutron_agent_linuxbridge('vxlan/tos').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/l2_population').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_neutron_agent_linuxbridge('agent/tunnel_types').with_value(params[:tunnel_types])
         end
@@ -122,8 +122,8 @@ describe 'neutron::agents::ml2::linuxbridge' do
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/enable_vxlan').with_value(true)
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/local_ip').with_value(params[:local_ip])
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value(params[:vxlan_group])
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_ttl').with_value(params[:vxlan_ttl])
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_tos').with_value(params[:vxlan_tos])
+          is_expected.to contain_neutron_agent_linuxbridge('vxlan/ttl').with_value(params[:vxlan_ttl])
+          is_expected.to contain_neutron_agent_linuxbridge('vxlan/tos').with_value(params[:vxlan_tos])
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/l2_population').with_value(params[:l2_population])
         end
       end

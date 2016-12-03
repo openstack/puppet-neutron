@@ -13,7 +13,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
       :tunnel_types                => [],
       :local_ip                    => false,
       :physical_interface_mappings => [],
-      :firewall_driver             => 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver',
+      :firewall_driver             => 'iptables',
       :purge_config                => false,}
   end
 

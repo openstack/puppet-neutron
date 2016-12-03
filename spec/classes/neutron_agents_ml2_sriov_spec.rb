@@ -44,7 +44,7 @@ describe 'neutron::agents::ml2::sriov' do
       is_expected.to contain_neutron_sriov_agent_config('sriov_nic/exclude_devices').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_sriov_agent_config('sriov_nic/physical_device_mappings').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_sriov_agent_config('agent/extensions').with_value(['<SERVICE DEFAULT>'])
-      is_expected.to contain_neutron_sriov_agent_config('securitygroup/firewall_driver').with_value('neutron.agent.firewall.NoopFirewallDriver')
+      is_expected.to contain_neutron_sriov_agent_config('securitygroup/firewall_driver').with_value('noop')
     end
 
     it 'does not configure numvfs by default' do

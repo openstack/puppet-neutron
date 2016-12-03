@@ -576,7 +576,7 @@ deprecated. Please use neutron::default_transport_url instead.")
     }
   }
 
-  if $rpc_backend in [$::os_service_default, 'neutron.openstack.common.rpc.impl_kombu', 'rabbit'] {
+  if $rpc_backend in [$::os_service_default, 'rabbit'] {
     if is_service_default($default_transport_url) and is_service_default($rabbit_password) {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }

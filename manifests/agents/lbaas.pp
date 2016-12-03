@@ -87,8 +87,8 @@ class neutron::agents::lbaas (
     purge => $purge_config,
   }
 
-  # The LBaaS agent loads both neutron.ini and its own file.
-  # This only lists config specific to the agent.  neutron.ini supplies
+  # The LBaaS agent loads both neutron.conf and its own file.
+  # This only lists config specific to the agent.  neutron.conf supplies
   # the rest.
   neutron_lbaas_agent_config {
     'DEFAULT/debug':              value => $debug;

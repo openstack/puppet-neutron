@@ -94,8 +94,8 @@ class neutron::agents::vpnaas (
     purge => $purge_config,
   }
 
-  # The VPNaaS agent loads both neutron.ini and its own file.
-  # This only lists config specific to the agent.  neutron.ini supplies
+  # The VPNaaS agent loads both neutron.conf and its own file.
+  # This only lists config specific to the agent.  neutron.conf supplies
   # the rest.
   neutron_vpnaas_agent_config {
     'vpnagent/vpn_device_driver':        value => $vpn_device_driver;

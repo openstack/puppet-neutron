@@ -105,16 +105,6 @@ class neutron::agents::dhcp (
   include ::neutron::deps
   include ::neutron::params
 
-  case $dhcp_driver {
-    /\.Dnsmasq/: {
-      Package[$::neutron::params::dnsmasq_packages] -> Package<| title == 'neutron-dhcp-agent' |>
-      ensure_packages($::neutron::params::dnsmasq_packages)
-    }
-    default: {
-      fail("Unsupported dhcp_driver ${dhcp_driver}")
-    }
-  }
-
   if (! ($enable_isolated_metadata or $enable_force_metadata)) and $enable_metadata_network {
     fail('enable_metadata_network to true requires enable_isolated_metadata or enable_force_metadata also enabled.')
   } else {

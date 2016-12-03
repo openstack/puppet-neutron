@@ -36,8 +36,6 @@ describe 'neutron::agents::dhcp' do
 
     it { is_expected.to contain_class('neutron::params') }
 
-    it_configures 'dnsmasq dhcp_driver'
-
     it 'configures dhcp_agent.ini' do
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/state_path').with_value(p[:state_path]);
@@ -176,24 +174,6 @@ describe 'neutron::agents::dhcp' do
     end
   end
 
-  shared_examples_for 'dnsmasq dhcp_driver' do
-    it 'installs dnsmasq packages' do
-      if platform_params.has_key?(:dhcp_agent_package)
-        is_expected.to contain_package(platform_params[:dnsmasq_base_package]).with_before(['Package[neutron-dhcp-agent]'])
-        is_expected.to contain_package(platform_params[:dnsmasq_utils_package]).with_before(['Package[neutron-dhcp-agent]'])
-      end
-      is_expected.to contain_package(platform_params[:dnsmasq_base_package]).with(
-        :ensure => 'present',
-        :name   => platform_params[:dnsmasq_base_package]
-      )
-      is_expected.to contain_package(platform_params[:dnsmasq_utils_package]).with(
-        :ensure => 'present',
-        :name   => platform_params[:dnsmasq_utils_package]
-      )
-    end
-  end
-
-
   context 'on Debian platforms' do
     let :facts do
       @default_facts.merge(test_facts.merge({
@@ -202,9 +182,7 @@ describe 'neutron::agents::dhcp' do
     end
 
     let :platform_params do
-      { :dnsmasq_base_package  => 'dnsmasq-base',
-        :dnsmasq_utils_package => 'dnsmasq-utils',
-        :dhcp_agent_package    => 'neutron-dhcp-agent',
+      { :dhcp_agent_package    => 'neutron-dhcp-agent',
         :dhcp_agent_service    => 'neutron-dhcp-agent' }
     end
 
@@ -225,9 +203,7 @@ describe 'neutron::agents::dhcp' do
     end
 
     let :platform_params do
-      { :dnsmasq_base_package  => 'dnsmasq',
-        :dnsmasq_utils_package => 'dnsmasq-utils',
-        :dhcp_agent_service    => 'neutron-dhcp-agent' }
+      { :dhcp_agent_service    => 'neutron-dhcp-agent' }
     end
 
     it_configures 'neutron dhcp agent'

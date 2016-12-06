@@ -81,7 +81,7 @@
 #
 # [*firewall_driver*]
 #   (optional) Firewall driver for realizing neutron security group function.
-#   Defaults to 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'.
+#   Defaults to 'iptables_hybrid'.
 #
 # [*enable_distributed_routing*]
 #   (optional) Set to True on L2 agents to enable support
@@ -165,7 +165,7 @@ class neutron::agents::ml2::ovs (
   $polling_interval           = $::os_service_default,
   $l2_population              = $::os_service_default,
   $arp_responder              = $::os_service_default,
-  $firewall_driver            = 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
+  $firewall_driver            = 'iptables_hybrid',
   $enable_distributed_routing = $::os_service_default,
   $drop_flows_on_start        = false,
   $manage_vswitch             = true,

@@ -15,7 +15,7 @@ describe 'neutron::agents::ml2::ovs' do
       :tunnel_types               => [],
       :tunnel_bridge              => 'br-tun',
       :drop_flows_on_start        => false,
-      :firewall_driver            => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
+      :firewall_driver            => 'iptables_hybrid',
       :manage_vswitch             => true,
       :purge_config               => false,
       :enable_dpdk                => false,

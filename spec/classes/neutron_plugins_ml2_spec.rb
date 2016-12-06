@@ -106,12 +106,12 @@ describe 'neutron::plugins::ml2' do
       before :each do
         params.merge!(
           :enable_security_group => true,
-          :firewall_driver       => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver',
+          :firewall_driver       => 'iptables_hybrid',
         )
       end
       it 'configures enable_security_group and firewall_driver options' do
         is_expected.to contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('true')
-        is_expected.to contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver')
+        is_expected.to contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('iptables_hybrid')
       end
     end
 

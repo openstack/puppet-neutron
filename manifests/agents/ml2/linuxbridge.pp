@@ -56,7 +56,7 @@
 #
 # [*firewall_driver*]
 #   (optional) Firewall driver for realizing neutron security group function.
-#   Defaults to 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'.
+#   Defaults to 'iptables'.
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -75,7 +75,7 @@ class neutron::agents::ml2::linuxbridge (
   $polling_interval = $::os_service_default,
   $l2_population    = $::os_service_default,
   $physical_interface_mappings = [],
-  $firewall_driver  = 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver',
+  $firewall_driver  = 'iptables',
   $purge_config     = false,
 ) {
 

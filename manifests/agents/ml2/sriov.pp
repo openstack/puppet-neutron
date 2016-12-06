@@ -95,7 +95,7 @@ class neutron::agents::ml2::sriov (
     'agent/extensions':                   value => join(any2array($extensions), ',');
     # As of now security groups are not supported for SR-IOV ports.
     # It is required to disable Firewall driver in the SR-IOV agent config.
-    'securitygroup/firewall_driver':      value => 'neutron.agent.firewall.NoopFirewallDriver';
+    'securitygroup/firewall_driver':      value => 'noop';
   }
 
   if !is_service_default($number_of_vfs) and !empty($number_of_vfs) {

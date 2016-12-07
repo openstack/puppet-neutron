@@ -129,8 +129,8 @@ class neutron::agents::dhcp (
     purge => $purge_config,
   }
 
-  # The DHCP agent loads both neutron.ini and its own file.
-  # This only lists config specific to the agent.  neutron.ini supplies
+  # The DHCP agent loads both neutron.conf and its own file.
+  # This only lists config specific to the agent.  neutron.conf supplies
   # the rest.
   neutron_dhcp_agent_config {
     'DEFAULT/debug':                  value => $debug;

@@ -73,8 +73,8 @@ class neutron::agents::metering (
     purge => $purge_config,
   }
 
-  # The metering agent loads both neutron.ini and its own file.
-  # This only lists config specific to the agent.  neutron.ini supplies
+  # The metering agent loads both neutron.conf and its own file.
+  # This only lists config specific to the agent.  neutron.conf supplies
   # the rest.
   neutron_metering_agent_config {
     'DEFAULT/debug':              value => $debug;

@@ -15,6 +15,8 @@ class neutron::params {
   $midonet_server_package      = 'python-networking-midonet'
   $midonet_config_file         = '/etc/neutron/plugins/midonet/midonet.ini'
   $ovn_plugin_package          = 'python-networking-ovn'
+  $vpp_plugin_package          = 'python-networking-vpp'
+  $vpp_agent_service           = 'neutron-vpp-agent'
   $plumgrid_plugin_package     = 'networking-plumgrid'
   $plumgrid_pythonlib_package  = 'plumgrid-pythonlib'
   $plumgrid_config_file        = '/etc/neutron/plugins/plumgrid/plumgrid.ini'

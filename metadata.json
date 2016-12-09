@@ -1,6 +1,6 @@
 {
   "name": "openstack-neutron",
-  "version": "10.0.0",
+  "version": "10.1.0",
   "author": "OpenStack Contributors",
   "summary": "Puppet module for OpenStack Neutron",
   "license": "Apache-2.0",
@@ -53,11 +53,11 @@
     },
     {
       "name": "openstack/keystone",
-      "version_requirement": ">=10.0.0 <11.0.0"
+      "version_requirement": ">=10.1.0 <11.0.0"
     },
     {
       "name": "openstack/nova",
-      "version_requirement": ">=10.0.0 <11.0.0"
+      "version_requirement": ">=10.1.0 <11.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -65,7 +65,7 @@
     },
     {
       "name": "openstack/vswitch",
-      "version_requirement": ">=6.0.0 <7.0.0"
+      "version_requirement": ">=6.1.0 <7.0.0"
     },
     {
       "name": "duritong/sysctl",
@@ -73,11 +73,11 @@
     },
     {
       "name": "openstack/openstacklib",
-      "version_requirement": ">=10.0.0 <11.0.0"
+      "version_requirement": ">=10.1.0 <11.0.0"
     },
     {
       "name": "openstack/oslo",
-      "version_requirement": ">=10.0.0 <11.0.0"
+      "version_requirement": ">=10.1.0 <11.0.0"
     }
   ]
 }

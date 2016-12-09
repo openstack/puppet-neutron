@@ -105,11 +105,11 @@ The `neutron_config` provider is a children of the ini_setting provider. It allo
 
 ```puppet
 neutron_config { 'DEFAULT/core_plugin' :
-  value => openvswitch,
+  value => ml2,
 }
 ```
 
-This will write `core_plugin=openvswitch` in the `[DEFAULT]` section.
+This will write `core_plugin=ml2` in the `[DEFAULT]` section.
 
 ##### name
 

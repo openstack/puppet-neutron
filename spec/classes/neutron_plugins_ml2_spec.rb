@@ -25,7 +25,7 @@ describe 'neutron::plugins::ml2' do
   let :pre_condition do
     "class { 'neutron':
       rabbit_password => 'passw0rd',
-      core_plugin     => 'neutron.plugins.ml2.plugin.Ml2Plugin' }"
+      core_plugin     => 'ml2' }"
   end
 
   let :default_params do
@@ -61,7 +61,7 @@ describe 'neutron::plugins::ml2' do
     it { is_expected.to contain_class('neutron::params') }
 
     it 'configures neutron.conf' do
-        is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('neutron.plugins.ml2.plugin.Ml2Plugin')
+        is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('ml2')
     end
 
     it 'passes purge to resource' do

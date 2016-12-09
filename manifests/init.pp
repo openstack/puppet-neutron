@@ -27,14 +27,14 @@
 #
 # [*core_plugin*]
 #   (optional) Neutron plugin provider
-#   Defaults to openvswitch
-#   Could be bigswitch, brocade, cisco, embrane, hyperv, linuxbridge, midonet,
-#   ml2, mlnx, nec, nicira, plumgrid, ryu, nuage, opencontrail (full path)
+#   Defaults to ml2
+#   Could be bigswitch, brocade, cisco, embrane, hyperv, midonet,
+#   ml2, mlnx, nec, nicira, plumgrid, ryu, nuage, opencontrail
 #
-#   Example for opencontrail:
+#   Example for nuage:
 #
 #     class {'neutron' :
-#       core_plugin => 'neutron.plugins.opencontrail.contrail_plugin:NeutronPluginContrailCoreV2'
+#       core_plugin => 'nuage'
 #     }
 #
 # [*service_plugins*]
@@ -381,7 +381,7 @@ class neutron (
   $debug                                = undef,
   $bind_host                            = $::os_service_default,
   $bind_port                            = $::os_service_default,
-  $core_plugin                          = 'openvswitch',
+  $core_plugin                          = 'ml2',
   $service_plugins                      = $::os_service_default,
   $auth_strategy                        = 'keystone',
   $base_mac                             = $::os_service_default,

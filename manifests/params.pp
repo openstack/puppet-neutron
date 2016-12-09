@@ -48,7 +48,6 @@ class neutron::params {
     $cisco_server_package       = 'openstack-neutron-cisco'
     $nvp_server_package         = 'openstack-neutron-nicira'
     $dhcp_agent_package         = false
-    $dnsmasq_packages           = ['dnsmasq', 'dnsmasq-utils']
     $lbaasv2_agent_package      = 'openstack-neutron-lbaas'
     $metering_agent_package     = 'openstack-neutron-metering-agent'
     $vpnaas_agent_package       = 'openstack-neutron-vpnaas'
@@ -87,7 +86,6 @@ class neutron::params {
     $openswan_package           = 'openswan'
     $libreswan_package          = false
     $metadata_agent_package     = 'neutron-metadata-agent'
-    $dnsmasq_packages           = ['dnsmasq-base', 'dnsmasq-utils']
     $l3_agent_package           = 'neutron-l3-agent'
     $fwaas_package              = 'python-neutron-fwaas'
   } else {

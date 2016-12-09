@@ -98,7 +98,6 @@ describe 'neutron::agents::ml2::linuxbridge' do
 
       context 'when providing all parameters' do
         it 'configures ml2_conf.ini' do
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/enable_vxlan').with_value(true)
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/local_ip').with_value(params[:local_ip])
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/ttl').with_value('<SERVICE DEFAULT>')
@@ -119,7 +118,6 @@ describe 'neutron::agents::ml2::linuxbridge' do
         end
 
         it 'configures ml2_conf.ini' do
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/enable_vxlan').with_value(true)
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/local_ip').with_value(params[:local_ip])
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value(params[:vxlan_group])
           is_expected.to contain_neutron_agent_linuxbridge('vxlan/ttl').with_value(params[:vxlan_ttl])

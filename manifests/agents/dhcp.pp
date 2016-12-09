@@ -30,7 +30,7 @@
 #   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*dhcp_driver*]
-#   (optional) Defaults to 'neutron.agent.linux.dhcp.Dnsmasq'.
+#   (optional) Defaults to $::os_service_default.
 #
 # [*root_helper*]
 #   (optional) Defaults to 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf'.
@@ -88,7 +88,7 @@ class neutron::agents::dhcp (
   $state_path               = '/var/lib/neutron',
   $resync_interval          = 30,
   $interface_driver         = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_driver              = 'neutron.agent.linux.dhcp.Dnsmasq',
+  $dhcp_driver              = $::os_service_default,
   $root_helper              = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $dnsmasq_config_file      = $::os_service_default,
   $dnsmasq_dns_servers      = $::os_service_default,

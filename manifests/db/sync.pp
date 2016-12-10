@@ -5,13 +5,13 @@
 #
 # [*extra_params*]
 #   (optional) String of extra command line parameters to append
-#   to the neutron-db-manage upgrade head command. These will be
+#   to the neutron-db-manage upgrade heads command. These will be
 #   inserted in the command line between 'neutron-db-manage' and
-#   'upgrade head'.
-#   Defaults to '--config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini'
+#   'upgrade heads'.
+#   Defaults to ''
 #
 class neutron::db::sync(
-  $extra_params = '--config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini',
+  $extra_params = '',
 ) {
 
   include ::neutron::deps

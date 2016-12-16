@@ -37,18 +37,6 @@
 #   in the lbaas config.
 #   Defaults to false.
 #
-# DEPRECATED PARAMETERS
-#
-# [*enable_v1*]
-#   (optional) Whether to use lbaas v1 agent or not.
-#   Deprecated. Will be removed in Ocata.
-#   Defaults to undef
-#
-# [*enable_v2*]
-#   (optional) Whether to use lbaas v2 agent or not.
-#   Deprecated. Will be removed in Ocata.
-#   Defaults to undef
-#
 class neutron::agents::lbaas (
   $package_ensure         = present,
   $enabled                = true,
@@ -59,17 +47,10 @@ class neutron::agents::lbaas (
   $user_group             = $::neutron::params::nobody_user_group,
   $manage_haproxy_package = true,
   $purge_config           = false,
-  # DEPRECATED PARAMETERS
-  $enable_v1              = undef,
-  $enable_v2              = undef,
 ) {
 
   include ::neutron::deps
   include ::neutron::params
-
-  if $enable_v1 or $enable_v2 {
-    warning('enable_v1 and enable_v2 parameters are deprecated and will be removed in Ocata.')
-  }
 
   case $device_driver {
     /\.haproxy/: {

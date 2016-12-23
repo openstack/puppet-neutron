@@ -140,6 +140,11 @@
 #   (optional) Enable or not DPDK with OVS
 #   Defaults to false.
 #
+# [*minimize_polling*]
+#  (optional) Minimize polling by monitoring ovsdb for interface
+#  changes. (boolean value)
+#  Defaults to $::os_service_default
+#
 # === Deprecated Parameters
 #
 # [*prevent_arp_spoofing*]
@@ -177,6 +182,7 @@ class neutron::agents::ml2::ovs (
   $ovsdb_interface            = $::os_service_default,
   $purge_config               = false,
   $enable_dpdk                = false,
+  $minimize_polling           = $::os_service_default,
   # DEPRECATED PARAMETERS
   $prevent_arp_spoofing       = $::os_service_default,
   $enable_tunneling           = false,
@@ -279,6 +285,7 @@ class neutron::agents::ml2::ovs (
     'agent/drop_flows_on_start':        value => $drop_flows_on_start;
     'agent/prevent_arp_spoofing':       value => $prevent_arp_spoofing;
     'agent/extensions':                 value => join(any2array($extensions), ',');
+    'agent/minimize_polling':           value => $minimize_polling;
     'ovs/integration_bridge':           value => $integration_bridge;
     'ovs/datapath_type':                value => $datapath_type;
     'ovs/vhostuser_socket_dir':         value => $vhostuser_socket_dir;

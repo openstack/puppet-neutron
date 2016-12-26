@@ -86,6 +86,10 @@ describe 'basic neutron' do
       apply_manifest(pp, :catch_changes => true)
     end
 
+    describe port(9696) do
+      it { is_expected.to be_listening }
+    end
+
     describe 'test Neutron OVS agent bridges' do
       it 'should list OVS bridges' do
         shell("ovs-vsctl show") do |r|

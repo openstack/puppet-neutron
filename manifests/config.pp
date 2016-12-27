@@ -127,6 +127,7 @@ class neutron::config (
   create_resources('neutron_api_config', $api_config)
   create_resources('neutron_l3_agent_config', $l3_agent_config)
   create_resources('neutron_dhcp_agent_config', $dhcp_agent_config)
+  create_resources('neutron_lbaas_agent_config', $lbaas_agent_config)
   create_resources('neutron_metadata_agent_config', $metadata_agent_config)
   create_resources('neutron_metering_agent_config', $metering_agent_config)
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)

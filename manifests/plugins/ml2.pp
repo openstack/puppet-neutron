@@ -133,12 +133,6 @@
 #   are 4 and 6.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*sriov_agent_required*]
-#   (optional) Deprecated.
-#   Defaults to undef.
-#
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
   $extension_drivers         = $::os_service_default,
@@ -158,8 +152,6 @@ class neutron::plugins::ml2 (
   $purge_config              = false,
   $max_header_size           = $::os_service_default,
   $overlay_ip_version        = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $sriov_agent_required      = undef,
 ) {
 
   include ::neutron::deps
@@ -221,10 +213,6 @@ class neutron::plugins::ml2 (
     vni_ranges          => $vni_ranges,
     vxlan_group         => $vxlan_group,
     max_header_size     => $max_header_size
-  }
-
-  if $sriov_agent_required {
-    warning ('sriov_agent_required is deprecated, has no effect and will be removed in a future release.')
   }
 
   neutron::plugins::ml2::mech_driver { $mechanism_drivers:

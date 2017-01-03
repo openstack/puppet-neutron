@@ -10,8 +10,14 @@
 #   'upgrade heads'.
 #   Defaults to ''
 #
+# [*db_sync_timeout*]
+#   (optional) Timeout for the execution of the db_sync
+#   Defaults to 300
+#
+#
 class neutron::db::sync(
-  $extra_params = '',
+  $extra_params    = '',
+  $db_sync_timeout = 300,
 ) {
 
   include ::neutron::deps
@@ -23,6 +29,7 @@ class neutron::db::sync(
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,
+    timeout     => $db_sync_timeout,
     logoutput   => on_failure,
     subscribe   => [
       Anchor['neutron::install::end'],

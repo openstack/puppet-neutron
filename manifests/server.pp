@@ -87,6 +87,12 @@
 #   report_interval is a config for neutron agents, set by class neutron
 #   Defaults to: $::os_service_default
 #
+# [*enable_new_agents*]
+#   (optional) Agent starts with admin_state_up=False when enable_new_agents=False. In the
+#   case, user's resources will not be scheduled automatically to the agent until
+#   admin changes admin_state_up to True.
+#   Defaults to: $::os_service_default
+#
 # [*state_path*]
 #   (optional) Deprecated.  Use state_path parameter on base neutron class instead.
 #
@@ -297,6 +303,7 @@ class neutron::server (
   $api_workers                      = $::processorcount,
   $rpc_workers                      = $::processorcount,
   $agent_down_time                  = $::os_service_default,
+  $enable_new_agents                = $::os_service_default,
   $router_scheduler_driver          = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
   $router_distributed               = $::os_service_default,
   $network_scheduler_driver         = $::os_service_default,
@@ -468,6 +475,7 @@ class neutron::server (
     'DEFAULT/api_workers':                      value => $api_workers;
     'DEFAULT/rpc_workers':                      value => $rpc_workers;
     'DEFAULT/agent_down_time':                  value => $agent_down_time;
+    'DEFAULT/enable_new_agents':                value => $enable_new_agents;
     'DEFAULT/router_scheduler_driver':          value => $router_scheduler_driver;
     'DEFAULT/router_distributed':               value => $router_distributed;
     'DEFAULT/allow_automatic_l3agent_failover': value => $allow_automatic_l3agent_failover;

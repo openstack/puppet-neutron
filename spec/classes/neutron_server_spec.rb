@@ -77,6 +77,7 @@ describe 'neutron::server' do
       is_expected.to contain_neutron_config('DEFAULT/api_workers').with_value(facts[:processorcount])
       is_expected.to contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:processorcount])
       is_expected.to contain_neutron_config('DEFAULT/agent_down_time').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('DEFAULT/enable_new_agents').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
       is_expected.to contain_neutron_config('qos/notification_drivers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')

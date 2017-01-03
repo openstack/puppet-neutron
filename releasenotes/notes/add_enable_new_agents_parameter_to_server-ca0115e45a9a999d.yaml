@@ -1,0 +1,3 @@
+---
+features:
+  - Adds the enable_new_agents config option to the neutron server

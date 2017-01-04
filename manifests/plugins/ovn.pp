@@ -14,7 +14,7 @@
 #
 # [*neutron_sync_mode*]
 #   (optional) The synchronization mode of OVN with Neutron DB.
-#   Valid values are - ['log', 'off', 'repair']
+#   Valid values are - 'log', 'off', 'repair'
 #   off - synchronization is off
 #   log - during neutron-server startup check to see if OVN is in sync with
 #         the Neutron database. Log warnings for any inconsistencies found so
@@ -32,7 +32,7 @@
 #
 # [*vif_type*]
 #   (optional) Type of VIF to be used for ports.
-#   Valid values are ['ovs', 'vhostuser']
+#   Valid values are 'ovs','vhostuser'
 #   Defaults to $::os_service_default
 
 class neutron::plugins::ovn(

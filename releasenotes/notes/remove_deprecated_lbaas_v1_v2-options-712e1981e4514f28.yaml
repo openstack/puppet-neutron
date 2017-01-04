@@ -1,0 +1,4 @@
+---
+other:
+  - Removed deprecated neutron::agent::lbaas::enable_v1
+  - Removed deprecated neutron::agent::lbaas::enable_v2

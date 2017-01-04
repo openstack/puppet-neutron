@@ -1,0 +1,5 @@
+---
+features:
+  - Add minimize_polling parameter to ovs ml2 agent class.
+  - Add type and provider to mange rootwrap.conf file mainly
+    to manipulate XenServer connection parameters.

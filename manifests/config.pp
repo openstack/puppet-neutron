@@ -75,9 +75,6 @@
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
-# [*plugin_ovs_config*]
-#   (optional) Manage configuration of ovs_neutron_plugin.ini
-#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #

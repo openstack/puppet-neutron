@@ -30,11 +30,6 @@
 #   (optional) Connection url for the neutron database.
 #   (Defaults to undef)
 #
-# [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left
-#   undefined, tokens will instead be cached in-process.
-#   Defaults to $::os_service_default.
-#
 # [*database_max_retries*]
 #   (optional) Maximum database connection retries during startup.
 #   (Defaults to undef)

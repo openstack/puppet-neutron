@@ -106,6 +106,12 @@ class neutron::plugins::midonet (
     tag    => ['neutron-package', 'openstack'],
     }
 
+  package { 'python-networking-midonet-ext':
+    ensure => $package_ensure,
+    name   => $::neutron::params::midonet_server_package_ext,
+    tag    => ['neutron-package', 'openstack'],
+    }
+
   neutron_plugin_midonet {
     'MIDONET/midonet_uri':  value => "http://${midonet_api_ip}:${midonet_api_port}/midonet-api";
     'MIDONET/username':     value => $keystone_username;
@@ -136,9 +142,10 @@ class neutron::plugins::midonet (
   }
 
   if $sync_db {
-    Package<| title == 'python-networking-midonet' |> ~> Exec['midonet-db-sync']
+    Package<| title == 'python-networking-midonet' |>     ~> Exec['midonet-db-sync']
+    Package<| title == 'python-networking-midonet-ext' |> ~> Exec['midonet-db-sync']
     exec { 'midonet-db-sync':
-      command     => 'neutron-db-manage --subproject networking-midonet upgrade heads',
+      command     => 'neutron-db-manage --subproject networking-midonet upgrade head',
       path        => '/usr/bin',
       subscribe   => [
         Anchor['neutron::install::end'],

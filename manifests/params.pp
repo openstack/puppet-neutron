@@ -124,8 +124,9 @@ class neutron::params {
     $opencontrail_plugin_package = 'neutron-plugin-contrail'
     $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
 
-    $midonet_server_package = 'python-networking-midonet'
-    $midonet_config_file    = '/etc/neutron/plugins/midonet/midonet.ini'
+    $midonet_server_package      = 'python-networking-midonet'
+    $midonet_server_package_ext  = 'python-networking-midonet-ext'
+    $midonet_config_file         = '/etc/neutron/plugins/midonet/midonet.ini'
 
     $ovn_plugin_package = 'python-networking-ovn'
 

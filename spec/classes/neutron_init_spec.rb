@@ -140,7 +140,6 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/auth_strategy').with_value('keystone')
       is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value( params[:core_plugin] )
       is_expected.to contain_neutron_config('DEFAULT/base_mac').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('DEFAULT/mac_generation_retries').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dhcp_lease_duration').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/host').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/dns_domain').with_value('<SERVICE DEFAULT>')

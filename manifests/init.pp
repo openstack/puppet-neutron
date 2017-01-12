@@ -51,10 +51,6 @@
 #   (optional) The MAC address pattern to use.
 #   Defaults to $::os_service_default
 #
-# [*mac_generation_retries*]
-#   (optional) How many times to try to generate a unique mac
-#   Defaults to $::os_service_default
-#
 # [*dhcp_lease_duration*]
 #   (optional) DHCP lease
 #   Defaults to $::os_service_default
@@ -358,6 +354,10 @@
 # [*memcache_servers*]
 #   (optional) This option is deprecated an has no effect.
 #
+# [*mac_generation_retries*]
+#   (optional) How many times to try to generate a unique mac
+#   Defaults to $::os_service_default
+#
 # [*rabbit_password*]
 # [*rabbit_host*]
 # [*rabbit_port*]
@@ -385,7 +385,6 @@ class neutron (
   $service_plugins                      = $::os_service_default,
   $auth_strategy                        = 'keystone',
   $base_mac                             = $::os_service_default,
-  $mac_generation_retries               = $::os_service_default,
   $dhcp_lease_duration                  = $::os_service_default,
   $host                                 = $::os_service_default,
   $dns_domain                           = $::os_service_default,
@@ -453,6 +452,7 @@ class neutron (
   $allow_pagination                     = undef,
   $allow_sorting                        = undef,
   $memcache_servers                     = undef,
+  $mac_generation_retries               = $::os_service_default,
   $rabbit_password                      = $::os_service_default,
   $rabbit_host                          = $::os_service_default,
   $rabbit_hosts                         = $::os_service_default,
@@ -511,6 +511,10 @@ class neutron (
     warning('memcache_servers option is deprecated, has no effect and will be removed after Ocata.')
   }
 
+  if ! is_service_default($mac_generation_retries) {
+    warning('mac_generation_retries option is deprecated, has no effect and will be removed after Ocata.')
+  }
+
   if !is_service_default($rabbit_host) or
     !is_service_default($rabbit_hosts) or
     !is_service_default($rabbit_password) or
@@ -538,7 +542,6 @@ deprecated. Please use neutron::default_transport_url instead.")
     'DEFAULT/auth_strategy':           value => $auth_strategy;
     'DEFAULT/core_plugin':             value => $core_plugin;
     'DEFAULT/base_mac':                value => $base_mac;
-    'DEFAULT/mac_generation_retries':  value => $mac_generation_retries;
     'DEFAULT/dhcp_lease_duration':     value => $dhcp_lease_duration;
     'DEFAULT/host':                    value => $host;
     'DEFAULT/dns_domain':              value => $dns_domain;

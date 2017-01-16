@@ -1,0 +1,4 @@
+---
+deprecations:
+  - mac_generation_retries is deprecated, has no effect and
+    will be removed after Ocata cycle.

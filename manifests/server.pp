@@ -217,10 +217,6 @@
 #   LBaaS agent should be installed from neutron::agents::lbaas.
 #   Defaults to false.
 #
-# [*min_l3_agents_per_router*]
-#   Deprecated. (optional) Minimum number of l3 agents which a HA router will be scheduled on.
-#   Defaults to undef
-#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -263,7 +259,6 @@ class neutron::server (
   $state_path                       = undef,
   $lock_path                        = undef,
   $ensure_lbaas_package             = false,
-  $min_l3_agents_per_router         = undef,
 ) inherits ::neutron::params {
 
   include ::neutron::deps
@@ -331,10 +326,6 @@ class neutron::server (
 
   if $sync_db {
     include ::neutron::db::sync
-  }
-
-  if $min_l3_agents_per_router {
-    warning('min_l3_agents_per_router is deprecated, has no effect and will be removed for the Ocata release.')
   }
 
   neutron_config {

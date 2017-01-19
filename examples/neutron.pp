@@ -18,8 +18,8 @@ class { '::neutron::server':
 
 # Configure nova notifications system
 class { '::neutron::server::notifications':
-  nova_admin_tenant_name => 'admin',
-  nova_admin_password    => 'secrete',
+  tenant_name => 'admin',
+  password    => 'secrete',
 }
 
 # Various agents

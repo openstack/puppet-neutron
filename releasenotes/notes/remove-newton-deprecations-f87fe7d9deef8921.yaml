@@ -1,0 +1,6 @@
+---
+deprecations:
+  - The ``log_facility``, ``allow_sorting``, ``allow_pagination``,
+    ``nova_url``, ``quota_items``, ``prevent_arp_spoofing``,
+    ``advertise_mtu`` and ``nova_admin_*`` options were deprecated in newton
+    (or earlier) and have been removed for Ocata.

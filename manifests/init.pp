@@ -335,22 +335,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*log_facility*]
-#   (optional) Syslog facility to receive log lines
-#   Defaults to undef
-#
-# [*advertise_mtu*]
-#   (optional) VMs will receive DHCP and RA MTU option when the network's preferred MTU is known
-#   Defaults to undef
-#
-# [*allow_sorting*]
-#   (optional) Enable sorting
-#   Defaults to undef
-#
-# [*allow_pagination*]
-#   (optional) Enable pagination
-#   Defaults to undef
-#
 # [*memcache_servers*]
 #   (optional) This option is deprecated an has no effect.
 #
@@ -447,10 +431,6 @@ class neutron (
   $notification_topics                  = $::os_service_default,
   $notification_transport_url           = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $log_facility                         = undef,
-  $advertise_mtu                        = undef,
-  $allow_pagination                     = undef,
-  $allow_sorting                        = undef,
   $memcache_servers                     = undef,
   $mac_generation_retries               = $::os_service_default,
   $rabbit_password                      = $::os_service_default,
@@ -489,22 +469,6 @@ class neutron (
   if ! is_service_default($kombu_missing_consumer_retry_timeout) and ! is_service_default($rpc_response_timeout)
       and ($kombu_missing_consumer_retry_timeout > $rpc_response_timeout) {
     warning('kombu_missing_consumer_retry_timeout should not be longer than rpc_response_timeout')
-  }
-
-  if $log_facility {
-    warning('log_facility is deprecated, has no effect and will be removed after Newton cycle.')
-  }
-
-  if $advertise_mtu {
-    warning('advertise_mtu is deprecated, has no effect and will be removed in Ocata.')
-  }
-
-  if $allow_sorting {
-    warning('allow_sorting is deprecated, has no effect and will be removed in a future release.')
-  }
-
-  if $allow_pagination {
-    warning('allow_pagination is deprecated, has no effect and will be removed in a future release.')
   }
 
   if $memcache_servers {

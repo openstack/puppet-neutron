@@ -147,10 +147,6 @@
 #
 # === Deprecated Parameters
 #
-# [*prevent_arp_spoofing*]
-#   (optional) Enable or not ARP Spoofing Protection
-#   Defaults to $::os_service_default
-#
 # [*enable_tunneling*]
 #   (optional) Enable or not tunneling
 #   Defaults to false
@@ -184,7 +180,6 @@ class neutron::agents::ml2::ovs (
   $enable_dpdk                = false,
   $minimize_polling           = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $prevent_arp_spoofing       = $::os_service_default,
   $enable_tunneling           = false,
 ) {
 
@@ -240,10 +235,6 @@ class neutron::agents::ml2::ovs (
     fail('A value of $ovsdb_interface is incorrect. The allowed values are vsctl and native')
   }
 
-  if ! is_service_default ($prevent_arp_spoofing) {
-    warning('The prevent_arp_spoofing parameter is deprecated and will be removed in Ocata release')
-  }
-
   resources { 'neutron_agent_ovs':
     purge => $purge_config,
   }
@@ -283,7 +274,6 @@ class neutron::agents::ml2::ovs (
     'agent/arp_responder':              value => $arp_responder;
     'agent/enable_distributed_routing': value => $enable_distributed_routing;
     'agent/drop_flows_on_start':        value => $drop_flows_on_start;
-    'agent/prevent_arp_spoofing':       value => $prevent_arp_spoofing;
     'agent/extensions':                 value => join(any2array($extensions), ',');
     'agent/minimize_polling':           value => $minimize_polling;
     'ovs/integration_bridge':           value => $integration_bridge;

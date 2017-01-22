@@ -81,6 +81,10 @@ class neutron::deps {
   Anchor['neutron::service::end'] -> Neutron_router<||>
   Anchor['neutron::service::end'] -> Neutron_subnet<||>
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db<||> -> Anchor['neutron::dbsync::begin']
+
   # Installation or config changes will always restart services.
   Anchor['neutron::install::end'] ~> Anchor['neutron::service::begin']
   Anchor['neutron::config::end']  ~> Anchor['neutron::service::begin']

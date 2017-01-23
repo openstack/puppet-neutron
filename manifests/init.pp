@@ -556,7 +556,7 @@ class neutron (
   oslo::messaging::default { 'neutron_config':
     transport_url        => $default_transport_url,
     rpc_response_timeout => $rpc_response_timeout,
-    control_exchange     => $control_exchange
+    control_exchange     => $control_exchange,
   }
 
   oslo::concurrency { 'neutron_config': lock_path => $lock_path }
@@ -587,7 +587,7 @@ class neutron (
 
 
   if $rpc_backend in [$::os_service_default, 'neutron.openstack.common.rpc.impl_kombu', 'rabbit'] {
-    if is_service_default($rabbit_password) {
+    if is_service_default($default_transport_url) and is_service_default($rabbit_password) {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }
 

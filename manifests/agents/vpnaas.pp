@@ -45,18 +45,12 @@
 #   in the vpnaas config.
 #   Defaults to false.
 #
-# === Deprecated Parameters
-#
-# [*external_network_bridge*]
-#  (optional) Deprecated. Defaults to $::os_service_default
-#
 class neutron::agents::vpnaas (
   $package_ensure              = present,
   $enabled                     = true,
   $manage_service              = true,
   $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $external_network_bridge     = $::os_service_default,
   $ipsec_status_check_interval = $::os_service_default,
   $purge_config                = false,
 ) {
@@ -101,14 +95,6 @@ class neutron::agents::vpnaas (
     'vpnagent/vpn_device_driver':        value => $vpn_device_driver;
     'ipsec/ipsec_status_check_interval': value => $ipsec_status_check_interval;
     'DEFAULT/interface_driver':          value => $interface_driver;
-  }
-
-  if ! is_service_default ($external_network_bridge) {
-    warning('parameter external_network_bridge is deprecated')
-  }
-
-  neutron_vpnaas_agent_config {
-    'DEFAULT/external_network_bridge': value => $external_network_bridge;
   }
 
   if $::neutron::params::vpnaas_agent_package {

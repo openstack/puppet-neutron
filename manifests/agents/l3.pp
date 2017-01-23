@@ -92,12 +92,6 @@
 #   (optional) L3 agent extensions to enable.
 #   Defaults to $::os_service_default
 #
-# === Deprecated Parameters
-#
-# [*external_network_bridge*]
-#   (optional) Deprecated. The name of the external bridge
-#   Defaults to $::os_service_default
-#
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -119,16 +113,10 @@ class neutron::agents::l3 (
   $purge_config                     = false,
   $availability_zone                = $::os_service_default,
   $extensions                       = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $external_network_bridge          = $::os_service_default,
 ) {
 
   include ::neutron::deps
   include ::neutron::params
-
-  if ! is_service_default ($external_network_bridge) {
-    warning('parameter external_network_bridge is deprecated')
-  }
 
   resources { 'neutron_l3_agent_config':
     purge => $purge_config,
@@ -144,7 +132,6 @@ class neutron::agents::l3 (
 
   neutron_l3_agent_config {
     'DEFAULT/debug':                            value => $debug;
-    'DEFAULT/external_network_bridge':          value => $external_network_bridge;
     'DEFAULT/interface_driver':                 value => $interface_driver;
     'DEFAULT/gateway_external_network_id':      value => $gateway_external_network_id;
     'DEFAULT/handle_internal_only_routers':     value => $handle_internal_only_routers;

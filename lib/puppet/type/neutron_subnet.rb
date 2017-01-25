@@ -36,7 +36,7 @@ Puppet::Type.newtype(:neutron_subnet) do
   newproperty(:allocation_pools, :array_matching => :all) do
     desc <<-EOT
     Array of Sub-ranges of cidr available for dynamic allocation to ports.
-    Syntax:["start=IPADDR,end=IPADDR", ...]
+    Syntax: {"start" : "172.20.100.10", "end" : "172.20.100.200" }
     EOT
     def insync?(is)
       is.to_set == should.to_set

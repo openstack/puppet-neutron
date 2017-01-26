@@ -67,9 +67,11 @@ Puppet::Type.type(:neutron_subnet).provide(
 
   def self.parse_allocation_pool(values)
     allocation_pools = []
-    return [] if values.empty?
+    return [] if values.empty? or values == '[]'
     for value in Array(values)
-      allocation_pool = JSON.parse(value.gsub(/\\"/,'"'))
+      allocation_pool = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"')
+                                   .gsub('\'','"').gsub('[', '')
+                                   .gsub(']', ''))
       start_ip = allocation_pool['start']
       end_ip = allocation_pool['end']
       allocation_pools << "start=#{start_ip},end=#{end_ip}"
@@ -79,17 +81,25 @@ Puppet::Type.type(:neutron_subnet).provide(
 
   def self.parse_host_routes(values)
     host_routes = []
-    return [] if values.empty?
+    return [] if values.empty? or values == '[]'
+    # Strip brackets from output, needed after neutronclient >= 6.1.0
+    values = values.gsub('[', '').gsub(']', '')
     for value in Array(values)
-      host_route = JSON.parse(value.gsub(/\\"/,'"'))
+      host_route = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"')
+                              .gsub('\'','"'))
       nexthop = host_route['nexthop']
       destination = host_route['destination']
-      host_routes << "nexthop=#{nexthop},destination=#{destination}"
+      host_routes << "destination=#{destination},nexthop=#{nexthop}"
     end
     return host_routes
   end
 
   def self.parse_dns_nameservers(values)
+    # With neutronclient >= 6.1.0 we need to parse the string a bit
+    if values.is_a? String
+        values = values.gsub('u\'', '').gsub('\'','').gsub('[', '')
+                       .gsub(']', '').gsub(',', '').split(' ')
+    end
     # just enforce that this is actually an array
     return Array(values)
   end

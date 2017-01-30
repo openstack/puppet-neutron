@@ -1,0 +1,10 @@
+---
+prelude: >
+    BGP-based IP VPNs networks are widely used in the industry especially for
+    enterprises. This project aims at supporting inter-connection between
+    L3VPNs and Neutron resources, i.e. Networks, Routers and Ports.
+features:
+  - Add support for BGPVPN Neutron service plugin
+  - Add new type for BGPVPN Service config
+  - Add new provider for BGPVPN Service config
+  - Add spec and unit tests

@@ -101,12 +101,6 @@
 #   (optional) Ensure state for package.
 #   Defaults to 'present'.
 #
-# [*supported_pci_vendor_devs*]
-#   (optional) Supported PCI vendor devices, defined by
-#   vendor_id:product_id according to the PCI ID
-#   Repository. Should be an array of devices.
-#   Defaults to ['15b3:1004', '8086:10ca'] (Intel & Mellanox SR-IOV capable NICs)
-#
 # [*physical_network_mtus*]
 #   (optional) For L2 mechanism drivers, per-physical network MTU setting.
 #   Should be an array with 'physnetX1:9000'.
@@ -133,6 +127,13 @@
 #   are 4 and 6.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+# [*supported_pci_vendor_devs*]
+#   (optional) Supported PCI vendor devices, defined by
+#   vendor_id:product_id according to the PCI ID
+#   Repository. Should be an array of devices.
+#   Defaults to undef
+#
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
   $extension_drivers         = $::os_service_default,
@@ -146,12 +147,13 @@ class neutron::plugins::ml2 (
   $enable_security_group     = $::os_service_default,
   $firewall_driver           = $::os_service_default,
   $package_ensure            = 'present',
-  $supported_pci_vendor_devs = ['15b3:1004', '8086:10ca'],
   $physical_network_mtus     = $::os_service_default,
   $path_mtu                  = 0,
   $purge_config              = false,
   $max_header_size           = $::os_service_default,
   $overlay_ip_version        = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $supported_pci_vendor_devs = undef,
 ) {
 
   include ::neutron::deps
@@ -163,6 +165,10 @@ class neutron::plugins::ml2 (
 
   if !is_service_default($enable_security_group) and $enable_security_group and is_service_default($firewall_driver) {
     warning('Security groups will not work without properly set firewall_driver')
+  }
+
+  if $supported_pci_vendor_devs {
+    warning ('supported_pci_vendor_devs is deprecated, has no effect and will be removed in a future release.')
   }
 
   if !is_service_default($overlay_ip_version) and !($overlay_ip_version in [4, 6]) {
@@ -213,10 +219,6 @@ class neutron::plugins::ml2 (
     vni_ranges          => $vni_ranges,
     vxlan_group         => $vxlan_group,
     max_header_size     => $max_header_size
-  }
-
-  neutron::plugins::ml2::mech_driver { $mechanism_drivers:
-    supported_pci_vendor_devs => $supported_pci_vendor_devs,
   }
 
   neutron_plugin_ml2 {

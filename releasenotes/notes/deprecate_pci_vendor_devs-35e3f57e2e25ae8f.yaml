@@ -1,0 +1,4 @@
+---
+deprecations:
+  - Parameter 'supported_pci_vendor_devs' of the class neutron::plugins::ml2
+    has been deprecated, as this configuration is removed in neutron in Ocata.

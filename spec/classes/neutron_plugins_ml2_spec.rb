@@ -287,17 +287,6 @@ describe 'neutron::plugins::ml2' do
       end
     end
 
-    context 'when running sriov mechanism driver' do
-      before :each do
-        params.merge!(
-          :mechanism_drivers    => ['openvswitch', 'sriovnicswitch'],
-        )
-      end
-      it 'configures sriov mechanism driver' do
-        is_expected.to contain_neutron_plugin_sriov('ml2_sriov/supported_pci_vendor_devs').with_value(['15b3:1004,8086:10ca'])
-      end
-    end
-
     context 'on Ubuntu operating systems' do
       before do
         facts.merge!({:operatingsystem => 'Ubuntu'})

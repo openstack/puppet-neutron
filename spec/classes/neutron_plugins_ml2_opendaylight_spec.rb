@@ -11,11 +11,13 @@ describe 'neutron::plugins::ml2::opendaylight' do
 
   let :default_params do
     {
-      :package_ensure   => 'present',
-      :odl_username     => '<SERVICE DEFAULT>',
-      :odl_password     => '<SERVICE DEFAULT>',
-      :odl_url          => '<SERVICE DEFAULT>',
-      :ovsdb_connection => 'tcp:127.0.0.1:6639'
+      :package_ensure          => 'present',
+      :odl_username            => '<SERVICE DEFAULT>',
+      :odl_password            => '<SERVICE DEFAULT>',
+      :odl_url                 => '<SERVICE DEFAULT>',
+      :ovsdb_connection        => 'tcp:127.0.0.1:6639',
+      :port_binding_controller => '<SERVICE DEFAULT>',
+      :odl_hostconf_uri        => '<SERVICE DEFAULT>'
     }
   end
 
@@ -48,6 +50,8 @@ describe 'neutron::plugins::ml2::opendaylight' do
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/password').with_value(params[:odl_password])
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/username').with_value(params[:odl_username])
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/url').with_value(params[:odl_url])
+      is_expected.to contain_neutron_plugin_ml2('ml2_odl/port_binding_controller').with_value(params[:port_binding_controller])
+      is_expected.to contain_neutron_plugin_ml2('ml2_odl/odl_hostconf_uri').with_value(params[:odl_hostconf_uri])
     end
 
     it 'configures neutron server settings' do

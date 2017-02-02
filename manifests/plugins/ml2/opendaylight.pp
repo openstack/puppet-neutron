@@ -29,12 +29,22 @@
 # (optional) The URI used to connect to the local OVSDB server
 # Defaults to 'tcp:127.0.0.1:6639'
 #
+# [*port_binding_controller*]
+# (optional) Name of the controller to be used for port binding.
+# Defaults to $::os_service_default
+#
+# [*odl_hostconf_uri*]
+# (optional) Path for ODL host configuration REST interface.
+# Defaults to $::os_service_default
+#
 class neutron::plugins::ml2::opendaylight (
-  $package_ensure     = 'present',
-  $odl_username       = $::os_service_default,
-  $odl_password       = $::os_service_default,
-  $odl_url            = $::os_service_default,
-  $ovsdb_connection   = 'tcp:127.0.0.1:6639',
+  $package_ensure          = 'present',
+  $odl_username            = $::os_service_default,
+  $odl_password            = $::os_service_default,
+  $odl_url                 = $::os_service_default,
+  $ovsdb_connection        = 'tcp:127.0.0.1:6639',
+  $port_binding_controller = $::os_service_default,
+  $odl_hostconf_uri        = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -48,9 +58,11 @@ class neutron::plugins::ml2::opendaylight (
   )
 
   neutron_plugin_ml2 {
-    'ml2_odl/username': value => $odl_username;
-    'ml2_odl/password': value => $odl_password;
-    'ml2_odl/url':      value => $odl_url;
+    'ml2_odl/username':                value => $odl_username;
+    'ml2_odl/password':                value => $odl_password;
+    'ml2_odl/url':                     value => $odl_url;
+    'ml2_odl/port_binding_controller': value => $port_binding_controller;
+    'ml2_odl/odl_hostconf_uri':        value => $odl_hostconf_uri;
   }
 
   neutron_config {

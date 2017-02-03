@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The MidoNet API does not exist anymore. Starting in the MidoNet 5.0 release
+    the API is now called Cluster. Hence we are deprecating the "midonet_api_*"
+    parameter in favor of "midonet_cluster_*".

@@ -16,6 +16,9 @@
 #
 # === Parameters
 #
+# [*password*]
+#   (required) Password for connection to nova in admin context.
+#
 # [*notify_nova_on_port_status_changes*]
 #   (optional) Send notification to nova when port status is active.
 #   Defaults to true
@@ -38,10 +41,6 @@
 # [*username*]
 #   (optional) Username for connection to nova in admin context
 #   Defaults to 'nova'
-#
-# [*password*]
-#   Password for connection to nova in admin context.
-#   Either password or nova_admin_password is required
 #
 # [*tenant_id*]
 #   (optional) The UUID of the admin nova tenant. If provided this takes
@@ -76,55 +75,19 @@
 #
 # === Deprecated Parameters
 #
-# [*nova_admin_auth_url*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   Authorization URL for connection to nova in admin context.
-#   Defaults to 'http://127.0.0.1:35357/v2.0'
-#
-# [*nova_admin_username*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   (optional) Username for connection to nova in admin context
-#   Defaults to 'nova'
-#
-# [*nova_admin_tenant_name*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   The name of the admin nova tenant
-#   Defaults to 'services'
-#
-# [*nova_admin_tenant_id*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   The UUID of the admin nova tenant. If provided this takes precedence
-#   over nova_admin_tenant_name.
-#
-# [*nova_admin_password*]
-#   Deprecated. Auth plugins based authentication should be used instead
-#   Password for connection to nova in admin context.
-#   Either nova_admin_password or password is required
-#
-# [*nova_region_name*]
-#   Deprecated. region_name parameter should be used instead
-#   Name of nova region to use. Useful if keystone manages more than
-#   one region.
-#   Defaults to $::os_service_default
-#
 # [*auth_plugin*]
 #   Deprecated. auth_type should be used instead
 #   An authentication plugin to use with an OpenStack Identity server.
 #   Defaults to $::os_service_default
 #
-# [*nova_url*]
-#   Deprecated URL for connection to nova (Only supports one nova region
-#   currently).
-#   Defaults to $::os_service_default
-#
 
 class neutron::server::notifications (
+  $password,
   $notify_nova_on_port_status_changes = true,
   $notify_nova_on_port_data_changes   = true,
   $send_events_interval               = $::os_service_default,
   $auth_type                          = 'password',
   $username                           = 'nova',
-  $password                           = false,
   $tenant_id                          = $::os_service_default,
   $tenant_name                        = 'services',
   $project_domain_id                  = 'default',
@@ -133,14 +96,7 @@ class neutron::server::notifications (
   $auth_url                           = 'http://127.0.0.1:35357',
   $region_name                        = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $nova_admin_auth_url                = 'http://127.0.0.1:35357/v2.0',
-  $nova_admin_username                = 'nova',
-  $nova_admin_tenant_name             = 'services',
-  $nova_admin_tenant_id               = $::os_service_default,
-  $nova_admin_password                = false,
-  $nova_region_name                   = $::os_service_default,
   $auth_plugin                        = $::os_service_default,
-  $nova_url                           = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -148,74 +104,38 @@ class neutron::server::notifications (
   # Depend on the specified keystone_user resource, if it exists.
   Keystone_user <| title == 'nova' |> -> Class[neutron::server::notifications]
 
-  if ! $nova_admin_password and ! $password {
-    fail('nova_admin_password or password must be set.')
-  }
-
-  if $nova_admin_password and is_service_default($nova_admin_tenant_id) and (! $nova_admin_tenant_name) {
-    fail('You must provide either nova_admin_tenant_name or nova_admin_tenant_id.')
-  }
-
-  if $password and is_service_default($tenant_id) and (! $tenant_name) {
+  if is_service_default($tenant_id) and (! $tenant_name) {
     fail('You must provide either tenant_name or tenant_id.')
   }
 
-  if ! is_service_default ($nova_url) {
-    warning('nova_url is deprecated and will be removed after Newton cycle.')
+  neutron_config {
+    'nova/auth_url':          value => $auth_url;
+    'nova/username':          value => $username;
+    'nova/password':          value => $password, secret => true;
+    'nova/project_domain_id': value => $project_domain_id;
+    'nova/project_name':      value => $project_name;
+    'nova/user_domain_id':    value => $user_domain_id;
+    'nova/region_name':       value => $region_name;
   }
-
-  if $nova_admin_password {
-    warning('nova_admin-* and nova_region_name parameters are deprecated and will be removed in a future release')
+  if ! is_service_default ($auth_plugin) and ($auth_plugin) {
+    warning('auth_plugin parameter is deprecated, auth_type should be used instead')
     neutron_config {
-      'DEFAULT/nova_admin_auth_url': value => $nova_admin_auth_url;
-      'DEFAULT/nova_admin_username': value => $nova_admin_username;
-      'DEFAULT/nova_admin_password': value => $nova_admin_password, secret => true;
-      'DEFAULT/nova_region_name':    value => $nova_region_name;
+      'nova/auth_plugin': value => $auth_plugin;
     }
-
-    if ! is_service_default ($nova_admin_tenant_id) {
-      if $nova_admin_tenant_id {
-        neutron_config {
-          'DEFAULT/nova_admin_tenant_id': value => $nova_admin_tenant_id;
-        }
-      }
-    } else {
-      neutron_config {
-        'DEFAULT/nova_admin_tenant_name': value => $nova_admin_tenant_name;
-      }
+  } else {
+    neutron_config {
+      'nova/auth_type': value => $auth_type;
     }
   }
-
-  if $password {
+  if ! is_service_default ($tenant_id) {
+    if $tenant_id {
+      neutron_config {
+        'nova/tenant_id': value => $tenant_id;
+      }
+    }
+  } else {
     neutron_config {
-      'nova/auth_url':          value => $auth_url;
-      'nova/username':          value => $username;
-      'nova/password':          value => $password, secret => true;
-      'nova/project_domain_id': value => $project_domain_id;
-      'nova/project_name':      value => $project_name;
-      'nova/user_domain_id':    value => $user_domain_id;
-      'nova/region_name':       value => $region_name;
-    }
-    if ! is_service_default ($auth_plugin) and ($auth_plugin) {
-      warning('auth_plugin parameter is deprecated, auth_type should be used instead')
-      neutron_config {
-        'nova/auth_plugin': value => $auth_plugin;
-      }
-    } else {
-      neutron_config {
-        'nova/auth_type': value => $auth_type;
-      }
-    }
-    if ! is_service_default ($tenant_id) {
-      if $tenant_id {
-        neutron_config {
-          'nova/tenant_id': value => $tenant_id;
-        }
-      }
-    } else {
-      neutron_config {
-        'nova/tenant_name': value => $tenant_name;
-      }
+      'nova/tenant_name': value => $tenant_name;
     }
   }
 
@@ -223,6 +143,5 @@ class neutron::server::notifications (
     'DEFAULT/notify_nova_on_port_status_changes': value => $notify_nova_on_port_status_changes;
     'DEFAULT/notify_nova_on_port_data_changes':   value => $notify_nova_on_port_data_changes;
     'DEFAULT/send_events_interval':               value => $send_events_interval;
-    'DEFAULT/nova_url':                           value => $nova_url;
   }
 }

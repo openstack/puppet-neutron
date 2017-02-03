@@ -97,12 +97,6 @@
 #   (Optional) Enables or disables fatal status of deprecations (boolean value).
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*log_facility*]
-#   (optional) Syslog facility to receive log lines
-#   Defaults to undef
-#
 class neutron::logging (
   $debug                         = $::os_service_default,
   $use_syslog                    = $::os_service_default,
@@ -123,8 +117,6 @@ class neutron::logging (
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $fatal_deprecations            = $::os_service_default,
-  # Deprecated
-  $log_facility                  = undef,
 ) {
 
   include ::neutron::deps
@@ -134,10 +126,6 @@ class neutron::logging (
   $use_stderr_real = pick($::neutron::use_stderr,$use_stderr)
   $log_file_real = pick($::neutron::log_file,$log_file)
   $log_dir_real = pick($::neutron::log_dir,$log_dir)
-
-  if $log_facility {
-    warning('log_facility is deprecated, has no effect and will be removed after Newton cycle. Please use syslog_log_facility instead.')
-  }
 
   oslo::log { 'neutron_config':
     debug                         => $debug_real,

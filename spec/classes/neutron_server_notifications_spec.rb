@@ -16,24 +16,19 @@
 require 'spec_helper'
 
 describe 'neutron::server::notifications' do
-    let :pre_condition do
-        'define keystone_user() {}'
-    end
 
-    let :default_params do
+    let :params do
         {
             :notify_nova_on_port_status_changes => true,
             :notify_nova_on_port_data_changes   => true,
             :auth_type                          => 'password',
             :username                           => 'nova',
+            :password                           => 'secrete',
             :tenant_name                        => 'services',
             :project_domain_id                  => 'default',
             :project_name                       => 'services',
             :user_domain_id                     => 'default',
             :auth_url                           => 'http://127.0.0.1:35357',
-            :nova_admin_auth_url                => 'http://127.0.0.1:35357/v2.0',
-            :nova_admin_username                => 'nova',
-            :nova_admin_tenant_name             => 'services',
         }
     end
 
@@ -43,16 +38,7 @@ describe 'neutron::server::notifications' do
       }
     end
 
-    let :params do
-        {
-            :password  => 'secrete'
-        }
-    end
-
     shared_examples_for 'neutron server notifications' do
-        let :p do
-            default_params.merge(params)
-        end
 
         it 'configure neutron.conf' do
             is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_status_changes').with_value(true)
@@ -65,12 +51,6 @@ describe 'neutron::server::notifications' do
             is_expected.to contain_neutron_config('nova/password').with_secret( true )
             is_expected.to contain_neutron_config('nova/tenant_name').with_value('services')
             is_expected.to contain_neutron_config('nova/region_name').with_value('<SERVICE DEFAULT>')
-            is_expected.not_to contain_neutron_config('DEFAULT/nova_region_name')
-            is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_auth_url')
-            is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_username')
-            is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_password')
-            is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_password')
-            is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_tenant_id')
             is_expected.not_to contain_neutron_config('nova/auth_plugin')
         end
 
@@ -80,7 +60,6 @@ describe 'neutron::server::notifications' do
                     :notify_nova_on_port_status_changes => false,
                     :notify_nova_on_port_data_changes   => false,
                     :send_events_interval               => '10',
-                    :nova_url                           => 'http://nova:8774/v3',
                     :auth_url                           => 'http://keystone:35357/v2.0',
                     :auth_type                          => 'v2password',
                     :username                           => 'joe',
@@ -92,7 +71,6 @@ describe 'neutron::server::notifications' do
                 is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_status_changes').with_value(false)
                 is_expected.to contain_neutron_config('DEFAULT/notify_nova_on_port_data_changes').with_value(false)
                 is_expected.to contain_neutron_config('DEFAULT/send_events_interval').with_value('10')
-                is_expected.to contain_neutron_config('DEFAULT/nova_url').with_value('http://nova:8774/v3')
                 is_expected.to contain_neutron_config('nova/auth_url').with_value('http://keystone:35357/v2.0')
                 is_expected.to contain_neutron_config('nova/auth_type').with_value('v2password')
                 is_expected.to contain_neutron_config('nova/username').with_value('joe')
@@ -100,31 +78,6 @@ describe 'neutron::server::notifications' do
                 is_expected.to contain_neutron_config('nova/password').with_secret( true )
                 is_expected.to contain_neutron_config('nova/region_name').with_value('MyRegion')
                 is_expected.to contain_neutron_config('nova/tenant_id').with_value('UUID2')
-            end
-        end
-
-        context 'when using deprecated parameters' do
-            before :each do
-                params.merge!(
-                    :nova_admin_auth_url  => 'http://keystone:35357/v2.0',
-                    :nova_admin_username  => 'joe',
-                    :nova_admin_password  => 'secrete',
-                    :nova_region_name     => 'MyRegion',
-                    :nova_admin_tenant_id => 'UUID2',
-                    :password             => false
-                )
-            end
-            it 'should configure neutron server with deprecated parameters' do
-                is_expected.to contain_neutron_config('DEFAULT/nova_admin_auth_url').with_value('http://keystone:35357/v2.0')
-                is_expected.to contain_neutron_config('DEFAULT/nova_admin_username').with_value('joe')
-                is_expected.to contain_neutron_config('DEFAULT/nova_admin_password').with_value('secrete')
-                is_expected.to contain_neutron_config('DEFAULT/nova_admin_password').with_secret( true )
-                is_expected.to contain_neutron_config('DEFAULT/nova_region_name').with_value('MyRegion')
-                is_expected.to contain_neutron_config('DEFAULT/nova_admin_tenant_id').with_value('UUID2')
-                is_expected.not_to contain_neutron_config('nova/auth_url')
-                is_expected.not_to contain_neutron_config('nova/username')
-                is_expected.not_to contain_neutron_config('nova/password')
-                is_expected.not_to contain_neutron_config('nova/tenant_id')
             end
         end
 
@@ -140,50 +93,14 @@ describe 'neutron::server::notifications' do
             end
         end
 
-        context 'when no nova_admin_password or password is specified' do
-            before :each do
-                params.merge!({
-                  :nova_admin_password => false,
-                  :password            => false })
-            end
-
-            it_raises 'a Puppet::Error', /nova_admin_password or password must be set./
-        end
-
-        context 'when no nova_admin_tenant_id and nova_admin_tenant_name specified' do
-            before :each do
-                params.merge!({
-                  :nova_admin_tenant_name => false,
-                  :nova_admin_password    => 'secrete',
-                })
-            end
-
-            it_raises 'a Puppet::Error', /You must provide either nova_admin_tenant_name or nova_admin_tenant_id./
-        end
-
         context 'when no tenant_id and tenant_name specified' do
             before :each do
-                params.merge!({
-                  :tenant_name => false,
-                  :password    => 'secrete',
-                })
+                params.merge!({ :tenant_name => false })
             end
 
             it_raises 'a Puppet::Error', /You must provide either tenant_name or tenant_id./
         end
 
-        context 'when providing a nova_tenant_name' do
-            before :each do
-                params.merge!({
-                  :nova_admin_tenant_name => 'services',
-                  :nova_admin_password    => 'secrete',
-                  :password               => false
-                })
-            end
-            it 'should configure nova admin tenant name' do
-              is_expected.to contain_neutron_config('DEFAULT/nova_admin_tenant_name').with_value('services')
-            end
-        end
     end
 
     context 'on Debian platforms' do

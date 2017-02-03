@@ -82,12 +82,6 @@
 #   A negative value means unlimited.
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMATERS
-#
-# [*quota_items*]
-#   (optional) Resource name(s) that are supported in quota features.
-#   Defaults to undef
-#
 class neutron::quota (
   $default_quota             = $::os_service_default,
   $quota_network             = $::os_service_default,
@@ -109,15 +103,9 @@ class neutron::quota (
   $quota_packet_filter       = 100,
   $quota_pool                = $::os_service_default,
   $quota_vip                 = $::os_service_default,
-  #DEPRECATED PAMAMETERS
-  $quota_items               = undef,
 ) {
 
   include ::neutron::deps
-
-  if $quota_items {
-    warning('quota_items is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   neutron_config {
     'quotas/default_quota':             value => $default_quota;

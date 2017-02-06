@@ -54,6 +54,10 @@
 #   Set to 0 will cause cache entries to never expire.
 #   Set to $::os_service_default or false to disable cache.
 #
+# [*metadata_insecure*]
+#   (optional) Allow to perform insecure SSL (https) requests to nova metadata.
+#   Defaults to $::os_service_default
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the metadata config.
@@ -73,6 +77,7 @@ class neutron::agents::metadata (
   $metadata_workers          = $::os_workers,
   $metadata_backlog          = $::os_service_default,
   $metadata_memory_cache_ttl = $::os_service_default,
+  $metadata_insecure         = $::os_service_default,
   $nova_client_cert          = $::os_service_default,
   $nova_client_priv_key      = $::os_service_default,
   $purge_config              = false,
@@ -91,6 +96,7 @@ class neutron::agents::metadata (
     'DEFAULT/nova_metadata_ip':               value => $metadata_ip;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/nova_metadata_protocol':         value => $metadata_protocol;
+    'DEFAULT/nova_metadata_insecure':         value => $metadata_insecure;
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret;
     'DEFAULT/metadata_workers':               value => $metadata_workers;
     'DEFAULT/metadata_backlog':               value => $metadata_backlog;

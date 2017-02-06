@@ -61,6 +61,7 @@ describe 'neutron::agents::metadata' do
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_workers').with(:value => facts[:os_workers])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_insecure').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_proxy_shared_secret').with(:value => params[:shared_secret])
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/cache_url').with(:ensure => 'absent')
     end
@@ -72,6 +73,7 @@ describe 'neutron::agents::metadata' do
         :shared_secret        => '42',
         :nova_client_cert     => '/nova/cert',
         :nova_client_priv_key => '/nova/key',
+        :metadata_insecure    => true,
       }
     end
 
@@ -79,6 +81,7 @@ describe 'neutron::agents::metadata' do
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with_value('/some/cert')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_cert').with_value('/nova/cert')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_priv_key').with_value('/nova/key')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_insecure').with_value(true)
     end
   end
 

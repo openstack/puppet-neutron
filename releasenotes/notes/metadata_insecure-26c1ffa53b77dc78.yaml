@@ -1,0 +1,4 @@
+---
+features:
+  - Add nova_metadata_insecure option, to allow deployments without valid
+    SSL certificates.

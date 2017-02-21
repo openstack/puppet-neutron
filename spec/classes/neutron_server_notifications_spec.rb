@@ -28,8 +28,10 @@ describe 'neutron::server::notifications' do
             :username                           => 'nova',
             :tenant_name                        => 'services',
             :project_domain_id                  => 'default',
+            :project_domain_name                => 'Default',
             :project_name                       => 'services',
             :user_domain_id                     => 'default',
+            :user_domain_name                   => 'Default',
             :auth_url                           => 'http://127.0.0.1:35357',
             :nova_admin_auth_url                => 'http://127.0.0.1:35357/v2.0',
             :nova_admin_username                => 'nova',
@@ -71,6 +73,10 @@ describe 'neutron::server::notifications' do
             is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_password')
             is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_password')
             is_expected.not_to contain_neutron_config('DEFAULT/nova_admin_tenant_id')
+            is_expected.to contain_neutron_config('nova/project_domain_id').with_value('default')
+            is_expected.to contain_neutron_config('nova/project_domain_name').with_value('Default')
+            is_expected.to contain_neutron_config('nova/user_domain_id').with_value('default')
+            is_expected.to contain_neutron_config('nova/user_domain_name').with_value('Default')
             is_expected.not_to contain_neutron_config('nova/auth_plugin')
         end
 
@@ -85,7 +91,11 @@ describe 'neutron::server::notifications' do
                     :auth_type                          => 'v2password',
                     :username                           => 'joe',
                     :region_name                        => 'MyRegion',
-                    :tenant_id                          => 'UUID2'
+                    :tenant_id                          => 'UUID2',
+                    :project_domain_id                  => 'default_1',
+                    :project_domain_name                => 'Default_2',
+                    :user_domain_id                     => 'default_3',
+                    :user_domain_name                   => 'Default_4',
                 )
             end
             it 'should configure neutron server with overrided parameters' do
@@ -100,6 +110,10 @@ describe 'neutron::server::notifications' do
                 is_expected.to contain_neutron_config('nova/password').with_secret( true )
                 is_expected.to contain_neutron_config('nova/region_name').with_value('MyRegion')
                 is_expected.to contain_neutron_config('nova/tenant_id').with_value('UUID2')
+                is_expected.to contain_neutron_config('nova/project_domain_id').with_value('default_1')
+                is_expected.to contain_neutron_config('nova/project_domain_name').with_value('Default_2')
+                is_expected.to contain_neutron_config('nova/user_domain_id').with_value('default_3')
+                is_expected.to contain_neutron_config('nova/user_domain_name').with_value('Default_4')
             end
         end
 

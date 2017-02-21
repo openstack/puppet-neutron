@@ -55,6 +55,10 @@
 #   (optional) Nova project's domain ID
 #   Defaults to 'default'
 #
+# [*project_domain_name*]
+#   (Optional) Name of domain for $project_name
+#   Defaults to 'Default'
+#
 # [*project_name*]
 #   (optional) Nova project's name
 #   Defaults to 'services'
@@ -62,6 +66,10 @@
 # [*user_domain_id*]
 #   (optional) User's domain ID for connection to nova in admin context
 #   Defaults to 'default'
+#
+# [*user_domain_name*]
+#   (Optional) Name of domain for $username
+#   Defaults to 'Default'
 #
 # [*auth_url*]
 #   (optional) Authorization URL for connection to nova in admin context.
@@ -128,8 +136,10 @@ class neutron::server::notifications (
   $tenant_id                          = $::os_service_default,
   $tenant_name                        = 'services',
   $project_domain_id                  = 'default',
+  $project_domain_name                = 'Default',
   $project_name                       = 'services',
   $user_domain_id                     = 'default',
+  $user_domain_name                   = 'Default',
   $auth_url                           = 'http://127.0.0.1:35357',
   $region_name                        = $::os_service_default,
   # DEPRECATED PARAMETERS
@@ -188,13 +198,15 @@ class neutron::server::notifications (
 
   if $password {
     neutron_config {
-      'nova/auth_url':          value => $auth_url;
-      'nova/username':          value => $username;
-      'nova/password':          value => $password, secret => true;
-      'nova/project_domain_id': value => $project_domain_id;
-      'nova/project_name':      value => $project_name;
-      'nova/user_domain_id':    value => $user_domain_id;
-      'nova/region_name':       value => $region_name;
+      'nova/auth_url':            value => $auth_url;
+      'nova/username':            value => $username;
+      'nova/password':            value => $password, secret => true;
+      'nova/project_domain_id':   value => $project_domain_id;
+      'nova/project_domain_name': value => $project_domain_name;
+      'nova/project_name':        value => $project_name;
+      'nova/user_domain_id':      value => $user_domain_id;
+      'nova/user_domain_name':    value => $user_domain_name;
+      'nova/region_name':         value => $region_name;
     }
     if ! is_service_default ($auth_plugin) and ($auth_plugin) {
       warning('auth_plugin parameter is deprecated, auth_type should be used instead')

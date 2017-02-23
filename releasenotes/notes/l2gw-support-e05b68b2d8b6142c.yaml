@@ -1,0 +1,7 @@
+---
+prelude: >
+  L2 Gateway (L2GW) is an API framework for OpenStack that offers bridging
+  two or more networks together to make them look at a single broadcast domain.
+  A typical use case is bridging the virtual with the physical networks
+features:
+  - Add support to deploy l2gw plugin and agent in Neutron.

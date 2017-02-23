@@ -30,6 +30,12 @@
 # [*bgpvpn_service_config*]
 #   (optional) Manage configuration of networking_bgpvpn.conf
 #
+# [*l2gw_agent_config*]
+#   (optional) Manage configuration of l2gateway_agent.ini
+#
+# [*l2gw_service_config*]
+#   (optional) Manage configuration of l2gw_plugin.ini
+#
 # [*l3_agent_config*]
 #   (optional) Manage configuration of l3_agent.ini
 #
@@ -85,6 +91,8 @@ class neutron::config (
   $server_config                 = {},
   $api_config                    = {},
   $bgpvpn_service_config         = {},
+  $l2gw_agent_config             = {},
+  $l2gw_service_config           = {},
   $l3_agent_config               = {},
   $dhcp_agent_config             = {},
   $lbaas_agent_config            = {},
@@ -108,6 +116,8 @@ class neutron::config (
   validate_hash($server_config)
   validate_hash($api_config)
   validate_hash($bgpvpn_service_config)
+  validate_hash($l2gw_agent_config)
+  validate_hash($l2gw_service_config)
   validate_hash($l3_agent_config)
   validate_hash($dhcp_agent_config)
   validate_hash($lbaas_agent_config)
@@ -128,6 +138,7 @@ class neutron::config (
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_config', $api_config)
   create_resources('neutron_bgpvpn_service_config', $bgpvpn_service_config)
+  create_resources('neutron_l2gw_agent_config', $l2gw_agent_config)
   create_resources('neutron_l3_agent_config', $l3_agent_config)
   create_resources('neutron_dhcp_agent_config', $dhcp_agent_config)
   create_resources('neutron_lbaas_agent_config', $lbaas_agent_config)
@@ -143,4 +154,5 @@ class neutron::config (
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
   create_resources('neutron_plugin_nuage', $plugin_nuage_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
+  create_resources('neutron_l2gw_service_config', $l2gw_service_config)
 }

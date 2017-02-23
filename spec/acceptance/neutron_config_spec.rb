@@ -10,6 +10,8 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/lbaas_agent.ini',
                      '/etc/neutron/metadata_agent.ini',
                      '/etc/neutron/metering_agent.ini',
+                     '/etc/neutron/l2gw_plugin.ini',
+                     '/etc/neutron/l2gateway_agent.ini',
                      '/etc/neutron/plugins/cisco/cisco_plugins.ini',
                      '/etc/neutron/plugins/cisco/credentials.ini',
                      '/etc/neutron/plugins/cisco/db_conn.ini',
@@ -43,6 +45,7 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_plugin_linuxbridge <||>
   File <||> -> Neutron_plugin_ml2 <||>
   File <||> -> Neutron_plugin_nvp <||>
+  File <||> -> Neutron_l2gw_service_config <||>
   File <||> -> Neutron_vpnaas_agent_config <||>
   File <||> -> Neutron_plugin_midonet <||>
   File <||> -> Neutron_plugin_opencontrail <||>
@@ -53,6 +56,7 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_plugin_sriov <||>
   File <||> -> Neutron_sriov_agent_config <||>
   File <||> -> Neutron_agent_vpp <||>
+  File <||> -> Neutron_l2gw_agent_config <||>
 
 
   $neutron_directories = ['/etc/neutron',
@@ -73,6 +77,8 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/lbaas_agent.ini',
                      '/etc/neutron/metadata_agent.ini',
                      '/etc/neutron/metering_agent.ini',
+                     '/etc/neutron/l2gw_plugin.ini',
+                     '/etc/neutron/l2gateway_agent.ini',
                      '/etc/neutron/plugins/cisco/cisco_plugins.ini',
                      '/etc/neutron/plugins/cisco/credentials.ini',
                      '/etc/neutron/plugins/cisco/db_conn.ini',
@@ -544,6 +550,41 @@ describe 'basic neutron_config resource' do
     ensure_absent_val => 'toto',
   }
 
+  neutron_l2gw_service_config { 'DEFAULT/thisshouldexist' :
+    value => 'foo',
+  }
+
+  neutron_l2gw_service_config { 'DEFAULT/thisshouldnotexist' :
+    value => '<SERVICE DEFAULT>',
+  }
+
+  neutron_l2gw_service_config { 'DEFAULT/thisshouldexist2' :
+    value             => '<SERVICE DEFAULT>',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_l2gw_service_config { 'DEFAULT/thisshouldnotexist2' :
+    value             => 'toto',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_l2gw_agent_config { 'DEFAULT/thisshouldexist' :
+    value => 'foo',
+  }
+
+  neutron_l2gw_agent_config { 'DEFAULT/thisshouldnotexist' :
+    value => '<SERVICE DEFAULT>',
+  }
+
+  neutron_l2gw_agent_config { 'DEFAULT/thisshouldexist2' :
+    value             => '<SERVICE DEFAULT>',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_l2gw_agent_config { 'DEFAULT/thisshouldnotexist2' :
+    value             => 'toto',
+    ensure_absent_val => 'toto',
+  }
 
   EOS
 
@@ -570,7 +611,9 @@ describe 'basic neutron_config resource' do
                     'neutron_plugin_plumgrid',
                     'neutron_plugin_sriov',
                     'neutron_sriov_agent_config',
-                    'neutron_agent_vpp']
+                    'neutron_agent_vpp',
+                    'neutron_l2gw_service_config',
+                    'neutron_l2gw_agent_config']
 
   pp_resource_names = "  $resource_names = [" + resource_names.collect { |r| "    '#{r}'," }.join("\n") + "   ]\n"
 

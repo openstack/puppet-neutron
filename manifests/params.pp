@@ -30,6 +30,7 @@ class neutron::params {
   $l3_agent_service            = 'neutron-l3-agent'
   $metadata_agent_service      = 'neutron-metadata-agent'
   $bgpvpn_plugin_package       = 'python-networking-bgpvpn'
+  $l2gw_agent_service          = 'neutron-l2gw-agent'
 
   if($::osfamily == 'Redhat') {
     $nobody_user_group          = 'nobody'
@@ -55,6 +56,8 @@ class neutron::params {
     $lbaasv2_agent_package      = 'openstack-neutron-lbaas'
     $metering_agent_package     = 'openstack-neutron-metering-agent'
     $vpnaas_agent_package       = 'openstack-neutron-vpnaas'
+    $l2gw_agent_package         = 'openstack-neutron-l2gw-agent'
+    $l2gw_package               = 'python2-networking-l2gw'
     if $::operatingsystemrelease =~ /^7.*/ or $::operatingsystem == 'Fedora' {
       $openswan_package = 'libreswan'
     } else {
@@ -92,6 +95,8 @@ class neutron::params {
     $metadata_agent_package     = 'neutron-metadata-agent'
     $l3_agent_package           = 'neutron-l3-agent'
     $fwaas_package              = 'python-neutron-fwaas'
+    $l2gw_agent_package         = 'neutron-l2gw-agent'
+    $l2gw_package               = 'python-networking-l2gw'
   } else {
     fail("Unsupported osfamily ${::osfamily}")
   }

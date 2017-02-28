@@ -483,7 +483,6 @@ describe 'neutron' do
     context 'with default parameters' do
       before { params.merge!( :rpc_backend => 'amqp' ) }
 
-      it { is_expected.to contain_neutron_config('DEFAULT/rpc_backend').with_value('amqp') }
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
@@ -514,7 +513,6 @@ describe 'neutron' do
         :amqp_password      => 'password',
       ) }
 
-      it { is_expected.to contain_neutron_config('DEFAULT/rpc_backend').with_value('amqp') }
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }

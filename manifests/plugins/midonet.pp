@@ -7,51 +7,69 @@
 #
 # === Parameters
 #
-# [*midonet_api_ip*]
-#   IP address of the MidoNet api service
-# [*midonet_api_port*]
-#   IP address of the MidoNet port service. MidoNet runs in a Tomcat, so 8080
-#   is used by default.
+# [*midonet_cluster_ip*]
+#   IP address of the MidoNet Cluster service.
+#   Defaults to '127.0.0.1'
+#
+# [*midonet_cluster_port*]
+#   Port on which the MidoNet Cluster listens.
+#   Defaults to '8181'
+#
 # [*keystone_username*]
-#   Username from which midonet api will authenticate against Keystone (neutron
-#   service is desirable and defaulted)
+#   Username with which MidoNet Cluster will authenticate against Keystone.
+#   Defaults to 'neutron'
+#
 # [*keystone_password*]
-#   Password from which midonet api will authenticate against Keystone
+#   Password for the user that will be used to authenticate against Keystone.
 #   Defaults to $::os_service_default
+#
 # [*keystone_tenant*]
-#   Tenant from which midonet api will authenticate against Keystone (services
-#   tenant is desirable and defaulted)
+#   Tenant for the user that will be used to authenticate against Keystone.
+#   Defaults to 'services'
+#
 # [*sync_db*]
-#   Whether 'midonet-db-manage' should run to create and/or syncrhonize the database
-#   with MidoNet specific tables. Defaults to false
+#   Whether 'midonet-db-manage' should run to create and/or sync the database
+#   with MidoNet specific tables.
+#   Defaults to false
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the midonet config.
-#   Defaults to false.
+#   Defaults to false
 #
 # [*package_ensure*]
-#   Whether to install the latest package, or a version for midonet plugin
-#   Defaults to 'present'.
+#   Whether to install the latest package, or a specific version
+#   of the MidoNet plugin.
+#   Defaults to 'present'
+#
+# DEPRECATED PARAMETERS
+#
+# [*midonet_api_ip*]
+#   (DEPRECATED) IP address of the MidoNet API service.
+#   Defaults to undef
+#
+# [*midonet_api_port*]
+#   (DEPRECATED) Port on which the MidoNet API service listens.
+#   Defaults to undef
 #
 # === Examples
 #
 # An example call would be:
 #
 #     class {'neutron:plugins::midonet':
-#         midonet_api_ip    => '23.123.5.32',
-#         midonet_api_port  => '8080',
-#         keystone_username => 'neutron',
-#         keystone_password => '32kjaxT0k3na',
-#         keystone_tenant   => 'services',
-#         sync_db           => true
+#         midonet_cluster_ip    => '23.123.5.32',
+#         midonet_cluster_port  => '8181',
+#         keystone_username     => 'neutron',
+#         keystone_password     => '32kjaxT0k3na',
+#         keystone_tenant       => 'services',
+#         sync_db               => true
 #     }
 #
 # You can alternatively use the Hiera's yaml style:
-#     neutron::plugin::midonet::midonet_api_ip: '23.213.5.32'
-#     neutron::plugin::midonet::port: '8080'
+#     neutron::plugin::midonet::midonet_cluster_ip: '23.213.5.32'
+#     neutron::plugin::midonet::port: '8181'
 #     neutron::plugin::midonet::keystone_username: 'neutron'
-#     neutron::plugin::midonet::keystone_password: '32.kjaxT0k3na'
+#     neutron::plugin::midonet::keystone_password: '32kjaxT0k3na'
 #     neutron::plugin::midonet::keystone_tenant: 'services'
 #     neutron::plugin::midonet::sync_db: true
 #
@@ -76,24 +94,45 @@
 # limitations under the License.
 #
 class neutron::plugins::midonet (
-  $midonet_api_ip    = '127.0.0.1',
-  $midonet_api_port  = '8080',
-  $keystone_username = 'neutron',
-  $keystone_password = $::os_service_default,
-  $keystone_tenant   = 'services',
-  $sync_db           = false,
-  $purge_config      = false,
-  $package_ensure    = 'present'
+  $midonet_cluster_ip    = '127.0.0.1',
+  $midonet_cluster_port  = '8181',
+  $keystone_username     = 'neutron',
+  $keystone_password     = $::os_service_default,
+  $keystone_tenant       = 'service',
+  $sync_db               = false,
+  $purge_config          = false,
+  $package_ensure        = 'present',
+  # DEPRECATED PARAMETERS
+  $midonet_api_ip        = undef,
+  $midonet_api_port      = undef,
 ) {
 
   include ::neutron::deps
   include ::neutron::params
 
-  ensure_resource('file', '/etc/neutron/plugins/midonet', {
-    ensure => directory,
-    owner  => 'root',
-    group  => 'neutron',
-    mode   => '0640'}
+  if $midonet_api_ip {
+    # If we got midonet_api_ip here, display deprecation warning and use this value.
+    warning('The midonet_api_ip parameter is going to be removed in future releases. Use the midonet_cluster_ip parameter instead.')
+    $cluster_ip = $midonet_api_ip
+  } else {
+    $cluster_ip = $midonet_cluster_ip
+  }
+
+  if $midonet_api_port {
+    # If we got midonet_api_port here, display deprecation warning and use this value.
+    warning('The midonet_api_port parameter is going to be removed in future releases. Use the midonet_cluster_port parameter instead.')
+    $cluster_port = $midonet_api_port
+  } else {
+    $cluster_port = $midonet_cluster_port
+  }
+
+  ensure_resource('file', '/etc/neutron/plugins/midonet',
+    {
+      ensure => directory,
+      owner  => 'root',
+      group  => 'neutron',
+      mode   => '0640'
+    }
   )
 
   resources { 'neutron_plugin_midonet':
@@ -106,14 +145,8 @@ class neutron::plugins::midonet (
     tag    => ['neutron-package', 'openstack'],
     }
 
-  package { 'python-networking-midonet-ext':
-    ensure => $package_ensure,
-    name   => $::neutron::params::midonet_server_package_ext,
-    tag    => ['neutron-package', 'openstack'],
-    }
-
   neutron_plugin_midonet {
-    'MIDONET/midonet_uri':  value => "http://${midonet_api_ip}:${midonet_api_port}/midonet-api";
+    'MIDONET/midonet_uri':  value => "http://${cluster_ip}:${cluster_port}/midonet-api";
     'MIDONET/username':     value => $keystone_username;
     'MIDONET/password':     value => $keystone_password, secret =>true;
     'MIDONET/project_id':   value => $keystone_tenant;
@@ -143,7 +176,6 @@ class neutron::plugins::midonet (
 
   if $sync_db {
     Package<| title == 'python-networking-midonet' |>     ~> Exec['midonet-db-sync']
-    Package<| title == 'python-networking-midonet-ext' |> ~> Exec['midonet-db-sync']
     exec { 'midonet-db-sync':
       command     => 'neutron-db-manage --subproject networking-midonet upgrade head',
       path        => '/usr/bin',

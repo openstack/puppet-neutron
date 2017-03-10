@@ -311,13 +311,13 @@ describe 'neutron' do
       )
     end
 
-    it do
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
-    end
+    it { is_expected.to contain_oslo__messaging__rabbit('neutron_config').with(
+      :rabbit_use_ssl     => true,
+      :kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
+      :kombu_ssl_certfile => '/path/to/ssl/cert/file',
+      :kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
+      :kombu_ssl_version  => 'TLSv1'
+    )}
   end
 
   shared_examples_for 'with SSL enabled without kombu' do
@@ -327,24 +327,16 @@ describe 'neutron' do
       )
     end
 
-    it do
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
-    end
+    it { is_expected.to contain_oslo__messaging__rabbit('neutron_config').with(
+      :rabbit_use_ssl     => true,
+    )}
   end
 
   shared_examples_for 'with SSL disabled' do
 
-    it do
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
-    end
+    it { is_expected.to contain_oslo__messaging__rabbit('neutron_config').with(
+      :rabbit_use_ssl     => '<SERVICE DEFAULT>',
+    )}
   end
 
   shared_examples_for 'with SSL and kombu wrongly configured' do

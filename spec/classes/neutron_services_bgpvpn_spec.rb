@@ -38,6 +38,19 @@ describe 'neutron::services::bgpvpn' do
           :name   => platform_params[:bgpvpn_package_name],
         )
       end
+
+      it 'runs neutron-db-sync' do
+        is_expected.to contain_exec('bgpvpn-db-sync').with(
+          :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-bgpvpn upgrade head',
+          :path        => '/usr/bin',
+          :subscribe   => ['Anchor[neutron::install::end]',
+                           'Anchor[neutron::config::end]',
+                           'Anchor[neutron::dbsync::begin]'
+                           ],
+          :notify      => 'Anchor[neutron::dbsync::end]',
+          :refreshonly => 'true',
+        )
+      end
     end
 
     context 'with multiple service providers' do

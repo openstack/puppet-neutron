@@ -68,7 +68,7 @@ class neutron::services::bgpvpn (
   if $sync_db {
     Package<| title == $::neutron::params::bgpvpn_plugin_package |> ~> Exec['bgpvpn-db-sync']
     exec { 'bgpvpn-db-sync':
-      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-bgpvpn upgrade',
+      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-bgpvpn upgrade head',
       path        => '/usr/bin',
       subscribe   => [
         Anchor['neutron::install::end'],

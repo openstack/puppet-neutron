@@ -53,7 +53,7 @@ describe 'neutron::logging' do
   end
 
   shared_examples 'basic default logging settings' do
-    it 'configures neutron logging settins with default values' do
+    it 'configures neutron logging settings with default values' do
       is_expected.to contain_oslo__log('neutron_config').with(
         :use_syslog          => '<SERVICE DEFAULT>',
         :use_stderr          => '<SERVICE DEFAULT>',
@@ -67,7 +67,7 @@ describe 'neutron::logging' do
   end
 
   shared_examples 'basic non-default logging settings' do
-    it 'configures neutron logging settins with non-default values' do
+    it 'configures neutron logging settings with non-default values' do
       is_expected.to contain_oslo__log('neutron_config').with(
         :use_syslog          => false,
         :use_stderr          => false,

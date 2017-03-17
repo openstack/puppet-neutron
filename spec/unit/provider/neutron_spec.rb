@@ -14,7 +14,7 @@ describe Puppet::Provider::Neutron do
       'project_name' => 'admin_tenant',
       'username'     => 'admin',
       'password'     => 'password',
-      'auth_url'     => 'https://192.168.56.210:35357'
+      'auth_uri'     => 'https://192.168.56.210:35357/v2.0/',
     }
   end
 
@@ -56,13 +56,14 @@ describe Puppet::Provider::Neutron do
       end.to raise_error(Puppet::Error, credential_error)
     end
 
+
   end
 
   describe 'when invoking the neutron cli' do
 
     it 'should set auth credentials in the environment' do
       authenv = {
-        :OS_AUTH_URL     => credential_hash['auth_url'],
+        :OS_AUTH_URL     => credential_hash['auth_uri'],
         :OS_USERNAME     => credential_hash['username'],
         :OS_PROJECT_NAME => credential_hash['project_name'],
         :OS_PASSWORD     => credential_hash['password'],
@@ -74,7 +75,7 @@ describe Puppet::Provider::Neutron do
 
     it 'should set region in the environment if needed' do
       authenv = {
-        :OS_AUTH_URL     => credential_hash['auth_url'],
+        :OS_AUTH_URL     => credential_hash['auth_uri'],
         :OS_USERNAME     => credential_hash['username'],
         :OS_PROJECT_NAME => credential_hash['project_name'],
         :OS_PASSWORD     => credential_hash['password'],

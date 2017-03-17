@@ -78,6 +78,12 @@ describe 'basic neutron' do
       }
       class { '::neutron::services::lbaas::haproxy': }
       class { '::neutron::services::lbaas::octavia': }
+
+      # Create Neutron security group for admin tenant
+      neutron_security_group { 'test':
+        ensure      => present,
+        description => 'Test security group',
+      }
       EOS
 
 

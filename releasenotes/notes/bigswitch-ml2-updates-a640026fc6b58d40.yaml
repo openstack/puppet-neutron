@@ -1,0 +1,13 @@
+---
+features:
+  - |
+    Added additional configuration parameters for the bigswitch restproxy
+    plugin configuration. Added the ability to configure `cache_connections`,
+    `keystone_sync_interval`, `no_Ssl_validation, `server_timeout`,
+    `sync_data`, and `thread_pool_size`
+upgrade:
+  - |
+    Switched the bigswitch restproxy configuration to use $::os_service_default
+    for parameters that match the upstream default. It should be noted that
+    the default values for `ssl_cert_directory` and `neutron_id` do not match
+    the defaults from the networking-bigswitch classes and have been left alone.

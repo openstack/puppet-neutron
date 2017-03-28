@@ -52,9 +52,9 @@ describe 'neutron' do
       end
 
       it 'configures logging' do
-        is_expected.to contain_neutron_config('DEFAULT/log_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
-        is_expected.to contain_neutron_config('DEFAULT/use_stderr').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_oslo__log('neutron_config').with(:log_file   => '<SERVICE DEFAULT>',
+                                                                :log_dir    => params[:log_dir],
+                                                                :use_stderr => '<SERVICE DEFAULT>')
       end
 
     end

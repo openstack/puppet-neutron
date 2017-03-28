@@ -50,7 +50,7 @@ describe 'neutron::plugins::ml2::opendaylight' do
     end
 
     it 'configures ml2_odl settings' do
-      is_expected.to contain_neutron_plugin_ml2('ml2_odl/password').with_value(params[:odl_password])
+      is_expected.to contain_neutron_plugin_ml2('ml2_odl/password').with_value(params[:odl_password]).with_secret(true)
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/username').with_value(params[:odl_username])
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/url').with_value(params[:odl_url])
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/port_binding_controller').with_value(params[:port_binding_controller])

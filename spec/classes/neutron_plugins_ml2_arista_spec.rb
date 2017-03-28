@@ -54,7 +54,7 @@ describe 'neutron::plugins::ml2::arista' do
     it 'configures ml2 arista settings' do
       is_expected.to contain_neutron_plugin_ml2('ml2_arista/eapi_host').with_value(params[:eapi_host])
       is_expected.to contain_neutron_plugin_ml2('ml2_arista/eapi_username').with_value(params[:eapi_username])
-      is_expected.to contain_neutron_plugin_ml2('ml2_arista/eapi_password').with_value(params[:eapi_password])
+      is_expected.to contain_neutron_plugin_ml2('ml2_arista/eapi_password').with_value(params[:eapi_password]).with_secret(true)
     end
   end
 

@@ -7,20 +7,20 @@ describe 'neutron::agents::l3' do
   end
 
   let :default_params do
-    { :package_ensure                   => 'present',
-      :enabled                          => true,
-      :debug                            => false,
-      :interface_driver                 => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :ha_enabled                       => false,
-      :ha_vrrp_auth_type                => 'PASS',
-      :ha_vrrp_advert_int               => '3',
-      :agent_mode                       => 'legacy',
-      :purge_config                     => false }
+    { :package_ensure     => 'present',
+      :enabled            => true,
+      :debug              => false,
+      :interface_driver   => 'neutron.agent.linux.interface.OVSInterfaceDriver',
+      :ha_enabled         => false,
+      :ha_vrrp_auth_type  => 'PASS',
+      :ha_vrrp_advert_int => '3',
+      :agent_mode         => 'legacy',
+      :purge_config       => false }
   end
 
   let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
+    { :operatingsystem        => 'default',
+      :operatingsystemrelease => 'default'
     }
   end
 

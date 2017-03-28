@@ -18,14 +18,14 @@ describe 'neutron::plugins::ml2::fujitsu::fossw' do
 
   let :default_params do
     {
-      :fossw_ips => '192.168.0.1,192.168.0.2',
-      :username => 'admin',
-      :password => 'admin',
-      :port => 22,
-      :timeout => 30,
-      :udp_dest_port => 4789,
+      :fossw_ips              => '192.168.0.1,192.168.0.2',
+      :username               => 'admin',
+      :password               => 'admin',
+      :port                   => 22,
+      :timeout                => 30,
+      :udp_dest_port          => 4789,
       :ovsdb_vlanid_range_min => 2,
-      :ovsdb_port => 6640,
+      :ovsdb_port             => 6640,
     }
   end
 
@@ -34,9 +34,9 @@ describe 'neutron::plugins::ml2::fujitsu::fossw' do
   end
 
   let :test_facts do
-    { :operatingsystem         => 'default',
-      :operatingsystemrelease  => 'default',
-      :concat_basedir          => '/',
+    { :operatingsystem        => 'default',
+      :operatingsystemrelease => 'default',
+      :concat_basedir         => '/',
     }
   end
 
@@ -49,7 +49,7 @@ describe 'neutron::plugins::ml2::fujitsu::fossw' do
     it do
       is_expected.to contain_neutron_plugin_ml2('fujitsu_fossw/fossw_ips').with_value(params[:fossw_ips])
       is_expected.to contain_neutron_plugin_ml2('fujitsu_fossw/username').with_value(params[:username])
-      is_expected.to contain_neutron_plugin_ml2('fujitsu_fossw/password').with_value(params[:password])
+      is_expected.to contain_neutron_plugin_ml2('fujitsu_fossw/password').with_value(params[:password]).with_secret(true)
       is_expected.to contain_neutron_plugin_ml2('fujitsu_fossw/port').with_value(params[:port])
       is_expected.to contain_neutron_plugin_ml2('fujitsu_fossw/timeout').with_value(params[:timeout])
       is_expected.to contain_neutron_plugin_ml2('fujitsu_fossw/udp_dest_port').with_value(params[:udp_dest_port])

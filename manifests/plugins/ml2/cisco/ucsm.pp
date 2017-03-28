@@ -27,7 +27,6 @@
 #   Example:
 #   [ '2222:3333', '4444:5555' ]
 #
-
 class neutron::plugins::ml2::cisco::ucsm (
   $ucsm_ip,
   $ucsm_username,
@@ -42,7 +41,7 @@ class neutron::plugins::ml2::cisco::ucsm (
   neutron_plugin_ml2 {
     'ml2_cisco_ucsm/ucsm_ip'            : value => $ucsm_ip;
     'ml2_cisco_ucsm/ucsm_username'      : value => $ucsm_username;
-    'ml2_cisco_ucsm/ucsm_password'      : value => $ucsm_password;
+    'ml2_cisco_ucsm/ucsm_password'      : value => $ucsm_password, secret => true;
     'ml2_cisco_ucsm/ucsm_host_list'     : value => $ucsm_host_list;
     'ml2_cisco_ucsm/supported_pci_devs' : value => $supported_pci_devs;
   }

@@ -18,10 +18,10 @@ describe 'neutron::plugins::ml2::cisco::ucsm' do
 
   let :default_params do
     {
-      :ucsm_ip => '1.1.1.1',
-      :ucsm_username => 'admin',
-      :ucsm_password => 'password',
-      :ucsm_host_list => 'host1:profile1, host2:profile2',
+      :ucsm_ip            => '1.1.1.1',
+      :ucsm_username      => 'admin',
+      :ucsm_password      => 'password',
+      :ucsm_host_list     => 'host1:profile1, host2:profile2',
       :supported_pci_devs => [ '2222:3333', '4444:5555' ]
     }
   end
@@ -31,9 +31,9 @@ describe 'neutron::plugins::ml2::cisco::ucsm' do
   end
 
   let :test_facts do
-    { :operatingsystem         => 'default',
-      :operatingsystemrelease  => 'default',
-      :concat_basedir          => '/',
+    { :operatingsystem        => 'default',
+      :operatingsystemrelease => 'default',
+      :concat_basedir         => '/',
     }
   end
 
@@ -48,7 +48,7 @@ describe 'neutron::plugins::ml2::cisco::ucsm' do
     it do
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_ip').with_value(params[:ucsm_ip])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_username').with_value(params[:ucsm_username])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_password').with_value(params[:ucsm_password])
+      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_password').with_value(params[:ucsm_password]).with_secret(true)
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_host_list').with_value(params[:ucsm_host_list])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/supported_pci_devs').with_value(params[:supported_pci_devs])
     end

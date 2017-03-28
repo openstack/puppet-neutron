@@ -43,15 +43,15 @@
 #   Defaults to false.
 #
 class neutron::agents::ml2::vpp (
-  $package_ensure   = 'present',
-  $enabled          = true,
-  $manage_service   = true,
-  $physnets         = $::os_service_default,
-  $etcd_host        = $::os_service_default,
-  $etcd_port        = $::os_service_default,
-  $etcd_user        = $::os_service_default,
-  $etcd_pass        = $::os_service_default,
-  $purge_config     = false,
+  $package_ensure = 'present',
+  $enabled        = true,
+  $manage_service = true,
+  $physnets       = $::os_service_default,
+  $etcd_host      = $::os_service_default,
+  $etcd_port      = $::os_service_default,
+  $etcd_user      = $::os_service_default,
+  $etcd_pass      = $::os_service_default,
+  $purge_config   = false,
 ) {
   include ::neutron::deps
   include ::neutron::params
@@ -61,12 +61,12 @@ class neutron::agents::ml2::vpp (
   }
 
   neutron_agent_vpp {
-    'ml2_vpp/physnets': value  => $physnets;
+    'ml2_vpp/physnets':  value => $physnets;
     'ml2_vpp/etcd_host': value => $etcd_host;
     'ml2_vpp/etcd_port': value => $etcd_port;
     'ml2_vpp/etcd_user': value => $etcd_user;
     'ml2_vpp/etcd_pass': value => $etcd_pass;
-    'DEFAULT/host': value      => $::hostname;
+    'DEFAULT/host':      value => $::hostname;
   }
 
   package { 'neutron-vpp-agent':

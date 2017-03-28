@@ -55,7 +55,7 @@ describe 'neutron::plugins::ml2::arista::l3' do
     it 'configures ml2 arista l3_arista settings' do
       is_expected.to contain_neutron_plugin_ml2('l3_arista/primary_l3_host').with_value(params[:primary_l3_host])
       is_expected.to contain_neutron_plugin_ml2('l3_arista/primary_l3_host_username').with_value(params[:primary_l3_host_username])
-      is_expected.to contain_neutron_plugin_ml2('l3_arista/primary_l3_host_password').with_value(params[:primary_l3_host_password])
+      is_expected.to contain_neutron_plugin_ml2('l3_arista/primary_l3_host_password').with_value(params[:primary_l3_host_password]).with_secret(true)
     end
   end
 

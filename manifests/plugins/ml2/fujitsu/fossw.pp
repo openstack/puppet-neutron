@@ -45,7 +45,7 @@
 # (optional) The port number which OVSDB server on the fos switches listen.
 # Example: 6640
 # Defaults to 6640
-
+#
 class neutron::plugins::ml2::fujitsu::fossw (
   $fossw_ips,
   $username,
@@ -62,7 +62,7 @@ class neutron::plugins::ml2::fujitsu::fossw (
   neutron_plugin_ml2 {
     'fujitsu_fossw/fossw_ips'              : value => join(any2array($fossw_ips), ',');
     'fujitsu_fossw/username'               : value => $username;
-    'fujitsu_fossw/password'               : value => $password;
+    'fujitsu_fossw/password'               : value => $password, secret => true;
     'fujitsu_fossw/port'                   : value => $port;
     'fujitsu_fossw/timeout'                : value => $timeout;
     'fujitsu_fossw/udp_dest_port'          : value => $udp_dest_port;

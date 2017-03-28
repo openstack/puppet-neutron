@@ -59,7 +59,7 @@ class neutron::plugins::ml2::opendaylight (
 
   neutron_plugin_ml2 {
     'ml2_odl/username':                value => $odl_username;
-    'ml2_odl/password':                value => $odl_password;
+    'ml2_odl/password':                value => $odl_password, secret => true;
     'ml2_odl/url':                     value => $odl_url;
     'ml2_odl/port_binding_controller': value => $port_binding_controller;
     'ml2_odl/odl_hostconf_uri':        value => $odl_hostconf_uri;

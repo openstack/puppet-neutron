@@ -35,7 +35,7 @@
 # (optional) Whether to save configuration.
 # Example: true
 # Defaults to true
-
+#
 class neutron::plugins::ml2::fujitsu::cfab (
   $address,
   $username,
@@ -51,7 +51,7 @@ class neutron::plugins::ml2::fujitsu::cfab (
   neutron_plugin_ml2 {
     'fujitsu_cfab/address'           : value => $address;
     'fujitsu_cfab/username'          : value => $username;
-    'fujitsu_cfab/password'          : value => $password;
+    'fujitsu_cfab/password'          : value => $password, secret => true;
     'fujitsu_cfab/physical_networks' : value => join(any2array($physical_networks), ',');
     'fujitsu_cfab/share_pprofile'    : value => $share_pprofile;
     'fujitsu_cfab/pprofile_prefix'   : value => $pprofile_prefix;

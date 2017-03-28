@@ -170,7 +170,7 @@ class neutron::plugins::plumgrid (
     'database/connection':                   value => $connection;
     'l2gateway/vendor':                      value => $l2gateway_vendor;
     'l2gateway/sw_username':                 value => $l2gateway_sw_username;
-    'l2gateway/sw_password':                 value => $l2gateway_sw_password;
+    'l2gateway/sw_password':                 value => $l2gateway_sw_password, secret =>true;
   }
 
   neutron_plumlib_plumgrid {
@@ -185,7 +185,7 @@ class neutron::plugins::plumgrid (
     'PLUMgridMetadata/nova_metadata_ip':             value => $nova_metadata_ip;
     'PLUMgridMetadata/nova_metadata_port':           value => $nova_metadata_port;
     'PLUMgridMetadata/nova_metadata_subnet':         value => $nova_metadata_subnet;
-    'PLUMgridMetadata/metadata_proxy_shared_secret': value => $metadata_proxy_shared_secret;
+    'PLUMgridMetadata/metadata_proxy_shared_secret': value => $metadata_proxy_shared_secret, secret =>true;
     'ConnectorType/connector_type':                  value => $connector_type;
   }
 }

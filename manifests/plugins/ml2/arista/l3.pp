@@ -70,7 +70,7 @@ class neutron::plugins::ml2::arista::l3(
   neutron_plugin_ml2 {
     'l3_arista/primary_l3_host'         : value => $primary_l3_host;
     'l3_arista/primary_l3_host_username': value => $primary_l3_host_username;
-    'l3_arista/primary_l3_host_password': value => $primary_l3_host_password;
+    'l3_arista/primary_l3_host_password': value => $primary_l3_host_password, secret => true;
     'l3_arista/secondary_l3_host'       : value => $secondary_l3_host;
     'l3_arista/mlag_config'             : value => $mlag_config;
     'l3_arista/l3_sync_interval'        : value => $l3_sync_interval;

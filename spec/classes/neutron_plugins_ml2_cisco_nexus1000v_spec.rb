@@ -18,19 +18,19 @@ describe 'neutron::plugins::ml2::cisco::nexus1000v' do
 
   let :default_params do
     {
-      :n1kv_vsm_ip => '10.10.10.10',
-      :n1kv_vsm_username => 'admin',
-      :n1kv_vsm_password => 'password',
-      :default_policy_profile => 'default-pp',
-      :default_vlan_network_profile => 'default-vlan-np',
+      :n1kv_vsm_ip                   => '10.10.10.10',
+      :n1kv_vsm_username             => 'admin',
+      :n1kv_vsm_password             => 'password',
+      :default_policy_profile        => 'default-pp',
+      :default_vlan_network_profile  => 'default-vlan-np',
       :default_vxlan_network_profile => 'default-vxlan-np',
-      :poll_duration => '60',
-      :http_pool_size => '4',
-      :http_timeout => '15',
-      :sync_interval => '300',
-      :max_vsm_retries => '2',
-      :restrict_policy_profiles => 'False',
-      :enable_vif_type_n1kv => 'False',
+      :poll_duration                 => '60',
+      :http_pool_size                => '4',
+      :http_timeout                  => '15',
+      :sync_interval                 => '300',
+      :max_vsm_retries               => '2',
+      :restrict_policy_profiles      => 'False',
+      :enable_vif_type_n1kv          => 'False',
     }
   end
 
@@ -39,9 +39,9 @@ describe 'neutron::plugins::ml2::cisco::nexus1000v' do
   end
 
   let :test_facts do
-    { :operatingsystem         => 'default',
-      :operatingsystemrelease  => 'default',
-      :concat_basedir          => '/',
+    { :operatingsystem        => 'default',
+      :operatingsystemrelease => 'default',
+      :concat_basedir         => '/',
     }
   end
 
@@ -56,7 +56,7 @@ describe 'neutron::plugins::ml2::cisco::nexus1000v' do
     it do
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco_n1kv/n1kv_vsm_ips').with_value(params[:n1kv_vsm_ip])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco_n1kv/username').with_value(params[:n1kv_vsm_username])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_n1kv/password').with_value(params[:n1kv_vsm_password])
+      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_n1kv/password').with_value(params[:n1kv_vsm_password]).with_secret(true)
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco_n1kv/default_policy_profile').with_value(params[:default_policy_profile])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco_n1kv/default_vlan_network_profile').with_value(params[:default_vlan_network_profile])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco_n1kv/default_vxlan_network_profile').with_value(params[:default_vxlan_network_profile])

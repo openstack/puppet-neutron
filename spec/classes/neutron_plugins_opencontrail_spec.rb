@@ -54,7 +54,7 @@ describe 'neutron::plugins::opencontrail' do
       is_expected.to contain_neutron_plugin_opencontrail('KEYSTONE/auth_url').with_value(params[:keystone_auth_url])
       is_expected.to contain_neutron_plugin_opencontrail('KEYSTONE/admin_user').with_value(params[:keystone_admin_user])
       is_expected.to contain_neutron_plugin_opencontrail('KEYSTONE/admin_tenant_name').with_value(params[:keystone_admin_tenant_name])
-      is_expected.to contain_neutron_plugin_opencontrail('KEYSTONE/admin_password').with_value(params[:keystone_admin_password])
+      is_expected.to contain_neutron_plugin_opencontrail('KEYSTONE/admin_password').with_value(params[:keystone_admin_password]).with_secret(true)
       is_expected.to contain_neutron_plugin_opencontrail('KEYSTONE/admin_token').with_value(params[:keystone_admin_token])
     end
 

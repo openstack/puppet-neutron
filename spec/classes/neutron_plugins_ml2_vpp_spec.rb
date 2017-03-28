@@ -14,8 +14,8 @@ describe 'neutron::plugins::ml2::vpp' do
 
   let :default_params do
     {
-      :etcd_host      => '127.0.0.1',
-      :etcd_port      => 4001,
+      :etcd_host => '127.0.0.1',
+      :etcd_port => 4001,
     }
   end
 
@@ -41,7 +41,7 @@ describe 'neutron::plugins::ml2::vpp' do
       is_expected.to contain_neutron_plugin_ml2('ml2_vpp/etcd_host').with_value(params[:etcd_host])
       is_expected.to contain_neutron_plugin_ml2('ml2_vpp/etcd_port').with_value(params[:etcd_port])
       is_expected.to contain_neutron_plugin_ml2('ml2_vpp/etcd_user').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_plugin_ml2('ml2_vpp/etcd_pass').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_plugin_ml2('ml2_vpp/etcd_pass').with_value('<SERVICE DEFAULT>').with_secret(true)
     end
 
     context 'when enabling etcd authentication' do
@@ -51,7 +51,7 @@ describe 'neutron::plugins::ml2::vpp' do
       end
       it 'should configure etcd username and password' do
         is_expected.to contain_neutron_plugin_ml2('ml2_vpp/etcd_user').with_value('admin')
-        is_expected.to contain_neutron_plugin_ml2('ml2_vpp/etcd_pass').with_value('password')
+        is_expected.to contain_neutron_plugin_ml2('ml2_vpp/etcd_pass').with_value('password').with_secret(true)
       end
     end
   end

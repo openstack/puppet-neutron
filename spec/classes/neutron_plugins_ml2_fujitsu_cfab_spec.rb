@@ -18,13 +18,13 @@ describe 'neutron::plugins::ml2::fujitsu::cfab' do
 
   let :default_params do
     {
-      :address => '192.168.0.1',
-      :username => 'admin',
-      :password => 'admin',
+      :address           => '192.168.0.1',
+      :username          => 'admin',
+      :password          => 'admin',
       :physical_networks => 'physnet1:1,physnet2:2',
-      :share_pprofile => 'false',
-      :pprofile_prefix => 'neutron-',
-      :save_config => 'true',
+      :share_pprofile    => 'false',
+      :pprofile_prefix   => 'neutron-',
+      :save_config       => 'true',
     }
   end
 
@@ -33,9 +33,9 @@ describe 'neutron::plugins::ml2::fujitsu::cfab' do
   end
 
   let :test_facts do
-    { :operatingsystem         => 'default',
-      :operatingsystemrelease  => 'default',
-      :concat_basedir          => '/',
+    { :operatingsystem        => 'default',
+      :operatingsystemrelease => 'default',
+      :concat_basedir         => '/',
     }
   end
 
@@ -48,7 +48,7 @@ describe 'neutron::plugins::ml2::fujitsu::cfab' do
     it do
       is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/address').with_value(params[:address])
       is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/username').with_value(params[:username])
-      is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/password').with_value(params[:password])
+      is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/password').with_value(params[:password]).with_secret(true)
       is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/physical_networks').with_value(params[:physical_networks])
       is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/share_pprofile').with_value(params[:share_pprofile])
       is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/pprofile_prefix').with_value(params[:pprofile_prefix])

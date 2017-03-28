@@ -58,7 +58,7 @@ class neutron::plugins::ml2::arista(
   neutron_plugin_ml2 {
     'ml2_arista/eapi_host'    : value => $eapi_host;
     'ml2_arista/eapi_username': value => $eapi_username;
-    'ml2_arista/eapi_password': value => $eapi_password;
+    'ml2_arista/eapi_password': value => $eapi_password, secret => true;
     'ml2_arista/region_name'  : value => $region_name;
     'ml2_arista/sync_interval': value => $sync_interval;
     'ml2_arista/use_fqdn'     : value => $use_fqdn;

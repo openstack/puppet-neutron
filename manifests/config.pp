@@ -87,6 +87,9 @@
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
+# [*plugin_nsx_config*]
+#   (optional) Manage configuration of plugins/vmware/nsx.ini
+#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -113,6 +116,7 @@ class neutron::config (
   $plugin_ovn_config             = {},
   $plugin_nuage_config           = {},
   $plugin_ml2_config             = {},
+  $plugin_nsx_config             = {},
 ) {
 
   include ::neutron::deps
@@ -139,6 +143,7 @@ class neutron::config (
   validate_hash($plugin_ovn_config)
   validate_hash($plugin_nuage_config)
   validate_hash($plugin_ml2_config)
+  validate_hash($plugin_nsx_config)
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_config', $api_config)
@@ -161,4 +166,5 @@ class neutron::config (
   create_resources('neutron_plugin_nuage', $plugin_nuage_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
   create_resources('neutron_l2gw_service_config', $l2gw_service_config)
+  create_resources('neutron_plugin_nsx', $plugin_nsx_config)
 }

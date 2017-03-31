@@ -23,6 +23,7 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/midonet/midonet.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
                      '/etc/neutron/plugins/plumgrid/plumgrid.ini',
+                     '/etc/neutron/plugins/vmware/nsx.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
                      '/etc/neutron/plugins/ml2/sriov_agent.ini',
                      '/etc/neutron/plugins/ml2/vpp_agent.ini']
@@ -57,6 +58,7 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_sriov_agent_config <||>
   File <||> -> Neutron_agent_vpp <||>
   File <||> -> Neutron_l2gw_agent_config <||>
+  File <||> -> Neutron_plugin_nsx <||>
 
 
   $neutron_directories = ['/etc/neutron',
@@ -67,7 +69,8 @@ describe 'basic neutron_config resource' do
                           '/etc/neutron/plugins/nicira',
                           '/etc/neutron/plugins/midonet',
                           '/etc/neutron/plugins/opencontrail',
-                          '/etc/neutron/plugins/plumgrid']
+                          '/etc/neutron/plugins/plumgrid',
+                          '/etc/neutron/plugins/vmware']
 
   $neutron_files = [ '/etc/neutron/api-paste.ini',
                      '/etc/neutron/neutron.conf',
@@ -90,6 +93,7 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/midonet/midonet.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
                      '/etc/neutron/plugins/plumgrid/plumgrid.ini',
+                     '/etc/neutron/plugins/vmware/nsx.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
                      '/etc/neutron/plugins/ml2/sriov_agent.ini',
                      '/etc/neutron/plugins/ml2/vpp_agent.ini']
@@ -492,6 +496,24 @@ describe 'basic neutron_config resource' do
     ensure_absent_val => 'toto', }
 
   neutron_plumlib_plumgrid { 'DEFAULT/thisshouldnotexist2' :
+    value             => 'toto',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_plugin_nsx { 'DEFAULT/thisshouldexist' :
+    value => 'foo',
+  }
+
+  neutron_plugin_nsx { 'DEFAULT/thisshouldnotexist' :
+    value => '<SERVICE DEFAULT>',
+  }
+
+  neutron_plugin_nsx { 'DEFAULT/thisshouldexist2' :
+    value             => '<SERVICE DEFAULT>',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_plugin_nsx { 'DEFAULT/thisshouldnotexist2' :
     value             => 'toto',
     ensure_absent_val => 'toto',
   }

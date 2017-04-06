@@ -28,6 +28,11 @@
 #   Must be in form: <service_type>:<name>:<driver>[:default]
 #   Defaults to $::os_service_default
 #
+# [*sync_db*]
+#   Whether 'l2gw-db-sync' should run to create and/or synchronize the
+#   database with networking-l2gw specific tables.
+#   Default to false
+#
 # [*package_ensure*]
 #   (optional) Ensure state for package.
 #   Defaults to 'present'.
@@ -43,6 +48,7 @@ class neutron::services::l2gw (
   $quota_l2_gateway             = $::os_service_default,
   $periodic_monitoring_interval = $::os_service_default,
   $service_providers            = $::os_service_default,
+  $sync_db                      = false,
   $package_ensure               = 'present',
   $purge_config                 = false,
 ) {
@@ -70,5 +76,20 @@ class neutron::services::l2gw (
       'DEFAULT/quota_l2_gateway':                     value => $quota_l2_gateway;
       'DEFAULT/periodic_monitoring_interval':         value => $periodic_monitoring_interval;
       'service_providers/service_provider':           value => $service_providers;
+  }
+
+  if $sync_db {
+    Package<| title == $::neutron::params::l2gw_package |> ~> Exec['l2gw-db-sync']
+    exec { 'l2gw-db-sync':
+      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-l2gw upgrade head',
+      path        => '/usr/bin',
+      subscribe   => [
+        Anchor['neutron::install::end'],
+        Anchor['neutron::config::end'],
+        Anchor['neutron::dbsync::begin']
+      ],
+      notify      => Anchor['neutron::dbsync::end'],
+      refreshonly => true
+    }
   }
 }

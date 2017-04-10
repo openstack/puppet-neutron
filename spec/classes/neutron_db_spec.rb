@@ -6,12 +6,14 @@ describe 'neutron::db' do
 
     context 'with default parameters' do
 
-      it { is_expected.to contain_neutron_config('database/connection').with_value('sqlite:////var/lib/neutron/ovs.sqlite').with_secret(true) }
-      it { is_expected.to contain_neutron_config('database/idle_timeout').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_neutron_config('database/min_pool_size').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_neutron_config('database/max_retries').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_neutron_config('database/retry_interval').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_neutron_config('database/db_max_retries').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_oslo__db('neutron_config').with(
+        :db_max_retries => '<SERVICE DEFAULT>',
+        :connection     => 'sqlite:////var/lib/neutron/ovs.sqlite',
+        :idle_timeout   => '<SERVICE DEFAULT>',
+        :min_pool_size  => '<SERVICE DEFAULT>',
+        :max_retries    => '<SERVICE DEFAULT>',
+        :retry_interval => '<SERVICE DEFAULT>',
+      )}
 
     end
 
@@ -25,12 +27,14 @@ describe 'neutron::db' do
           :database_db_max_retries => '-1', }
       end
 
-      it { is_expected.to contain_neutron_config('database/connection').with_value('mysql+pymysql://neutron:neutron@localhost/neutron').with_secret(true) }
-      it { is_expected.to contain_neutron_config('database/idle_timeout').with_value('3601') }
-      it { is_expected.to contain_neutron_config('database/min_pool_size').with_value('2') }
-      it { is_expected.to contain_neutron_config('database/max_retries').with_value('11') }
-      it { is_expected.to contain_neutron_config('database/retry_interval').with_value('11') }
-      it { is_expected.to contain_neutron_config('database/db_max_retries').with_value('-1') }
+      it { is_expected.to contain_oslo__db('neutron_config').with(
+        :db_max_retries => '-1',
+        :connection     => 'mysql+pymysql://neutron:neutron@localhost/neutron',
+        :idle_timeout   => '3601',
+        :min_pool_size  => '2',
+        :max_retries    => '11',
+        :retry_interval => '11',
+      )}
 
     end
 
@@ -39,12 +43,14 @@ describe 'neutron::db' do
         { :database_connection => 'mysql://neutron:neutron@localhost/neutron' }
       end
 
-      it { is_expected.to contain_neutron_config('database/connection').with_value('mysql://neutron:neutron@localhost/neutron').with_secret(true) }
+      it { is_expected.to contain_oslo__db('neutron_config').with(
+        :connection => 'mysql://neutron:neutron@localhost/neutron',
+      )}
     end
 
     context 'with postgresql backend' do
       let :params do
-        { :database_connection     => 'postgresql://neutron:neutron@localhost/neutron', }
+        { :database_connection => 'postgresql://neutron:neutron@localhost/neutron', }
       end
 
       it 'install the proper backend package' do
@@ -55,7 +61,7 @@ describe 'neutron::db' do
 
     context 'with incorrect database_connection string' do
       let :params do
-        { :database_connection     => 'redis://neutron:neutron@localhost/neutron', }
+        { :database_connection => 'redis://neutron:neutron@localhost/neutron', }
       end
 
       it_raises 'a Puppet::Error', /validate_re/
@@ -63,7 +69,7 @@ describe 'neutron::db' do
 
     context 'with incorrect database_connection string' do
       let :params do
-        { :database_connection     => 'foo+pymysql://neutron:neutron@localhost/neutron', }
+        { :database_connection => 'foo+pymysql://neutron:neutron@localhost/neutron', }
       end
 
       it_raises 'a Puppet::Error', /validate_re/
@@ -84,7 +90,7 @@ describe 'neutron::db' do
 
     context 'using pymysql driver' do
       let :params do
-        { :database_connection     => 'mysql+pymysql://neutron:neutron@localhost/neutron' }
+        { :database_connection => 'mysql+pymysql://neutron:neutron@localhost/neutron' }
       end
 
       it { is_expected.to contain_package('db_backend_package').with({ :ensure => 'present', :name => 'python-pymysql' }) }
@@ -104,7 +110,7 @@ describe 'neutron::db' do
 
     context 'using pymysql driver' do
       let :params do
-        { :database_connection     => 'mysql+pymysql://neutron:neutron@localhost/neutron' }
+        { :database_connection => 'mysql+pymysql://neutron:neutron@localhost/neutron' }
       end
 
       it { is_expected.not_to contain_package('db_backend_package') }

@@ -56,9 +56,9 @@ describe 'neutron::agents::bagpipe' do
     end
 
     it 'installs bgpvpn bagpipe package' do
-      is_expected.to contain_package('python-networking-bagpipe').with(
+      is_expected.to contain_package('openstack-bagpipe-bgp').with(
         :ensure => p[:package_ensure],
-        :name   => platform_params[:bgpvpn_bagpipe_package],
+        :name   => platform_params[:bagpipe_bgp_package],
       )
     end
 
@@ -104,9 +104,9 @@ describe 'neutron::agents::bagpipe' do
       let (:platform_params) do
         case facts[:osfamily]
         when 'RedHat'
-          { :bgpvpn_bagpipe_package => 'python-networking-bagpipe' }
+          { :bagpipe_bgp_package => 'openstack-bagpipe-bgp' }
         when 'Debian'
-          { :bgpvpn_bagpipe_package => 'python-networking-bagpipe' }
+          { :bagpipe_bgp_package => 'openstack-bagpipe-bgp' }
         end
       end
 

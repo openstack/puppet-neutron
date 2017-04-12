@@ -22,7 +22,7 @@ Puppet::Type.newtype(:neutron_bgpvpn_bagpipe_config) do
   end
 
   autorequire(:package) do
-    ['python-networking-bagpipe']
+    ['openstack-bagpipe-bgp']
   end
 
 end

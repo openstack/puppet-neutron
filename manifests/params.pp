@@ -29,6 +29,7 @@ class neutron::params {
   $vpnaas_agent_service        = 'neutron-vpn-agent'
   $l3_agent_service            = 'neutron-l3-agent'
   $metadata_agent_service      = 'neutron-metadata-agent'
+  $bagpipe_bgp_package         = 'openstack-bagpipe-bgp'
   $bgpvpn_bagpipe_package      = 'python-networking-bagpipe'
   $bgpvpn_bagpipe_service      = 'bagpipe-bgp'
   $bgpvpn_plugin_package       = 'python-networking-bgpvpn'

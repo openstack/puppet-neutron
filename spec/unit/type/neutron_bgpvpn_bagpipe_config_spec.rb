@@ -9,7 +9,7 @@ describe 'Puppet::Type.type(:neutron_bgpvpn_bagpipe_config)' do
 
   it 'should autorequire the package that install the file' do
     catalog = Puppet::Resource::Catalog.new
-    package = Puppet::Type.type(:package).new(:name => 'python-networking-bagpipe')
+    package = Puppet::Type.type(:package).new(:name => 'openstack-bagpipe-bgp')
     catalog.add_resource package, @neutron_bgpvpn_bagpipe_config
     dependency = @neutron_bgpvpn_bagpipe_config.autorequire
     expect(dependency.size).to eq(1)

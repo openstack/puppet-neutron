@@ -109,10 +109,10 @@ class neutron::agents::bagpipe (
     'dataplane_driver_ipvpn/mpls_interface':   value => $mpls_interface;
   }
 
-  if $::neutron::params::bgpvpn_bagpipe_package {
-    package { 'python-networking-bagpipe':
+  if $::neutron::params::bagpipe_bgp_package {
+    package { 'openstack-bagpipe-bgp':
       ensure => $package_ensure,
-      name   => $::neutron::params::bgpvpn_bagpipe_package,
+      name   => $::neutron::params::bagpipe_bgp_package,
       tag    => ['openstack', 'neutron-package'],
     }
   }

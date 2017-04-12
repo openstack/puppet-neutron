@@ -4,6 +4,7 @@ features:
   - Add new type for BGPVPN Service config
   - Add new provider for BGPVPN Service config
   - Add Bagpipe agent as reference driver
+  - Add Bagpipe ML2 plugin config
   - Add new type for Bagpipe driver
   - Add new provider for Bagpipe driver
   - Add spec and unit tests

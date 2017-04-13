@@ -335,13 +335,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*memcache_servers*]
-#   (optional) This option is deprecated an has no effect.
-#
-# [*mac_generation_retries*]
-#   (optional) How many times to try to generate a unique mac
-#   Defaults to $::os_service_default
-#
 # [*rabbit_password*]
 # [*rabbit_host*]
 # [*rabbit_port*]
@@ -431,8 +424,6 @@ class neutron (
   $notification_topics                  = $::os_service_default,
   $notification_transport_url           = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $memcache_servers                     = undef,
-  $mac_generation_retries               = $::os_service_default,
   $rabbit_password                      = $::os_service_default,
   $rabbit_host                          = $::os_service_default,
   $rabbit_hosts                         = $::os_service_default,
@@ -469,14 +460,6 @@ class neutron (
   if ! is_service_default($kombu_missing_consumer_retry_timeout) and ! is_service_default($rpc_response_timeout)
       and ($kombu_missing_consumer_retry_timeout > $rpc_response_timeout) {
     warning('kombu_missing_consumer_retry_timeout should not be longer than rpc_response_timeout')
-  }
-
-  if $memcache_servers {
-    warning('memcache_servers option is deprecated, has no effect and will be removed after Ocata.')
-  }
-
-  if ! is_service_default($mac_generation_retries) {
-    warning('mac_generation_retries option is deprecated, has no effect and will be removed after Ocata.')
   }
 
   if !is_service_default($rabbit_host) or

@@ -1,0 +1,4 @@
+---
+other:
+  - Removed deprecated option neutron::memcache_servers.
+  - Removed deprecated option neutron::mac_generation_retries.

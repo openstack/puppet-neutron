@@ -19,7 +19,7 @@ describe 'neutron::plugins::ml2::cisco::vts' do
       :vts_url                 => '<SERVICE DEFAULT>',
       :vts_timeout             => '<SERVICE DEFAULT>',
       :vts_sync_timeout        => '<SERVICE DEFAULT>',
-      :vts_retry_count        => '<SERVICE DEFAULT>'
+      :vts_retry_count         => '<SERVICE DEFAULT>'
     }
   end
 
@@ -42,21 +42,14 @@ describe 'neutron::plugins::ml2::cisco::vts' do
     end
 
     it 'configures ml2_cisco_vts settings' do
-      is_expected.to contain_neutron_plugin_ml2('ml2_cc/password').with_value
-      (params[:vts_password]).with_secret(true)
-      is_expected.to contain_neutron_plugin_ml2('ml2_cc/username').with_value
-      (params[:_username])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cc/url').with_value
-      (params[:vts_url])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cc/vts_hostconf_uri')
-      .with_value(params[:vts_hostconf_uri])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cc/timeout')
-      .with_value(params[:vts_timeout])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cc/sync_timeout')
-      .with_value(params[:vts_sync_timeout])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cc/retry_count')
-      .with_value(params[:vts_retry_count])
+      is_expected.to contain_neutron_plugin_ml2('ml2_cc/password').with_value(params[:vts_password]).with_secret(true)
+      is_expected.to contain_neutron_plugin_ml2('ml2_cc/username').with_value(params[:vts_username])
+      is_expected.to contain_neutron_plugin_ml2('ml2_cc/url').with_value(params[:vts_url])
+      is_expected.to contain_neutron_plugin_ml2('ml2_cc/timeout').with_value(params[:vts_timeout])
+      is_expected.to contain_neutron_plugin_ml2('ml2_cc/sync_timeout').with_value(params[:vts_sync_timeout])
+      is_expected.to contain_neutron_plugin_ml2('ml2_cc/retry_count').with_value(params[:vts_retry_count])
     end
+  end
 
   begin
     context 'on RedHat platforms' do

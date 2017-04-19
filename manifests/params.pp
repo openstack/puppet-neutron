@@ -34,6 +34,8 @@ class neutron::params {
   $bgpvpn_bagpipe_service      = 'bagpipe-bgp'
   $bgpvpn_plugin_package       = 'python-networking-bgpvpn'
   $l2gw_agent_service          = 'neutron-l2gw-agent'
+  $nsx_plugin_package          = 'vmware-nsx'
+  $nsx_config_file             = '/etc/neutron/plugins/vmware/nsx.ini'
 
   if($::osfamily == 'Redhat') {
     $nobody_user_group          = 'nobody'

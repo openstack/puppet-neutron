@@ -39,9 +39,9 @@
 # Defaults to $::os_service_default
 #
 class neutron::plugins::ml2::cisco::vts (
-  $vts_username            = $::os_service_default,
-  $vts_password            = $::os_service_default,
-  $vts_url                 = $::os_service_default,
+  $vts_username,
+  $vts_password,
+  $vts_url,
   $vts_timeout             = $::os_service_default,
   $vts_sync_timeout        = $::os_service_default,
   $vts_retry_count         = $::os_service_default,

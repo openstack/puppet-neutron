@@ -111,9 +111,6 @@ class neutron::server::notifications (
 
   include ::neutron::deps
 
-  # Depend on the specified keystone_user resource, if it exists.
-  Keystone_user <| title == 'nova' |> -> Class[neutron::server::notifications]
-
   if is_service_default($tenant_id) and (! $tenant_name) {
     fail('You must provide either tenant_name or tenant_id.')
   }

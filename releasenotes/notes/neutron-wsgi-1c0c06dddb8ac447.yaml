@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Neutron API can now be deployed in WSGI with Apache, like we support it
+    for other modules. Switch neutron::server::service_name to 'httpd' and use
+    neutron::wsgi::apache class to deploy it.

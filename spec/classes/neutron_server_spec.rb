@@ -66,7 +66,7 @@ describe 'neutron::server' do
         :name    => platform_params[:server_service],
         :enable  => true,
         :ensure  => 'running',
-        :tag     => ['neutron-service', 'neutron-db-sync-service'],
+        :tag     => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
       )
       is_expected.to contain_service('neutron-server').that_subscribes_to('Anchor[neutron::service::begin]')
       is_expected.to contain_service('neutron-server').that_notifies('Anchor[neutron::service::end]')
@@ -137,15 +137,6 @@ describe 'neutron::server' do
       end
       it 'should enable HA routers' do
         is_expected.to contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(0)
-      end
-    end
-
-    context 'with custom service name' do
-      before :each do
-        params.merge!(:service_name => 'custom-service-name')
-      end
-      it 'should configure proper service name' do
-        is_expected.to contain_service('neutron-server').with_name('custom-service-name')
       end
     end
 
@@ -233,6 +224,44 @@ describe 'neutron::server' do
       end
 
       it { is_expected.to contain_neutron_config('oslo_middleware/enable_proxy_headers_parsing').with_value(true) }
+    end
+
+    context 'when running neutron-api in wsgi' do
+      before :each do
+        params.merge!({ :service_name => 'httpd' })
+      end
+
+      let :pre_condition do
+        "class { 'neutron': rabbit_password => 'passw0rd' }
+         include ::apache
+         class { '::neutron::keystone::authtoken':
+           password => 'passw0rd',
+         }"
+      end
+
+      it 'configures neutron-api service with Apache' do
+        is_expected.to contain_service('neutron-server').with(
+          :ensure     => 'stopped',
+          :name       => platform_params[:server_service],
+          :enable     => false,
+          :tag        => ['neutron-service', 'neutron-db-sync-service'],
+        )
+      end
+    end
+
+    context 'when service_name is customized' do
+      before :each do
+        params.merge!({ :service_name => 'foobar' })
+      end
+
+      it 'configures neutron-api service with custom name' do
+        is_expected.to contain_service('neutron-server').with(
+          :name    => 'foobar',
+          :enable  => true,
+          :ensure  => 'running',
+          :tag     => ['neutron-service', 'neutron-db-sync-service'],
+        )
+      end
     end
   end
 

@@ -39,16 +39,25 @@
 # Defaults to $::os_service_default
 #
 class neutron::plugins::ml2::cisco::vts (
+  $package_ensure          = 'present',
   $vts_username,
   $vts_password,
   $vts_url,
   $vts_timeout             = $::os_service_default,
   $vts_sync_timeout        = $::os_service_default,
   $vts_retry_count         = $::os_service_default,
+  $vts_vmmid               = $::os_service_default
 ) {
 
   include ::neutron::deps
   require ::neutron::plugins::ml2
+
+  ensure_resource('package', 'python-cisco-controller',
+    {
+      ensure => $package_ensure,
+      tag    => 'openstack',
+    }
+  )
 
   neutron_plugin_ml2 {
     'ml2_cc/username':                value => $vts_username;
@@ -57,5 +66,6 @@ class neutron::plugins::ml2::cisco::vts (
     'ml2_cc/timeout':                 value => $vts_timeout;
     'ml2_cc/sync_timeout':            value => $vts_sync_timeout;
     'ml2_cc/retry_count':             value => $vts_retry_count;
+    'ml2_cc/vmmid':                   value => $vts_vmmid;
   }
 }

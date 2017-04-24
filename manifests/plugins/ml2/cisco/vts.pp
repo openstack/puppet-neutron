@@ -5,25 +5,16 @@
 #
 # === Parameters
 #
-# [*package_ensure*]
-# (optional) The intended state of the cisco-vts-ml2-driver
-# package, i.e. any of the possible values of the 'ensure'
-# property for a package resource type.
-# Defaults to 'present'
-#
 # [*vts_username*]
-# (optional) The VTS controller username
-# Defaults to $::os_service_default
+# (required) The VTS controller username
 # Example: 'admin'
 #
 # [*vts_password*]
-# (optional) The VTS controller password
-# Defaults to $::os_service_default
+# (required) The VTS controller password
 # Example: 'admin'
 #
 # [*vts_url*]
-# (optional) The VTS controller neutron URL
-# Defaults to $::os_service_default
+# (required) The VTS controller neutron URL
 # Example: 'http://127.0.0.1:8888/api/running/openstack'
 #
 # [*vts_timeout*]
@@ -38,15 +29,25 @@
 # (optional) Numer of retries for synchronization with VTS.
 # Defaults to $::os_service_default
 #
+# [*vts_vmmid*]
+# (optional) FIXME: Description of vmmid
+# Defaults to $::os_service_default
+#
+# [*package_ensure*]
+# (optional) The intended state of the cisco-vts-ml2-driver
+# package, i.e. any of the possible values of the 'ensure'
+# property for a package resource type.
+# Defaults to 'present'
+#
 class neutron::plugins::ml2::cisco::vts (
-  $package_ensure          = 'present',
   $vts_username,
   $vts_password,
   $vts_url,
-  $vts_timeout             = $::os_service_default,
-  $vts_sync_timeout        = $::os_service_default,
-  $vts_retry_count         = $::os_service_default,
-  $vts_vmmid               = $::os_service_default
+  $vts_timeout      = $::os_service_default,
+  $vts_sync_timeout = $::os_service_default,
+  $vts_retry_count  = $::os_service_default,
+  $vts_vmmid        = $::os_service_default,
+  $package_ensure   = 'present'
 ) {
 
   include ::neutron::deps
@@ -60,12 +61,12 @@ class neutron::plugins::ml2::cisco::vts (
   )
 
   neutron_plugin_ml2 {
-    'ml2_cc/username':                value => $vts_username;
-    'ml2_cc/password':                value => $vts_password, secret => true;
-    'ml2_cc/url':                     value => $vts_url;
-    'ml2_cc/timeout':                 value => $vts_timeout;
-    'ml2_cc/sync_timeout':            value => $vts_sync_timeout;
-    'ml2_cc/retry_count':             value => $vts_retry_count;
-    'ml2_cc/vmmid':                   value => $vts_vmmid;
+    'ml2_cc/username':     value => $vts_username;
+    'ml2_cc/password':     value => $vts_password, secret => true;
+    'ml2_cc/url':          value => $vts_url;
+    'ml2_cc/timeout':      value => $vts_timeout;
+    'ml2_cc/sync_timeout': value => $vts_sync_timeout;
+    'ml2_cc/retry_count':  value => $vts_retry_count;
+    'ml2_cc/vmmid':        value => $vts_vmmid;
   }
 }

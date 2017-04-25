@@ -46,7 +46,7 @@ class neutron::plugins::ml2::cisco::vts (
   $vts_timeout      = $::os_service_default,
   $vts_sync_timeout = $::os_service_default,
   $vts_retry_count  = $::os_service_default,
-  $vts_vmmid        = $::os_service_default,
+  $vts_vmmid,
   $package_ensure   = 'present'
 ) {
 

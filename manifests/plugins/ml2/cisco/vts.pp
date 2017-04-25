@@ -67,6 +67,6 @@ class neutron::plugins::ml2::cisco::vts (
     'ml2_cc/timeout':      value => $vts_timeout;
     'ml2_cc/sync_timeout': value => $vts_sync_timeout;
     'ml2_cc/retry_count':  value => $vts_retry_count;
-    'ml2_cc/vmmid':        value => $vts_vmmid;
+    'ml2_cc/vmm_id':        value => $vts_vmmid;
   }
 }

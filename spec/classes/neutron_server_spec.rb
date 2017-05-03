@@ -90,12 +90,21 @@ describe 'neutron::server' do
       end
     end
 
-    context 'with DVR enabled' do
+    context 'with DVR enabled for new routers' do
       before :each do
         params.merge!(:router_distributed => true)
       end
-      it 'should enable DVR' do
+      it 'should enable DVR for new routers' do
         is_expected.to contain_neutron_config('DEFAULT/router_distributed').with_value(true)
+      end
+    end
+
+    context 'with DVR disabled' do
+      before :each do
+        params.merge!(:enable_dvr => false)
+      end
+      it 'should disable DVR' do
+        is_expected.to contain_neutron_config('DEFAULT/enable_dvr').with_value(false)
       end
     end
 

@@ -114,6 +114,10 @@
 #   Also can be the type of the router on the create request (admin-only attribute).
 #   Defaults to $::os_service_default
 #
+# [*enable_dvr*]
+#   (optional) Setting the "enable_dvr" flag to "False" will disable "dvr" API extension exposure.
+#   Defaults to $::os_service_default
+#
 # [*dhcp_load_type*]
 #   (optional) The resource type whos load is being reported by the agent.
 #   The expected values are either 'networks', 'subnets', 'ports'.
@@ -236,6 +240,7 @@ class neutron::server (
   $enable_new_agents                = $::os_service_default,
   $router_scheduler_driver          = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
   $router_distributed               = $::os_service_default,
+  $enable_dvr                       = $::os_service_default,
   $network_scheduler_driver         = $::os_service_default,
   $dhcp_load_type                   = $::os_service_default,
   $default_availability_zones       = $::os_service_default,
@@ -338,6 +343,7 @@ class neutron::server (
     'DEFAULT/enable_new_agents':                value => $enable_new_agents;
     'DEFAULT/router_scheduler_driver':          value => $router_scheduler_driver;
     'DEFAULT/router_distributed':               value => $router_distributed;
+    'DEFAULT/enable_dvr':                       value => $enable_dvr;
     'DEFAULT/allow_automatic_l3agent_failover': value => $allow_automatic_l3agent_failover;
     'DEFAULT/allow_automatic_dhcp_failover':    value => $allow_automatic_dhcp_failover;
     'DEFAULT/network_scheduler_driver':         value => $network_scheduler_driver;

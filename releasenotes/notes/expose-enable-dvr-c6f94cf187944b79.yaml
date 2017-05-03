@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    New option ``enable_dvr`` is now exposed. The option is added in Pike, and
+    it allows to disable ``dvr`` API extension exposure when it's known the
+    deployment is not configured to support DVR routers.

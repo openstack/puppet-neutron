@@ -100,7 +100,7 @@ class neutron::params {
     $metadata_agent_package     = 'neutron-metadata-agent'
     $l3_agent_package           = 'neutron-l3-agent'
     $fwaas_package              = 'python-neutron-fwaas'
-    $l2gw_agent_package         = 'neutron-l2gw-agent'
+    $l2gw_agent_package         = 'neutron-l2gateway-agent'
     $l2gw_package               = 'python-networking-l2gw'
   } else {
     fail("Unsupported osfamily ${::osfamily}")

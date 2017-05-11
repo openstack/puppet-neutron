@@ -102,7 +102,7 @@ describe 'neutron::agents::l2gw' do
         when 'RedHat'
           { :l2gw_agent_package_name => 'openstack-neutron-l2gw-agent' }
         when 'Debian'
-          { :l2gw_agent_package_name => 'neutron-l2gw-agent' }
+          { :l2gw_agent_package_name => 'neutron-l2gateway-agent' }
         end
       end
 

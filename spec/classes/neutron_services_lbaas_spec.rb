@@ -23,7 +23,7 @@ require 'spec_helper'
 describe 'neutron::services::lbaas' do
 
   let :default_params do
-    { :service_providers => '<SERVICE_DEFAULT>'}
+    { :service_providers => '<SERVICE DEFAULT>'}
   end
 
   shared_examples_for 'neutron lbaas service plugin' do

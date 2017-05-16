@@ -24,9 +24,9 @@ describe 'neutron::services::lbaas::octavia' do
 
   let :default_params do
     { :base_url              => 'http://127.0.0.1:9876',
-      :request_poll_interval => '<SERVICE_DEFAULT>',
-      :request_poll_timeout  => '<SERVICE_DEFAULT>',
-      :allocates_vip         => '<SERVICE_DEFAULT>'}
+      :request_poll_interval => '<SERVICE DEFAULT>',
+      :request_poll_timeout  => '<SERVICE DEFAULT>',
+      :allocates_vip         => '<SERVICE DEFAULT>'}
   end
 
   context 'with default params' do
@@ -36,9 +36,9 @@ describe 'neutron::services::lbaas::octavia' do
 
     it 'configures octavia service plugin' do
       is_expected.to contain_neutron_config('octavia/base_url').with_value('http://127.0.0.1:9876')
-      is_expected.to contain_neutron_config('octavia/request_poll_interval').with_value('<SERVICE_DEFAULT>')
-      is_expected.to contain_neutron_config('octavia/request_poll_timeout').with_value('<SERVICE_DEFAULT>')
-      is_expected.to contain_neutron_config('octavia/allocates_vip').with_value('<SERVICE_DEFAULT>')
+      is_expected.to contain_neutron_config('octavia/request_poll_interval').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('octavia/request_poll_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('octavia/allocates_vip').with_value('<SERVICE DEFAULT>')
     end
   end
 

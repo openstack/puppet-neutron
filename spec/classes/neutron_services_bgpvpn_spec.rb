@@ -20,7 +20,7 @@ describe 'neutron::services::bgpvpn' do
 
   let :default_params do
     { :package_ensure    => 'present',
-      :service_providers => '<SERVICE_DEFAULT>',
+      :service_providers => '<SERVICE DEFAULT>',
       :sync_db           => true,
     }
   end

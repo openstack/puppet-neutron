@@ -23,12 +23,12 @@ require 'spec_helper'
 describe 'neutron::services::lbaas::haproxy' do
 
   let :default_params do
-    { :interface_driver        => '<SERVICE_DEFAULT>',
-      :periodic_interval       => '<SERVICE_DEFAULT>',
-      :loadbalancer_state_path => '<SERVICE_DEFAULT>',
-      :user_group              => '<SERVICE_DEFAULT>',
-      :send_gratuitous_arp     => '<SERVICE_DEFAULT>',
-      :jinja_config_template   => '<SERVICE_DEFAULT>'}
+    { :interface_driver        => '<SERVICE DEFAULT>',
+      :periodic_interval       => '<SERVICE DEFAULT>',
+      :loadbalancer_state_path => '<SERVICE DEFAULT>',
+      :user_group              => '<SERVICE DEFAULT>',
+      :send_gratuitous_arp     => '<SERVICE DEFAULT>',
+      :jinja_config_template   => '<SERVICE DEFAULT>'}
   end
 
   context 'with default params' do
@@ -37,12 +37,12 @@ describe 'neutron::services::lbaas::haproxy' do
     end
 
     it 'configures haproxy service plugin' do
-      is_expected.to contain_neutron_config('haproxy/interface_driver').with_value('<SERVICE_DEFAULT>')
-      is_expected.to contain_neutron_config('haproxy/periodic_interval').with_value('<SERVICE_DEFAULT>')
-      is_expected.to contain_neutron_config('haproxy/loadbalancer_state_path').with_value('<SERVICE_DEFAULT>')
-      is_expected.to contain_neutron_config('haproxy/user_group').with_value('<SERVICE_DEFAULT>')
-      is_expected.to contain_neutron_config('haproxy/send_gratuitous_arp').with_value('<SERVICE_DEFAULT>')
-      is_expected.to contain_neutron_config('haproxy/jinja_config_template').with_value('<SERVICE_DEFAULT>')
+      is_expected.to contain_neutron_config('haproxy/interface_driver').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('haproxy/periodic_interval').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('haproxy/loadbalancer_state_path').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('haproxy/user_group').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('haproxy/send_gratuitous_arp').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('haproxy/jinja_config_template').with_value('<SERVICE DEFAULT>')
     end
   end
 

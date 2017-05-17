@@ -171,7 +171,7 @@ class neutron::plugins::ml2 (
     warning ('supported_pci_vendor_devs is deprecated, has no effect and will be removed in a future release.')
   }
 
-  if !is_service_default($overlay_ip_version) and !($overlay_ip_version in [4, 6]) {
+  if !is_service_default($overlay_ip_version) and !("${overlay_ip_version}" in ['4', '6']) {
     fail('Invalid IP version for overlay_ip_version')
   }
 

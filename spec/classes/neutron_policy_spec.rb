@@ -29,7 +29,9 @@ describe 'neutron::policy' do
     end
 
     it 'set policy_file in neutron.conf' do
-      is_expected.to contain_neutron_config('oslo_policy/policy_file').with_value(params[:policy_path])
+      is_expected.to contain_oslo__policy('neutron_config').with(
+        :policy_file => '/etc/neutron/policy.json',
+      )
     end
   end
 

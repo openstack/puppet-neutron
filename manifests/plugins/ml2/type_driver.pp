@@ -130,6 +130,6 @@ define neutron::plugins::ml2::type_driver (
   }
   else {
     # detect an invalid type_drivers value
-    fail('type_driver unknown.')
+    warning('type_driver unknown.')
   }
 }

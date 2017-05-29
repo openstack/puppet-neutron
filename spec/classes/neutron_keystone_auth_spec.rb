@@ -61,7 +61,6 @@ describe 'neutron::keystone::auth' do
       }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/neutron::network').with_notify(['Service[neutron-server]']) }
   end
 
   describe 'with endpoint URL parameters' do

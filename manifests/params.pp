@@ -71,6 +71,8 @@ class neutron::params {
     $libreswan_package          = 'libreswan'
     $l3_agent_package           = false
     $fwaas_package              = 'openstack-neutron-fwaas'
+    $neutron_wsgi_script_path   = '/var/www/cgi-bin/neutron'
+    $neutron_wsgi_script_source = '/usr/bin/neutron-api'
   } elsif($::osfamily == 'Debian') {
     $nobody_user_group          = 'nogroup'
     $package_name               = 'neutron-common'
@@ -102,6 +104,8 @@ class neutron::params {
     $fwaas_package              = 'python-neutron-fwaas'
     $l2gw_agent_package         = 'neutron-l2gateway-agent'
     $l2gw_package               = 'python-networking-l2gw'
+    $neutron_wsgi_script_path   = '/usr/lib/cgi-bin/neutron'
+    $neutron_wsgi_script_source = '/usr/bin/neutron-api'
   } else {
     fail("Unsupported osfamily ${::osfamily}")
   }

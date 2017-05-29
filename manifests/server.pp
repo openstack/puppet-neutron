@@ -17,8 +17,13 @@
 #   Defaults to true
 #
 # [*service_name*]
-#   (optional) The name of the neutron-server service
-#   Defaults to $::neutron::params::server_service
+#   (optional) Name of the service that will be providing the
+#   server functionality of neutron-api.
+#   If the value is 'httpd', this means neutron-api will be a web
+#   service, and you must use another class to configure that
+#   web service. For example, use class { 'neutron::wsgi::apache'...}
+#   to make neutron-api be a web app using apache mod_wsgi.
+#   Defaults to '$::neutron::params::server_service'
 #
 # [*log_file*]
 #   REMOVED: Use log_file of neutron class instead.
@@ -409,13 +414,37 @@ class neutron::server (
       $service_ensure = 'stopped'
     }
   }
-
-  service { 'neutron-server':
-    ensure     => $service_ensure,
-    name       => $service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => ['neutron-service', 'neutron-db-sync-service'],
+  if $service_name == $::neutron::params::server_service {
+    service { 'neutron-server':
+      ensure     => $service_ensure,
+      name       => $::neutron::params::server_service,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
+    }
+  } elsif $service_name == 'httpd' {
+    include ::apache::params
+    service { 'neutron-server':
+      ensure     => 'stopped',
+      name       => $::neutron::params::server_service,
+      enable     => false,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => ['neutron-service', 'neutron-db-sync-service'],
+    }
+    Service <<| title == 'httpd' |>> { tag +> 'neutron-service' }
+    # we need to make sure neutron-server is stopped before trying to start apache
+    Service[$::neutron::params::server_service] -> Service[$service_name]
+  } else {
+    # backward compatibility so operators can customize the service name.
+    service { 'neutron-server':
+      ensure     => $service_ensure,
+      name       => $service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => ['neutron-service', 'neutron-db-sync-service'],
+    }
   }
 }

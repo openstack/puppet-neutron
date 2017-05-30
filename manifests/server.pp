@@ -433,7 +433,7 @@ class neutron::server (
       hasrestart => true,
       tag        => ['neutron-service', 'neutron-db-sync-service'],
     }
-    Service <<| title == 'httpd' |>> { tag +> 'neutron-service' }
+    Service <| title == 'httpd' |> { tag +> 'neutron-service' }
     # we need to make sure neutron-server is stopped before trying to start apache
     Service[$::neutron::params::server_service] -> Service[$service_name]
   } else {

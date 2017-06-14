@@ -1,0 +1,6 @@
+---
+features:
+  - Additional support for Nuage is added in neutron, as a result of which
+    Nuage can be plugged into neutron as ML2 mechanism driver. This feature
+    is in addition to the option of usign Nuage as the core plugin. This
+    change adds neutron::plugins::ml2::nuage

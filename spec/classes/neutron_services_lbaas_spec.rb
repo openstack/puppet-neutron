@@ -23,7 +23,7 @@ require 'spec_helper'
 describe 'neutron::services::lbaas' do
 
   let :default_params do
-    { :service_providers => '<SERVICE DEFAULT>'}
+    {}
   end
 
   shared_examples_for 'neutron lbaas service plugin' do
@@ -58,20 +58,6 @@ describe 'neutron::services::lbaas' do
           is_expected.to contain_neutron_config('certificates/storage_path').with_value('/var/lib/neutron-lbaas/certificates/')
           is_expected.to contain_neutron_config('certificates/barbican_auth').with_value('barbican_acl_auth')
         end
-      end
-    end
-
-    context 'with multiple service providers' do
-      let :params do
-        default_params.merge(
-          { :service_providers => ['provider1', 'provider2'] }
-        )
-      end
-
-      it 'configures neutron.conf' do
-        is_expected.to contain_neutron_lbaas_service_config(
-          'service_providers/service_provider'
-        ).with_value(['provider1', 'provider2'])
       end
     end
   end

@@ -219,13 +219,7 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
-# === Deprecated Parameters
-#
-# [*ensure_lbaas_package*]
-#   Deprecated. Ensures installation of LBaaS package.
-#   LBaaS agent should be installed from neutron::agents::lbaas.
-#   Defaults to false.
-#
+
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -268,7 +262,6 @@ class neutron::server (
   $report_interval                  = undef,
   $state_path                       = undef,
   $lock_path                        = undef,
-  $ensure_lbaas_package             = false,
 ) inherits ::neutron::params {
 
   include ::neutron::deps
@@ -321,15 +314,6 @@ class neutron::server (
     ensure_resource( 'package', 'neutron-vpnaas-agent', {
       'ensure' => $package_ensure,
       'name'   => $::neutron::params::vpnaas_agent_package,
-      'tag'    => ['openstack', 'neutron-package'],
-    })
-  }
-
-  if $ensure_lbaas_package {
-    warning('$ensure_lbaas_package is deprecated. To install lbaas agent the neutron::agents::lbaas class should be used.')
-    ensure_resource( 'package', 'neutron-lbaasv2-agent', {
-      'ensure' => $package_ensure,
-      'name'   => $::neutron::params::lbaasv2_agent_package,
       'tag'    => ['openstack', 'neutron-package'],
     })
   }

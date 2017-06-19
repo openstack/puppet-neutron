@@ -1,0 +1,6 @@
+---
+other:
+  - Removed deprecated neutron::services::lbaas::service_providers
+  - Removed deprecated neutron::services::lbaas::package_ensure
+  - Removed deprecated neutron::server::ensure_lbaas_package
+

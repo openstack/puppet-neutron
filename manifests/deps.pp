@@ -47,7 +47,6 @@ class neutron::deps {
   Anchor['neutron::config::begin'] -> Neutron_l3_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_lbaas_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_lbaas_service_config<||> ~> Anchor['neutron::config::end']
-  Anchor['neutron::config::begin'] -> Neutron_lbaas_service_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_metadata_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_metering_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_plugin_cisco_credentials<||> ~> Anchor['neutron::config::end']

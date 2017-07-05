@@ -9,11 +9,9 @@
 #
 # [*odl_username*]
 # (optional) The opendaylight controller username
-# Defaults to 'admin'
 #
 # [*odl_password*]
 # (optional) The opendaylight controller password
-# Defaults to 'admin'
 #
 # [*odl_check_url*]
 # (optional) The URL used to check ODL is available and ready
@@ -43,8 +41,8 @@
 #
 class neutron::plugins::ovs::opendaylight (
   $tunnel_ip,
-  $odl_username       = 'admin',
-  $odl_password       = 'admin',
+  $odl_username,
+  $odl_password,
   $odl_check_url      = 'http://127.0.0.1:8080/restconf/operational/network-topology:network-topology/topology/netvirt:1',
   $odl_ovsdb_iface    = 'tcp:127.0.0.1:6640',
   $ovsdb_server_iface = 'ptcp:6639:127.0.0.1',

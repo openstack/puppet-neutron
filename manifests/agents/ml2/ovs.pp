@@ -354,7 +354,7 @@ class neutron::agents::ml2::ovs (
       enable  => $enabled,
       # TODO: Remove this require once ovs-cleanup service
       # script is packaged in neutron-openvswitch package
-      require => Package['neutron'],
+      require => Anchor['neutron::install::end'],
     }
   }
 }

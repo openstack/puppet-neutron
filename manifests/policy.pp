@@ -28,6 +28,8 @@ class neutron::policy (
   $policy_path = '/etc/neutron/policy.json',
 ) {
 
+  include ::neutron::deps
+
   validate_hash($policies)
 
   Openstacklib::Policy::Base {

@@ -15,8 +15,6 @@ describe 'neutron::plugins::ml2::opendaylight' do
   let :default_params do
     {
       :package_ensure          => 'present',
-      :odl_username            => '<SERVICE DEFAULT>',
-      :odl_password            => '<SERVICE DEFAULT>',
       :odl_url                 => '<SERVICE DEFAULT>',
       :ovsdb_connection        => 'tcp:127.0.0.1:6639',
       :port_binding_controller => '<SERVICE DEFAULT>',
@@ -26,6 +24,8 @@ describe 'neutron::plugins::ml2::opendaylight' do
 
   let :params do
     {
+      :odl_username           => 'user',
+      :odl_password           => 'password',
     }
   end
 

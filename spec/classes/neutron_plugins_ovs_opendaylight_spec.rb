@@ -14,8 +14,6 @@ describe 'neutron::plugins::ovs::opendaylight' do
 
   let :default_params do
     {
-      :odl_username       => 'admin',
-      :odl_password       => 'admin',
       :odl_check_url      => 'http://127.0.0.1:8080/restconf/operational/network-topology:network-topology/topology/netvirt:1',
       :odl_ovsdb_iface    => 'tcp:127.0.0.1:6640',
       :ovsdb_server_iface => 'ptcp:6639:127.0.0.1',
@@ -28,6 +26,8 @@ describe 'neutron::plugins::ovs::opendaylight' do
   let :params do
     {
       :tunnel_ip         => '127.0.0.1',
+      :odl_username       => 'user',
+      :odl_password       => 'password',
     }
   end
 

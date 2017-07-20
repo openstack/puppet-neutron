@@ -61,15 +61,15 @@ class neutron::plugins::ovs::opendaylight (
     tries     => $retry_count,
     try_sleep => $retry_interval,
     path      => '/usr/sbin:/usr/bin:/sbin:/bin',
-  } ->
+  }
   # OVS manager
-  exec { 'Set OVS Manager to OpenDaylight':
+  -> exec { 'Set OVS Manager to OpenDaylight':
     command => "ovs-vsctl set-manager ${ovsdb_server_iface} ${odl_ovsdb_iface}",
     unless  => "ovs-vsctl show | grep 'Manager \"${ovsdb_server_iface} ${odl_ovsdb_iface}\"'",
     path    => '/usr/sbin:/usr/bin:/sbin:/bin',
-  } ->
+  }
   # local ip
-  exec { 'Set local_ip Other Option':
+  -> exec { 'Set local_ip Other Option':
     command => "ovs-vsctl set Open_vSwitch $(ovs-vsctl get Open_vSwitch . _uuid) other_config:local_ip=${tunnel_ip}",
     unless  => "ovs-vsctl list Open_vSwitch | grep 'local_ip=\"${tunnel_ip}\"'",
     path    => '/usr/sbin:/usr/bin:/sbin:/bin',

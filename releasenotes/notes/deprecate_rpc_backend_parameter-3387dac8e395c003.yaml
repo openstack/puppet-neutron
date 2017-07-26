@@ -1,0 +1,4 @@
+---
+deprecations:
+  - neutron::rpc_backend is deprecated and will be removed in a future
+    release. Please use neutron::default_transport_url instead.

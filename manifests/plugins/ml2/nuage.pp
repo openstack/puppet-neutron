@@ -60,6 +60,22 @@ class neutron::plugins::ml2::nuage (
     tag    => 'neutron-config-file',
   }
 
+  if $::osfamily == 'Debian' {
+    file_line { 'neutron-server-DAEMON_ARGS':
+      path => '/etc/default/neutron-server',
+      line => 'DAEMON_ARGS="$DAEMON_ARGS --config-file /etc/neutron/plugins/nuage/plugin.ini"',
+    }
+  }
+
+  if $::osfamily == 'Redhat' {
+    file { '/etc/neutron/conf.d/neutron-server/nuage_plugin.conf':
+      ensure  => link,
+      require => File['/etc/neutron/plugins/nuage/plugin.ini'],
+      target  => $::neutron::params::nuage_config_file,
+      tag     => 'neutron-config-file',
+    }
+  }
+
   file { '/etc/neutron/plugins/nuage/plugin.ini':
     ensure  => file,
     owner   => 'root',

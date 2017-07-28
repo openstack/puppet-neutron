@@ -72,6 +72,13 @@ describe 'neutron::plugins::ml2::nuage' do
       it_raises 'a Puppet::Error', /Nuage should be the mechanism driver in neutron.conf/
     end
 
+    it 'should have a nuage plugin conf file' do
+      is_expected.to contain_file(platform_params[:nuage_conf_file]).with(
+        :ensure => platform_params[:nuage_file_ensure],
+        :target => platform_params[:nuage_file_target]
+      )
+    end
+
     context 'configure ml2 nuage with wrong mechanism_driver configuration' do
       let :pre_condition do
         "class { '::neutron::plugins::ml2':
@@ -88,6 +95,21 @@ describe 'neutron::plugins::ml2::nuage' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
+      end
+
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'RedHat'
+          { :nuage_conf_file   => '/etc/neutron/conf.d/neutron-server/nuage_plugin.conf',
+            :nuage_file_ensure => 'link',
+            :nuage_file_target => '/etc/neutron/plugins/nuage/plugin.ini'
+          }
+        when 'Debian'
+          { :nuage_conf_file   => '/etc/default/neutron-server',
+            :nuage_file_ensure => 'present',
+            :nuage_file_target => nil
+          }
+        end
       end
 
       it_configures 'neutron plugin ml2 nuage'

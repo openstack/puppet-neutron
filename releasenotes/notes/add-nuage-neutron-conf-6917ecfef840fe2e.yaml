@@ -1,0 +1,6 @@
+---
+features:
+  - Added nuage configuration file under neutron-server configuration
+    directory so that neutron-server can pick up the configuration file on
+    startup. This change creates nuage_plugin.conf symlink under the folder
+    /etc/neutron/conf.d/neutron-server.

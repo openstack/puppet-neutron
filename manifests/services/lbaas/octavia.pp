@@ -38,6 +38,41 @@
 # [*allocates_vip*]
 #   (optional) Whether Octavia is responsible for allocating
 #   the VIP.
+#
+# [*auth_url*]
+#   (optional) Keystone Authentication URL
+#   Defaults to $::os_service_default   Defaults to $::os_service_default
+#
+# [*admin_user*]
+#   (optional) User for LBaaS authentication
+#   Defaults to $::os_service_default
+#
+# [*admin_tenant_name*]
+#   (optional) Tenant for LBaaS authentication
+#   Defaults to 'services'
+#
+# [*admin_password*]
+#   (optional) Password for LBaaS authentication
+#   Defaults to $::os_service_default
+#
+# [*admin_user_domain*]
+#   (optional) User domain for LBaaS authentication
+#   Defaults to $::os_service_default
+#
+# [*admin_project_domain*]
+#   (optional) Project domain for LBaaS authentication
+#   Defaults to $::os_service_default
+#
+# [*auth_version*]
+#   (optional) Authentication version
+#   Defaults to $::os_service_default
+#
+# [*endpoint_type*]
+#   (optional) Endpoint type (public/private/internal)
+#   Defaults to $::os_service_default
+#
+# [*insecure*]
+#   (optional) Accept insecure certificates
 #   Defaults to $::os_service_default
 #
 
@@ -45,7 +80,16 @@ class neutron::services::lbaas::octavia(
   $base_url              = 'http://127.0.0.1:9876',
   $request_poll_interval = $::os_service_default,
   $request_poll_timeout  = $::os_service_default,
-  $allocates_vip         = $::os_service_default
+  $allocates_vip         = $::os_service_default,
+  $auth_url              = $::os_service_default,
+  $admin_user            = $::os_service_default,
+  $admin_tenant_name     = 'services',
+  $admin_password        = $::os_service_default,
+  $admin_user_domain     = $::os_service_default,
+  $admin_project_domain  = $::os_service_default,
+  $auth_version          = $::os_service_default,
+  $endpoint_type         = $::os_service_default,
+  $insecure              = $::os_service_default
 ) {
 
   include ::neutron::deps
@@ -55,5 +99,17 @@ class neutron::services::lbaas::octavia(
     'octavia/request_poll_interval': value => $request_poll_interval;
     'octavia/request_poll_timeout':  value => $request_poll_timeout;
     'octavia/allocates_vip':         value => $allocates_vip;
+  }
+
+  neutron_config {
+    'service_auth/auth_url'             : value => $auth_url;
+    'service_auth/admin_user'           : value => $admin_user;
+    'service_auth/admin_tenant_name'    : value => $admin_tenant_name;
+    'service_auth/admin_password'       : value => $admin_password;
+    'service_auth/admin_user_domain'    : value => $admin_user_domain;
+    'service_auth/admin_project_domain' : value => $admin_project_domain;
+    'service_auth/auth_version'         : value => $auth_version;
+    'service_auth/endpoint_type'        : value => $endpoint_type;
+    'service_auth/insecure'             : value => $insecure;
   }
 }

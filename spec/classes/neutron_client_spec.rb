@@ -2,30 +2,34 @@ require 'spec_helper'
 
 describe 'neutron::client' do
 
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
-    }
-  end
+  shared_examples_for 'neutron client' do
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian'
-      }))
+    it { is_expected.to contain_class('neutron::deps') }
+    it { is_expected.to contain_class('neutron::params') }
+
+    it 'installs neutron client package' do
+      is_expected.to contain_package('python-neutronclient').with(
+        :ensure => 'present',
+        :name   => platform_params[:client_package],
+        :tag    => ['neutron-support-package', 'openstack']
+      )
     end
-
-    it { is_expected.to contain_class('neutron::client') }
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7'
-      }))
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      let :platform_params do
+        { :client_package => 'python-neutronclient' }
+      end
+
+      it_behaves_like 'neutron client'
     end
-
-    it { is_expected.to contain_class('neutron::client') }
   end
+
 end

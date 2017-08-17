@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The parameter metadata_host was added to the metadata agent resource. This
+    sets the nova_metadata_host value which is meant to replace the
+    nova_metadata_ip value and allows you to set hostnames instead of just IPs.

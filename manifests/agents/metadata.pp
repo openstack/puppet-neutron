@@ -32,6 +32,9 @@
 # [*metadata_ip*]
 #   The IP address of the metadata service. Defaults to $::os_service_default.
 #
+# [*metadata_host*]
+#   The hostname of the metadata service. Defaults to $::os_service_default.
+#
 # [*metadata_port*]
 #   The TCP port of the metadata service. Defaults to $::os_service_default.
 #
@@ -72,6 +75,7 @@ class neutron::agents::metadata (
   $debug                     = false,
   $auth_ca_cert              = $::os_service_default,
   $metadata_ip               = $::os_service_default,
+  $metadata_host             = $::os_service_default,
   $metadata_port             = $::os_service_default,
   $metadata_protocol         = $::os_service_default,
   $metadata_workers          = $::os_workers,
@@ -94,6 +98,7 @@ class neutron::agents::metadata (
     'DEFAULT/debug':                          value => $debug;
     'DEFAULT/auth_ca_cert':                   value => $auth_ca_cert;
     'DEFAULT/nova_metadata_ip':               value => $metadata_ip;
+    'DEFAULT/nova_metadata_host':             value => $metadata_host;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/nova_metadata_protocol':         value => $metadata_protocol;
     'DEFAULT/nova_metadata_insecure':         value => $metadata_insecure;

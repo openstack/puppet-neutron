@@ -57,6 +57,7 @@ describe 'neutron::agents::metadata' do
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_cert').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_priv_key').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_ip').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_host').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_port').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/metadata_workers').with(:value => facts[:os_workers])

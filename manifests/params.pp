@@ -36,6 +36,7 @@ class neutron::params {
   $l2gw_agent_service          = 'neutron-l2gw-agent'
   $nsx_plugin_package          = 'vmware-nsx'
   $nsx_config_file             = '/etc/neutron/plugins/vmware/nsx.ini'
+  $sfc_package                 = 'python-networking-sfc'
 
   if($::osfamily == 'Redhat') {
     $nobody_user_group          = 'nobody'

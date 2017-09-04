@@ -1,0 +1,4 @@
+---
+features:
+  - Adds ability to configure networking-sfc neutron
+    extension.

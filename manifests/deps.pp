@@ -40,6 +40,7 @@ class neutron::deps {
   Anchor['neutron::config::begin'] -> Neutron_api_paste_ini<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_bgpvpn_bagpipe_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_bgpvpn_service_config<||> ~> Anchor['neutron::config::end']
+  Anchor['neutron::config::begin'] -> Neutron_sfc_service_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_dhcp_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_fwaas_service_config<||> ~> Anchor['neutron::config::end']

@@ -1,0 +1,3 @@
+---
+features:
+  - Adds ability to configure metadata agent in networking-ovn.

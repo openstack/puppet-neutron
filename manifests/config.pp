@@ -54,6 +54,9 @@
 # [*metadata_agent_config*]
 #   (optional) Manage configuration of metadata_agent.ini
 #
+# [*ovn_metadata_agent_config*]
+#   (optional) Manage configuration of networking-ovn metadata_agent.ini
+#
 # [*metering_agent_config*]
 #   (optional) Manage configuration of metering_agent.ini
 #
@@ -108,6 +111,7 @@ class neutron::config (
   $dhcp_agent_config             = {},
   $lbaas_agent_config            = {},
   $metadata_agent_config         = {},
+  $ovn_metadata_agent_config     = {},
   $metering_agent_config         = {},
   $vpnaas_agent_config           = {},
   $plugin_linuxbridge_config     = {},
@@ -136,6 +140,7 @@ class neutron::config (
   validate_hash($dhcp_agent_config)
   validate_hash($lbaas_agent_config)
   validate_hash($metadata_agent_config)
+  validate_hash($ovn_metadata_agent_config)
   validate_hash($metering_agent_config)
   validate_hash($vpnaas_agent_config)
   validate_hash($plugin_linuxbridge_config)
@@ -174,4 +179,5 @@ class neutron::config (
   create_resources('neutron_l2gw_service_config', $l2gw_service_config)
   create_resources('neutron_plugin_nsx', $plugin_nsx_config)
   create_resources('neutron_plugin_nvp', $plugin_nvp_config)
+  create_resources('ovn_metadata_agent_config', $ovn_metadata_agent_config)
 }

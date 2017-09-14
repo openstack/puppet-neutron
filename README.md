@@ -1,7 +1,7 @@
 Team and repository tags
 ========================
 
-[![Team and repository tags](http://governance.openstack.org/badges/puppet-neutron.svg)](http://governance.openstack.org/reference/tags/index.html)
+[![Team and repository tags](https://governance.openstack.org/tc/badges/puppet-neutron.svg)](https://governance.openstack.org/tc/reference/tags/index.html)
 
 <!-- Change things from this point on -->
 
@@ -43,7 +43,7 @@ Setup
 
 ### Beginning with neutron
 
-To utilize the neutron module's functionality you will need to declare multiple resources. The following example displays the setting up of an Open vSwitch neutron installation. This is not an exhaustive list of all the components needed. We recommend that you consult and understand the [core openstack](http://docs.openstack.org) documentation to assist you in understanding the available deployment options.
+To utilize the neutron module's functionality you will need to declare multiple resources. The following example displays the setting up of an Open vSwitch neutron installation. This is not an exhaustive list of all the components needed. We recommend that you consult and understand the [core openstack](https://docs.openstack.org) documentation to assist you in understanding the available deployment options.
 
 ```puppet
 # enable the neutron service

@@ -57,7 +57,7 @@ This is a backwards-incompatible major release for OpenStack Liberty.
 - dbsync should only notify services that use the db
 - map allocation_pool property to set
 - restart Neutron agents if packages are updated
-- remove unecessary constraint between Package and Config resource
+- remove unnecessary constraint between Package and Config resource
 - fix 'shared' parameter check in neutron_network provider
 
 ####Maintenance

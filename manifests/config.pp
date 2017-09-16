@@ -39,6 +39,9 @@
 # [*l2gw_service_config*]
 #   (optional) Manage configuration of l2gw_plugin.ini
 #
+# [*sfc_service_config*]
+#   (optional) Manage configuration of networking-sfc.conf
+#
 # [*l3_agent_config*]
 #   (optional) Manage configuration of l3_agent.ini
 #
@@ -100,6 +103,7 @@ class neutron::config (
   $bgpvpn_service_config         = {},
   $l2gw_agent_config             = {},
   $l2gw_service_config           = {},
+  $sfc_service_config            = {},
   $l3_agent_config               = {},
   $dhcp_agent_config             = {},
   $lbaas_agent_config            = {},
@@ -127,6 +131,7 @@ class neutron::config (
   validate_hash($bgpvpn_service_config)
   validate_hash($l2gw_agent_config)
   validate_hash($l2gw_service_config)
+  validate_hash($sfc_service_config)
   validate_hash($l3_agent_config)
   validate_hash($dhcp_agent_config)
   validate_hash($lbaas_agent_config)
@@ -150,6 +155,7 @@ class neutron::config (
   create_resources('neutron_bgpvpn_bagpipe_config', $bgpvpn_bagpipe_config)
   create_resources('neutron_bgpvpn_service_config', $bgpvpn_service_config)
   create_resources('neutron_l2gw_agent_config', $l2gw_agent_config)
+  create_resources('neutron_sfc_service_config', $sfc_service_config)
   create_resources('neutron_l3_agent_config', $l3_agent_config)
   create_resources('neutron_dhcp_agent_config', $dhcp_agent_config)
   create_resources('neutron_lbaas_agent_config', $lbaas_agent_config)

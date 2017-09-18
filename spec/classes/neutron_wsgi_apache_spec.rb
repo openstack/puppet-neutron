@@ -9,19 +9,20 @@ describe 'neutron::wsgi::apache' do
       it { is_expected.to contain_class('apache::mod::wsgi') }
       it { is_expected.to contain_class('apache::mod::ssl') }
       it { is_expected.to contain_openstacklib__wsgi__apache('neutron_wsgi').with(
-        :bind_port           => 9696,
-        :group               => 'neutron',
-        :path                => '/',
-        :servername          => facts[:fqdn],
-        :ssl                 => true,
-        :threads             => 1,
-        :user                => 'neutron',
-        :workers             => facts[:os_workers],
-        :wsgi_daemon_process => 'neutron',
-        :wsgi_process_group  => 'neutron',
-        :wsgi_script_dir     => platform_params[:wsgi_script_path],
-        :wsgi_script_file    => 'app',
-        :wsgi_script_source  => platform_params[:wsgi_script_source],
+        :bind_port                   => 9696,
+        :group                       => 'neutron',
+        :path                        => '/',
+        :servername                  => facts[:fqdn],
+        :ssl                         => true,
+        :threads                     => 1,
+        :user                        => 'neutron',
+        :workers                     => facts[:os_workers],
+        :wsgi_daemon_process         => 'neutron',
+        :wsgi_process_group          => 'neutron',
+        :wsgi_script_dir             => platform_params[:wsgi_script_path],
+        :wsgi_script_file            => 'app',
+        :wsgi_script_source          => platform_params[:wsgi_script_source],
+        :custom_wsgi_process_options => {},
       )}
     end
 
@@ -34,6 +35,9 @@ describe 'neutron::wsgi::apache' do
           :ssl                       => false,
           :wsgi_process_display_name => 'neutron',
           :workers                   => 37,
+          :custom_wsgi_process_options => {
+            'python_path' => '/my/python/path',
+          },
         }
       end
       it { is_expected.to contain_class('neutron::params') }
@@ -41,21 +45,24 @@ describe 'neutron::wsgi::apache' do
       it { is_expected.to contain_class('apache::mod::wsgi') }
       it { is_expected.to_not contain_class('apache::mod::ssl') }
       it { is_expected.to contain_openstacklib__wsgi__apache('neutron_wsgi').with(
-        :bind_host                 => '10.42.51.1',
-        :bind_port                 => 12345,
-        :group                     => 'neutron',
-        :path                      => '/',
-        :servername                => 'dummy.host',
-        :ssl                       => false,
-        :threads                   => 1,
-        :user                      => 'neutron',
-        :workers                   => 37,
-        :wsgi_daemon_process       => 'neutron',
-        :wsgi_process_display_name => 'neutron',
-        :wsgi_process_group        => 'neutron',
-        :wsgi_script_dir           => platform_params[:wsgi_script_path],
-        :wsgi_script_file          => 'app',
-        :wsgi_script_source        => platform_params[:wsgi_script_source],
+        :bind_host                   => '10.42.51.1',
+        :bind_port                   => 12345,
+        :group                       => 'neutron',
+        :path                        => '/',
+        :servername                  => 'dummy.host',
+        :ssl                         => false,
+        :threads                     => 1,
+        :user                        => 'neutron',
+        :workers                     => 37,
+        :wsgi_daemon_process         => 'neutron',
+        :wsgi_process_display_name   => 'neutron',
+        :wsgi_process_group          => 'neutron',
+        :wsgi_script_dir             => platform_params[:wsgi_script_path],
+        :wsgi_script_file            => 'app',
+        :wsgi_script_source          => platform_params[:wsgi_script_source],
+        :custom_wsgi_process_options => {
+          'python_path' => '/my/python/path',
+        },
       )}
     end
   end

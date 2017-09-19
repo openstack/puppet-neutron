@@ -33,14 +33,35 @@ describe 'neutron::config' do
     end
   end
 
+  shared_examples_for 'neutron_service_config' do
+    let :params do
+      { :sfc_service_config  => config_hash,
+        :l2gw_service_config => config_hash,
+      }
+    end
+
+    it 'configures arbitrary sfc_service_config configurations' do
+      is_expected.to contain_neutron_sfc_service_config('DEFAULT/foo').with_value('fooValue')
+      is_expected.to contain_neutron_sfc_service_config('DEFAULT/bar').with_value('barValue')
+      is_expected.to contain_neutron_sfc_service_config('DEFAULT/baz').with_ensure('absent')
+    end
+
+    it 'configures arbitrary l2gw_service_config configurations' do
+      is_expected.to contain_neutron_l2gw_service_config('DEFAULT/foo').with_value('fooValue')
+      is_expected.to contain_neutron_l2gw_service_config('DEFAULT/bar').with_value('barValue')
+      is_expected.to contain_neutron_l2gw_service_config('DEFAULT/baz').with_ensure('absent')
+    end
+  end
+
   shared_examples_for 'neutron_agent_config' do
     let :params do
-      { :l3_agent_config        => config_hash,
-        :dhcp_agent_config      => config_hash,
-        :lbaas_agent_config     => config_hash,
-        :metadata_agent_config  => config_hash,
-        :metering_agent_config  => config_hash,
-        :vpnaas_agent_config    => config_hash,
+      { :l3_agent_config       => config_hash,
+        :dhcp_agent_config     => config_hash,
+        :lbaas_agent_config    => config_hash,
+        :metadata_agent_config => config_hash,
+        :metering_agent_config => config_hash,
+        :vpnaas_agent_config   => config_hash,
+        :l2gw_agent_config     => config_hash,
       }
     end
 
@@ -78,6 +99,12 @@ describe 'neutron::config' do
       is_expected.to contain_neutron_vpnaas_agent_config('DEFAULT/foo').with_value('fooValue')
       is_expected.to contain_neutron_vpnaas_agent_config('DEFAULT/bar').with_value('barValue')
       is_expected.to contain_neutron_vpnaas_agent_config('DEFAULT/baz').with_ensure('absent')
+    end
+
+    it 'configures arbitrary l2gw_agent_config configurations' do
+      is_expected.to contain_neutron_l2gw_agent_config('DEFAULT/foo').with_value('fooValue')
+      is_expected.to contain_neutron_l2gw_agent_config('DEFAULT/bar').with_value('barValue')
+      is_expected.to contain_neutron_l2gw_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
   end

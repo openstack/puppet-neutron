@@ -37,6 +37,10 @@
 # (optional) Path for ODL host configuration REST interface.
 # Defaults to $::os_service_default
 #
+# [*odl_features*]
+# (optional) List of ODL features to enable
+# Defaults to $::os_service_default
+#
 class neutron::plugins::ml2::opendaylight (
   $package_ensure          = 'present',
   $odl_username            = $::os_service_default,
@@ -45,6 +49,7 @@ class neutron::plugins::ml2::opendaylight (
   $ovsdb_connection        = 'tcp:127.0.0.1:6639',
   $port_binding_controller = $::os_service_default,
   $odl_hostconf_uri        = $::os_service_default,
+  $odl_features            = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -63,6 +68,7 @@ class neutron::plugins::ml2::opendaylight (
     'ml2_odl/url':                     value => $odl_url;
     'ml2_odl/port_binding_controller': value => $port_binding_controller;
     'ml2_odl/odl_hostconf_uri':        value => $odl_hostconf_uri;
+    'ml2_odl/odl_features':            value => join(any2array($odl_features), ',');
   }
 
   neutron_config {

@@ -18,7 +18,8 @@ describe 'neutron::plugins::ml2::opendaylight' do
       :odl_url                 => '<SERVICE DEFAULT>',
       :ovsdb_connection        => 'tcp:127.0.0.1:6639',
       :port_binding_controller => '<SERVICE DEFAULT>',
-      :odl_hostconf_uri        => '<SERVICE DEFAULT>'
+      :odl_hostconf_uri        => '<SERVICE DEFAULT>',
+      :odl_features            => '<SERVICE DEFAULT>',
     }
   end
 
@@ -55,6 +56,7 @@ describe 'neutron::plugins::ml2::opendaylight' do
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/url').with_value(params[:odl_url])
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/port_binding_controller').with_value(params[:port_binding_controller])
       is_expected.to contain_neutron_plugin_ml2('ml2_odl/odl_hostconf_uri').with_value(params[:odl_hostconf_uri])
+      is_expected.to contain_neutron_plugin_ml2('ml2_odl/odl_features').with_value(params[:odl_features])
     end
 
     it 'configures neutron server settings' do

@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Adds ability to configure OpenDayight features which will override the
+    default behavior of negotiating features with ODL.
+

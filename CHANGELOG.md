@@ -1,7 +1,7 @@
 ## 8.0.0 and beyond
 
 From 8.0.0 release and beyond, release notes are published on
-[docs.openstack.org](http://docs.openstack.org/releasenotes/puppet-neutron/).
+[docs.openstack.org](https://docs.openstack.org/releasenotes/puppet-neutron/).
 
 ##2015-11-25 - 7.0.0
 ###Summary
@@ -57,7 +57,7 @@ This is a backwards-incompatible major release for OpenStack Liberty.
 - dbsync should only notify services that use the db
 - map allocation_pool property to set
 - restart Neutron agents if packages are updated
-- remove unecessary constraint between Package and Config resource
+- remove unnecessary constraint between Package and Config resource
 - fix 'shared' parameter check in neutron_network provider
 
 ####Maintenance

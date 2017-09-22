@@ -63,6 +63,9 @@
 # [*plugin_linuxbridge_config*]
 #   (optional) Manage configuration of linuxbridge_conf.ini
 #
+# [*plugin_nvp_config*]
+#   (optional) Manage configuration of /etc/neutron/plugins/nicira/nvp.ini
+#
 # [*plugin_cisco_db_conn_config*]
 #   (optional) Manage configuration of plugins/cisco/db_conn.ini
 #
@@ -121,6 +124,7 @@ class neutron::config (
   $plugin_nuage_config           = {},
   $plugin_ml2_config             = {},
   $plugin_nsx_config             = {},
+  $plugin_nvp_config             = {},
 ) {
 
   include ::neutron::deps
@@ -149,6 +153,7 @@ class neutron::config (
   validate_hash($plugin_nuage_config)
   validate_hash($plugin_ml2_config)
   validate_hash($plugin_nsx_config)
+  validate_hash($plugin_nvp_config)
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_config', $api_config)
@@ -173,4 +178,5 @@ class neutron::config (
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
   create_resources('neutron_l2gw_service_config', $l2gw_service_config)
   create_resources('neutron_plugin_nsx', $plugin_nsx_config)
+  create_resources('neutron_plugin_nvp', $plugin_nvp_config)
 }

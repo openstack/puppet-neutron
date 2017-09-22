@@ -81,9 +81,6 @@
 # [*plugin_opencontrail_config*]
 #   (optional) Manage configuration of plugins/opencontrail/ContrailPlugin.ini
 #
-# [*plugin_ovn_config*]
-#   (optional) Manage configuration of plugins/networking-ovn/networking-ovn.ini
-#
 # [*plugin_nuage_config*]
 #   (optional) Manage configuration of plugins/nuage/plugin.ini
 #
@@ -117,7 +114,6 @@ class neutron::config (
   $plugin_midonet_config         = {},
   $plugin_plumgrid_config        = {},
   $plugin_opencontrail_config    = {},
-  $plugin_ovn_config             = {},
   $plugin_nuage_config           = {},
   $plugin_ml2_config             = {},
   $plugin_nsx_config             = {},
@@ -145,7 +141,6 @@ class neutron::config (
   validate_hash($plugin_midonet_config)
   validate_hash($plugin_plumgrid_config)
   validate_hash($plugin_opencontrail_config)
-  validate_hash($plugin_ovn_config)
   validate_hash($plugin_nuage_config)
   validate_hash($plugin_ml2_config)
   validate_hash($plugin_nsx_config)

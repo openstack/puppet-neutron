@@ -226,6 +226,8 @@ class neutron::keystone::authtoken(
   $revocation_cache_time          = undef,
 ) {
 
+  include ::neutron::deps
+
   if is_service_default($password) {
     fail('Please set password for neutron service user')
   }

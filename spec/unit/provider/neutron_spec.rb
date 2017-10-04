@@ -11,10 +11,12 @@ describe Puppet::Provider::Neutron do
 
   let :credential_hash do
     {
-      'project_name' => 'admin_tenant',
-      'username'     => 'admin',
-      'password'     => 'password',
-      'auth_uri'     => 'https://192.168.56.210:35357/v2.0/',
+      'project_name'        => 'admin_tenant',
+      'username'            => 'admin',
+      'password'            => 'password',
+      'auth_uri'            => 'https://192.168.56.210:35357/v2.0/',
+      'project_domain_name' => 'Default',
+      'user_domain_name'    => 'Default',
     }
   end
 
@@ -63,10 +65,12 @@ describe Puppet::Provider::Neutron do
 
     it 'should set auth credentials in the environment' do
       authenv = {
-        :OS_AUTH_URL     => credential_hash['auth_uri'],
-        :OS_USERNAME     => credential_hash['username'],
-        :OS_PROJECT_NAME => credential_hash['project_name'],
-        :OS_PASSWORD     => credential_hash['password'],
+        :OS_AUTH_URL            => credential_hash['auth_uri'],
+        :OS_USERNAME            => credential_hash['username'],
+        :OS_PROJECT_NAME        => credential_hash['project_name'],
+        :OS_PASSWORD            => credential_hash['password'],
+        :OS_PROJECT_DOMAIN_NAME => credential_hash['project_domain_name'],
+        :OS_USER_DOMAIN_NAME    => credential_hash['user_domain_name'],
       }
       klass.expects(:get_neutron_credentials).with().returns(credential_hash)
       klass.expects(:withenv).with(authenv)
@@ -75,11 +79,13 @@ describe Puppet::Provider::Neutron do
 
     it 'should set region in the environment if needed' do
       authenv = {
-        :OS_AUTH_URL     => credential_hash['auth_uri'],
-        :OS_USERNAME     => credential_hash['username'],
-        :OS_PROJECT_NAME => credential_hash['project_name'],
-        :OS_PASSWORD     => credential_hash['password'],
-        :OS_REGION_NAME  => 'REGION_NAME',
+        :OS_AUTH_URL            => credential_hash['auth_uri'],
+        :OS_USERNAME            => credential_hash['username'],
+        :OS_PROJECT_NAME        => credential_hash['project_name'],
+        :OS_PASSWORD            => credential_hash['password'],
+        :OS_REGION_NAME         => 'REGION_NAME',
+        :OS_PROJECT_DOMAIN_NAME => credential_hash['project_domain_name'],
+        :OS_USER_DOMAIN_NAME    => credential_hash['user_domain_name'],
       }
 
       cred_hash = credential_hash.merge({'region_name' => 'REGION_NAME'})

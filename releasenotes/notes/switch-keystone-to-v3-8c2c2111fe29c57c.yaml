@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    neutron auth provider has been switch to use keystone API v3.

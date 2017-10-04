@@ -114,10 +114,12 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
   def self.auth_neutron(*args)
     q = neutron_credentials
     authenv = {
-      :OS_AUTH_URL     => self.auth_endpoint,
-      :OS_USERNAME     => q['username'],
-      :OS_PROJECT_NAME => q['project_name'],
-      :OS_PASSWORD     => q['password']
+      :OS_AUTH_URL            => self.auth_endpoint,
+      :OS_USERNAME            => q['username'],
+      :OS_PROJECT_NAME        => q['project_name'],
+      :OS_PASSWORD            => q['password'],
+      :OS_PROJECT_DOMAIN_NAME => q['project_domain_name'],
+      :OS_USER_DOMAIN_NAME    => q['user_domain_name']
     }
     if q.key?('region_name')
       authenv[:OS_REGION_NAME] = q['region_name']

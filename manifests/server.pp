@@ -171,10 +171,6 @@
 #   (optional) Deprecated, does nothing.
 #   Defaults to 'undef'.
 #
-# [*qos_notification_drivers*]
-#   (optional) Drivers list to use to send the update notification
-#   Defaults to $::os_service_default.
-#
 # [*network_auto_schedule*]
 #   (optional) Allow auto scheduling networks to DHCP agent
 #   Defaults to $::os_service_default.
@@ -219,6 +215,12 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
+# == Deprecated
+#
+# [*qos_notification_drivers*]
+#   (deprecated) Drivers list to use to send the update notification
+#   Defaults to $::os_service_default.
+#
 
 class neutron::server (
   $package_ensure                   = 'present',
@@ -248,7 +250,6 @@ class neutron::server (
   $l3_ha                            = false,
   $max_l3_agents_per_router         = 3,
   $l3_ha_net_cidr                   = $::os_service_default,
-  $qos_notification_drivers         = $::os_service_default,
   $network_auto_schedule            = $::os_service_default,
   $ensure_vpnaas_package            = false,
   $ensure_fwaas_package             = false,
@@ -262,6 +263,7 @@ class neutron::server (
   $report_interval                  = undef,
   $state_path                       = undef,
   $lock_path                        = undef,
+  $qos_notification_drivers         = $::os_service_default,
 ) inherits ::neutron::params {
 
   include ::neutron::deps
@@ -362,6 +364,12 @@ class neutron::server (
     Neutron_config <| title == 'oslo_concurrency/lock_path' |> {
       value  => $lock_path,
     }
+  }
+
+  if !is_service_default($qos_notification_drivers) {
+    deprecation('qos_notification_drivers', 'The qos configuration option \
+notification_drivers is deprecated in ocata release, and will be removed in a \
+future release')
   }
 
   neutron_config { 'qos/notification_drivers': value => join(any2array($qos_notification_drivers), ',') }

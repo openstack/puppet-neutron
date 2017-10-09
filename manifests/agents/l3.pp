@@ -38,11 +38,6 @@
 #   (optional) The port of the metadata server
 #   Defaults to $::os_service_default
 #
-# [*send_arp_for_ha*]
-#   (optional) Send this many gratuitous ARPs for HA setup. Set it below or equal to 0
-#   to disable this feature.
-#   Defaults to $::os_service_default
-#
 # [*periodic_interval*]
 #   (optional) seconds between re-sync routers' data if needed
 #   Defaults to $::os_service_default
@@ -92,6 +87,13 @@
 #   (optional) L3 agent extensions to enable.
 #   Defaults to $::os_service_default
 #
+# == Deprecated
+#
+# [*send_arp_for_ha*]
+#   (deprecated) Send this many gratuitous ARPs for HA setup. Set it below or equal to 0
+#   to disable this feature.
+#   Defaults to $::os_service_default
+#
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -101,7 +103,6 @@ class neutron::agents::l3 (
   $gateway_external_network_id      = $::os_service_default,
   $handle_internal_only_routers     = $::os_service_default,
   $metadata_port                    = $::os_service_default,
-  $send_arp_for_ha                  = $::os_service_default,
   $periodic_interval                = $::os_service_default,
   $periodic_fuzzy_delay             = $::os_service_default,
   $enable_metadata_proxy            = $::os_service_default,
@@ -113,6 +114,8 @@ class neutron::agents::l3 (
   $purge_config                     = false,
   $availability_zone                = $::os_service_default,
   $extensions                       = $::os_service_default,
+  # Deprecated
+  $send_arp_for_ha                  = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -128,6 +131,11 @@ class neutron::agents::l3 (
       'DEFAULT/ha_vrrp_auth_password': value => $ha_vrrp_auth_password;
       'DEFAULT/ha_vrrp_advert_int':    value => $ha_vrrp_advert_int;
     }
+  }
+
+  if !is_service_default($send_arp_for_ha) {
+    deprecation('send_arp_for_ha', 'The l3-agent configuration option \
+send_arp_for_ha is deprecated in ocata release, and will be removed in Pike')
   }
 
   neutron_l3_agent_config {

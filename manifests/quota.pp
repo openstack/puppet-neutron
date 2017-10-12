@@ -72,6 +72,11 @@
 #   (optional) Number of packet_filters allowed per tenant, -1 for unlimited.
 #   Defaults to '100'.
 #
+# [*quota_loadbalancer*]
+#   (optional) Number of loadbalancers allowed per tenant.
+#   A negative value means unlimited.
+#   Defaults to $::os_service_default.
+#
 # [*quota_pool*]
 #   (optional) Number of pools allowed per tenant.
 #   A negative value means unlimited.
@@ -101,6 +106,7 @@ class neutron::quota (
   $quota_member              = $::os_service_default,
   $quota_network_gateway     = 5,
   $quota_packet_filter       = 100,
+  $quota_loadbalancer        = $::os_service_default,
   $quota_pool                = $::os_service_default,
   $quota_vip                 = $::os_service_default,
 ) {
@@ -124,6 +130,7 @@ class neutron::quota (
     'quotas/quota_member':              value => $quota_member;
     'quotas/quota_network_gateway':     value => $quota_network_gateway;
     'quotas/quota_packet_filter':       value => $quota_packet_filter;
+    'quotas/quota_loadbalancer':        value => $quota_loadbalancer;
     'quotas/quota_pool':                value => $quota_pool;
     'quotas/quota_vip':                 value => $quota_vip;
   }

@@ -47,7 +47,7 @@ describe 'neutron::quota' do
         :quota_firewall            => 1,
         :quota_firewall_policy     => 1,
         :quota_firewall_rule       => -1,
-        :quota_health_monitor      => -1,
+        :quota_healthmonitor       => -1,
         :quota_member              => -1,
         :quota_network_gateway     => 5,
         :quota_packet_filter       => 100,

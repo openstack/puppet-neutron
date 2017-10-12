@@ -1,0 +1,7 @@
+---
+deprecations:
+  - The option neutron::quota::quota_health_monitor now has no effect
+fixes:
+  - |
+    The option neutron::quota::quota_health_monitor was incorrect it should
+    be neutron::quota::quota_healthmonitor and has been renamed as such.

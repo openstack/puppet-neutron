@@ -44,7 +44,7 @@
 #
 #   [*workers*]
 #     Number of WSGI workers to spawn.
-#     Optional. Defaults to 1
+#     Optional. Defaults to $::os_workers
 #
 #   [*priority*]
 #     (optional) The priority for the vhost.
@@ -52,7 +52,7 @@
 #
 #   [*threads*]
 #     (optional) The number of threads for the vhost.
-#     Defaults to $::os_workers
+#     Defaults to 1
 #
 #   [*wsgi_process_display_name*]
 #     (optional) Name of the WSGI process display-name.

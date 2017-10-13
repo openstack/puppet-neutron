@@ -1,0 +1,8 @@
+---
+deprecations:
+  - |
+    neutron::agents::l3::send_arp_for_ha is deprecated in Ocata, and will be
+    removed in Pike
+  - |
+    neutron::server::qos_notification_drivers is deprecated in Ocata, and
+    will be removed in a future release

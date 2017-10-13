@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Adds capability for configuring the Cisco VTS neutron ml2 plugin mechanism driver.

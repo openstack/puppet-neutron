@@ -6,16 +6,19 @@
 # === Parameters
 #
 # [*vts_username*]
-# (required) The VTS controller username
+# (optional) The VTS controller username
 # Example: 'admin'
+# Defaults to $::os_service_default
 #
 # [*vts_password*]
-# (required) The VTS controller password
+# (optional) The VTS controller password
 # Example: 'admin'
+# Defaults to $::os_service_default
 #
 # [*vts_url*]
-# (required) The VTS controller neutron URL
+# (optional) The VTS controller neutron URL
 # Example: 'http://127.0.0.1:8888/api/running/openstack'
+# Defaults to $::os_service_default
 #
 # [*vts_timeout*]
 # (optional) Timeout for connection to vts host REST interface.
@@ -40,10 +43,10 @@
 # Defaults to 'present'
 #
 class neutron::plugins::ml2::cisco::vts (
-  $vts_username,
-  $vts_password,
-  $vts_url,
-  $vts_vmmid,
+  $vts_username     = $::os_service_default,
+  $vts_password     = $::os_service_default,
+  $vts_url          = $::os_service_default,
+  $vts_vmmid        = $::os_service_default,
   $vts_timeout      = $::os_service_default,
   $vts_sync_timeout = $::os_service_default,
   $vts_retry_count  = $::os_service_default,
@@ -67,6 +70,6 @@ class neutron::plugins::ml2::cisco::vts (
     'ml2_cc/timeout':      value => $vts_timeout;
     'ml2_cc/sync_timeout': value => $vts_sync_timeout;
     'ml2_cc/retry_count':  value => $vts_retry_count;
-    'ml2_cc/vmm_id':        value => $vts_vmmid;
+    'ml2_cc/vmm_id':       value => $vts_vmmid;
   }
 }

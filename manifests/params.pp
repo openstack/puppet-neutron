@@ -8,6 +8,7 @@ class neutron::params {
   $client_package              = 'python-neutronclient'
   $server_service              = 'neutron-server'
   $ovs_agent_service           = 'neutron-openvswitch-agent'
+  $destroy_patch_ports_service = 'neutron-destroy-patch-ports'
   $linuxbridge_agent_service   = 'neutron-linuxbridge-agent'
   $cisco_config_file           = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
   $opencontrail_plugin_package = 'neutron-plugin-contrail'

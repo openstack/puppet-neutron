@@ -308,6 +308,15 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_package('neutron-ovs-agent').that_notifies('Anchor[neutron::install::end]')
     end
 
+    it 'configures neutron destroy patch ports service' do
+      is_expected.to contain_service('neutron-destroy-patch-ports-service').with(
+        :name   => platform_params[:destroy_patch_ports_service],
+        :enable => true,
+        :ensure => 'running',
+        :tag    => ['neutron-service'],
+      )
+    end
+
     context 'when enabling dpdk with manage vswitch is default' do
       let :pre_condition do
         "class { 'vswitch::dpdk': host_core_list => '1,2', memory_channels => '1' }"
@@ -339,8 +348,9 @@ describe 'neutron::agents::ml2::ovs' do
           { :ovs_agent_package => 'neutron-openvswitch-agent',
             :ovs_agent_service => 'neutron-openvswitch-agent' }
         when 'RedHat'
-          { :ovs_cleanup_service => 'neutron-ovs-cleanup',
-            :ovs_agent_service   => 'neutron-openvswitch-agent' }
+          { :ovs_cleanup_service         => 'neutron-ovs-cleanup',
+            :ovs_agent_service           => 'neutron-openvswitch-agent',
+            :destroy_patch_ports_service => 'neutron-destroy-patch-ports' }
         end
       end
 

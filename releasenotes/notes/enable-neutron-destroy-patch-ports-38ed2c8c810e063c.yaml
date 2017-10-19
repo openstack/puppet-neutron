@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    A new systemd service ``neutron-destroy-patch-ports`` was
+    introduced on RHEL based systems. The service is executed only on
+    boot and its purpose is to clean up patch ports between the Neutron
+    integration bridge and other configured provider bridges.

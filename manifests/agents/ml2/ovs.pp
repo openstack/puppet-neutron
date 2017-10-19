@@ -348,6 +348,15 @@ class neutron::agents::ml2::ovs (
     tag    => ['neutron-service', 'neutron-db-sync-service'],
   }
 
+  if ($::osfamily == 'Redhat') {
+    service { 'neutron-destroy-patch-ports-service':
+      ensure => $service_ensure,
+      name   => $::neutron::params::destroy_patch_ports_service,
+      enable => $enabled,
+      tag    => ['neutron-service'],
+    }
+  }
+
   if $::neutron::params::ovs_cleanup_service {
     service { 'ovs-cleanup-service':
       name    => $::neutron::params::ovs_cleanup_service,

@@ -79,6 +79,7 @@ describe 'neutron::server' do
       is_expected.to contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
       is_expected.to contain_neutron_config('qos/notification_drivers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('DEFAULT/ovs_integration_bridge').with_value('<SERVICE DEFAULT>')
     end
 
     context 'with manage_service as false' do
@@ -225,6 +226,15 @@ describe 'neutron::server' do
 
       it { is_expected.to contain_neutron_config('oslo_middleware/enable_proxy_headers_parsing').with_value(true) }
     end
+
+    context 'with ovs_integration_bridge set' do
+      before :each do
+        params.merge!({:ovs_integration_bridge => 'br-int' })
+      end
+
+      it { is_expected.to contain_neutron_config('DEFAULT/ovs_integration_bridge').with_value('br-int') }
+    end
+
   end
 
   shared_examples_for 'VPNaaS, FWaaS and LBaaS package installation' do

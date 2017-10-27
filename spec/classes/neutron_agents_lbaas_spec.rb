@@ -48,6 +48,7 @@ describe 'neutron::agents::lbaas' do
       is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
       is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/device_driver').with_value(p[:device_driver]);
       is_expected.to contain_neutron_lbaas_agent_config('haproxy/user_group').with_value(platform_params[:nobody_user_group]);
+      is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/ovs_use_veth').with_value('<SERVICE DEFAULT>');
     end
 
     it 'installs neutron lbaas agent package' do
@@ -78,6 +79,15 @@ describe 'neutron::agents::lbaas' do
         is_expected.to contain_service('neutron-lbaasv2-service').with(
           :ensure => 'stopped',
         )
+      end
+    end
+
+    context 'with ovs_use_veth as false' do
+      before :each do
+        params.merge!(:ovs_use_veth => false)
+      end
+      it 'should have ovs_use_veth set to false' do
+        is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/ovs_use_veth').with_value(false);
       end
     end
   end

@@ -215,6 +215,10 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
+# [*ovs_integration_bridge*]
+#   (optional) Name of Open vSwitch bridge to use
+#   Defaults to ::os_service_default
+#
 # == Deprecated
 #
 # [*qos_notification_drivers*]
@@ -257,6 +261,7 @@ class neutron::server (
   $service_providers                = $::os_service_default,
   $auth_strategy                    = 'keystone',
   $enable_proxy_headers_parsing     = $::os_service_default,
+  $ovs_integration_bridge           = $::os_service_default,
   # DEPRECATED PARAMETERS
   $log_dir                          = undef,
   $log_file                         = undef,
@@ -341,6 +346,7 @@ class neutron::server (
     'DEFAULT/dhcp_load_type':                   value => $dhcp_load_type;
     'DEFAULT/default_availability_zones':       value => join(any2array($default_availability_zones), ',');
     'DEFAULT/network_auto_schedule':            value => $network_auto_schedule;
+    'DEFAULT/ovs_integration_bridge':           value => $ovs_integration_bridge;
     'service_providers/service_provider':       value => $service_providers;
   }
 

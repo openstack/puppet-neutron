@@ -37,6 +37,10 @@
 #   in the lbaas config.
 #   Defaults to false.
 #
+# [*ovs_use_veth*]
+#   (optional) Uses veth for an interface or not.
+#   Defaults to false.
+#
 # DEPRECATED PARAMETERS
 #
 # [*enable_v1*]
@@ -56,6 +60,7 @@ class neutron::agents::lbaas (
   $debug                  = $::os_service_default,
   $interface_driver       = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $device_driver          = 'neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver',
+  $ovs_use_veth           = $::os_service_default,
   $user_group             = $::neutron::params::nobody_user_group,
   $manage_haproxy_package = true,
   $purge_config           = false,
@@ -94,6 +99,7 @@ class neutron::agents::lbaas (
     'DEFAULT/debug':              value => $debug;
     'DEFAULT/interface_driver':   value => $interface_driver;
     'DEFAULT/device_driver':      value => $device_driver;
+    'DEFAULT/ovs_use_veth':       value => $ovs_use_veth;
     'haproxy/user_group':         value => $user_group;
   }
 

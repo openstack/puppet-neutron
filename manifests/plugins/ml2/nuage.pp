@@ -39,6 +39,10 @@
 #   in the nuage config.
 #   Defaults to false.
 #
+# [*nuage_default_allow_non_ip*]
+#   (optional) Whether to allow non-IP traffic.
+#   Defaults to false.
+#
 class neutron::plugins::ml2::nuage (
   $nuage_net_partition_name,
   $nuage_vsd_ip,
@@ -47,9 +51,10 @@ class neutron::plugins::ml2::nuage (
   $nuage_vsd_organization,
   $nuage_base_uri_version,
   $nuage_cms_id,
-  $nuage_auth_resource    = '/me',
-  $nuage_server_ssl       = true,
-  $purge_config           = false,
+  $nuage_auth_resource        = '/me',
+  $nuage_server_ssl           = true,
+  $purge_config               = false,
+  $nuage_default_allow_non_ip = false,
 ) {
 
   include ::neutron::deps
@@ -99,6 +104,7 @@ class neutron::plugins::ml2::nuage (
     'RESTPROXY/serverssl':                  value => $nuage_server_ssl;
     'RESTPROXY/base_uri':                   value => "${nuage_base_uri_base}/${nuage_base_uri_version}";
     'RESTPROXY/cms_id':                     value => $nuage_cms_id;
+    'PLUGIN/default_allow_non_ip':          value => $nuage_default_allow_non_ip;
   }
 
   if $::neutron::core_plugin != 'ml2' or !('nuage' in $::neutron::plugins::ml2::mechanism_drivers) {

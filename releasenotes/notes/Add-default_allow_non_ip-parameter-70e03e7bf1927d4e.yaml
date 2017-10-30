@@ -1,0 +1,5 @@
+---
+features:
+  - Non-IP traffic is allowed in L2 and L3 Domains.
+    The default_allow_non_ip setting determines if non-ip traffic is 
+    allowed in Nuage specific L2 and L3 domains.

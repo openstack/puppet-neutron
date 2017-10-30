@@ -22,14 +22,15 @@ describe 'neutron::plugins::ml2::nuage' do
 
   let :params do
     {
-        :nuage_vsd_ip             => %w(192.168.33.3),
-        :nuage_vsd_username       => 'test',
-        :nuage_vsd_password       => 'test',
-        :nuage_vsd_organization   => 'vsd',
-        :nuage_net_partition_name => 'test',
-        :nuage_base_uri_version   => 'v3.0',
-        :nuage_cms_id             => '7488fae2-7e51-11e5-8bcf-feff819cdc9f',
-        :purge_config             => false,}
+        :nuage_vsd_ip               => %w(192.168.33.3),
+        :nuage_vsd_username         => 'test',
+        :nuage_vsd_password         => 'test',
+        :nuage_vsd_organization     => 'vsd',
+        :nuage_net_partition_name   => 'test',
+        :nuage_base_uri_version     => 'v3.0',
+        :nuage_cms_id               => '7488fae2-7e51-11e5-8bcf-feff819cdc9f',
+        :purge_config               => false,
+        :nuage_default_allow_non_ip => false,}
   end
 
   shared_examples_for 'neutron plugin ml2 nuage' do
@@ -60,6 +61,7 @@ describe 'neutron::plugins::ml2::nuage' do
       is_expected.to contain_neutron_plugin_nuage('RESTPROXY/server').with_value(params[:nuage_vsd_ip])
       is_expected.to contain_neutron_plugin_nuage('RESTPROXY/organization').with_value(params[:nuage_vsd_organization])
       is_expected.to contain_neutron_plugin_nuage('RESTPROXY/cms_id').with_value(params[:nuage_cms_id])
+      is_expected.to contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(params[:nuage_default_allow_non_ip])
     end
 
     context 'configure ml2 nuage with wrong core_plugin configuration' do
@@ -77,6 +79,15 @@ describe 'neutron::plugins::ml2::nuage' do
         :ensure => platform_params[:nuage_file_ensure],
         :target => platform_params[:nuage_file_target]
       )
+    end
+
+    context 'when allowing Non-IP' do
+      before :each do
+        params.merge!(:nuage_default_allow_non_ip => true)
+      end
+      it 'default_allow_non_ip is set to true' do
+        is_expected.to contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(true)
+      end
     end
 
     context 'configure ml2 nuage with wrong mechanism_driver configuration' do

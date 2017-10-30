@@ -130,11 +130,11 @@ class neutron::plugins::ovs::opendaylight (
           "vif_details": {\
             "uuid": "${::ovs_uuid}",\
             "has_datapath_type_netdev": true,\
-            "port_prefix": "vhu_",\
+            "port_prefix": "vhu",\
             "vhostuser_socket_dir": "${vhostuser_socket_dir}",\
             "vhostuser_ovs_plug": true,\
             "vhostuser_mode": "${vhostuser_mode}",\
-            "vhostuser_socket": "${vhostuser_socket_dir}/vhu_\$PORT_ID"\
+            "vhostuser_socket": "${vhostuser_socket_dir}/vhu\$PORT_ID"\
           }\
         }],\
         "allowed_network_types": ${json_network_types},\

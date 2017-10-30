@@ -1,0 +1,4 @@
+---
+fixes:
+  - |
+    Fixes vhostuser port prefix to be the correct value of 'vhu'.

@@ -48,6 +48,7 @@ describe 'neutron::agents::dhcp' do
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value(p[:enable_metadata_network]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/ovs_integration_bridge').with_value('<SERVICE DEFAULT>');
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('AGENT/availability_zone').with_value('<SERVICE DEFAULT>');
     end
 
@@ -160,6 +161,17 @@ describe 'neutron::agents::dhcp' do
     end
     it 'configures dnsmasq_config_file' do
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value(params[:dnsmasq_config_file])
+    end
+  end
+
+  shared_examples_for 'enable advertisement of the DNS resolver on the host.' do
+    before do
+      params.merge!(
+        :dnsmasq_local_resolv => true
+      )
+    end
+    it 'configures dnsmasq_local_resolv' do
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value(params[:dnsmasq_config_file])
     end
   end
 

@@ -24,13 +24,6 @@
 # [*package_ensure*]
 #   (optional) Ensure state for package. Defaults to 'present'.
 #
-# [*enabled*]
-#   (optional) Enable state for service. Defaults to 'true'.
-#
-# [*manage_service*]
-#   (optional) Whether to start/stop the service
-#   Defaults to true
-#
 # [*vpn_device_driver*]
 #   (optional) Defaults to 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver'.
 #
@@ -45,18 +38,34 @@
 #   in the vpnaas config.
 #   Defaults to false.
 #
+# DEPRECATED PARAMETERS
+# [*enabled*]
+#   (optional) Enable state for service. Defaults to undef.
+#
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to undef
 class neutron::agents::vpnaas (
   $package_ensure              = present,
-  $enabled                     = true,
-  $manage_service              = true,
   $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $ipsec_status_check_interval = $::os_service_default,
   $purge_config                = false,
+  # DEPRECATED PARAMETERS
+  $enabled                     = undef,
+  $manage_service              = undef,
 ) {
 
   include ::neutron::deps
   include ::neutron::params
+
+  if $enabled{
+    warning ('enabled is deprecated, has no effect and will be removed in a future release.')
+  }
+
+  if $manage_service{
+    warning ('manage_service is deprecated, has no effect and will be removed in a future release.')
+  }
 
   case $vpn_device_driver {
     /\.OpenSwan/: {
@@ -103,20 +112,5 @@ class neutron::agents::vpnaas (
       'name'   => $::neutron::params::vpnaas_agent_package,
       'tag'    => ['openstack', 'neutron-package'],
     })
-  }
-
-  if $manage_service {
-    if $enabled {
-      $service_ensure = 'running'
-    } else {
-      $service_ensure = 'stopped'
-    }
-  }
-
-  service { 'neutron-vpnaas-service':
-    ensure => $service_ensure,
-    name   => $::neutron::params::vpnaas_agent_service,
-    enable => $enabled,
-    tag    => 'neutron-service',
   }
 }

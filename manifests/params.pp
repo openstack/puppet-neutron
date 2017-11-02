@@ -26,7 +26,6 @@ class neutron::params {
   $lbaasv2_agent_service       = 'neutron-lbaasv2-agent'
   $haproxy_package             = 'haproxy'
   $metering_agent_service      = 'neutron-metering-agent'
-  $vpnaas_agent_service        = 'neutron-vpn-agent'
   $l3_agent_service            = 'neutron-l3-agent'
   $metadata_agent_service      = 'neutron-metadata-agent'
   $bagpipe_bgp_package         = 'openstack-bagpipe-bgp'

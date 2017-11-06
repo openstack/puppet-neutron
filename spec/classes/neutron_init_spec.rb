@@ -91,6 +91,7 @@ describe 'neutron' do
     it_configures 'with dns_domain defined'
     it_configures 'with transport_url defined'
     it_configures 'with rootwrap daemon'
+    it_configures 'with max_allowed_address_pair defined'
 
     context 'with amqp messaging' do
       it_configures 'amqp support'
@@ -517,6 +518,18 @@ describe 'neutron' do
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/username').with_value('amqp_user') }
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/password').with_value('password') }
+    end
+  end
+
+  shared_examples_for 'with max_allowed_address_pair defined' do
+    before do
+      params.merge!(
+        :max_allowed_address_pair => '50'
+      )
+    end
+
+    it do
+      is_expected.to contain_neutron_config('DEFAULT/max_allowed_address_pair').with_value(params[:max_allowed_address_pair])
     end
   end
 

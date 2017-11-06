@@ -1,0 +1,5 @@
+---
+features:
+  - Add the Neutron configuration parameter "max_allowed_address_pair"
+    to Puppet so that more than the default 10 address pairs per port
+    can be used.

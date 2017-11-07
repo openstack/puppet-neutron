@@ -42,8 +42,13 @@
 #   Defaults to $::os_service_default
 #
 # [*dnsmasq_dns_servers*]
-#  (optional) List of servers to use as dnsmasq forwarders.
-#  Defaults to $::os_service_default.
+#   (optional) List of servers to use as dnsmasq forwarders.
+#   Defaults to $::os_service_default.
+#
+# [*dnsmasq_local_resolv*]
+#   (optional) Enables the dnsmasq service to provide name resolution for instances
+#   via DNS resolvers on the host running the DHCP agent.
+#   Defaults to $::os_service_default.
 #
 # [*enable_isolated_metadata*]
 #   (optional) enable metadata support on isolated networks.
@@ -96,6 +101,7 @@ class neutron::agents::dhcp (
   $root_helper              = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $dnsmasq_config_file      = $::os_service_default,
   $dnsmasq_dns_servers      = $::os_service_default,
+  $dnsmasq_local_resolv     = $::os_service_default,
   $enable_isolated_metadata = false,
   $enable_force_metadata    = $::os_service_default,
   $enable_metadata_network  = false,
@@ -138,6 +144,7 @@ class neutron::agents::dhcp (
     'DEFAULT/dhcp_broadcast_reply':   value => $dhcp_broadcast_reply;
     'DEFAULT/dnsmasq_config_file':    value => $dnsmasq_config_file;
     'DEFAULT/dnsmasq_dns_servers':    value => join(any2array($dnsmasq_dns_servers), ',');
+    'DEFAULT/dnsmasq_local_resolv':   value => $dnsmasq_local_resolv;
     'DEFAULT/ovs_integration_bridge': value => $ovs_integration_bridge;
     'AGENT/availability_zone':        value => $availability_zone;
   }

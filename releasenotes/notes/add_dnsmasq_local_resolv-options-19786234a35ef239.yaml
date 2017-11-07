@@ -1,0 +1,5 @@
+---
+features:
+  - Add 'dnsmasq_local_resolv' option support to Enables the dnsmasq
+    service to provide name resolution for instances via DNS resolvers
+    on the host running the DHCP agent.

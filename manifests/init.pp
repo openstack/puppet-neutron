@@ -329,6 +329,10 @@
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #   Defaults to $::os_service_default.
 #
+# [*max_allowed_address_pair*]
+#   (optional) Maximum number of allowed address pairs per port
+#   Defaults to $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*rabbit_password*]
@@ -422,6 +426,7 @@ class neutron (
   $notification_driver                  = $::os_service_default,
   $notification_topics                  = $::os_service_default,
   $notification_transport_url           = $::os_service_default,
+  $max_allowed_address_pair             = $::os_service_default,
   # DEPRECATED PARAMETERS
   $rabbit_password                      = $::os_service_default,
   $rabbit_host                          = $::os_service_default,
@@ -501,6 +506,7 @@ instead.")
     'DEFAULT/api_extensions_path':     value => $api_extensions_path;
     'DEFAULT/state_path':              value => $state_path;
     'DEFAULT/global_physnet_mtu':      value => $global_physnet_mtu;
+    'DEFAULT/max_allowed_address_pair':value => $max_allowed_address_pair;
     'agent/root_helper':               value => $root_helper;
     'agent/root_helper_daemon':        value => $root_helper_daemon;
     'agent/report_interval':           value => $report_interval;

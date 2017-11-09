@@ -24,7 +24,8 @@ describe 'neutron::plugins::ovs::opendaylight' do
       :allowed_network_types => ['local', 'vlan', 'vxlan', 'gre'],
       :enable_dpdk           => false,
       :vhostuser_socket_dir  => '/var/run/openvswitch',
-      :vhostuser_mode        => 'client'
+      :vhostuser_mode        => 'client',
+      :enable_hw_offload     => false
     }
   end
 
@@ -61,6 +62,13 @@ describe 'neutron::plugins::ovs::opendaylight' do
         params.merge!({ :enable_dpdk => true })
       end
       it_configures 'with DPDK enabled'
+    end
+
+    context 'with hw_offload and  DPDK enabled' do
+      before do
+        params.merge!({ :enable_hw_offload => true, :enable_dpdk => true})
+      end
+      it_raises 'a Puppet::Error',/Enabling hardware offload and DPDK is not allowed/
     end
     it_configures 'with default parameters'
   end

@@ -32,7 +32,6 @@ describe 'neutron::agents::vpnaas' do
 
   let :default_params do
     { :package_ensure              => 'present',
-      :enabled                     => true,
       :vpn_device_driver           => 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
       :interface_driver            => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :purge_config                => false,
@@ -77,26 +76,6 @@ describe 'neutron::agents::vpnaas' do
         is_expected.to contain_package('neutron').that_notifies('Anchor[neutron::install::end]')
       end
     end
-
-    it 'configures neutron vpnaas agent service' do
-      is_expected.to contain_service('neutron-vpnaas-service').with(
-        :name    => platform_params[:vpnaas_agent_service],
-        :enable  => true,
-        :ensure  => 'running',
-        :tag     => 'neutron-service',
-      )
-      is_expected.to contain_service('neutron-vpnaas-service').that_subscribes_to('Anchor[neutron::service::begin]')
-      is_expected.to contain_service('neutron-vpnaas-service').that_notifies('Anchor[neutron::service::end]')
-    end
-
-    context 'with manage_service as false' do
-      before :each do
-        params.merge!(:manage_service => false)
-      end
-      it 'should not start/stop service' do
-        is_expected.to contain_service('neutron-vpnaas-service').without_ensure
-      end
-    end
   end
 
   shared_examples_for 'openswan vpnaas_driver' do
@@ -120,15 +99,10 @@ describe 'neutron::agents::vpnaas' do
 
     let :platform_params do
       { :openswan_package     => 'openswan',
-        :vpnaas_agent_package => 'neutron-vpn-agent',
-        :vpnaas_agent_service => 'neutron-vpn-agent' }
+        :vpnaas_agent_package => 'neutron-vpn-agent'}
     end
 
     it_configures 'neutron vpnaas agent'
-    it 'configures subscription to neutron-vpnaas-agent package' do
-      is_expected.to contain_service('neutron-vpnaas-service').that_subscribes_to('Anchor[neutron::service::begin]')
-      is_expected.to contain_service('neutron-vpnaas-service').that_notifies('Anchor[neutron::service::end]')
-    end
 
     context 'when configuring the LibreSwan driver' do
       before do
@@ -153,8 +127,7 @@ describe 'neutron::agents::vpnaas' do
 
     let :platform_params do
       { :openswan_package     => 'openswan',
-        :vpnaas_agent_package => 'openstack-neutron-vpnaas',
-        :vpnaas_agent_service => 'neutron-vpn-agent'}
+        :vpnaas_agent_package => 'openstack-neutron-vpnaas'}
     end
 
     it_configures 'neutron vpnaas agent'
@@ -171,8 +144,7 @@ describe 'neutron::agents::vpnaas' do
     let :platform_params do
       { :openswan_package     => 'libreswan',
         :libreswan_package    => 'libreswan',
-        :vpnaas_agent_package => 'openstack-neutron-vpnaas',
-        :vpnaas_agent_service => 'neutron-vpn-agent'}
+        :vpnaas_agent_package => 'openstack-neutron-vpnaas'}
     end
 
     it_configures 'neutron vpnaas agent'

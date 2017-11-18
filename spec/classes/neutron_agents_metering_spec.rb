@@ -35,7 +35,6 @@ describe 'neutron::agents::metering' do
   let :default_params do
     { :package_ensure   => 'present',
       :enabled          => true,
-      :debug            => false,
       :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :driver           => 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
       :purge_config     => false,
@@ -62,7 +61,7 @@ describe 'neutron::agents::metering' do
     end
 
     it 'configures metering_agent.ini' do
-      is_expected.to contain_neutron_metering_agent_config('DEFAULT/debug').with_value(p[:debug]);
+      is_expected.to contain_neutron_metering_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_metering_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
       is_expected.to contain_neutron_metering_agent_config('DEFAULT/driver').with_value(p[:driver]);
       is_expected.to contain_neutron_metering_agent_config('DEFAULT/measure_interval').with_value('<SERVICE DEFAULT>');

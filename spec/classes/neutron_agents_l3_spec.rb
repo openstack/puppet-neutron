@@ -9,7 +9,6 @@ describe 'neutron::agents::l3' do
   let :default_params do
     { :package_ensure     => 'present',
       :enabled            => true,
-      :debug              => false,
       :interface_driver   => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :ha_enabled         => false,
       :ha_vrrp_auth_type  => 'PASS',
@@ -36,7 +35,7 @@ describe 'neutron::agents::l3' do
     it { is_expected.to contain_class('neutron::params') }
 
     it 'configures l3_agent.ini' do
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/debug').with_value(p[:debug])
+      is_expected.to contain_neutron_l3_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver])
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/gateway_external_network_id').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value('<SERVICE DEFAULT>')

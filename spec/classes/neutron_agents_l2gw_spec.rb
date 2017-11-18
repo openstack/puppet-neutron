@@ -23,7 +23,6 @@ describe 'neutron::agents::l2gw' do
       :purge_config                     => false,
       :enabled                          => true,
       :manage_service                   => true,
-      :debug                            => false,
       :enable_manager                   => false,
       :manager_table_listening_port     => '6632',
       :socket_timeout                   => '30',
@@ -58,7 +57,7 @@ describe 'neutron::agents::l2gw' do
     end
 
     it 'configures l2gw_plugin.ini' do
-      is_expected.to contain_neutron_l2gw_agent_config('DEFAULT/debug').with_value(p[:debug])
+      is_expected.to contain_neutron_l2gw_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l2gw_agent_config('ovsdb/enable_manager').with_value(p[:enable_manager])
       is_expected.to contain_neutron_l2gw_agent_config('ovsdb/manager_table_listening_port').with_value(p[:manager_table_listening_port])
       is_expected.to contain_neutron_l2gw_agent_config('ovsdb/l2_gw_agent_priv_key_base_path').with_value('<SERVICE DEFAULT>')

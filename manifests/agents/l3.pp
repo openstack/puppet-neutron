@@ -20,7 +20,7 @@
 #
 # [*debug*]
 #   (optional) Print debug info in logs
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*interface_driver*]
 #   (optional) Driver to interface with neutron
@@ -98,7 +98,7 @@ class neutron::agents::l3 (
   $package_ensure                   = 'present',
   $enabled                          = true,
   $manage_service                   = true,
-  $debug                            = false,
+  $debug                            = $::os_service_default,
   $interface_driver                 = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $gateway_external_network_id      = $::os_service_default,
   $handle_internal_only_routers     = $::os_service_default,

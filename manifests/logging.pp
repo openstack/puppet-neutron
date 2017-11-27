@@ -12,6 +12,10 @@
 #   (optional) Use syslog for logging
 #   Defaults to $::os_service_default
 #
+# [*use_json*]
+#   (optional) Use json for logging
+#   Defaults to $::os_service_default
+#
 # [*use_stderr*]
 #   (optional) Use stderr for logging
 #   Defaults to $::os_service_default
@@ -100,6 +104,7 @@
 class neutron::logging (
   $debug                         = $::os_service_default,
   $use_syslog                    = $::os_service_default,
+  $use_json                      = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_file                      = $::os_service_default,
   $log_dir                       = '/var/log/neutron',
@@ -135,6 +140,7 @@ class neutron::logging (
     debug                         => $debug_real,
     use_stderr                    => $use_stderr_real,
     use_syslog                    => $use_syslog_real,
+    use_json                      => $use_json,
     syslog_log_facility           => $syslog_log_facility,
     log_file                      => $log_file_real,
     log_dir                       => $log_dir_real,

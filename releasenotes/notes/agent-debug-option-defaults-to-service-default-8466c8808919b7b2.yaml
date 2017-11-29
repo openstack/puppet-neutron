@@ -1,0 +1,17 @@
+---
+upgrade:
+  - |
+    Debug logging is no longer overridden and disabled by default on the L2
+    gateway, metering, L3 and metadata agents allowing the service default
+    to take affect. Deployments requiring these services to have debug
+    logging disabled independent of other related configuration may need to
+    explictly set this parameters.  Affected parameters are
+    'neutron::agents::l2gw::debug', 'neutron:agents::l3::debug',
+    'neutron::agents::metadata::debug' and 'neutron::agents::l2gw::debug'.
+
+fixes:
+  - |
+    The L2 gateway, metering, L3 and metadata agents now use the service
+    default for the debug logging unless otherwise explicitly set. This allows
+    a common configuration for enabling debug logging instead of explicitly
+    enabling in each service.

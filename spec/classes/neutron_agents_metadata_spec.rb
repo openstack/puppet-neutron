@@ -8,7 +8,6 @@ describe 'neutron::agents::metadata' do
 
   let :params do
     { :package_ensure    => 'present',
-      :debug             => false,
       :enabled           => true,
       :shared_secret     => 'metadata-secret',
       :purge_config      => false,
@@ -52,7 +51,7 @@ describe 'neutron::agents::metadata' do
     end
 
     it 'configures metadata_agent.ini' do
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/debug').with(:value => params[:debug])
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/debug').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/auth_ca_cert').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_cert').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_client_priv_key').with(:value => '<SERVICE DEFAULT>')

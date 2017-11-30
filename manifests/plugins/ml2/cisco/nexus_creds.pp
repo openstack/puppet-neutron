@@ -95,22 +95,4 @@ define neutron::plugins::ml2::cisco::nexus_creds(
       tag    => 'neutron-config-file',
     }
   )
-
-  $check_known_hosts = "/bin/cat /var/lib/neutron/.ssh/known_hosts | /bin/grep ${ip_address}"
-
-  # Test to make sure switch is reachable before ssh-keyscan.
-  #  - ssh-keyscan timeouts fail silently so use ping to
-  #    report connectivity failures.
-  exec {"ping_test_${name}":
-    unless  => $check_known_hosts,
-    command => "/usr/bin/ping -c 1 ${ip_address}",
-    user    => 'neutron'
-  }
-
-  exec {"nexus_creds_${name}":
-    unless  => $check_known_hosts,
-    command => "/usr/bin/ssh-keyscan -t rsa ${ip_address} >> /var/lib/neutron/.ssh/known_hosts",
-    user    => 'neutron',
-    require => [Exec["ping_test_${name}"], Anchor['neutron::config::end']]
-  }
 }

@@ -65,6 +65,12 @@
 #   OVS will create the vhostuser socket.
 #   Defaults to "client"
 #
+# [*enable_hw_offload*]
+#   (optional) Configure OVS to use
+#   Hardware Offload. This feature is
+#   supported from ovs 2.8.0.
+#   Defaults to False.
+#
 class neutron::plugins::ovs::opendaylight (
   $tunnel_ip,
   $odl_username,
@@ -79,7 +85,8 @@ class neutron::plugins::ovs::opendaylight (
   $allowed_network_types = ['local', 'vlan', 'vxlan', 'gre'],
   $enable_dpdk           = false,
   $vhostuser_socket_dir  = '/var/run/openvswitch',
-  $vhostuser_mode        = 'client'
+  $vhostuser_mode        = 'client',
+  $enable_hw_offload     = false
 ) {
 
   include ::neutron::deps
@@ -121,6 +128,10 @@ class neutron::plugins::ovs::opendaylight (
   $json_network_types = convert_to_json_string($allowed_network_types)
   $json_bridge_mappings = convert_to_json_string($provider_mappings)
 
+  if $enable_hw_offload and $enable_dpdk {
+    fail('Enabling hardware offload and DPDK is not allowed')
+  }
+
   if $enable_dpdk {
     $host_config = @("END":json/$L)
       {\
@@ -141,6 +152,24 @@ class neutron::plugins::ovs::opendaylight (
         "bridge_mappings": ${json_bridge_mappings}\
       }
       |-END
+  } elsif $enable_hw_offload {
+    require ::vswitch::ovs
+    $host_config = @("END":json/L)
+      {\
+        "supported_vnic_types": [{\
+          "vnic_type": "normal",\
+          "vif_type": "ovs",\
+          "vif_details": {}\
+        },{\
+          "vnic_type": "direct",\
+          "vif_type": "ovs",\
+          "vif_details": {}\
+        }],\
+        "allowed_network_types": ${json_network_types},\
+        "bridge_mappings": ${json_bridge_mappings}\
+      }
+      |-END
+
   } else {
     $host_config = @("END":json/L)
       {\

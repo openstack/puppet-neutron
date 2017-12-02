@@ -42,6 +42,11 @@
 #   (optional) Type of VIF to be used for ports.
 #   Valid values are 'ovs', 'vhostuser'
 #   Defaults to $::os_service_default
+#
+# [*ovn_metadata_enabled*]
+#   (optional) Whether to enable metadata service in OVN.
+#   Type: boolean
+#   Defaults to $::os_service_default
 
 class neutron::plugins::ml2::ovn(
   $ovn_nb_connection        = $::os_service_default,
@@ -51,6 +56,7 @@ class neutron::plugins::ml2::ovn(
   $neutron_sync_mode        = $::os_service_default,
   $ovn_l3_mode              = $::os_service_default,
   $vif_type                 = $::os_service_default,
+  $ovn_metadata_enabled     = $::os_service_default,
   ) {
 
   include ::neutron::deps
@@ -82,5 +88,6 @@ class neutron::plugins::ml2::ovn(
     'ovn/neutron_sync_mode'        : value => $neutron_sync_mode;
     'ovn/ovn_l3_mode'              : value => $ovn_l3_mode;
     'ovn/vif_type'                 : value => $vif_type;
+    'ovn/ovn_metadata_enabled'     : value => $ovn_metadata_enabled;
   }
 }

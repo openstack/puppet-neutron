@@ -29,6 +29,7 @@ class neutron::params {
   $metering_agent_service      = 'neutron-metering-agent'
   $l3_agent_service            = 'neutron-l3-agent'
   $metadata_agent_service      = 'neutron-metadata-agent'
+  $ovn_metadata_agent_service  = 'networking-ovn-metadata-agent'
   $bagpipe_bgp_package         = 'openstack-bagpipe-bgp'
   $bgpvpn_bagpipe_package      = 'python-networking-bagpipe'
   $bgpvpn_bagpipe_service      = 'bagpipe-bgp'
@@ -64,6 +65,7 @@ class neutron::params {
     $vpnaas_agent_package       = 'openstack-neutron-vpnaas'
     $l2gw_agent_package         = 'openstack-neutron-l2gw-agent'
     $l2gw_package               = 'python2-networking-l2gw'
+    $ovn_metadata_agent_package = 'networking-ovn-metadata-agent'
     if $::operatingsystemrelease =~ /^7.*/ or $::operatingsystem == 'Fedora' {
       $openswan_package = 'libreswan'
     } else {

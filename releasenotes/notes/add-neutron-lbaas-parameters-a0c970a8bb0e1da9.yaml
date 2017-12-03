@@ -1,0 +1,5 @@
+---
+features:
+  - Adds ovs_integration_bridge config option in
+    neutron.conf and adds ovs_veth_use config
+    option in lbaas_agent.ini

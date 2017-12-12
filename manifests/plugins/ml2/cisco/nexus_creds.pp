@@ -4,7 +4,7 @@
 # for use by the ML2 Mech Driver for Cisco Nexus Switches.
 #
 # More info available here:
-# https://wiki.openstack.org/wiki/Neutron/ML2/MechCiscoNexus
+# http://networking-cisco.readthedocs.io
 #
 #
 # neutron::plugins::ml2::cisco::nexus_creds used by
@@ -74,6 +74,40 @@
 #
 # Defaults to undef.
 #
+# [*vpc_pool*]
+# (not used) Required for Baremetal deployments and Port-Channel creation
+# is needed.  This defines the pool of port-channel ids which are
+# available for port-channel creation.
+#
+# Defaults to undef.
+#
+# [*intfcfg_portchannel*]
+# (not used) For use with Baremetal deployments and custom port-channel
+# configuration is required during port-channel creation.
+#
+# Defaults to undef.
+#
+# [*https_verify*]
+# (not used) Set to True when certification authority (CA) file is in
+# the Operating System repository or is a locally defined file whose
+# name is provided in https_local_certificate.  Set to False
+# to skip https certification checking thus making the connection
+# insecure.  Getting a certificate and setting https_verify to True
+# is strongly advised for production to prevent man-in-the-middle
+# attacks.  Be advised the default will change from False to True
+# in future releases.
+#
+# Defaults to undef.
+#
+# [*https_local_certificate*]
+# (not used) Configure a local certificate file to present in https
+# requests.  For experimental purpose when an official certificate
+# from a Trusted Certificate Authority is not yet available.
+#
+# Defaults to undef.
+#
+
+
 define neutron::plugins::ml2::cisco::nexus_creds(
   # Not used parameters
   $username,
@@ -84,6 +118,10 @@ define neutron::plugins::ml2::cisco::nexus_creds(
   $ip_address,
   $nve_src_intf = undef,
   $physnet      = undef,
+  $vpc_pool     = undef,
+  $intfcfg_portchannel = undef,
+  $https_verify = undef,
+  $https_local_certificate = undef,
 
 ) {
   include ::neutron::deps

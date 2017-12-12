@@ -1,7 +1,7 @@
 #
 # Configure the Nexus VXLAN Type Driver
 # More info available here:
-# http://docwiki.cisco.com/wiki/OpenStack/ML2NexusMechanismDriver
+# http://networking-cisco.readthedocs.io
 #
 # === Parameters
 #

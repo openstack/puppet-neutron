@@ -1,0 +1,10 @@
+---
+deprecations:
+  - |
+    Nexus: Configuration clean-up
+
+    This changeset deprecates old configurations not used in the code and
+    others to be aged out mostly due to code improvements such as implementation
+    of the Nexusu RESTAPI driver.  The RESTAPI driver replaces use of the
+    ncclient driver.  The ncclient driver will be removed along with any tuning
+    configuration that goes with it.

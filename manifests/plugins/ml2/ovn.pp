@@ -47,6 +47,11 @@
 #   (optional) Whether to enable metadata service in OVN.
 #   Type: boolean
 #   Defaults to $::os_service_default
+#
+# [*dvr_enabled*]
+#   (optional) Whether to enable DVR.
+#   Type: boolean
+#   Defaults to $::os_service_default
 
 class neutron::plugins::ml2::ovn(
   $ovn_nb_connection        = $::os_service_default,
@@ -57,6 +62,7 @@ class neutron::plugins::ml2::ovn(
   $ovn_l3_mode              = $::os_service_default,
   $vif_type                 = $::os_service_default,
   $ovn_metadata_enabled     = $::os_service_default,
+  $dvr_enabled              = $::os_service_default,
   ) {
 
   include ::neutron::deps
@@ -89,5 +95,6 @@ class neutron::plugins::ml2::ovn(
     'ovn/ovn_l3_mode'              : value => $ovn_l3_mode;
     'ovn/vif_type'                 : value => $vif_type;
     'ovn/ovn_metadata_enabled'     : value => $ovn_metadata_enabled;
+    'ovn/enable_distributed_floating_ip' : value => $dvr_enabled;
   }
 }

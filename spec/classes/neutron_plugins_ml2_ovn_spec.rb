@@ -18,6 +18,7 @@ describe 'neutron::plugins::ml2::ovn' do
        :neutron_sync_mode        => 'log',
        :ovn_l3_mode              => true,
        :vif_type                 => 'ovs',
+       :dvr_enabled              => false,
     }
   end
 
@@ -44,6 +45,7 @@ describe 'neutron::plugins::ml2::ovn' do
       is_expected.to contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(params[:neutron_sync_mode])
       is_expected.to contain_neutron_plugin_ml2('ovn/ovn_l3_mode').with_value(params[:ovn_l3_mode])
       is_expected.to contain_neutron_plugin_ml2('ovn/vif_type').with_value(params[:vif_type])
+      is_expected.to contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
     end
 
   end
@@ -68,6 +70,15 @@ describe 'neutron::plugins::ml2::ovn' do
       is_expected.to raise_error(Puppet::Error, /Invalid value for vif_type parameter/)
       params.delete(:vif_type)
       is_expected.to contain_neutron_plugin_ml2('ovn/vif_type').with_value('<SERVICE DEFAULT>')
+    end
+
+    context 'with DVR' do
+      before :each do
+        params.merge!(:dvr_enabled => true)
+      end
+      it 'should enable DVR mode' do
+        is_expected.to contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
+      end
     end
   end
 

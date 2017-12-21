@@ -280,7 +280,7 @@ describe 'neutron' do
         :use_syslog         => false,
       )
     end
-    it { is_expected.to contain_neutron_config('DEFAULT/use_syslog').with_value(false) }
+    it { is_expected.to contain_neutron_config('DEFAULT/use-syslog').with_value(false) }
   end
 
   shared_examples_for 'with non-default kombu options' do
@@ -367,7 +367,7 @@ describe 'neutron' do
     end
 
     it do
-      is_expected.to contain_neutron_config('DEFAULT/use_syslog').with_value(true)
+      is_expected.to contain_neutron_config('DEFAULT/use-syslog').with_value(true)
     end
   end
 
@@ -379,8 +379,8 @@ describe 'neutron' do
       )
     end
     it 'configures logging' do
-      is_expected.to contain_neutron_config('DEFAULT/log_file').with_value(params[:log_file])
-      is_expected.to contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
+      is_expected.to contain_neutron_config('DEFAULT/log-file').with_value(params[:log_file])
+      is_expected.to contain_neutron_config('DEFAULT/log-dir').with_value(params[:log_dir])
     end
   end
 

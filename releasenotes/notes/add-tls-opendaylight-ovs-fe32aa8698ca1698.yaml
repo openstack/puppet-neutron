@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Enables using TLS in Open vSwitch (OVS) with OpenDaylight.  OVS is
+    configured to with certificates and private key to use in enabling a
+    secure connection to OpenDaylight via OVSDB.

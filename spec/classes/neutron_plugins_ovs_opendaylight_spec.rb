@@ -2,16 +2,6 @@ require 'spec_helper'
 
 describe 'neutron::plugins::ovs::opendaylight' do
 
-  let :pre_condition do
-    "class { '::neutron::keystone::authtoken':
-      password => 'passw0rd',
-     }
-     class { 'neutron::server': }
-     class { 'neutron':
-      rabbit_password => 'passw0rd',
-      core_plugin     => 'ml2' }"
-  end
-
   let :default_params do
     {
       :odl_check_url         => 'http://127.0.0.1:8080/restconf/operational/network-topology:network-topology/topology/netvirt:1',
@@ -25,7 +15,8 @@ describe 'neutron::plugins::ovs::opendaylight' do
       :enable_dpdk           => false,
       :vhostuser_socket_dir  => '/var/run/openvswitch',
       :vhostuser_mode        => 'client',
-      :enable_hw_offload     => false
+      :enable_hw_offload     => false,
+      :enable_tls            => false,
     }
   end
 
@@ -70,7 +61,53 @@ describe 'neutron::plugins::ovs::opendaylight' do
       end
       it_raises 'a Puppet::Error',/Enabling hardware offload and DPDK is not allowed/
     end
+
     it_configures 'with default parameters'
+
+    context 'with TLS and no key or certificates' do
+      before do
+         params.merge!({ :enable_tls => true })
+      end
+      it_raises 'a Puppet::Error',/When enabling TLS, tls_key_file and tls_cert_file must be provided/
+    end
+
+    context 'with TLS and no CA cert' do
+      before do
+        File.stubs(:file?).returns(true)
+        File.stubs(:readlines).returns(["MIIFGjCCBAKgAwIBAgICA"])
+        params.merge!({
+          :enable_tls => true,
+          :tls_key_file => 'dummy.pem',
+          :tls_cert_file => 'dummy.crt'})
+      end
+      it_configures 'with TLS enabled'
+      it {is_expected.to contain_vs_ssl('system').with(
+        'ensure'    => 'present',
+        'key_file'  => 'dummy.pem',
+        'cert_file' => 'dummy.crt',
+        'bootstrap' => true,
+        'before'    => 'Exec[Set OVS Manager to OpenDaylight]'
+      )}
+    end
+    context 'with TLS and CA cert' do
+      before do
+        File.stubs(:file?).returns(true)
+        File.stubs(:readlines).returns(["MIIFGjCCBAKgAwIBAgICA"])
+        params.merge!({
+          :enable_tls => true,
+          :tls_key_file => 'dummy.pem',
+          :tls_cert_file => 'dummy.crt',
+          :tls_ca_cert_file => 'ca.crt'})
+      end
+      it_configures 'with TLS enabled'
+      it {is_expected.to contain_vs_ssl('system').with(
+        'ensure'    => 'present',
+        'key_file'  => 'dummy.pem',
+        'cert_file' => 'dummy.crt',
+        'ca_file'   => 'ca.crt',
+        'before'    => 'Exec[Set OVS Manager to OpenDaylight]'
+      )}
+    end
   end
 
   shared_examples_for 'with default parameters' do
@@ -107,6 +144,17 @@ describe 'neutron::plugins::ovs::opendaylight' do
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_config_odl_l2').with(
         :value => /vhostuser/,
       )
+    end
+  end
+
+  shared_examples_for 'with TLS enabled' do
+    it 'configures OVS for ODL' do
+      is_expected.to contain_exec('Add trusted cert: dummy.crt')
+      is_expected.to contain_exec('Set OVS Manager to OpenDaylight')
+      is_expected.to contain_vs_config('other_config:local_ip')
+      is_expected.not_to contain_vs_config('other_config:provider_mappings')
+      is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_hostid')
+      is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_config_odl_l2')
     end
   end
 

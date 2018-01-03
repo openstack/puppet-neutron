@@ -71,6 +71,22 @@
 #   supported from ovs 2.8.0.
 #   Defaults to False.
 #
+# [*enable_tls*]
+#   (optional) Configure OVS to use SSL/TLS
+#   Defaults to False.
+#
+# [*tls_key_file*]
+#   (optional) Private key file path to use for TLS configuration
+#   Defaults to False.  Required if enabling TLS.
+#
+# [*tls_cert_file*]
+#   (optional) Certificate file path to use for TLS configuration
+#   Defaults to False.  Required if enabling TLS.
+#
+# [*tls_ca_cert_file*]
+#   (optional) CA Certificate file path to use for TLS configuration
+#   Defaults to False.
+#
 class neutron::plugins::ovs::opendaylight (
   $tunnel_ip,
   $odl_username,
@@ -86,7 +102,11 @@ class neutron::plugins::ovs::opendaylight (
   $enable_dpdk           = false,
   $vhostuser_socket_dir  = '/var/run/openvswitch',
   $vhostuser_mode        = 'client',
-  $enable_hw_offload     = false
+  $enable_hw_offload     = false,
+  $enable_tls            = false,
+  $tls_key_file          = undef,
+  $tls_cert_file         = undef,
+  $tls_ca_cert_file      = undef
 ) {
 
   include ::neutron::deps
@@ -94,16 +114,98 @@ class neutron::plugins::ovs::opendaylight (
   # Handle the case where ODL controller is also on this host
   Service<| title == 'opendaylight' |> -> Exec <| title == 'Wait for NetVirt OVSDB to come up' |>
 
+  if $enable_tls {
+    if empty($tls_key_file) or empty($tls_cert_file) {
+      fail('When enabling TLS, tls_key_file and tls_cert_file must be provided')
+    }
+    if ! empty($tls_ca_cert_file) {
+      vs_ssl { 'system':
+        ensure    => present,
+        key_file  => $tls_key_file,
+        cert_file => $tls_cert_file,
+        ca_file   => $tls_ca_cert_file,
+        before    => Exec['Set OVS Manager to OpenDaylight']
+      }
+    } else {
+      vs_ssl { 'system':
+        ensure    => present,
+        key_file  => $tls_key_file,
+        cert_file => $tls_cert_file,
+        bootstrap => true,
+        before    => Exec['Set OVS Manager to OpenDaylight']
+      }
+    }
+
+    if $odl_ovsdb_iface =~ /^tcp/ {
+      warning('TLS enabled but odl_ovsdb_iface set to tcp.  Will override to ssl')
+      $odl_ovsdb_iface_parsed = regsubst($odl_ovsdb_iface, '^tcp', 'ssl')
+    }
+
+    if $ovsdb_server_iface =~ /^ptcp/ {
+      warning('TLS enabled but ovsdb_server_iface set to ptcp.  Will override to pssl')
+      $ovsdb_server_iface_parsed = regsubst($ovsdb_server_iface, '^ptcp', 'pssl')
+    }
+
+    if $odl_check_url =~ /^http:/ {
+      warning('TLS enabled but odl_check_url set to http.  Will override to https')
+      $odl_check_url_parsed = regsubst($odl_check_url, '^http:', 'https:')
+    } else {
+      $odl_check_url_parsed = $odl_check_url
+    }
+
+    $cert_data = convert_cert_to_string($tls_cert_file)
+    $rest_data = @("END":json/L)
+      {\
+        "aaa-cert-rpc:input": {\
+        "aaa-cert-rpc:node-alias": "${::hostname}",\
+        "aaa-cert-rpc:node-cert": "${cert_data}"\
+        }\
+      }
+      |-END
+    $odl_url_prefix = $odl_check_url_parsed ? {
+      /^(https:\/\/.*?)\// => $1,
+      default => undef
+    }
+    if $odl_url_prefix == undef {
+      fail("Unable to parse URL prefix from ${odl_check_url_parsed}")
+    }
+    $curl_post = "curl -k -X POST -o /dev/null --fail --silent -H 'Content-Type: application/json' -H 'Cache-Control: no-cache'"
+    $curl_get = "curl -k -X POST --fail --silent -H 'Content-Type: application/json' -H 'Cache-Control: no-cache'"
+    $cert_rest_url = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:setNodeCertifcate"
+    $cert_rest_get = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:getNodeCertifcate"
+    $rest_get_data = @("END":json/L)
+      {\
+        "aaa-cert-rpc:input": {\
+        "aaa-cert-rpc:node-alias": "${::hostname}"\
+        }\
+      }
+      |-END
+    exec { "Add trusted cert: ${tls_cert_file}":
+      command   => "${curl_post} -u ${odl_username}:${odl_password} -d '${rest_data}' ${cert_rest_url}",
+      tries     => 5,
+      try_sleep => 30,
+      unless    => "${curl_get} -u ${odl_username}:${odl_password} -d '${rest_get_data}' ${cert_rest_get} | grep -q ${cert_data}",
+      path      => '/usr/sbin:/usr/bin:/sbin:/bin',
+      before    => Exec['Set OVS Manager to OpenDaylight'],
+      require   => Exec['Wait for NetVirt OVSDB to come up']
+    }
+
+  } else {
+    $odl_ovsdb_iface_parsed = $odl_ovsdb_iface
+    $ovsdb_server_iface_parsed = $ovsdb_server_iface
+    $odl_check_url_parsed = $odl_check_url
+  }
+
   exec { 'Wait for NetVirt OVSDB to come up':
-    command   => "curl -o /dev/null --fail --silent --head -u ${odl_username}:${odl_password} ${odl_check_url}",
+    command   => "curl -k -o /dev/null --fail --silent --head -u ${odl_username}:${odl_password} ${odl_check_url_parsed}",
     tries     => $retry_count,
     try_sleep => $retry_interval,
     path      => '/usr/sbin:/usr/bin:/sbin:/bin',
   }
   # OVS manager
   -> exec { 'Set OVS Manager to OpenDaylight':
-      command => "ovs-vsctl set-manager ${ovsdb_server_iface} ${odl_ovsdb_iface}",
-      unless  => "ovs-vsctl show | grep 'Manager \"${ovsdb_server_iface} ${odl_ovsdb_iface}\"'",
+      command => "ovs-vsctl set-manager ${ovsdb_server_iface_parsed} ${odl_ovsdb_iface_parsed}",
+      unless  => "ovs-vsctl show | grep 'Manager \"${ovsdb_server_iface_parsed} ${odl_ovsdb_iface_parsed}\"'",
       path    => '/usr/sbin:/usr/bin:/sbin:/bin',
   }
 

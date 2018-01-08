@@ -50,6 +50,10 @@
 #   Nova metadata IP
 #   Defaults to 127.0.0.1
 #
+# [*nova_metadata_host*]
+#   Nova metadata host
+#   Defaults to 127.0.0.1
+#
 # [*nova_metadata_port*]
 #   Nova metadata port
 #   Defaults to 8775
@@ -104,6 +108,7 @@ class neutron::plugins::plumgrid (
   $identity_version             = 'v3',
   $user_domain_name             = 'Default',
   $nova_metadata_ip             = '127.0.0.1',
+  $nova_metadata_host           = '127.0.0.1',
   $nova_metadata_port           = '8775',
   $nova_metadata_subnet         = '127.0.0.1/24',
   $metadata_proxy_shared_secret = $::os_service_default,
@@ -183,6 +188,7 @@ class neutron::plugins::plumgrid (
     'PLUMgridMetadata/enable_pg_metadata' :          value => 'True';
     'PLUMgridMetadata/metadata_mode':                value => 'local';
     'PLUMgridMetadata/nova_metadata_ip':             value => $nova_metadata_ip;
+    'PLUMgridMetadata/nova_metadata_host':           value => $nova_metadata_host;
     'PLUMgridMetadata/nova_metadata_port':           value => $nova_metadata_port;
     'PLUMgridMetadata/nova_metadata_subnet':         value => $nova_metadata_subnet;
     'PLUMgridMetadata/metadata_proxy_shared_secret': value => $metadata_proxy_shared_secret, secret =>true;

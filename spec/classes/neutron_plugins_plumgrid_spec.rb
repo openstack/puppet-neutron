@@ -21,6 +21,7 @@ describe 'neutron::plugins::plumgrid' do
     :identity_version     => 'v3',
     :user_domain_name     => 'Default',
     :nova_metadata_ip     => '127.0.0.1',
+    :nova_metadata_host   => '127.0.0.1',
     :nova_metadata_port   => '8775',
     :nova_metadata_subnet => '127.0.0.1/24',
     :connector_type       => 'distributed',
@@ -88,6 +89,7 @@ describe 'neutron::plugins::plumgrid' do
       is_expected.to contain_neutron_plumlib_plumgrid('PLUMgridMetadata/enable_pg_metadata').with_value('True')
       is_expected.to contain_neutron_plumlib_plumgrid('PLUMgridMetadata/metadata_mode').with_value('local')
       is_expected.to contain_neutron_plumlib_plumgrid('PLUMgridMetadata/nova_metadata_ip').with_value(params[:nova_metadata_ip])
+      is_expected.to contain_neutron_plumlib_plumgrid('PLUMgridMetadata/nova_metadata_host').with_value(params[:nova_metadata_host])
       is_expected.to contain_neutron_plumlib_plumgrid('PLUMgridMetadata/nova_metadata_port').with_value(params[:nova_metadata_port])
       is_expected.to contain_neutron_plumlib_plumgrid('PLUMgridMetadata/nova_metadata_subnet').with_value(params[:nova_metadata_subnet])
       is_expected.to contain_neutron_plumlib_plumgrid('PLUMgridMetadata/metadata_proxy_shared_secret').with_value('<SERVICE DEFAULT>').with_secret(true)

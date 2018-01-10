@@ -29,13 +29,14 @@ class neutron::policy (
 ) {
 
   include ::neutron::deps
+  include ::neutron::params
 
   validate_hash($policies)
 
   Openstacklib::Policy::Base {
-    file_path => $policy_path,
-    require   => Anchor['neutron::config::begin'],
-    notify    => Anchor['neutron::config::end'],
+    file_path  => $policy_path,
+    file_user  => 'root',
+    file_group => $::neutron::params::group,
   }
 
   create_resources('openstacklib::policy::base', $policies)

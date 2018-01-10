@@ -38,6 +38,7 @@ class neutron::params {
   $nsx_plugin_package          = 'vmware-nsx'
   $nsx_config_file             = '/etc/neutron/plugins/vmware/nsx.ini'
   $sfc_package                 = 'python-networking-sfc'
+  $group                       = 'neutron'
 
   if($::osfamily == 'Redhat') {
     $nobody_user_group          = 'nobody'

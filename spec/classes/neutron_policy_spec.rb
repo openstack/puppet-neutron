@@ -2,12 +2,6 @@ require 'spec_helper'
 
 describe 'neutron::policy' do
 
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
-    }
-  end
-
   shared_examples_for 'neutron policies' do
     let :params do
       {
@@ -23,12 +17,11 @@ describe 'neutron::policy' do
 
     it 'set up the policies' do
       is_expected.to contain_openstacklib__policy__base('context_is_admin').with({
-        :key   => 'context_is_admin',
-        :value => 'foo:bar'
+        :key        => 'context_is_admin',
+        :value      => 'foo:bar',
+        :file_user  => 'root',
+        :file_group => 'neutron',
       })
-    end
-
-    it 'set policy_file in neutron.conf' do
       is_expected.to contain_oslo__policy('neutron_config').with(
         :policy_file => '/etc/neutron/policy.json',
       )
@@ -46,5 +39,4 @@ describe 'neutron::policy' do
       it_configures 'neutron policies'
     end
   end
-
 end

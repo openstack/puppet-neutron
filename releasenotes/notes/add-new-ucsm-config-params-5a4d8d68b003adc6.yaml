@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    Add new configuration parameters for the Cisco UCSM ML2 driver
+
+    The following new configuration parameters are now being supported by the
+    UCSM ML2 driver.
+    * ucsm_https_verify
+    * sp_template_list
+    * vnic_template_list

@@ -1,0 +1,5 @@
+---
+features:
+  - Adds support for baremetal. Installation and configuration of
+    networking-baremetal ironic-neutron-agent ml2 agent.
+

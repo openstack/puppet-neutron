@@ -41,43 +41,45 @@ class neutron::params {
   $group                       = 'neutron'
 
   if($::osfamily == 'Redhat') {
-    $nobody_user_group            = 'nobody'
-    $package_name                 = 'openstack-neutron'
-    $server_package               = false
-    $ml2_server_package           = 'openstack-neutron-ml2'
-    $ovs_agent_package            = false
-    $ovs_server_package           = 'openstack-neutron-openvswitch'
-    $ovs_cleanup_service          = 'neutron-ovs-cleanup'
-    $libnl_package                = 'libnl'
-    $package_provider             = 'rpm'
-    $linuxbridge_agent_package    = false
-    $linuxbridge_server_package   = 'openstack-neutron-linuxbridge'
-    $sriov_nic_agent_service      = 'neutron-sriov-nic-agent'
-    $sriov_nic_agent_package      = 'openstack-neutron-sriov-nic-agent'
-    $bigswitch_lldp_package       = 'openstack-neutron-bigswitch-lldp'
-    $bigswitch_agent_package      = 'openstack-neutron-bigswitch-agent'
-    $bigswitch_lldp_service       = 'neutron-bsn-lldp'
-    $bigswitch_agent_service      = 'neutron-bsn-agent'
-    $cisco_server_package         = 'openstack-neutron-cisco'
-    $nvp_server_package           = 'openstack-neutron-nicira'
-    $dhcp_agent_package           = false
-    $lbaasv2_agent_package        = 'openstack-neutron-lbaas'
-    $metering_agent_package       = 'openstack-neutron-metering-agent'
-    $vpnaas_agent_package         = 'openstack-neutron-vpnaas'
-    $l2gw_agent_package           = 'openstack-neutron-l2gw-agent'
-    $l2gw_package                 = 'python2-networking-l2gw'
-    $ovn_metadata_agent_package   = 'networking-ovn-metadata-agent'
+    $nobody_user_group                  = 'nobody'
+    $package_name                       = 'openstack-neutron'
+    $server_package                     = false
+    $ml2_server_package                 = 'openstack-neutron-ml2'
+    $ovs_agent_package                  = false
+    $ovs_server_package                 = 'openstack-neutron-openvswitch'
+    $ovs_cleanup_service                = 'neutron-ovs-cleanup'
+    $libnl_package                      = 'libnl'
+    $package_provider                   = 'rpm'
+    $linuxbridge_agent_package          = false
+    $linuxbridge_server_package         = 'openstack-neutron-linuxbridge'
+    $sriov_nic_agent_service            = 'neutron-sriov-nic-agent'
+    $sriov_nic_agent_package            = 'openstack-neutron-sriov-nic-agent'
+    $bigswitch_lldp_package             = 'openstack-neutron-bigswitch-lldp'
+    $bigswitch_agent_package            = 'openstack-neutron-bigswitch-agent'
+    $bigswitch_lldp_service             = 'neutron-bsn-lldp'
+    $bigswitch_agent_service            = 'neutron-bsn-agent'
+    $cisco_server_package               = 'openstack-neutron-cisco'
+    $nvp_server_package                 = 'openstack-neutron-nicira'
+    $dhcp_agent_package                 = false
+    $lbaasv2_agent_package              = 'openstack-neutron-lbaas'
+    $metering_agent_package             = 'openstack-neutron-metering-agent'
+    $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
+    $l2gw_agent_package                 = 'openstack-neutron-l2gw-agent'
+    $l2gw_package                       = 'python2-networking-l2gw'
+    $ovn_metadata_agent_package         = 'networking-ovn-metadata-agent'
     if $::operatingsystemrelease =~ /^7.*/ or $::operatingsystem == 'Fedora' {
       $openswan_package = 'libreswan'
     } else {
       $openswan_package = 'openswan'
     }
-    $libreswan_package            = 'libreswan'
-    $l3_agent_package             = false
-    $fwaas_package                = 'openstack-neutron-fwaas'
-    $neutron_wsgi_script_path     = '/var/www/cgi-bin/neutron'
-    $neutron_wsgi_script_source   = '/usr/bin/neutron-api'
-    $networking_baremetal_package = 'python2-networking-baremetal'
+    $libreswan_package                  = 'libreswan'
+    $l3_agent_package                   = false
+    $fwaas_package                      = 'openstack-neutron-fwaas'
+    $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
+    $neutron_wsgi_script_source         = '/usr/bin/neutron-api'
+    $networking_baremetal_package       = 'python2-networking-baremetal'
+    $networking_baremetal_agent_package = 'python2-ironic-neutron-agent'
+    $networking_baremetal_agent_service = 'ironic-neutron-agent'
   } elsif($::osfamily == 'Debian') {
     $nobody_user_group          = 'nogroup'
     $package_name               = 'neutron-common'

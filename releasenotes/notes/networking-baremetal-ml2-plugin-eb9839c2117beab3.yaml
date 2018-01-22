@@ -1,0 +1,4 @@
+---
+features:
+  - Additional support for baremetal. Added support for installation of
+    networking-baremetal neutron ML2 mechanism driver.

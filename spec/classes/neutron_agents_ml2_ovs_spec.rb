@@ -53,6 +53,8 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_neutron_agent_ovs('ovs/integration_bridge').with_value(p[:integration_bridge])
       is_expected.to contain_neutron_agent_ovs('securitygroup/firewall_driver').\
         with_value(p[:firewall_driver])
+      is_expected.to contain_neutron_agent_ovs('securitygroup/enable_security_group').\
+        with_value(['<SERVICE DEFAULT>'])
       is_expected.to contain_neutron_agent_ovs('ovs/tunnel_bridge').with_ensure('absent')
       is_expected.to contain_neutron_agent_ovs('ovs/local_ip').with_ensure('absent')
       is_expected.to contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_ensure('absent')
@@ -98,6 +100,16 @@ describe 'neutron::agents::ml2::ovs' do
         is_expected.to contain_neutron_agent_ovs('securitygroup/firewall_driver').with_ensure('absent')
       end
     end
+
+    context 'when disabling security groups' do
+      before :each do
+        params.merge!(:enable_security_group => false)
+      end
+      it 'should disable securitygroups' do
+        is_expected.to contain_neutron_agent_ovs('securitygroup/enable_security_group').with_value('false')
+      end
+    end
+
 
     context 'when enabling ARP responder' do
       before :each do

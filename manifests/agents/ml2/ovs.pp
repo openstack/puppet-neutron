@@ -140,6 +140,11 @@
 #   (optional) Enable or not DPDK with OVS
 #   Defaults to false.
 #
+# [*enable_security_group*]
+#   (optional) Controls whether the agent supports security
+#   groups or not.
+#   Defaults to $::os_service_default
+#
 # [*minimize_polling*]
 #  (optional) Minimize polling by monitoring ovsdb for interface
 #  changes. (boolean value)
@@ -178,6 +183,7 @@ class neutron::agents::ml2::ovs (
   $ovsdb_interface            = $::os_service_default,
   $purge_config               = false,
   $enable_dpdk                = false,
+  $enable_security_group      = $::os_service_default,
   $minimize_polling           = $::os_service_default,
   # DEPRECATED PARAMETERS
   $enable_tunneling           = false,
@@ -269,18 +275,19 @@ class neutron::agents::ml2::ovs (
   }
 
   neutron_agent_ovs {
-    'agent/polling_interval':           value => $polling_interval;
-    'agent/l2_population':              value => $l2_population;
-    'agent/arp_responder':              value => $arp_responder;
-    'agent/enable_distributed_routing': value => $enable_distributed_routing;
-    'agent/drop_flows_on_start':        value => $drop_flows_on_start;
-    'agent/extensions':                 value => join(any2array($extensions), ',');
-    'agent/minimize_polling':           value => $minimize_polling;
-    'ovs/integration_bridge':           value => $integration_bridge;
-    'ovs/datapath_type':                value => $datapath_type;
-    'ovs/vhostuser_socket_dir':         value => $vhostuser_socket_dir;
-    'ovs/ovsdb_interface':              value => $ovsdb_interface;
-    'ovs/of_interface':                 value => $of_interface;
+    'agent/polling_interval':               value => $polling_interval;
+    'agent/l2_population':                  value => $l2_population;
+    'agent/arp_responder':                  value => $arp_responder;
+    'agent/enable_distributed_routing':     value => $enable_distributed_routing;
+    'agent/drop_flows_on_start':            value => $drop_flows_on_start;
+    'agent/extensions':                     value => join(any2array($extensions), ',');
+    'agent/minimize_polling':               value => $minimize_polling;
+    'ovs/integration_bridge':               value => $integration_bridge;
+    'ovs/datapath_type':                    value => $datapath_type;
+    'ovs/vhostuser_socket_dir':             value => $vhostuser_socket_dir;
+    'ovs/ovsdb_interface':                  value => $ovsdb_interface;
+    'ovs/of_interface':                     value => $of_interface;
+    'securitygroup/enable_security_group':  value => $enable_security_group;
   }
 
   if $firewall_driver {

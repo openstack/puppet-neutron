@@ -150,7 +150,9 @@ describe 'neutron::plugins::ovs::opendaylight' do
   shared_examples_for 'with TLS enabled' do
     it 'configures OVS for ODL' do
       is_expected.to contain_exec('Add trusted cert: dummy.crt')
-      is_expected.to contain_exec('Set OVS Manager to OpenDaylight')
+      is_expected.to contain_exec('Set OVS Manager to OpenDaylight').with(
+        :command => "ovs-vsctl set-manager pssl:6639:127.0.0.1 ssl:127.0.0.1:6640"
+      )
       is_expected.to contain_vs_config('other_config:local_ip')
       is_expected.not_to contain_vs_config('other_config:provider_mappings')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_hostid')

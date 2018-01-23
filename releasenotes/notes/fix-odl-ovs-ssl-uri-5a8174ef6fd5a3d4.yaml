@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    Fixes an issue with using TLS and specifying ovsdb_server_iface and
+    the odl_ovsdb_iface parameters with the plugins::ovs::opendaylight
+    class.

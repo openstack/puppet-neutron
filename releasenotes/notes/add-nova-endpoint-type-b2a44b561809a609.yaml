@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Added a new parameter 'neutron::notifications::endpoint_type' for specifying
+    the endpoint type when getting a nova endpoint from the keystone catalog.

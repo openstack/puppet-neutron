@@ -57,6 +57,7 @@ describe 'neutron::server::notifications' do
             is_expected.to contain_neutron_config('nova/project_domain_name').with_value('Default')
             is_expected.to contain_neutron_config('nova/user_domain_id').with_value('default')
             is_expected.to contain_neutron_config('nova/user_domain_name').with_value('Default')
+            is_expected.to contain_neutron_config('nova/endpoint_type').with_value('<SERVICE DEFAULT>')
             is_expected.not_to contain_neutron_config('nova/auth_plugin')
         end
 
@@ -75,6 +76,7 @@ describe 'neutron::server::notifications' do
                     :project_domain_name                => 'Default_2',
                     :user_domain_id                     => 'default_3',
                     :user_domain_name                   => 'Default_4',
+                    :endpoint_type                      => 'internal'
                 )
             end
             it 'should configure neutron server with overrided parameters' do
@@ -92,6 +94,7 @@ describe 'neutron::server::notifications' do
                 is_expected.to contain_neutron_config('nova/project_domain_name').with_value('Default_2')
                 is_expected.to contain_neutron_config('nova/user_domain_id').with_value('default_3')
                 is_expected.to contain_neutron_config('nova/user_domain_name').with_value('Default_4')
+                is_expected.to contain_neutron_config('nova/endpoint_type').with_value('internal')
             end
         end
 

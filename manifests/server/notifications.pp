@@ -81,6 +81,11 @@
 #   one region.
 #   Defaults to $::os_service_default
 #
+# [*endpoint_type*]
+#   (optional) The type of nova endpoint to use when looking up in
+#   the keystone catalog.
+#   Defaults to $::os_service_default
+#
 # === Deprecated Parameters
 #
 # [*auth_plugin*]
@@ -105,6 +110,7 @@ class neutron::server::notifications (
   $user_domain_name                   = 'Default',
   $auth_url                           = 'http://127.0.0.1:35357',
   $region_name                        = $::os_service_default,
+  $endpoint_type                      = $::os_service_default,
   # DEPRECATED PARAMETERS
   $auth_plugin                        = $::os_service_default,
 ) {
@@ -125,6 +131,7 @@ class neutron::server::notifications (
     'nova/user_domain_id':      value => $user_domain_id;
     'nova/user_domain_name':    value => $user_domain_name;
     'nova/region_name':         value => $region_name;
+    'nova/endpoint_type':       value => $endpoint_type;
   }
   if ! is_service_default ($auth_plugin) and ($auth_plugin) {
     warning('auth_plugin parameter is deprecated, auth_type should be used instead')

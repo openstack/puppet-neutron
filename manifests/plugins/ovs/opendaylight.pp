@@ -139,11 +139,15 @@ class neutron::plugins::ovs::opendaylight (
     if $odl_ovsdb_iface =~ /^tcp/ {
       warning('TLS enabled but odl_ovsdb_iface set to tcp.  Will override to ssl')
       $odl_ovsdb_iface_parsed = regsubst($odl_ovsdb_iface, '^tcp', 'ssl')
+    } else {
+      $odl_ovsdb_iface_parsed = $odl_ovsdb_iface
     }
 
     if $ovsdb_server_iface =~ /^ptcp/ {
       warning('TLS enabled but ovsdb_server_iface set to ptcp.  Will override to pssl')
       $ovsdb_server_iface_parsed = regsubst($ovsdb_server_iface, '^ptcp', 'pssl')
+    } else {
+      $ovsdb_server_iface_parsed = $ovsdb_server_iface
     }
 
     if $odl_check_url =~ /^http:/ {

@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Adds 'neutron::agents::ml2::ovs::enable_security_group' to permit disabling security groups
+    on the Neutron OVS agent.

@@ -26,6 +26,10 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
           "ip_address" => "172.18.117.28",
           "nve_src_intf" => 1,
           "physnet" => "physnet1",
+          "vpc_pool" => "",
+          "intfcfg_portchannel" => "",
+          "https_verify" => false,
+          "https_local_certificate" => "",
           "servers" => {
             "control02" => {"ports" => "portchannel:20"},
             "control01" => {"ports" => "portchannel:10"}
@@ -37,8 +41,10 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
       :svi_round_robin           => false,
       :provider_vlan_name_prefix => 'p-',
       :persistent_switch_config  => false,
-      :switch_heartbeat_time     => 0,
+      :never_cache_ssh_connection => false,
+      :switch_heartbeat_time     => 30,
       :switch_replay_count       => 3,
+      :nexus_driver              => 'restapi',
       :provider_vlan_auto_create => true,
       :provider_vlan_auto_trunk  => true,
       :vxlan_global_config       => true,
@@ -71,8 +77,10 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/svi_round_robin').with_value(params[:svi_round_robin])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/provider_vlan_name_prefix').with_value(params[:provider_vlan_name_prefix])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/persistent_switch_config').with_value(params[:persistent_switch_config])
+      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/never_cache_ssh_connection').with_value(params[:never_cache_ssh_connection])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/switch_heartbeat_time').with_value(params[:switch_heartbeat_time])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/switch_replay_count').with_value(params[:switch_replay_count])
+      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/nexus_driver').with_value(params[:nexus_driver])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/provider_vlan_auto_create').with_value(params[:provider_vlan_auto_create])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/provider_vlan_auto_trunk').with_value(params[:provider_vlan_auto_trunk])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/vxlan_global_config').with_value(params[:vxlan_global_config])

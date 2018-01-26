@@ -4,7 +4,7 @@
 # for use by the ML2 Mech Driver for Cisco Nexus Switches.
 #
 # More info available here:
-# https://wiki.openstack.org/wiki/Neutron/ML2/MechCiscoNexus
+# http://networking-cisco.readthedocs.io
 #
 #
 # neutron::plugins::ml2::cisco::nexus_switch used by
@@ -19,9 +19,6 @@
 #
 # [*ip_address*]
 # (required) The IP address of the switch.
-#
-# [*ssh_port*]
-# (required) The SSH port to use when connecting to the switch.
 #
 # [*servers*]
 # (required) A hash of server names (key) mapped to the switch's
@@ -78,15 +75,48 @@
 #
 # Defaults to $::os_service_default.
 #
+# [*vpc_pool*]
+# (optional) Required for Baremetal deployments and Port-Channel creation
+# is needed.  This defines the pool of port-channel ids which are
+# available for port-channel creation.
+#
+# [*intfcfg_portchannel*]
+# (optional) For use with Baremetal deployments and custom port-channel
+# configuration is required during port-channel creation.
+#
+# [*https_verify*]
+# (optional) Set to True when certification authority (CA) file is in
+# the Operating System repository or is a locally defined file whose
+# name is provided in https_local_certificate.  Set to False
+# to skip https certification checking thus making the connection
+# insecure.  Getting a certificate and setting https_verify to True
+# is strongly advised for production to prevent man-in-the-middle
+# attacks.  Be advised the default will change from False to True
+# in future releases.
+#
+# [*https_local_certificate*]
+# (optional) Configure a local certificate file to present in https
+# requests.  For experimental purpose when an official certificate
+# from a Trusted Certificate Authority is not yet available.
+#
+# DEPRECATED
+# [*ssh_port*]
+# (optional)  This configuration item is deprecated.
+# The SSH port to use when connecting to the switch.
+#
 define neutron::plugins::ml2::cisco::nexus_switch(
   $username,
   $password,
   $ip_address,
-  $ssh_port,
   $servers,
   $switchname   = $title,
+  $ssh_port     = $::os_service_default,
   $nve_src_intf = $::os_service_default,
-  $physnet      = $::os_service_default
+  $physnet      = $::os_service_default,
+  $vpc_pool     = $::os_service_default,
+  $intfcfg_portchannel = $::os_service_default,
+  $https_verify = $::os_service_default,
+  $https_local_certificate = $::os_service_default
 ) {
 
   include ::neutron::deps
@@ -94,10 +124,15 @@ define neutron::plugins::ml2::cisco::nexus_switch(
   $section = "ML2_MECH_CISCO_NEXUS:${ip_address}"
   neutron_plugin_ml2 {
     "${section}/username":       value => $username;
-    "${section}/password":       value => $password;
-    "${section}/ssh_port":       value => $ssh_port;
+    "${section}/password":       value => $password, secret => true;
     "${section}/nve_src_intf":   value => $nve_src_intf;
     "${section}/physnet":        value => $physnet;
+    "${section}/vpc_pool":       value => $vpc_pool;
+    "${section}/intfcfg_portchannel":  value => $intfcfg_portchannel;
+    "${section}/https_verify":  value => $https_verify;
+    "${section}/https_local_certificate":  value => $https_local_certificate;
+    #DEPRECATED ARGS
+    "${section}/ssh_port":       value => $ssh_port;
   }
 
   $server_defaults = {

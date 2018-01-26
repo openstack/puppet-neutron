@@ -1,11 +1,11 @@
-# == Define: neutron::plugins::ml2::cisco::nexus_switch
+# == Define: neutron::plugins::ml2::cisco::nexus_switch_server
 #
 # Defined type to configure the Cisco Nexus Switch parameters
 # for servers connected to the switch for use by the ML2 Mech
 # Driver for Cisco Nexus Switches.
 #
 # More info available here:
-# https://wiki.openstack.org/wiki/Neutron/ML2/MechCiscoNexus
+# http://networking-cisco.readthedocs.io
 #
 #
 # neutron::plugins::ml2::cisco::nexus_switch_server used by

@@ -25,10 +25,6 @@
 # Defaults to $::os_service_default
 # Example: 'http://127.0.0.1:8080/controller/nb/v2/neutron'
 #
-# [*ovsdb_connection*]
-# (optional) The URI used to connect to the local OVSDB server
-# Defaults to 'tcp:127.0.0.1:6639'
-#
 # [*port_binding_controller*]
 # (optional) Name of the controller to be used for port binding.
 # Defaults to $::os_service_default
@@ -41,15 +37,21 @@
 # (optional) List of ODL features to enable
 # Defaults to $::os_service_default
 #
+# === Deprecated Parameters
+#
+# [*ovsdb_connection*]
+# (optional) Deprecated.  The URI used to connect to the local OVSDB server
+# Defaults to 'tcp:127.0.0.1:6639'
+#
 class neutron::plugins::ml2::opendaylight (
-  $package_ensure          = 'present',
-  $odl_username            = $::os_service_default,
-  $odl_password            = $::os_service_default,
-  $odl_url                 = $::os_service_default,
-  $ovsdb_connection        = 'tcp:127.0.0.1:6639',
-  $port_binding_controller = $::os_service_default,
-  $odl_hostconf_uri        = $::os_service_default,
-  $odl_features            = $::os_service_default,
+  $package_ensure            = 'present',
+  $odl_username              = $::os_service_default,
+  $odl_password              = $::os_service_default,
+  $odl_url                   = $::os_service_default,
+  $ovsdb_connection          = 'tcp:127.0.0.1:6639',
+  $port_binding_controller   = $::os_service_default,
+  $odl_hostconf_uri          = $::os_service_default,
+  $odl_features              = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -69,6 +71,10 @@ class neutron::plugins::ml2::opendaylight (
     'ml2_odl/port_binding_controller': value => $port_binding_controller;
     'ml2_odl/odl_hostconf_uri':        value => $odl_hostconf_uri;
     'ml2_odl/odl_features':            value => join(any2array($odl_features), ',');
+  }
+
+  if $ovsdb_connection != 'tcp:127.0.0.1:6639' {
+    warning('The ovsdb_connection parameter is deprecated and will be removed in future releases')
   }
 
   neutron_config {

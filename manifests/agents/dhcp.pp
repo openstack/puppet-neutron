@@ -83,6 +83,22 @@
 #   (optional) Name of Open vSwitch bridge to use
 #   Defaults to $::os_service_default
 #
+# [*ovsdb_connection*]
+# (optional) The URI used to connect to the local OVSDB server
+# Defaults to $::os_service_default
+#
+# [*ovsdb_agent_ssl_key_file*]
+# (optional) The SSL key file to use for Neutron agents to connect to OVSDB
+# Defaults to $::os_service_default
+#
+# [*ovsdb_agent_ssl_cert_file*]
+# (optional) The SSL cert file to use for Neutron agents to connect to OVSDB
+# Defaults to $::os_service_default
+#
+# [*ovsdb_agent_ssl_ca_file*]
+# (optional) The SSL CA cert file to use for Neutron agents to connect to OVSDB
+# Defaults to $::os_service_default
+#
 # === Deprecated Parameters
 #
 # [*dhcp_domain*]
@@ -90,27 +106,31 @@
 #   Defaults to $::os_service_default
 #
 class neutron::agents::dhcp (
-  $package_ensure           = present,
-  $enabled                  = true,
-  $manage_service           = true,
-  $debug                    = $::os_service_default,
-  $state_path               = '/var/lib/neutron',
-  $resync_interval          = 30,
-  $interface_driver         = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_driver              = $::os_service_default,
-  $root_helper              = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $dnsmasq_config_file      = $::os_service_default,
-  $dnsmasq_dns_servers      = $::os_service_default,
-  $dnsmasq_local_resolv     = $::os_service_default,
-  $enable_isolated_metadata = false,
-  $enable_force_metadata    = $::os_service_default,
-  $enable_metadata_network  = false,
-  $dhcp_broadcast_reply     = $::os_service_default,
-  $purge_config             = false,
-  $availability_zone        = $::os_service_default,
-  $ovs_integration_bridge   = $::os_service_default,
+  $package_ensure            = present,
+  $enabled                   = true,
+  $manage_service            = true,
+  $debug                     = $::os_service_default,
+  $state_path                = '/var/lib/neutron',
+  $resync_interval           = 30,
+  $interface_driver          = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $dhcp_driver               = $::os_service_default,
+  $root_helper               = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+  $dnsmasq_config_file       = $::os_service_default,
+  $dnsmasq_dns_servers       = $::os_service_default,
+  $dnsmasq_local_resolv      = $::os_service_default,
+  $enable_isolated_metadata  = false,
+  $enable_force_metadata     = $::os_service_default,
+  $enable_metadata_network   = false,
+  $dhcp_broadcast_reply      = $::os_service_default,
+  $purge_config              = false,
+  $availability_zone         = $::os_service_default,
+  $ovs_integration_bridge    = $::os_service_default,
+  $ovsdb_connection          = $::os_service_default,
+  $ovsdb_agent_ssl_key_file  = $::os_service_default,
+  $ovsdb_agent_ssl_cert_file = $::os_service_default,
+  $ovsdb_agent_ssl_ca_file   = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $dhcp_domain              = $::os_service_default,
+  $dhcp_domain               = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -151,6 +171,28 @@ class neutron::agents::dhcp (
 
   if ! is_service_default ($dhcp_domain) {
     warning('The dhcp_domain parameter is deprecated and will be removed in future releases')
+  }
+
+  if $ovsdb_connection =~ /^ssl:/ {
+    $req_ssl_opts = {
+      'ovsdb_agent_ssl_key_file'  => $ovsdb_agent_ssl_key_file,
+      'ovsdb_agent_ssl_cert_file' => $ovsdb_agent_ssl_cert_file,
+      'ovsdb_agent_ssl_ca_file'   => $ovsdb_agent_ssl_ca_file
+    }
+    $req_ssl_opts.each |$opts| {
+      if !$opts[1] or is_service_default($opts[1]) {
+        fail(
+          "${opts[0]} must be provided when using an SSL ovsdb_connection URI"
+        )
+      }
+    }
+  }
+
+  neutron_dhcp_agent_config {
+    'OVS/ovsdb_connection': value => $ovsdb_connection;
+    'OVS/ssl_key_file':     value => $ovsdb_agent_ssl_key_file;
+    'OVS/ssl_cert_file':    value => $ovsdb_agent_ssl_cert_file;
+    'OVS/ssl_ca_cert_file': value => $ovsdb_agent_ssl_ca_file;
   }
 
   if $::neutron::params::dhcp_agent_package {

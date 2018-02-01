@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    Adds the ability to configure SSL OVSDB connection for Neutron DHCP Agent.
+deprecations:
+  - |
+    Deprecates using neutron::plugins::ml2::opendaylight::ovsdb_connection.
+    The configuration is now moved to neutron::agents::dhcp::ovsdb_connection.

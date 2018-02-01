@@ -50,6 +50,10 @@ describe 'neutron::agents::dhcp' do
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/ovs_integration_bridge').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('AGENT/availability_zone').with_value('<SERVICE DEFAULT>');
+      is_expected.to contain_neutron_dhcp_agent_config('OVS/ovsdb_connection').with_value('<SERVICE DEFAULT>');
+      is_expected.to contain_neutron_dhcp_agent_config('OVS/ssl_key_file').with_value('<SERVICE DEFAULT>');
+      is_expected.to contain_neutron_dhcp_agent_config('OVS/ssl_cert_file').with_value('<SERVICE DEFAULT>');
+      is_expected.to contain_neutron_dhcp_agent_config('OVS/ssl_ca_cert_file').with_value('<SERVICE DEFAULT>');
     end
 
     it 'installs neutron dhcp agent package' do
@@ -149,6 +153,34 @@ describe 'neutron::agents::dhcp' do
       end
       it 'should configure availability zone' do
         is_expected.to contain_neutron_dhcp_agent_config('AGENT/availability_zone').with_value(p[:availability_zone]);
+      end
+    end
+
+    context 'with SSL configuration' do
+      before do
+        params.merge!({
+          :ovsdb_connection          => 'ssl:127.0.0.1:6639',
+          :ovsdb_agent_ssl_key_file  => '/tmp/dummy.pem',
+          :ovsdb_agent_ssl_cert_file => '/tmp/dummy.crt',
+          :ovsdb_agent_ssl_ca_file   => '/tmp/ca.crt'
+        })
+      end
+      it 'configures neutron SSL settings' do
+        is_expected.to contain_neutron_dhcp_agent_config('OVS/ovsdb_connection').with_value(params[:ovsdb_connection])
+        is_expected.to contain_neutron_dhcp_agent_config('OVS/ssl_key_file').with_value(params[:ovsdb_agent_ssl_key_file])
+        is_expected.to contain_neutron_dhcp_agent_config('OVS/ssl_cert_file').with_value(params[:ovsdb_agent_ssl_cert_file])
+        is_expected.to contain_neutron_dhcp_agent_config('OVS/ssl_ca_cert_file').with_value(params[:ovsdb_agent_ssl_ca_file])
+      end
+    end
+
+    context 'with SSL enabled, but missing file config' do
+      before do
+        params.merge!({
+          :ovsdb_connection => 'ssl:127.0.0.1:6639'
+        })
+      end
+      it 'fails to configure' do
+        is_expected.to raise_error(Puppet::Error)
       end
     end
   end

@@ -39,7 +39,7 @@
 #
 # [*ovs_use_veth*]
 #   (optional) Uses veth for an interface or not.
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 class neutron::agents::lbaas (
   $package_ensure         = present,

@@ -217,7 +217,7 @@
 #
 # [*ovs_integration_bridge*]
 #   (optional) Name of Open vSwitch bridge to use
-#   Defaults to ::os_service_default
+#   Defaults to $::os_service_default
 #
 # == Deprecated
 #

@@ -1,0 +1,3 @@
+---
+features:
+  - Optionally users can set device_driver value in lbaas_agent.ini to $::os_service_default

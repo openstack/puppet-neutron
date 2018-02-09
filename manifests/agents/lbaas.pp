@@ -83,6 +83,7 @@ class neutron::agents::lbaas (
         ensure_packages([$::neutron::params::haproxy_package])
       }
     }
+    $::os_service_default: {}
     default: {
       fail("Unsupported device_driver ${device_driver}")
     }

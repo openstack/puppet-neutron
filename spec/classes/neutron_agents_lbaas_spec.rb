@@ -90,6 +90,15 @@ describe 'neutron::agents::lbaas' do
         is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/ovs_use_veth').with_value(false);
       end
     end
+
+    context 'with device_driver as $::os_service_default' do
+      before :each do
+        params.merge!(:device_driver => '<SERVICE DEFAULT>')
+      end
+      it 'should have devcie_driver set to $::os_service_default' do
+        is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/device_driver').with_value('<SERVICE DEFAULT>');
+      end
+    end
   end
 
   shared_examples_for 'haproxy lbaas_driver' do

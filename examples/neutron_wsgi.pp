@@ -8,7 +8,7 @@ class { '::neutron':
 
 class { '::neutron::server':
   auth_password       => 'password',
-  database_connection => 'mysql://neutron:password@192.168.1.1/neutron',
+  database_connection => 'mysql+pymysql://neutron:password@192.168.1.1/neutron',
   service_name        => 'httpd',
 }
 include ::apache

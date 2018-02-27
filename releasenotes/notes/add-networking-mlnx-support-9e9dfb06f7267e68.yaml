@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Adding the ability to configure Mellanox mlnx_sdn_assist mechanism driver for Neutron ml2.

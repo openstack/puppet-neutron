@@ -47,11 +47,11 @@ describe 'neutron::db' do
 
     context 'with MySQL-python library as backend package' do
       let :params do
-        { :database_connection => 'mysql://neutron:neutron@localhost/neutron' }
+        { :database_connection => 'mysql+pymysql://neutron:neutron@localhost/neutron' }
       end
 
       it { is_expected.to contain_oslo__db('neutron_config').with(
-        :connection => 'mysql://neutron:neutron@localhost/neutron',
+        :connection => 'mysql+pymysql://neutron:neutron@localhost/neutron',
       )}
     end
 

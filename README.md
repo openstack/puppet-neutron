@@ -59,7 +59,7 @@ class { '::neutron':
 # configure authentication
 class { 'neutron::server':
     auth_password   => 'keystone_neutron_secret',
-    sql_connection  => 'mysql://neutron:neutron_sql_secret@127.0.0.1/neutron?charset=utf8',
+    sql_connection  => 'mysql+pymysql://neutron:neutron_sql_secret@127.0.0.1/neutron?charset=utf8',
 }
 
 # ml2 plugin with vxlan as ml2 driver and ovs as mechanism driver

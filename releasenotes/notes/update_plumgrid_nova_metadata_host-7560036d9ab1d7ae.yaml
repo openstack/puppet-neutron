@@ -1,0 +1,6 @@
+---
+fixes:
+  - PLUMgrid neutron plugin now specifies both nova_metadata_ip and
+    nova_metadata_host values since the former was deprecated in the
+    Queens cycle.  When older releases are no longer supported
+    nova_metadata_ip can be removed.

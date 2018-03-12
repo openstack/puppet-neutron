@@ -16,7 +16,7 @@ class { '::neutron':
 
 class { '::neutron::server':
   auth_password       => 'password',
-  database_connection => 'mysql://neutron:password@192.168.1.1/neutron',
+  database_connection => 'mysql+pymysql://neutron:password@192.168.1.1/neutron',
 }
 
 # configure l3-agent to use the new router by name

@@ -13,7 +13,7 @@ class { '::neutron':
 # The API server talks to keystone for authorisation
 class { '::neutron::server':
   auth_password       => 'password',
-  database_connection => 'mysql://neutron:password@192.168.1.1/neutron',
+  database_connection => 'mysql+pymysql://neutron:password@192.168.1.1/neutron',
 }
 
 # Configure nova notifications system

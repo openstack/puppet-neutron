@@ -31,7 +31,7 @@ class { '::neutron::server':
   enabled           => false,
   manage_service    => false,
   keystone_password => 'password',
-  connection        => 'mysql://neutron:password@192.168.1.1/neutron',
+  connection        => 'mysql+pymysql://neutron:password@192.168.1.1/neutron',
 }
 
 class { '::neutron::agents::dhcp':

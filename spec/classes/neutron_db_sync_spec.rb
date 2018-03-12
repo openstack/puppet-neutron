@@ -17,6 +17,7 @@ describe 'neutron::db::sync' do
                          'Anchor[neutron::config::end]',
                          'Anchor[neutron::dbsync::begin]'],
         :notify      => 'Anchor[neutron::dbsync::end]',
+        :tag         => 'openstack-db',
       )
     end
 
@@ -40,6 +41,7 @@ describe 'neutron::db::sync' do
                            'Anchor[neutron::config::end]',
                            'Anchor[neutron::dbsync::begin]'],
           :notify      => 'Anchor[neutron::dbsync::end]',
+          :tag         => 'openstack-db',
         )
     }
     end

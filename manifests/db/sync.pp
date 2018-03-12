@@ -37,5 +37,6 @@ class neutron::db::sync(
       Anchor['neutron::dbsync::begin']
     ],
     notify      => Anchor['neutron::dbsync::end'],
+    tag         => 'openstack-db',
   }
 }

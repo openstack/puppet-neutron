@@ -78,7 +78,9 @@ describe 'neutron::server' do
       is_expected.to contain_neutron_config('DEFAULT/enable_new_agents').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
       is_expected.to contain_neutron_config('qos/notification_drivers').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_oslo__middleware('neutron_config').with(
+        :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
+      )
       is_expected.to contain_neutron_config('DEFAULT/ovs_integration_bridge').with_value('<SERVICE DEFAULT>')
     end
 
@@ -224,7 +226,9 @@ describe 'neutron::server' do
         params.merge!({:enable_proxy_headers_parsing => true })
       end
 
-      it { is_expected.to contain_neutron_config('oslo_middleware/enable_proxy_headers_parsing').with_value(true) }
+      it { is_expected.to contain_oslo__middleware('neutron_config').with(
+        :enable_proxy_headers_parsing => true,
+      )}
     end
 
     context 'when running neutron-api in wsgi' do

@@ -492,7 +492,7 @@ describe 'neutron' do
       it { is_expected.to contain_neutron_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>') }
     end
 
-    context 'with overriden amqp parameters' do
+    context 'with overridden amqp parameters' do
       before { params.merge!(
         :amqp_idle_timeout  => '60',
         :amqp_trace         => true,

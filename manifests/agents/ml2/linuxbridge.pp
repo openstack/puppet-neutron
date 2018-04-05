@@ -54,6 +54,10 @@
 #   tuples mapping physical network names to agent's node-specific physical
 #   network interfaces. Defaults to empty list.
 #
+# [*bridge_mappings*]
+#   (optional) List of <physical_network>:<bridge>
+#   Defaults to empty list
+#
 # [*firewall_driver*]
 #   (optional) Firewall driver for realizing neutron security group function.
 #   Defaults to 'iptables'.
@@ -75,12 +79,14 @@ class neutron::agents::ml2::linuxbridge (
   $polling_interval = $::os_service_default,
   $l2_population    = $::os_service_default,
   $physical_interface_mappings = [],
+  $bridge_mappings  = [],
   $firewall_driver  = 'iptables',
   $purge_config     = false,
 ) {
 
   validate_array($tunnel_types)
   validate_array($physical_interface_mappings)
+  validate_array($bridge_mappings)
 
   include ::neutron::deps
   include ::neutron::params
@@ -116,6 +122,16 @@ class neutron::agents::ml2::linuxbridge (
   } else {
     neutron_agent_linuxbridge {
       'agent/tunnel_types': ensure => absent;
+    }
+  }
+
+  if size($bridge_mappings) > 0 {
+    neutron_agent_linuxbridge {
+      'linux_bridge/bridge_mappings': value => join($bridge_mappings, ',');
+    }
+  } else {
+    neutron_agent_linuxbridge {
+      'linux_bridge/bridge_mappings': ensure => absent;
     }
   }
 

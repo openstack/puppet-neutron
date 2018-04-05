@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Added a new paramater 'neutron::agents::ml2::linuxbridge::bridge_mappings' for
+    specifying the bridge_mappings in the linuxbridge agent.

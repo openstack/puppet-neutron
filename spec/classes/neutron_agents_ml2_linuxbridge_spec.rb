@@ -13,6 +13,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
       :tunnel_types                => [],
       :local_ip                    => false,
       :physical_interface_mappings => [],
+      :bridge_mappings             => [],
       :firewall_driver             => 'iptables',
       :purge_config                => false,}
   end
@@ -41,6 +42,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
       it 'configures ml2_conf.ini' do
         is_expected.to contain_neutron_agent_linuxbridge('agent/polling_interval').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/physical_interface_mappings').with_value(default_params[:physical_interface_mappings].join(','))
+        is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/bridge_mappings').with_ensure('absent')
         is_expected.to contain_neutron_agent_linuxbridge('securitygroup/firewall_driver').with_value(default_params[:firewall_driver])
         is_expected.to contain_neutron_agent_linuxbridge('agent/tunnel_types').with_ensure('absent')
       end
@@ -135,6 +137,18 @@ describe 'neutron::agents::ml2::linuxbridge' do
       it 'configures physical interface mappings' do
         is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/physical_interface_mappings').with_value(
           params[:physical_interface_mappings].join(',')
+        )
+      end
+    end
+
+    context 'when providing the bridge_mappings parameter' do
+      before do
+        params.merge!(:bridge_mappings => ['physnet0:br0', 'physnet1:br1'])
+      end
+
+      it 'configures bridge mappings' do
+        is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/bridge_mappings').with_value(
+          params[:bridge_mappings].join(',')
         )
       end
     end

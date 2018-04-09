@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    Fixes default of vhostuser_mode in ODL-OVS to be server, and clarifies
+    the configuration parameter. See
+    https://bugs.launchpad.net/tripleo/+bug/1762473

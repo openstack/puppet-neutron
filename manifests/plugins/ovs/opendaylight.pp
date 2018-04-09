@@ -59,11 +59,11 @@
 #   Defaults to "/var/run/openvswitch"
 #
 # [*vhostuser_mode*]
-#   (optional) Specify the mode for OVS when creating vhostuser ports.
-#   Valid values are 'client' or 'server'.  In client mode, the hypervisor
+#   (optional) Specify the mode for the VIF when creating vhostuser ports.
+#   Valid values are 'client' or 'server'.  In client mode, openvswitch
 #   will be responsible for creating the vhostuser socket.  In server mode,
-#   OVS will create the vhostuser socket.
-#   Defaults to "client"
+#   the hypervisor will create the vhostuser socket.
+#   Defaults to "server"
 #
 # [*enable_hw_offload*]
 #   (optional) Configure OVS to use
@@ -101,7 +101,7 @@ class neutron::plugins::ovs::opendaylight (
   $allowed_network_types = ['local', 'vlan', 'vxlan', 'gre'],
   $enable_dpdk           = false,
   $vhostuser_socket_dir  = '/var/run/openvswitch',
-  $vhostuser_mode        = 'client',
+  $vhostuser_mode        = 'server',
   $enable_hw_offload     = false,
   $enable_tls            = false,
   $tls_key_file          = undef,

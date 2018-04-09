@@ -14,7 +14,7 @@ describe 'neutron::plugins::ovs::opendaylight' do
       :allowed_network_types => ['local', 'vlan', 'vxlan', 'gre'],
       :enable_dpdk           => false,
       :vhostuser_socket_dir  => '/var/run/openvswitch',
-      :vhostuser_mode        => 'client',
+      :vhostuser_mode        => 'server',
       :enable_hw_offload     => false,
       :enable_tls            => false,
     }

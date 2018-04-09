@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixes missing "flat" network type in the allowed network types for
+    OpenDaylight OVS.

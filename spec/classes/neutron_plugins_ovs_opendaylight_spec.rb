@@ -11,7 +11,7 @@ describe 'neutron::plugins::ovs::opendaylight' do
       :retry_interval        => 60,
       :retry_count           => 20,
       :host_id               => "dummy_host",
-      :allowed_network_types => ['local', 'vlan', 'vxlan', 'gre'],
+      :allowed_network_types => ['local', 'flat', 'vlan', 'vxlan', 'gre'],
       :enable_dpdk           => false,
       :vhostuser_socket_dir  => '/var/run/openvswitch',
       :vhostuser_mode        => 'server',

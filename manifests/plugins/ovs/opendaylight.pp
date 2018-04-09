@@ -47,8 +47,8 @@
 #   The value 'local' is only useful for single-box testing
 #   but provides no connectivity between hosts.
 #   Should be an array that can have these elements:
-#   local, vlan, gre, vxlan
-#   Defaults to ['local', 'vlan', 'gre', 'vxlan']
+#   local, flat, vlan, gre, vxlan
+#   Defaults to ['local', 'flat', 'vlan', 'gre', 'vxlan']
 #
 # [*enable_dpdk*]
 #   (optional) Enables vhostuser VIF host configuration for OVS DPDK.
@@ -98,7 +98,7 @@ class neutron::plugins::ovs::opendaylight (
   $retry_interval        = 60,
   $retry_count           = 20,
   $host_id               = $fqdn,
-  $allowed_network_types = ['local', 'vlan', 'vxlan', 'gre'],
+  $allowed_network_types = ['local', 'flat', 'vlan', 'vxlan', 'gre'],
   $enable_dpdk           = false,
   $vhostuser_socket_dir  = '/var/run/openvswitch',
   $vhostuser_mode        = 'client',

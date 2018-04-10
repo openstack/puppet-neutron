@@ -125,7 +125,7 @@ define neutron::plugins::ml2::type_driver (
     }
     neutron_plugin_ml2 {
       'ml2_type_geneve/max_header_size': value => $max_header_size;
-      'ml2_type_geneve/vni_ranges':      value => join($vni_ranges,',');
+      'ml2_type_geneve/vni_ranges':      value => join(any2array($vni_ranges),',');
     }
   }
   else {

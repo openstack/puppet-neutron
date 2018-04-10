@@ -26,7 +26,7 @@
 #   (optional) List of network type driver entrypoints to be loaded
 #   from the neutron.ml2.type_drivers namespace.
 #   Could be an array that can have these elements:
-#   local, flat, vlan, gre, vxlan
+#   local, flat, vlan, gre, vxlan, geneve
 #   Defaults to ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'].
 #
 # [*extension_drivers*]
@@ -135,7 +135,7 @@
 #   Defaults to undef
 #
 class neutron::plugins::ml2 (
-  $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
+  $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
   $extension_drivers         = $::os_service_default,
   $tenant_network_types      = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
   $mechanism_drivers         = ['openvswitch', 'linuxbridge'],

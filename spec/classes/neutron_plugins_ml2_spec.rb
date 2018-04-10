@@ -29,7 +29,7 @@ describe 'neutron::plugins::ml2' do
   end
 
   let :default_params do
-    { :type_drivers          => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
+    { :type_drivers          => ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
       :tenant_network_types  => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
       :mechanism_drivers     => ['openvswitch', 'linuxbridge'],
       :flat_networks         => '*',

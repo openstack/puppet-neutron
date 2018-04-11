@@ -5,7 +5,12 @@
 class neutron::params {
   include ::openstacklib::defaults
 
-  $client_package              = 'python-neutronclient'
+  if ($::os_package_type == 'debian') {
+    $pyvers = '3'
+  } else {
+    $pyvers = ''
+  }
+  $client_package              = "python${pyvers}-neutronclient"
   $server_service              = 'neutron-server'
   $ovs_agent_service           = 'neutron-openvswitch-agent'
   $destroy_patch_ports_service = 'neutron-destroy-patch-ports'
@@ -13,11 +18,11 @@ class neutron::params {
   $cisco_config_file           = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
   $opencontrail_plugin_package = 'neutron-plugin-contrail'
   $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
-  $midonet_server_package      = 'python-networking-midonet'
-  $midonet_server_package_ext  = 'python-networking-midonet-ext'
+  $midonet_server_package      = "python${pyvers}-networking-midonet"
+  $midonet_server_package_ext  = "python${pyvers}-networking-midonet-ext"
   $midonet_config_file         = '/etc/neutron/plugins/midonet/midonet.ini'
-  $ovn_plugin_package          = 'python-networking-ovn'
-  $vpp_plugin_package          = 'python-networking-vpp'
+  $ovn_plugin_package          = "python${pyvers}-networking-ovn"
+  $vpp_plugin_package          = "python${pyvers}-networking-vpp"
   $vpp_agent_service           = 'neutron-vpp-agent'
   $plumgrid_plugin_package     = 'networking-plumgrid'
   $plumgrid_pythonlib_package  = 'plumgrid-pythonlib'
@@ -31,13 +36,13 @@ class neutron::params {
   $metadata_agent_service      = 'neutron-metadata-agent'
   $ovn_metadata_agent_service  = 'networking-ovn-metadata-agent'
   $bagpipe_bgp_package         = 'openstack-bagpipe-bgp'
-  $bgpvpn_bagpipe_package      = 'python-networking-bagpipe'
+  $bgpvpn_bagpipe_package      = "python${pyvers}-networking-bagpipe"
   $bgpvpn_bagpipe_service      = 'bagpipe-bgp'
-  $bgpvpn_plugin_package       = 'python-networking-bgpvpn'
+  $bgpvpn_plugin_package       = "python${pyvers}-networking-bgpvpn"
   $l2gw_agent_service          = 'neutron-l2gw-agent'
   $nsx_plugin_package          = 'vmware-nsx'
   $nsx_config_file             = '/etc/neutron/plugins/vmware/nsx.ini'
-  $sfc_package                 = 'python-networking-sfc'
+  $sfc_package                 = "python${pyvers}-networking-sfc"
   $group                       = 'neutron'
 
   if($::osfamily == 'Redhat') {
@@ -108,9 +113,9 @@ class neutron::params {
     $libreswan_package          = false
     $metadata_agent_package     = 'neutron-metadata-agent'
     $l3_agent_package           = 'neutron-l3-agent'
-    $fwaas_package              = 'python-neutron-fwaas'
+    $fwaas_package              = "python${pyvers}-neutron-fwaas"
     $l2gw_agent_package         = 'neutron-l2gateway-agent'
-    $l2gw_package               = 'python-networking-l2gw'
+    $l2gw_package               = "python${pyvers}-networking-l2gw"
     $neutron_wsgi_script_path   = '/usr/lib/cgi-bin/neutron'
     $neutron_wsgi_script_source = '/usr/bin/neutron-api'
   } else {

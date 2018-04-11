@@ -25,7 +25,16 @@ describe 'neutron::client' do
       end
 
       let :platform_params do
-        { :client_package => 'python-neutronclient' }
+        case facts[:osfamily]
+        when 'Debian'
+          if facts[:os_package_type] == 'debian'
+            { :client_package => 'python3-neutronclient' }
+          else
+            { :client_package => 'python-neutronclient' }
+          end
+        when 'RedHat'
+          { :client_package => 'python-neutronclient' }
+        end
       end
 
       it_behaves_like 'neutron client'

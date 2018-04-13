@@ -52,7 +52,7 @@
 #   Defaults to empty list
 #
 # [*local_ip*]
-#   (optional) Local IP address of GRE tunnel endpoints.
+#   (optional) Local IP address of VXLAN/GRE tunnel endpoints.
 #   Required when enabling tunneling
 #   Defaults to false
 #

@@ -46,7 +46,7 @@ Puppet::Type.newtype(:ovn_metadata_agent_config) do
   end
 
   autorequire(:package) do
-    'networking-ovn-metadata-agent'
+    'python-networking-ovn-metadata-agent'
   end
 
 end

@@ -14,6 +14,8 @@ describe 'neutron::config' do
       { :server_config => config_hash }
     end
 
+    it { is_expected.to contain_class('neutron::deps') }
+
     it 'configures arbitrary neutron-config configurations' do
       is_expected.to contain_neutron_config('DEFAULT/foo').with_value('fooValue')
       is_expected.to contain_neutron_config('DEFAULT/bar').with_value('barValue')

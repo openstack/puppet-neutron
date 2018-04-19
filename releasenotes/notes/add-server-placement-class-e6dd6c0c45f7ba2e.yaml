@@ -1,0 +1,3 @@
+---
+features:
+  - Add neutron::server::placement class to manage placement related options

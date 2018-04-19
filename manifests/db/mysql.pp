@@ -17,7 +17,7 @@
 #    Optional. Defaults to 'localhost'
 #
 #  [*allowed_hosts*]
-#    other hosts the user is allowd to connect from.
+#    other hosts the user is allowed to connect from.
 #    Optional. Defaults to undef.
 #
 #  [*charset*]

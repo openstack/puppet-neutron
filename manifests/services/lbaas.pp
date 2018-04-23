@@ -55,10 +55,17 @@ class neutron::services::lbaas (
   include ::neutron::params
 
   if $ensure_lbaas_driver_package {
-    ensure_packages(['python-neutron-lbaas'], {
-      ensure => $ensure_lbaas_driver_package,
-      tag    => ['openstack', 'neutron-package']
-    })
+    if ($::os_package_type == 'debian') {
+      ensure_packages(['python3-neutron-lbaas'], {
+        ensure => $ensure_lbaas_driver_package,
+        tag    => ['openstack', 'neutron-package']
+      })
+    } else {
+      ensure_packages(['python-neutron-lbaas'], {
+        ensure => $ensure_lbaas_driver_package,
+        tag    => ['openstack', 'neutron-package']
+      })
+    }
   }
 
   neutron_config {

@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    OVS SSL/TLS certificates are now pushed to every OpenDaylight instance.
+    See https://bugs.launchpad.net/puppet-neutron/+bug/1766989

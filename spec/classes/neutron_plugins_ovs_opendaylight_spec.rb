@@ -108,6 +108,25 @@ describe 'neutron::plugins::ovs::opendaylight' do
         'before'    => 'Exec[Set OVS Manager to OpenDaylight]'
       )}
     end
+    context 'with TLS and multiple ODLs' do
+      before do
+        File.stubs(:file?).returns(true)
+        File.stubs(:readlines).returns(["MIIFGjCCBAKgAwIBAgICA"])
+        params.merge!({
+          :enable_tls => true,
+          :tls_key_file => 'dummy.pem',
+          :tls_cert_file => 'dummy.crt',
+          :odl_ovsdb_iface => 'tcp:127.0.0.1:6640 tcp:172.0.0.1:6640'})
+      end
+      it_configures 'with TLS and ODL HA'
+      it {is_expected.to contain_vs_ssl('system').with(
+        'ensure'    => 'present',
+        'key_file'  => 'dummy.pem',
+        'cert_file' => 'dummy.crt',
+        'bootstrap' => true,
+        'before'    => 'Exec[Set OVS Manager to OpenDaylight]'
+      )}
+    end
   end
 
   shared_examples_for 'with default parameters' do
@@ -149,9 +168,23 @@ describe 'neutron::plugins::ovs::opendaylight' do
 
   shared_examples_for 'with TLS enabled' do
     it 'configures OVS for ODL' do
-      is_expected.to contain_exec('Add trusted cert: dummy.crt')
+      is_expected.to contain_exec('Add trusted cert: dummy.crt to https://127.0.0.1:8080')
       is_expected.to contain_exec('Set OVS Manager to OpenDaylight').with(
         :command => "ovs-vsctl set-manager pssl:6639:127.0.0.1 ssl:127.0.0.1:6640"
+      )
+      is_expected.to contain_vs_config('other_config:local_ip')
+      is_expected.not_to contain_vs_config('other_config:provider_mappings')
+      is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_hostid')
+      is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_config_odl_l2')
+    end
+  end
+
+  shared_examples_for 'with TLS and ODL HA' do
+    it 'configures OVS for ODL' do
+      is_expected.to contain_exec('Add trusted cert: dummy.crt to https://172.0.0.1:8080')
+      is_expected.to contain_exec('Add trusted cert: dummy.crt to https://127.0.0.1:8080')
+      is_expected.to contain_exec('Set OVS Manager to OpenDaylight').with(
+        :command => "ovs-vsctl set-manager pssl:6639:127.0.0.1 ssl:127.0.0.1:6640 ssl:172.0.0.1:6640"
       )
       is_expected.to contain_vs_config('other_config:local_ip')
       is_expected.not_to contain_vs_config('other_config:provider_mappings')

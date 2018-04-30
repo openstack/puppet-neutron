@@ -138,7 +138,7 @@ class neutron::plugins::ovs::opendaylight (
 
     if $odl_ovsdb_iface =~ /^tcp/ {
       warning('TLS enabled but odl_ovsdb_iface set to tcp.  Will override to ssl')
-      $odl_ovsdb_iface_parsed = regsubst($odl_ovsdb_iface, '^tcp', 'ssl')
+      $odl_ovsdb_iface_parsed = regsubst($odl_ovsdb_iface, 'tcp:', 'ssl:', 'G')
     } else {
       $odl_ovsdb_iface_parsed = $odl_ovsdb_iface
     }
@@ -166,17 +166,9 @@ class neutron::plugins::ovs::opendaylight (
         }\
       }
       |-END
-    $odl_url_prefix = $odl_check_url_parsed ? {
-      /^(https:\/\/.*?)\// => $1,
-      default => undef
-    }
-    if $odl_url_prefix == undef {
-      fail("Unable to parse URL prefix from ${odl_check_url_parsed}")
-    }
+
     $curl_post = "curl -k -X POST -o /dev/null --fail --silent -H 'Content-Type: application/json' -H 'Cache-Control: no-cache'"
     $curl_get = "curl -k -X POST --fail --silent -H 'Content-Type: application/json' -H 'Cache-Control: no-cache'"
-    $cert_rest_url = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:setNodeCertifcate"
-    $cert_rest_get = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:getNodeCertifcate"
     $rest_get_data = @("END":json/L)
       {\
         "aaa-cert-rpc:input": {\
@@ -184,14 +176,24 @@ class neutron::plugins::ovs::opendaylight (
         }\
       }
       |-END
-    exec { "Add trusted cert: ${tls_cert_file}":
-      command   => "${curl_post} -u ${odl_username}:${odl_password} -d '${rest_data}' ${cert_rest_url}",
-      tries     => 5,
-      try_sleep => 30,
-      unless    => "${curl_get} -u ${odl_username}:${odl_password} -d '${rest_get_data}' ${cert_rest_get} | grep -q ${cert_data}",
-      path      => '/usr/sbin:/usr/bin:/sbin:/bin',
-      before    => Exec['Set OVS Manager to OpenDaylight'],
-      require   => Exec['Wait for NetVirt OVSDB to come up']
+
+    $ovsdb_arr = split($odl_ovsdb_iface_parsed, ' ')
+    $odl_rest_port = regsubst($odl_check_url_parsed, '^.*:([0-9]+)/.*$', '\1')
+    $ovsdb_arr.each |$ovsdb_uri| {
+
+      $odl_ip = regsubst($ovsdb_uri, 'ssl:(.+):[0-9]+', '\1')
+      $odl_url_prefix = "https://${odl_ip}:${odl_rest_port}"
+      $cert_rest_url = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:setNodeCertifcate"
+      $cert_rest_get = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:getNodeCertifcate"
+      exec { "Add trusted cert: ${tls_cert_file} to ${odl_url_prefix}":
+        command   => "${curl_post} -u ${odl_username}:${odl_password} -d '${rest_data}' ${cert_rest_url}",
+        tries     => 5,
+        try_sleep => 30,
+        unless    => "${curl_get} -u ${odl_username}:${odl_password} -d '${rest_get_data}' ${cert_rest_get} | grep -q ${cert_data}",
+        path      => '/usr/sbin:/usr/bin:/sbin:/bin',
+        before    => Exec['Set OVS Manager to OpenDaylight'],
+        require   => Exec['Wait for NetVirt OVSDB to come up']
+      }
     }
 
   } else {

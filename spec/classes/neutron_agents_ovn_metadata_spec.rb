@@ -118,7 +118,7 @@ describe 'neutron::agents::ovn_metadata' do
     end
 
     let :platform_params do
-      { :ovn_metadata_agent_package => 'networking-ovn-metadata-agent',
+      { :ovn_metadata_agent_package => 'python-networking-ovn-metadata-agent',
         :ovn_metadata_agent_service => 'networking-ovn-metadata-agent' }
     end
 

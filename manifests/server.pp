@@ -25,6 +25,10 @@
 #   to make neutron-api be a web app using apache mod_wsgi.
 #   Defaults to '$::neutron::params::server_service'
 #
+# [*validate*]
+#   (optional) Whether to validate the service is working after any service refreshes
+#   Defaults to false
+#
 # [*log_file*]
 #   REMOVED: Use log_file of neutron class instead.
 #
@@ -231,6 +235,7 @@ class neutron::server (
   $enabled                          = true,
   $manage_service                   = true,
   $service_name                     = $::neutron::params::server_service,
+  $validate                         = false,
   $database_connection              = undef,
   $database_max_retries             = undef,
   $database_idle_timeout            = undef,
@@ -444,5 +449,25 @@ future release')
       hasrestart => true,
       tag        => ['neutron-service', 'neutron-db-sync-service'],
     }
+  }
+  if $validate {
+    $keystone_project_name = $::neutron::keystone::authtoken::project_name
+    $keystone_username = $::neutron::keystone::authtoken::username
+    $keystone_password = $::neutron::keystone::authtoken::password
+    $keystone_www_uri = $::neutron::keystone::authtoken::www_authenticate_uri
+
+    $validation_cmd = {
+      'neutron-server' => {
+        'environment' => ["OS_PASSWORD=${keystone_password}"],
+        # lint:ignore:140chars
+        'unless'      => "openstack --os-auth-url ${keystone_www_uri} --os-project-name ${keystone_project_name} --os-username ${keystone_username} --os-identity-api-version 3 network list",
+        'command'     => "openstack --os-auth-url ${keystone_www_uri} --os-project-name ${keystone_project_name} --os-username ${keystone_username} --os-identity-api-version 3 network list",
+        # lint:endignore
+        'timeout'     => '60',
+        'tries'       => '30',
+        'try_sleep'   => '2',
+      }
+    }
+    create_resources('openstacklib::service_validation', $validation_cmd, {'subscribe' => 'Service[neutron-server]'})
   }
 }

@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Set hostname to FQDN in OVS when deployed with OpenDaylight.

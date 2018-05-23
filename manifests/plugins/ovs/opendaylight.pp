@@ -233,6 +233,11 @@ class neutron::plugins::ovs::opendaylight (
     value => $host_id,
   }
 
+  # Set hostname to FQDN instead of default 'localhost'
+  vs_config {'external_ids:hostname':
+    value => $host_id,
+  }
+
   $json_network_types = convert_to_json_string($allowed_network_types)
   $json_bridge_mappings = convert_to_json_string($provider_mappings)
 

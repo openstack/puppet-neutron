@@ -136,6 +136,7 @@ describe 'neutron::plugins::ovs::opendaylight' do
       is_expected.to contain_vs_config('other_config:local_ip')
       is_expected.not_to contain_vs_config('other_config:provider_mappings')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_hostid')
+      is_expected.to contain_vs_config('external_ids:hostname')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_config_odl_l2')
     end
   end
@@ -147,6 +148,7 @@ describe 'neutron::plugins::ovs::opendaylight' do
       is_expected.to contain_vs_config('other_config:local_ip')
       is_expected.to contain_vs_config('other_config:provider_mappings')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_hostid')
+      is_expected.to contain_vs_config('external_ids:hostname')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_config_odl_l2').with(
         :value => /bridge_mappings\": {\"default\":\"br-ex\"}/
       )
@@ -160,6 +162,7 @@ describe 'neutron::plugins::ovs::opendaylight' do
       is_expected.to contain_vs_config('other_config:local_ip')
       is_expected.not_to contain_vs_config('other_config:provider_mappings')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_hostid')
+      is_expected.to contain_vs_config('external_ids:hostname')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_config_odl_l2').with(
         :value => /vhostuser/,
       )
@@ -175,6 +178,7 @@ describe 'neutron::plugins::ovs::opendaylight' do
       is_expected.to contain_vs_config('other_config:local_ip')
       is_expected.not_to contain_vs_config('other_config:provider_mappings')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_hostid')
+      is_expected.to contain_vs_config('external_ids:hostname')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_config_odl_l2')
     end
   end
@@ -189,6 +193,7 @@ describe 'neutron::plugins::ovs::opendaylight' do
       is_expected.to contain_vs_config('other_config:local_ip')
       is_expected.not_to contain_vs_config('other_config:provider_mappings')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_hostid')
+      is_expected.to contain_vs_config('external_ids:hostname')
       is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_config_odl_l2')
     end
   end

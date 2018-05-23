@@ -11,7 +11,6 @@ class neutron::params {
     $pyvers = ''
   }
   $client_package              = "python${pyvers}-neutronclient"
-  $server_service              = 'neutron-server'
   $ovs_agent_service           = 'neutron-openvswitch-agent'
   $destroy_patch_ports_service = 'neutron-destroy-patch-ports'
   $linuxbridge_agent_service   = 'neutron-linuxbridge-agent'
@@ -48,7 +47,12 @@ class neutron::params {
   if($::osfamily == 'Redhat') {
     $nobody_user_group                  = 'nobody'
     $package_name                       = 'openstack-neutron'
+    $server_service                     = 'neutron-server'
     $server_package                     = false
+    $api_package_name                   = false
+    $api_service_name                   = false
+    $rpc_package_name                   = false
+    $rpc_service_name                   = false
     $ml2_server_package                 = 'openstack-neutron-ml2'
     $ovs_agent_package                  = false
     $ovs_server_package                 = 'openstack-neutron-openvswitch'
@@ -88,11 +92,22 @@ class neutron::params {
   } elsif($::osfamily == 'Debian') {
     $nobody_user_group          = 'nogroup'
     $package_name               = 'neutron-common'
-    $server_package             = 'neutron-server'
     if $::os_package_type =='debian' {
-      $ml2_server_package = false
+      $ml2_server_package       = false
+      $server_service           = false
+      $server_package           = false
+      $api_package_name         = 'neutron-api'
+      $api_service_name         = 'neutron-api'
+      $rpc_package_name         = 'neutron-rpc-server'
+      $rpc_service_name         = 'neutron-rpc-server'
     } else {
       $ml2_server_package = 'neutron-plugin-ml2'
+      $server_service           = 'neutron-server'
+      $server_package           = 'neutron-server'
+      $api_package_name         = false
+      $api_service_name         = false
+      $rpc_package_name         = false
+      $rpc_service_name         = false
     }
     $ovs_agent_package          = 'neutron-openvswitch-agent'
     $ovs_server_package         = 'neutron-plugin-openvswitch'

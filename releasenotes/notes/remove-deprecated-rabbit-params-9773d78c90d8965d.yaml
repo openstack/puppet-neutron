@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    The deprecated neutron::rabbit_host, neutron::rabbit_hosts, neutron::rabbit_password,
+    neutron::rabbit_port, neutron::rabbit_userid and neutron::rabit_virtual_host are now
+    removed. Please use neutron::default_transport_url instead.

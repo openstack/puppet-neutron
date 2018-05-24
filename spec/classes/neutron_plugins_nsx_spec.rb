@@ -4,7 +4,6 @@ describe 'neutron::plugins::nsx' do
 
   let :pre_condition do
     "class { 'neutron':
-      rabbit_password => 'passw0rd',
       core_plugin     => 'vmware_nsx.plugin.NsxV3Plugin' }
       class { '::neutron::keystone::authtoken':
         password => 'passw0rd',
@@ -94,7 +93,6 @@ describe 'neutron::plugins::nsx' do
     context 'configure nsx with wrong core_plugin configure' do
       let :pre_condition do
         "class { 'neutron':
-          rabbit_password => 'passw0rd',
           core_plugin     => 'foo' }"
       end
 

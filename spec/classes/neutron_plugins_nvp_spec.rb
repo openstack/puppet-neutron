@@ -4,7 +4,6 @@ describe 'neutron::plugins::nvp' do
 
   let :pre_condition do
     "class { 'neutron':
-      rabbit_password => 'passw0rd',
       core_plugin     => 'neutron.plugins.nicira.NeutronPlugin.NvpPluginV2' }"
   end
 
@@ -90,7 +89,6 @@ describe 'neutron::plugins::nvp' do
     context 'configure nvp with wrong core_plugin configure' do
       let :pre_condition do
         "class { 'neutron':
-          rabbit_password => 'passw0rd',
           core_plugin     => 'foo' }"
       end
 

@@ -27,7 +27,6 @@ describe 'neutron::plugins::ml2::arista::l3' do
      }
      class { 'neutron::server': }
      class { 'neutron':
-      rabbit_password => 'passw0rd',
       core_plugin     => 'ml2' }"
   end
 

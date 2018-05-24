@@ -8,7 +8,6 @@ describe 'neutron::plugins::ml2::mellanox::mlnx_sdn_assist' do
      }
      class { 'neutron::server': }
      class { 'neutron':
-      rabbit_password => 'passw0rd',
       core_plugin     => 'ml2' }"
   end
 

@@ -12,7 +12,6 @@ describe 'neutron::plugins::ml2::fujitsu::fossw' do
      }
      class { 'neutron::server': }
      class { 'neutron':
-      rabbit_password => 'passw0rd',
       core_plugin     => 'neutron.plugins.ml2.plugin.Ml2Plugin' }"
   end
 

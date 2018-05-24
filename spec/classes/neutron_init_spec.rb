@@ -6,7 +6,6 @@ describe 'neutron' do
     { :package_ensure        => 'present',
       :core_plugin           => 'ml2',
       :auth_strategy         => 'keystone',
-      :rabbit_password       => 'guest',
       :log_dir               => '/var/log/neutron',
       :purge_config          => false,
     }
@@ -27,20 +26,17 @@ describe 'neutron' do
     context 'and if rabbit_hosts parameter is provided' do
 
       context 'with one server' do
-        before { params.merge!( :rabbit_hosts => ['127.0.0.1:5672'] ) }
         it_configures 'a neutron base installation'
         it_configures 'rabbit HA with a single virtual host'
       end
 
       context 'with multiple servers' do
-        before { params.merge!( :rabbit_hosts => ['rabbit1:5672', 'rabbit2:5672'] ) }
         it_configures 'a neutron base installation'
         it_configures 'rabbit HA with multiple hosts'
       end
 
       context 'with rabbit_ha_queues set to false and with rabbit_hosts' do
-        before { params.merge!( :rabbit_ha_queues => 'false',
-                                :rabbit_hosts => ['rabbit:5673'] ) }
+        before { params.merge!( :rabbit_ha_queues => 'false' ) }
         it_configures 'rabbit_ha_queues set to false'
       end
 
@@ -123,10 +119,6 @@ describe 'neutron' do
     end
 
     it 'configures credentials for rabbit' do
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_userid').with_value( '<SERVICE DEFAULT>' )
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( '<SERVICE DEFAULT>' )
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value( '<SERVICE DEFAULT>' )
@@ -163,18 +155,17 @@ describe 'neutron' do
 
   shared_examples_for 'rabbit HA with a single virtual host' do
     it 'in neutron.conf' do
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts] )
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>')
     end
   end
 
   shared_examples_for 'rabbit HA with multiple hosts' do
+    before do
+      params.merge!(
+        :rabbit_ha_queues => true,
+      )
+    end
     it 'in neutron.conf' do
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true)
     end
   end

@@ -333,29 +333,6 @@
 #   (optional) Maximum number of allowed address pairs per port
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*rabbit_password*]
-# [*rabbit_host*]
-# [*rabbit_port*]
-# [*rabbit_user*]
-#   (optional) Various rabbitmq settings
-#   Defaults to $::os_service_default
-#
-# [*rabbit_virtual_host*]
-#   (optional) virtualhost to use.
-#   Defaults to $::os_service_default
-#
-# [*rabbit_hosts*]
-#   (optional) array of rabbitmq servers for HA.
-#   A single IP address, such as a VIP, can be used for load-balancing
-#   multiple RabbitMQ Brokers.
-#   Defaults to $::os_service_default
-#
-# [*rpc_backend*]
-#   (optional) what rpc/queuing service to use
-#   Defaults to $::os_service_default
-#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
@@ -427,14 +404,6 @@ class neutron (
   $notification_topics                  = $::os_service_default,
   $notification_transport_url           = $::os_service_default,
   $max_allowed_address_pair             = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $rabbit_password                      = $::os_service_default,
-  $rabbit_host                          = $::os_service_default,
-  $rabbit_hosts                         = $::os_service_default,
-  $rabbit_port                          = $::os_service_default,
-  $rabbit_user                          = $::os_service_default,
-  $rabbit_virtual_host                  = $::os_service_default,
-  $rpc_backend                          = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -465,19 +434,6 @@ class neutron (
   if ! is_service_default($kombu_missing_consumer_retry_timeout) and ! is_service_default($rpc_response_timeout)
       and ($kombu_missing_consumer_retry_timeout > $rpc_response_timeout) {
     warning('kombu_missing_consumer_retry_timeout should not be longer than rpc_response_timeout')
-  }
-
-  if !is_service_default($rabbit_host) or
-    !is_service_default($rabbit_hosts) or
-    !is_service_default($rabbit_password) or
-    !is_service_default($rabbit_port) or
-    !is_service_default($rabbit_user) or
-    !is_service_default($rabbit_virtual_host) or
-    !is_service_default($rpc_backend) {
-    warning("neutron::rabbit_host, neutron::rabbit_hosts, neutron::rabbit_password, \
-neutron::rabbit_port, neutron::rabbit_user, neutron::rabbit_virtual_host and \
-neutron::rpc_backend are deprecated. Please use neutron::default_transport_url \
-instead.")
   }
 
   package { 'neutron':
@@ -535,9 +491,6 @@ instead.")
   }
 
   oslo::messaging::rabbit {'neutron_config':
-    rabbit_userid                        => $rabbit_user,
-    rabbit_password                      => $rabbit_password,
-    rabbit_virtual_host                  => $rabbit_virtual_host,
     heartbeat_timeout_threshold          => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate                       => $rabbit_heartbeat_rate,
     rabbit_use_ssl                       => $rabbit_use_ssl,
@@ -550,10 +503,7 @@ instead.")
     kombu_ssl_certfile                   => $kombu_ssl_certfile,
     kombu_ssl_keyfile                    => $kombu_ssl_keyfile,
     amqp_durable_queues                  => $amqp_durable_queues,
-    rabbit_hosts                         => $rabbit_hosts,
     rabbit_ha_queues                     => $rabbit_ha_queues,
-    rabbit_host                          => $rabbit_host,
-    rabbit_port                          => $rabbit_port,
     kombu_ssl_version                    => $kombu_ssl_version,
   }
 

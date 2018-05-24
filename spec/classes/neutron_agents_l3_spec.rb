@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'neutron::agents::l3' do
 
   let :pre_condition do
-    "class { 'neutron': rabbit_password => 'passw0rd' }"
+    "class { 'neutron': }"
   end
 
   let :default_params do

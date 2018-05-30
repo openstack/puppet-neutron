@@ -14,6 +14,7 @@ describe 'neutron::designate' do
       end
 
       it 'configures designate in neutron.conf' do
+        is_expected.to contain_neutron_config('DEFAULT/external_dns_driver').with_value('designate')
         is_expected.to contain_neutron_config('designate/url').with_value('http://ip/designate')
         is_expected.to contain_neutron_config('designate/password').with_value('secret')
         is_expected.to contain_neutron_config('designate/username').with_value('neutron')
@@ -42,6 +43,7 @@ describe 'neutron::designate' do
       end
 
       it 'configures designate in neutron.conf' do
+        is_expected.to contain_neutron_config('DEFAULT/external_dns_driver').with_value('designate')
         is_expected.to contain_neutron_config('designate/url').with_value('http://ip/designate')
         is_expected.to contain_neutron_config('designate/password').with_value('secret')
         is_expected.to contain_neutron_config('designate/username').with_value('user')

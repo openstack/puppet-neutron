@@ -52,6 +52,12 @@
 #   (optional) Whether to enable DVR.
 #   Type: boolean
 #   Defaults to $::os_service_default
+#
+# [*dns_servers*]
+#   (optional) List of dns servers which will be as forwarders
+#              if a subnet's dns_nameservers is empty.
+#   Type: List
+#   Defaults to $::os_service_default
 
 class neutron::plugins::ml2::ovn(
   $ovn_nb_connection        = $::os_service_default,
@@ -63,6 +69,7 @@ class neutron::plugins::ml2::ovn(
   $vif_type                 = $::os_service_default,
   $ovn_metadata_enabled     = $::os_service_default,
   $dvr_enabled              = $::os_service_default,
+  $dns_servers              = $::os_service_default,
   ) {
 
   include ::neutron::deps
@@ -96,5 +103,6 @@ class neutron::plugins::ml2::ovn(
     'ovn/vif_type'                 : value => $vif_type;
     'ovn/ovn_metadata_enabled'     : value => $ovn_metadata_enabled;
     'ovn/enable_distributed_floating_ip' : value => $dvr_enabled;
+    'ovn/dns_servers'              : value => join(any2array($dns_servers), ',');
   }
 }

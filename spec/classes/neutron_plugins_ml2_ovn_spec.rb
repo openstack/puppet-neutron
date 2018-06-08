@@ -19,6 +19,7 @@ describe 'neutron::plugins::ml2::ovn' do
        :ovn_l3_mode              => true,
        :vif_type                 => 'ovs',
        :dvr_enabled              => false,
+       :dns_servers              => ['8.8.8.8', '10.10.10.10'],
     }
   end
 
@@ -46,6 +47,7 @@ describe 'neutron::plugins::ml2::ovn' do
       is_expected.to contain_neutron_plugin_ml2('ovn/ovn_l3_mode').with_value(params[:ovn_l3_mode])
       is_expected.to contain_neutron_plugin_ml2('ovn/vif_type').with_value(params[:vif_type])
       is_expected.to contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
+      is_expected.to contain_neutron_plugin_ml2('ovn/dns_servers').with_value(params[:dns_servers].join(','))
     end
 
   end

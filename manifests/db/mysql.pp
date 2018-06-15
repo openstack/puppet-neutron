@@ -3,28 +3,32 @@
 #
 # == Parameters
 #
-#  [*password*]
-#    password to connect to the database. Mandatory.
+# [*password*]
+#   (Required) password to connect to the database.
 #
-#  [*dbname*]
-#    name of the database. Optional. Defaults to neutron.
+# [*dbname*]
+#   (Optional) name of the database.
+#   Defaults to neutron.
 #
-#  [*user*]
-#    user to connect to the database. Optional. Defaults to neutron.
+# [*user*]
+#   (Optional) user to connect to the database.
+#   Defaults to neutron.
 #
-#  [*host*]
-#    the default source host user is allowed to connect from.
-#    Optional. Defaults to 'localhost'
+# [*host*]
+#   (Optional) the default source host user is allowed to connect from.
+#   Defaults to 'localhost'
 #
-#  [*allowed_hosts*]
-#    other hosts the user is allowed to connect from.
-#    Optional. Defaults to undef.
+# [*allowed_hosts*]
+#   (Optional) other hosts the user is allowed to connect from.
+#   Defaults to undef.
 #
-#  [*charset*]
-#    the database charset. Optional. Defaults to 'utf8'
+# [*charset*]
+#   (Optional) the database charset.
+#   Defaults to 'utf8'
 #
-#  [*collate*]
-#    the database collation. Optional. Defaults to 'utf8_general_ci'
+# [*collate*]
+#   (Optional) the database collation.
+#   Defaults to 'utf8_general_ci'
 #
 class neutron::db::mysql (
   $password,

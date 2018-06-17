@@ -86,14 +86,6 @@
 #   the keystone catalog.
 #   Defaults to $::os_service_default
 #
-# === Deprecated Parameters
-#
-# [*auth_plugin*]
-#   Deprecated. auth_type should be used instead
-#   An authentication plugin to use with an OpenStack Identity server.
-#   Defaults to $::os_service_default
-#
-
 class neutron::server::notifications (
   $password,
   $notify_nova_on_port_status_changes = true,
@@ -111,8 +103,6 @@ class neutron::server::notifications (
   $auth_url                           = 'http://127.0.0.1:35357',
   $region_name                        = $::os_service_default,
   $endpoint_type                      = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $auth_plugin                        = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -132,16 +122,7 @@ class neutron::server::notifications (
     'nova/user_domain_name':    value => $user_domain_name;
     'nova/region_name':         value => $region_name;
     'nova/endpoint_type':       value => $endpoint_type;
-  }
-  if ! is_service_default ($auth_plugin) and ($auth_plugin) {
-    warning('auth_plugin parameter is deprecated, auth_type should be used instead')
-    neutron_config {
-      'nova/auth_plugin': value => $auth_plugin;
-    }
-  } else {
-    neutron_config {
-      'nova/auth_type': value => $auth_type;
-    }
+    'nova/auth_type':           value => $auth_type;
   }
   if ! is_service_default ($tenant_id) {
     if $tenant_id {

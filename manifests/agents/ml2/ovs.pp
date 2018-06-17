@@ -150,12 +150,6 @@
 #  changes. (boolean value)
 #  Defaults to $::os_service_default
 #
-# === Deprecated Parameters
-#
-# [*enable_tunneling*]
-#   (optional) Enable or not tunneling
-#   Defaults to false
-#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -185,8 +179,6 @@ class neutron::agents::ml2::ovs (
   $enable_dpdk                = false,
   $enable_security_group      = $::os_service_default,
   $minimize_polling           = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $enable_tunneling           = false,
 ) {
 
   include ::neutron::deps
@@ -212,22 +204,18 @@ class neutron::agents::ml2::ovs (
     }
   }
 
-  if $enable_tunneling {
-    warning('The enable_tunneling parameter is deprecated.  Please set tunnel_types with the desired type to enable tunneling.')
-  }
-
   validate_array($tunnel_types)
-  if $enable_tunneling or (size($tunnel_types) > 0) {
-    $enable_tunneling_real = true
+  if size($tunnel_types) > 0 {
+    $enable_tunneling = true
   } else {
-    $enable_tunneling_real = false
+    $enable_tunneling = false
   }
 
-  if $enable_tunneling_real and ! $local_ip {
+  if $enable_tunneling and ! $local_ip {
     fail('Local ip for ovs agent must be set when tunneling is enabled')
   }
 
-  if ($enable_tunneling_real) and (!is_service_default($enable_distributed_routing)) and (!is_service_default($l2_population)) {
+  if ($enable_tunneling) and (!is_service_default($enable_distributed_routing)) and (!is_service_default($l2_population)) {
     if $enable_distributed_routing and ! $l2_population {
       fail('L2 population must be enabled when DVR and tunneling are enabled')
     }
@@ -296,7 +284,7 @@ class neutron::agents::ml2::ovs (
     neutron_agent_ovs { 'securitygroup/firewall_driver': ensure => absent }
   }
 
-  if $enable_tunneling_real {
+  if $enable_tunneling {
     neutron_agent_ovs {
       'ovs/tunnel_bridge':         value => $tunnel_bridge;
       'ovs/local_ip':              value => $local_ip;

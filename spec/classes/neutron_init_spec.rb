@@ -18,42 +18,7 @@ describe 'neutron' do
   end
 
   shared_examples_for 'neutron' do
-
-    context 'and if rabbit_host parameter is provided' do
-      it_configures 'a neutron base installation'
-    end
-
-    context 'and if rabbit_hosts parameter is provided' do
-
-      context 'with one server' do
-        it_configures 'a neutron base installation'
-        it_configures 'rabbit HA with a single virtual host'
-      end
-
-      context 'with multiple servers' do
-        it_configures 'a neutron base installation'
-        it_configures 'rabbit HA with multiple hosts'
-      end
-
-      context 'with rabbit_ha_queues set to false and with rabbit_hosts' do
-        before { params.merge!( :rabbit_ha_queues => 'false' ) }
-        it_configures 'rabbit_ha_queues set to false'
-      end
-
-      context 'with non-default notification options' do
-        before { params.merge!( :notification_driver => 'messagingv2',
-                                :notification_topics => 'notifications',
-                                :notification_transport_url => 'rabbit://me:passwd@host:5672/virtual_host' ) }
-        it_configures 'notification_driver and notification_topics'
-      end
-
-      it 'configures logging' do
-        is_expected.to contain_oslo__log('neutron_config').with(:log_file   => '<SERVICE DEFAULT>',
-                                                                :log_dir    => params[:log_dir],
-                                                                :use_stderr => '<SERVICE DEFAULT>')
-      end
-
-    end
+    it_configures 'a neutron base installation'
 
     context 'with rabbitmq heartbeat configured' do
       before { params.merge!( :rabbit_heartbeat_timeout_threshold => '60', :rabbit_heartbeat_rate => '10' ) }
@@ -118,7 +83,7 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
     end
 
-    it 'configures credentials for rabbit' do
+    it 'configures rabbit' do
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value( '<SERVICE DEFAULT>' )
@@ -150,23 +115,6 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       is_expected.to contain_neutron_config('agent/root_helper_daemon').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('agent/report_interval').with_value('<SERVICE DEFAULT>')
-    end
-  end
-
-  shared_examples_for 'rabbit HA with a single virtual host' do
-    it 'in neutron.conf' do
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>')
-    end
-  end
-
-  shared_examples_for 'rabbit HA with multiple hosts' do
-    before do
-      params.merge!(
-        :rabbit_ha_queues => true,
-      )
-    end
-    it 'in neutron.conf' do
-      is_expected.to contain_neutron_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true)
     end
   end
 

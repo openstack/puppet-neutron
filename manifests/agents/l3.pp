@@ -87,13 +87,6 @@
 #   (optional) L3 agent extensions to enable.
 #   Defaults to $::os_service_default
 #
-# == Deprecated
-#
-# [*send_arp_for_ha*]
-#   (deprecated) Send this many gratuitous ARPs for HA setup. Set it below or equal to 0
-#   to disable this feature.
-#   Defaults to $::os_service_default
-#
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -114,8 +107,6 @@ class neutron::agents::l3 (
   $purge_config                     = false,
   $availability_zone                = $::os_service_default,
   $extensions                       = $::os_service_default,
-  # Deprecated
-  $send_arp_for_ha                  = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -133,18 +124,12 @@ class neutron::agents::l3 (
     }
   }
 
-  if !is_service_default($send_arp_for_ha) {
-    deprecation('send_arp_for_ha', 'The l3-agent configuration option \
-send_arp_for_ha is deprecated in ocata release, and will be removed in Pike')
-  }
-
   neutron_l3_agent_config {
     'DEFAULT/debug':                            value => $debug;
     'DEFAULT/interface_driver':                 value => $interface_driver;
     'DEFAULT/gateway_external_network_id':      value => $gateway_external_network_id;
     'DEFAULT/handle_internal_only_routers':     value => $handle_internal_only_routers;
     'DEFAULT/metadata_port':                    value => $metadata_port;
-    'DEFAULT/send_arp_for_ha':                  value => $send_arp_for_ha;
     'DEFAULT/periodic_interval':                value => $periodic_interval;
     'DEFAULT/periodic_fuzzy_delay':             value => $periodic_fuzzy_delay;
     'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;

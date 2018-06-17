@@ -77,7 +77,6 @@ describe 'neutron::server' do
       is_expected.to contain_neutron_config('DEFAULT/agent_down_time').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/enable_new_agents').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
-      is_expected.to contain_neutron_config('qos/notification_drivers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_oslo__middleware('neutron_config').with(
         :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
       )
@@ -143,17 +142,6 @@ describe 'neutron::server' do
       end
     end
 
-    context 'with state_path and lock_path parameters' do
-      before :each do
-        params.merge!(:state_path => 'state_path',
-                      :lock_path  => 'lock_path' )
-      end
-      it 'should override state_path and lock_path from base class' do
-        is_expected.to contain_neutron_config('DEFAULT/state_path').with_value(p[:state_path])
-        is_expected.to contain_neutron_config('oslo_concurrency/lock_path').with_value(p[:lock_path])
-      end
-    end
-
     context 'with allow_automatic_l3agent_failover in neutron.conf' do
       it 'should configure allow_automatic_l3agent_failover' do
         is_expected.to contain_neutron_config('DEFAULT/allow_automatic_l3agent_failover').with_value('<SERVICE DEFAULT>')
@@ -163,15 +151,6 @@ describe 'neutron::server' do
     context 'with allow_automatic_dhcp_failover in neutron.conf' do
       it 'should configure allow_automatic_dhcp_failover' do
         is_expected.to contain_neutron_config('DEFAULT/allow_automatic_dhcp_failover').with_value('<SERVICE DEFAULT>')
-      end
-    end
-
-    context 'with qos_notification_drivers parameter' do
-      before :each do
-        params.merge!(:qos_notification_drivers => 'message_queue')
-      end
-      it 'should configure qos_notification_drivers' do
-        is_expected.to contain_neutron_config('qos/notification_drivers').with_value('message_queue')
       end
     end
 

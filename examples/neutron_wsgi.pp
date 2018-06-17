@@ -1,9 +1,7 @@
 # Example of manifest to deploy Neutron API in WSGI with Apache
 class { '::neutron':
   allow_overlapping_ips => true,
-  rabbit_password       => 'password',
-  rabbit_user           => 'guest',
-  rabbit_host           => 'localhost',
+  default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
 }
 
 class { '::neutron::server':

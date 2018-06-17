@@ -40,7 +40,6 @@ describe 'neutron::agents::l3' do
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/gateway_external_network_id').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/metadata_port').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/send_arp_for_ha').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')

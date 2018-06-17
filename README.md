@@ -48,12 +48,10 @@ To utilize the neutron module's functionality you will need to declare multiple 
 ```puppet
 # enable the neutron service
 class { '::neutron':
-    enabled         => true,
-    bind_host       => '127.0.0.1',
-    rabbit_host     => '127.0.0.1',
-    rabbit_user     => 'neutron',
-    rabbit_password => 'rabbit_secret',
-    debug           => false,
+    enabled               => true,
+    bind_host             => '127.0.0.1',
+    default_transport_url => 'rabbit://neutron:passw0rd@localhost:5672/neutron',
+    debug                 => false,
 }
 
 # configure authentication

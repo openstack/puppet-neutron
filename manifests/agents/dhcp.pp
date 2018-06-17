@@ -99,12 +99,6 @@
 # (optional) The SSL CA cert file to use for Neutron agents to connect to OVSDB
 # Defaults to $::os_service_default
 #
-# === Deprecated Parameters
-#
-# [*dhcp_domain*]
-#   (optional) Deprecated. Domain to use for building the hostnames
-#   Defaults to $::os_service_default
-#
 class neutron::agents::dhcp (
   $package_ensure            = present,
   $enabled                   = true,
@@ -129,8 +123,6 @@ class neutron::agents::dhcp (
   $ovsdb_agent_ssl_key_file  = $::os_service_default,
   $ovsdb_agent_ssl_cert_file = $::os_service_default,
   $ovsdb_agent_ssl_ca_file   = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $dhcp_domain               = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -158,7 +150,6 @@ class neutron::agents::dhcp (
     'DEFAULT/state_path':             value => $state_path;
     'DEFAULT/resync_interval':        value => $resync_interval;
     'DEFAULT/interface_driver':       value => $interface_driver;
-    'DEFAULT/dhcp_domain':            value => $dhcp_domain;
     'DEFAULT/dhcp_driver':            value => $dhcp_driver;
     'DEFAULT/root_helper':            value => $root_helper;
     'DEFAULT/dhcp_broadcast_reply':   value => $dhcp_broadcast_reply;
@@ -167,10 +158,6 @@ class neutron::agents::dhcp (
     'DEFAULT/dnsmasq_local_resolv':   value => $dnsmasq_local_resolv;
     'DEFAULT/ovs_integration_bridge': value => $ovs_integration_bridge;
     'AGENT/availability_zone':        value => $availability_zone;
-  }
-
-  if ! is_service_default ($dhcp_domain) {
-    warning('The dhcp_domain parameter is deprecated and will be removed in future releases')
   }
 
   if $ovsdb_connection =~ /^ssl:/ {

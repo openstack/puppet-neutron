@@ -83,6 +83,7 @@ class neutron::params {
     $networking_baremetal_package       = 'python2-networking-baremetal'
     $networking_baremetal_agent_package = 'python2-ironic-neutron-agent'
     $networking_baremetal_agent_service = 'ironic-neutron-agent'
+    $networking_ansible_package         = 'python2-networking-ansible'
   } elsif($::osfamily == 'Debian') {
     $nobody_user_group          = 'nogroup'
     $package_name               = 'neutron-common'

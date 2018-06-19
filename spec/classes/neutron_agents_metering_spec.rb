@@ -24,7 +24,6 @@ describe 'neutron::agents::metering' do
 
   let :pre_condition do
     "class { 'neutron':
-      rabbit_password => 'passw0rd',
       service_plugins => ['neutron.services.metering.metering_plugin.MeteringPlugin'] }"
   end
 

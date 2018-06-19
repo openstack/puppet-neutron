@@ -12,7 +12,6 @@ describe 'neutron::plugins::ml2::cisco::nexus1000v' do
      }
      class { 'neutron::server': }
      class { 'neutron':
-      rabbit_password => 'passw0rd',
       core_plugin     => 'ml2' }"
   end
 

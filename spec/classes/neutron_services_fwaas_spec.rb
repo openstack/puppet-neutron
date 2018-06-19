@@ -22,7 +22,7 @@ require 'spec_helper'
 
 describe 'neutron::services::fwaas' do
   let :pre_condition do
-    "class { 'neutron': rabbit_password => 'passw0rd' }
+    "class { 'neutron': }
      include ::neutron::agents::l3"
   end
 

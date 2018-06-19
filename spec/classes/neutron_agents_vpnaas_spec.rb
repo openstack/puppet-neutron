@@ -23,7 +23,7 @@ require 'spec_helper'
 describe 'neutron::agents::vpnaas' do
 
   let :pre_condition do
-    "class { 'neutron': rabbit_password => 'passw0rd' }"
+    "class { 'neutron': }"
   end
 
   let :params do

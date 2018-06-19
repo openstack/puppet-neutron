@@ -7,7 +7,7 @@ describe 'neutron::plugins::cisco' do
       password => 'passw0rd',
      }
      class { 'neutron::server': }
-     class { 'neutron': rabbit_password => 'passw0rd' }"
+     class { 'neutron': }"
   end
 
   let :params do

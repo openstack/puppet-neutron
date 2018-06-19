@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'neutron::agents::ml2::ovs' do
   let :pre_condition do
-    "class { 'neutron': rabbit_password => 'passw0rd' }"
+    "class { 'neutron': }"
   end
 
   let :default_params do

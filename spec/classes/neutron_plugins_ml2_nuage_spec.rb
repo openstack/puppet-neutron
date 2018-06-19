@@ -4,7 +4,6 @@ describe 'neutron::plugins::ml2::nuage' do
 
   let :pre_condition do
     "class { '::neutron':
-       rabbit_password => 'passw0rd',
        core_plugin     => 'ml2' }
      class { '::neutron::keystone::authtoken':
        password => 'passw0rd',
@@ -67,7 +66,6 @@ describe 'neutron::plugins::ml2::nuage' do
     context 'configure ml2 nuage with wrong core_plugin configuration' do
       let :pre_condition do
         "class { 'neutron':
-          rabbit_password => 'passw0rd',
           core_plugin     => 'foo' }"
       end
 

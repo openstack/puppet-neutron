@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'neutron::agents::lbaas' do
 
   let :pre_condition do
-    "class { 'neutron': rabbit_password => 'passw0rd' }"
+    "class { 'neutron': }"
   end
 
   let :params do
@@ -117,7 +117,7 @@ describe 'neutron::agents::lbaas' do
       "package { 'haproxy':
          ensure => 'present'
        }
-      class { 'neutron': rabbit_password => 'passw0rd' }"
+      class { 'neutron': }"
     end
     before do
       params.merge!(:manage_haproxy_package => false)

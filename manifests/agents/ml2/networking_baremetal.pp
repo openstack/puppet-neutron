@@ -54,7 +54,7 @@
 #   (optional) Authorization URL for connection to ironic in admin context.
 #   If version independent identity plugin is used available versions will be
 #   determined using auth_url
-#   Defaults to 'http://127.0.0.1:35357'
+#   Defaults to 'http://127.0.0.1:5000'
 #
 # [*username*]
 #   (optional) Username for connection to ironic in admin context
@@ -110,7 +110,7 @@ class neutron::agents::ml2::networking_baremetal (
   $keyfile             = $::os_service_default,
   $insecure            = $::os_service_default,
   $auth_type           = 'password',
-  $auth_url            = 'http://127.0.0.1:35357',
+  $auth_url            = 'http://127.0.0.1:5000',
   $username            = 'ironic',
   $project_domain_id   = 'default',
   $project_domain_name = 'Default',

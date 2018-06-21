@@ -169,3 +169,8 @@ The puppet-openstack modules follow the OpenStack development model. Developer d
 Contributors
 ------------
 The github [contributor graph](https://github.com/openstack/puppet-neutron/graphs/contributors).
+
+Release Notes
+-------------
+
+* https://docs.openstack.org/releasenotes/puppet-neutron

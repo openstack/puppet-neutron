@@ -40,7 +40,6 @@ describe 'neutron::agents::dhcp' do
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/state_path').with_value(p[:state_path]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/resync_interval').with_value(p[:resync_interval]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
-      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_domain').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dhcp_driver').with_value('<SERVICE DEFAULT>');
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/root_helper').with_value(p[:root_helper]);
       is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(p[:enable_isolated_metadata]);

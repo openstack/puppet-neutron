@@ -1,10 +1,8 @@
 class { '::neutron':
-  enabled         => true,
-  bind_host       => '127.0.0.1',
-  rabbit_host     => '127.0.0.1',
-  rabbit_user     => 'neutron',
-  rabbit_password => 'rabbit_secret',
-  debug           => true,
+  enabled               => true,
+  bind_host             => '127.0.0.1',
+  default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
+  debug                 => true,
 }
 
 class { '::neutron::server':

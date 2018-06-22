@@ -1,0 +1,37 @@
+---
+upgrade:
+  - |
+    The deprecated class neutron::plugins::ovn are now removed.
+    Please use the neutron::plugins::ml2::ovn class instead.
+  - |
+    The deprecated parameter neutron::quota::quota_health_monitor
+    are removed. Please use the quota_healthmonitor parameter instead.
+  - |
+    The deprecated parameters log_dir, log_file, state_path and lock_path
+    in neutron::server are removed. Please use these parameter in the ::neutron
+    class instead.
+  - |
+    The deprecated parameter report_interval in neutron::server are removed.
+    This parameter does not have any effect for neutron-server. Please configure
+    it in the ::neutron class for agents.
+  - |
+    The deprecated parameter neutron::server::qos_notification_driver are now removed.
+  - |
+    The deprecated parameter neutron::server::notifications::auth_plugin are removed.
+    Please use the auth_type parameter instead.
+  - |
+    The deprecated parameters neutron::rabbit_host, neutron::rabbit_hosts, neutron::rabbit_password
+    neutron::rabbit_port, neutron::rabbit_user, neutron::rabbit_virtual_host and neutron::rpc_backend
+    are now removed. Please use neutron::default_transport_url instead.
+  - |
+    The deprecated parameter enable_tunneling in neutron::agents::ml2::ovs are now removed.
+    Please set tunnel_types to an array with desired types instead.
+  - |
+    The deprecated parameters enabled and manage_serivce in neutron::agents::vpnaas are now removed.
+  - |
+    The deprecated parameter send_arp_for_ha in neutron::agents::l3 are now removed.
+  - |
+    The deprecated parameter dhcp_domain in neutron::agents::dhcp are now removed.
+    Please use the neutron::dns_domain parameter instead.
+  - |
+    The deprecated parameter supported_pci_vendor_devs in neutron::plugins::ml2 are now removed.

@@ -58,7 +58,6 @@ describe 'neutron::server::notifications' do
             is_expected.to contain_neutron_config('nova/user_domain_id').with_value('default')
             is_expected.to contain_neutron_config('nova/user_domain_name').with_value('Default')
             is_expected.to contain_neutron_config('nova/endpoint_type').with_value('<SERVICE DEFAULT>')
-            is_expected.not_to contain_neutron_config('nova/auth_plugin')
         end
 
         context 'when overriding parameters' do
@@ -95,18 +94,6 @@ describe 'neutron::server::notifications' do
                 is_expected.to contain_neutron_config('nova/user_domain_id').with_value('default_3')
                 is_expected.to contain_neutron_config('nova/user_domain_name').with_value('Default_4')
                 is_expected.to contain_neutron_config('nova/endpoint_type').with_value('internal')
-            end
-        end
-
-        context 'when auth_plugin is provided' do
-            before :each do
-                params.merge!(
-                    :auth_plugin => 'v3password',
-                )
-            end
-            it 'should configure auth_plugin for nova notifications' do
-                is_expected.to contain_neutron_config('nova/auth_plugin').with_value('v3password')
-                is_expected.not_to contain_neutron_config('nova/auth_type')
             end
         end
 

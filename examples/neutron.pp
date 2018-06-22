@@ -4,9 +4,7 @@
 # Configures everything in neutron.conf
 class { '::neutron':
   allow_overlapping_ips => true,
-  rabbit_password       => 'password',
-  rabbit_user           => 'guest',
-  rabbit_host           => 'localhost',
+  default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
   service_plugins       => ['metering']
 }
 
@@ -50,9 +48,7 @@ class { '::neutron::plugins::ml2':
 # over Rabbit and needs to know if overlapping IPs (namespaces) are in use
 class { '::neutron':
   allow_overlapping_ips => true,
-  rabbit_password       => 'password',
-  rabbit_user           => 'guest',
-  rabbit_host           => 'localhost',
+  default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
 }
 
 # The agent/plugin combo also needs installed on clients

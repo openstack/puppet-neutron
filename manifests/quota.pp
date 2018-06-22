@@ -87,13 +87,6 @@
 #   A negative value means unlimited.
 #   Defaults to $::os_service_default.
 #
-#
-# DEPRECATED
-# [*quota_health_monitor*]
-#   (optional) Number of health monitors allowed per tenant.
-#   A negative value means unlimited.
-#   Defaults to undef
-#
 class neutron::quota (
   $default_quota             = $::os_service_default,
   $quota_network             = $::os_service_default,
@@ -116,18 +109,9 @@ class neutron::quota (
   $quota_loadbalancer        = $::os_service_default,
   $quota_pool                = $::os_service_default,
   $quota_vip                 = $::os_service_default,
-  #DEPRECATED ARGS
-  $quota_health_monitor      = undef,
 ) {
 
   include ::neutron::deps
-
-  if $quota_health_monitor and is_service_default($quota_healthmonitor) {
-    warning('quota_health_monitor is deprecated, use quota_healthmonitor')
-    $quota_healthmonitor_real = $quota_health_monitor
-  } else {
-    $quota_healthmonitor_real = $quota_healthmonitor
-  }
 
   neutron_config {
     'quotas/default_quota':             value => $default_quota;
@@ -142,7 +126,7 @@ class neutron::quota (
     'quotas/quota_firewall':            value => $quota_firewall;
     'quotas/quota_firewall_policy':     value => $quota_firewall_policy;
     'quotas/quota_firewall_rule':       value => $quota_firewall_rule;
-    'quotas/quota_healthmonitor':       value => $quota_healthmonitor_real;
+    'quotas/quota_healthmonitor':       value => $quota_healthmonitor;
     'quotas/quota_member':              value => $quota_member;
     'quotas/quota_network_gateway':     value => $quota_network_gateway;
     'quotas/quota_packet_filter':       value => $quota_packet_filter;

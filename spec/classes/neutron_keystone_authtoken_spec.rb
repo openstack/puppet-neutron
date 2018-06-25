@@ -13,7 +13,7 @@ describe 'neutron::keystone::authtoken' do
       it 'configure keystone_authtoken' do
         is_expected.to contain_neutron_config('keystone_authtoken/username').with_value('neutron')
         is_expected.to contain_neutron_config('keystone_authtoken/password').with_value('neutron_password')
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value('http://localhost:35357')
+        is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value('http://localhost:5000')
         is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value('services')
         is_expected.to contain_neutron_config('keystone_authtoken/user_domain_name').with_value('Default')
         is_expected.to contain_neutron_config('keystone_authtoken/project_domain_name').with_value('Default')
@@ -53,7 +53,7 @@ describe 'neutron::keystone::authtoken' do
           :www_authenticate_uri                 => 'https://10.0.0.1:9999/',
           :username                             => 'myuser',
           :password                             => 'mypasswd',
-          :auth_url                             => 'https://127.0.0.1:35357',
+          :auth_url                             => 'https://127.0.0.1:5000',
           :project_name                         => 'service_project',
           :user_domain_name                     => 'domainX',
           :project_domain_name                  => 'domainX',

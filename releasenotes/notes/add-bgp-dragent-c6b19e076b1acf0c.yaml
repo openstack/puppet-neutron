@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    New class neutron::agents::bgp_dragent that installs and manages the
+    neutron-dynamic-routing and neutron-bgp-dragent packages.
+    When you are using this feature you must enable the 'bgp' service plugin
+    by passing it in neutron::service_plugins.

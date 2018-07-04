@@ -63,6 +63,9 @@
 # [*vpnaas_agent_config*]
 #   (optional) Manage configuration of vpn_agent.ini
 #
+# [*bgp_dragent_config*]
+#   (optional) Manage configuration of bgp_dragent.ini
+#
 # [*plugin_linuxbridge_config*]
 #   (optional) Manage configuration of linuxbridge_conf.ini
 #
@@ -114,6 +117,7 @@ class neutron::config (
   $ovn_metadata_agent_config     = {},
   $metering_agent_config         = {},
   $vpnaas_agent_config           = {},
+  $bgp_dragent_config            = {},
   $plugin_linuxbridge_config     = {},
   $plugin_cisco_db_conn_config   = {},
   $plugin_cisco_l2network_config = {},
@@ -143,6 +147,7 @@ class neutron::config (
   validate_hash($ovn_metadata_agent_config)
   validate_hash($metering_agent_config)
   validate_hash($vpnaas_agent_config)
+  validate_hash($bgp_dragent_config)
   validate_hash($plugin_linuxbridge_config)
   validate_hash($plugin_cisco_db_conn_config)
   validate_hash($plugin_cisco_l2network_config)
@@ -167,6 +172,7 @@ class neutron::config (
   create_resources('neutron_metadata_agent_config', $metadata_agent_config)
   create_resources('neutron_metering_agent_config', $metering_agent_config)
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)
+  create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
   create_resources('neutron_plugin_linuxbridge', $plugin_linuxbridge_config)
   create_resources('neutron_plugin_cisco_db_conn', $plugin_cisco_db_conn_config)
   create_resources('neutron_plugin_cisco_l2network', $plugin_cisco_l2network_config)

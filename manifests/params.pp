@@ -34,6 +34,7 @@ class neutron::params {
   $l3_agent_service            = 'neutron-l3-agent'
   $metadata_agent_service      = 'neutron-metadata-agent'
   $ovn_metadata_agent_service  = 'networking-ovn-metadata-agent'
+  $bgp_dragent_service         = 'neutron-bgp-dragent'
   $bagpipe_bgp_package         = 'openstack-bagpipe-bgp'
   $bgpvpn_bagpipe_package      = "python${pyvers}-networking-bagpipe"
   $bgpvpn_bagpipe_service      = 'bagpipe-bgp'
@@ -76,6 +77,8 @@ class neutron::params {
     $l2gw_agent_package                 = 'openstack-neutron-l2gw-agent'
     $l2gw_package                       = 'python2-networking-l2gw'
     $ovn_metadata_agent_package         = 'python-networking-ovn-metadata-agent'
+    $dynamic_routing_package            = 'openstack-neutron-dynamic-routing'
+    $bgp_dragent_package                = false
     if $::operatingsystemrelease =~ /^7.*/ or $::operatingsystem == 'Fedora' {
       $openswan_package = 'libreswan'
     } else {
@@ -101,6 +104,7 @@ class neutron::params {
       $api_service_name         = 'neutron-api'
       $rpc_package_name         = 'neutron-rpc-server'
       $rpc_service_name         = 'neutron-rpc-server'
+      $dynamic_routing_package  = 'neutron-dynamic-routing'
     } else {
       $ml2_server_package = 'neutron-plugin-ml2'
       $server_service           = 'neutron-server'
@@ -109,7 +113,9 @@ class neutron::params {
       $api_service_name         = false
       $rpc_package_name         = false
       $rpc_service_name         = false
+      $dynamic_routing_package  = 'python-neutron-dynamic-routing'
     }
+    $bgp_dragent_package        = 'neutron-bgp-dragent'
     $ovs_agent_package          = 'neutron-openvswitch-agent'
     $ovs_server_package         = 'neutron-plugin-openvswitch'
     $ovs_cleanup_service        = false

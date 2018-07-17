@@ -23,7 +23,7 @@ $LOAD_PATH.push(
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:neutron_bgp_dragent_config).provider(:openstackconfig)
+provider_class = Puppet::Type.type(:neutron_bgp_dragent_config).provider(:ini_setting)
 
 describe provider_class do
 

@@ -40,8 +40,8 @@ describe 'neutron::agents::bgp_dragent' do
 
       it { should contain_resources('neutron_bgp_dragent_config').with_purge(default_params[:purge_config]) }
 
-      it { should contain_neutron_bgp_dragent_config('BGP/bgp_speaker_driver').with_value(default_params[:bgp_speaker_driver]) }
-      it { should contain_neutron_bgp_dragent_config('BGP/bgp_router_id').with_value(facts[:ipaddress]) }
+      it { should contain_neutron_bgp_dragent_config('bgp/bgp_speaker_driver').with_value(default_params[:bgp_speaker_driver]) }
+      it { should contain_neutron_bgp_dragent_config('bgp/bgp_router_id').with_value(facts[:ipaddress]) }
     end
 
     context 'with overridden params' do
@@ -52,20 +52,20 @@ describe 'neutron::agents::bgp_dragent' do
       end
 
       it { should contain_resources('neutron_bgp_dragent_config').with_purge(true) }
-      it { should contain_neutron_bgp_dragent_config('BGP/bgp_speaker_driver').with_value('FakeDriver') }
-      it { should contain_neutron_bgp_dragent_config('BGP/bgp_router_id').with_value('4.3.2.1') }
+      it { should contain_neutron_bgp_dragent_config('bgp/bgp_speaker_driver').with_value('FakeDriver') }
+      it { should contain_neutron_bgp_dragent_config('bgp/bgp_router_id').with_value('4.3.2.1') }
     end
   end
 
   shared_examples 'neutron::agents::bgp_dragent on RedHat' do
     context 'with default params' do
-      it { should contain_package('neutron-dynamic-routing').with(
+      it { should_not contain_package('neutron-dynamic-routing') }
+
+      it { should contain_package('neutron-bgp-dragent').with(
         :ensure => default_params[:package_ensure],
-        :name   => platform_params[:dynamic_routing_package],
+        :name   => platform_params[:bgp_dragent_package],
         :tag    => ['openstack', 'neutron-package'],
       )}
-
-      it { should_not contain_package('neutron-bgp-dragent') }
 
       it { should contain_service('neutron-bgp-dragent').with(
         :ensure => 'running',
@@ -81,13 +81,13 @@ describe 'neutron::agents::bgp_dragent' do
                        :enabled        => false )
       end
 
-      it { should contain_package('neutron-dynamic-routing').with(
+      it { should_not contain_package('neutron-dynamic-routing') }
+
+      it { should contain_package('neutron-bgp-dragent').with(
         :ensure => 'absent',
-        :name   => platform_params[:dynamic_routing_package],
+        :name   => platform_params[:bgp_dragent_package],
         :tag    => ['openstack', 'neutron-package'],
       )}
-
-      it { should_not contain_package('neutron-bgp-dragent') }
 
       it { should contain_service('neutron-bgp-dragent').with(
         :ensure => 'stopped',
@@ -212,8 +212,8 @@ describe 'neutron::agents::bgp_dragent' do
         case facts[:osfamily]
         when 'RedHat'
           {
-            :dynamic_routing_package => 'openstack-neutron-dynamic-routing',
-            :bgp_dragent_package     => false,
+            :dynamic_routing_package => false,
+            :bgp_dragent_package     => 'openstack-neutron-bgp-dragent',
             :bgp_dragent_service     => 'neutron-bgp-dragent',
           }
         when 'Debian'

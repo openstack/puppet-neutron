@@ -7,7 +7,7 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       :manage_service      => true,
       :package_ensure      => 'present',
       :auth_type           => 'password',
-      :auth_url            => 'http://127.0.0.1:35357',
+      :auth_url            => 'http://127.0.0.1:5000',
       :username            => 'ironic',
       :project_domain_id   => 'default',
       :project_domain_name => 'Default',

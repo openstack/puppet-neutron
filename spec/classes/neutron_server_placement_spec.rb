@@ -27,7 +27,7 @@ describe 'neutron::server::placement' do
             :project_name        => 'services',
             :user_domain_id      => 'default',
             :user_domain_name    => 'Default',
-            :auth_url            => 'http://127.0.0.1:35357',
+            :auth_url            => 'http://127.0.0.1:5000',
         }
     end
 
@@ -41,7 +41,7 @@ describe 'neutron::server::placement' do
 
         it 'configure neutron.conf' do
             is_expected.to contain_neutron_config('placement/auth_type').with_value('password')
-            is_expected.to contain_neutron_config('placement/auth_url').with_value('http://127.0.0.1:35357')
+            is_expected.to contain_neutron_config('placement/auth_url').with_value('http://127.0.0.1:5000')
             is_expected.to contain_neutron_config('placement/username').with_value('nova')
             is_expected.to contain_neutron_config('placement/password').with_value('secrete')
             is_expected.to contain_neutron_config('placement/password').with_secret( true )
@@ -56,7 +56,7 @@ describe 'neutron::server::placement' do
         context 'when overriding parameters' do
             before :each do
                 params.merge!(
-                    :auth_url            => 'http://keystone:35357/v2.0',
+                    :auth_url            => 'http://keystone:5000/v2.0',
                     :auth_type           => 'v2password',
                     :username            => 'joe',
                     :region_name         => 'MyRegion',
@@ -68,7 +68,7 @@ describe 'neutron::server::placement' do
                 )
             end
             it 'should configure neutron server with overrided parameters' do
-                is_expected.to contain_neutron_config('placement/auth_url').with_value('http://keystone:35357/v2.0')
+                is_expected.to contain_neutron_config('placement/auth_url').with_value('http://keystone:5000/v2.0')
                 is_expected.to contain_neutron_config('placement/auth_type').with_value('v2password')
                 is_expected.to contain_neutron_config('placement/username').with_value('joe')
                 is_expected.to contain_neutron_config('placement/password').with_value('secrete')

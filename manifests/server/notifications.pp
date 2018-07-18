@@ -74,7 +74,7 @@
 #   (optional) Authorization URL for connection to nova in admin context.
 #   If version independent identity plugin is used available versions will be
 #   determined using auth_url
-#   Defaults to 'http://127.0.0.1:35357'
+#   Defaults to 'http://127.0.0.1:5000'
 #
 # [*region_name*]
 #   (optional) Name of nova region to use. Useful if keystone manages more than
@@ -100,7 +100,7 @@ class neutron::server::notifications (
   $project_name                       = 'services',
   $user_domain_id                     = 'default',
   $user_domain_name                   = 'Default',
-  $auth_url                           = 'http://127.0.0.1:35357',
+  $auth_url                           = 'http://127.0.0.1:5000',
   $region_name                        = $::os_service_default,
   $endpoint_type                      = $::os_service_default,
 ) {

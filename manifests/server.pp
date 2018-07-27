@@ -185,6 +185,11 @@
 #   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
 #   Defaults to false.
 #
+# [*ensure_dr_package*]
+#   (Optional) Ensures installation of Neutron Dynamic Routing package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if bgp service_plugin is enabled.
+#   Defaults to false.
+#
 # [*vpnaas_agent_package*]
 #   (optional) Use VPNaaS agent package instead of L3 agent package on debian platforms
 #   RedHat platforms won't take care of this parameter
@@ -257,6 +262,7 @@ class neutron::server (
   $network_auto_schedule            = $::os_service_default,
   $ensure_vpnaas_package            = false,
   $ensure_fwaas_package             = false,
+  $ensure_dr_package                = false,
   $vpnaas_agent_package             = false,
   $service_providers                = $::os_service_default,
   $auth_strategy                    = 'keystone',
@@ -323,6 +329,25 @@ class neutron::server (
       'name'   => $::neutron::params::vpnaas_agent_package,
       'tag'    => ['openstack', 'neutron-package'],
     })
+  }
+
+  if $ensure_dr_package {
+    if $::neutron::params::dynamic_routing_package {
+      ensure_packages('neutron-dynamic-routing', {
+        ensure => $package_ensure,
+        name   => $::neutron::params::dynamic_routing_package,
+        tag    => ['openstack', 'neutron-package'],
+      })
+    } elsif $::neutron::params::bgp_dragent_package {
+      # RedHat package doesn't ship dynamic-routing package separately
+      # so we install the agent, it's fine because RedHat based doesn't
+      # start services automatically like Debian based.
+      ensure_packages('neutron-bgp-dragent', {
+        ensure => $package_ensure,
+        name   => $::neutron::params::bgp_dragent_package,
+        tag    => ['openstack', 'neutron-package'],
+      })
+    }
   }
 
   if $sync_db {

@@ -1,0 +1,3 @@
+---
+deprecations:
+  - Deprecate of_interface in class neutron::agents::ml2::ovs. Option not needed anymore

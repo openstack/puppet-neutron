@@ -121,11 +121,6 @@
 #   (optional) The vhost-user socket directory for OVS
 #   Defaults to $::os_service_default
 #
-# [*of_interface*]
-#   (optional) OpenFlow interface to use
-#   Allowed values: ovs-ofctl, native
-#   Defaults to $::os_service_default
-#
 # [*ovsdb_interface*]
 #   (optional) The interface for interacting with the OVSDB
 #   Allowed values: vsctl, native
@@ -150,6 +145,11 @@
 #  changes. (boolean value)
 #  Defaults to $::os_service_default
 #
+# DEPRECATED
+#
+# [*of_interface*]
+#   (optional) This option is deprecated an has no effect
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -173,12 +173,13 @@ class neutron::agents::ml2::ovs (
   $tun_peer_patch_port        = $::os_service_default,
   $datapath_type              = $::os_service_default,
   $vhostuser_socket_dir       = $::os_service_default,
-  $of_interface               = $::os_service_default,
   $ovsdb_interface            = $::os_service_default,
   $purge_config               = false,
   $enable_dpdk                = false,
   $enable_security_group      = $::os_service_default,
   $minimize_polling           = $::os_service_default,
+  # DEPRECATED
+  $of_interface               = undef,
 ) {
 
   include ::neutron::deps
@@ -221,8 +222,8 @@ class neutron::agents::ml2::ovs (
     }
   }
 
-  if ! (is_service_default($of_interface)) and ! ($of_interface =~ /^(ovs-ofctl|native)$/) {
-    fail('A value of $of_interface is incorrect. The allowed values are ovs-ofctl and native')
+  if $of_interface {
+    warning('of_interface is deprecated and will be removed in the future')
   }
 
   if ! (is_service_default($ovsdb_interface)) and ! ($ovsdb_interface =~ /^(vsctl|native)$/) {

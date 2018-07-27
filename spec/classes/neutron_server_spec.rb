@@ -273,6 +273,28 @@ describe 'neutron::server' do
     end
   end
 
+  shared_examples_for 'neutron server dynamic routing debian' do
+    before do
+      params.merge!( :ensure_dr_package => true )
+    end
+
+    it 'should install dynamic routing package' do
+      is_expected.to contain_package('neutron-dynamic-routing')
+      is_expected.not_to contain_package('neutron-bgp-dragent')
+    end
+  end
+
+  shared_examples_for 'neutron server dynamic routing redhat' do
+    before do
+      params.merge!( :ensure_dr_package => true )
+    end
+
+    it 'should install bgp dragent package' do
+      is_expected.not_to contain_package('neutron-dynamic-routing')
+      is_expected.to contain_package('neutron-bgp-dragent')
+    end
+  end
+
   shared_examples_for 'a neutron server without database synchronization' do
     before do
       params.merge!(
@@ -298,6 +320,7 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server without database synchronization'
+    it_configures 'neutron server dynamic routing debian'
   end
 
   context 'on RedHat platforms' do
@@ -314,5 +337,6 @@ describe 'neutron::server' do
 
     it_configures 'a neutron server'
     it_configures 'a neutron server without database synchronization'
+    it_configures 'neutron server dynamic routing redhat'
   end
 end

@@ -77,8 +77,8 @@ class neutron::params {
     $l2gw_agent_package                 = 'openstack-neutron-l2gw-agent'
     $l2gw_package                       = 'python2-networking-l2gw'
     $ovn_metadata_agent_package         = 'python-networking-ovn-metadata-agent'
-    $dynamic_routing_package            = 'openstack-neutron-dynamic-routing'
-    $bgp_dragent_package                = false
+    $dynamic_routing_package            = false
+    $bgp_dragent_package                = 'openstack-neutron-bgp-dragent'
     if $::operatingsystemrelease =~ /^7.*/ or $::operatingsystem == 'Fedora' {
       $openswan_package = 'libreswan'
     } else {

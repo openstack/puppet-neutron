@@ -43,7 +43,7 @@
 #
 # [*purge_config*]
 #   (Optional) Whether to set only the specified config options in the BGP dragent config.
-#   Defaults to false.
+#   Defaults to false
 #
 class neutron::agents::bgp_dragent(
   $package_ensure     = 'present',
@@ -62,8 +62,8 @@ class neutron::agents::bgp_dragent(
   }
 
   neutron_bgp_dragent_config {
-    'BGP/bgp_speaker_driver': value => $bgp_speaker_driver;
-    'BGP/bgp_router_id':      value => $bgp_router_id;
+    'bgp/bgp_speaker_driver': value => $bgp_speaker_driver;
+    'bgp/bgp_router_id':      value => $bgp_router_id;
   }
 
   if $::neutron::params::dynamic_routing_package {

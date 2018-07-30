@@ -15,7 +15,7 @@ describe 'neutron::plugins::plumgrid' do
     :director_server      => '127.0.0.1',
     :director_server_port => '443',
     :servertimeout        => '99',
-    :connection           => 'http://127.0.0.1:35357/v2.0',
+    :connection           => 'http://127.0.0.1:5000/v2.0',
     :controller_priv_host => '127.0.0.1',
     :auth_protocol        => 'http',
     :identity_version     => 'v3',
@@ -82,7 +82,7 @@ describe 'neutron::plugins::plumgrid' do
     end
 
     it 'should perform default configuration of plumgrid plumlib' do
-      auth_uri = params[:auth_protocol] + "://" + params[:controller_priv_host] + ":" + "35357/" + params[:identity_version];
+      auth_uri = params[:auth_protocol] + "://" + params[:controller_priv_host] + ":" + "5000/" + params[:identity_version];
       is_expected.to contain_neutron_plumlib_plumgrid('keystone_authtoken/auth_uri').with_value(auth_uri)
       is_expected.to contain_neutron_plumlib_plumgrid('keystone_authtoken/identity_version').with_value(params[:identity_version])
       is_expected.to contain_neutron_plumlib_plumgrid('keystone_authtoken/user_domain_name').with_value(params[:user_domain_name])

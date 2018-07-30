@@ -24,7 +24,7 @@
 #
 # [*connection*]
 #   Database connection
-#   Defaults to http://127.0.0.1:35357/v2.0
+#   Defaults to http://127.0.0.1:5000/v2.0
 #
 # [*admin_password*]
 #   Keystone admin password
@@ -101,7 +101,7 @@ class neutron::plugins::plumgrid (
   $username                     = $::os_service_default,
   $password                     = $::os_service_default,
   $servertimeout                = '99',
-  $connection                   = 'http://127.0.0.1:35357/v2.0',
+  $connection                   = 'http://127.0.0.1:5000/v2.0',
   $admin_password               = $::os_service_default,
   $controller_priv_host         = '127.0.0.1',
   $auth_protocol                = 'http',
@@ -181,7 +181,7 @@ class neutron::plugins::plumgrid (
   neutron_plumlib_plumgrid {
     'keystone_authtoken/admin_user' :                value => 'admin';
     'keystone_authtoken/admin_password':             value => $admin_password, secret =>true;
-    'keystone_authtoken/auth_uri':                   value => "${auth_protocol}://${controller_priv_host}:35357/${identity_version}";
+    'keystone_authtoken/auth_uri':                   value => "${auth_protocol}://${controller_priv_host}:5000/${identity_version}";
     'keystone_authtoken/admin_tenant_name':          value => 'admin';
     'keystone_authtoken/identity_version':           value => $identity_version;
     'keystone_authtoken/user_domain_name':           value => $user_domain_name;

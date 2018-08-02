@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Added logic to support IPv6 deployment on underlay network
+    with ODL. The logic is implemented such that both TLS and
+    IPv6 can be enabled or either of them or none.

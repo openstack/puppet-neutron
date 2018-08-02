@@ -87,6 +87,10 @@
 #   (optional) CA Certificate file path to use for TLS configuration
 #   Defaults to False.
 #
+# [*enable_ipv6*]
+#   (optional) Enables IPv6 address for ODL-OVS communication
+#   Defaults to False.
+#
 class neutron::plugins::ovs::opendaylight (
   $tunnel_ip,
   $odl_username,
@@ -106,7 +110,8 @@ class neutron::plugins::ovs::opendaylight (
   $enable_tls            = false,
   $tls_key_file          = undef,
   $tls_cert_file         = undef,
-  $tls_ca_cert_file      = undef
+  $tls_ca_cert_file      = undef,
+  $enable_ipv6           = false,
 ) {
 
   include ::neutron::deps
@@ -136,26 +141,10 @@ class neutron::plugins::ovs::opendaylight (
       }
     }
 
-    if $odl_ovsdb_iface =~ /^tcp/ {
-      warning('TLS enabled but odl_ovsdb_iface set to tcp.  Will override to ssl')
-      $odl_ovsdb_iface_parsed = regsubst($odl_ovsdb_iface, 'tcp:', 'ssl:', 'G')
-    } else {
-      $odl_ovsdb_iface_parsed = $odl_ovsdb_iface
-    }
-
-    if $ovsdb_server_iface =~ /^ptcp/ {
-      warning('TLS enabled but ovsdb_server_iface set to ptcp.  Will override to pssl')
-      $ovsdb_server_iface_parsed = regsubst($ovsdb_server_iface, '^ptcp', 'pssl')
-    } else {
-      $ovsdb_server_iface_parsed = $ovsdb_server_iface
-    }
-
-    if $odl_check_url =~ /^http:/ {
-      warning('TLS enabled but odl_check_url set to http.  Will override to https')
-      $odl_check_url_parsed = regsubst($odl_check_url, '^http:', 'https:')
-    } else {
-      $odl_check_url_parsed = $odl_check_url
-    }
+    warning('TLS enabled, overriding all protocols')
+    $odl_ovsdb_iface_proto = 'ssl'
+    $ovsdb_server_iface_proto = 'pssl'
+    $odl_check_url_proto = 'https'
 
     $cert_data = convert_cert_to_string($tls_cert_file)
     $rest_data = @("END":json/L)
@@ -177,8 +166,8 @@ class neutron::plugins::ovs::opendaylight (
       }
       |-END
 
-    $ovsdb_arr = split($odl_ovsdb_iface_parsed, ' ')
-    $odl_rest_port = regsubst($odl_check_url_parsed, '^.*:([0-9]+)/.*$', '\1')
+    $ovsdb_arr = split($odl_ovsdb_iface, ' ')
+    $odl_rest_port = regsubst($odl_check_url, '^.*:([0-9]+)/.*$', '\1')
     $ovsdb_arr.each |$ovsdb_uri| {
 
       $odl_ip = regsubst($ovsdb_uri, 'ssl:(.+):[0-9]+', '\1')
@@ -195,15 +184,26 @@ class neutron::plugins::ovs::opendaylight (
         require   => Exec['Wait for NetVirt OVSDB to come up']
       }
     }
-
-  } else {
-    $odl_ovsdb_iface_parsed = $odl_ovsdb_iface
-    $ovsdb_server_iface_parsed = $ovsdb_server_iface
-    $odl_check_url_parsed = $odl_check_url
+  }
+  else {
+    $odl_ovsdb_iface_proto = 'tcp'
+    $ovsdb_server_iface_proto = 'ptcp'
+    $odl_check_url_proto = 'http'
   }
 
+  if $enable_ipv6 {
+    $ovsdb_server_ip = '[::1]'
+  }
+  else {
+    $ovsdb_server_ip = '127.0.0.1'
+  }
+
+  $odl_ovsdb_iface_parsed = regsubst($odl_ovsdb_iface, 'tcp', $odl_ovsdb_iface_proto, 'G')
+  $ovsdb_server_iface_parsed = "${ovsdb_server_iface_proto}:6639:${ovsdb_server_ip}"
+  $odl_check_url_parsed = regsubst($odl_check_url, 'http', $odl_check_url_proto)
+
   exec { 'Wait for NetVirt OVSDB to come up':
-    command   => "curl -k -o /dev/null --fail --silent --head -u ${odl_username}:${odl_password} ${odl_check_url_parsed}",
+    command   => "curl -g -k -o /dev/null --fail --silent --head -u ${odl_username}:${odl_password} ${odl_check_url_parsed}",
     tries     => $retry_count,
     try_sleep => $retry_interval,
     path      => '/usr/sbin:/usr/bin:/sbin:/bin',

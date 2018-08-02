@@ -17,6 +17,7 @@ describe 'neutron::plugins::ovs::opendaylight' do
       :vhostuser_mode        => 'server',
       :enable_hw_offload     => false,
       :enable_tls            => false,
+      :enable_ipv6           => false,
     }
   end
 
@@ -116,7 +117,7 @@ describe 'neutron::plugins::ovs::opendaylight' do
           :enable_tls => true,
           :tls_key_file => 'dummy.pem',
           :tls_cert_file => 'dummy.crt',
-          :odl_ovsdb_iface => 'tcp:127.0.0.1:6640 tcp:172.0.0.1:6640'})
+          :odl_ovsdb_iface => 'ssl:127.0.0.1:6640 ssl:172.0.0.1:6640'})
       end
       it_configures 'with TLS and ODL HA'
       it {is_expected.to contain_vs_ssl('system').with(
@@ -126,6 +127,15 @@ describe 'neutron::plugins::ovs::opendaylight' do
         'bootstrap' => true,
         'before'    => 'Exec[Set OVS Manager to OpenDaylight]'
       )}
+    end
+    context 'with IPv6 enabled' do
+      before do
+        params.merge!({
+          :enable_ipv6 => true,
+          :odl_ovsdb_iface => 'tcp:[::1]:6640',
+        })
+      end
+      it_configures 'with IPv6 enabled'
     end
   end
 
@@ -167,6 +177,9 @@ describe 'neutron::plugins::ovs::opendaylight' do
   end
 
   shared_examples_for 'with TLS enabled' do
+    before do
+        params.merge!({ :odl_ovsdb_iface  => 'ssl:127.0.0.1:6640' })
+    end
     it 'configures OVS for ODL' do
       is_expected.to contain_exec('Add trusted cert: dummy.crt to https://127.0.0.1:8080')
       is_expected.to contain_exec('Set OVS Manager to OpenDaylight').with(
@@ -185,6 +198,19 @@ describe 'neutron::plugins::ovs::opendaylight' do
       is_expected.to contain_exec('Add trusted cert: dummy.crt to https://127.0.0.1:8080')
       is_expected.to contain_exec('Set OVS Manager to OpenDaylight').with(
         :command => "ovs-vsctl set-manager pssl:6639:127.0.0.1 ssl:127.0.0.1:6640 ssl:172.0.0.1:6640"
+      )
+      is_expected.to contain_vs_config('other_config:local_ip')
+      is_expected.not_to contain_vs_config('other_config:provider_mappings')
+      is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_hostid')
+      is_expected.to contain_vs_config('external_ids:odl_os_hostconfig_config_odl_l2')
+    end
+  end
+
+  shared_examples_for 'with IPv6 enabled' do
+    it 'configures OVS for ODL' do
+      is_expected.to contain_exec('Wait for NetVirt OVSDB to come up')
+      is_expected.to contain_exec('Set OVS Manager to OpenDaylight').with(
+        :command => "ovs-vsctl set-manager ptcp:6639:[::1] tcp:[::1]:6640"
       )
       is_expected.to contain_vs_config('other_config:local_ip')
       is_expected.not_to contain_vs_config('other_config:provider_mappings')

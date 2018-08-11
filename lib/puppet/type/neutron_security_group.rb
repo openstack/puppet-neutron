@@ -30,7 +30,7 @@ Puppet::Type.newtype(:neutron_security_group) do
   ensurable
 
   autorequire(:neutron_config) do
-    ['www_authenticate_uri', 'project_name', 'username', 'password']
+    ['auth_url', 'project_name', 'username', 'password']
   end
 
   # Require the neutron-server service to be running
@@ -73,4 +73,3 @@ Puppet::Type.newtype(:neutron_security_group) do
   end
 
 end
-

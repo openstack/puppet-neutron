@@ -11,12 +11,12 @@ describe Puppet::Provider::Neutron do
 
   let :credential_hash do
     {
-      'project_name'         => 'admin_tenant',
-      'username'             => 'admin',
-      'password'             => 'password',
-      'www_authenticate_uri' => 'https://192.168.56.210:5000/v2.0/',
-      'project_domain_name'  => 'Default',
-      'user_domain_name'     => 'Default',
+      'project_name'        => 'admin_tenant',
+      'username'            => 'admin',
+      'password'            => 'password',
+      'auth_url'            => 'https://192.168.56.210:5000/v2.0/',
+      'project_domain_name' => 'Default',
+      'user_domain_name'    => 'Default',
     }
   end
 
@@ -65,7 +65,7 @@ describe Puppet::Provider::Neutron do
 
     it 'should set auth credentials in the environment' do
       authenv = {
-        :OS_AUTH_URL            => credential_hash['www_authenticate_uri'],
+        :OS_AUTH_URL            => credential_hash['auth_url'],
         :OS_USERNAME            => credential_hash['username'],
         :OS_PROJECT_NAME        => credential_hash['project_name'],
         :OS_PASSWORD            => credential_hash['password'],
@@ -79,7 +79,7 @@ describe Puppet::Provider::Neutron do
 
     it 'should set region in the environment if needed' do
       authenv = {
-        :OS_AUTH_URL            => credential_hash['www_authenticate_uri'],
+        :OS_AUTH_URL            => credential_hash['auth_url'],
         :OS_USERNAME            => credential_hash['username'],
         :OS_PROJECT_NAME        => credential_hash['project_name'],
         :OS_PASSWORD            => credential_hash['password'],

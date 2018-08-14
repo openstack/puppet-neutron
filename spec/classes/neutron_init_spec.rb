@@ -53,6 +53,8 @@ describe 'neutron' do
     it_configures 'with transport_url defined'
     it_configures 'with rootwrap daemon'
     it_configures 'with max_allowed_address_pair defined'
+    it_configures 'when disabling vlan_transparent'
+    it_configures 'when enabling vlan_transparent'
 
     context 'with amqp messaging' do
       it_configures 'amqp support'
@@ -111,7 +113,8 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/state_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('oslo_concurrency/lock_path').with_value('$state_path/lock')
       is_expected.to contain_neutron_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('DEFAULT/rpc_response_timeout').with_value( '<SERVICE DEFAULT>' )
+      is_expected.to contain_neutron_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_neutron_config('DEFAULT/vlan_transparent').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       is_expected.to contain_neutron_config('agent/root_helper_daemon').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_config('agent/report_interval').with_value('<SERVICE DEFAULT>')
@@ -332,6 +335,28 @@ describe 'neutron' do
       is_expected.to contain_neutron_config('DEFAULT/state_path').with_value('state_path')
       is_expected.to contain_neutron_config('oslo_concurrency/lock_path').with_value('lock_path')
     }
+  end
+
+  shared_examples_for  'when disabling vlan_transparent' do
+    before do
+      params.merge!(
+        :vlan_transparent => false
+      )
+    end
+    it do
+      is_expected.to contain_neutron_config('DEFAULT/vlan_transparent').with_value(false)
+    end
+  end
+
+  shared_examples_for 'when enabling vlan_transparent' do
+    before do
+      params.merge!(
+        :vlan_transparent => true
+      )
+    end
+    it do
+      is_expected.to contain_neutron_config('DEFAULT/vlan_transparent').with_value(true)
+    end
   end
 
   shared_examples_for 'without service_plugins' do

@@ -333,6 +333,10 @@
 #   (optional) Maximum number of allowed address pairs per port
 #   Defaults to $::os_service_default.
 #
+# [*vlan_transparent*]
+#   (optional) Allow plugins that support it to create VLAN transparent networks
+#   Defaults to $::os_service_default
+#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
@@ -404,6 +408,7 @@ class neutron (
   $notification_topics                  = $::os_service_default,
   $notification_transport_url           = $::os_service_default,
   $max_allowed_address_pair             = $::os_service_default,
+  $vlan_transparent                     = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -447,25 +452,26 @@ class neutron (
   }
 
   neutron_config {
-    'DEFAULT/bind_host':               value => $bind_host;
-    'DEFAULT/bind_port':               value => $bind_port;
-    'DEFAULT/auth_strategy':           value => $auth_strategy;
-    'DEFAULT/core_plugin':             value => $core_plugin;
-    'DEFAULT/base_mac':                value => $base_mac;
-    'DEFAULT/dhcp_lease_duration':     value => $dhcp_lease_duration;
-    'DEFAULT/host':                    value => $host;
-    'DEFAULT/dns_domain':              value => $dns_domain;
-    'DEFAULT/dhcp_agents_per_network': value => $dhcp_agents_per_network;
-    'DEFAULT/dhcp_agent_notification': value => $dhcp_agent_notification;
-    'DEFAULT/allow_bulk':              value => $allow_bulk;
-    'DEFAULT/allow_overlapping_ips':   value => $allow_overlapping_ips;
-    'DEFAULT/api_extensions_path':     value => $api_extensions_path;
-    'DEFAULT/state_path':              value => $state_path;
-    'DEFAULT/global_physnet_mtu':      value => $global_physnet_mtu;
-    'DEFAULT/max_allowed_address_pair':value => $max_allowed_address_pair;
-    'agent/root_helper':               value => $root_helper;
-    'agent/root_helper_daemon':        value => $root_helper_daemon;
-    'agent/report_interval':           value => $report_interval;
+    'DEFAULT/bind_host':                value => $bind_host;
+    'DEFAULT/bind_port':                value => $bind_port;
+    'DEFAULT/auth_strategy':            value => $auth_strategy;
+    'DEFAULT/core_plugin':              value => $core_plugin;
+    'DEFAULT/base_mac':                 value => $base_mac;
+    'DEFAULT/dhcp_lease_duration':      value => $dhcp_lease_duration;
+    'DEFAULT/host':                     value => $host;
+    'DEFAULT/dns_domain':               value => $dns_domain;
+    'DEFAULT/dhcp_agents_per_network':  value => $dhcp_agents_per_network;
+    'DEFAULT/dhcp_agent_notification':  value => $dhcp_agent_notification;
+    'DEFAULT/allow_bulk':               value => $allow_bulk;
+    'DEFAULT/allow_overlapping_ips':    value => $allow_overlapping_ips;
+    'DEFAULT/api_extensions_path':      value => $api_extensions_path;
+    'DEFAULT/state_path':               value => $state_path;
+    'DEFAULT/global_physnet_mtu':       value => $global_physnet_mtu;
+    'DEFAULT/max_allowed_address_pair': value => $max_allowed_address_pair;
+    'DEFAULT/vlan_transparent':         value => $vlan_transparent;
+    'agent/root_helper':                value => $root_helper;
+    'agent/root_helper_daemon':         value => $root_helper_daemon;
+    'agent/report_interval':            value => $report_interval;
   }
 
   oslo::messaging::default { 'neutron_config':

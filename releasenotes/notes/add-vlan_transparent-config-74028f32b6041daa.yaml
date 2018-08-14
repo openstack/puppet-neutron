@@ -1,0 +1,4 @@
+---
+features:
+  - Added vlan_transparent boolean parameter that if set to true
+    allows plugins that support transparent VLANs to use it.

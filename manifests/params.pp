@@ -89,7 +89,7 @@ class neutron::params {
     $server_package             = 'neutron-server'
     if $::os_package_type =='debian' {
       $ml2_server_package       = false
-      $dynamic_routing_package  = 'neutron-dynamic-routing'
+      $dynamic_routing_package  = 'python3-neutron-dynamic-routing'
     } else {
       $ml2_server_package       = 'neutron-plugin-ml2'
       $dynamic_routing_package  = 'python-neutron-dynamic-routing'

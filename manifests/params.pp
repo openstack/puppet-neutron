@@ -104,7 +104,7 @@ class neutron::params {
       $api_service_name         = 'neutron-api'
       $rpc_package_name         = 'neutron-rpc-server'
       $rpc_service_name         = 'neutron-rpc-server'
-      $dynamic_routing_package  = 'neutron-dynamic-routing'
+      $dynamic_routing_package  = 'python3-neutron-dynamic-routing'
     } else {
       $ml2_server_package = 'neutron-plugin-ml2'
       $server_service           = 'neutron-server'

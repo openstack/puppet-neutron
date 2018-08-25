@@ -218,7 +218,7 @@ describe 'neutron::agents::bgp_dragent' do
           }
         when 'Debian'
           if facts[:operatingsystem] == 'Debian'
-            pkg = 'neutron-dynamic-routing'
+            pkg = 'python3-neutron-dynamic-routing'
           else
             pkg = 'python-neutron-dynamic-routing'
           end

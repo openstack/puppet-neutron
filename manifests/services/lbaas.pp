@@ -51,6 +51,9 @@ class neutron::services::lbaas (
   $ensure_lbaas_driver_package = 'present',
 ) {
 
+  warning('neutron::services::lbaas class is deprecated, please use \
+           neutron::server::ensure_lbaas_package and neutron::server::service_provider')
+
   include ::neutron::deps
   include ::neutron::params
 

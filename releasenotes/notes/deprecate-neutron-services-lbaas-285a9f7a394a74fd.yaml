@@ -1,0 +1,8 @@
+---
+deprecations:
+  - |
+    neutron::services::lbaas class is deprecated, please use the option
+    neutron::server::ensure_lbaas_package to install the LBaaS package
+    and use neutron::server::service_provider to load the plugin.
+    You should still be using neutron::agents::lbaas to configure the
+    LBaaS agent unless you are using Octavia.

@@ -192,6 +192,11 @@
 #   (Optional) Allow auto scheduling networks to DHCP agent
 #   Defaults to $::os_service_default.
 #
+# [*ensure_lbaas_package*]
+#   (Optional) Ensures installation of LBaaS package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if lbaasv2 service_plugin is enabled.
+#   Defaults to false.
+#
 # [*ensure_vpnaas_package*]
 #   (Optional) Ensures installation of VPNaaS package before starting API service.
 #   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
@@ -276,6 +281,7 @@ class neutron::server (
   $max_l3_agents_per_router         = 3,
   $l3_ha_net_cidr                   = $::os_service_default,
   $network_auto_schedule            = $::os_service_default,
+  $ensure_lbaas_package             = false,
   $ensure_vpnaas_package            = false,
   $ensure_fwaas_package             = false,
   $ensure_dr_package                = false,
@@ -328,6 +334,25 @@ class neutron::server (
         'name'   => $::neutron::params::fwaas_package,
         'ensure' => $neutron::package_ensure,
         'tag'    => ['openstack', 'neutron-package'],
+      })
+    }
+  }
+
+  if $ensure_lbaas_package {
+    if $::neutron::params::lbaas_package {
+      ensure_packages('neutron-lbaas', {
+        ensure => $package_ensure,
+        name   => $::neutron::params::lbaas_package,
+        tag    => ['openstack', 'neutron-package']
+      })
+    } elsif $::neutron::params::lbaasv2_agent_package {
+      # RedHat package ships LBaaS and agent in same package
+      # so we install it here, it's fine because RedHat doesn't
+      # start services by default.
+      ensure_packages('neutron-lbaasv2-agent', {
+        ensure => $package_ensure,
+        name   => $::neutron::params::lbaasv2_agent_package,
+        tag    => ['openstack', 'neutron-package'],
       })
     }
   }

@@ -258,16 +258,14 @@ describe 'neutron::server' do
 
   end
 
-  shared_examples_for 'VPNaaS, FWaaS and LBaaS package installation' do
+  shared_examples_for 'VPNaaS and FWaaS package installation' do
     before do
       params.merge!(
         :ensure_vpnaas_package => true,
         :ensure_fwaas_package  => true,
-        :ensure_lbaas_package  => true
       )
     end
     it 'should install *aaS packages' do
-      is_expected.to contain_package('neutron-lbaasv2-agent')
       is_expected.to contain_package('neutron-fwaas')
       is_expected.to contain_package('neutron-vpnaas-agent')
     end
@@ -292,6 +290,28 @@ describe 'neutron::server' do
     it 'should install bgp dragent package' do
       is_expected.not_to contain_package('neutron-dynamic-routing')
       is_expected.to contain_package('neutron-bgp-dragent')
+    end
+  end
+
+  shared_examples_for 'neutron server lbaas debian' do
+    before do
+      params.merge!( :ensure_lbaas_package => true )
+    end
+
+    it 'should install lbaas package' do
+      is_expected.to contain_package('neutron-lbaas')
+      is_expected.not_to contain_package('neutron-lbaasv2-agent')
+    end
+  end
+
+  shared_examples_for 'neutron server lbaas redhat' do
+    before do
+      params.merge!( :ensure_lbaas_package => true )
+    end
+
+    it 'should install lbaasv2-agent package' do
+      is_expected.not_to contain_package('neutron-lbaas')
+      is_expected.to contain_package('neutron-lbaasv2-agent')
     end
   end
 
@@ -321,6 +341,7 @@ describe 'neutron::server' do
     it_configures 'a neutron server'
     it_configures 'a neutron server without database synchronization'
     it_configures 'neutron server dynamic routing debian'
+    it_configures 'neutron server lbaas debian'
   end
 
   context 'on RedHat platforms' do
@@ -338,5 +359,6 @@ describe 'neutron::server' do
     it_configures 'a neutron server'
     it_configures 'a neutron server without database synchronization'
     it_configures 'neutron server dynamic routing redhat'
+    it_configures 'neutron server lbaas redhat'
   end
 end

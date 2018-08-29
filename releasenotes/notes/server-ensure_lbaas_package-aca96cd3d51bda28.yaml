@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Added new parameter neutron::server::ensure_lbaas_package that if set to true
+    will install the neutron LBaaS package so that you can load that service_provider.

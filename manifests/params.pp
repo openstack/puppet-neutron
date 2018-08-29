@@ -86,6 +86,7 @@ class neutron::params {
     }
     $libreswan_package                  = 'libreswan'
     $l3_agent_package                   = false
+    $lbaas_package                      = false
     $fwaas_package                      = 'openstack-neutron-fwaas'
     $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
     $neutron_wsgi_script_source         = '/usr/bin/neutron-api'
@@ -105,6 +106,7 @@ class neutron::params {
       $rpc_package_name         = 'neutron-rpc-server'
       $rpc_service_name         = 'neutron-rpc-server'
       $dynamic_routing_package  = 'python3-neutron-dynamic-routing'
+      $lbaas_package            = 'python3-neutron-lbaas'
     } else {
       $ml2_server_package = 'neutron-plugin-ml2'
       $server_service           = 'neutron-server'
@@ -114,6 +116,7 @@ class neutron::params {
       $rpc_package_name         = false
       $rpc_service_name         = false
       $dynamic_routing_package  = 'python-neutron-dynamic-routing'
+      $lbaas_package            = 'python-neutron-lbaas'
     }
     $bgp_dragent_package        = 'neutron-bgp-dragent'
     $ovs_agent_package          = 'neutron-openvswitch-agent'

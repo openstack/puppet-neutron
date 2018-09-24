@@ -4,12 +4,21 @@
 # === Parameters
 #
 # [*default_overlay_tz*]
-#   UUID of the default overlay Transport Zone to be used for creating
+#   Name or UUID of the default overlay Transport Zone to be used for creating
 #   tunneled isolated "Neutron" networks. This option MUST be specified.
 #
+# [*default_vlan_tz*]
+#   (optional) Name or UUID of the default VLAN Transport Zone to be used for
+#   creating VLAN networks.
+#
+# [*default_bridge_cluster*]
+#   (optional) Name or UUID of the default NSX bridge cluster that will be
+#   used to perform L2 gateway bridging between VXLAN and VLAN networks.
+#
 # [*default_tier0_router*]
-#   UUID of the pre-created default tier0 (provider) router on NSX backend.
-#   This option is used to create external networks and MUST be specified.
+#   Name or UUID of the pre-created default tier0 (provider) router on NSX
+#   backend. This option is used to create external networks and MUST be
+#   specified.
 #
 # [*nsx_api_managers*]
 #   Comma separated NSX manager IP addresses. This option MUST be specified.
@@ -20,13 +29,17 @@
 # [*nsx_api_password*]
 #   The password for NSX manager.
 #
-# [*dhcp_profile_uuid*]
-#   UUID of the pre-created DHCP profile on NSX backend to support native DHCP.
-#   This option MUST be specified if native_dhcp_metadata is True.
+# [*dhcp_profile*]
+#   Name or UUID of the pre-created DHCP profile on NSX backend to support
+#   native DHCP. This option MUST be specified if native_dhcp_metadata is True.
 #
-# [*metadata_proxy_uuid*]
-#   UUID of the pre-created Metadata Proxy on NSX backend. This option MUST
-#   be specified if native_dhcp_metadata is True.
+# [*dhcp_relay_service*]
+#   (optional) This is the name or UUID of the NSX relay service that will be
+#   used to enable DHCP relay on router ports.
+#
+# [*metadata_proxy*]
+#   Name or UUID of the pre-created Metadata Proxy on NSX backend. This option
+#   MUST be specified if native_dhcp_metadata is True.
 #
 # [*native_dhcp_metadata*]
 #   Flag to enable native DHCP and Metadata.
@@ -40,17 +53,32 @@
 #   in the nvp config.
 #   Defaults to false.
 #
+# DEPRECATED
+#
+# [*dhcp_profile_uuid*]
+#   (DEPRECATED) UUID of the pre-created DHCP profile on NSX backend to support
+#   native DHCP.
+#
+# [*metadata_proxy_uuid*]
+#   (DEPRECATED) UUID of the pre-created Metadata Proxy on NSX backend.
+#
 class neutron::plugins::nsx (
-  $default_overlay_tz   = $::os_service_default,
-  $default_tier0_router = $::os_service_default,
-  $nsx_api_managers     = $::os_service_default,
-  $nsx_api_user         = $::os_service_default,
-  $nsx_api_password     = $::os_service_default,
-  $dhcp_profile_uuid    = $::os_service_default,
-  $metadata_proxy_uuid  = $::os_service_default,
-  $native_dhcp_metadata = $::os_service_default,
-  $package_ensure       = 'present',
-  $purge_config         = false,
+  $default_overlay_tz     = $::os_service_default,
+  $default_vlan_tz        = $::os_service_default,
+  $default_bridge_cluster = $::os_service_default,
+  $default_tier0_router   = $::os_service_default,
+  $nsx_api_managers       = $::os_service_default,
+  $nsx_api_user           = $::os_service_default,
+  $nsx_api_password       = $::os_service_default,
+  $dhcp_profile           = $::os_service_default,
+  $dhcp_relay_service     = $::os_service_default,
+  $metadata_proxy         = $::os_service_default,
+  $native_dhcp_metadata   = $::os_service_default,
+  $package_ensure         = 'present',
+  $purge_config           = false,
+  # DEPRECATED
+  $dhcp_profile_uuid      = undef,
+  $metadata_proxy_uuid    = undef,
 ) {
 
   include ::neutron::deps
@@ -88,20 +116,26 @@ class neutron::plugins::nsx (
     }
   }
 
+  if $dhcp_profile_uuid or $metadata_proxy_uuid {
+    warning('dhcp_profile_uuid and $metadata_proxy_uuid are deprecated and will be removed in the future')
+  }
 
   resources { 'neutron_plugin_nsx':
     purge => $purge_config,
   }
 
   neutron_plugin_nsx {
-    'nsx_v3/default_overlay_tz':   value => $default_overlay_tz;
-    'nsx_v3/default_tier0_router': value => $default_tier0_router;
-    'nsx_v3/nsx_api_managers':     value => $nsx_api_managers;
-    'nsx_v3/nsx_api_user':         value => $nsx_api_user;
-    'nsx_v3/nsx_api_password':     value => $nsx_api_password;
-    'nsx_v3/dhcp_profile_uuid':    value => $dhcp_profile_uuid;
-    'nsx_v3/metadata_proxy_uuid':  value => $metadata_proxy_uuid;
-    'nsx_v3/native_dhcp_metadata': value => $native_dhcp_metadata;
+    'nsx_v3/default_overlay_tz':       value => $default_overlay_tz;
+    'nsx_v3/default_vlan_tz':          value => $default_vlan_tz;
+    'nsx_v3/default_bridge_cluster':   value => $default_bridge_cluster;
+    'nsx_v3/default_tier0_router':     value => $default_tier0_router;
+    'nsx_v3/nsx_api_managers':         value => $nsx_api_managers;
+    'nsx_v3/nsx_api_user':             value => $nsx_api_user;
+    'nsx_v3/nsx_api_password':         value => $nsx_api_password;
+    'nsx_v3/dhcp_profile':             value => pick($dhcp_profile_uuid, $dhcp_profile);
+    'nsx_v3/dhcp_relay_service':       value => $dhcp_relay_service;
+    'nsx_v3/metadata_proxy':           value => pick($metadata_proxy_uuid, $metadata_proxy);
+    'nsx_v3/native_dhcp_metadata':     value => $native_dhcp_metadata;
   }
 
   if ($::neutron::core_plugin != 'vmware_nsx.plugin.NsxV3Plugin') and

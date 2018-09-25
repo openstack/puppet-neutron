@@ -21,7 +21,7 @@ describe 'neutron::plugins::ml2::networking_ansible' do
         'host2' => { 'ansible_network_os' => 'junos',
                      'ansible_host' => '10.0.0.1',
                      'ansible_user' => 'ansible',
-                     'ansible_ssh_pass' => 'password2'},}
+                     'ansible_ssh_private_key_file' => '/path/to/key'},}
     }
   end
 
@@ -44,6 +44,12 @@ describe 'neutron::plugins::ml2::networking_ansible' do
     it {
      params[:host_configs].each do |host_config|
        is_expected.to contain_neutron__plugins__ml2__networking_ansible_host(host_config.first)
+
+       is_expected.to contain_neutron_plugin_ml2('ansible:host1/ansible_ssh_pass').with_value('password1')
+       is_expected.to contain_neutron_plugin_ml2('ansible:host1/ansible_ssh_private_key_file').with_value(nil)
+
+       is_expected.to contain_neutron_plugin_ml2('ansible:host2/ansible_ssh_private_key_file').with_value('/path/to/key')
+       is_expected.to contain_neutron_plugin_ml2('ansible:host2/ansible_ssh_pass').with_value(nil)
      end
     }
   end

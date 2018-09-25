@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Adds 'neutron::agents::ml2::ovs::tunnel_csum' Set or un-set the tunnel header checksum  on
+    outgoing IP packet carrying GRE/VXLAN tunnel in ovs agent.

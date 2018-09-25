@@ -145,6 +145,11 @@
 #  changes. (boolean value)
 #  Defaults to $::os_service_default
 #
+# [*tunnel_csum*]
+#  (optional) Set or un-set the tunnel header checksum  on
+#  outgoing IP packet carrying GRE/VXLAN tunnel.
+#  Defaults to $::os_service_default
+#
 # DEPRECATED
 #
 # [*of_interface*]
@@ -178,6 +183,7 @@ class neutron::agents::ml2::ovs (
   $enable_dpdk                = false,
   $enable_security_group      = $::os_service_default,
   $minimize_polling           = $::os_service_default,
+  $tunnel_csum                = $::os_service_default,
   # DEPRECATED
   $of_interface               = undef,
 ) {
@@ -271,6 +277,7 @@ class neutron::agents::ml2::ovs (
     'agent/drop_flows_on_start':            value => $drop_flows_on_start;
     'agent/extensions':                     value => join(any2array($extensions), ',');
     'agent/minimize_polling':               value => $minimize_polling;
+    'agent/tunnel_csum':                    value => $tunnel_csum;
     'ovs/integration_bridge':               value => $integration_bridge;
     'ovs/datapath_type':                    value => $datapath_type;
     'ovs/vhostuser_socket_dir':             value => $vhostuser_socket_dir;

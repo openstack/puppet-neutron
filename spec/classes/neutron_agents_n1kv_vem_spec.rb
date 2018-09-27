@@ -7,6 +7,7 @@ describe 'neutron::agents::n1kv_vem' do
       :operatingsystem        => 'RedHat',
       :operatingsystemrelease => '7',
       :osfamily               => 'RedHat',
+      :os                     => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
     })
   end
 

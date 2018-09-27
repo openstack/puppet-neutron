@@ -69,7 +69,8 @@ describe 'neutron::services::fwaas' do
     let :facts do
       @default_facts.merge(test_facts.merge(
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Ubuntu'
+          :operatingsystem => 'Ubuntu',
+          :os       => { :name  => 'Ubuntu', :family => 'Debian', :release => { :major => '16', :minor => '04' } },
         }
       ))
     end
@@ -89,7 +90,8 @@ describe 'neutron::services::fwaas' do
     let :facts do
       @default_facts.merge(test_facts.merge(
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian'
+          :operatingsystem => 'Debian',
+          :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
         }
       ))
     end
@@ -108,7 +110,8 @@ describe 'neutron::services::fwaas' do
   context 'on Debian platforms with VPNaaS' do
     let :facts do
       @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian'
+         :osfamily => 'Debian',
+         :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
       }))
     end
 
@@ -130,7 +133,8 @@ describe 'neutron::services::fwaas' do
     let :facts do
       @default_facts.merge(test_facts.merge({
          :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7'
+         :operatingsystemrelease => '7',
+         :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
       }))
     end
 

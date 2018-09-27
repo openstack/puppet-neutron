@@ -53,7 +53,8 @@ describe 'neutron::plugins::ml2::cisco::type_nexus_vxlan' do
       let :facts do
         @default_facts.merge(test_facts.merge({
            :osfamily               => 'RedHat',
-           :operatingsystemrelease => '7'
+           :operatingsystemrelease => '7',
+           :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
         }))
       end
 

@@ -112,7 +112,8 @@ describe 'neutron::agents::metering' do
   context 'on Debian platforms' do
     let :facts do
       @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian'
+         :osfamily => 'Debian',
+         :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
       }))
     end
 
@@ -132,7 +133,8 @@ describe 'neutron::agents::metering' do
     let :facts do
       @default_facts.merge(test_facts.merge({
          :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7'
+         :operatingsystemrelease => '7',
+         :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
       }))
     end
 

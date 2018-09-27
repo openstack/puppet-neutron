@@ -93,7 +93,8 @@ describe 'neutron::agents::vpnaas' do
   context 'on Debian platforms' do
     let :facts do
       @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian'
+         :osfamily => 'Debian',
+         :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
       }))
     end
 
@@ -122,6 +123,7 @@ describe 'neutron::agents::vpnaas' do
       @default_facts.merge(test_facts.merge(
         { :osfamily                  => 'RedHat',
           :operatingsystemrelease    => '6.5',
+          :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '6', :minor => '5' } },
           :operatingsystemmajrelease => 6 }))
     end
 
@@ -138,6 +140,7 @@ describe 'neutron::agents::vpnaas' do
       @default_facts.merge(test_facts.merge(
         { :osfamily                  => 'RedHat',
           :operatingsystemrelease    => '7.1.2',
+          :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '1.2' } },
           :operatingsystemmajrelease => 7 }))
     end
 

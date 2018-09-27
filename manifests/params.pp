@@ -5,7 +5,8 @@
 class neutron::params {
   include ::openstacklib::defaults
 
-  if ($::os_package_type == 'debian') {
+  if ($::os_package_type == 'debian') or ($::os['name'] == 'Fedora') or
+     ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
     $pyvers = '3'
   } else {
     $pyvers = ''
@@ -75,8 +76,8 @@ class neutron::params {
     $metering_agent_package             = 'openstack-neutron-metering-agent'
     $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
     $l2gw_agent_package                 = 'openstack-neutron-l2gw-agent'
-    $l2gw_package                       = 'python2-networking-l2gw'
-    $ovn_metadata_agent_package         = 'python-networking-ovn-metadata-agent'
+    $l2gw_package                       = "python${pyvers}-networking-l2gw"
+    $ovn_metadata_agent_package         = "python${pyvers}-networking-ovn-metadata-agent"
     $dynamic_routing_package            = false
     $bgp_dragent_package                = 'openstack-neutron-bgp-dragent'
     if $::operatingsystemrelease =~ /^7.*/ or $::operatingsystem == 'Fedora' {
@@ -93,7 +94,7 @@ class neutron::params {
     $networking_baremetal_package       = 'python2-networking-baremetal'
     $networking_baremetal_agent_package = 'python2-ironic-neutron-agent'
     $networking_baremetal_agent_service = 'ironic-neutron-agent'
-    $networking_ansible_package         = 'python2-networking-ansible'
+    $networking_ansible_package         = "python${pyvers}-networking-ansible"
   } elsif($::osfamily == 'Debian') {
     $nobody_user_group          = 'nogroup'
     $package_name               = 'neutron-common'
@@ -115,8 +116,8 @@ class neutron::params {
       $api_service_name         = false
       $rpc_package_name         = false
       $rpc_service_name         = false
-      $dynamic_routing_package  = 'python-neutron-dynamic-routing'
-      $lbaas_package            = 'python-neutron-lbaas'
+      $dynamic_routing_package  = "python${pyvers}-neutron-dynamic-routing"
+      $lbaas_package            = "python${pyvers}-neutron-lbaas"
     }
     $bgp_dragent_package        = 'neutron-bgp-dragent'
     $ovs_agent_package          = 'neutron-openvswitch-agent'

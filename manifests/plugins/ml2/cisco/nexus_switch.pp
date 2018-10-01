@@ -91,18 +91,13 @@
 # to skip https certification checking thus making the connection
 # insecure.  Getting a certificate and setting https_verify to True
 # is strongly advised for production to prevent man-in-the-middle
-# attacks.  Be advised the default will change from False to True
-# in future releases.
+# attacks.  The default is true for a secure connection.
 #
 # [*https_local_certificate*]
 # (optional) Configure a local certificate file to present in https
 # requests.  For experimental purpose when an official certificate
 # from a Trusted Certificate Authority is not yet available.
 #
-# DEPRECATED
-# [*ssh_port*]
-# (optional)  This configuration item is deprecated.
-# The SSH port to use when connecting to the switch.
 #
 define neutron::plugins::ml2::cisco::nexus_switch(
   $username,
@@ -110,7 +105,6 @@ define neutron::plugins::ml2::cisco::nexus_switch(
   $ip_address,
   $servers,
   $switchname   = $title,
-  $ssh_port     = $::os_service_default,
   $nve_src_intf = $::os_service_default,
   $physnet      = $::os_service_default,
   $vpc_pool     = $::os_service_default,
@@ -122,22 +116,17 @@ define neutron::plugins::ml2::cisco::nexus_switch(
   include ::neutron::deps
 
   $section = "ML2_MECH_CISCO_NEXUS:${ip_address}"
+  $port_mappings = template("neutron/nexus_switch_port_mappings.erb")
   neutron_plugin_ml2 {
     "${section}/username":       value => $username;
     "${section}/password":       value => $password, secret => true;
+    "${section}/host_ports_mapping": value => $port_mappings;
     "${section}/nve_src_intf":   value => $nve_src_intf;
     "${section}/physnet":        value => $physnet;
     "${section}/vpc_pool":       value => $vpc_pool;
     "${section}/intfcfg_portchannel":  value => $intfcfg_portchannel;
     "${section}/https_verify":  value => $https_verify;
     "${section}/https_local_certificate":  value => $https_local_certificate;
-    #DEPRECATED ARGS
-    "${section}/ssh_port":       value => $ssh_port;
   }
 
-  $server_defaults = {
-    'switch_ip_address' => $ip_address
-  }
-  create_resources(neutron::plugins::ml2::cisco::nexus_switch_server,
-    $servers, $server_defaults)
 }

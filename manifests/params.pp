@@ -85,6 +85,7 @@ class neutron::params {
       $openswan_package = 'openswan'
     }
     $libreswan_package                  = 'libreswan'
+    $metadata_agent_package             = false
     $l3_agent_package                   = false
     $lbaas_package                      = false
     $fwaas_package                      = 'openstack-neutron-fwaas'

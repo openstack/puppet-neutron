@@ -64,7 +64,8 @@ describe 'neutron::plugins::ml2::cisco::vts' do
     let :facts do
       @default_facts.merge(test_facts.merge({
          :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7'
+         :operatingsystemrelease => '7',
+         :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
       }))
     end
     it_configures 'neutron plugin ml2 cisco vts'
@@ -74,6 +75,7 @@ describe 'neutron::plugins::ml2::cisco::vts' do
       let :facts do
         @default_facts.merge(test_facts.merge({
           :osfamily               => 'Debian',
+          :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
       }))
     end
     it_configures 'neutron plugin ml2 cisco vts'

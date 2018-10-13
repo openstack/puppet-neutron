@@ -74,5 +74,5 @@
     ],
     "source": "git://github.com/openstack/puppet-neutron.git",
     "summary": "Puppet module for OpenStack Neutron",
-    "version": "13.3.0"
+    "version": "13.3.1"
 }

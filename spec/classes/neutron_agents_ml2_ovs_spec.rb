@@ -46,6 +46,7 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_neutron_agent_ovs('agent/drop_flows_on_start').with_value(p[:drop_flows_on_start])
       is_expected.to contain_neutron_agent_ovs('agent/extensions').with_value(['<SERVICE DEFAULT>'])
       is_expected.to contain_neutron_agent_ovs('agent/minimize_polling').with_value(['<SERVICE DEFAULT>'])
+      is_expected.to contain_neutron_agent_ovs('agent/tunnel_csum').with_value(['<SERVICE DEFAULT>'])
       is_expected.to contain_neutron_agent_ovs('ovs/datapath_type').with_value(['<SERVICE DEFAULT>'])
       is_expected.to contain_neutron_agent_ovs('ovs/vhostuser_socket_dir').with_value(['<SERVICE DEFAULT>'])
       is_expected.to contain_neutron_agent_ovs('ovs/ovsdb_interface').with_value(['<SERVICE DEFAULT>'])

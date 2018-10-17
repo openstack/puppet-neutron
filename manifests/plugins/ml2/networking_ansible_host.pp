@@ -19,12 +19,16 @@
 # [*hostname*]
 # (required) The hostname of a host connected to the switch.
 #
+# [*manage_vlans*]
+# Should networking-ansible create and delete VLANs on the device.
+#
 define neutron::plugins::ml2::networking_ansible_host(
   $ansible_network_os,
   $ansible_host,
   $ansible_user,
   $ansible_ssh_pass,
-  $hostname = $title,
+  $hostname     = $title,
+  $manage_vlans = undef,
   ) {
   include ::neutron::deps
   require ::neutron::plugins::ml2
@@ -35,5 +39,6 @@ define neutron::plugins::ml2::networking_ansible_host(
     "${section}/ansible_host":         value => $ansible_host;
     "${section}/ansible_user":         value => $ansible_user;
     "${section}/ansible_ssh_pass":     value => $ansible_ssh_pass, secret => true;
+    "${section}/manage_vlans":         value => $manage_vlans;
   }
 }

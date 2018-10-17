@@ -16,7 +16,8 @@
 #     <host2> => {"ansible_network_os" => "junos",
 #                 "ansible_host" => "10.0.0.2",
 #                 "ansible_user" => 'ansible',
-#                 "ansible_ssh_private_key_file" => "/private/key"},
+#                 "ansible_ssh_private_key_file" => "/private/key",
+#                 "manage_vlans" => false},
 #  }
 #
 # [*package_ensure*]

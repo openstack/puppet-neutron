@@ -13,16 +13,19 @@ describe 'neutron::plugins::nsx' do
 
   let :default_params do
   {
-    :default_overlay_tz   => '<SERVICE DEFAULT>',
-    :default_tier0_router => '<SERVICE DEFAULT>',
-    :nsx_api_managers     => '<SERVICE DEFAULT>',
-    :nsx_api_user         => '<SERVICE DEFAULT>',
-    :nsx_api_password     => '<SERVICE DEFAULT>',
-    :dhcp_profile_uuid    => '<SERVICE DEFAULT>',
-    :metadata_proxy_uuid  => '<SERVICE DEFAULT>',
-    :native_dhcp_metadata => '<SERVICE DEFAULT>',
-    :package_ensure       => 'present',
-    :purge_config         => false,
+    :default_overlay_tz     => '<SERVICE DEFAULT>',
+    :default_vlan_tz        => '<SERVICE DEFAULT>',
+    :default_bridge_cluster => '<SERVICE DEFAULT>',
+    :default_tier0_router   => '<SERVICE DEFAULT>',
+    :nsx_api_managers       => '<SERVICE DEFAULT>',
+    :nsx_api_user           => '<SERVICE DEFAULT>',
+    :nsx_api_password       => '<SERVICE DEFAULT>',
+    :dhcp_profile           => '<SERVICE DEFAULT>',
+    :dhcp_relay_service     => '<SERVICE DEFAULT>',
+    :metadata_proxy         => '<SERVICE DEFAULT>',
+    :native_dhcp_metadata   => '<SERVICE DEFAULT>',
+    :package_ensure         => 'present',
+    :purge_config           => false,
   }
   end
 
@@ -52,11 +55,14 @@ describe 'neutron::plugins::nsx' do
 
       it 'should configure nsx.ini' do
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_overlay_tz').with_value(default_params[:default_overlay_tz])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_vlan_tz').with_value(default_params[:default_vlan_tz])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_bridge_cluster').with_value(default_params[:default_bridge_cluster])
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_tier0_router').with_value(default_params[:default_tier0_router])
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/nsx_api_managers').with_value(default_params[:nsx_api_managers])
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/nsx_api_password').with_value(default_params[:nsx_api_password])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_profile_uuid').with_value(default_params[:dhcp_profile_uuid])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/metadata_proxy_uuid').with_value(default_params[:metadata_proxy_uuid])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_profile').with_value(default_params[:dhcp_profile])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_relay_service').with_value(default_params[:dhcp_relay_service])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/metadata_proxy').with_value(default_params[:metadata_proxy])
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/native_dhcp_metadata').with_value(default_params[:native_dhcp_metadata])
       end
     end
@@ -64,25 +70,31 @@ describe 'neutron::plugins::nsx' do
     context 'with parameters' do
       let (:params) do
         {
-          :default_overlay_tz   => 'fake-tz-uuid',
-          :default_tier0_router => 'fake-tier0-uuid',
-          :nsx_api_managers     => '127.0.0.1',
-          :nsx_api_user         => 'admin',
-          :nsx_api_password     => 'pasword',
-          :dhcp_profile_uuid    => 'fake-dhcp-uuid',
-          :metadata_proxy_uuid  => 'fake-metadata-uuid',
-          :native_dhcp_metadata => 'True',
-          :purge_config         => true,
+          :default_overlay_tz     => 'fake-overlay-tz-uuid',
+          :default_vlan_tz        => 'fake-vlan-tz-uuid',
+          :default_bridge_cluster => 'fake-bridge-cluster-uuid',
+          :default_tier0_router   => 'fake-tier0-uuid',
+          :nsx_api_managers       => '127.0.0.1',
+          :nsx_api_user           => 'admin',
+          :nsx_api_password       => 'pasword',
+          :dhcp_profile           => 'fake-dhcp-uuid',
+          :dhcp_relay_service     => 'fake-dhcp-relay-service',
+          :metadata_proxy         => 'fake-metadata-uuid',
+          :native_dhcp_metadata   => 'True',
+          :purge_config           => true,
         }
       end
 
       it {
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_overlay_tz').with_value(params[:default_overlay_tz])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_vlan_tz').with_value(params[:default_vlan_tz])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_bridge_cluster').with_value(params[:default_bridge_cluster])
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_tier0_router').with_value(params[:default_tier0_router])
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/nsx_api_managers').with_value(params[:nsx_api_managers])
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/nsx_api_password').with_value(params[:nsx_api_password])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_profile_uuid').with_value(params[:dhcp_profile_uuid])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/metadata_proxy_uuid').with_value(params[:metadata_proxy_uuid])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_profile').with_value(params[:dhcp_profile])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_relay_service').with_value(params[:dhcp_relay_service])
+        is_expected.to contain_neutron_plugin_nsx('nsx_v3/metadata_proxy').with_value(params[:metadata_proxy])
         is_expected.to contain_neutron_plugin_nsx('nsx_v3/native_dhcp_metadata').with_value(params[:native_dhcp_metadata])
         is_expected.to contain_resources('neutron_plugin_nsx').with({
           :purge => true

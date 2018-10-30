@@ -16,28 +16,30 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Advanced validation when using GRE
+# Advanced validation for VLAN configuration
 #
-
-module Puppet::Parser::Functions
-  newfunction(:validate_tunnel_id_ranges) do |args|
+Puppet::Functions.create_function(:validate_network_vlan_ranges) do
+  def validate_network_vlan_ranges(*args)
     value = args[0]
     if not value.kind_of?(Array)
       value = [value]
     end
 
     value.each do |range|
-      if m = /^(\d+):(\d+)$/.match(range)
-        first_id = Integer(m[1])
-        second_id = Integer(m[2])
-        if ((second_id - first_id) > 1000000)
-          raise Puppet::Error, "tunnel id ranges are to large."
+      if m = /^(.+:)?(\d+):(\d+)$/.match(range)
+        first_id = Integer(m[-2])
+        second_id = Integer(m[-1])
+        if (first_id > 4094) || (second_id > 4094)
+          raise Puppet::Error, "vlan id are invalid."
         end
         if ((second_id - first_id) < 0 )
-          raise Puppet::Error, "tunnel id ranges are invalid."
+          raise Puppet::Error, "network vlan ranges are invalid."
         end
+      elsif m = /^([^:]+)?(:\d+)?$/.match(range)
+        # Either only name of physical network or single vlan id has
+        # been passed. This is also correct.
       elsif range
-        raise Puppet::Error, "tunnel id ranges are invalid."
+        raise Puppet::Error, "network vlan ranges are invalid."
       end
     end
   end

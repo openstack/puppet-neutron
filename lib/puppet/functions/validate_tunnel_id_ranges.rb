@@ -16,11 +16,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Advanced validation when using VXLAN
+# Advanced validation when using GRE
 #
-
-module Puppet::Parser::Functions
-  newfunction(:validate_vni_ranges) do |args|
+Puppet::Functions.create_function(:validate_tunnel_id_ranges) do
+  def validate_tunnel_id_ranges(*args)
     value = args[0]
     if not value.kind_of?(Array)
       value = [value]
@@ -30,17 +29,14 @@ module Puppet::Parser::Functions
       if m = /^(\d+):(\d+)$/.match(range)
         first_id = Integer(m[1])
         second_id = Integer(m[2])
-        if not (0 <= first_id && first_id <= 16777215)
-          raise Puppet::Error, "vni ranges are invalid."
+        if ((second_id - first_id) > 1000000)
+          raise Puppet::Error, "tunnel id ranges are to large."
         end
-        if not (0 <= second_id && second_id <= 16777215)
-          raise Puppet::Error, "vni ranges are invalid."
-        end
-        if (second_id < first_id)
-          raise Puppet::Error, "vni ranges are invalid."
+        if ((second_id - first_id) < 0 )
+          raise Puppet::Error, "tunnel id ranges are invalid."
         end
       elsif range
-        raise Puppet::Error, "vni ranges are invalid."
+        raise Puppet::Error, "tunnel id ranges are invalid."
       end
     end
   end

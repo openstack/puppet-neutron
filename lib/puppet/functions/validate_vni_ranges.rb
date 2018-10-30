@@ -16,31 +16,30 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Advanced validation for VLAN configuration
+# Advanced validation when using VXLAN
 #
-
-module Puppet::Parser::Functions
-  newfunction(:validate_network_vlan_ranges) do |args|
+Puppet::Functions.create_function(:validate_vni_ranges) do
+  def validate_vni_ranges(*args)
     value = args[0]
     if not value.kind_of?(Array)
       value = [value]
     end
 
     value.each do |range|
-      if m = /^(.+:)?(\d+):(\d+)$/.match(range)
-        first_id = Integer(m[-2])
-        second_id = Integer(m[-1])
-        if (first_id > 4094) || (second_id > 4094)
-          raise Puppet::Error, "vlan id are invalid."
+      if m = /^(\d+):(\d+)$/.match(range)
+        first_id = Integer(m[1])
+        second_id = Integer(m[2])
+        if not (0 <= first_id && first_id <= 16777215)
+          raise Puppet::Error, "vni ranges are invalid."
         end
-        if ((second_id - first_id) < 0 )
-          raise Puppet::Error, "network vlan ranges are invalid."
+        if not (0 <= second_id && second_id <= 16777215)
+          raise Puppet::Error, "vni ranges are invalid."
         end
-      elsif m = /^([^:]+)?(:\d+)?$/.match(range)
-        # Either only name of physical network or single vlan id has
-        # been passed. This is also correct.
+        if (second_id < first_id)
+          raise Puppet::Error, "vni ranges are invalid."
+        end
       elsif range
-        raise Puppet::Error, "network vlan ranges are invalid."
+        raise Puppet::Error, "vni ranges are invalid."
       end
     end
   end

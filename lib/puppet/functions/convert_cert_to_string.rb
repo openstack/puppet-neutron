@@ -5,7 +5,7 @@ Puppet::Functions.create_function(:convert_cert_to_string) do
 
   def convert_cert_to_string(cert_file)
     unless File.file?(cert_file)
-      raise puppet::ParseError, "Certificate file not found: #{cert_file}"
+      raise Puppet::ParseError, "Certificate file not found: #{cert_file}"
     end
     text=File.readlines(cert_file)
     cert_string = ''

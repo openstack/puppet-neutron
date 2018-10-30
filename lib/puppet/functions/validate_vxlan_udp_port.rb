@@ -18,9 +18,8 @@
 #
 # Advanced validation for VXLAN UDP port configuration
 #
-
-module Puppet::Parser::Functions
-  newfunction(:validate_vxlan_udp_port) do |args|
+Puppet::Functions.create_function(:validate_vxlan_udp_port) do
+  def validate_vxlan_udp_port(*args)
     value = Integer(args[0])
 
     # check if port is either default value or one of the private ports

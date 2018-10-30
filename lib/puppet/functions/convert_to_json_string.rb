@@ -1,5 +1,5 @@
-module Puppet::Parser::Functions
-  newfunction(:convert_to_json_string, :type => :rvalue) do |args|
+Puppet::Functions.create_function(:convert_to_json_string) do
+  def convert_to_json_string(*args)
     require 'json'
     value = args[0]
     if (value.kind_of? Array) && value.all? {|x| x.include? ":"}

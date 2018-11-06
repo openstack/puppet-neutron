@@ -1,0 +1,1 @@
+<%- @servers.each_with_index do |(server, value), index| -%><%= value['hostname'] -%><%= ':' %>[<%= value['ports'] %>]<%= ',' if index < (@servers.size - 1) %><%- end -%>

@@ -47,9 +47,6 @@
 # [*ip_address*]
 # (required) The IP address of the switch.
 #
-# [*ssh_port*]
-# (not used) The SSH port to use when connecting to the switch.
-#
 # [*nve_src_intf*]
 # (not used) Only valid if VXLAN overlay is configured and
 # vxlan_global_config is set to True.
@@ -94,8 +91,7 @@
 # to skip https certification checking thus making the connection
 # insecure.  Getting a certificate and setting https_verify to True
 # is strongly advised for production to prevent man-in-the-middle
-# attacks.  Be advised the default will change from False to True
-# in future releases.
+# attacks.  The default is True for a secure connection.
 #
 # Defaults to undef.
 #
@@ -113,7 +109,6 @@ define neutron::plugins::ml2::cisco::nexus_creds(
   $username,
   $password,
   $servers,
-  $ssh_port,
   # Used parameters
   $ip_address,
   $nve_src_intf = undef,

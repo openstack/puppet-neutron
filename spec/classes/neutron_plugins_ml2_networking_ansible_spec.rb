@@ -22,6 +22,7 @@ describe 'neutron::plugins::ml2::networking_ansible' do
                      'ansible_host' => '10.0.0.1',
                      'ansible_user' => 'ansible',
                      'ansible_ssh_pass' => 'password2',
+                     'mac' => '01:23:45:67:89:AB',
                      'manage_vlans' => false},}
     }
   end
@@ -45,6 +46,9 @@ describe 'neutron::plugins::ml2::networking_ansible' do
     it {
      params[:host_configs].each do |host_config|
        is_expected.to contain_neutron__plugins__ml2__networking_ansible_host(host_config.first)
+
+       is_expected.to contain_neutron_plugin_ml2('ansible:host1/mac').with_value(nil)
+       is_expected.to contain_neutron_plugin_ml2('ansible:host2/mac').with_value('01:23:45:67:89:AB')
 
        is_expected.to contain_neutron_plugin_ml2('ansible:host1/manage_vlans').with_value(nil)
        is_expected.to contain_neutron_plugin_ml2('ansible:host2/manage_vlans').with_value(false)

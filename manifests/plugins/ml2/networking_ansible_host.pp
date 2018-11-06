@@ -17,10 +17,14 @@
 #   (required) SSH password to connect to the network device
 #
 # [*hostname*]
-# (required) The hostname of a host connected to the switch.
+#   (required) The hostname of a host connected to the switch.
+#
+# [*mac*]
+#   Chassis MAC ID of the network device. Used to map lldp provided value
+#   to the hostname when using ironic introspection.
 #
 # [*manage_vlans*]
-# Should networking-ansible create and delete VLANs on the device.
+#   Should networking-ansible create and delete VLANs on the device.
 #
 define neutron::plugins::ml2::networking_ansible_host(
   $ansible_network_os,
@@ -29,6 +33,7 @@ define neutron::plugins::ml2::networking_ansible_host(
   $ansible_ssh_pass,
   $hostname     = $title,
   $manage_vlans = undef,
+  $mac                          = undef,
   ) {
   include ::neutron::deps
   require ::neutron::plugins::ml2
@@ -39,6 +44,7 @@ define neutron::plugins::ml2::networking_ansible_host(
     "${section}/ansible_host":         value => $ansible_host;
     "${section}/ansible_user":         value => $ansible_user;
     "${section}/ansible_ssh_pass":     value => $ansible_ssh_pass, secret => true;
+    "${section}/mac":                          value => $mac;
     "${section}/manage_vlans":         value => $manage_vlans;
   }
 }

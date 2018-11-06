@@ -17,6 +17,7 @@
 #                 "ansible_host" => "10.0.0.2",
 #                 "ansible_user" => 'ansible',
 #                 "ansible_ssh_pass" => "***",
+#                 "mac" => "01:23:45:67:89:AB",
 #                 "manage_vlans" => false},
 #  }
 #

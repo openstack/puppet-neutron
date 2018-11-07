@@ -48,9 +48,6 @@
 # [*dhcp_agent_config*]
 #   (optional) Manage configuration of dhcp_agent.ini
 #
-# [*lbaas_agent_config*]
-#   (optional) Manage configuration of lbaas_agent.ini
-#
 # [*metadata_agent_config*]
 #   (optional) Manage configuration of metadata_agent.ini
 #
@@ -102,6 +99,11 @@
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
+#### DEPRECATED
+#
+# [*lbaas_agent_config*]
+#   (optional) Manage configuration of lbaas_agent.ini
+#
 class neutron::config (
   $server_config                 = {},
   $api_config                    = {},
@@ -112,7 +114,6 @@ class neutron::config (
   $sfc_service_config            = {},
   $l3_agent_config               = {},
   $dhcp_agent_config             = {},
-  $lbaas_agent_config            = {},
   $metadata_agent_config         = {},
   $ovn_metadata_agent_config     = {},
   $metering_agent_config         = {},
@@ -129,6 +130,8 @@ class neutron::config (
   $plugin_ml2_config             = {},
   $plugin_nsx_config             = {},
   $plugin_nvp_config             = {},
+### DEPRECATED PARAMS
+  $lbaas_agent_config            = undef,
 ) {
 
   include ::neutron::deps
@@ -142,7 +145,6 @@ class neutron::config (
   validate_hash($sfc_service_config)
   validate_hash($l3_agent_config)
   validate_hash($dhcp_agent_config)
-  validate_hash($lbaas_agent_config)
   validate_hash($metadata_agent_config)
   validate_hash($ovn_metadata_agent_config)
   validate_hash($metering_agent_config)
@@ -160,6 +162,13 @@ class neutron::config (
   validate_hash($plugin_nsx_config)
   validate_hash($plugin_nvp_config)
 
+  if $lbaas_agent_config {
+    validate_hash($lbaas_agent_config)
+
+    warning('neutron::config::lbaas_agent_config is deprecated and will be removed in a future release')
+    create_resources('neutron_lbaas_agent_config', $lbaas_agent_config)
+  }
+
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_config', $api_config)
   create_resources('neutron_bgpvpn_bagpipe_config', $bgpvpn_bagpipe_config)
@@ -168,7 +177,6 @@ class neutron::config (
   create_resources('neutron_sfc_service_config', $sfc_service_config)
   create_resources('neutron_l3_agent_config', $l3_agent_config)
   create_resources('neutron_dhcp_agent_config', $dhcp_agent_config)
-  create_resources('neutron_lbaas_agent_config', $lbaas_agent_config)
   create_resources('neutron_metadata_agent_config', $metadata_agent_config)
   create_resources('neutron_metering_agent_config', $metering_agent_config)
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)

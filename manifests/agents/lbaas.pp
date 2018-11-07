@@ -57,6 +57,8 @@ class neutron::agents::lbaas (
   include ::neutron::deps
   include ::neutron::params
 
+  warning('neutron::agents::lbaas is deprecated and will be removed in a future release')
+
   case $device_driver {
     /\.haproxy/: {
       Package <| title == $::neutron::params::haproxy_package |> -> Package <| title == 'neutron-lbaasv2-agent' |>

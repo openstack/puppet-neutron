@@ -192,11 +192,6 @@
 #   (Optional) Allow auto scheduling networks to DHCP agent
 #   Defaults to $::os_service_default.
 #
-# [*ensure_lbaas_package*]
-#   (Optional) Ensures installation of LBaaS package before starting API service.
-#   Set to true to ensure installation of the package that is required to start neutron service if lbaasv2 service_plugin is enabled.
-#   Defaults to false.
-#
 # [*ensure_vpnaas_package*]
 #   (Optional) Ensures installation of VPNaaS package before starting API service.
 #   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
@@ -246,6 +241,13 @@
 #   (Optional) Name of Open vSwitch bridge to use
 #   Defaults to $::os_service_default
 #
+### DEPRECATED PARAMS
+#
+# [*ensure_lbaas_package*]
+#   (Optional) Ensures installation of LBaaS package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if lbaasv2 service_plugin is enabled.
+#   Defaults to false.
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -281,7 +283,6 @@ class neutron::server (
   $max_l3_agents_per_router         = 3,
   $l3_ha_net_cidr                   = $::os_service_default,
   $network_auto_schedule            = $::os_service_default,
-  $ensure_lbaas_package             = false,
   $ensure_vpnaas_package            = false,
   $ensure_fwaas_package             = false,
   $ensure_dr_package                = false,
@@ -290,6 +291,8 @@ class neutron::server (
   $auth_strategy                    = 'keystone',
   $enable_proxy_headers_parsing     = $::os_service_default,
   $ovs_integration_bridge           = $::os_service_default,
+### DEPRECATED PARAMS
+  $ensure_lbaas_package             = false,
 ) inherits ::neutron::params {
 
   include ::neutron::deps
@@ -339,6 +342,8 @@ class neutron::server (
   }
 
   if $ensure_lbaas_package {
+    warning('neutron::server::ensure_lbaas_package is deprecated and will be removed in a future release')
+
     if $::neutron::params::lbaas_package {
       ensure_packages('neutron-lbaas', {
         ensure => $package_ensure,

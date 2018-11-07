@@ -1,0 +1,18 @@
+---
+deprecations:
+  - |
+    Neutron LBaaS is deprecated since Queens so all the following resources
+    and parameters are deprecated and will be removed in a future release:
+
+    - ``neutron::agents::lbaas``
+    - ``neutron::config::lbaas_agent_config``
+    - ``neutron::server::ensure_lbaas_package``
+    - ``neutron::services::lbaas``
+    - ``neutron::services::lbaas::haproxy``
+    - ``neutron::services::lbaas::octavia``
+
+    Please see the following link for more information on this deprecation:
+    https://wiki.openstack.org/wiki/Neutron/LBaaS/Deprecation
+
+    You should use the Octavia project to implement LBaaS.
+    https://docs.openstack.org/octavia/latest/reference/introduction.html

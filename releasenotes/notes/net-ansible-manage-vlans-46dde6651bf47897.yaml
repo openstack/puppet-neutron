@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Added support for networking-ansible's manage_vlans parameter

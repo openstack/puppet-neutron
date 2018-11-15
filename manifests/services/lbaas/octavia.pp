@@ -94,6 +94,8 @@ class neutron::services::lbaas::octavia(
 
   include ::neutron::deps
 
+  warning('neutron::services::lbaas::octavia is deprecated and will be removed in a future release')
+
   neutron_config {
     'octavia/base_url':              value => $base_url;
     'octavia/request_poll_interval': value => $request_poll_interval;

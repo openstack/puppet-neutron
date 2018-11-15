@@ -59,6 +59,8 @@ class neutron::services::lbaas::haproxy(
 
   include ::neutron::deps
 
+  warning('neutron::services::lbaas::haproxy is deprecated and will be removed in a future release')
+
   neutron_config {
     'haproxy/interface_driver':         value => $interface_driver;
     'haproxy/periodic_interval':        value => $periodic_interval;

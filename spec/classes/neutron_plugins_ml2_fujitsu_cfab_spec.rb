@@ -1,11 +1,6 @@
-#
-# Unit tests for neutron::plugins::ml2::fujitsu::cfab class
-#
-
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::fujitsu::cfab' do
-
   let :pre_condition do
     "class { '::neutron::keystone::authtoken':
       password => 'passw0rd',
@@ -31,27 +26,20 @@ describe 'neutron::plugins::ml2::fujitsu::cfab' do
     {}
   end
 
-  let :test_facts do
-    { :operatingsystem        => 'default',
-      :operatingsystemrelease => 'default',
-      :concat_basedir         => '/',
-    }
-  end
-
-  shared_examples_for 'neutron fujitsu ml2 cfab plugin' do
+  shared_examples 'neutron fujitsu ml2 cfab plugin' do
 
     before do
       params.merge!(default_params)
     end
 
     it do
-      is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/address').with_value(params[:address])
-      is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/username').with_value(params[:username])
-      is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/password').with_value(params[:password]).with_secret(true)
-      is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/physical_networks').with_value(params[:physical_networks])
-      is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/share_pprofile').with_value(params[:share_pprofile])
-      is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/pprofile_prefix').with_value(params[:pprofile_prefix])
-      is_expected.to contain_neutron_plugin_ml2('fujitsu_cfab/save_config').with_value(params[:save_config])
+      should contain_neutron_plugin_ml2('fujitsu_cfab/address').with_value(params[:address])
+      should contain_neutron_plugin_ml2('fujitsu_cfab/username').with_value(params[:username])
+      should contain_neutron_plugin_ml2('fujitsu_cfab/password').with_value(params[:password]).with_secret(true)
+      should contain_neutron_plugin_ml2('fujitsu_cfab/physical_networks').with_value(params[:physical_networks])
+      should contain_neutron_plugin_ml2('fujitsu_cfab/share_pprofile').with_value(params[:share_pprofile])
+      should contain_neutron_plugin_ml2('fujitsu_cfab/pprofile_prefix').with_value(params[:pprofile_prefix])
+      should contain_neutron_plugin_ml2('fujitsu_cfab/save_config').with_value(params[:save_config])
     end
 
   end
@@ -64,7 +52,7 @@ describe 'neutron::plugins::ml2::fujitsu::cfab' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'neutron fujitsu ml2 cfab plugin'
+      it_behaves_like 'neutron fujitsu ml2 cfab plugin'
     end
   end
 end

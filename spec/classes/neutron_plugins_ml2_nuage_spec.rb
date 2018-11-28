@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::nuage' do
-
   let :pre_condition do
     "class { '::neutron':
        core_plugin     => 'ml2' }
@@ -11,12 +10,6 @@ describe 'neutron::plugins::ml2::nuage' do
      class { 'neutron::server': }
      class { '::neutron::plugins::ml2':
        mechanism_drivers => ['nuage'] }"
-  end
-
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
-    }
   end
 
   let :params do
@@ -32,22 +25,22 @@ describe 'neutron::plugins::ml2::nuage' do
         :nuage_default_allow_non_ip => false,}
   end
 
-  shared_examples_for 'neutron plugin ml2 nuage' do
+  shared_examples 'neutron plugin ml2 nuage' do
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'configures neutron.conf' do
-      is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('ml2')
+      should contain_neutron_config('DEFAULT/core_plugin').with_value('ml2')
     end
 
     it 'passes purge to resource' do
-      is_expected.to contain_resources('neutron_plugin_nuage').with({
+      should contain_resources('neutron_plugin_nuage').with({
         :purge => false
       })
     end
 
     it 'should have a nuage plugin ini file' do
-      is_expected.to contain_file('/etc/neutron/plugins/nuage/plugin.ini').with(
+      should contain_file('/etc/neutron/plugins/nuage/plugin.ini').with(
         :ensure => 'file',
         :owner  => 'root',
         :group  => 'neutron',
@@ -56,11 +49,11 @@ describe 'neutron::plugins::ml2::nuage' do
     end
 
     it 'should configure plugin.ini' do
-      is_expected.to contain_neutron_plugin_nuage('RESTPROXY/default_net_partition_name').with_value(params[:nuage_net_partition_name])
-      is_expected.to contain_neutron_plugin_nuage('RESTPROXY/server').with_value(params[:nuage_vsd_ip])
-      is_expected.to contain_neutron_plugin_nuage('RESTPROXY/organization').with_value(params[:nuage_vsd_organization])
-      is_expected.to contain_neutron_plugin_nuage('RESTPROXY/cms_id').with_value(params[:nuage_cms_id])
-      is_expected.to contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(params[:nuage_default_allow_non_ip])
+      should contain_neutron_plugin_nuage('RESTPROXY/default_net_partition_name').with_value(params[:nuage_net_partition_name])
+      should contain_neutron_plugin_nuage('RESTPROXY/server').with_value(params[:nuage_vsd_ip])
+      should contain_neutron_plugin_nuage('RESTPROXY/organization').with_value(params[:nuage_vsd_organization])
+      should contain_neutron_plugin_nuage('RESTPROXY/cms_id').with_value(params[:nuage_cms_id])
+      should contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(params[:nuage_default_allow_non_ip])
     end
 
     context 'configure ml2 nuage with wrong core_plugin configuration' do
@@ -69,11 +62,11 @@ describe 'neutron::plugins::ml2::nuage' do
           core_plugin     => 'foo' }"
       end
 
-      it_raises 'a Puppet::Error', /Nuage should be the mechanism driver in neutron.conf/
+      it { should raise_error(Puppet::Error, /Nuage should be the mechanism driver in neutron.conf/) }
     end
 
     it 'should have a nuage plugin conf file' do
-      is_expected.to contain_file(platform_params[:nuage_conf_file]).with(
+      should contain_file(platform_params[:nuage_conf_file]).with(
         :ensure => platform_params[:nuage_file_ensure],
         :target => platform_params[:nuage_file_target]
       )
@@ -84,7 +77,7 @@ describe 'neutron::plugins::ml2::nuage' do
         params.merge!(:nuage_default_allow_non_ip => true)
       end
       it 'default_allow_non_ip is set to true' do
-        is_expected.to contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(true)
+        should contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(true)
       end
     end
 
@@ -94,7 +87,7 @@ describe 'neutron::plugins::ml2::nuage' do
           mechanism_drivers => ['bar'] }"
       end
 
-      it_raises 'a Puppet::Error', /Nuage should be the mechanism driver in neutron.conf/
+      it { should raise_error(Puppet::Error, /Nuage should be the mechanism driver in neutron.conf/) }
     end
   end
 
@@ -121,7 +114,7 @@ describe 'neutron::plugins::ml2::nuage' do
         end
       end
 
-      it_configures 'neutron plugin ml2 nuage'
+      it_behaves_like 'neutron plugin ml2 nuage'
     end
   end
 end

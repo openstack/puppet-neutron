@@ -18,27 +18,27 @@ describe 'neutron::agents::ml2::vpp' do
     {}
   end
 
-  shared_examples_for 'neutron plugin vpp agent with ml2 plugin' do
+  shared_examples 'neutron plugin vpp agent with ml2 plugin' do
     let :p do
       default_params.merge(params)
     end
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'passes purge to resource' do
-      is_expected.to contain_resources('neutron_agent_vpp').with({
+      should contain_resources('neutron_agent_vpp').with({
         :purge => false
       })
     end
 
     it 'configures plugins/ml2/vpp_agent.ini' do
-      is_expected.to contain_neutron_agent_vpp('ml2_vpp/physnets').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_agent_vpp('ml2_vpp/etcd_user').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_agent_vpp('ml2_vpp/etcd_pass').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_vpp('ml2_vpp/physnets').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_vpp('ml2_vpp/etcd_user').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_vpp('ml2_vpp/etcd_pass').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs neutron vpp agent package' do
-      is_expected.to contain_package('neutron-vpp-agent').with(
+      should contain_package('neutron-vpp-agent').with(
         :name   => platform_params[:vpp_plugin_package],
         :ensure => p[:package_ensure],
         :tag    => ['openstack', 'neutron-package'],
@@ -46,14 +46,14 @@ describe 'neutron::agents::ml2::vpp' do
     end
 
     it 'configures neutron vpp agent service' do
-      is_expected.to contain_service('neutron-vpp-agent-service').with(
+      should contain_service('neutron-vpp-agent-service').with(
         :name    => platform_params[:vpp_agent_service],
         :enable  => true,
         :ensure  => 'running',
         :tag     => ['neutron-service'],
       )
-      is_expected.to contain_service('neutron-vpp-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
-      is_expected.to contain_service('neutron-vpp-agent-service').that_notifies('Anchor[neutron::service::end]')
+      should contain_service('neutron-vpp-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      should contain_service('neutron-vpp-agent-service').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'with manage_service as false' do
@@ -61,7 +61,7 @@ describe 'neutron::agents::ml2::vpp' do
         params.merge!(:manage_service => false)
       end
       it 'should not start/stop service' do
-        is_expected.to contain_service('neutron-vpp-agent-service').without_ensure
+        should contain_service('neutron-vpp-agent-service').without_ensure
       end
     end
 
@@ -70,7 +70,7 @@ describe 'neutron::agents::ml2::vpp' do
         params.merge!(:physnets => 'physnet:GigabitEthernet2/2/0')
       end
       it 'should configure physnets' do
-        is_expected.to contain_neutron_agent_vpp('ml2_vpp/physnets').with_value('physnet:GigabitEthernet2/2/0')
+        should contain_neutron_agent_vpp('ml2_vpp/physnets').with_value('physnet:GigabitEthernet2/2/0')
       end
     end
 
@@ -80,8 +80,8 @@ describe 'neutron::agents::ml2::vpp' do
                       :etcd_pass => 'password' )
       end
       it 'should configure etcd username and password' do
-        is_expected.to contain_neutron_agent_vpp('ml2_vpp/etcd_user').with_value('admin')
-        is_expected.to contain_neutron_agent_vpp('ml2_vpp/etcd_pass').with_value('password')
+        should contain_neutron_agent_vpp('ml2_vpp/etcd_user').with_value('admin')
+        should contain_neutron_agent_vpp('ml2_vpp/etcd_pass').with_value('password')
       end
     end
   end

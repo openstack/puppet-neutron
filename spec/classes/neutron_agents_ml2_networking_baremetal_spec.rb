@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'neutron::agents::ml2::networking_baremetal' do
-
   let :default_params do
-    { :enabled             => true,
+    {
+      :enabled             => true,
       :manage_service      => true,
       :package_ensure      => 'present',
       :auth_type           => 'password',
@@ -18,69 +18,64 @@ describe 'neutron::agents::ml2::networking_baremetal' do
     }
   end
 
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
-    }
-  end
-
   let :params do
-    { :password => 'passw0rd',
+    {
+      :password => 'passw0rd',
     }
   end
 
-  shared_examples_for 'networking-baremetal ironic-neutron-agent with ml2 plugin' do
+  shared_examples 'networking-baremetal ironic-neutron-agent with ml2 plugin' do
     let :p do
       default_params.merge(params)
     end
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'passes purge to resource' do
-      is_expected.to contain_resources('ironic_neutron_agent_config').with({
+      should contain_resources('ironic_neutron_agent_config').with({
         :purge => false
       })
     end
 
     it 'configures /etc/neutron/plugins/ml2/ironic_neutron_agent.ini' do
-      is_expected.to contain_ironic_neutron_agent_config('ironic/auth_strategy').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_neutron_agent_config('ironic/ironic_url').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_neutron_agent_config('ironic/cafile').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_neutron_agent_config('ironic/certfile').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_neutron_agent_config('ironic/keyfile').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_neutron_agent_config('ironic/auth_type').with_value(p[:auth_type])
-      is_expected.to contain_ironic_neutron_agent_config('ironic/auth_url').with_value(p[:auth_url])
-      is_expected.to contain_ironic_neutron_agent_config('ironic/username').with_value(p[:username])
-      is_expected.to contain_ironic_neutron_agent_config('ironic/password').with_value(p[:password])
-      is_expected.to contain_ironic_neutron_agent_config('ironic/project_domain_id').with_value(p[:project_domain_id])
-      is_expected.to contain_ironic_neutron_agent_config('ironic/project_domain_name').with_value(p[:project_domain_name])
-      is_expected.to contain_ironic_neutron_agent_config('ironic/project_name').with_value(p[:project_name])
-      is_expected.to contain_ironic_neutron_agent_config('ironic/user_domain_id').with_value(p[:user_domain_id])
-      is_expected.to contain_ironic_neutron_agent_config('ironic/user_domain_name').with_value(p[:user_domain_name])
-      is_expected.to contain_ironic_neutron_agent_config('ironic/region_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_neutron_agent_config('ironic/retry_interval').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_neutron_agent_config('ironic/max_retries').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/auth_strategy').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/ironic_url').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/cafile').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/certfile').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/keyfile').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/auth_type').with_value(p[:auth_type])
+      should contain_ironic_neutron_agent_config('ironic/auth_url').with_value(p[:auth_url])
+      should contain_ironic_neutron_agent_config('ironic/username').with_value(p[:username])
+      should contain_ironic_neutron_agent_config('ironic/password').with_value(p[:password])
+      should contain_ironic_neutron_agent_config('ironic/project_domain_id').with_value(p[:project_domain_id])
+      should contain_ironic_neutron_agent_config('ironic/project_domain_name').with_value(p[:project_domain_name])
+      should contain_ironic_neutron_agent_config('ironic/project_name').with_value(p[:project_name])
+      should contain_ironic_neutron_agent_config('ironic/user_domain_id').with_value(p[:user_domain_id])
+      should contain_ironic_neutron_agent_config('ironic/user_domain_name').with_value(p[:user_domain_name])
+      should contain_ironic_neutron_agent_config('ironic/region_name').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/retry_interval').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/max_retries').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs ironic-neutron-agent agent package' do
-      is_expected.to contain_package('python2-ironic-neutron-agent').with(
+      should contain_package('python2-ironic-neutron-agent').with(
         :name   => platform_params[:networking_baremetal_agent_package],
         :ensure => p[:package_ensure],
         :tag    => ['openstack', 'neutron-package'],
       )
-      is_expected.to contain_package('python2-ironic-neutron-agent').that_requires('Anchor[neutron::install::begin]')
-      is_expected.to contain_package('python2-ironic-neutron-agent').that_notifies('Anchor[neutron::install::end]')
+      should contain_package('python2-ironic-neutron-agent').that_requires('Anchor[neutron::install::begin]')
+      should contain_package('python2-ironic-neutron-agent').that_notifies('Anchor[neutron::install::end]')
     end
 
     it 'configures networking-baremetal ironic-neutron-agent service' do
-      is_expected.to contain_service('ironic-neutron-agent-service').with(
+      should contain_service('ironic-neutron-agent-service').with(
         :name    => platform_params[:networking_baremetal_agent_service],
         :enable  => true,
         :ensure  => 'running',
         :tag     => 'neutron-service',
       )
-      is_expected.to contain_service('ironic-neutron-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
-      is_expected.to contain_service('ironic-neutron-agent-service').that_notifies('Anchor[neutron::service::end]')
+      should contain_service('ironic-neutron-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
+      should contain_service('ironic-neutron-agent-service').that_notifies('Anchor[neutron::service::end]')
     end
 
     context 'with enabled as false' do
@@ -88,14 +83,14 @@ describe 'neutron::agents::ml2::networking_baremetal' do
         params.merge!(:enabled => false)
       end
       it 'should not start service' do
-        is_expected.to contain_service('ironic-neutron-agent-service').with(
+        should contain_service('ironic-neutron-agent-service').with(
           :name    => platform_params[:networking_baremetal_agent_service],
           :enable  => false,
           :ensure  => 'stopped',
           :tag     => 'neutron-service',
         )
-        is_expected.to contain_service('ironic-neutron-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
-        is_expected.to contain_service('ironic-neutron-agent-service').that_notifies('Anchor[neutron::service::end]')
+        should contain_service('ironic-neutron-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
+        should contain_service('ironic-neutron-agent-service').that_notifies('Anchor[neutron::service::end]')
       end
     end
   end
@@ -119,10 +114,9 @@ describe 'neutron::agents::ml2::networking_baremetal' do
         it_behaves_like 'networking-baremetal ironic-neutron-agent with ml2 plugin'
       when facts[:osfamily] != 'RedHat'
         it 'fails with unsupported osfamily' do
-          is_expected.to raise_error(Puppet::Error, /Unsupported osfamily.*/)
+          should raise_error(Puppet::Error, /Unsupported osfamily.*/)
         end
       end
     end
   end
-
 end

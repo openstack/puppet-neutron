@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 describe 'neutron::db::postgresql' do
-
-  shared_examples_for 'neutron::db::postgresql' do
+  shared_examples 'neutron::db::postgresql' do
     let :req_params do
       { :password => 'pw' }
     end
@@ -11,18 +10,12 @@ describe 'neutron::db::postgresql' do
       'include postgresql::server'
     end
 
-    let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
-    }
-    end
-
     context 'with only required parameters' do
       let :params do
         req_params
       end
 
-      it { is_expected.to contain_postgresql__server__db('neutron').with(
+      it { should contain_postgresql__server__db('neutron').with(
         :user     => 'neutron',
         :password => 'md5696acd1dd66513a556a18a1beccd03d1'
       )}
@@ -41,8 +34,7 @@ describe 'neutron::db::postgresql' do
         }))
       end
 
-      it_configures 'neutron::db::postgresql'
+      it_behaves_like 'neutron::db::postgresql'
     end
   end
-
 end

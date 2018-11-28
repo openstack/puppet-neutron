@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'neutron::config' do
-
   let(:config_hash) do {
     'DEFAULT/foo' => { 'value'  => 'fooValue' },
     'DEFAULT/bar' => { 'value'  => 'barValue' },
@@ -9,33 +8,33 @@ describe 'neutron::config' do
   }
   end
 
-  shared_examples_for 'neutron_config' do
+  shared_examples 'neutron_config' do
     let :params do
       { :server_config => config_hash }
     end
 
-    it { is_expected.to contain_class('neutron::deps') }
+    it { should contain_class('neutron::deps') }
 
     it 'configures arbitrary neutron-config configurations' do
-      is_expected.to contain_neutron_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_config('DEFAULT/baz').with_ensure('absent')
     end
   end
 
-  shared_examples_for 'neutron_api_config' do
+  shared_examples 'neutron_api_config' do
     let :params do
       { :api_config => config_hash }
     end
 
     it 'configures arbitrary neutron-api-config configurations' do
-      is_expected.to contain_neutron_api_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_api_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_api_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_api_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_api_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_api_config('DEFAULT/baz').with_ensure('absent')
     end
   end
 
-  shared_examples_for 'neutron_service_config' do
+  shared_examples 'neutron_service_config' do
     let :params do
       { :sfc_service_config  => config_hash,
         :l2gw_service_config => config_hash,
@@ -43,19 +42,19 @@ describe 'neutron::config' do
     end
 
     it 'configures arbitrary sfc_service_config configurations' do
-      is_expected.to contain_neutron_sfc_service_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_sfc_service_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_sfc_service_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_sfc_service_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_sfc_service_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_sfc_service_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary l2gw_service_config configurations' do
-      is_expected.to contain_neutron_l2gw_service_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_l2gw_service_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_l2gw_service_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_l2gw_service_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_l2gw_service_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_l2gw_service_config('DEFAULT/baz').with_ensure('absent')
     end
   end
 
-  shared_examples_for 'neutron_agent_config' do
+  shared_examples 'neutron_agent_config' do
     let :params do
       { :l3_agent_config       => config_hash,
         :dhcp_agent_config     => config_hash,
@@ -69,56 +68,56 @@ describe 'neutron::config' do
     end
 
     it 'configures arbitrary l3_agent_config configurations' do
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_l3_agent_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_l3_agent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_l3_agent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_l3_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary dhcp_agent_config configurations' do
-      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_dhcp_agent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_dhcp_agent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_dhcp_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary lbaas_agent_config configurations' do
-      is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_lbaas_agent_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_lbaas_agent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_lbaas_agent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_lbaas_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary metadata_agent_config configurations' do
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_metadata_agent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_metadata_agent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_metadata_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary metering_agent_config configurations' do
-      is_expected.to contain_neutron_metering_agent_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_metering_agent_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_metering_agent_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_metering_agent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_metering_agent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_metering_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary vpnaas_agent_config configurations' do
-      is_expected.to contain_neutron_vpnaas_agent_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_vpnaas_agent_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_vpnaas_agent_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_vpnaas_agent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_vpnaas_agent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_vpnaas_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary l2gw_agent_config configurations' do
-      is_expected.to contain_neutron_l2gw_agent_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_l2gw_agent_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_l2gw_agent_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_l2gw_agent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_l2gw_agent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_l2gw_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary bgp_dragent_config configurations' do
-      is_expected.to contain_neutron_bgp_dragent_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_bgp_dragent_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_bgp_dragent_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_bgp_dragent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_bgp_dragent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_bgp_dragent_config('DEFAULT/baz').with_ensure('absent')
     end
 
   end
 
-  shared_examples_for 'neutron_plugin_config' do
+  shared_examples 'neutron_plugin_config' do
     let :params do
       {
         :plugin_linuxbridge_config     => config_hash,
@@ -136,69 +135,69 @@ describe 'neutron::config' do
     end
 
     it 'configures arbitrary neutron_plugin_linuxbridge configurations' do
-      is_expected.to contain_neutron_plugin_linuxbridge('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_linuxbridge('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_linuxbridge('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_linuxbridge('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_linuxbridge('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_linuxbridge('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_cisco_db_conn configurations' do
-      is_expected.to contain_neutron_plugin_cisco_db_conn('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_cisco_db_conn('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_cisco_db_conn('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_cisco_db_conn('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_cisco_db_conn('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_cisco_db_conn('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_cisco_l2network configurations' do
-      is_expected.to contain_neutron_plugin_cisco_l2network('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_cisco_l2network('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_cisco_l2network('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_cisco_l2network('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_cisco_l2network('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_cisco_l2network('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_cisco configurations' do
-      is_expected.to contain_neutron_plugin_cisco('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_cisco('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_cisco('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_cisco('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_cisco('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_cisco('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_midonet configurations' do
-      is_expected.to contain_neutron_plugin_midonet('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_midonet('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_midonet('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_midonet('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_midonet('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_midonet('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_plumgrid configurations' do
-      is_expected.to contain_neutron_plugin_plumgrid('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_plumgrid('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_plumgrid('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_plumgrid('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_plumgrid('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_plumgrid('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_nsx configurations' do
-      is_expected.to contain_neutron_plugin_nsx('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_nsx('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_nsx('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_nsx('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_nsx('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_nsx('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_nvp configurations' do
-      is_expected.to contain_neutron_plugin_nvp('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_nvp('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_nvp('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_nvp('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_nvp('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_nvp('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_opencontrail configurations' do
-      is_expected.to contain_neutron_plugin_opencontrail('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_opencontrail('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_opencontrail('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_opencontrail('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_opencontrail('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_opencontrail('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_nuage configurations' do
-      is_expected.to contain_neutron_plugin_nuage('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_nuage('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_nuage('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_nuage('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_nuage('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_nuage('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_ml2 configurations' do
-      is_expected.to contain_neutron_plugin_ml2('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_neutron_plugin_ml2('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_neutron_plugin_ml2('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_plugin_ml2('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_plugin_ml2('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_plugin_ml2('DEFAULT/baz').with_ensure('absent')
     end
 
   end
@@ -211,10 +210,10 @@ describe 'neutron::config' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'neutron_config'
-      it_configures 'neutron_api_config'
-      it_configures 'neutron_agent_config'
-      it_configures 'neutron_plugin_config'
+      it_behaves_like 'neutron_config'
+      it_behaves_like 'neutron_api_config'
+      it_behaves_like 'neutron_agent_config'
+      it_behaves_like 'neutron_plugin_config'
     end
   end
 end

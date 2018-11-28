@@ -2,13 +2,8 @@ require 'spec_helper'
 
 describe 'neutron::plugins::ml2::networking_baremetal' do
   let :default_params do
-    { :package_ensure             => 'present',
-    }
-  end
-
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
+    {
+      :package_ensure             => 'present',
     }
   end
 
@@ -16,21 +11,21 @@ describe 'neutron::plugins::ml2::networking_baremetal' do
     {}
   end
 
-  shared_examples_for 'networking-baremetal ml2 plugin' do
+  shared_examples 'networking-baremetal ml2 plugin' do
     let :p do
       default_params.merge(params)
     end
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'installs networking-baremetal python2-networking-baremetal package' do
-      is_expected.to contain_package('python2-networking-baremetal').with(
+      should contain_package('python2-networking-baremetal').with(
         :name   => platform_params[:networking_baremetal_package],
         :ensure => p[:package_ensure],
         :tag    => ['openstack', 'neutron-package'],
       )
-      is_expected.to contain_package('python2-networking-baremetal').that_requires('Anchor[neutron::install::begin]')
-      is_expected.to contain_package('python2-networking-baremetal').that_notifies('Anchor[neutron::install::end]')
+      should contain_package('python2-networking-baremetal').that_requires('Anchor[neutron::install::begin]')
+      should contain_package('python2-networking-baremetal').that_notifies('Anchor[neutron::install::end]')
     end
   end
 
@@ -52,10 +47,9 @@ describe 'neutron::plugins::ml2::networking_baremetal' do
         it_behaves_like 'networking-baremetal ml2 plugin'
       when facts[:osfamily] != 'RedHat'
         it 'fails with unsupported osfamily' do
-          is_expected.to raise_error(Puppet::Error, /Unsupported osfamily.*/)
+          should raise_error(Puppet::Error, /Unsupported osfamily.*/)
         end
       end
     end
   end
-
 end

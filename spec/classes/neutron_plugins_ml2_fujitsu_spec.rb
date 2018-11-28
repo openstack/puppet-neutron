@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::fujitsu' do
-
   let :pre_condition do
     "class { '::neutron::keystone::authtoken':
       password => 'passw0rd',
@@ -21,23 +20,15 @@ describe 'neutron::plugins::ml2::fujitsu' do
     {}
   end
 
-  let :test_facts do
-    {
-      :operatingsystem        => 'default',
-      :operatingsystemrelease => 'default',
-      :concat_basedir         => '/',
-    }
-  end
-
-  shared_examples_for 'neutron plugin fujitsu ml2' do
+  shared_examples 'neutron plugin fujitsu ml2' do
     before do
       params.merge!(default_params)
     end
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'should have' do
-      is_expected.to contain_package('python-networking-fujitsu').with(
+      should contain_package('python-networking-fujitsu').with(
         :ensure => params[:package_ensure],
         :tag    => 'openstack'
         )
@@ -52,8 +43,7 @@ describe 'neutron::plugins::ml2::fujitsu' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'neutron plugin fujitsu ml2'
+      it_behaves_like 'neutron plugin fujitsu ml2'
     end
   end
 end
-

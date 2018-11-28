@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'neutron::rootwrap' do
-
   let :pre_condition do
     "class { 'neutron::agents::ml2::ovs': }"
   end
@@ -13,12 +12,12 @@ describe 'neutron::rootwrap' do
     }
   end
 
-  shared_examples_for 'neutron rootwrap' do
+  shared_examples 'neutron rootwrap' do
 
     it 'configures rootwrap.conf' do
-      is_expected.to contain_neutron_rootwrap_config('xenapi/xenapi_connection_url').with_value(params[:xenapi_connection_url]);
-      is_expected.to contain_neutron_rootwrap_config('xenapi/xenapi_connection_username').with_value(params[:xenapi_connection_username]);
-      is_expected.to contain_neutron_rootwrap_config('xenapi/xenapi_connection_password').with_value(params[:xenapi_connection_password]);
+      should contain_neutron_rootwrap_config('xenapi/xenapi_connection_url').with_value(params[:xenapi_connection_url]);
+      should contain_neutron_rootwrap_config('xenapi/xenapi_connection_username').with_value(params[:xenapi_connection_username]);
+      should contain_neutron_rootwrap_config('xenapi/xenapi_connection_password').with_value(params[:xenapi_connection_password]);
     end
 
   end
@@ -33,7 +32,7 @@ describe 'neutron::rootwrap' do
         }))
       end
 
-      it_configures 'neutron rootwrap'
+      it_behaves_like 'neutron rootwrap'
     end
   end
 end

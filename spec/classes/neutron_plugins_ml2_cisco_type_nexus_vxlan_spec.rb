@@ -1,23 +1,19 @@
-#
-# Unit tests for neutron::plugins::ml2::cisco::type_nexus_vxlan class
-#
-
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::cisco::type_nexus_vxlan' do
-
   let :pre_condition do
     "class { '::neutron::keystone::authtoken':
       password => 'passw0rd',
      }
      class { 'neutron::server': }
      class { 'neutron':
-      core_plugin     => 'ml2' }"
+      core_plugin     => 'ml2'
+     }"
   end
 
   let :default_params do
     {
-      :vni_ranges => '20000:22000',
+      :vni_ranges   => '20000:22000',
       :mcast_ranges => '224.0.0.1:224.0.0.3,224.0.1.1:224.0.1.3'
     }
   end
@@ -26,39 +22,30 @@ describe 'neutron::plugins::ml2::cisco::type_nexus_vxlan' do
     {}
   end
 
-  let :test_facts do
-    { :operatingsystem         => 'default',
-      :operatingsystemrelease  => 'default',
-      :concat_basedir          => '/',
-    }
-  end
-
-  shared_examples_for 'neutron cisco ml2 type nexus vxlan plugin' do
-
+  shared_examples 'neutron cisco ml2 type nexus vxlan plugin' do
     before do
       params.merge!(default_params)
     end
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it do
-      is_expected.to contain_neutron_plugin_ml2('ml2_type_nexus_vxlan/vni_ranges').with_value(params[:vni_ranges])
-      is_expected.to contain_neutron_plugin_ml2('ml2_type_nexus_vxlan/mcast_ranges').with_value(params[:mcast_ranges])
+      should contain_neutron_plugin_ml2('ml2_type_nexus_vxlan/vni_ranges').with_value(params[:vni_ranges])
+      should contain_neutron_plugin_ml2('ml2_type_nexus_vxlan/mcast_ranges').with_value(params[:mcast_ranges])
     end
-
   end
 
-  begin
-    context 'on RedHat platforms' do
-      let :facts do
-        @default_facts.merge(test_facts.merge({
-           :osfamily               => 'RedHat',
-           :operatingsystemrelease => '7',
-           :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
-        }))
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'neutron cisco ml2 type nexus vxlan plugin'
+      if facts[:osfamily] == 'RedHat'
+        it_behaves_like 'neutron cisco ml2 type nexus vxlan plugin'
+      end
     end
   end
 end

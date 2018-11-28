@@ -2,13 +2,8 @@ require 'spec_helper'
 
 describe 'neutron::plugins::ml2::networking_ansible' do
   let :default_params do
-    { :package_ensure   => 'present',
-    }
-  end
-
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
+    {
+      :package_ensure   => 'present',
     }
   end
 
@@ -27,37 +22,37 @@ describe 'neutron::plugins::ml2::networking_ansible' do
     }
   end
 
-  shared_examples_for 'networking-ansible ml2 plugin' do
+  shared_examples 'networking-ansible ml2 plugin' do
     let :p do
       default_params.merge(params)
     end
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'installs networking-ansible python2-networking-ansible package' do
-      is_expected.to contain_package('python2-networking-ansible').with(
+      should contain_package('python2-networking-ansible').with(
         :name   => platform_params[:networking_ansible_package],
         :ensure => p[:package_ensure],
         :tag    => ['openstack', 'neutron-package'],
       )
-      is_expected.to contain_package('python2-networking-ansible').that_requires('Anchor[neutron::install::begin]')
-      is_expected.to contain_package('python2-networking-ansible').that_notifies('Anchor[neutron::install::end]')
+      should contain_package('python2-networking-ansible').that_requires('Anchor[neutron::install::begin]')
+      should contain_package('python2-networking-ansible').that_notifies('Anchor[neutron::install::end]')
     end
     it {
      params[:host_configs].each do |host_config|
-       is_expected.to contain_neutron__plugins__ml2__networking_ansible_host(host_config.first)
+       should contain_neutron__plugins__ml2__networking_ansible_host(host_config.first)
 
-       is_expected.to contain_neutron_plugin_ml2('ansible:host1/ansible_ssh_pass').with_value('password1')
-       is_expected.to contain_neutron_plugin_ml2('ansible:host1/ansible_ssh_private_key_file').with_value(nil)
+       should contain_neutron_plugin_ml2('ansible:host1/ansible_ssh_pass').with_value('password1')
+       should contain_neutron_plugin_ml2('ansible:host1/ansible_ssh_private_key_file').with_value(nil)
 
-       is_expected.to contain_neutron_plugin_ml2('ansible:host2/ansible_ssh_private_key_file').with_value('/path/to/key')
-       is_expected.to contain_neutron_plugin_ml2('ansible:host2/ansible_ssh_pass').with_value(nil)
+       should contain_neutron_plugin_ml2('ansible:host2/ansible_ssh_private_key_file').with_value('/path/to/key')
+       should contain_neutron_plugin_ml2('ansible:host2/ansible_ssh_pass').with_value(nil)
 
-       is_expected.to contain_neutron_plugin_ml2('ansible:host1/mac').with_value(nil)
-       is_expected.to contain_neutron_plugin_ml2('ansible:host2/mac').with_value('01:23:45:67:89:AB')
+       should contain_neutron_plugin_ml2('ansible:host1/mac').with_value(nil)
+       should contain_neutron_plugin_ml2('ansible:host2/mac').with_value('01:23:45:67:89:AB')
 
-       is_expected.to contain_neutron_plugin_ml2('ansible:host1/manage_vlans').with_value(nil)
-       is_expected.to contain_neutron_plugin_ml2('ansible:host2/manage_vlans').with_value(false)
+       should contain_neutron_plugin_ml2('ansible:host1/manage_vlans').with_value(nil)
+       should contain_neutron_plugin_ml2('ansible:host2/manage_vlans').with_value(false)
      end
     }
   end
@@ -80,10 +75,9 @@ describe 'neutron::plugins::ml2::networking_ansible' do
         it_behaves_like 'networking-ansible ml2 plugin'
       when facts[:osfamily] != 'RedHat'
         it 'fails with unsupported osfamily' do
-          is_expected.to raise_error(Puppet::Error, /Unsupported osfamily.*/)
+          should raise_error(Puppet::Error, /Unsupported osfamily.*/)
         end
       end
     end
   end
-
 end

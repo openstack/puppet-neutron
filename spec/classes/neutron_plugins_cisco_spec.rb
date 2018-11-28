@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::cisco' do
-
   let :pre_condition do
     "class { '::neutron::keystone::authtoken':
       password => 'passw0rd',
@@ -11,15 +10,16 @@ describe 'neutron::plugins::cisco' do
   end
 
   let :params do
-    { :keystone_username => 'neutron',
+    {
+      :keystone_username => 'neutron',
       :keystone_password => 'neutron_pass',
       :keystone_auth_url => 'http://127.0.0.1:5000/v2.0/',
       :keystone_tenant   => 'tenant',
-
       :database_name     => 'neutron',
       :database_pass     => 'dbpass',
       :database_host     => 'localhost',
-      :database_user     => 'neutron'}
+      :database_user     => 'neutron'
+    }
   end
 
   let :params_default do
@@ -37,29 +37,22 @@ describe 'neutron::plugins::cisco' do
     }
   end
 
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
-    }
-  end
-
-  shared_examples_for 'default cisco plugin' do
-
+  shared_examples 'default cisco plugin' do
     before do
       params.merge!(params_default)
     end
 
     it 'should create plugin symbolic link' do
-      is_expected.to contain_file('/etc/neutron/plugin.ini').with(
+      should contain_file('/etc/neutron/plugin.ini').with(
         :ensure  => 'link',
         :target  => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
       )
-      is_expected.to contain_file('/etc/neutron/plugin.ini').that_requires('Anchor[neutron::config::begin]')
-      is_expected.to contain_file('/etc/neutron/plugin.ini').that_notifies('Anchor[neutron::config::end]')
+      should contain_file('/etc/neutron/plugin.ini').that_requires('Anchor[neutron::config::begin]')
+      should contain_file('/etc/neutron/plugin.ini').that_notifies('Anchor[neutron::config::end]')
     end
 
     it 'should have a plugin config folder' do
-      is_expected.to contain_file('/etc/neutron/plugins').with(
+      should contain_file('/etc/neutron/plugins').with(
         :ensure => 'directory',
         :owner  => 'root',
         :group  => 'neutron',
@@ -68,7 +61,7 @@ describe 'neutron::plugins::cisco' do
     end
 
     it 'should have a cisco plugin config folder' do
-      is_expected.to contain_file('/etc/neutron/plugins/cisco').with(
+      should contain_file('/etc/neutron/plugins/cisco').with(
         :ensure => 'directory',
         :owner  => 'root',
         :group  => 'neutron',
@@ -77,78 +70,78 @@ describe 'neutron::plugins::cisco' do
     end
 
     it 'passes purge to resource plugin_cisco' do
-      is_expected.to contain_resources('neutron_plugin_cisco').with({
+      should contain_resources('neutron_plugin_cisco').with({
         :purge => false
       })
     end
 
     it 'passes purge to resource cisco_db_conn' do
-      is_expected.to contain_resources('neutron_plugin_cisco_db_conn').with({
+      should contain_resources('neutron_plugin_cisco_db_conn').with({
         :purge => false
       })
     end
 
     it 'passes purge to resource cisco_l2network' do
-      is_expected.to contain_resources('neutron_plugin_cisco_l2network').with({
+      should contain_resources('neutron_plugin_cisco_l2network').with({
         :purge => false
       })
     end
 
     it 'passes purge to resource cisco_credentials' do
-      is_expected.to contain_resources('neutron_plugin_cisco_credentials').with({
+      should contain_resources('neutron_plugin_cisco_credentials').with({
         :purge => false
       })
     end
 
     it 'should perform default l2 configuration' do
-      is_expected.to contain_neutron_plugin_cisco_l2network('VLANS/vlan_start').\
+      should contain_neutron_plugin_cisco_l2network('VLANS/vlan_start').\
         with_value(params[:vlan_start])
-      is_expected.to contain_neutron_plugin_cisco_l2network('VLANS/vlan_end').\
+      should contain_neutron_plugin_cisco_l2network('VLANS/vlan_end').\
         with_value(params[:vlan_end])
-      is_expected.to contain_neutron_plugin_cisco_l2network('VLANS/vlan_name_prefix').\
+      should contain_neutron_plugin_cisco_l2network('VLANS/vlan_name_prefix').\
         with_value(params[:vlan_name_prefix])
-      is_expected.to contain_neutron_plugin_cisco_l2network('MODEL/model_class').\
+      should contain_neutron_plugin_cisco_l2network('MODEL/model_class').\
         with_value(params[:model_class])
-      is_expected.to contain_neutron_plugin_cisco_l2network('PORTS/max_ports').\
+      should contain_neutron_plugin_cisco_l2network('PORTS/max_ports').\
         with_value(params[:max_ports])
-      is_expected.to contain_neutron_plugin_cisco_l2network('PORTPROFILES/max_port_profiles').\
+      should contain_neutron_plugin_cisco_l2network('PORTPROFILES/max_port_profiles').\
         with_value(params[:max_port_profiles])
-      is_expected.to contain_neutron_plugin_cisco_l2network('NETWORKS/max_networks').\
+      should contain_neutron_plugin_cisco_l2network('NETWORKS/max_networks').\
         with_value(params[:max_networks])
-      is_expected.to contain_neutron_plugin_cisco_l2network('SEGMENTATION/manager_class').\
+      should contain_neutron_plugin_cisco_l2network('SEGMENTATION/manager_class').\
         with_value(params[:manager_class])
     end
 
     it 'should create a dummy inventory item' do
-      is_expected.to contain_neutron_plugin_cisco('INVENTORY/dummy').\
+      should contain_neutron_plugin_cisco('INVENTORY/dummy').\
         with_value('dummy')
     end
 
     it 'should configure the db connection' do
-      is_expected.to contain_neutron_plugin_cisco_db_conn('DATABASE/name').\
+      should contain_neutron_plugin_cisco_db_conn('DATABASE/name').\
         with_value(params[:database_name])
-      is_expected.to contain_neutron_plugin_cisco_db_conn('DATABASE/user').\
+      should contain_neutron_plugin_cisco_db_conn('DATABASE/user').\
         with_value(params[:database_user])
-      is_expected.to contain_neutron_plugin_cisco_db_conn('DATABASE/pass').\
+      should contain_neutron_plugin_cisco_db_conn('DATABASE/pass').\
         with_value(params[:database_pass])
-      is_expected.to contain_neutron_plugin_cisco_db_conn('DATABASE/host').\
+      should contain_neutron_plugin_cisco_db_conn('DATABASE/host').\
         with_value(params[:database_host])
     end
 
     it 'should configure the admin credentials' do
-      is_expected.to contain_neutron_plugin_cisco_credentials('keystone/username').\
+      should contain_neutron_plugin_cisco_credentials('keystone/username').\
         with_value(params[:keystone_username])
-      is_expected.to contain_neutron_plugin_cisco_credentials('keystone/password').\
+      should contain_neutron_plugin_cisco_credentials('keystone/password').\
         with_value(params[:keystone_password])
-      is_expected.to contain_neutron_plugin_cisco_credentials('keystone/password').with_secret( true )
-      is_expected.to contain_neutron_plugin_cisco_credentials('keystone/auth_url').\
+      should contain_neutron_plugin_cisco_credentials('keystone/password').with_secret( true )
+      should contain_neutron_plugin_cisco_credentials('keystone/auth_url').\
         with_value(params[:keystone_auth_url])
-      is_expected.to contain_neutron_plugin_cisco_credentials('keystone/tenant').\
+      should contain_neutron_plugin_cisco_credentials('keystone/tenant').\
         with_value(params[:keystone_tenant])
     end
 
     it 'should perform vswitch plugin configuration' do
-      is_expected.to contain_neutron_plugin_cisco('PLUGINS/vswitch_plugin').\
+      should contain_neutron_plugin_cisco('PLUGINS/vswitch_plugin').\
           with_value('neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2')
     end
 
@@ -158,59 +151,38 @@ describe 'neutron::plugins::cisco' do
       end
 
       it 'should perform nexus plugin configuration' do
-        is_expected.to contain_neutron_plugin_cisco('PLUGINS/nexus_plugin').\
+        should contain_neutron_plugin_cisco('PLUGINS/nexus_plugin').\
           with_value('neutron.plugins.cisco.nexus.cisco_nexus_plugin_v2.NexusPlugin')
       end
     end
-
   end
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian',
-         :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
-      }))
-    end
 
-    context 'on Ubuntu operating systems' do
-      before do
-        facts.merge!({:operatingsystem => 'Ubuntu'})
-      end
-
-      it 'configures /etc/default/neutron-server' do
-        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
-          :path    => '/etc/default/neutron-server',
-          :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-          :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/cisco/cisco_plugins.ini',
-          :tag     => 'neutron-file-line',
-        )
-        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
-        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
-
-      end
-      it_configures 'default cisco plugin'
-    end
-
-    context 'on Debian operating systems' do
-      before do
-        facts.merge!({:operatingsystem => 'Debian'})
-      end
-
-      it_configures 'default cisco plugin'
+  shared_examples 'neutron::plugins::cisco on Ubuntu' do
+    it 'configures /etc/default/neutron-server' do
+      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
+        :path    => '/etc/default/neutron-server',
+        :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+        :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/cisco/cisco_plugins.ini',
+        :tag     => 'neutron-file-line',
+      )
+      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
     end
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7',
-         :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
-      }))
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      it_behaves_like 'default cisco plugin'
+
+      if facts[:operatingsystem] == 'Ubuntu'
+        it_behaves_like 'neutron::plugins::cisco on Ubuntu'
+      end
     end
-
-    it_configures 'default cisco plugin'
-
   end
-
 end

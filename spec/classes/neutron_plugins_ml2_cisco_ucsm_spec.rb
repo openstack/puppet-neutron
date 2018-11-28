@@ -1,18 +1,14 @@
-#
-# Unit tests for neutron::plugins::ml2::cisco::ucsm class
-#
-
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::cisco::ucsm' do
-
   let :pre_condition do
     "class { '::neutron::keystone::authtoken':
       password => 'passw0rd',
      }
      class { 'neutron::server': }
      class { 'neutron':
-      core_plugin     => 'ml2' }"
+      core_plugin     => 'ml2'
+     }"
   end
 
   let :default_params do
@@ -32,44 +28,35 @@ describe 'neutron::plugins::ml2::cisco::ucsm' do
     {}
   end
 
-  let :test_facts do
-    { :operatingsystem        => 'default',
-      :operatingsystemrelease => 'default',
-      :concat_basedir         => '/',
-    }
-  end
-
-  shared_examples_for 'neutron cisco ml2 ucsm plugin' do
-
+  shared_examples 'neutron cisco ml2 ucsm plugin' do
     before do
       params.merge!(default_params)
     end
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it do
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_ip').with_value(params[:ucsm_ip])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_username').with_value(params[:ucsm_username])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_password').with_value(params[:ucsm_password]).with_secret(true)
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_host_list').with_value(params[:ucsm_host_list])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/supported_pci_devs').with_value(params[:supported_pci_devs])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/sp_template_list').with_value(params[:sp_template_list])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco_ucsm/vnic_template_list').with_value(params[:vnic_template_list])
+      should contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_ip').with_value(params[:ucsm_ip])
+      should contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_username').with_value(params[:ucsm_username])
+      should contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_password').with_value(params[:ucsm_password]).with_secret(true)
+      should contain_neutron_plugin_ml2('ml2_cisco_ucsm/ucsm_host_list').with_value(params[:ucsm_host_list])
+      should contain_neutron_plugin_ml2('ml2_cisco_ucsm/supported_pci_devs').with_value(params[:supported_pci_devs])
+      should contain_neutron_plugin_ml2('ml2_cisco_ucsm/sp_template_list').with_value(params[:sp_template_list])
+      should contain_neutron_plugin_ml2('ml2_cisco_ucsm/vnic_template_list').with_value(params[:vnic_template_list])
     end
-
   end
 
-  begin
-    context 'on RedHat platforms' do
-      let :facts do
-        @default_facts.merge(test_facts.merge({
-           :osfamily => 'RedHat',
-           :operatingsystemrelease => '7',
-           :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
-        }))
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'neutron cisco ml2 ucsm plugin'
+      if facts[:osfamily] == 'RedHat'
+        it_behaves_like 'neutron cisco ml2 ucsm plugin'
+      end
     end
   end
 end

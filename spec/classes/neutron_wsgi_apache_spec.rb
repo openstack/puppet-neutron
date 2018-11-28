@@ -1,14 +1,13 @@
 require 'spec_helper'
 
 describe 'neutron::wsgi::apache' do
-
-  shared_examples_for 'apache serving neutron with mod_wsgi' do
+  shared_examples 'apache serving neutron with mod_wsgi' do
     context 'with default parameters' do
-      it { is_expected.to contain_class('neutron::params') }
-      it { is_expected.to contain_class('apache') }
-      it { is_expected.to contain_class('apache::mod::wsgi') }
-      it { is_expected.to contain_class('apache::mod::ssl') }
-      it { is_expected.to contain_openstacklib__wsgi__apache('neutron_wsgi').with(
+      it { should contain_class('neutron::params') }
+      it { should contain_class('apache') }
+      it { should contain_class('apache::mod::wsgi') }
+      it { should contain_class('apache::mod::ssl') }
+      it { should contain_openstacklib__wsgi__apache('neutron_wsgi').with(
         :bind_port                   => 9696,
         :group                       => 'neutron',
         :path                        => '/',
@@ -45,11 +44,11 @@ describe 'neutron::wsgi::apache' do
           :error_log_file            => '/var/log/httpd/error_log'
         }
       end
-      it { is_expected.to contain_class('neutron::params') }
-      it { is_expected.to contain_class('apache') }
-      it { is_expected.to contain_class('apache::mod::wsgi') }
-      it { is_expected.to_not contain_class('apache::mod::ssl') }
-      it { is_expected.to contain_openstacklib__wsgi__apache('neutron_wsgi').with(
+      it { should contain_class('neutron::params') }
+      it { should contain_class('apache') }
+      it { should contain_class('apache::mod::wsgi') }
+      it { should_not contain_class('apache::mod::ssl') }
+      it { should contain_openstacklib__wsgi__apache('neutron_wsgi').with(
         :bind_host                   => '10.42.51.1',
         :bind_port                   => 12345,
         :group                       => 'neutron',
@@ -106,7 +105,7 @@ describe 'neutron::wsgi::apache' do
 
         end
       end
-      it_configures 'apache serving neutron with mod_wsgi'
+      it_behaves_like 'apache serving neutron with mod_wsgi'
     end
   end
 end

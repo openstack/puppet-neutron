@@ -21,12 +21,11 @@
 require 'spec_helper'
 
 describe 'neutron::services::lbaas' do
-
   let :default_params do
     {}
   end
 
-  shared_examples_for 'neutron lbaas service plugin' do
+  shared_examples 'neutron lbaas service plugin' do
 
     context 'with default params' do
       let :params do
@@ -34,13 +33,13 @@ describe 'neutron::services::lbaas' do
       end
 
       it 'should contain python-neutron-lbaas package' do
-        is_expected.to contain_package('python-neutron-lbaas').with({ :ensure => 'present' })
+        should contain_package('python-neutron-lbaas').with({ :ensure => 'present' })
       end
 
       it 'should set certificates options with service defaults' do
-        is_expected.to contain_neutron_config('certificates/cert_manager_type').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('certificates/storage_path').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('certificates/barbican_auth').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('certificates/cert_manager_type').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('certificates/storage_path').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('certificates/barbican_auth').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -54,42 +53,23 @@ describe 'neutron::services::lbaas' do
         )
 
         it 'should configure certificates section' do
-          is_expected.to contain_neutron_config('certificates/cert_manager_type').with_value('barbican')
-          is_expected.to contain_neutron_config('certificates/storage_path').with_value('/var/lib/neutron-lbaas/certificates/')
-          is_expected.to contain_neutron_config('certificates/barbican_auth').with_value('barbican_acl_auth')
+          should contain_neutron_config('certificates/cert_manager_type').with_value('barbican')
+          should contain_neutron_config('certificates/storage_path').with_value('/var/lib/neutron-lbaas/certificates/')
+          should contain_neutron_config('certificates/barbican_auth').with_value('barbican_acl_auth')
         end
       end
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily  => 'Debian',
-        :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
-      })
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      it_behaves_like 'neutron lbaas service plugin'
     end
-
-    let :platform_params do
-      {}
-    end
-
-    it_configures 'neutron lbaas service plugin'
-  end
-
-  context 'on Red Hat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'RedHat',
-        :operatingsystemrelease => '7',
-        :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
-      })
-    end
-
-    let :platform_params do
-      {}
-    end
-
-    it_configures 'neutron lbaas service plugin'
   end
 end

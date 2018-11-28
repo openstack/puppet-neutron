@@ -20,7 +20,6 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::arista' do
-
   let :pre_condition do
     "class { '::neutron::keystone::authtoken':
       password => 'passw0rd',
@@ -45,15 +44,15 @@ describe 'neutron::plugins::ml2::arista' do
     }
   end
 
-  shared_examples_for 'neutron plugin ml2 arista' do
+  shared_examples 'neutron plugin ml2 arista' do
     before do
       params.merge!(default_params)
     end
 
     it 'configures ml2 arista settings' do
-      is_expected.to contain_neutron_plugin_ml2('ml2_arista/eapi_host').with_value(params[:eapi_host])
-      is_expected.to contain_neutron_plugin_ml2('ml2_arista/eapi_username').with_value(params[:eapi_username])
-      is_expected.to contain_neutron_plugin_ml2('ml2_arista/eapi_password').with_value(params[:eapi_password]).with_secret(true)
+      should contain_neutron_plugin_ml2('ml2_arista/eapi_host').with_value(params[:eapi_host])
+      should contain_neutron_plugin_ml2('ml2_arista/eapi_username').with_value(params[:eapi_username])
+      should contain_neutron_plugin_ml2('ml2_arista/eapi_password').with_value(params[:eapi_password]).with_secret(true)
     end
   end
 
@@ -67,7 +66,7 @@ describe 'neutron::plugins::ml2::arista' do
         }))
       end
 
-      it_configures 'neutron plugin ml2 arista'
+      it_behaves_like 'neutron plugin ml2 arista'
     end
   end
 end

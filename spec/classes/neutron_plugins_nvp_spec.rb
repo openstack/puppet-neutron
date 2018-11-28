@@ -1,46 +1,44 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::nvp' do
-
   let :pre_condition do
     "class { 'neutron':
-      core_plugin     => 'neutron.plugins.nicira.NeutronPlugin.NvpPluginV2' }"
+      core_plugin     => 'neutron.plugins.nicira.NeutronPlugin.NvpPluginV2'
+     }"
   end
 
   let :default_params do
     {
-        :metadata_mode  => 'access_network',
-        :package_ensure => 'present',
-        :purge_config   => false,}
-  end
-
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
+      :metadata_mode  => 'access_network',
+      :package_ensure => 'present',
+      :purge_config   => false,
     }
   end
 
   let :params do
     {
-        :default_tz_uuid => '0344130f-1add-4e86-b36e-ad1c44fe40dc',
-        :nvp_controllers => %w(10.0.0.1 10.0.0.2),
-        :nvp_user => 'admin',
-        :nvp_password => 'password'}
+      :default_tz_uuid => '0344130f-1add-4e86-b36e-ad1c44fe40dc',
+      :nvp_controllers => %w(10.0.0.1 10.0.0.2),
+      :nvp_user => 'admin',
+      :nvp_password => 'password'
+    }
   end
 
   let :optional_params do
-    {:default_l3_gw_service_uuid => '0344130f-1add-4e86-b36e-ad1c44fe40dc'}
+    {
+      :default_l3_gw_service_uuid => '0344130f-1add-4e86-b36e-ad1c44fe40dc'
+    }
   end
 
-  shared_examples_for 'neutron plugin nvp' do
+  shared_examples 'neutron plugin nvp' do
     let :p do
       default_params.merge(params)
     end
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'should have' do
-      is_expected.to contain_package('neutron-plugin-nvp').with(
+      should contain_package('neutron-plugin-nvp').with(
                  :name   => platform_params[:nvp_server_package],
                  :ensure => p[:package_ensure],
                  :tag    => ['neutron-package', 'openstack'],
@@ -48,32 +46,32 @@ describe 'neutron::plugins::nvp' do
     end
 
     it 'should configure neutron.conf' do
-      is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('neutron.plugins.nicira.NeutronPlugin.NvpPluginV2')
+      should contain_neutron_config('DEFAULT/core_plugin').with_value('neutron.plugins.nicira.NeutronPlugin.NvpPluginV2')
     end
 
     it 'should create plugin symbolic link' do
-      is_expected.to contain_file('/etc/neutron/plugin.ini').with(
+      should contain_file('/etc/neutron/plugin.ini').with(
         :ensure  => 'link',
         :target  => '/etc/neutron/plugins/nicira/nvp.ini',
       )
-      is_expected.to contain_file('/etc/neutron/plugin.ini').that_requires('Anchor[neutron::config::begin]')
-      is_expected.to contain_file('/etc/neutron/plugin.ini').that_notifies('Anchor[neutron::config::end]')
+      should contain_file('/etc/neutron/plugin.ini').that_requires('Anchor[neutron::config::begin]')
+      should contain_file('/etc/neutron/plugin.ini').that_notifies('Anchor[neutron::config::end]')
     end
 
     it 'passes purge to resource' do
-      is_expected.to contain_resources('neutron_plugin_nvp').with({
+      should contain_resources('neutron_plugin_nvp').with({
         :purge => false
       })
     end
 
     it 'should configure nvp.ini' do
-      is_expected.to contain_neutron_plugin_nvp('DEFAULT/default_tz_uuid').with_value(p[:default_tz_uuid])
-      is_expected.to contain_neutron_plugin_nvp('nvp/metadata_mode').with_value(p[:metadata_mode])
-      is_expected.to contain_neutron_plugin_nvp('DEFAULT/nvp_controllers').with_value(p[:nvp_controllers].join(','))
-      is_expected.to contain_neutron_plugin_nvp('DEFAULT/nvp_user').with_value(p[:nvp_user])
-      is_expected.to contain_neutron_plugin_nvp('DEFAULT/nvp_password').with_value(p[:nvp_password])
-      is_expected.to contain_neutron_plugin_nvp('DEFAULT/nvp_password').with_secret( true )
-      is_expected.not_to contain_neutron_plugin_nvp('DEFAULT/default_l3_gw_service_uuid').with_value(p[:default_l3_gw_service_uuid])
+      should contain_neutron_plugin_nvp('DEFAULT/default_tz_uuid').with_value(p[:default_tz_uuid])
+      should contain_neutron_plugin_nvp('nvp/metadata_mode').with_value(p[:metadata_mode])
+      should contain_neutron_plugin_nvp('DEFAULT/nvp_controllers').with_value(p[:nvp_controllers].join(','))
+      should contain_neutron_plugin_nvp('DEFAULT/nvp_user').with_value(p[:nvp_user])
+      should contain_neutron_plugin_nvp('DEFAULT/nvp_password').with_value(p[:nvp_password])
+      should contain_neutron_plugin_nvp('DEFAULT/nvp_password').with_secret( true )
+      should_not contain_neutron_plugin_nvp('DEFAULT/default_l3_gw_service_uuid').with_value(p[:default_l3_gw_service_uuid])
     end
 
     context 'configure nvp with optional params' do
@@ -82,7 +80,7 @@ describe 'neutron::plugins::nvp' do
       end
 
       it 'should configure nvp.ini' do
-        is_expected.to contain_neutron_plugin_nvp('DEFAULT/default_l3_gw_service_uuid').with_value(params[:default_l3_gw_service_uuid])
+        should contain_neutron_plugin_nvp('DEFAULT/default_l3_gw_service_uuid').with_value(params[:default_l3_gw_service_uuid])
       end
     end
 
@@ -92,41 +90,32 @@ describe 'neutron::plugins::nvp' do
           core_plugin     => 'foo' }"
       end
 
-      it_raises 'a Puppet::Error', /nvp plugin should be the core_plugin in neutron.conf/
+      it { should raise_error(Puppet::Error, /nvp plugin should be the core_plugin in neutron.conf/) }
     end
   end
 
-  begin
-    context 'on Debian platforms' do
-      let :facts do
-        @default_facts.merge(test_facts.merge({
-           :osfamily => 'Debian',
-           :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
-        }))
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
       end
 
-      let :platform_params do
-        { :nvp_server_package => 'neutron-plugin-nicira' }
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          {
+            :nvp_server_package => 'neutron-plugin-nicira'
+          }
+        when 'RedHat'
+          {
+            :nvp_server_package => 'openstack-neutron-nicira'
+          }
+        end
       end
 
-      it_configures 'neutron plugin nvp'
-    end
-
-    context 'on RedHat platforms' do
-      let :facts do
-        @default_facts.merge(test_facts.merge({
-           :osfamily               => 'RedHat',
-           :operatingsystemrelease => '7',
-           :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
-        }))
-      end
-
-      let :platform_params do
-        { :nvp_server_package => 'openstack-neutron-nicira' }
-      end
-
-      it_configures 'neutron plugin nvp'
+      it_behaves_like 'neutron plugin nvp'
     end
   end
-
 end

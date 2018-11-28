@@ -1,14 +1,12 @@
 require 'spec_helper'
 
 describe 'neutron::client' do
-
-  shared_examples_for 'neutron client' do
-
-    it { is_expected.to contain_class('neutron::deps') }
-    it { is_expected.to contain_class('neutron::params') }
+  shared_examples 'neutron client' do
+    it { should contain_class('neutron::deps') }
+    it { should contain_class('neutron::params') }
 
     it 'installs neutron client package' do
-      is_expected.to contain_package('python-neutronclient').with(
+      should contain_package('python-neutronclient').with(
         :ensure => 'present',
         :name   => platform_params[:client_package],
         :tag    => ['neutron-support-package', 'openstack']
@@ -40,5 +38,4 @@ describe 'neutron::client' do
       it_behaves_like 'neutron client'
     end
   end
-
 end

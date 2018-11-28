@@ -17,7 +17,6 @@
 require 'spec_helper'
 
 describe 'neutron::services::sfc' do
-
   let :default_params do
     { :package_ensure => 'present',
       :sfc_driver     => '<SERVICE DEFAULT>',
@@ -26,7 +25,7 @@ describe 'neutron::services::sfc' do
     }
   end
 
-  shared_examples_for 'neutron sfc service plugin' do
+  shared_examples 'neutron sfc service plugin' do
 
     context 'with default params' do
       let :params do
@@ -34,14 +33,14 @@ describe 'neutron::services::sfc' do
       end
 
       it 'installs sfc package' do
-        is_expected.to contain_package('python-networking-sfc').with(
+        should contain_package('python-networking-sfc').with(
           :ensure => params[:package_ensure],
           :name   => platform_params[:sfc_package_name],
         )
       end
 
       it 'runs neutron-db-sync' do
-        is_expected.to contain_exec('sfc-db-sync').with(
+        should contain_exec('sfc-db-sync').with(
           :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-sfc upgrade head',
           :path        => '/usr/bin',
           :subscribe   => ['Anchor[neutron::install::end]',
@@ -64,10 +63,10 @@ describe 'neutron::services::sfc' do
       end
 
       it 'configures networking-sfc.conf' do
-        is_expected.to contain_neutron_sfc_service_config(
+        should contain_neutron_sfc_service_config(
           'sfc/drivers'
         ).with_value('odl_v2')
-        is_expected.to contain_neutron_sfc_service_config(
+        should contain_neutron_sfc_service_config(
           'flowclassifier/drivers'
         ).with_value('odl_v2')
       end
@@ -90,7 +89,7 @@ describe 'neutron::services::sfc' do
           { :sfc_package_name => 'python-networking-sfc' }
         end
       end
-      it_configures 'neutron sfc service plugin'
+      it_behaves_like 'neutron sfc service plugin'
     end
   end
 end

@@ -17,30 +17,29 @@
 require 'spec_helper'
 
 describe 'neutron::services::bgpvpn' do
-
   let :default_params do
-    { :package_ensure    => 'present',
+    {
+      :package_ensure    => 'present',
       :service_providers => '<SERVICE DEFAULT>',
       :sync_db           => true,
     }
   end
 
-  shared_examples_for 'neutron bgpvpn service plugin' do
-
+  shared_examples 'neutron bgpvpn service plugin' do
     context 'with default params' do
       let :params do
         default_params
       end
 
       it 'installs bgpvpn package' do
-        is_expected.to contain_package('python-networking-bgpvpn').with(
+        should contain_package('python-networking-bgpvpn').with(
           :ensure => params[:package_ensure],
           :name   => platform_params[:bgpvpn_package_name],
         )
       end
 
       it 'runs neutron-db-sync' do
-        is_expected.to contain_exec('bgpvpn-db-sync').with(
+        should contain_exec('bgpvpn-db-sync').with(
           :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-bgpvpn upgrade head',
           :path        => '/usr/bin',
           :subscribe   => ['Anchor[neutron::install::end]',
@@ -61,7 +60,7 @@ describe 'neutron::services::bgpvpn' do
       end
 
       it 'configures networking_bgpvpn.conf' do
-        is_expected.to contain_neutron_bgpvpn_service_config(
+        should contain_neutron_bgpvpn_service_config(
           'service_providers/service_provider'
         ).with_value(['provider1', 'provider2'])
       end
@@ -84,7 +83,7 @@ describe 'neutron::services::bgpvpn' do
           { :bgpvpn_package_name => 'python-networking-bgpvpn' }
         end
       end
-      it_configures 'neutron bgpvpn service plugin'
+      it_behaves_like 'neutron bgpvpn service plugin'
     end
   end
 end

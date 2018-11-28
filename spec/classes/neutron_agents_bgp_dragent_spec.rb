@@ -17,7 +17,6 @@
 require 'spec_helper'
 
 describe 'neutron::agents::bgp_dragent' do
-
   let :default_params do
     {
       :package_ensure     => 'present',
@@ -29,8 +28,7 @@ describe 'neutron::agents::bgp_dragent' do
   end
 
   let :params do
-    {
-    }
+    {}
   end
 
   shared_examples 'neutron::agents::bgp_dragent' do

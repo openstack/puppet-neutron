@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe 'neutron::agents::ml2::linuxbridge' do
-
   let :pre_condition do
     "class { 'neutron': }"
   end
 
   let :default_params do
-    { :package_ensure              => 'present',
+    {
+      :package_ensure              => 'present',
       :enabled                     => true,
       :manage_service              => true,
       :tunnel_types                => [],
@@ -18,33 +18,26 @@ describe 'neutron::agents::ml2::linuxbridge' do
       :purge_config                => false,}
   end
 
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
-    }
-  end
-
   let :params do
     {}
   end
 
-  shared_examples_for 'neutron plugin linuxbridge agent with ml2 plugin' do
-
+  shared_examples 'neutron plugin linuxbridge agent with ml2 plugin' do
     context 'with default parameters' do
-      it { is_expected.to contain_class('neutron::params') }
+      it { should contain_class('neutron::params') }
 
       it 'passes purge to resource' do
-        is_expected.to contain_resources('neutron_agent_linuxbridge').with({
+        should contain_resources('neutron_agent_linuxbridge').with({
           :purge => false
         })
       end
 
       it 'configures ml2_conf.ini' do
-        is_expected.to contain_neutron_agent_linuxbridge('agent/polling_interval').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/physical_interface_mappings').with_value(default_params[:physical_interface_mappings].join(','))
-        is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/bridge_mappings').with_ensure('absent')
-        is_expected.to contain_neutron_agent_linuxbridge('securitygroup/firewall_driver').with_value(default_params[:firewall_driver])
-        is_expected.to contain_neutron_agent_linuxbridge('agent/tunnel_types').with_ensure('absent')
+        should contain_neutron_agent_linuxbridge('agent/polling_interval').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_agent_linuxbridge('linux_bridge/physical_interface_mappings').with_value(default_params[:physical_interface_mappings].join(','))
+        should contain_neutron_agent_linuxbridge('linux_bridge/bridge_mappings').with_ensure('absent')
+        should contain_neutron_agent_linuxbridge('securitygroup/firewall_driver').with_value(default_params[:firewall_driver])
+        should contain_neutron_agent_linuxbridge('agent/tunnel_types').with_ensure('absent')
       end
 
       it 'installs neutron linuxbridge agent package' do
@@ -54,23 +47,22 @@ describe 'neutron::agents::ml2::linuxbridge' do
           linuxbridge_agent_package = platform_params[:linuxbridge_server_package]
         end
 
-        is_expected.to contain_package('neutron-plugin-linuxbridge-agent').with(
+        should contain_package('neutron-plugin-linuxbridge-agent').with(
           :name   => linuxbridge_agent_package,
           :ensure => default_params[:package_ensure],
           :tag    => ['openstack', 'neutron-package'],
         )
-
       end
 
       it 'configures neutron linuxbridge agent service' do
-        is_expected.to contain_service('neutron-plugin-linuxbridge-agent').with(
+        should contain_service('neutron-plugin-linuxbridge-agent').with(
           :name    => platform_params[:linuxbridge_agent_service],
           :enable  => true,
           :ensure  => 'running',
           :tag     => 'neutron-service',
         )
-        is_expected.to contain_service('neutron-plugin-linuxbridge-agent').that_subscribes_to('Anchor[neutron::service::begin]')
-        is_expected.to contain_service('neutron-plugin-linuxbridge-agent').that_notifies('Anchor[neutron::service::end]')
+        should contain_service('neutron-plugin-linuxbridge-agent').that_subscribes_to('Anchor[neutron::service::begin]')
+        should contain_service('neutron-plugin-linuxbridge-agent').that_notifies('Anchor[neutron::service::end]')
       end
 
       context 'with manage_service as false' do
@@ -78,15 +70,15 @@ describe 'neutron::agents::ml2::linuxbridge' do
           params.merge!(:manage_service => false)
         end
         it 'should not start/stop service' do
-          is_expected.to contain_service('neutron-plugin-linuxbridge-agent').without_ensure
+          should contain_service('neutron-plugin-linuxbridge-agent').without_ensure
         end
       end
 
       it 'does not configre VXLAN tunneling' do
-        is_expected.to contain_neutron_agent_linuxbridge('vxlan/enable_vxlan').with_value(false)
-        is_expected.to contain_neutron_agent_linuxbridge('vxlan/local_ip').with_ensure('absent')
-        is_expected.not_to contain_neutron_agent_linuxbridge('vxlan/vxlan_group')
-        is_expected.not_to contain_neutron_agent_linuxbridge('vxlan/l2_population')
+        should contain_neutron_agent_linuxbridge('vxlan/enable_vxlan').with_value(false)
+        should contain_neutron_agent_linuxbridge('vxlan/local_ip').with_ensure('absent')
+        should_not contain_neutron_agent_linuxbridge('vxlan/vxlan_group')
+        should_not contain_neutron_agent_linuxbridge('vxlan/l2_population')
       end
     end
 
@@ -100,12 +92,12 @@ describe 'neutron::agents::ml2::linuxbridge' do
 
       context 'when providing all parameters' do
         it 'configures ml2_conf.ini' do
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/local_ip').with_value(params[:local_ip])
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/ttl').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/tos').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/l2_population').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_neutron_agent_linuxbridge('agent/tunnel_types').with_value(params[:tunnel_types])
+          should contain_neutron_agent_linuxbridge('vxlan/local_ip').with_value(params[:local_ip])
+          should contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value('<SERVICE DEFAULT>')
+          should contain_neutron_agent_linuxbridge('vxlan/ttl').with_value('<SERVICE DEFAULT>')
+          should contain_neutron_agent_linuxbridge('vxlan/tos').with_value('<SERVICE DEFAULT>')
+          should contain_neutron_agent_linuxbridge('vxlan/l2_population').with_value('<SERVICE DEFAULT>')
+          should contain_neutron_agent_linuxbridge('agent/tunnel_types').with_value(params[:tunnel_types])
         end
       end
 
@@ -120,11 +112,11 @@ describe 'neutron::agents::ml2::linuxbridge' do
         end
 
         it 'configures ml2_conf.ini' do
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/local_ip').with_value(params[:local_ip])
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value(params[:vxlan_group])
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/ttl').with_value(params[:vxlan_ttl])
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/tos').with_value(params[:vxlan_tos])
-          is_expected.to contain_neutron_agent_linuxbridge('vxlan/l2_population').with_value(params[:l2_population])
+          should contain_neutron_agent_linuxbridge('vxlan/local_ip').with_value(params[:local_ip])
+          should contain_neutron_agent_linuxbridge('vxlan/vxlan_group').with_value(params[:vxlan_group])
+          should contain_neutron_agent_linuxbridge('vxlan/ttl').with_value(params[:vxlan_ttl])
+          should contain_neutron_agent_linuxbridge('vxlan/tos').with_value(params[:vxlan_tos])
+          should contain_neutron_agent_linuxbridge('vxlan/l2_population').with_value(params[:l2_population])
         end
       end
     end
@@ -135,7 +127,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
       end
 
       it 'configures physical interface mappings' do
-        is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/physical_interface_mappings').with_value(
+        should contain_neutron_agent_linuxbridge('linux_bridge/physical_interface_mappings').with_value(
           params[:physical_interface_mappings].join(',')
         )
       end
@@ -147,7 +139,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
       end
 
       it 'configures bridge mappings' do
-        is_expected.to contain_neutron_agent_linuxbridge('linux_bridge/bridge_mappings').with_value(
+        should contain_neutron_agent_linuxbridge('linux_bridge/bridge_mappings').with_value(
           params[:bridge_mappings].join(',')
         )
       end
@@ -158,39 +150,35 @@ describe 'neutron::agents::ml2::linuxbridge' do
         params.merge!(:firewall_driver => false)
       end
       it 'removes firewall driver configuration' do
-        is_expected.to contain_neutron_agent_linuxbridge('securitygroup/firewall_driver').with_ensure('absent')
+        should contain_neutron_agent_linuxbridge('securitygroup/firewall_driver').with_ensure('absent')
       end
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian',
-         :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
-      }))
-    end
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-    let :platform_params do
-      { :linuxbridge_agent_package => 'neutron-linuxbridge-agent',
-        :linuxbridge_agent_service => 'neutron-linuxbridge-agent' }
-    end
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          {
+            :linuxbridge_agent_package => 'neutron-linuxbridge-agent',
+            :linuxbridge_agent_service => 'neutron-linuxbridge-agent'
+          }
+        when 'RedHat'
+          {
+            :linuxbridge_server_package => 'openstack-neutron-linuxbridge',
+            :linuxbridge_agent_service  => 'neutron-linuxbridge-agent'
+          }
+        end
+      end
 
-    it_configures 'neutron plugin linuxbridge agent with ml2 plugin'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7',
-         :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
-      }))
-    end
-
-    let :platform_params do
-      { :linuxbridge_server_package => 'openstack-neutron-linuxbridge',
-        :linuxbridge_agent_service  => 'neutron-linuxbridge-agent' }
+      it_behaves_like 'neutron plugin linuxbridge agent with ml2 plugin'
     end
   end
 end

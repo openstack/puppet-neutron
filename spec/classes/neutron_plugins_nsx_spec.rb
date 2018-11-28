@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::nsx' do
-
   let :pre_condition do
     "class { 'neutron':
       core_plugin     => 'vmware_nsx.plugin.NsxV3Plugin' }
@@ -29,13 +28,13 @@ describe 'neutron::plugins::nsx' do
   }
   end
 
-  shared_examples_for 'neutron plugin nsx' do
+  shared_examples 'neutron plugin nsx' do
 
     context 'with defaults' do
-      it { is_expected.to contain_class('neutron::params') }
+      it { should contain_class('neutron::params') }
 
       it 'should have a nsx plugin ini file' do
-        is_expected.to contain_file('/etc/neutron/plugins/vmware/nsx.ini').with(
+        should contain_file('/etc/neutron/plugins/vmware/nsx.ini').with(
           :ensure => 'file',
           :owner  => 'root',
           :group  => 'neutron',
@@ -44,26 +43,26 @@ describe 'neutron::plugins::nsx' do
       end
 
       it 'should configure neutron.conf' do
-        is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('vmware_nsx.plugin.NsxV3Plugin')
+        should contain_neutron_config('DEFAULT/core_plugin').with_value('vmware_nsx.plugin.NsxV3Plugin')
       end
 
       it 'passes purge to resource' do
-        is_expected.to contain_resources('neutron_plugin_nsx').with({
+        should contain_resources('neutron_plugin_nsx').with({
           :purge => false
         })
       end
 
       it 'should configure nsx.ini' do
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_overlay_tz').with_value(default_params[:default_overlay_tz])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_vlan_tz').with_value(default_params[:default_vlan_tz])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_bridge_cluster').with_value(default_params[:default_bridge_cluster])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_tier0_router').with_value(default_params[:default_tier0_router])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/nsx_api_managers').with_value(default_params[:nsx_api_managers])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/nsx_api_password').with_value(default_params[:nsx_api_password])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_profile').with_value(default_params[:dhcp_profile])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_relay_service').with_value(default_params[:dhcp_relay_service])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/metadata_proxy').with_value(default_params[:metadata_proxy])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/native_dhcp_metadata').with_value(default_params[:native_dhcp_metadata])
+        should contain_neutron_plugin_nsx('nsx_v3/default_overlay_tz').with_value(default_params[:default_overlay_tz])
+        should contain_neutron_plugin_nsx('nsx_v3/default_vlan_tz').with_value(default_params[:default_vlan_tz])
+        should contain_neutron_plugin_nsx('nsx_v3/default_bridge_cluster').with_value(default_params[:default_bridge_cluster])
+        should contain_neutron_plugin_nsx('nsx_v3/default_tier0_router').with_value(default_params[:default_tier0_router])
+        should contain_neutron_plugin_nsx('nsx_v3/nsx_api_managers').with_value(default_params[:nsx_api_managers])
+        should contain_neutron_plugin_nsx('nsx_v3/nsx_api_password').with_value(default_params[:nsx_api_password])
+        should contain_neutron_plugin_nsx('nsx_v3/dhcp_profile').with_value(default_params[:dhcp_profile])
+        should contain_neutron_plugin_nsx('nsx_v3/dhcp_relay_service').with_value(default_params[:dhcp_relay_service])
+        should contain_neutron_plugin_nsx('nsx_v3/metadata_proxy').with_value(default_params[:metadata_proxy])
+        should contain_neutron_plugin_nsx('nsx_v3/native_dhcp_metadata').with_value(default_params[:native_dhcp_metadata])
       end
     end
 
@@ -86,17 +85,17 @@ describe 'neutron::plugins::nsx' do
       end
 
       it {
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_overlay_tz').with_value(params[:default_overlay_tz])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_vlan_tz').with_value(params[:default_vlan_tz])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_bridge_cluster').with_value(params[:default_bridge_cluster])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/default_tier0_router').with_value(params[:default_tier0_router])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/nsx_api_managers').with_value(params[:nsx_api_managers])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/nsx_api_password').with_value(params[:nsx_api_password])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_profile').with_value(params[:dhcp_profile])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/dhcp_relay_service').with_value(params[:dhcp_relay_service])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/metadata_proxy').with_value(params[:metadata_proxy])
-        is_expected.to contain_neutron_plugin_nsx('nsx_v3/native_dhcp_metadata').with_value(params[:native_dhcp_metadata])
-        is_expected.to contain_resources('neutron_plugin_nsx').with({
+        should contain_neutron_plugin_nsx('nsx_v3/default_overlay_tz').with_value(params[:default_overlay_tz])
+        should contain_neutron_plugin_nsx('nsx_v3/default_vlan_tz').with_value(params[:default_vlan_tz])
+        should contain_neutron_plugin_nsx('nsx_v3/default_bridge_cluster').with_value(params[:default_bridge_cluster])
+        should contain_neutron_plugin_nsx('nsx_v3/default_tier0_router').with_value(params[:default_tier0_router])
+        should contain_neutron_plugin_nsx('nsx_v3/nsx_api_managers').with_value(params[:nsx_api_managers])
+        should contain_neutron_plugin_nsx('nsx_v3/nsx_api_password').with_value(params[:nsx_api_password])
+        should contain_neutron_plugin_nsx('nsx_v3/dhcp_profile').with_value(params[:dhcp_profile])
+        should contain_neutron_plugin_nsx('nsx_v3/dhcp_relay_service').with_value(params[:dhcp_relay_service])
+        should contain_neutron_plugin_nsx('nsx_v3/metadata_proxy').with_value(params[:metadata_proxy])
+        should contain_neutron_plugin_nsx('nsx_v3/native_dhcp_metadata').with_value(params[:native_dhcp_metadata])
+        should contain_resources('neutron_plugin_nsx').with({
           :purge => true
         })
       }
@@ -108,28 +107,28 @@ describe 'neutron::plugins::nsx' do
           core_plugin     => 'foo' }"
       end
 
-      it_raises 'a Puppet::Error', /NSX plugin should be the core_plugin in neutron.conf/
+      it { should raise_error(Puppet::Error, /NSX plugin should be the core_plugin in neutron.conf/) }
     end
   end
 
-  shared_examples_for 'neutron plugin nsx on Debian' do
+  shared_examples 'neutron plugin nsx on Debian' do
     context 'with defaults' do
       it 'configures /etc/default/neutron-server' do
-        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
+        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
           :path    => '/etc/default/neutron-server',
           :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
           :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/vmware/nsx.ini',
         )
-        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
-        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
+        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
       end
     end
   end
 
-  shared_examples_for 'neutron plugin nsx on RedHat' do
+  shared_examples 'neutron plugin nsx on RedHat' do
     context 'with defaults' do
      it 'should create plugin symbolic link' do
-        is_expected.to contain_file('/etc/neutron/plugin.ini').with(
+        should contain_file('/etc/neutron/plugin.ini').with(
           :ensure  => 'link',
           :target  => '/etc/neutron/plugins/vmware/nsx.ini')
       end
@@ -144,9 +143,8 @@ describe 'neutron::plugins::nsx' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'neutron plugin nsx'
-      it_configures "neutron plugin nsx on #{facts[:osfamily]}"
+      it_behaves_like 'neutron plugin nsx'
+      it_behaves_like "neutron plugin nsx on #{facts[:osfamily]}"
     end
   end
-
 end

@@ -19,21 +19,21 @@
 require 'spec_helper'
 
 describe 'neutron::services::vpnaas' do
-
   let :default_params do
-    { :package_ensure    => 'present',
-      :service_providers => '<SERVICE DEFAULT>'}
+    {
+      :package_ensure    => 'present',
+      :service_providers => '<SERVICE DEFAULT>'
+    }
   end
 
-  shared_examples_for 'neutron vpnaas service plugin' do
-
+  shared_examples 'neutron vpnaas service plugin' do
     context 'with default params' do
       let :params do
         default_params
       end
 
       it 'installs vpnaas package' do
-        is_expected.to contain_package('neutron-vpnaas-agent').with(
+        should contain_package('neutron-vpnaas-agent').with(
           :ensure => params[:package_ensure],
           :name   => platform_params[:vpnaas_package_name],
         )
@@ -48,43 +48,35 @@ describe 'neutron::services::vpnaas' do
       end
 
       it 'configures neutron_vpnaas.conf' do
-        is_expected.to contain_neutron_vpnaas_service_config(
+        should contain_neutron_vpnaas_service_config(
           'service_providers/service_provider'
         ).with_value(['provider1', 'provider2'])
       end
     end
-
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'Debian',
-        :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
-      })
-    end
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-    let :platform_params do
-      { :vpnaas_package_name => 'neutron-vpn-agent'}
-    end
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          {
+            :vpnaas_package_name => 'neutron-vpn-agent'
+          }
+        when 'RedHat'
+          {
+            :vpnaas_package_name => 'openstack-neutron-vpnaas'
+          }
+        end
+      end
 
-    it_configures 'neutron vpnaas service plugin'
+      it_behaves_like 'neutron vpnaas service plugin'
+    end
   end
-
-  context 'on Red Hat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'RedHat',
-        :operatingsystemrelease => '7',
-        :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
-      })
-    end
-
-    let :platform_params do
-      { :vpnaas_package_name => 'openstack-neutron-vpnaas'}
-    end
-
-    it_configures 'neutron vpnaas service plugin'
-  end
-
 end

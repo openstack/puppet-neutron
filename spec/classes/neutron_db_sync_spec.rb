@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe 'neutron::db::sync' do
-
-  shared_examples_for 'neutron-dbsync' do
-
+  shared_examples 'neutron-dbsync' do
     it 'runs neutron-db-sync' do
-      is_expected.to contain_exec('neutron-db-sync').with(
+      should contain_exec('neutron-db-sync').with(
         :command     => 'neutron-db-manage  upgrade heads',
         :path        => '/usr/bin',
         :refreshonly => 'true',
@@ -29,7 +27,7 @@ describe 'neutron::db::sync' do
     end
 
     it {
-        is_expected.to contain_exec('neutron-db-sync').with(
+        should contain_exec('neutron-db-sync').with(
           :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf upgrade heads',
           :path        => '/usr/bin',
           :refreshonly => 'true',
@@ -54,7 +52,7 @@ describe 'neutron::db::sync' do
       end
 
       it {
-        is_expected.to contain_exec('neutron-db-sync').with(
+        should contain_exec('neutron-db-sync').with(
           :command     => 'neutron-db-manage  upgrade heads',
           :path        => '/usr/bin',
           :refreshonly => 'true',
@@ -83,8 +81,7 @@ describe 'neutron::db::sync' do
         }))
       end
 
-      it_configures 'neutron-dbsync'
+      it_behaves_like 'neutron-dbsync'
     end
   end
-
 end

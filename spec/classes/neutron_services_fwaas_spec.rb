@@ -26,59 +26,44 @@ describe 'neutron::services::fwaas' do
      include ::neutron::agents::l3"
   end
 
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
-    }
-  end
-
   let :params do
     {}
   end
 
   let :default_params do
-    { :vpnaas_agent_package => false,
-      :purge_config         => false, }
+    {
+      :vpnaas_agent_package => false,
+      :purge_config         => false,
+    }
   end
 
-  shared_examples_for 'neutron fwaas service plugin' do
+  shared_examples 'neutron fwaas service plugin' do
     let :params_hash do
       default_params.merge(params)
     end
 
     it 'passes purge to resource' do
-      is_expected.to contain_resources('neutron_fwaas_service_config').with({
+      should contain_resources('neutron_fwaas_service_config').with({
         :purge => false
       })
     end
 
     it 'configures driver in fwaas_driver.ini' do
-      is_expected.to contain_neutron_fwaas_service_config('fwaas/driver').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_fwaas_service_config('fwaas/enabled').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_fwaas_service_config('fwaas/agent_version').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_fwaas_service_config('fwaas/driver').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_fwaas_service_config('fwaas/enabled').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_fwaas_service_config('fwaas/agent_version').with_value('<SERVICE DEFAULT>')
     end
 
     it 'configures driver in neutron.conf' do
-      is_expected.to contain_neutron_config('fwaas/driver').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('fwaas/enabled').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_config('fwaas/agent_version').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('fwaas/driver').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('fwaas/enabled').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('fwaas/agent_version').with_value('<SERVICE DEFAULT>')
     end
   end
 
-  context 'on Ubuntu platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge(
-        { :osfamily        => 'Debian',
-          :operatingsystem => 'Ubuntu',
-          :os       => { :name  => 'Ubuntu', :family => 'Debian', :release => { :major => '16', :minor => '04' } },
-        }
-      ))
-    end
-
-    it_configures 'neutron fwaas service plugin'
-
+  shared_examples 'neutron::services::fwaas on Ubuntu' do
     it 'installs neutron fwaas package' do
-      is_expected.to contain_package('neutron-fwaas').with(
+      should contain_package('neutron-fwaas').with(
         :ensure => 'present',
         :tag    => ['neutron-package', 'openstack'],
         :name   => 'python-neutron-fwaas',
@@ -86,66 +71,64 @@ describe 'neutron::services::fwaas' do
     end
   end
 
-  context 'on Debian platforms without VPNaaS' do
-    let :facts do
-      @default_facts.merge(test_facts.merge(
-        { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian',
-          :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
-        }
-      ))
+  shared_examples 'neutron::services::fwaas on Debian' do
+    context 'without VPNaaS package' do
+      it 'installs neutron fwaas package' do
+        should contain_package('neutron-fwaas').with(
+          :ensure => 'present',
+          :tag    => ['neutron-package', 'openstack'],
+          :name   => 'python-neutron-fwaas',
+        )
+      end
     end
 
-    it_configures 'neutron fwaas service plugin'
+    context 'with VPNaaS package' do
+      before do
+        params.merge!( :vpnaas_agent_package => true )
+      end
 
-    it 'installs neutron fwaas package' do
-      is_expected.to contain_package('neutron-fwaas').with(
-        :ensure => 'present',
-        :tag    => ['neutron-package', 'openstack'],
-        :name   => 'python-neutron-fwaas',
-      )
-    end
-  end
-
-  context 'on Debian platforms with VPNaaS' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian',
-         :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
-      }))
-    end
-
-    let :params do
-      { :vpnaas_agent_package => true }
-    end
-
-    it_configures 'neutron fwaas service plugin'
-
-    it 'installs neutron vpnaas agent package' do
-      is_expected.to contain_package('neutron-vpn-agent').with(
-        :ensure => 'present',
-        :tag    => ['neutron-package', 'openstack'],
-      )
+      it 'installs neutron vpnaas agent package' do
+        should contain_package('neutron-vpn-agent').with(
+          :ensure => 'present',
+          :tag    => ['neutron-package', 'openstack'],
+        )
+      end
     end
   end
 
-  context 'on Red Hat platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7',
-         :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
-      }))
-    end
-
-    it_configures 'neutron fwaas service plugin'
-
+  shared_examples 'neutron::services::fwaas on RedHat' do
     it 'installs neutron fwaas service package' do
-      is_expected.to contain_package('neutron-fwaas').with(
+      should contain_package('neutron-fwaas').with(
         :ensure => 'present',
         :name   => 'openstack-neutron-fwaas',
       )
     end
   end
 
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      let (:platform_params) do
+        {}
+      end
+
+      it_behaves_like 'neutron fwaas service plugin'
+
+      case facts[:operatingsystem]
+      when 'Debian'
+        it_behaves_like 'neutron::services::fwaas on Debian'
+      when 'Ubuntu'
+        it_behaves_like 'neutron::services::fwaas on Ubuntu'
+      end
+
+      if facts[:osfamily] == 'RedHat'
+        it_behaves_like 'neutron::services::fwaas on RedHat'
+      end
+    end
+  end
 end

@@ -1,12 +1,9 @@
 require 'spec_helper'
 
 describe 'neutron::db' do
-
   shared_examples 'neutron::db' do
-
     context 'with default parameters' do
-
-      it { is_expected.to contain_oslo__db('neutron_config').with(
+      it { should contain_oslo__db('neutron_config').with(
         :db_max_retries => '<SERVICE DEFAULT>',
         :connection     => 'sqlite:////var/lib/neutron/ovs.sqlite',
         :idle_timeout   => '<SERVICE DEFAULT>',
@@ -22,7 +19,8 @@ describe 'neutron::db' do
 
     context 'with specific parameters' do
       let :params do
-        { :database_connection     => 'mysql+pymysql://neutron:neutron@localhost/neutron',
+        {
+          :database_connection     => 'mysql+pymysql://neutron:neutron@localhost/neutron',
           :database_idle_timeout   => '3601',
           :database_min_pool_size  => '2',
           :database_max_pool_size  => '11',
@@ -34,7 +32,7 @@ describe 'neutron::db' do
         }
       end
 
-      it { is_expected.to contain_oslo__db('neutron_config').with(
+      it { should contain_oslo__db('neutron_config').with(
         :db_max_retries => '-1',
         :connection     => 'mysql+pymysql://neutron:neutron@localhost/neutron',
         :idle_timeout   => '3601',
@@ -53,7 +51,7 @@ describe 'neutron::db' do
         { :database_connection => 'mysql+pymysql://neutron:neutron@localhost/neutron' }
       end
 
-      it { is_expected.to contain_oslo__db('neutron_config').with(
+      it { should contain_oslo__db('neutron_config').with(
         :connection => 'mysql+pymysql://neutron:neutron@localhost/neutron',
       )}
     end
@@ -64,7 +62,7 @@ describe 'neutron::db' do
       end
 
       it 'install the proper backend package' do
-        is_expected.to contain_package('python-psycopg2').with(:ensure => 'present')
+        should contain_package('python-psycopg2').with(:ensure => 'present')
       end
 
     end
@@ -74,7 +72,7 @@ describe 'neutron::db' do
         { :database_connection => 'redis://neutron:neutron@localhost/neutron', }
       end
 
-      it_raises 'a Puppet::Error', /validate_re/
+      it { should raise_error(Puppet::Error, /validate_re/) }
     end
 
     context 'with incorrect database_connection string' do
@@ -82,49 +80,34 @@ describe 'neutron::db' do
         { :database_connection => 'foo+pymysql://neutron:neutron@localhost/neutron', }
       end
 
-      it_raises 'a Puppet::Error', /validate_re/
+      it { should raise_error(Puppet::Error, /validate_re/) }
     end
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-         :osfamily => 'Debian',
-         :operatingsystem => 'Debian',
-         :operatingsystemrelease => 'jessie',
-      })
-    end
-
-    it_configures 'neutron::db'
-
+  shared_examples 'neutron::db on Debian' do
     context 'using pymysql driver' do
       let :params do
         { :database_connection => 'mysql+pymysql://neutron:neutron@localhost/neutron' }
       end
 
-      it { is_expected.to contain_package('python-pymysql').with({ :ensure => 'present', :name => 'python-pymysql' }) }
+      it { should contain_package('python-pymysql').with({ :ensure => 'present', :name => 'python-pymysql' }) }
     end
-
   end
 
-  context 'on Redhat platforms' do
-    let :facts do
-      @default_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7.1',
-      })
-    end
-
-    it_configures 'neutron::db'
-
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection => 'mysql+pymysql://neutron:neutron@localhost/neutron' }
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
       end
 
+      it_behaves_like 'neutron::db'
+
+      if facts[:osfamily] == 'Debian'
+        it_behaves_like 'neutron::db on Debian'
+      end
     end
-
   end
-
 end

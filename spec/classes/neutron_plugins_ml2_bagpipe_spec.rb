@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::bagpipe' do
-
   let :default_params do
     {
       :bagpipe_bgp_port        => '<SERVICE DEFAULT>',
@@ -11,33 +10,24 @@ describe 'neutron::plugins::ml2::bagpipe' do
   end
 
   let :params do
-    {
-    }
+    {}
   end
 
-  let :test_facts do
-    {
-      :operatingsystem        => 'default',
-      :operatingsystemrelease => 'default',
-    }
-  end
-
-
-  shared_examples_for 'neutron plugin bagpipe ml2' do
+  shared_examples 'neutron plugin bagpipe ml2' do
     before do
       params.merge!(default_params)
     end
 
     it 'should have' do
-      is_expected.to contain_package('python-networking-bagpipe').with(
+      should contain_package('python-networking-bagpipe').with(
         :ensure => params[:package_ensure],
         :tag    => 'openstack'
         )
     end
 
     it 'configures bagpipe settings' do
-      is_expected.to contain_neutron_plugin_ml2('bagpipe/bagpipe_bgp_port').with_value(params[:bagpipe_bgp_port])
-      is_expected.to contain_neutron_plugin_ml2('bagpipe/mpls_bridge').with_value(params[:mpls_bridge])
+      should contain_neutron_plugin_ml2('bagpipe/bagpipe_bgp_port').with_value(params[:bagpipe_bgp_port])
+      should contain_neutron_plugin_ml2('bagpipe/mpls_bridge').with_value(params[:mpls_bridge])
     end
   end
 
@@ -57,7 +47,7 @@ describe 'neutron::plugins::ml2::bagpipe' do
           { :bagpipe_package_name => 'python-networking-bagpipe' }
         end
       end
-      it_configures 'neutron plugin bagpipe ml2'
+      it_behaves_like 'neutron plugin bagpipe ml2'
     end
   end
 end

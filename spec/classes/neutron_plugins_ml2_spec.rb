@@ -21,14 +21,15 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2' do
-
   let :pre_condition do
     "class { 'neutron':
-      core_plugin     => 'ml2' }"
+      core_plugin     => 'ml2'
+     }"
   end
 
   let :default_params do
-    { :type_drivers          => ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
+    {
+      :type_drivers          => ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
       :tenant_network_types  => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
       :mechanism_drivers     => ['openvswitch', 'linuxbridge'],
       :flat_networks         => '*',
@@ -39,12 +40,7 @@ describe 'neutron::plugins::ml2' do
       :path_mtu              => '0',
       :physical_network_mtus => '',
       :package_ensure        => 'present',
-      :purge_config          => false, }
-  end
-
-  let :test_facts do
-    { :operatingsystem           => 'default',
-      :operatingsystemrelease    => 'default'
+      :purge_config          => false,
     }
   end
 
@@ -52,37 +48,37 @@ describe 'neutron::plugins::ml2' do
     {}
   end
 
-  shared_examples_for 'neutron plugin ml2' do
+  shared_examples 'neutron plugin ml2' do
     let :p do
       default_params.merge(params)
     end
 
-    it { is_expected.to contain_class('neutron::params') }
+    it { should contain_class('neutron::params') }
 
     it 'configures neutron.conf' do
-        is_expected.to contain_neutron_config('DEFAULT/core_plugin').with_value('ml2')
+        should contain_neutron_config('DEFAULT/core_plugin').with_value('ml2')
     end
 
     it 'passes purge to resource' do
-      is_expected.to contain_resources('neutron_plugin_ml2').with({
+      should contain_resources('neutron_plugin_ml2').with({
         :purge => false
       })
     end
 
     it 'configures ml2_conf.ini' do
-      is_expected.to contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
-      is_expected.to contain_neutron_plugin_ml2('ml2/tenant_network_types').with_value(p[:tenant_network_types].join(','))
-      is_expected.to contain_neutron_plugin_ml2('ml2/mechanism_drivers').with_value(p[:mechanism_drivers].join(','))
-      is_expected.to contain_neutron_plugin_ml2('ml2/extension_drivers').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_plugin_ml2('ml2/path_mtu').with_value(p[:path_mtu])
-      is_expected.to contain_neutron_plugin_ml2('ml2/physical_network_mtus').with_ensure('absent')
-      is_expected.to contain_neutron_plugin_ml2('ml2/overlay_ip_version').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
+      should contain_neutron_plugin_ml2('ml2/tenant_network_types').with_value(p[:tenant_network_types].join(','))
+      should contain_neutron_plugin_ml2('ml2/mechanism_drivers').with_value(p[:mechanism_drivers].join(','))
+      should contain_neutron_plugin_ml2('ml2/extension_drivers').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_plugin_ml2('ml2/path_mtu').with_value(p[:path_mtu])
+      should contain_neutron_plugin_ml2('ml2/physical_network_mtus').with_ensure('absent')
+      should contain_neutron_plugin_ml2('ml2/overlay_ip_version').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('<SERVICE DEFAULT>')
     end
 
     it 'creates plugin symbolic link' do
-      is_expected.to contain_file('/etc/neutron/plugin.ini').with(
+      should contain_file('/etc/neutron/plugin.ini').with(
         :ensure  => 'link',
         :target  => '/etc/neutron/plugins/ml2/ml2_conf.ini'
       )
@@ -90,16 +86,15 @@ describe 'neutron::plugins::ml2' do
 
     it 'installs ml2 package (if any)' do
       if platform_params.has_key?(:ml2_server_package)
-        is_expected.to contain_package('neutron-plugin-ml2').with(
+        should contain_package('neutron-plugin-ml2').with(
           :name   => platform_params[:ml2_server_package],
           :ensure => p[:package_ensure],
           :tag    => ['neutron-package', 'openstack'],
         )
-        is_expected.to contain_package('neutron-plugin-ml2').that_requires('Anchor[neutron::install::begin]')
-        is_expected.to contain_package('neutron-plugin-ml2').that_notifies('Anchor[neutron::install::end]')
+        should contain_package('neutron-plugin-ml2').that_requires('Anchor[neutron::install::begin]')
+        should contain_package('neutron-plugin-ml2').that_notifies('Anchor[neutron::install::end]')
       end
     end
-
 
     context 'when overriding security group options' do
       before :each do
@@ -109,8 +104,8 @@ describe 'neutron::plugins::ml2' do
         )
       end
       it 'configures enable_security_group and firewall_driver options' do
-        is_expected.to contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('true')
-        is_expected.to contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('iptables_hybrid')
+        should contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('true')
+        should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('iptables_hybrid')
       end
     end
 
@@ -119,7 +114,7 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:overlay_ip_version => 4)
       end
       it 'configures as IPv4' do
-        is_expected.to contain_neutron_plugin_ml2('ml2/overlay_ip_version').with_value(4)
+        should contain_neutron_plugin_ml2('ml2/overlay_ip_version').with_value(4)
       end
     end
 
@@ -128,7 +123,7 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:overlay_ip_version => 6)
       end
       it 'configures as IPv6' do
-        is_expected.to contain_neutron_plugin_ml2('ml2/overlay_ip_version').with_value(6)
+        should contain_neutron_plugin_ml2('ml2/overlay_ip_version').with_value(6)
       end
     end
 
@@ -137,7 +132,7 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:overlay_ip_version => 10)
       end
       it 'fails to accept value' do
-        is_expected.to raise_error(Puppet::Error)
+        should raise_error(Puppet::Error)
       end
     end
 
@@ -147,7 +142,7 @@ describe 'neutron::plugins::ml2' do
       end
 
       it 'configures extension drivers' do
-        is_expected.to contain_neutron_plugin_ml2('ml2/extension_drivers').with_value(p[:extension_drivers].join(','))
+        should contain_neutron_plugin_ml2('ml2/extension_drivers').with_value(p[:extension_drivers].join(','))
       end
     end
 
@@ -163,7 +158,7 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:flat_networks => ['eth1', 'eth2'])
       end
       it 'configures flat_networks' do
-        is_expected.to contain_neutron_plugin_ml2('ml2_type_flat/flat_networks').with_value(p[:flat_networks].join(','))
+        should contain_neutron_plugin_ml2('ml2_type_flat/flat_networks').with_value(p[:flat_networks].join(','))
       end
     end
 
@@ -172,7 +167,7 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:tunnel_id_ranges => ['0:20', '40:60'])
       end
       it 'configures gre_networks with valid ranges' do
-        is_expected.to contain_neutron_plugin_ml2('ml2_type_gre/tunnel_id_ranges').with_value(p[:tunnel_id_ranges].join(','))
+        should contain_neutron_plugin_ml2('ml2_type_gre/tunnel_id_ranges').with_value(p[:tunnel_id_ranges].join(','))
       end
     end
 
@@ -181,7 +176,7 @@ describe 'neutron::plugins::ml2' do
        params.merge!(:tunnel_id_ranges => ['0:20', '40:100000000'])
       end
 
-      it_raises 'a Puppet::Error', /tunnel id ranges are to large./
+      it { should raise_error(Puppet::Error, /tunnel id ranges are to large./) }
     end
 
     context 'when using vlan driver with valid values' do
@@ -189,7 +184,7 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:network_vlan_ranges => ['1:20', '400:4094'])
       end
       it 'configures vlan_networks with 1:20 and 400:4094 VLAN ranges' do
-        is_expected.to contain_neutron_plugin_ml2('ml2_type_vlan/network_vlan_ranges').with_value(p[:network_vlan_ranges].join(','))
+        should contain_neutron_plugin_ml2('ml2_type_vlan/network_vlan_ranges').with_value(p[:network_vlan_ranges].join(','))
       end
     end
 
@@ -198,7 +193,7 @@ describe 'neutron::plugins::ml2' do
        params.merge!(:network_vlan_ranges => ['1:20', '400:4099'])
       end
 
-      it_raises 'a Puppet::Error', /vlan id are invalid./
+      it { should raise_error(Puppet::Error, /vlan id are invalid./) }
     end
 
     context 'when using vlan driver with invalid vlan range' do
@@ -206,7 +201,7 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:network_vlan_ranges => ['2938:1'])
       end
 
-      it_raises 'a Puppet::Error', /vlan ranges are invalid./
+      it { should raise_error(Puppet::Error, /vlan ranges are invalid./) }
     end
 
     context 'when using vxlan driver with valid values' do
@@ -214,8 +209,8 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:vni_ranges => ['40:300', '500:1000'], :vxlan_group => '224.1.1.1')
       end
       it 'configures vxlan_networks with 224.1.1.1 vxlan group' do
-        is_expected.to contain_neutron_plugin_ml2('ml2_type_vxlan/vni_ranges').with_value(p[:vni_ranges].join(','))
-        is_expected.to contain_neutron_plugin_ml2('ml2_type_vxlan/vxlan_group').with_value(p[:vxlan_group])
+        should contain_neutron_plugin_ml2('ml2_type_vxlan/vni_ranges').with_value(p[:vni_ranges].join(','))
+        should contain_neutron_plugin_ml2('ml2_type_vxlan/vxlan_group').with_value(p[:vxlan_group])
       end
     end
 
@@ -224,7 +219,7 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:vxlan_group => '192.1.1.1')
       end
 
-      it_raises 'a Puppet::Error', /is not valid for vxlan_group./
+      it { should raise_error(Puppet::Error, /is not valid for vxlan_group./) }
     end
 
     context 'when using vxlan driver with invalid vni_range' do
@@ -232,7 +227,7 @@ describe 'neutron::plugins::ml2' do
         params.merge!(:vni_ranges => ['2938:1'])
       end
 
-      it_raises  'a Puppet::Error', /vni ranges are invalid./
+      it { should raise_error(Puppet::Error, /vni ranges are invalid./) }
     end
 
     context 'when using geneve driver' do
@@ -244,9 +239,9 @@ describe 'neutron::plugins::ml2' do
       end
 
       it 'configures geneve with valid values' do
-        is_expected.to contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
-        is_expected.to contain_neutron_plugin_ml2('ml2_type_geneve/vni_ranges').with_value([p[:vni_ranges].join(',')])
-        is_expected.to contain_neutron_plugin_ml2('ml2_type_geneve/max_header_size').with_value(p[:max_header_size])
+        should contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
+        should contain_neutron_plugin_ml2('ml2_type_geneve/vni_ranges').with_value([p[:vni_ranges].join(',')])
+        should contain_neutron_plugin_ml2('ml2_type_geneve/max_header_size').with_value(p[:max_header_size])
       end
     end
 
@@ -256,7 +251,7 @@ describe 'neutron::plugins::ml2' do
       end
 
       it 'should set the path_mtu on the ml2 plugin' do
-        is_expected.to contain_neutron_plugin_ml2('ml2/path_mtu').with_value(p[:path_mtu])
+        should contain_neutron_plugin_ml2('ml2/path_mtu').with_value(p[:path_mtu])
       end
     end
 
@@ -266,7 +261,7 @@ describe 'neutron::plugins::ml2' do
       end
 
       it 'should set the physical_network_mtus on the ml2 plugin' do
-        is_expected.to contain_neutron_plugin_ml2('ml2/physical_network_mtus').with_value(p[:physical_network_mtus].join(','))
+        should contain_neutron_plugin_ml2('ml2/physical_network_mtus').with_value(p[:physical_network_mtus].join(','))
       end
     end
 
@@ -276,7 +271,7 @@ describe 'neutron::plugins::ml2' do
       end
       it 'overrides package ensure state (if possible)' do
         if platform_params.has_key?(:ml2_server_package)
-          is_expected.to contain_package('neutron-plugin-ml2').with(
+          should contain_package('neutron-plugin-ml2').with(
             :name   => platform_params[:ml2_server_package],
             :ensure => params[:package_ensure],
             :tag    => ['neutron-package', 'openstack'],
@@ -291,61 +286,43 @@ describe 'neutron::plugins::ml2' do
       end
 
       it 'configures /etc/default/neutron-server' do
-        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
+        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
           :path    => '/etc/default/neutron-server',
           :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
           :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugin.ini',
         )
-        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
-        is_expected.to contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
+        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
       end
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian',
-         :os       => { :name  => 'Debian', :family => 'Debian', :release => { :major => '8', :minor => '0' } },
-      }))
-    end
-
-    let :platform_params do
-      {}
-    end
-
-    context 'on Ubuntu operating systems' do
-      before do
-        facts.merge!({:operatingsystem => 'Ubuntu'})
-        platform_params.merge!(:ml2_server_package => 'neutron-plugin-ml2')
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'neutron plugin ml2'
-    end
-
-    context 'on non-Ubuntu operating systems' do
-      before do
-        facts.merge!({:operatingsystem => 'Debian'})
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          if facts[:operatingsystem] == 'Ubuntu'
+            {
+             :ml2_server_package => 'neutron-plugin-ml2'
+            }
+          else
+            {}
+          end
+        when 'RedHat'
+          {
+            :ml2_server_package => 'openstack-neutron-ml2'
+          }
+        end
       end
 
-      it_configures 'neutron plugin ml2'
+      it_behaves_like 'neutron plugin ml2'
     end
   end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily               => 'RedHat',
-         :operatingsystemrelease => '7',
-         :os       => { :name  => 'CentOS', :family => 'RedHat', :release => { :major => '7', :minor => '0' } },
-      }))
-    end
-
-    let :platform_params do
-      { :ml2_server_package => 'openstack-neutron-ml2' }
-    end
-
-    it_configures 'neutron plugin ml2'
-  end
-
 end

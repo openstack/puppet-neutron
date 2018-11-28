@@ -1,114 +1,89 @@
 require 'spec_helper'
 
 describe 'neutron::agents::bigswitch' do
-
   let :pre_condition do
     "class { 'neutron': }"
   end
 
-  let :test_facts do
-    {
-      :operatingsystem        => 'default',
-      :operatingsystemrelease => 'default',
-      :package_ensure         => 'present',
-    }
-  end
+  shared_examples 'neutron::agents::bigswitch' do
+    context 'neutron bigswitch base' do
+      it 'should have' do
+        should contain_package('python-networking-bigswitch').with(
+          :ensure => 'present',
+          :tag    => 'openstack'
+        )
+      end
+    end
 
-  shared_examples_for 'neutron bigswitch base' do
-    it 'should have' do
-      is_expected.to contain_package('python-networking-bigswitch').with(
-        :ensure => 'present',
-        :tag    => 'openstack'
-      )
+    context 'neutron-bsn-agent only' do
+      let :params do
+        {
+          :lldp_enabled   => false,
+          :agent_enabled  => true
+        }
+      end
+
+      it 'enable neutron-bsn-agent service' do
+        should contain_service('bigswitch-agent').with(
+          :enable => params[:agent_enabled],
+          :ensure =>'running',
+          :tag    =>'neutron-service',
+        )
+      end
+
+      it 'disable neutron-bsn-lldp service' do
+        should contain_service('bigswitch-lldp').with(
+          :enable => params[:lldp_enabled],
+          :ensure =>'stopped',
+          :tag    =>'neutron-service',
+        )
+      end
+
+    end
+
+    context 'neutron-bsn-lldp only' do
+      let :params do
+        {
+          :lldp_enabled  => true,
+          :agent_enabled => false
+        }
+      end
+
+      it 'disable neutron-bsn-agent service' do
+        should contain_service('bigswitch-agent').with(
+          :enable => params[:agent_enabled],
+          :ensure =>'stopped',
+          :tag    =>'neutron-service',
+        )
+      end
+
+      it 'enable neutron-bsn-lldp service' do
+        should contain_service('bigswitch-lldp').with(
+          :enable => params[:lldp_enabled],
+          :ensure =>'running',
+          :tag    =>'neutron-service',
+        )
+      end
     end
   end
 
-  context 'neutron-bsn-agent only' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'RedHat',
-         :operatingsystemrelease => '7'
-      }))
-    end
-
-    let :params do
-      {
-        :lldp_enabled   => false,
-        :agent_enabled  => true
-      }
-    end
-
-    it_configures 'neutron bigswitch base'
-
-    it 'enable neutron-bsn-agent service' do
-      is_expected.to contain_service('bigswitch-agent').with(
-        :enable => params[:agent_enabled],
-        :ensure =>'running',
-        :tag    =>'neutron-service',
-      )
-    end
-
-    it 'disable neutron-bsn-lldp service' do
-      is_expected.to contain_service('bigswitch-lldp').with(
-        :enable => params[:lldp_enabled],
-        :ensure =>'stopped',
-        :tag    =>'neutron-service',
-      )
-    end
-
+  shared_examples 'neutron::agents::bigswitch on Debian' do
+    it { should raise_error(Puppet::Error, /Unsupported osfamily Debian/) }
   end
 
-  context 'neutron-bsn-lldp only' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'RedHat',
-         :operatingsystemrelease => '7'
-      }))
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      if facts[:osfamily] == 'Debian'
+        it_behaves_like 'neutron::agents::bigswitch on Debian'
+      else
+        it_behaves_like 'neutron::agents::bigswitch'
+      end
     end
-
-    let :params do
-      {
-        :lldp_enabled  => true,
-        :agent_enabled => false
-      }
-    end
-
-    it_configures 'neutron bigswitch base'
-
-    it 'disable neutron-bsn-agent service' do
-      is_expected.to contain_service('bigswitch-agent').with(
-        :enable => params[:agent_enabled],
-        :ensure =>'stopped',
-        :tag    =>'neutron-service',
-      )
-    end
-
-    it 'enable neutron-bsn-lldp service' do
-      is_expected.to contain_service('bigswitch-lldp').with(
-        :enable => params[:lldp_enabled],
-        :ensure =>'running',
-        :tag    =>'neutron-service',
-      )
-    end
-
   end
-
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge(test_facts.merge({
-         :osfamily => 'Debian'
-      }))
-    end
-
-    let :params do
-      {
-        :lldp_enabled  => false,
-        :agent_enabled => false
-      }
-    end
-
-    it { is_expected.to raise_error(Puppet::Error, /Unsupported osfamily Debian/) }
-
-  end
-
 end

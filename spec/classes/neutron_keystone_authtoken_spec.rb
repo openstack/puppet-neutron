@@ -1,50 +1,47 @@
 require 'spec_helper'
 
 describe 'neutron::keystone::authtoken' do
-
   let :params do
     { :password => 'neutron_password', }
   end
 
   shared_examples 'neutron authtoken' do
-
     context 'with default parameters' do
-
       it 'configure keystone_authtoken' do
-        is_expected.to contain_neutron_config('keystone_authtoken/username').with_value('neutron')
-        is_expected.to contain_neutron_config('keystone_authtoken/password').with_value('neutron_password')
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value('http://localhost:5000')
-        is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value('services')
-        is_expected.to contain_neutron_config('keystone_authtoken/user_domain_name').with_value('Default')
-        is_expected.to contain_neutron_config('keystone_authtoken/project_domain_name').with_value('Default')
-        is_expected.to contain_neutron_config('keystone_authtoken/insecure').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_section').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_type').with_value('password')
-        is_expected.to contain_neutron_config('keystone_authtoken/www_authenticate_uri').with_value('http://localhost:5000')
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_version').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/cache').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/cafile').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/certfile').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/check_revocations_for_cached').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/delay_auth_decision').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/enforce_token_bind').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/hash_algorithms').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/http_connect_timeout').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/http_request_max_retries').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/include_service_catalog').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/keyfile').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_conn_get_timeout').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_dead_retry').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_maxsize').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_socket_timeout').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_unused_timeout').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_secret_key').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_security_strategy').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_use_advanced_pool').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/region_name').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/token_cache_time').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_neutron_config('keystone_authtoken/service_token_roles_required').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/username').with_value('neutron')
+        should contain_neutron_config('keystone_authtoken/password').with_value('neutron_password')
+        should contain_neutron_config('keystone_authtoken/auth_url').with_value('http://localhost:5000')
+        should contain_neutron_config('keystone_authtoken/project_name').with_value('services')
+        should contain_neutron_config('keystone_authtoken/user_domain_name').with_value('Default')
+        should contain_neutron_config('keystone_authtoken/project_domain_name').with_value('Default')
+        should contain_neutron_config('keystone_authtoken/insecure').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/auth_section').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/auth_type').with_value('password')
+        should contain_neutron_config('keystone_authtoken/www_authenticate_uri').with_value('http://localhost:5000')
+        should contain_neutron_config('keystone_authtoken/auth_version').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/cache').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/cafile').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/certfile').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/check_revocations_for_cached').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/delay_auth_decision').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/enforce_token_bind').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/hash_algorithms').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/http_connect_timeout').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/http_request_max_retries').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/include_service_catalog').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/keyfile').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/memcache_pool_conn_get_timeout').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/memcache_pool_dead_retry').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/memcache_pool_maxsize').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/memcache_pool_socket_timeout').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/memcache_pool_unused_timeout').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/memcache_secret_key').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/memcache_security_strategy').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/memcache_use_advanced_pool').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/region_name').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/token_cache_time').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('keystone_authtoken/service_token_roles_required').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -90,44 +87,44 @@ describe 'neutron::keystone::authtoken' do
       end
 
       it 'configure keystone_authtoken' do
-        is_expected.to contain_neutron_config('keystone_authtoken/www_authenticate_uri').with_value('https://10.0.0.1:9999/')
-        is_expected.to contain_neutron_config('keystone_authtoken/username').with_value(params[:username])
-        is_expected.to contain_neutron_config('keystone_authtoken/password').with_value(params[:password]).with_secret(true)
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_url').with_value(params[:auth_url])
-        is_expected.to contain_neutron_config('keystone_authtoken/project_name').with_value(params[:project_name])
-        is_expected.to contain_neutron_config('keystone_authtoken/user_domain_name').with_value(params[:user_domain_name])
-        is_expected.to contain_neutron_config('keystone_authtoken/project_domain_name').with_value(params[:project_domain_name])
-        is_expected.to contain_neutron_config('keystone_authtoken/insecure').with_value(params[:insecure])
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_section').with_value(params[:auth_section])
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_type').with_value(params[:auth_type])
-        is_expected.to contain_neutron_config('keystone_authtoken/auth_version').with_value(params[:auth_version])
-        is_expected.to contain_neutron_config('keystone_authtoken/cache').with_value(params[:cache])
-        is_expected.to contain_neutron_config('keystone_authtoken/cafile').with_value(params[:cafile])
-        is_expected.to contain_neutron_config('keystone_authtoken/certfile').with_value(params[:certfile])
-        is_expected.to contain_neutron_config('keystone_authtoken/check_revocations_for_cached').with_value(params[:check_revocations_for_cached])
-        is_expected.to contain_neutron_config('keystone_authtoken/delay_auth_decision').with_value(params[:delay_auth_decision])
-        is_expected.to contain_neutron_config('keystone_authtoken/enforce_token_bind').with_value(params[:enforce_token_bind])
-        is_expected.to contain_neutron_config('keystone_authtoken/hash_algorithms').with_value(params[:hash_algorithms])
-        is_expected.to contain_neutron_config('keystone_authtoken/http_connect_timeout').with_value(params[:http_connect_timeout])
-        is_expected.to contain_neutron_config('keystone_authtoken/http_request_max_retries').with_value(params[:http_request_max_retries])
-        is_expected.to contain_neutron_config('keystone_authtoken/include_service_catalog').with_value(params[:include_service_catalog])
-        is_expected.to contain_neutron_config('keystone_authtoken/keyfile').with_value(params[:keyfile])
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_conn_get_timeout').with_value(params[:memcache_pool_conn_get_timeout])
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_dead_retry').with_value(params[:memcache_pool_dead_retry])
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_maxsize').with_value(params[:memcache_pool_maxsize])
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_socket_timeout').with_value(params[:memcache_pool_socket_timeout])
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_pool_unused_timeout').with_value(params[:memcache_pool_unused_timeout])
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_secret_key').with_value(params[:memcache_secret_key])
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_security_strategy').with_value(params[:memcache_security_strategy])
-        is_expected.to contain_neutron_config('keystone_authtoken/memcache_use_advanced_pool').with_value(params[:memcache_use_advanced_pool])
-        is_expected.to contain_neutron_config('keystone_authtoken/memcached_servers').with_value('memcached01:11211,memcached02:11211')
-        is_expected.to contain_neutron_config('keystone_authtoken/region_name').with_value(params[:region_name])
-        is_expected.to contain_neutron_config('keystone_authtoken/token_cache_time').with_value(params[:token_cache_time])
-        is_expected.to contain_neutron_config('keystone_authtoken/service_token_roles_required').with_value(params[:service_token_roles_required])
+        should contain_neutron_config('keystone_authtoken/www_authenticate_uri').with_value('https://10.0.0.1:9999/')
+        should contain_neutron_config('keystone_authtoken/username').with_value(params[:username])
+        should contain_neutron_config('keystone_authtoken/password').with_value(params[:password]).with_secret(true)
+        should contain_neutron_config('keystone_authtoken/auth_url').with_value(params[:auth_url])
+        should contain_neutron_config('keystone_authtoken/project_name').with_value(params[:project_name])
+        should contain_neutron_config('keystone_authtoken/user_domain_name').with_value(params[:user_domain_name])
+        should contain_neutron_config('keystone_authtoken/project_domain_name').with_value(params[:project_domain_name])
+        should contain_neutron_config('keystone_authtoken/insecure').with_value(params[:insecure])
+        should contain_neutron_config('keystone_authtoken/auth_section').with_value(params[:auth_section])
+        should contain_neutron_config('keystone_authtoken/auth_type').with_value(params[:auth_type])
+        should contain_neutron_config('keystone_authtoken/auth_version').with_value(params[:auth_version])
+        should contain_neutron_config('keystone_authtoken/cache').with_value(params[:cache])
+        should contain_neutron_config('keystone_authtoken/cafile').with_value(params[:cafile])
+        should contain_neutron_config('keystone_authtoken/certfile').with_value(params[:certfile])
+        should contain_neutron_config('keystone_authtoken/check_revocations_for_cached').with_value(params[:check_revocations_for_cached])
+        should contain_neutron_config('keystone_authtoken/delay_auth_decision').with_value(params[:delay_auth_decision])
+        should contain_neutron_config('keystone_authtoken/enforce_token_bind').with_value(params[:enforce_token_bind])
+        should contain_neutron_config('keystone_authtoken/hash_algorithms').with_value(params[:hash_algorithms])
+        should contain_neutron_config('keystone_authtoken/http_connect_timeout').with_value(params[:http_connect_timeout])
+        should contain_neutron_config('keystone_authtoken/http_request_max_retries').with_value(params[:http_request_max_retries])
+        should contain_neutron_config('keystone_authtoken/include_service_catalog').with_value(params[:include_service_catalog])
+        should contain_neutron_config('keystone_authtoken/keyfile').with_value(params[:keyfile])
+        should contain_neutron_config('keystone_authtoken/memcache_pool_conn_get_timeout').with_value(params[:memcache_pool_conn_get_timeout])
+        should contain_neutron_config('keystone_authtoken/memcache_pool_dead_retry').with_value(params[:memcache_pool_dead_retry])
+        should contain_neutron_config('keystone_authtoken/memcache_pool_maxsize').with_value(params[:memcache_pool_maxsize])
+        should contain_neutron_config('keystone_authtoken/memcache_pool_socket_timeout').with_value(params[:memcache_pool_socket_timeout])
+        should contain_neutron_config('keystone_authtoken/memcache_pool_unused_timeout').with_value(params[:memcache_pool_unused_timeout])
+        should contain_neutron_config('keystone_authtoken/memcache_secret_key').with_value(params[:memcache_secret_key])
+        should contain_neutron_config('keystone_authtoken/memcache_security_strategy').with_value(params[:memcache_security_strategy])
+        should contain_neutron_config('keystone_authtoken/memcache_use_advanced_pool').with_value(params[:memcache_use_advanced_pool])
+        should contain_neutron_config('keystone_authtoken/memcached_servers').with_value('memcached01:11211,memcached02:11211')
+        should contain_neutron_config('keystone_authtoken/region_name').with_value(params[:region_name])
+        should contain_neutron_config('keystone_authtoken/token_cache_time').with_value(params[:token_cache_time])
+        should contain_neutron_config('keystone_authtoken/service_token_roles_required').with_value(params[:service_token_roles_required])
       end
 
       it 'installs python memcache package' do
-        is_expected.to contain_package('python-memcache')
+        should contain_package('python-memcache')
       end
     end
   end
@@ -140,8 +137,7 @@ describe 'neutron::keystone::authtoken' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'neutron authtoken'
+      it_behaves_like 'neutron authtoken'
     end
   end
-
 end

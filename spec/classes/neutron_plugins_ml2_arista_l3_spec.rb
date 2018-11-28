@@ -20,7 +20,6 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::arista::l3' do
-
   let :pre_condition do
     "class { '::neutron::keystone::authtoken':
       password => 'passw0rd',
@@ -46,19 +45,19 @@ describe 'neutron::plugins::ml2::arista::l3' do
     }
   end
 
-  shared_examples_for 'neutron plugin ml2 arista l3_arista' do
+  shared_examples 'neutron plugin ml2 arista l3_arista' do
     before do
       params.merge!(default_params)
     end
 
     it 'configures ml2 arista l3_arista settings' do
-      is_expected.to contain_neutron_plugin_ml2('l3_arista/primary_l3_host').with_value(params[:primary_l3_host])
-      is_expected.to contain_neutron_plugin_ml2('l3_arista/primary_l3_host_username').with_value(params[:primary_l3_host_username])
-      is_expected.to contain_neutron_plugin_ml2('l3_arista/primary_l3_host_password').with_value(params[:primary_l3_host_password]).with_secret(true)
+      should contain_neutron_plugin_ml2('l3_arista/primary_l3_host').with_value(params[:primary_l3_host])
+      should contain_neutron_plugin_ml2('l3_arista/primary_l3_host_username').with_value(params[:primary_l3_host_username])
+      should contain_neutron_plugin_ml2('l3_arista/primary_l3_host_password').with_value(params[:primary_l3_host_password]).with_secret(true)
     end
   end
 
-  shared_examples_for 'ml2 l3_arista should fail when mlag is true and secondary is service default' do
+  shared_examples 'ml2 l3_arista should fail when mlag is true and secondary is service default' do
     let :params do
       {}
     end
@@ -69,7 +68,7 @@ describe 'neutron::plugins::ml2::arista::l3' do
     end
 
     it 'should fail when mlag is true and secondary l3 host is service default' do
-      is_expected.to raise_error(Puppet::Error, /Must set secondary_l3_host when mlag_config is true./)
+      should raise_error(Puppet::Error, /Must set secondary_l3_host when mlag_config is true./)
     end
   end
 
@@ -83,7 +82,7 @@ describe 'neutron::plugins::ml2::arista::l3' do
         }))
       end
 
-      it_configures 'neutron plugin ml2 arista l3_arista'
+      it_behaves_like 'neutron plugin ml2 arista l3_arista'
     end
   end
 end

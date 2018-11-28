@@ -1,10 +1,8 @@
 require 'spec_helper'
 
 describe 'neutron::logging' do
-
   let :params do
-    {
-    }
+    {}
   end
 
   let :log_params do
@@ -36,27 +34,27 @@ describe 'neutron::logging' do
     }
   end
 
-  shared_examples_for 'neutron-logging' do
+  shared_examples 'neutron-logging' do
 
     context 'with basic logging options and default settings' do
-      it_configures  'basic default logging settings'
+      it_behaves_like  'basic default logging settings'
     end
 
     context 'with basic logging options and non-default settings' do
       before { params.merge!( log_params ) }
-      it_configures 'basic non-default logging settings'
+      it_behaves_like 'basic non-default logging settings'
     end
 
     context 'with extended logging options' do
       before { params.merge!( log_params ) }
-      it_configures 'logging params set'
+      it_behaves_like 'logging params set'
     end
 
   end
 
   shared_examples 'basic default logging settings' do
     it 'configures neutron logging settings with default values' do
-      is_expected.to contain_oslo__log('neutron_config').with(
+      should contain_oslo__log('neutron_config').with(
         :use_syslog          => '<SERVICE DEFAULT>',
         :use_json            => '<SERVICE DEFAULT>',
         :use_journal         => '<SERVICE DEFAULT>',
@@ -72,7 +70,7 @@ describe 'neutron::logging' do
 
   shared_examples 'basic non-default logging settings' do
     it 'configures neutron logging settings with non-default values' do
-      is_expected.to contain_oslo__log('neutron_config').with(
+      should contain_oslo__log('neutron_config').with(
         :use_syslog          => false,
         :use_json            => false,
         :use_journal         => true,
@@ -86,9 +84,9 @@ describe 'neutron::logging' do
     end
   end
 
-  shared_examples_for 'logging params set' do
+  shared_examples 'logging params set' do
     it 'enables logging params' do
-      is_expected.to contain_oslo__log('neutron_config').with(
+      should contain_oslo__log('neutron_config').with(
         :logging_context_format_string =>
           '%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s [%(request_id)s %(user_identity)s] %(instance)s%(message)s',
         :logging_default_format_string => '%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s [-] %(instance)s%(message)s',
@@ -117,8 +115,7 @@ describe 'neutron::logging' do
         facts.merge(OSDefaults.get_facts())
       end
 
-      it_configures 'neutron-logging'
+      it_behaves_like 'neutron-logging'
     end
   end
-
 end

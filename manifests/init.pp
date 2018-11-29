@@ -13,10 +13,6 @@
 #   (optional) The state of the package
 #   Defaults to 'present'
 #
-# [*debug*]
-#   (optional) Print debug messages in the logs
-#   Defaults to undef
-#
 # [*bind_host*]
 #   (optional) The IP/interface to bind to
 #   Defaults to $::os_service_default
@@ -276,28 +272,6 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to $::os_service_default
 #
-# [*use_syslog*]
-#   (optional) Use syslog for logging
-#   Defaults to undef
-#
-# [*use_stderr*]
-#   (optional) Use stderr for logging
-#   Defaults to undef
-#
-# [*log_file*]
-#   (optional) Where to log
-#   Defaults to undef
-#
-# [*log_dir*]
-#   (optional) Directory where logs should be stored
-#   If set to $::os_service_default, it will not log to any directory
-#   Defaults to undef
-#
-# [*manage_logging*]
-#   (optional) Whether to manage olso.logging options
-#   If set to false, neutron::logging class should be evaluated
-#   Defaults to true.
-#
 # [*state_path*]
 #   (optional) Where to store state files. This directory must be writable
 #   by the user executing the agent
@@ -337,10 +311,16 @@
 #   (optional) Allow plugins that support it to create VLAN transparent networks
 #   Defaults to $::os_service_default
 #
+## DEPRECATED PARAMS
+#
+# [*manage_logging*]
+#   (optional) Whether to manage olso.logging options
+#   If set to false, neutron::logging class should be evaluated
+#   Defaults to undef.
+#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
-  $debug                                = undef,
   $bind_host                            = $::os_service_default,
   $bind_port                            = $::os_service_default,
   $core_plugin                          = 'ml2',
@@ -396,11 +376,6 @@ class neutron (
   $cert_file                            = $::os_service_default,
   $key_file                             = $::os_service_default,
   $ca_file                              = $::os_service_default,
-  $use_syslog                           = undef,
-  $use_stderr                           = undef,
-  $log_file                             = undef,
-  $log_dir                              = undef,
-  $manage_logging                       = true,
   $state_path                           = $::os_service_default,
   $lock_path                            = '$state_path/lock',
   $purge_config                         = false,
@@ -409,12 +384,15 @@ class neutron (
   $notification_transport_url           = $::os_service_default,
   $max_allowed_address_pair             = $::os_service_default,
   $vlan_transparent                     = $::os_service_default,
+  ## DEPRECATED PARAMS
+  $manage_logging                       = undef,
 ) {
 
   include ::neutron::deps
   include ::neutron::params
+
   if $manage_logging {
-    include ::neutron::logging
+    warning('neutron::manage_logging is deprecated and has no effect, please use neutron::logging class')
   }
 
   if ! is_service_default($use_ssl) and ($use_ssl) {

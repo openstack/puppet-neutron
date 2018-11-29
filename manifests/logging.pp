@@ -131,25 +131,15 @@ class neutron::logging (
 
   include ::neutron::deps
 
-  $debug_real = pick($::neutron::debug,$debug)
-  $use_syslog_real = pick($::neutron::use_syslog,$use_syslog)
-  $use_stderr_real = pick($::neutron::use_stderr,$use_stderr)
-  $log_file_real = pick($::neutron::log_file,$log_file)
-  if $log_dir != '' {
-    $log_dir_real = pick($::neutron::log_dir,$log_dir)
-  } else {
-    $log_dir_real = $log_dir
-  }
-
   oslo::log { 'neutron_config':
-    debug                         => $debug_real,
-    use_stderr                    => $use_stderr_real,
-    use_syslog                    => $use_syslog_real,
+    debug                         => $debug,
+    use_stderr                    => $use_stderr,
+    use_syslog                    => $use_syslog,
     use_json                      => $use_json,
     use_journal                   => $use_journal,
     syslog_log_facility           => $syslog_log_facility,
-    log_file                      => $log_file_real,
-    log_dir                       => $log_dir_real,
+    log_file                      => $log_file,
+    log_dir                       => $log_dir,
     log_config_append             => $log_config_append,
     log_date_format               => $log_date_format,
     watch_log_file                => $watch_log_file,

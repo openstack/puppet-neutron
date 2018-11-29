@@ -6,7 +6,6 @@ describe 'neutron' do
       :package_ensure => 'present',
       :core_plugin    => 'ml2',
       :auth_strategy  => 'keystone',
-      :log_dir        => '/var/log/neutron',
       :purge_config   => false,
     }
   end
@@ -36,9 +35,6 @@ describe 'neutron' do
     it_behaves_like 'with SSL socket options set'
     it_behaves_like 'with SSL socket options set with wrong parameters'
     it_behaves_like 'with SSL socket options left by default'
-    it_behaves_like 'with syslog disabled'
-    it_behaves_like 'with syslog enabled'
-    it_behaves_like 'with log_file specified'
     it_behaves_like 'without service_plugins'
     it_behaves_like 'with service_plugins'
     it_behaves_like 'with host defined'
@@ -208,15 +204,6 @@ describe 'neutron' do
     it { should raise_error(Puppet::Error, /The ca_file parameter requires that use_ssl to be set to true/) }
   end
 
-  shared_examples 'with syslog disabled' do
-    before do
-      params.merge!(
-        :use_syslog => false,
-      )
-    end
-    it { should contain_neutron_config('DEFAULT/use_syslog').with_value(false) }
-  end
-
   shared_examples 'with non-default kombu options' do
     before do
       params.merge!(
@@ -291,31 +278,6 @@ describe 'neutron' do
       end
     end
 
-  end
-
-  shared_examples 'with syslog enabled' do
-    before do
-      params.merge!(
-        :use_syslog => 'true'
-      )
-    end
-
-    it do
-      should contain_neutron_config('DEFAULT/use_syslog').with_value(true)
-    end
-  end
-
-  shared_examples 'with log_file specified' do
-    before do
-      params.merge!(
-        :log_file => '/var/log/neutron/server.log',
-        :log_dir  => '/tmp/log/neutron'
-      )
-    end
-    it 'configures logging' do
-      should contain_neutron_config('DEFAULT/log_file').with_value(params[:log_file])
-      should contain_neutron_config('DEFAULT/log_dir').with_value(params[:log_dir])
-    end
   end
 
   shared_examples 'with state and lock paths set' do

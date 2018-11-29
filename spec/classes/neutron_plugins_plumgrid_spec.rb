@@ -76,6 +76,7 @@ describe 'neutron::plugins::plumgrid' do
     it 'should perform default configuration of plumgrid plumlib' do
       auth_uri = params[:auth_protocol] + "://" + params[:controller_priv_host] + ":" + "5000/" + params[:identity_version];
       should contain_neutron_plumlib_plumgrid('keystone_authtoken/auth_uri').with_value(auth_uri)
+      should contain_neutron_plumlib_plumgrid('keystone_authtoken/www_authenticate_uri').with_value(auth_uri)
       should contain_neutron_plumlib_plumgrid('keystone_authtoken/identity_version').with_value(params[:identity_version])
       should contain_neutron_plumlib_plumgrid('keystone_authtoken/user_domain_name').with_value(params[:user_domain_name])
       should contain_neutron_plumlib_plumgrid('PLUMgridMetadata/enable_pg_metadata').with_value('True')

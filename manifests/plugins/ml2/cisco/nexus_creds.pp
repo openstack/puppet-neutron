@@ -114,9 +114,9 @@ define neutron::plugins::ml2::cisco::nexus_creds(
   $username,
   $password,
   $servers,
-  $ssh_port     = undef,
   # Used parameters
   $ip_address,
+  $ssh_port     = undef,
   $nve_src_intf = undef,
   $physnet      = undef,
   $vpc_pool     = undef,

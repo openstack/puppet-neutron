@@ -87,6 +87,10 @@
 #   (optional) CA Certificate file path to use for TLS configuration
 #   Defaults to False.
 #
+# [*enable_ipv6*]
+#   (optional) If we should enable ipv6.
+#   Defaults to False.
+#
 class neutron::plugins::ovs::opendaylight (
   $tunnel_ip,
   $odl_username,

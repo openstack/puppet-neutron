@@ -158,9 +158,11 @@ class neutron::plugins::ml2 (
     warning('Security groups will not work without properly set firewall_driver')
   }
 
+  # lint:ignore:only_variable_string
   if !is_service_default($overlay_ip_version) and !("${overlay_ip_version}" in ['4', '6']) {
     fail('Invalid IP version for overlay_ip_version')
   }
+  # lint:endignore
 
   if $::operatingsystem == 'Ubuntu' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':

@@ -5,51 +5,62 @@
 # === Parameters
 #
 # [*password*]
-#   (required) Password for Neutron user.
+#   (Required) Password for Neutron user.
 #
 # [*auth_name*]
-#   Username for Neutron service. Defaults to 'neutron'.
+#   (Optional) Username for Neutron service.
+#   Defaults to 'neutron'.
 #
 # [*email*]
-#   Email for Neutron user. Defaults to 'neutron@localhost'.
+#   (Optional) Email for Neutron user.
+#   Defaults to 'neutron@localhost'.
 #
 # [*tenant*]
-#   Tenant for Neutron user. Defaults to 'services'.
+#   (Optional) Tenant for Neutron user.
+#   Defaults to 'services'.
 #
 # [*configure_endpoint*]
-#   Should Neutron endpoint be configured? Defaults to 'true'.
+#   (Optional) Should Neutron endpoint be configured?
+#   Defaults to true.
 #
 # [*configure_user*]
-#   Should the Neutron service user be configured? Defaults to 'true'.
+#   (Optional) Should the Neutron service user be configured?
+#   Defaults to true.
 #
 # [*configure_user_role*]
-#   Should the admin role be configured for the service user?
-#   Defaults to 'true'.
+#   (Optional) Should the admin role be configured for the service user?
+#   Defaults to true.
 #
 # [*service_name*]
-#   Name of the service. Defaults 'neutron'.
+#   (Optional) Name of the service.
+#   Defaults 'neutron'.
 #
 # [*service_type*]
-#   Type of service. Defaults to 'network'.
+#   (Optional) Type of service.
+#   Defaults to 'network'.
 #
 # [*service_description*]
-#   Description for keystone service.
-#   (optional) Defaults to 'Neutron Networking Service'.
+#   (Optional) Description for keystone service.
+#   Defaults to 'Neutron Networking Service'.
 #
 # [*region*]
-#   Region for endpoint. Defaults to 'RegionOne'.
+#   (Optional) Region for endpoint.
+#   Defaults to 'RegionOne'.
 #
 # [*public_url*]
-#   (optional) The endpoint's public url. (Defaults to 'http://127.0.0.1:9696')
+#   (0ptional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:9696'
 #
 # [*admin_url*]
-#   (optional) The endpoint's admin url. (Defaults to 'http://127.0.0.1:9696')
+#   (Optional) The endpoint's admin url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:9696'
 #
 # [*internal_url*]
-#   (optional) The endpoint's internal url. (Defaults to 'http://127.0.0.1:9696')
+#   (Optional) The endpoint's internal url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:9696'
 #
 # === Examples
 #
@@ -58,7 +69,6 @@
 #    internal_url => 'https://10.0.0.11:9696',
 #    admin_url    => 'https://10.0.0.11:9696',
 #  }
-#
 #
 class neutron::keystone::auth (
   $password,

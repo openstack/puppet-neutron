@@ -5,7 +5,7 @@
 # === Parameters
 #
 # [*policies*]
-#   (optional) Set of policies to configure for neutron
+#   (Optional) Set of policies to configure for neutron
 #   Example :
 #     {
 #       'neutron-context_is_admin' => {
@@ -20,7 +20,7 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (optional) Path to the neutron policy.json file
+#   (Optional) Path to the neutron policy.json file
 #   Defaults to /etc/neutron/policy.json
 #
 class neutron::policy (

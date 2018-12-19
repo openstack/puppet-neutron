@@ -6,8 +6,8 @@ class { '::neutron':
 }
 
 class { '::neutron::server':
-  auth_uri      => 'http://127.0.0.1:5000',
-  auth_password => 'keystone_secret',
+  www_authenticate_uri => 'http://127.0.0.1:5000',
+  auth_password        => 'keystone_secret',
 }
 
 class { '::neutron::plugins::ml2':

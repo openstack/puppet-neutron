@@ -35,7 +35,7 @@
 #
 # [*bgp_speaker_driver*]
 #   (Optional) The BGP speaker driver to use.
-#   Defaults to 'neutron_dynamic_routing.services.bgp.agent.driver.ryu.driver.RyuBgpDriver'
+#   Defaults to 'neutron_dynamic_routing.services.bgp.agent.driver.os_ken.driver.OsKenBgpDriver'
 #
 # [*bgp_router_id*]
 #   (Optional) The BGP router ID.
@@ -49,7 +49,7 @@ class neutron::agents::bgp_dragent(
   $package_ensure     = 'present',
   $enabled            = true,
   $manage_service     = true,
-  $bgp_speaker_driver = 'neutron_dynamic_routing.services.bgp.agent.driver.ryu.driver.RyuBgpDriver',
+  $bgp_speaker_driver = 'neutron_dynamic_routing.services.bgp.agent.driver.os_ken.driver.OsKenBgpDriver',
   $bgp_router_id      = $::ipaddress,
   $purge_config       = false,
 ) {

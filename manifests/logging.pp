@@ -5,36 +5,36 @@
 # === Parameters:
 #
 # [*debug*]
-#   (optional) Print debug messages in the logs
+#   (Optional) Print debug messages in the logs
 #   Defaults to $::os_service_default
 #
 # [*use_syslog*]
-#   (optional) Use syslog for logging
+#   (Optional) Use syslog for logging
 #   Defaults to $::os_service_default
 #
 # [*use_json*]
-#   (optional) Use json for logging
+#   (Optional) Use json for logging
 #   Defaults to $::os_service_default
 #
 # [*use_journal*]
-#   (optional) Use journal for logging
+#   (Optional) Use journal for logging
 #   Defaults to $::os_service_default
 #
 # [*use_stderr*]
-#   (optional) Use stderr for logging
+#   (Optional) Use stderr for logging
 #   Defaults to $::os_service_default
 #
 # [*log_file*]
-#   (optional) Where to log
+#   (Optional) Where to log
 #   Defaults to $::os_service_default
 #
 # [*log_dir*]
-#   (optional) Directory where logs should be stored
+#   (Optional) Directory where logs should be stored
 #   If set to $::os_service_default, it will not log to any directory
 #   Defaults to /var/log/neutron
 #
 # [*log_config_append*]
-#   The name of an additional logging configuration file.
+#   (Optional) The name of an additional logging configuration file.
 #   Defaults to $::os_service_default
 #   See https://docs.python.org/2/howto/logging.html
 #

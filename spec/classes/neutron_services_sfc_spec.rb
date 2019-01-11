@@ -33,7 +33,7 @@ describe 'neutron::services::sfc' do
       end
 
       it 'installs sfc package' do
-        should contain_package('python-networking-sfc').with(
+        should contain_package(platform_params[:sfc_package_name]).with(
           :ensure => params[:package_ensure],
           :name   => platform_params[:sfc_package_name],
         )
@@ -86,7 +86,7 @@ describe 'neutron::services::sfc' do
         when 'RedHat'
           { :sfc_package_name => 'python-networking-sfc' }
         when 'Debian'
-          { :sfc_package_name => 'python-networking-sfc' }
+          { :sfc_package_name => 'python3-networking-sfc' }
         end
       end
       it_behaves_like 'neutron sfc service plugin'

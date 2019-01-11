@@ -33,7 +33,7 @@ describe 'neutron::services::lbaas' do
       end
 
       it 'should contain python-neutron-lbaas package' do
-        should contain_package('python-neutron-lbaas').with({ :ensure => 'present' })
+        should contain_package(platform_params[:lbaas_package_name]).with({ :ensure => 'present' })
       end
 
       it 'should set certificates options with service defaults' do
@@ -67,6 +67,19 @@ describe 'neutron::services::lbaas' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
+      end
+
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          {
+            :lbaas_package_name => 'python3-neutron-lbaas'
+          }
+        when 'RedHat'
+          {
+            :lbaas_package_name => 'python-neutron-lbaas'
+          }
+        end
       end
 
       it_behaves_like 'neutron lbaas service plugin'

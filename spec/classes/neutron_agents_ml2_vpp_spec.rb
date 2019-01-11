@@ -95,8 +95,18 @@ describe 'neutron::agents::ml2::vpp' do
       end
 
       let :platform_params do
-        { :vpp_plugin_package => 'python-networking-vpp',
-          :vpp_agent_service => 'neutron-vpp-agent' }
+        case facts[:osfamily]
+        when 'Debian'
+          {
+            :vpp_plugin_package => 'python3-networking-vpp',
+            :vpp_agent_service  => 'neutron-vpp-agent'
+          }
+        when 'RedHat'
+          {
+            :vpp_plugin_package => 'python-networking-vpp',
+            :vpp_agent_service  => 'neutron-vpp-agent'
+          }
+        end
       end
 
       it_behaves_like 'neutron plugin vpp agent with ml2 plugin'

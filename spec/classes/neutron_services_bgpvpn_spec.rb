@@ -32,7 +32,7 @@ describe 'neutron::services::bgpvpn' do
       end
 
       it 'installs bgpvpn package' do
-        should contain_package('python-networking-bgpvpn').with(
+        should contain_package(platform_params[:bgpvpn_package_name]).with(
           :ensure => params[:package_ensure],
           :name   => platform_params[:bgpvpn_package_name],
         )
@@ -80,7 +80,7 @@ describe 'neutron::services::bgpvpn' do
         when 'RedHat'
           { :bgpvpn_package_name => 'python-networking-bgpvpn' }
         when 'Debian'
-          { :bgpvpn_package_name => 'python-networking-bgpvpn' }
+          { :bgpvpn_package_name => 'python3-networking-bgpvpn' }
         end
       end
       it_behaves_like 'neutron bgpvpn service plugin'

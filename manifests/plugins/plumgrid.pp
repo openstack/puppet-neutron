@@ -181,7 +181,10 @@ class neutron::plugins::plumgrid (
   neutron_plumlib_plumgrid {
     'keystone_authtoken/admin_user' :                value => 'admin';
     'keystone_authtoken/admin_password':             value => $admin_password, secret =>true;
+    # TODO(tobias-urdin): Remove auth_uri when we know www_authenticate_uri is working until then
+    # we keep duplicates here.
     'keystone_authtoken/auth_uri':                   value => "${auth_protocol}://${controller_priv_host}:5000/${identity_version}";
+    'keystone_authtoken/www_authenticate_uri':       value => "${auth_protocol}://${controller_priv_host}:5000/${identity_version}";
     'keystone_authtoken/admin_tenant_name':          value => 'admin';
     'keystone_authtoken/identity_version':           value => $identity_version;
     'keystone_authtoken/user_domain_name':           value => $user_domain_name;

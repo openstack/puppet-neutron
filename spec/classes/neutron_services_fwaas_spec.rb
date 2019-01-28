@@ -66,7 +66,7 @@ describe 'neutron::services::fwaas' do
       should contain_package('neutron-fwaas').with(
         :ensure => 'present',
         :tag    => ['neutron-package', 'openstack'],
-        :name   => 'python-neutron-fwaas',
+        :name   => platform_params[:fwaas_package_name],
       )
     end
   end
@@ -77,7 +77,7 @@ describe 'neutron::services::fwaas' do
         should contain_package('neutron-fwaas').with(
           :ensure => 'present',
           :tag    => ['neutron-package', 'openstack'],
-          :name   => 'python-neutron-fwaas',
+          :name   => platform_params[:fwaas_package_name],
         )
       end
     end
@@ -100,7 +100,7 @@ describe 'neutron::services::fwaas' do
     it 'installs neutron fwaas service package' do
       should contain_package('neutron-fwaas').with(
         :ensure => 'present',
-        :name   => 'openstack-neutron-fwaas',
+        :name   => platform_params[:fwaas_package_name],
       )
     end
   end
@@ -114,7 +114,16 @@ describe 'neutron::services::fwaas' do
       end
 
       let (:platform_params) do
-        {}
+        case facts[:osfamily]
+        when 'Debian'
+          { 
+            :fwaas_package_name => 'python3-neutron-fwaas'
+          }
+        when 'RedHat'
+          {
+            :fwaas_package_name => 'openstack-neutron-fwaas'
+          }
+        end
       end
 
       it_behaves_like 'neutron fwaas service plugin'

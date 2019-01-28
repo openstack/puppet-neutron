@@ -4,13 +4,8 @@
 #
 class neutron::params {
   include ::openstacklib::defaults
+  $pyvers = $::openstacklib::defaults::pyvers
 
-  if ($::os_package_type == 'debian') or ($::os['name'] == 'Fedora') or
-    ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
-    $pyvers = '3'
-  } else {
-    $pyvers = ''
-  }
   $client_package              = "python${pyvers}-neutronclient"
   $ovs_agent_service           = 'neutron-openvswitch-agent'
   $destroy_patch_ports_service = 'neutron-destroy-patch-ports'

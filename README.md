@@ -37,7 +37,7 @@ Setup
 
 **What the neutron module affects:**
 
-* [Neutron](https://wiki.openstack.org/wiki/Neutron), the network service for OpenStack.
+* [Neutron](https://docs.openstack.org/neutron/latest/), the network service for OpenStack.
 
 ### Installing neutron
 

@@ -39,7 +39,7 @@ describe 'neutron::plugins::ml2::mellanox' do
     it 'should have' do
       is_expected.to contain_package('python-networking-mlnx').with(
         :ensure => params[:package_ensure],
-        :tag    => ['openstack', 'neutron-package']
+        :tag    => ['openstack']
         )
     end
   end

@@ -51,7 +51,7 @@ class neutron::plugins::nvp (
     tag    => ['neutron-package', 'openstack'],
   }
 
-  validate_array($nvp_controllers)
+  validate_legacy(Array, 'validate_array', $nvp_controllers)
 
   resources { 'neutron_plugin_nvp':
     purge => $purge_config,

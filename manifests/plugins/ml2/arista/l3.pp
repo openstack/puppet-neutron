@@ -61,7 +61,7 @@ class neutron::plugins::ml2::arista::l3(
   require ::neutron::plugins::ml2
 
   if !is_service_default($mlag_config) {
-    validate_bool($mlag_config)
+    validate_legacy(Boolean, 'validate_bool', $mlag_config)
     if $mlag_config and is_service_default($secondary_l3_host) {
       fail('Must set secondary_l3_host when mlag_config is true.')
     }

@@ -121,7 +121,7 @@ define neutron::plugins::ml2::type_driver (
   elsif ($name == 'geneve') {
     validate_vni_ranges($vni_ranges)
     if !is_service_default($max_header_size) {
-      validate_integer($max_header_size)
+      validate_legacy(Integer, 'validate_integer', $max_header_size)
     }
     neutron_plugin_ml2 {
       'ml2_type_geneve/max_header_size': value => $max_header_size;

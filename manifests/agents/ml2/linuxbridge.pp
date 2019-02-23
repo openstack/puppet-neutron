@@ -84,9 +84,9 @@ class neutron::agents::ml2::linuxbridge (
   $purge_config     = false,
 ) {
 
-  validate_array($tunnel_types)
-  validate_array($physical_interface_mappings)
-  validate_array($bridge_mappings)
+  validate_legacy(Array, 'validate_array', $tunnel_types)
+  validate_legacy(Array, 'validate_array', $physical_interface_mappings)
+  validate_legacy(Array, 'validate_array', $bridge_mappings)
 
   include ::neutron::deps
   include ::neutron::params

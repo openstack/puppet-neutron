@@ -302,17 +302,16 @@ class neutron::server (
   include ::keystone::client
 
   if !is_service_default($default_availability_zones) {
-    validate_array($default_availability_zones)
+    validate_legacy(Array, 'validate_array', $default_availability_zones)
   }
 
   if !is_service_default($dhcp_load_type) {
-    validate_re($dhcp_load_type,
-                ['^networks$', '^subnets$', '^ports$'],
-                'Must pass either networks, subnets, or ports as values for dhcp_load_type')
+    validate_legacy(Enum['networks', 'subnets', 'ports'], 'validate_re', $dhcp_load_type,
+      [['^networks$', '^subnets$', '^ports$']])
   }
 
   if !is_service_default($service_providers) {
-    validate_array($service_providers)
+    validate_legacy(Array, 'validate_array', $service_providers)
   }
 
   if $ensure_fwaas_package {

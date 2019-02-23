@@ -226,7 +226,7 @@ class neutron::plugins::ml2 (
       'ml2/physical_network_mtus': ensure => absent;
     }
   } else {
-    validate_array($physical_network_mtus)
+    validate_legacy(Array, 'validate_array', $physical_network_mtus)
     neutron_plugin_ml2 {
       'ml2/physical_network_mtus': value => join($physical_network_mtus, ',');
     }

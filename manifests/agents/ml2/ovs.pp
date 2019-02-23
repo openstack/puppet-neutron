@@ -211,7 +211,7 @@ class neutron::agents::ml2::ovs (
     }
   }
 
-  validate_array($tunnel_types)
+  validate_legacy(Array, 'validate_array', $tunnel_types)
   if size($tunnel_types) > 0 {
     $enable_tunneling = true
   } else {

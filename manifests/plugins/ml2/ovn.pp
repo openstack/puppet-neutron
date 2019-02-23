@@ -76,7 +76,7 @@ class neutron::plugins::ml2::ovn(
   require ::neutron::plugins::ml2
 
   if ! is_service_default($ovn_l3_mode) {
-    validate_bool($ovn_l3_mode)
+    validate_legacy(Boolean, 'validate_bool', $ovn_l3_mode)
   }
 
   if ! ( $vif_type in ['ovs', 'vhostuser', $::os_service_default] ) {

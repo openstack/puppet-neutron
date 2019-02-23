@@ -165,7 +165,7 @@ describe 'neutron::server' do
         params.merge!(:dhcp_load_type => 'badvalue')
       end
 
-      it { should raise_error(Puppet::Error, /Must pass either networks, subnets, or ports as values for dhcp_load_type/) }
+      it { should raise_error(Puppet::Error) }
     end
 
     context 'with multiple service providers' do

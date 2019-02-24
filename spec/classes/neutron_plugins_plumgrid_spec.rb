@@ -14,7 +14,7 @@ describe 'neutron::plugins::plumgrid' do
     :director_server      => '127.0.0.1',
     :director_server_port => '443',
     :servertimeout        => '99',
-    :connection           => 'http://127.0.0.1:5000/v2.0',
+    :connection           => 'http://127.0.0.1:5000/v3',
     :controller_priv_host => '127.0.0.1',
     :auth_protocol        => 'http',
     :identity_version     => 'v3',

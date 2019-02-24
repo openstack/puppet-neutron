@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The default value for neutron::plugins::cisco::keystone_auth_url
+    is changed from http://127.0.0.1:5000/v2.0/ to http://127.0.0.1:5000/v3/
+  - |
+    The default value for neutron::plugins::plumgrid::connection is
+    changed from http://127.0.0.1:5000/v2.0 to http://127.0.0.1:5000/v3

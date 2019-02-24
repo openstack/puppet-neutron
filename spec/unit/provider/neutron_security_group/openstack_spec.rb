@@ -10,7 +10,7 @@ describe provider_class do
     ENV['OS_USERNAME']     = 'admin'
     ENV['OS_PASSWORD']     = 'password'
     ENV['OS_PROJECT_NAME'] = 'admin_tenant'
-    ENV['OS_AUTH_URL']     = 'https://192.168.56.210:5000/v2.0/'
+    ENV['OS_AUTH_URL']     = 'https://192.168.56.210:5000/v3/'
   end
 
   before(:each) do

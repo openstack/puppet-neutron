@@ -13,7 +13,7 @@ describe 'neutron::plugins::cisco' do
     {
       :keystone_username => 'neutron',
       :keystone_password => 'neutron_pass',
-      :keystone_auth_url => 'http://127.0.0.1:5000/v2.0/',
+      :keystone_auth_url => 'http://127.0.0.1:5000/v3/',
       :keystone_tenant   => 'tenant',
       :database_name     => 'neutron',
       :database_pass     => 'dbpass',

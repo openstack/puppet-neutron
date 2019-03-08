@@ -29,9 +29,6 @@
 # [*nova_client_priv_key*]
 #   Private key of client certificate. (Defaults to $::os_service_default)
 #
-# [*metadata_ip*]
-#   The IP address of the metadata service. Defaults to $::os_service_default.
-#
 # [*metadata_host*]
 #   The hostname of the metadata service. Defaults to $::os_service_default.
 #
@@ -66,6 +63,11 @@
 #   in the metadata config.
 #   Defaults to false.
 #
+# DEPRECATED
+#
+# [*metadata_ip*]
+#   (optional) This option is deprecated an has no effect
+#
 
 class neutron::agents::metadata (
   $shared_secret,
@@ -74,7 +76,6 @@ class neutron::agents::metadata (
   $manage_service            = true,
   $debug                     = $::os_service_default,
   $auth_ca_cert              = $::os_service_default,
-  $metadata_ip               = $::os_service_default,
   $metadata_host             = $::os_service_default,
   $metadata_port             = $::os_service_default,
   $metadata_protocol         = $::os_service_default,
@@ -85,6 +86,7 @@ class neutron::agents::metadata (
   $nova_client_cert          = $::os_service_default,
   $nova_client_priv_key      = $::os_service_default,
   $purge_config              = false,
+  $metadata_ip               = undef,
   ) {
 
   include ::neutron::deps
@@ -97,7 +99,6 @@ class neutron::agents::metadata (
   neutron_metadata_agent_config {
     'DEFAULT/debug':                          value => $debug;
     'DEFAULT/auth_ca_cert':                   value => $auth_ca_cert;
-    'DEFAULT/nova_metadata_ip':               value => $metadata_ip;
     'DEFAULT/nova_metadata_host':             value => $metadata_host;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/nova_metadata_protocol':         value => $metadata_protocol;
@@ -117,6 +118,10 @@ class neutron::agents::metadata (
     neutron_metadata_agent_config {
       'DEFAULT/cache_url': ensure => absent;
     }
+  }
+
+  if $metadata_ip {
+    warning('nova_metadata_ip is deprecated, please use nova_metadata_host instead')
   }
 
   if $::neutron::params::metadata_agent_package {

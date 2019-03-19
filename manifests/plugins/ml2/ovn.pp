@@ -58,6 +58,11 @@
 #              if a subnet's dns_nameservers is empty.
 #   Type: List
 #   Defaults to $::os_service_default
+#
+# [*vhostuser_socket_dir*]
+#   (optional) The vhost-user socket directory for OVS
+#   Type: String
+#   Defaults to $::os_service_default
 
 class neutron::plugins::ml2::ovn(
   $ovn_nb_connection        = $::os_service_default,
@@ -70,6 +75,7 @@ class neutron::plugins::ml2::ovn(
   $ovn_metadata_enabled     = $::os_service_default,
   $dvr_enabled              = $::os_service_default,
   $dns_servers              = $::os_service_default,
+  $vhostuser_socket_dir     = $::os_service_default,
   ) {
 
   include ::neutron::deps
@@ -104,5 +110,6 @@ class neutron::plugins::ml2::ovn(
     'ovn/ovn_metadata_enabled'     : value => $ovn_metadata_enabled;
     'ovn/enable_distributed_floating_ip' : value => $dvr_enabled;
     'ovn/dns_servers'              : value => join(any2array($dns_servers), ',');
+    'ovn/vhostuser_socket_dir'     : value => $vhostuser_socket_dir;
   }
 }

@@ -14,7 +14,7 @@ describe Puppet::Provider::Neutron do
       'project_name'        => 'admin_tenant',
       'username'            => 'admin',
       'password'            => 'password',
-      'auth_url'            => 'https://192.168.56.210:5000/v2.0/',
+      'auth_url'            => 'https://192.168.56.210:5000/v3/',
       'project_domain_name' => 'Default',
       'user_domain_name'    => 'Default',
     }

@@ -15,7 +15,7 @@ describe 'neutron::plugins::opencontrail' do
       :api_server_port            => '8082',
       :multi_tenancy              => 'true',
       :contrail_extensions        => ['ipam:ipam','policy:policy','route-table'],
-      :keystone_auth_url          => 'http://keystone-server:5000/v2.0',
+      :keystone_auth_url          => 'http://keystone-server:5000/v3',
       :keystone_admin_user        => 'admin',
       :keystone_admin_tenant_name => 'admin',
       :keystone_admin_password    => 'admin',

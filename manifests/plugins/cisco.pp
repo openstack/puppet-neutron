@@ -30,7 +30,7 @@
 #
 # [*keystone_auth_url*]
 # The url against which to authenticate
-# Defaults to http://127.0.0.1:5000/v2.0/
+# Defaults to http://127.0.0.1:5000/v3/
 #
 # [*keystone_tenant*]
 # The tenant the supplied user has admin privs in
@@ -103,7 +103,7 @@ class neutron::plugins::cisco(
   # Keystone connection
   $keystone_username = 'neutron',
   $keystone_tenant   = 'services',
-  $keystone_auth_url = 'http://127.0.0.1:5000/v2.0/',
+  $keystone_auth_url = 'http://127.0.0.1:5000/v3/',
 
   $vswitch_plugin = 'neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2',
   $nexus_plugin   = $::os_service_default,

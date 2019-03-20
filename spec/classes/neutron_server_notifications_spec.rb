@@ -58,8 +58,8 @@ describe 'neutron::server::notifications' do
           :notify_nova_on_port_status_changes => false,
           :notify_nova_on_port_data_changes   => false,
           :send_events_interval               => '10',
-          :auth_url                           => 'http://keystone:5000/v2.0',
-          :auth_type                          => 'v2password',
+          :auth_url                           => 'http://keystone:5000/v3',
+          :auth_type                          => 'password',
           :username                           => 'joe',
           :region_name                        => 'MyRegion',
           :tenant_id                          => 'UUID2',
@@ -75,8 +75,8 @@ describe 'neutron::server::notifications' do
         should contain_neutron_config('DEFAULT/notify_nova_on_port_status_changes').with_value(false)
         should contain_neutron_config('DEFAULT/notify_nova_on_port_data_changes').with_value(false)
         should contain_neutron_config('DEFAULT/send_events_interval').with_value('10')
-        should contain_neutron_config('nova/auth_url').with_value('http://keystone:5000/v2.0')
-        should contain_neutron_config('nova/auth_type').with_value('v2password')
+        should contain_neutron_config('nova/auth_url').with_value('http://keystone:5000/v3')
+        should contain_neutron_config('nova/auth_type').with_value('password')
         should contain_neutron_config('nova/username').with_value('joe')
         should contain_neutron_config('nova/password').with_value('secrete')
         should contain_neutron_config('nova/password').with_secret( true )

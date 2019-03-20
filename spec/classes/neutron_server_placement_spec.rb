@@ -48,8 +48,8 @@ describe 'neutron::server::placement' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :auth_url            => 'http://keystone:5000/v2.0',
-          :auth_type           => 'v2password',
+          :auth_url            => 'http://keystone:5000/v3',
+          :auth_type           => 'password',
           :username            => 'joe',
           :region_name         => 'MyRegion',
           :project_domain_id   => 'default_1',
@@ -61,8 +61,8 @@ describe 'neutron::server::placement' do
       end
 
       it 'should configure neutron server with overrided parameters' do
-        should contain_neutron_config('placement/auth_url').with_value('http://keystone:5000/v2.0')
-        should contain_neutron_config('placement/auth_type').with_value('v2password')
+        should contain_neutron_config('placement/auth_url').with_value('http://keystone:5000/v3')
+        should contain_neutron_config('placement/auth_type').with_value('password')
         should contain_neutron_config('placement/username').with_value('joe')
         should contain_neutron_config('placement/password').with_value('secrete')
         should contain_neutron_config('placement/password').with_secret( true )

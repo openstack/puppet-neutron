@@ -28,8 +28,7 @@ describe 'basic neutron' do
       it 'should list OVS bridges' do
         shell("ovs-vsctl show") do |r|
           expect(r.stdout).to match(/br-int/)
-          # TODO(aschultz): renable this after timeout is sorted
-          #expect(r.stdout).to match(/br-tun/)
+          expect(r.stdout).to match(/br-tun/)
         end
       end
     end

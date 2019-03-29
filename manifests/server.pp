@@ -103,6 +103,10 @@
 #   manages them.
 #   Defaults to: $::os_workers
 #
+# [*rpc_response_max_timeout*]
+#   (Optional) Maximum seconds to wait for a response from an RPC call
+#   Defaults to: $::os_service_default
+#
 # [*agent_down_time*]
 #   (Optional) Seconds to regard the agent as down; should be at least twice
 #   report_interval, to be sure the agent is down for good.
@@ -269,6 +273,7 @@ class neutron::server (
   $sync_db                          = false,
   $api_workers                      = $::os_workers,
   $rpc_workers                      = $::os_workers,
+  $rpc_response_max_timeout         = $::os_service_default,
   $agent_down_time                  = $::os_service_default,
   $enable_new_agents                = $::os_service_default,
   $router_scheduler_driver          = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
@@ -398,6 +403,7 @@ class neutron::server (
     'DEFAULT/l3_ha_net_cidr':                   value => $l3_ha_net_cidr;
     'DEFAULT/api_workers':                      value => $api_workers;
     'DEFAULT/rpc_workers':                      value => $rpc_workers;
+    'DEFAULT/rpc_response_max_timeout':         value => $rpc_response_max_timeout;
     'DEFAULT/agent_down_time':                  value => $agent_down_time;
     'DEFAULT/enable_new_agents':                value => $enable_new_agents;
     'DEFAULT/router_scheduler_driver':          value => $router_scheduler_driver;

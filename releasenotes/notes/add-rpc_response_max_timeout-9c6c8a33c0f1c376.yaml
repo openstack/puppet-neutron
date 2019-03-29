@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Added the ability to configure rpc_response_max_timeout.

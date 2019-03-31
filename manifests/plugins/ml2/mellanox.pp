@@ -27,7 +27,7 @@ class neutron::plugins::ml2::mellanox (
   ensure_resource('package', 'python-networking-mlnx',
     {
       ensure => $package_ensure,
-      tag    => ['openstack', 'neutron-package']
+      tag    => 'openstack'
     }
   )
 }

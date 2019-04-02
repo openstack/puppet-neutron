@@ -41,6 +41,7 @@ describe 'neutron::plugins::ml2::ovn' do
       should contain_neutron_plugin_ml2('ovn/vif_type').with_value(params[:vif_type])
       should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
       should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(params[:dns_servers].join(','))
+      should contain_neutron_plugin_ml2('ovn/vhostuser_socket_dir').with_value('<SERVICE DEFAULT>')
     end
 
   end
@@ -53,6 +54,7 @@ describe 'neutron::plugins::ml2::ovn' do
     before :each do
       params.clear
       params.merge!(default_params)
+      params.merge!(:vhostuser_socket_dir => 'test')
     end
 
     it 'should fail with invalid neutron_sync_mode' do
@@ -65,6 +67,10 @@ describe 'neutron::plugins::ml2::ovn' do
       should raise_error(Puppet::Error, /Invalid value for vif_type parameter/)
       params.delete(:vif_type)
       should contain_neutron_plugin_ml2('ovn/vif_type').with_value('<SERVICE DEFAULT>')
+    end
+
+    it 'should contain valid vhostuser socket dir' do
+      should contain_neutron_plugin_ml2('ovn/vhostuser_socket_dir').with_value('test')
     end
 
     context 'with DVR' do

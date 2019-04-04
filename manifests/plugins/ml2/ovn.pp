@@ -110,6 +110,6 @@ class neutron::plugins::ml2::ovn(
     'ovn/ovn_metadata_enabled'     : value => $ovn_metadata_enabled;
     'ovn/enable_distributed_floating_ip' : value => $dvr_enabled;
     'ovn/dns_servers'              : value => join(any2array($dns_servers), ',');
-    'ovn/vhostuser_socket_dir'     : value => $vhostuser_socket_dir;
+    'ovn/vhost_sock_dir'           : value => $vhostuser_socket_dir;
   }
 }

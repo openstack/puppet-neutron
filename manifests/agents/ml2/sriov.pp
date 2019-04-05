@@ -89,10 +89,10 @@ class neutron::agents::ml2::sriov (
   }
 
   neutron_sriov_agent_config {
-    'sriov_nic/polling_interval':         value => $polling_interval;
     'sriov_nic/exclude_devices':          value => pick(join(any2array($exclude_devices), ','), $::os_service_default);
     'sriov_nic/physical_device_mappings': value => pick(join(any2array($physical_device_mappings), ','), $::os_service_default);
     'agent/extensions':                   value => join(any2array($extensions), ',');
+    'agent/polling_interval':             value => $polling_interval;
     # As of now security groups are not supported for SR-IOV ports.
     # It is required to disable Firewall driver in the SR-IOV agent config.
     'securitygroup/firewall_driver':      value => 'noop';

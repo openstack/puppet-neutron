@@ -34,10 +34,10 @@ describe 'neutron::agents::ml2::sriov' do
     end
 
     it 'configures /etc/neutron/plugins/ml2/sriov_agent.ini' do
-      should contain_neutron_sriov_agent_config('sriov_nic/polling_interval').with_value(p[:polling_interval])
       should contain_neutron_sriov_agent_config('sriov_nic/exclude_devices').with_value('<SERVICE DEFAULT>')
       should contain_neutron_sriov_agent_config('sriov_nic/physical_device_mappings').with_value('<SERVICE DEFAULT>')
       should contain_neutron_sriov_agent_config('agent/extensions').with_value(['<SERVICE DEFAULT>'])
+      should contain_neutron_sriov_agent_config('agent/polling_interval').with_value(p[:polling_interval])
       should contain_neutron_sriov_agent_config('securitygroup/firewall_driver').with_value('noop')
     end
 

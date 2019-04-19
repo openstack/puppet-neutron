@@ -134,8 +134,8 @@ class neutron::agents::l3 (
     'DEFAULT/periodic_fuzzy_delay':             value => $periodic_fuzzy_delay;
     'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;
     'DEFAULT/agent_mode':                       value => $agent_mode;
-    'AGENT/availability_zone':                  value => $availability_zone;
-    'AGENT/extensions':                         value => $extensions;
+    'agent/availability_zone':                  value => $availability_zone;
+    'agent/extensions':                         value => $extensions;
   }
 
   if $::neutron::params::l3_agent_package {

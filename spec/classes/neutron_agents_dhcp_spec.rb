@@ -43,7 +43,7 @@ describe 'neutron::agents::dhcp' do
       should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/ovs_integration_bridge').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value('<SERVICE DEFAULT>');
-      should contain_neutron_dhcp_agent_config('AGENT/availability_zone').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_dhcp_agent_config('agent/availability_zone').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('OVS/ovsdb_connection').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('OVS/ssl_key_file').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('OVS/ssl_cert_file').with_value('<SERVICE DEFAULT>');
@@ -146,7 +146,7 @@ describe 'neutron::agents::dhcp' do
         params.merge!(:availability_zone => 'zone1')
       end
       it 'should configure availability zone' do
-        should contain_neutron_dhcp_agent_config('AGENT/availability_zone').with_value(p[:availability_zone]);
+        should contain_neutron_dhcp_agent_config('agent/availability_zone').with_value(p[:availability_zone]);
       end
     end
 

@@ -130,8 +130,8 @@ class neutron::params {
     $dhcp_agent_package         = 'neutron-dhcp-agent'
     $lbaasv2_agent_package      = 'neutron-lbaasv2-agent'
     $metering_agent_package     = 'neutron-metering-agent'
-    $vpnaas_agent_package       = 'neutron-vpn-agent'
-    $openswan_package           = 'openswan'
+    $vpnaas_agent_package       = 'python-neutron-vpnaas'
+    $openswan_package           = 'strongswan'
     $libreswan_package          = false
     $metadata_agent_package     = 'neutron-metadata-agent'
     $l3_agent_package           = 'neutron-l3-agent'

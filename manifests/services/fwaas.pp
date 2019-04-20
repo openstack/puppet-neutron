@@ -60,7 +60,8 @@ class neutron::services::fwaas (
   if ($::osfamily == 'Debian') {
     # Debian platforms
     if $vpnaas_agent_package {
-      ensure_resource( 'package', $::neutron::params::vpnaas_agent_package, {
+      ensure_resource( 'package', 'neutron-vpn-agent', {
+        'name'   => $::neutron::params::vpnaas_agent_package,
         'ensure' => $neutron::package_ensure,
         'tag'    => ['neutron-package', 'openstack'],
       })

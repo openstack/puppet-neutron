@@ -1,7 +1,7 @@
 ---
 upgrade:
   - Switch-on lbaasv2 by default instead of lbaasv2 to follow what upstream Neutron is doing
-    in https://review.openstack.org/286381 and also switch default device_driver to be
+    in https://review.opendev.org/286381 and also switch default device_driver to be
     neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver
 
 deprecations:

@@ -171,7 +171,7 @@
 #   (optional) The amount of time to wait before attempting to reconnect
 #   to MQ provider. This is used in some cases where you may need to wait
 #   for the provider to propery premote the master before attempting to
-#   reconnect. See https://review.openstack.org/#/c/76686
+#   reconnect. See https://review.opendev.org/#/c/76686
 #   Defaults to $::os_service_default
 #
 # [*kombu_missing_consumer_retry_timeout*]

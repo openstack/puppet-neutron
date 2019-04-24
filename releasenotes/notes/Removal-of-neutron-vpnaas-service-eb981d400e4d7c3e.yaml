@@ -2,6 +2,6 @@
 deprecations:
   - |
     The neutron-vpnaas project has removed the agent service in
-    https://review.openstack.org/517263 . Thus, the "enabled" and
+    https://review.opendev.org/517263 . Thus, the "enabled" and
     "manage_service" parameters of class neutron::agents:vpnaas have been
     deprecated in Queens.

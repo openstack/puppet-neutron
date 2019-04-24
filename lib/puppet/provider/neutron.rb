@@ -235,7 +235,7 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
     if ! instance
       instance = Puppet::Type.type(instance_type).instances.find do |i|
         # We need to check against the Default domain name because of
-        # https://review.openstack.org/#/c/226919/ which changed the naming
+        # https://review.opendev.org/#/c/226919/ which changed the naming
         # format for the tenant to include ::<Domain name>. This should be
         # removed when we drop the resource without a domain name.
         # TODO(aschultz): remove ::domain lookup as part of M-cycle

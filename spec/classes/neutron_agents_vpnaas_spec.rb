@@ -128,7 +128,7 @@ describe 'neutron::agents::vpnaas' do
         case facts[:osfamily]
         when 'Debian'
           {
-            :openswan_package     => 'openswan',
+            :openswan_package     => 'strongswan',
             :vpnaas_agent_package => 'neutron-vpn-agent'
           }
         when 'RedHat'

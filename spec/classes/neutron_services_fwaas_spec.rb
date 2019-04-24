@@ -90,6 +90,7 @@ describe 'neutron::services::fwaas' do
       it 'installs neutron vpnaas agent package' do
         should contain_package('neutron-vpn-agent').with(
           :ensure => 'present',
+          :name   => platform_params[:vpnaas_package_name],
           :tag    => ['neutron-package', 'openstack'],
         )
       end
@@ -117,7 +118,8 @@ describe 'neutron::services::fwaas' do
         case facts[:osfamily]
         when 'Debian'
           { 
-            :fwaas_package_name => 'python3-neutron-fwaas'
+            :fwaas_package_name   => 'python3-neutron-fwaas',
+            :vpnaas_package_name  => 'python-neutron-vpnaas'
           }
         when 'RedHat'
           {

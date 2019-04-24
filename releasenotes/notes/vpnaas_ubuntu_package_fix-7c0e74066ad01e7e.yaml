@@ -1,0 +1,8 @@
+---
+fixes:
+  - |
+    As of Queens the neutron-vpn-agent package for Ubuntu is no longer provided and
+    has been replaced with the package python-neutron-vpnaas.
+  - |
+    On Debian there is no package named openswan and the package that should be
+    installed for VPNaaS is strongswan.

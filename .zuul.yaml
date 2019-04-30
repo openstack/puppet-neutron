@@ -19,6 +19,7 @@
       TripleO standalone Job running Neutron specific Tempest tests.
     vars:
       featureset_override:
-        run_tempest: true
-        tempest_whitelist:
+        run_tempest: false
+        tempest_test_whitelist:
           - 'network'
+        use_os_tempest: true

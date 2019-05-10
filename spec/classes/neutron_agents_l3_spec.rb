@@ -38,8 +38,8 @@ describe 'neutron::agents::l3' do
       should contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_l3_agent_config('AGENT/availability_zone').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_l3_agent_config('AGENT/extensions').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('agent/availability_zone').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('agent/extensions').with_value('<SERVICE DEFAULT>')
     end
 
     it 'passes purge to resource' do
@@ -106,7 +106,7 @@ describe 'neutron::agents::l3' do
       end
 
       it 'configures availability zone' do
-        should contain_neutron_l3_agent_config('AGENT/availability_zone').with_value(p[:availability_zone])
+        should contain_neutron_l3_agent_config('agent/availability_zone').with_value(p[:availability_zone])
       end
     end
   end

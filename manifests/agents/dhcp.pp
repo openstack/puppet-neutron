@@ -157,7 +157,7 @@ class neutron::agents::dhcp (
     'DEFAULT/dnsmasq_dns_servers':    value => join(any2array($dnsmasq_dns_servers), ',');
     'DEFAULT/dnsmasq_local_resolv':   value => $dnsmasq_local_resolv;
     'DEFAULT/ovs_integration_bridge': value => $ovs_integration_bridge;
-    'AGENT/availability_zone':        value => $availability_zone;
+    'agent/availability_zone':        value => $availability_zone;
   }
 
   if $ovsdb_connection =~ /^ssl:/ {

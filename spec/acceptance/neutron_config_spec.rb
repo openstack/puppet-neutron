@@ -7,7 +7,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/dhcp_agent.ini',
                      '/etc/neutron/fwaas_driver.ini',
                      '/etc/neutron/l3_agent.ini',
-                     '/etc/neutron/lbaas_agent.ini',
                      '/etc/neutron/metadata_agent.ini',
                      '/etc/neutron/metering_agent.ini',
                      '/etc/neutron/l2gw_plugin.ini',
@@ -36,7 +35,6 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_dhcp_agent_config <||>
   File <||> -> Neutron_fwaas_service_config <||>
   File <||> -> Neutron_l3_agent_config <||>
-  File <||> -> Neutron_lbaas_agent_config <||>
   File <||> -> Neutron_metadata_agent_config <||>
   File <||> -> Neutron_metering_agent_config <||>
   File <||> -> Neutron_plugin_cisco <||>
@@ -77,7 +75,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/dhcp_agent.ini',
                      '/etc/neutron/fwaas_driver.ini',
                      '/etc/neutron/l3_agent.ini',
-                     '/etc/neutron/lbaas_agent.ini',
                      '/etc/neutron/metadata_agent.ini',
                      '/etc/neutron/metering_agent.ini',
                      '/etc/neutron/l2gw_plugin.ini',
@@ -191,24 +188,6 @@ describe 'basic neutron_config resource' do
   }
 
   neutron_l3_agent_config { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_lbaas_agent_config { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_lbaas_agent_config { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_lbaas_agent_config { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_lbaas_agent_config { 'DEFAULT/thisshouldnotexist2' :
     value             => 'toto',
     ensure_absent_val => 'toto',
   }
@@ -615,7 +594,6 @@ describe 'basic neutron_config resource' do
                     'neutron_dhcp_agent_config',
                     'neutron_fwaas_service_config',
                     'neutron_l3_agent_config',
-                    'neutron_lbaas_agent_config',
                     'neutron_metadata_agent_config',
                     'neutron_plugin_cisco',
                     'neutron_plugin_cisco_credentials',

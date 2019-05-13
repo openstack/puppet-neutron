@@ -23,7 +23,6 @@ class { '::neutron::server::notifications':
 # Various agents
 class { '::neutron::agents::dhcp': }
 class { '::neutron::agents::l3': }
-class { '::neutron::agents::lbaas': }
 class { '::neutron::agents::vpnaas': }
 class { '::neutron::agents::metering': }
 

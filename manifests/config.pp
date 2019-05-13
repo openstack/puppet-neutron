@@ -99,11 +99,6 @@
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
-#### DEPRECATED
-#
-# [*lbaas_agent_config*]
-#   (optional) Manage configuration of lbaas_agent.ini
-#
 class neutron::config (
   $server_config                 = {},
   $api_config                    = {},
@@ -130,8 +125,6 @@ class neutron::config (
   $plugin_ml2_config             = {},
   $plugin_nsx_config             = {},
   $plugin_nvp_config             = {},
-### DEPRECATED PARAMS
-  $lbaas_agent_config            = undef,
 ) {
 
   include ::neutron::deps
@@ -161,13 +154,6 @@ class neutron::config (
   validate_legacy(Hash, 'validate_hash', $plugin_ml2_config)
   validate_legacy(Hash, 'validate_hash', $plugin_nsx_config)
   validate_legacy(Hash, 'validate_hash', $plugin_nvp_config)
-
-  if $lbaas_agent_config {
-    validate_legacy(Hash, 'validate_hash', $lbaas_agent_config)
-
-    warning('neutron::config::lbaas_agent_config is deprecated and will be removed in a future release')
-    create_resources('neutron_lbaas_agent_config', $lbaas_agent_config)
-  }
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_config', $api_config)

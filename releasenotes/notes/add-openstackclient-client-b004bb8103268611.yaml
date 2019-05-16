@@ -1,0 +1,3 @@
+---
+features:
+  - Add openstackclient installation to the client class.

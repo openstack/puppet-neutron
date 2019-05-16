@@ -12,6 +12,8 @@ describe 'neutron::client' do
         :tag    => ['neutron-support-package', 'openstack']
       )
     end
+
+    it { is_expected.to contain_class('openstacklib::openstackclient') }
   end
 
   on_supported_os({

@@ -21,4 +21,6 @@ class neutron::client (
     tag    => ['neutron-support-package', 'openstack'],
   }
 
+  include '::openstacklib::openstackclient'
+
 }

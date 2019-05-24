@@ -30,7 +30,7 @@ describe 'neutron::plugins::ml2::bigswitch::restproxy' do
     it do
       should contain_neutron_plugin_ml2('restproxy/servers').with_value(params[:servers])
       should contain_neutron_plugin_ml2('restproxy/server_auth').with_value(params[:server_auth])
-      should contain_neutron_plugin_ml2('restproxy/auth_tenant').with_value('service')
+      should contain_neutron_plugin_ml2('restproxy/auth_tenant').with_value('services')
       should contain_neutron_plugin_ml2('restproxy/auth_password').with_value(false)
       should contain_neutron_plugin_ml2('restproxy/auth_user').with_value('neutron')
       should contain_neutron_plugin_ml2('restproxy/auth_url').with_value(false)
@@ -69,7 +69,7 @@ describe 'neutron::plugins::ml2::bigswitch::restproxy' do
 
         should contain_neutron_plugin_ml2('restproxy/servers').with_value(params[:servers])
         should contain_neutron_plugin_ml2('restproxy/server_auth').with_value(params[:server_auth])
-        should contain_neutron_plugin_ml2('restproxy/auth_tenant').with_value('service')
+        should contain_neutron_plugin_ml2('restproxy/auth_tenant').with_value('services')
         should contain_neutron_plugin_ml2('restproxy/auth_password').with_value(false)
         should contain_neutron_plugin_ml2('restproxy/auth_user').with_value('neutron')
         should contain_neutron_plugin_ml2('restproxy/auth_url').with_value(false)

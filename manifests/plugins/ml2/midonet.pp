@@ -16,7 +16,7 @@
 #
 # [*project_id*]
 #   (optional) Name of the project that MidoNet admin user belongs to.
-#   Defaults to 'service'
+#   Defaults to 'services'
 #
 class neutron::plugins::ml2::midonet (
   $midonet_uri,

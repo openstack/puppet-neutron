@@ -98,7 +98,7 @@ class neutron::plugins::midonet (
   $midonet_cluster_port  = '8181',
   $keystone_username     = 'neutron',
   $keystone_password     = $::os_service_default,
-  $keystone_tenant       = 'service',
+  $keystone_tenant       = 'services',
   $sync_db               = false,
   $purge_config          = false,
   $package_ensure        = 'present',

@@ -83,7 +83,7 @@
 class neutron::plugins::ml2::bigswitch::restproxy (
   $servers                = $::os_service_default,
   $server_auth            = $::os_service_default,
-  $auth_tenant            = 'service',
+  $auth_tenant            = 'services',
   $auth_password          = false,
   $auth_user              = 'neutron',
   $auth_url               = false,

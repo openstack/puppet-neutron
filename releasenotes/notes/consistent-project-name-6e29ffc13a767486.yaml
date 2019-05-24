@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    The default value for neutron::plugins::midonet::keystone_tenant and
+    neutron::plugins::ml2::bigswitch::restproxy::auth_tenant has been
+    changed from 'service' to 'services'.

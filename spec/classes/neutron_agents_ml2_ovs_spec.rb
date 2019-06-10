@@ -59,6 +59,7 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_neutron_agent_ovs('ovs/local_ip').with_ensure('absent')
       is_expected.to contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_ensure('absent')
       is_expected.to contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_ensure('absent')
+      is_expected.to contain_neutron_agent_ovs('agent/tunnel_types').with_ensure('absent')
     end
 
     it 'installs neutron ovs agent package' do

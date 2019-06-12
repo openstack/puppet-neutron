@@ -58,7 +58,6 @@ describe 'neutron::config' do
     let :params do
       { :l3_agent_config       => config_hash,
         :dhcp_agent_config     => config_hash,
-        :lbaas_agent_config    => config_hash,
         :metadata_agent_config => config_hash,
         :metering_agent_config => config_hash,
         :vpnaas_agent_config   => config_hash,
@@ -77,12 +76,6 @@ describe 'neutron::config' do
       should contain_neutron_dhcp_agent_config('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_dhcp_agent_config('DEFAULT/bar').with_value('barValue')
       should contain_neutron_dhcp_agent_config('DEFAULT/baz').with_ensure('absent')
-    end
-
-    it 'configures arbitrary lbaas_agent_config configurations' do
-      should contain_neutron_lbaas_agent_config('DEFAULT/foo').with_value('fooValue')
-      should contain_neutron_lbaas_agent_config('DEFAULT/bar').with_value('barValue')
-      should contain_neutron_lbaas_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary metadata_agent_config configurations' do

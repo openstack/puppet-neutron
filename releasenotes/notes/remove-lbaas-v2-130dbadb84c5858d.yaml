@@ -1,0 +1,20 @@
+---
+upgrade:
+  - |
+    The Neutron LBaaS plugin has been removed upstream and is no longer available
+    in the Train release. The following deprecated resources has been removed:
+
+    - ``neutron::agents::lbaas``
+    - ``neutron::config::lbaas_agent_config``
+    - ``neutron::server::ensure_lbaas_package``
+    - ``neutron::services::lbaas``
+    - ``neutron::services::lbaas::haproxy``
+    - ``neutron::services::lbaas::octavia``
+    - ``neutron_lbaas_agent_config``
+    - ``neutron_lbaas_service_config``
+
+    Please see the following link for more information on this deprecation:
+    https://wiki.openstack.org/wiki/Neutron/LBaaS/Deprecation
+
+    You should use the Octavia project to implement LBaaS.
+    https://docs.openstack.org/octavia/latest/reference/introduction.html

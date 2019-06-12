@@ -320,12 +320,12 @@ describe 'neutron' do
   shared_examples 'with service_plugins' do
     before do
       params.merge!(
-        :service_plugins => ['router','firewall','lbaas','vpnaas','metering','qos']
+        :service_plugins => ['router','firewall','vpnaas','metering','qos']
       )
     end
 
     it do
-      should contain_neutron_config('DEFAULT/service_plugins').with_value('router,firewall,lbaas,vpnaas,metering,qos')
+      should contain_neutron_config('DEFAULT/service_plugins').with_value('router,firewall,vpnaas,metering,qos')
     end
 
   end

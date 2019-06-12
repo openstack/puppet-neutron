@@ -24,7 +24,6 @@ class neutron::params {
   $plumgrid_config_file        = '/etc/neutron/plugins/plumgrid/plumgrid.ini'
   $nuage_config_file           = '/etc/neutron/plugins/nuage/plugin.ini'
   $dhcp_agent_service          = 'neutron-dhcp-agent'
-  $lbaasv2_agent_service       = 'neutron-lbaasv2-agent'
   $haproxy_package             = 'haproxy'
   $metering_agent_service      = 'neutron-metering-agent'
   $l3_agent_service            = 'neutron-l3-agent'
@@ -67,7 +66,6 @@ class neutron::params {
     $cisco_server_package               = 'openstack-neutron-cisco'
     $nvp_server_package                 = 'openstack-neutron-nicira'
     $dhcp_agent_package                 = false
-    $lbaasv2_agent_package              = 'openstack-neutron-lbaas'
     $metering_agent_package             = 'openstack-neutron-metering-agent'
     $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
     $l2gw_agent_package                 = 'openstack-neutron-l2gw-agent'
@@ -83,7 +81,6 @@ class neutron::params {
     $libreswan_package                  = 'libreswan'
     $metadata_agent_package             = false
     $l3_agent_package                   = false
-    $lbaas_package                      = false
     $fwaas_package                      = 'openstack-neutron-fwaas'
     $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
     $neutron_wsgi_script_source         = '/usr/bin/neutron-api'
@@ -103,7 +100,6 @@ class neutron::params {
       $rpc_package_name         = 'neutron-rpc-server'
       $rpc_service_name         = 'neutron-rpc-server'
       $dynamic_routing_package  = 'python3-neutron-dynamic-routing'
-      $lbaas_package            = 'python3-neutron-lbaas'
     } else {
       $ml2_server_package = 'neutron-plugin-ml2'
       $server_service           = 'neutron-server'
@@ -113,7 +109,6 @@ class neutron::params {
       $rpc_package_name         = false
       $rpc_service_name         = false
       $dynamic_routing_package  = "python${pyvers}-neutron-dynamic-routing"
-      $lbaas_package            = "python${pyvers}-neutron-lbaas"
     }
     $bgp_dragent_package        = 'neutron-bgp-dragent'
     $ovs_agent_package          = 'neutron-openvswitch-agent'
@@ -128,7 +123,6 @@ class neutron::params {
     $cisco_server_package       = 'neutron-plugin-cisco'
     $nvp_server_package         = 'neutron-plugin-nicira'
     $dhcp_agent_package         = 'neutron-dhcp-agent'
-    $lbaasv2_agent_package      = 'neutron-lbaasv2-agent'
     $metering_agent_package     = 'neutron-metering-agent'
     $vpnaas_agent_package       = 'python-neutron-vpnaas'
     $openswan_package           = 'strongswan'

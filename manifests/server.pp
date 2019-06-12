@@ -219,15 +219,13 @@
 #
 # [*service_providers*]
 #   (Optional) (Array) Configures the service providers for neutron server.
-#   This needs to be set for lbaas, vpnaas, and fwaas.
+#   This needs to be set for vpnaas, fwaas etc.
 #   Defaults to $::os_service_default
 #
 #   Example:
 #
 #   class { 'neutron::server':
 #     service_providers => [
-#        'LOADBALANCERV2:Octavia:neutron_lbaas.drivers.octavia.driver.OctaviaDriver:default',
-#        'LOADBALANCER:Haproxy:neutron_lbaas.services.loadbalancer.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver',
 #        'VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default'
 #     ]
 #   }
@@ -244,13 +242,6 @@
 # [*ovs_integration_bridge*]
 #   (Optional) Name of Open vSwitch bridge to use
 #   Defaults to $::os_service_default
-#
-### DEPRECATED PARAMS
-#
-# [*ensure_lbaas_package*]
-#   (Optional) Ensures installation of LBaaS package before starting API service.
-#   Set to true to ensure installation of the package that is required to start neutron service if lbaasv2 service_plugin is enabled.
-#   Defaults to false.
 #
 class neutron::server (
   $package_ensure                   = 'present',
@@ -296,8 +287,6 @@ class neutron::server (
   $auth_strategy                    = 'keystone',
   $enable_proxy_headers_parsing     = $::os_service_default,
   $ovs_integration_bridge           = $::os_service_default,
-### DEPRECATED PARAMS
-  $ensure_lbaas_package             = false,
 ) inherits ::neutron::params {
 
   include ::neutron::deps
@@ -341,27 +330,6 @@ class neutron::server (
         'name'   => $::neutron::params::fwaas_package,
         'ensure' => $neutron::package_ensure,
         'tag'    => ['openstack', 'neutron-package'],
-      })
-    }
-  }
-
-  if $ensure_lbaas_package {
-    warning('neutron::server::ensure_lbaas_package is deprecated and will be removed in a future release')
-
-    if $::neutron::params::lbaas_package {
-      ensure_packages('neutron-lbaas', {
-        ensure => $package_ensure,
-        name   => $::neutron::params::lbaas_package,
-        tag    => ['openstack', 'neutron-package']
-      })
-    } elsif $::neutron::params::lbaasv2_agent_package {
-      # RedHat package ships LBaaS and agent in same package
-      # so we install it here, it's fine because RedHat doesn't
-      # start services by default.
-      ensure_packages('neutron-lbaasv2-agent', {
-        ensure => $package_ensure,
-        name   => $::neutron::params::lbaasv2_agent_package,
-        tag    => ['openstack', 'neutron-package'],
       })
     }
   }

@@ -295,28 +295,6 @@ describe 'neutron::server' do
     end
   end
 
-  shared_examples 'neutron server lbaas on Debian' do
-    before do
-      params.merge!( :ensure_lbaas_package => true )
-    end
-
-    it 'should install lbaas package' do
-      should contain_package('neutron-lbaas')
-      should_not contain_package('neutron-lbaasv2-agent')
-    end
-  end
-
-  shared_examples 'neutron server lbaas on RedHat' do
-    before do
-      params.merge!( :ensure_lbaas_package => true )
-    end
-
-    it 'should install lbaasv2-agent package' do
-      should_not contain_package('neutron-lbaas')
-      should contain_package('neutron-lbaasv2-agent')
-    end
-  end
-
   shared_examples 'a neutron server without database synchronization' do
     before do
       params.merge!(
@@ -354,7 +332,6 @@ describe 'neutron::server' do
       it_behaves_like 'a neutron server'
       it_behaves_like 'a neutron server without database synchronization'
       it_behaves_like "neutron server dynamic routing on #{facts[:osfamily]}"
-      it_behaves_like "neutron server lbaas on #{facts[:osfamily]}"
     end
   end
 end

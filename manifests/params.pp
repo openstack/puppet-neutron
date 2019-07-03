@@ -39,6 +39,8 @@ class neutron::params {
   $nsx_config_file             = '/etc/neutron/plugins/vmware/nsx.ini'
   $sfc_package                 = "python${pyvers}-networking-sfc"
   $group                       = 'neutron'
+  $mlnx_agent_package          = 'python-networking-mlnx'
+  $eswitchd_service            = 'eswitchd'
 
   if($::osfamily == 'Redhat') {
     $nobody_user_group                  = 'nobody'
@@ -88,6 +90,7 @@ class neutron::params {
     $networking_baremetal_agent_package = 'python2-ironic-neutron-agent'
     $networking_baremetal_agent_service = 'ironic-neutron-agent'
     $networking_ansible_package         = "python${pyvers}-networking-ansible"
+    $mlnx_agent_service                 = 'neutron-mlnx-agent'
   } elsif($::osfamily == 'Debian') {
     $nobody_user_group          = 'nogroup'
     $package_name               = 'neutron-common'
@@ -134,6 +137,7 @@ class neutron::params {
     $l2gw_package               = "python${pyvers}-networking-l2gw"
     $neutron_wsgi_script_path   = '/usr/lib/cgi-bin/neutron'
     $neutron_wsgi_script_source = '/usr/bin/neutron-api'
+    $mlnx_agent_service         = 'neutron-plugin-mlnx-agent'
   } else {
     fail("Unsupported osfamily ${::osfamily}")
   }

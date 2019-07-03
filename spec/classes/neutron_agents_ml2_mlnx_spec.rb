@@ -1,0 +1,116 @@
+require 'spec_helper'
+
+describe 'neutron::agents::ml2::mlnx' do
+  let :pre_condition do
+    "class { 'neutron': }"
+  end
+
+  let :default_params do
+    {
+      :package_ensure            => 'present',
+      :enabled                   => true,
+      :manage_service            => true
+    }
+  end
+
+  let :params do
+    {}
+  end
+
+  shared_examples 'neutron mlnx agent with ml2 plugin' do
+    let :p do
+      default_params.merge(params)
+    end
+
+    it { should contain_class('neutron::params') }
+
+
+    it 'configures /etc/neutron/plugins/mlnx/mlnx_config.ini' do
+      should contain_neutron_mlnx_agent_config('eswitch/physical_device_mappings').with_value('<SERVICE DEFAULT>')
+    end
+
+
+    it 'installs neutron mlnx agent package' do
+      should contain_package(platform_params[:mlnx_agent_package]).with(
+        :name   => platform_params[:mlnx_agent_package],
+        :ensure => p[:package_ensure],
+        :tag    => ['openstack', 'neutron-package'],
+      )
+      should contain_package(platform_params[:mlnx_agent_package]).that_requires('Anchor[neutron::install::begin]')
+      should contain_package(platform_params[:mlnx_agent_package]).that_notifies('Anchor[neutron::install::end]')
+    end
+
+    it 'configures neutron mlnx agent service' do
+      should contain_service(platform_params[:mlnx_agent_service]).with(
+        :name    => platform_params[:mlnx_agent_service],
+        :enable  => true,
+        :ensure  => 'running',
+        :tag     => 'neutron-service',
+      )
+      should contain_service(platform_params[:mlnx_agent_service]).that_subscribes_to('Anchor[neutron::service::begin]')
+      should contain_service(platform_params[:mlnx_agent_service]).that_notifies('Anchor[neutron::service::end]')
+      should contain_service('eswitchd').that_subscribes_to('Anchor[neutron::service::begin]')
+      should contain_service('eswitchd').that_notifies('Anchor[neutron::service::end]')
+    end
+
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not start/stop service' do
+        should contain_service(platform_params[:mlnx_agent_service]).without_ensure
+        should contain_service('eswitchd').without_ensure
+      end
+    end
+
+    context 'when supplying device mapping' do
+      before :each do
+        params.merge!(:physical_device_mappings => ['physnet1:eth1'])
+      end
+
+      it 'configures physical device mappings' do
+        should contain_neutron_mlnx_agent_config('eswitch/physical_device_mappings').with_value(['physnet1:eth1'])
+        should contain_eswitchd_config('DAEMON/fabrics').with_value(['physnet1:eth1'])
+      end
+    end
+
+    context 'when supplying empty device mapping' do
+      before :each do
+        params.merge!(:physical_device_mappings => "")
+      end
+
+      it 'configures physical device mappings with exclusion' do
+        should contain_neutron_mlnx_agent_config('eswitch/physical_device_mappings').with_value('<SERVICE DEFAULT>')
+        should contain_eswitchd_config('DAEMON/fabrics').with_value('<SERVICE DEFAULT>')
+      end
+    end
+
+  end
+
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          {
+            :mlnx_agent_package => 'python-networking-mlnx',
+            :mlnx_agent_service => 'neutron-plugin-mlnx-agent'
+          }
+        when 'RedHat'
+          {
+            :mlnx_agent_package => 'python-networking-mlnx',
+            :mlnx_agent_service => 'neutron-mlnx-agent'
+          }
+        end
+      end
+
+      it_behaves_like 'neutron mlnx agent with ml2 plugin'
+    end
+  end
+end

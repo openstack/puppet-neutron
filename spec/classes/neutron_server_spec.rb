@@ -74,6 +74,7 @@ describe 'neutron::server' do
       should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
       should contain_oslo__middleware('neutron_config').with(
         :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
+        :max_request_body_size        => '<SERVICE DEFAULT>',
       )
       should contain_neutron_config('DEFAULT/ovs_integration_bridge').with_value('<SERVICE DEFAULT>')
     end
@@ -208,6 +209,16 @@ describe 'neutron::server' do
 
       it { should contain_oslo__middleware('neutron_config').with(
         :enable_proxy_headers_parsing => true,
+      )}
+    end
+
+    context 'with max_request_body_size' do
+      before :each do
+        params.merge!( :max_request_body_size => '102400' )
+      end
+
+      it { should contain_oslo__middleware('neutron_config').with(
+        :max_request_body_size => '102400',
       )}
     end
 

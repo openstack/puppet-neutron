@@ -239,6 +239,10 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
+# [*max_request_body_size*]
+#   (Optional) Set max request body size
+#   Defaults to $::os_service_default.
+#
 # [*ovs_integration_bridge*]
 #   (Optional) Name of Open vSwitch bridge to use
 #   Defaults to $::os_service_default
@@ -286,6 +290,7 @@ class neutron::server (
   $service_providers                = $::os_service_default,
   $auth_strategy                    = 'keystone',
   $enable_proxy_headers_parsing     = $::os_service_default,
+  $max_request_body_size            = $::os_service_default,
   $ovs_integration_bridge           = $::os_service_default,
 ) inherits ::neutron::params {
 
@@ -426,6 +431,7 @@ class neutron::server (
 
   oslo::middleware { 'neutron_config':
     enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
+    max_request_body_size        => $max_request_body_size,
   }
 
   if $manage_service {

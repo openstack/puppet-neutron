@@ -145,6 +145,11 @@
 #   groups or not.
 #   Defaults to $::os_service_default
 #
+# [*permitted_ethertypes*]
+#   (optional) List of additional ethernet types to be configured
+#   on the firewall.
+#   Defaults to $::os_service_default
+#
 # [*minimize_polling*]
 #  (optional) Minimize polling by monitoring ovsdb for interface
 #  changes. (boolean value)
@@ -189,6 +194,7 @@ class neutron::agents::ml2::ovs (
   $purge_config               = false,
   $enable_dpdk                = false,
   $enable_security_group      = $::os_service_default,
+  $permitted_ethertypes       = $::os_service_default,
   $minimize_polling           = $::os_service_default,
   $tunnel_csum                = $::os_service_default,
   # DEPRECATED PARAMETERS
@@ -208,6 +214,13 @@ class neutron::agents::ml2::ovs (
 
   if $enable_dpdk and is_service_default($vhostuser_socket_dir) {
     fail('vhost user socket directory for ovs agent must be set when DPDK is enabled')
+  }
+
+  if ! is_service_default($permitted_ethertypes) {
+    validate_legacy(Array, 'validate_array', $permitted_ethertypes)
+    neutron_agent_ovs {
+      'securitygroup/permitted_ethertypes':   value => join($permitted_ethertypes, ',');
+    }
   }
 
   if $manage_vswitch {

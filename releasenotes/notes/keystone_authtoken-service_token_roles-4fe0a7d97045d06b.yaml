@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    New hieradata, neutron::keystone::authtoken::service_token_roles, is
+    introduced so that specific role can be assigned to the service user
+    who can use service token feature.

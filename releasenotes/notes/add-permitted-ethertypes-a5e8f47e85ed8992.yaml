@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Add support for configuring security group permitted_ethertypes on the
+    Neutron OVS agent.

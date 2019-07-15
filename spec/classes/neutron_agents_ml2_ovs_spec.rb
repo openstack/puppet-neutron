@@ -55,6 +55,7 @@ describe 'neutron::agents::ml2::ovs' do
         with_value(p[:firewall_driver])
       should contain_neutron_agent_ovs('securitygroup/enable_security_group').\
         with_value(['<SERVICE DEFAULT>'])
+      should_not contain_neutron_agent_ovs('securitygroup/permitted_ethertypes')
       should contain_neutron_agent_ovs('ovs/tunnel_bridge').with_ensure('absent')
       should contain_neutron_agent_ovs('ovs/local_ip').with_ensure('absent')
       should contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_ensure('absent')
@@ -89,6 +90,15 @@ describe 'neutron::agents::ml2::ovs' do
       end
       it 'should not start/stop service' do
         should contain_service('neutron-ovs-agent-service').without_ensure
+      end
+    end
+
+    context 'when supplying permitted ethertypes' do
+      before :each do
+        params.merge!(:permitted_ethertypes => ['0x4008', '0x5'])
+      end
+      it 'should configured ethertypes' do
+        should contain_neutron_agent_ovs('securitygroup/permitted_ethertypes').with_value('0x4008,0x5')
       end
     end
 

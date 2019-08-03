@@ -17,7 +17,7 @@
 #   (optional) Whether to start/stop the service
 #   Defaults to true
 #
-# [*physical_device_mappings*]
+# [*physical_interface_mappings*]
 #   (optional) Array of <physical_network>:<physical device>
 #   All physical networks listed in network_vlan_ranges
 #   on the server should have mappings to appropriate
@@ -34,7 +34,7 @@ class neutron::agents::ml2::mlnx (
   $package_ensure             = 'present',
   $enabled                    = true,
   $manage_service             = true,
-  $physical_device_mappings   = $::os_service_default,
+  $physical_interface_mappings   = $::os_service_default,
   $polling_interval           = 2,
 ) {
 
@@ -46,12 +46,12 @@ class neutron::agents::ml2::mlnx (
   $eswitchd_service            = $::neutron::params::eswitchd_service
 
   neutron_mlnx_agent_config {
-    'eswitch/physical_device_mappings': value => pick(join(any2array($physical_device_mappings), ','), $::os_service_default);
+    'eswitch/physical_interface_mappings': value => pick(join(any2array($physical_interface_mappings), ','), $::os_service_default);
     'agent/polling_interval':           value => $polling_interval;
   }
 
   eswitchd_config {
-    'DAEMON/fabrics': value => pick(join(any2array($physical_device_mappings), ','), $::os_service_default);
+    'DAEMON/fabrics': value => pick(join(any2array($physical_interface_mappings), ','), $::os_service_default);
   }
 
   package { $mlnx_agent_package:

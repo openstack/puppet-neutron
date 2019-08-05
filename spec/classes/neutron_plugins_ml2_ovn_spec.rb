@@ -13,6 +13,12 @@ describe 'neutron::plugins::ml2::ovn' do
     {
        :ovn_nb_connection        => 'tcp:127.0.0.1:6641',
        :ovn_sb_connection        => 'tcp:127.0.0.1:6642',
+       :ovn_nb_private_key       => 'nb_key',
+       :ovn_nb_certificate       => 'nb_cert',
+       :ovn_nb_ca_cert           => 'nb_ca_cert',
+       :ovn_sb_private_key       => 'sb_key',
+       :ovn_sb_certificate       => 'sb_cert',
+       :ovn_sb_ca_cert           => 'sb_ca_cert',
        :ovsdb_connection_timeout => '60',
        :neutron_sync_mode        => 'log',
        :ovn_l3_mode              => true,
@@ -35,6 +41,12 @@ describe 'neutron::plugins::ml2::ovn' do
     it 'should perform default configuration of' do
       should contain_neutron_plugin_ml2('ovn/ovn_nb_connection').with_value(params[:ovn_nb_connection])
       should contain_neutron_plugin_ml2('ovn/ovn_sb_connection').with_value(params[:ovn_sb_connection])
+      should contain_neutron_plugin_ml2('ovn/ovn_nb_private_key').with_value(params[:ovn_nb_private_key])
+      should contain_neutron_plugin_ml2('ovn/ovn_nb_certificate').with_value(params[:ovn_nb_certificate])
+      should contain_neutron_plugin_ml2('ovn/ovn_nb_ca_cert').with_value(params[:ovn_nb_ca_cert])
+      should contain_neutron_plugin_ml2('ovn/ovn_sb_private_key').with_value(params[:ovn_sb_private_key])
+      should contain_neutron_plugin_ml2('ovn/ovn_sb_certificate').with_value(params[:ovn_sb_certificate])
+      should contain_neutron_plugin_ml2('ovn/ovn_sb_ca_cert').with_value(params[:ovn_sb_ca_cert])
       should contain_neutron_plugin_ml2('ovn/ovsdb_connection_timeout').with_value(params[:ovsdb_connection_timeout])
       should contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(params[:neutron_sync_mode])
       should contain_neutron_plugin_ml2('ovn/ovn_l3_mode').with_value(params[:ovn_l3_mode])

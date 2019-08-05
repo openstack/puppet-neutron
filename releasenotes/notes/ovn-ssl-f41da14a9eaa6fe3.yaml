@@ -1,0 +1,15 @@
+---
+features:
+  - |
+    This patch introduce parameters which support SSL to connect to
+    OVN_Northbound DB and OVN_Southbound DB. This can be set by:
+    * 'ovn_nb_private_key': The PEM file with private key for SSL connection to OVN-NB-DB
+    * 'ovn_nb_certificate': The PEM file with certificate that certifies the private
+    key specified in ovn_nb_private_key
+    * 'ovn_nb_ca_cert': The PEM file with CA certificate that OVN should use to
+    verify certificates presented to it by SSL peers
+    * 'ovn_sb_private_key': The PEM file with private key for SSL connection to OVN-SB-DBt,
+    * 'ovn_sb_certificate': The PEM file with certificate that certifies the
+    private key specified in ovn_sb_private_key'
+    * 'ovn_sb_ca_cert': The PEM file with CA certificate that OVN should use to
+    verify certificates presented to it by SSL peers

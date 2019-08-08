@@ -68,6 +68,20 @@
 #   (optional) The connection string for the OVN_Southbound OVSDB
 #   Defaults to '$::os_service_default'
 #
+# [*ovn_sb_private_key*]
+#   (optional) TThe PEM file with private key for SSL connection to OVN-SB-DB
+#   Defaults to $::os_service_default
+#
+# [*ovn_sb_certificate*]
+#   (optional) The PEM file with certificate that certifies the
+#   private key specified in ovn_sb_private_key
+#   Defaults to $::os_service_default
+#
+# [*ovn_sb_ca_cert*]
+#   (optional) TThe PEM file with CA certificate that OVN should use to
+#   verify certificates presented to it by SSL peers
+#   Defaults to $::os_service_default
+#
 # [*ovsdb_connection_timeout*]
 #   (optional) Timeout in seconds for the OVSDB connection transaction
 #   Defaults to $::os_service_default
@@ -111,6 +125,9 @@ class neutron::agents::ovn_metadata (
   $ovsdb_connection          = 'tcp:127.0.0.1:6640',
   $ovs_manager               = 'ptcp:6640:127.0.0.1',
   $ovn_sb_connection         = $::os_service_default,
+  $ovn_sb_private_key        = $::os_service_default,
+  $ovn_sb_certificate        = $::os_service_default,
+  $ovn_sb_ca_cert            = $::os_service_default,
   $ovsdb_connection_timeout  = $::os_service_default,
   $root_helper               = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $root_helper_daemon        = $::os_service_default,
@@ -144,6 +161,9 @@ class neutron::agents::ovn_metadata (
     'ovs/ovsdb_connection':                   value => $ovsdb_connection;
     'ovs/ovsdb_connection_timeout':           value => $ovsdb_connection_timeout;
     'ovn/ovn_sb_connection':                  value => $ovn_sb_connection;
+    'ovn/ovn_sb_private_key':                 value => $ovn_sb_private_key;
+    'ovn/ovn_sb_certificate':                 value => $ovn_sb_certificate;
+    'ovn/ovn_sb_ca_cert':                     value => $ovn_sb_ca_cert;
   }
 
   if $::neutron::params::ovn_metadata_agent_package {

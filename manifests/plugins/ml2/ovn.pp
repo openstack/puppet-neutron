@@ -10,6 +10,34 @@
 #   (optional) The connection string for the OVN_Southbound OVSDB
 #   Defaults to 'tcp:127.0.0.1:6642'
 #
+# [*ovn_nb_private_key*]
+#   (optional) The PEM file with private key for SSL connection to OVN-NB-DB
+#   Defaults to $::os_service_default
+#
+# [*ovn_nb_certificate*]
+#   (optional) The PEM file with certificate that certifies the private
+#   key specified in ovn_nb_private_key
+#   Defaults to $::os_service_default
+#
+# [*ovn_nb_ca_cert*]
+#   (optional) The PEM file with CA certificate that OVN should use to
+#   verify certificates presented to it by SSL peers
+#   Defaults to $::os_service_default
+#
+# [*ovn_sb_private_key*]
+#   (optional) The PEM file with private key for SSL connection to OVN-SB-DB
+#   Defaults to $::os_service_default
+#
+# [*ovn_sb_certificate*]
+#   (optional) The PEM file with certificate that certifies the
+#   private key specified in ovn_sb_private_key
+#   Defaults to $::os_service_default
+#
+# [*ovn_sb_ca_cert*]
+#   (optional) The PEM file with CA certificate that OVN should use to
+#   verify certificates presented to it by SSL peers
+#   Defaults to $::os_service_default
+#
 # [*package_ensure*]
 #   (optional) The intended state of the python-networking-odl
 #   package, i.e. any of the possible values of the 'ensure'
@@ -67,6 +95,12 @@
 class neutron::plugins::ml2::ovn(
   $ovn_nb_connection        = $::os_service_default,
   $ovn_sb_connection        = $::os_service_default,
+  $ovn_nb_private_key       = $::os_service_default,
+  $ovn_nb_certificate       = $::os_service_default,
+  $ovn_nb_ca_cert           = $::os_service_default,
+  $ovn_sb_private_key       = $::os_service_default,
+  $ovn_sb_certificate       = $::os_service_default,
+  $ovn_sb_ca_cert           = $::os_service_default,
   $package_ensure           = 'present',
   $ovsdb_connection_timeout = $::os_service_default,
   $neutron_sync_mode        = $::os_service_default,
@@ -103,6 +137,12 @@ class neutron::plugins::ml2::ovn(
   neutron_plugin_ml2 {
     'ovn/ovn_nb_connection'        : value => $ovn_nb_connection;
     'ovn/ovn_sb_connection'        : value => $ovn_sb_connection;
+    'ovn/ovn_nb_private_key'       : value => $ovn_nb_private_key;
+    'ovn/ovn_nb_certificate'       : value => $ovn_nb_certificate;
+    'ovn/ovn_nb_ca_cert'           : value => $ovn_nb_ca_cert;
+    'ovn/ovn_sb_private_key'       : value => $ovn_sb_private_key;
+    'ovn/ovn_sb_certificate'       : value => $ovn_sb_certificate;
+    'ovn/ovn_sb_ca_cert'           : value => $ovn_sb_ca_cert;
     'ovn/ovsdb_connection_timeout' : value => $ovsdb_connection_timeout;
     'ovn/neutron_sync_mode'        : value => $neutron_sync_mode;
     'ovn/ovn_l3_mode'              : value => $ovn_l3_mode;

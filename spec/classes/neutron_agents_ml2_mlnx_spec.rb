@@ -26,7 +26,7 @@ describe 'neutron::agents::ml2::mlnx' do
 
 
     it 'configures /etc/neutron/plugins/mlnx/mlnx_config.ini' do
-      should contain_neutron_mlnx_agent_config('eswitch/physical_device_mappings').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_mlnx_agent_config('eswitch/physical_interface_mappings').with_value('<SERVICE DEFAULT>')
     end
 
 
@@ -65,22 +65,22 @@ describe 'neutron::agents::ml2::mlnx' do
 
     context 'when supplying device mapping' do
       before :each do
-        params.merge!(:physical_device_mappings => ['physnet1:eth1'])
+        params.merge!(:physical_interface_mappings => ['physnet1:eth1'])
       end
 
       it 'configures physical device mappings' do
-        should contain_neutron_mlnx_agent_config('eswitch/physical_device_mappings').with_value(['physnet1:eth1'])
+        should contain_neutron_mlnx_agent_config('eswitch/physical_interface_mappings').with_value(['physnet1:eth1'])
         should contain_eswitchd_config('DAEMON/fabrics').with_value(['physnet1:eth1'])
       end
     end
 
     context 'when supplying empty device mapping' do
       before :each do
-        params.merge!(:physical_device_mappings => "")
+        params.merge!(:physical_interface_mappings => "")
       end
 
       it 'configures physical device mappings with exclusion' do
-        should contain_neutron_mlnx_agent_config('eswitch/physical_device_mappings').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_mlnx_agent_config('eswitch/physical_interface_mappings').with_value('<SERVICE DEFAULT>')
         should contain_eswitchd_config('DAEMON/fabrics').with_value('<SERVICE DEFAULT>')
       end
     end

@@ -29,7 +29,6 @@
 #   polling for local device changes.
 #   Defaults to '2"
 #
-
 class neutron::agents::ml2::mlnx (
   $package_ensure             = 'present',
   $enabled                    = true,

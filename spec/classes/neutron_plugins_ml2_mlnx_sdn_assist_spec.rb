@@ -33,6 +33,9 @@ describe 'neutron::plugins::ml2::mellanox::mlnx_sdn_assist' do
       should contain_neutron_plugin_ml2('sdn/password').with_value(params[:sdn_password]).with_secret(true)
       should contain_neutron_plugin_ml2('sdn/username').with_value(params[:sdn_username])
       should contain_neutron_plugin_ml2('sdn/url').with_value(params[:sdn_url])
+      should contain_neutron_plugin_ml2('sdn/sync_enabled').with_value('true')
+      should contain_neutron_plugin_ml2('sdn/bind_normal_ports').with_value('false')
+      should contain_neutron_plugin_ml2('sdn/bind_normal_ports_physnets').with_value([])
     end
   end
 

@@ -24,11 +24,31 @@
 # Defaults to $::os_service_default
 # Example: 'cloudx'
 #
+# [*sync_enabled*]
+# (optional) Whether synchronising state to an
+# SDN provider is enabled.
+# Defaults to true
+#
+# [*bind_normal_ports*]
+# (optional) Allow the binding of normal ports for ports
+# associated with a physnet from bind_normal_ports_physnets
+# Defaults to false
+#
+# [*bind_normal_ports_physnets*]
+# (optional) A list of physnets in which binding of normal
+# ports is allowed. This option is used in  conjuction
+# with bind_normal_ports.
+# The list must be a subset of physical_networks
+# Defaults to []
+#
 class neutron::plugins::ml2::mellanox::mlnx_sdn_assist (
   $sdn_username = $::os_service_default,
   $sdn_password = $::os_service_default,
   $sdn_url      = $::os_service_default,
   $sdn_domain   = $::os_service_default,
+  $sync_enabled                 = true,
+  $bind_normal_ports            = false,
+  $bind_normal_ports_physnets   = [],
 ) {
 
   include ::neutron::deps
@@ -39,5 +59,8 @@ class neutron::plugins::ml2::mellanox::mlnx_sdn_assist (
     'sdn/password': value => $sdn_password, secret => true;
     'sdn/url':      value => $sdn_url;
     'sdn/domain':   value => $sdn_domain;
+    'sdn/sync_enabled':                 value => $sync_enabled;
+    'sdn/bind_normal_ports':            value => $bind_normal_ports;
+    'sdn/bind_normal_ports_physnets':   value => $bind_normal_ports_physnets;
   }
 }

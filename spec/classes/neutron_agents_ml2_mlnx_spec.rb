@@ -85,6 +85,20 @@ describe 'neutron::agents::ml2::mlnx' do
       end
     end
 
+    it 'configures neutron dhcp agent' do
+      should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_dhcp_agent_config('DEFAULT/interface_driver').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_dhcp_agent_config('DEFAULT/multi_interface_driver_mappings').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_dhcp_agent_config('DEFAULT/ipoib_physical_interface').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_dhcp_agent_config('DEFAULT/enable_multi_interface_driver_cache_maintenance').with_value(false)
+    end
+
+    it 'configures neutron l3 agent' do
+      should contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/multi_interface_driver_mappings').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ipoib_physical_interface').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/enable_multi_interface_driver_cache_maintenance').with_value(false)
+    end
   end
 
   on_supported_os({

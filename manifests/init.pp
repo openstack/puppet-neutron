@@ -324,7 +324,7 @@
 ## DEPRECATED PARAMS
 #
 # [*manage_logging*]
-#   (optional) Whether to manage olso.logging options
+#   (optional) Whether to manage oslo.logging options
 #   If set to false, neutron::logging class should be evaluated
 #   Defaults to undef.
 #

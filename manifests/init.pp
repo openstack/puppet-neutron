@@ -321,13 +321,6 @@
 #   (optional) Allow plugins that support it to create VLAN transparent networks
 #   Defaults to $::os_service_default
 #
-## DEPRECATED PARAMS
-#
-# [*manage_logging*]
-#   (optional) Whether to manage oslo.logging options
-#   If set to false, neutron::logging class should be evaluated
-#   Defaults to undef.
-#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
@@ -395,16 +388,10 @@ class neutron (
   $notification_transport_url           = $::os_service_default,
   $max_allowed_address_pair             = $::os_service_default,
   $vlan_transparent                     = $::os_service_default,
-  ## DEPRECATED PARAMS
-  $manage_logging                       = undef,
 ) {
 
   include ::neutron::deps
   include ::neutron::params
-
-  if $manage_logging {
-    warning('neutron::manage_logging is deprecated and has no effect, please use neutron::logging class')
-  }
 
   if ! is_service_default($use_ssl) and ($use_ssl) {
     if is_service_default($cert_file) {

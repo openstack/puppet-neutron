@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The deprecated parameter neutron::manage_logging is removed.

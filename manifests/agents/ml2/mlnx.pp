@@ -17,6 +17,10 @@
 #   (optional) Whether to start/stop the service
 #   Defaults to true
 #
+# [*manage_package*]
+#   (optional) Whether to install the package
+#   Defaults to true
+#
 # [*physical_interface_mappings*]
 #   (optional) Array of <physical_network>:<physical device>
 #   All physical networks listed in network_vlan_ranges
@@ -27,7 +31,7 @@
 # [*polling_interval*]
 #   (optional) The number of seconds the agent will wait between
 #   polling for local device changes.
-#   Defaults to '2"
+#   Defaults to $::os_service_default
 #
 # [*dhcp_broadcast_reply*]
 #   (optional) Use broadcast in DHCP replies
@@ -60,8 +64,9 @@ class neutron::agents::ml2::mlnx (
   $package_ensure             = 'present',
   $enabled                    = true,
   $manage_service             = true,
-  $physical_interface_mappings   = $::os_service_default,
-  $polling_interval           = 2,
+  $manage_package             = true,
+  $physical_interface_mappings                     = $::os_service_default,
+  $polling_interval                                = $::os_service_default,
   $dhcp_broadcast_reply                            = $::os_service_default,
   $interface_driver                                = $::os_service_default,
   $multi_interface_driver_mappings                 = $::os_service_default,
@@ -78,7 +83,7 @@ class neutron::agents::ml2::mlnx (
 
   neutron_mlnx_agent_config {
     'eswitch/physical_interface_mappings': value => pick(join(any2array($physical_interface_mappings), ','), $::os_service_default);
-    'agent/polling_interval':           value => $polling_interval;
+    'agent/polling_interval'             : value => $polling_interval;
   }
 
   eswitchd_config {
@@ -102,9 +107,11 @@ class neutron::agents::ml2::mlnx (
     'DEFAULT/enable_multi_interface_driver_cache_maintenance' : value => $enable_multi_interface_driver_cache_maintenance;
   }
 
-  package { $mlnx_agent_package:
-    ensure => $package_ensure,
-    tag    => ['openstack', 'neutron-package'],
+  if $manage_package {
+    package { $mlnx_agent_package:
+      ensure => $package_ensure,
+      tag    => ['openstack', 'neutron-package'],
+    }
   }
 
   if $manage_service {

@@ -18,7 +18,8 @@ describe 'neutron::plugins::ml2::networking_ansible' do
                      'ansible_user' => 'ansible',
                      'ansible_ssh_private_key_file' => '/path/to/key',
                      'mac' => '01:23:45:67:89:AB',
-                     'manage_vlans' => false},}
+                     'manage_vlans' => false},},
+      :coordination_uri => 'etcd://127.0.0.1:2379'
     }
   end
 
@@ -38,6 +39,11 @@ describe 'neutron::plugins::ml2::networking_ansible' do
       should contain_package('python2-networking-ansible').that_requires('Anchor[neutron::install::begin]')
       should contain_package('python2-networking-ansible').that_notifies('Anchor[neutron::install::end]')
     end
+
+    it 'should configure non-host config' do
+      should contain_neutron_plugin_ml2('ml2_ansible/coordination_uri').with_value('etcd://127.0.0.1:2379')
+    end
+
     it {
      params[:host_configs].each do |host_config|
        should contain_neutron__plugins__ml2__networking_ansible_host(host_config.first)

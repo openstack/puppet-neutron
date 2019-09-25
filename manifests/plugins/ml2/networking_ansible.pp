@@ -21,6 +21,10 @@
 #                 "manage_vlans" => false},
 #  }
 #
+# [*coordination_uri*]
+#   (optional) URI to use as a backend for tooz coordination
+#   Defaults to $::os_service_default
+#
 # [*package_ensure*]
 #   (optional) The intended state of the python-networking-ansible
 #   package, i.e. any of the possible values of the 'ensure'
@@ -29,7 +33,8 @@
 #
 class neutron::plugins::ml2::networking_ansible(
   $host_configs,
-  $package_ensure = 'present',
+  $coordination_uri = $::os_service_default,
+  $package_ensure   = 'present'
   ) {
   include ::neutron::deps
   include ::neutron::params
@@ -46,4 +51,6 @@ class neutron::plugins::ml2::networking_ansible(
     }
   )
   create_resources(neutron::plugins::ml2::networking_ansible_host, $host_configs)
+
+  neutron_plugin_ml2 {'ml2_ansible/coordination_uri': value => $coordination_uri; }
 }

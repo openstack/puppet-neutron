@@ -91,6 +91,16 @@
 #   (optional) The vhost-user socket directory for OVS
 #   Type: String
 #   Defaults to $::os_service_default
+#
+# [*ovn_emit_need_to_frag*]
+#   (optional) Configure OVN to emit "need to frag" packets in case
+#              of MTU mismatch. Before enabling this configuration make
+#              sure that its supported by the host kernel (version >=
+#              5.2) or by checking the output of the following command:
+#              ovs-appctl -t ovs-vswitchd dpif/show-dp-features br-int |
+#              grep "Check pkt length action".
+#   Type: boolean
+#   Defaults to $::os_service_default
 
 class neutron::plugins::ml2::ovn(
   $ovn_nb_connection        = $::os_service_default,
@@ -110,6 +120,7 @@ class neutron::plugins::ml2::ovn(
   $dvr_enabled              = $::os_service_default,
   $dns_servers              = $::os_service_default,
   $vhostuser_socket_dir     = $::os_service_default,
+  $ovn_emit_need_to_frag    = $::os_service_default,
   ) {
 
   include ::neutron::deps
@@ -151,5 +162,6 @@ class neutron::plugins::ml2::ovn(
     'ovn/enable_distributed_floating_ip' : value => $dvr_enabled;
     'ovn/dns_servers'              : value => join(any2array($dns_servers), ',');
     'ovn/vhost_sock_dir'           : value => $vhostuser_socket_dir;
+    'ovn/ovn_emit_need_to_frag'    : value => $ovn_emit_need_to_frag;
   }
 }

@@ -25,6 +25,7 @@ describe 'neutron::plugins::ml2::ovn' do
        :vif_type                 => 'ovs',
        :dvr_enabled              => false,
        :dns_servers              => ['8.8.8.8', '10.10.10.10'],
+       :ovn_emit_need_to_frag    => false,
     }
   end
 
@@ -54,6 +55,7 @@ describe 'neutron::plugins::ml2::ovn' do
       should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
       should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(params[:dns_servers].join(','))
       should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(params[:ovn_emit_need_to_frag])
     end
 
   end
@@ -91,6 +93,15 @@ describe 'neutron::plugins::ml2::ovn' do
       end
       it 'should enable DVR mode' do
         should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
+      end
+    end
+
+    context 'with emit need to fragment enabled' do
+      before :each do
+        params.merge!(:ovn_emit_need_to_frag => true)
+      end
+      it 'should enable emit need to fragment option' do
+        should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(params[:ovn_emit_need_to_frag])
       end
     end
   end

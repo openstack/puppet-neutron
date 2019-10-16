@@ -326,6 +326,7 @@ class neutron::agents::ml2::ovs (
       'ovs/local_ip':              ensure => absent;
       'ovs/int_peer_patch_port':   ensure => absent;
       'ovs/tun_peer_patch_port':   ensure => absent;
+      'agent/tunnel_types':        ensure => absent;
     }
   }
 

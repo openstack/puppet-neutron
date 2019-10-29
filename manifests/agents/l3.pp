@@ -87,6 +87,13 @@
 #   (optional) L3 agent extensions to enable.
 #   Defaults to $::os_service_default
 #
+# [*radvd_user*]
+#   (optional) The username passed to radvd, used to drop root privileges and
+#   change user ID to username and group ID to the primary group of username.
+#   If no user specified, the user executing the L3 agent will be passed. If
+#   "root" specified, because radvd is spawned as root, no "username" parameter
+#   will be passed.
+#
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -107,6 +114,7 @@ class neutron::agents::l3 (
   $purge_config                     = false,
   $availability_zone                = $::os_service_default,
   $extensions                       = $::os_service_default,
+  $radvd_user                       = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -134,6 +142,7 @@ class neutron::agents::l3 (
     'DEFAULT/periodic_fuzzy_delay':             value => $periodic_fuzzy_delay;
     'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;
     'DEFAULT/agent_mode':                       value => $agent_mode;
+    'DEFAULT/radvd_user':                       value => $radvd_user;
     'agent/availability_zone':                  value => $availability_zone;
     'agent/extensions':                         value => $extensions;
   }

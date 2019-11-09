@@ -93,6 +93,7 @@
 #   If no user specified, the user executing the L3 agent will be passed. If
 #   "root" specified, because radvd is spawned as root, no "username" parameter
 #   will be passed.
+#   Defaults to $::os_service_default
 #
 class neutron::agents::l3 (
   $package_ensure                   = 'present',

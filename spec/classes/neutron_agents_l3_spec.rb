@@ -38,6 +38,7 @@ describe 'neutron::agents::l3' do
       should contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/radvd_user').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('agent/availability_zone').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('agent/extensions').with_value('<SERVICE DEFAULT>')
     end
@@ -85,6 +86,16 @@ describe 'neutron::agents::l3' do
       end
       it 'should enable DVR mode' do
         should contain_neutron_l3_agent_config('DEFAULT/agent_mode').with_value(p[:agent_mode])
+      end
+    end
+
+    context 'with radvd user' do
+      before :each do
+        params.merge!(:radvd_user => 'root')
+      end
+
+      it 'configures radvd user' do
+        should contain_neutron_l3_agent_config('DEFAULT/radvd_user').with_value(p[:radvd_user])
       end
     end
 

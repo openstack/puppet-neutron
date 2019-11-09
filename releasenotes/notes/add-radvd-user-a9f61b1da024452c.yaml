@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Added new parameters radvd_user that can define the username
+    passed to radvd.

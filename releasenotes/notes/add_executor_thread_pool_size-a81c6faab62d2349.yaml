@@ -1,0 +1,3 @@
+---
+features:
+    - Add possibility to configure the size of executor thread pool.

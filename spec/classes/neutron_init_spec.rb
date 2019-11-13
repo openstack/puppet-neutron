@@ -105,6 +105,7 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
       should contain_neutron_config('DEFAULT/state_path').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('oslo_concurrency/lock_path').with_value('$state_path/lock')
+      should contain_neutron_config('DEFAULT/executor_thread_pool_size').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/vlan_transparent').with_value('<SERVICE DEFAULT>')

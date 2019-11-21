@@ -105,7 +105,11 @@
 #   (optional) Whether to set only the specified config options
 #   in the metadata config.
 #   Defaults to false.
-
+#
+# [*ovn_remote_probe_interval*]
+#  (optional) Set probe interval, based on user configuration, value is in ms
+#  Defaults to 60000
+#
 class neutron::agents::ovn_metadata (
   $shared_secret,
   $package_ensure            = 'present',
@@ -133,6 +137,7 @@ class neutron::agents::ovn_metadata (
   $root_helper_daemon        = $::os_service_default,
   $state_path                = '/var/lib/neutron',
   $purge_config              = false,
+  $ovn_remote_probe_interval = $::os_service_default,
   ) {
 
   include ::neutron::deps
@@ -164,6 +169,7 @@ class neutron::agents::ovn_metadata (
     'ovn/ovn_sb_private_key':                 value => $ovn_sb_private_key;
     'ovn/ovn_sb_certificate':                 value => $ovn_sb_certificate;
     'ovn/ovn_sb_ca_cert':                     value => $ovn_sb_ca_cert;
+    'ovn/ovn_remote_probe_interval':          value => $ovn_remote_probe_interval;
   }
 
   if $::neutron::params::ovn_metadata_agent_package {

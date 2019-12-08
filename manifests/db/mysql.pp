@@ -40,7 +40,7 @@ class neutron::db::mysql (
   $collate       = 'utf8_general_ci',
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   validate_legacy(String, 'validate_string', $password)
 

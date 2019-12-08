@@ -79,7 +79,7 @@ class neutron::server::placement (
   $endpoint_type       = $::os_service_default,
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   neutron_config {
     'placement/auth_url':            value => $auth_url;

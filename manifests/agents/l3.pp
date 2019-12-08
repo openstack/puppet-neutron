@@ -118,8 +118,8 @@ class neutron::agents::l3 (
   $radvd_user                       = $::os_service_default,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   resources { 'neutron_l3_agent_config':
     purge => $purge_config,

@@ -125,8 +125,8 @@ class neutron::agents::dhcp (
   $ovsdb_agent_ssl_ca_file   = $::os_service_default,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   if (! ($enable_isolated_metadata or $enable_force_metadata)) and $enable_metadata_network {
     fail('enable_metadata_network to true requires enable_isolated_metadata or enable_force_metadata also enabled.')

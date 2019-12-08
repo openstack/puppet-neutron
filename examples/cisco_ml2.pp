@@ -1,16 +1,16 @@
-class { '::neutron':
+class { 'neutron':
   enabled               => true,
   bind_host             => '127.0.0.1',
   default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
   debug                 => true,
 }
 
-class { '::neutron::server':
+class { 'neutron::server':
   www_authenticate_uri => 'http://127.0.0.1:5000',
   auth_password        => 'keystone_secret',
 }
 
-class { '::neutron::plugins::ml2':
+class { 'neutron::plugins::ml2':
   type_drivers         => ['vlan', 'nexus_vxlan'],
   tenant_network_types => ['nexus_vxlan'],
   network_vlan_ranges  => ['physnet:2000:2020'],

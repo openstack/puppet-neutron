@@ -51,7 +51,7 @@ class neutron::plugins::ml2::mellanox::mlnx_sdn_assist (
   $bind_normal_ports_physnets   = [],
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
   require ::neutron::plugins::ml2
 
   neutron_plugin_ml2 {

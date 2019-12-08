@@ -121,7 +121,7 @@ class neutron::plugins::cisco(
   $purge_config      = false,
 )
 {
-  include ::neutron::deps
+  include neutron::deps
 
   ensure_resource('file', '/etc/neutron/plugins', {
     ensure => directory,

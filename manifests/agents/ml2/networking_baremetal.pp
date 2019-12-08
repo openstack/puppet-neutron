@@ -123,8 +123,8 @@ class neutron::agents::ml2::networking_baremetal (
   $purge_config        = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   if($::osfamily != 'RedHat') {
     # Drivers are only packaged for RedHat at this time

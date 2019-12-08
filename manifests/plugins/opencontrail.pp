@@ -66,8 +66,8 @@ class neutron::plugins::opencontrail (
   $purge_config               = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   validate_legacy(Array, 'validate_array', $contrail_extensions)
 

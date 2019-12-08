@@ -90,8 +90,8 @@ class neutron::agents::bagpipe (
   $local_address           = $::ipaddress,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   resources { 'neutron_bgpvpn_bagpipe_config':
     purge => $purge_config,

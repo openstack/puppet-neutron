@@ -100,7 +100,7 @@ class neutron::plugins::ml2::bigswitch::restproxy (
   $thread_pool_size       = $::os_service_default,
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
   require ::neutron::plugins::ml2::bigswitch
 
   neutron_plugin_ml2 {

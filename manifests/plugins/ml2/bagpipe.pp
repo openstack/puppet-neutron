@@ -39,8 +39,8 @@ class neutron::plugins::ml2::bagpipe (
   $package_ensure          = 'present',
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
   require ::neutron::plugins::ml2
 
   neutron_plugin_ml2 {

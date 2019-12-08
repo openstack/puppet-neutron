@@ -25,7 +25,7 @@ class neutron::rootwrap (
   $xenapi_connection_password = $::os_service_default,
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   neutron_rootwrap_config {
     'xenapi/xenapi_connection_url':      value => $xenapi_connection_url;

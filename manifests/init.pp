@@ -395,8 +395,8 @@ class neutron (
   $vlan_transparent                     = $::os_service_default,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   if ! is_service_default($use_ssl) and ($use_ssl) {
     if is_service_default($cert_file) {

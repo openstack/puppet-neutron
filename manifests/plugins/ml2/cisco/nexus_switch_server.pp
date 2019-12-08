@@ -27,7 +27,7 @@ define neutron::plugins::ml2::cisco::nexus_switch_server(
   $hostname = $title,
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   $section = "ML2_MECH_CISCO_NEXUS:${switch_ip_address}"
   neutron_plugin_ml2 {

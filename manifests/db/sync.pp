@@ -19,8 +19,8 @@ class neutron::db::sync(
   $db_sync_timeout = 300,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   exec { 'neutron-db-sync':
     command     => "neutron-db-manage ${extra_params} upgrade heads",

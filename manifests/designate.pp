@@ -78,8 +78,8 @@ class neutron::designate (
   $ipv6_ptr_zone_prefix_size = $::os_service_default,
   $ptr_zone_email            = $::os_service_default,
 ) {
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   neutron_config {
     'DEFAULT/external_dns_driver':         value => 'designate';

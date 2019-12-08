@@ -121,8 +121,8 @@ class neutron::agents::n1kv_vem (
   $fastpath_flood       = 'enable'
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
   require ::vswitch::ovs
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }

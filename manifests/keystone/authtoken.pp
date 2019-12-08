@@ -214,7 +214,7 @@ class neutron::keystone::authtoken(
   $service_token_roles_required   = $::os_service_default,
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   if is_service_default($password) {
     fail('Please set password for neutron service user')

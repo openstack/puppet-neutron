@@ -119,7 +119,7 @@ define neutron::plugins::ml2::cisco::nexus_creds(
   $https_local_certificate = undef,
 
 ) {
-  include ::neutron::deps
+  include neutron::deps
 
   ensure_resource('file', '/var/lib/neutron/.ssh',
     {

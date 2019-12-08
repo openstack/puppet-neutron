@@ -54,8 +54,8 @@ class neutron::agents::bgp_dragent(
   $purge_config       = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   resources { 'neutron_bgp_dragent_config':
     purge => $purge_config,

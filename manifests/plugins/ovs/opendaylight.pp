@@ -114,7 +114,7 @@ class neutron::plugins::ovs::opendaylight (
   $enable_ipv6           = false,
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   # Handle the case where ODL controller is also on this host
   Service<| title == 'opendaylight' |> -> Exec <| title == 'Wait for NetVirt OVSDB to come up' |>

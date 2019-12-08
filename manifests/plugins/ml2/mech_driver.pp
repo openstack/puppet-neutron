@@ -27,7 +27,7 @@ define neutron::plugins::ml2::mech_driver (
   $supported_pci_vendor_devs,
 ){
 
-  include ::neutron::deps
+  include neutron::deps
 
   if ($name == 'sriovnicswitch') {
     neutron_plugin_sriov {

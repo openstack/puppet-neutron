@@ -127,7 +127,7 @@ class neutron::config (
   $plugin_nvp_config             = {},
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   validate_legacy(Hash, 'validate_hash', $server_config)
   validate_legacy(Hash, 'validate_hash', $api_config)

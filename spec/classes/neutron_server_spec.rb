@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'neutron::server' do
   let :pre_condition do
     "class { 'neutron': }
-     class { '::neutron::keystone::authtoken':
+     class { 'neutron::keystone::authtoken':
        password => 'passw0rd',
      }"
   end
@@ -229,8 +229,8 @@ describe 'neutron::server' do
 
       let :pre_condition do
         "class { 'neutron': }
-         include ::apache
-         class { '::neutron::keystone::authtoken':
+         include apache
+         class { 'neutron::keystone::authtoken':
            password => 'passw0rd',
          }"
       end

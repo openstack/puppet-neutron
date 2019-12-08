@@ -88,8 +88,8 @@ class neutron::plugins::ml2::cisco::nexus1000v (
 )
 {
 
-  include ::neutron::deps
-  include ::neutron::plugins::ml2::cisco
+  include neutron::deps
+  include neutron::plugins::ml2::cisco
 
   neutron_plugin_ml2 {
     'ml2_cisco_n1kv/n1kv_vsm_ips'                  : value => $n1kv_vsm_ip;

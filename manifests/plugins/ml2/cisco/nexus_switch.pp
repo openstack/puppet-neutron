@@ -113,7 +113,7 @@ define neutron::plugins::ml2::cisco::nexus_switch(
   $https_local_certificate = $::os_service_default
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   $section = "ML2_MECH_CISCO_NEXUS:${ip_address}"
   $port_mappings = template('neutron/nexus_switch_port_mappings.erb')

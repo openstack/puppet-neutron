@@ -57,8 +57,8 @@ class neutron::plugins::ml2::nuage (
   $nuage_default_allow_non_ip = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   file { '/etc/neutron/plugins/nuage':
     ensure => directory,

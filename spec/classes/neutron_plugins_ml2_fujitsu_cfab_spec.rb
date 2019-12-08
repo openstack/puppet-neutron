@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'neutron::plugins::ml2::fujitsu::cfab' do
   let :pre_condition do
-    "class { '::neutron::keystone::authtoken':
+    "class { 'neutron::keystone::authtoken':
       password => 'passw0rd',
      }
      class { 'neutron::server': }

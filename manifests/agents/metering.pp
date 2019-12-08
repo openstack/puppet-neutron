@@ -66,8 +66,8 @@ class neutron::agents::metering (
   $purge_config     = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   resources { 'neutron_metering_agent_config':
     purge => $purge_config,

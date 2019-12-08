@@ -23,7 +23,7 @@ require 'spec_helper'
 describe 'neutron::services::fwaas' do
   let :pre_condition do
     "class { 'neutron': }
-     include ::neutron::agents::l3"
+     include neutron::agents::l3"
   end
 
   let :params do

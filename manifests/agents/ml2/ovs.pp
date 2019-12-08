@@ -194,8 +194,8 @@ class neutron::agents::ml2::ovs (
   $of_interface               = undef,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   if $enable_dpdk and ! $manage_vswitch {
     fail('Enabling DPDK without manage vswitch does not have any effect')

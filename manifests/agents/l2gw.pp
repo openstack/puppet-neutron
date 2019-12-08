@@ -86,8 +86,8 @@ class neutron::agents::l2gw (
   $purge_config                     = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   resources { 'neutron_l2gw_agent_config':
     purge => $purge_config,

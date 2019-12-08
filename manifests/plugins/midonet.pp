@@ -107,8 +107,8 @@ class neutron::plugins::midonet (
   $midonet_api_port      = undef,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   if $midonet_api_ip {
     # If we got midonet_api_ip here, display deprecation warning and use this value.

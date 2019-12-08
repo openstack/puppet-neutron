@@ -52,7 +52,7 @@ define neutron::plugins::ml2::type_driver (
   $max_header_size
 ){
 
-  include ::neutron::deps
+  include neutron::deps
 
   if ($name == 'flat') {
     neutron_plugin_ml2 {

@@ -4,7 +4,7 @@ describe 'neutron::plugins::nsx' do
   let :pre_condition do
     "class { 'neutron':
       core_plugin     => 'vmware_nsx.plugin.NsxV3Plugin' }
-      class { '::neutron::keystone::authtoken':
+      class { 'neutron::keystone::authtoken':
         password => 'passw0rd',
       }
       class { 'neutron::server': }"

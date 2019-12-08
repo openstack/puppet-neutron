@@ -15,8 +15,8 @@ class neutron::plugins::ml2::mellanox (
   $package_ensure = 'present'
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
   require ::neutron::plugins::ml2
 
   if($::osfamily != 'RedHat') {

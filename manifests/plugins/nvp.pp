@@ -40,8 +40,8 @@ class neutron::plugins::nvp (
   $purge_config      = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   Package['neutron'] -> Package['neutron-plugin-nvp']
 

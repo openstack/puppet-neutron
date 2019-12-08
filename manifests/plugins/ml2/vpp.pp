@@ -26,7 +26,7 @@ class neutron::plugins::ml2::vpp (
   $etcd_user = $::os_service_default,
   $etcd_pass = $::os_service_default,
 ) {
-  include ::neutron::deps
+  include neutron::deps
   require ::neutron::plugins::ml2
 
   neutron_plugin_ml2 {

@@ -53,7 +53,7 @@ class neutron::plugins::ml2::cisco::vts (
   $package_ensure   = 'present'
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
   require ::neutron::plugins::ml2
 
   ensure_resource('package', 'python-cisco-controller',

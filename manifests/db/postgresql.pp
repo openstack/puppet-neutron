@@ -32,7 +32,7 @@ class neutron::db::postgresql(
   $privileges = 'ALL',
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   ::openstacklib::db::postgresql { 'neutron':
     password_hash => postgresql_password($user, $password),

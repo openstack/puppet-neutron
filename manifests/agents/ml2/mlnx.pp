@@ -74,8 +74,8 @@ class neutron::agents::ml2::mlnx (
   $enable_multi_interface_driver_cache_maintenance = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   $mlnx_agent_package          = $::neutron::params::mlnx_agent_package
   $mlnx_agent_service          = $::neutron::params::mlnx_agent_service

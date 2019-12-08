@@ -57,8 +57,8 @@ class neutron::plugins::ml2::cisco::ucsm (
   $ucsm_https_verify = $::os_service_default,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::plugins::ml2::cisco
+  include neutron::deps
+  include neutron::plugins::ml2::cisco
 
   neutron_plugin_ml2 {
     'ml2_cisco_ucsm/ucsm_ip'            : value => $ucsm_ip;

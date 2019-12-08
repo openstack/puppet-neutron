@@ -70,8 +70,8 @@ class neutron::plugins::ml2::cisco::nexus (
   $vxlan_global_config       = true
 ) {
 
-  include ::neutron::deps
-  include ::neutron::plugins::ml2::cisco
+  include neutron::deps
+  include neutron::plugins::ml2::cisco
 
   neutron_plugin_ml2 {
     'ml2_cisco/managed_physical_network'  : value => $managed_physical_network;

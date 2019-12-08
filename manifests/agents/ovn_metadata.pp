@@ -140,8 +140,8 @@ class neutron::agents::ovn_metadata (
   $ovn_remote_probe_interval = $::os_service_default,
   ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   resources { 'ovn_metadata_agent_config':
     purge => $purge_config,

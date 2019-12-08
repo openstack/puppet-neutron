@@ -89,8 +89,8 @@ class neutron::agents::metadata (
   $metadata_ip               = undef,
   ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   resources { 'neutron_metadata_agent_config':
     purge => $purge_config,

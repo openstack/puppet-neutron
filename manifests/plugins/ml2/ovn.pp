@@ -123,7 +123,7 @@ class neutron::plugins::ml2::ovn(
   $ovn_emit_need_to_frag    = $::os_service_default,
   ) {
 
-  include ::neutron::deps
+  include neutron::deps
   require ::neutron::plugins::ml2
 
   if ! is_service_default($ovn_l3_mode) {

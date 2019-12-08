@@ -6,19 +6,19 @@
 # This manifest extends the one shown in base_provision.pp
 #
 
-class { '::neutron':
+class { 'neutron':
   allow_overlapping_ips => true,
   default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
   service_plugins       => ['router']
 }
 
-class { '::neutron::server':
+class { 'neutron::server':
   auth_password       => 'password',
   database_connection => 'mysql+pymysql://neutron:password@192.168.1.1/neutron',
 }
 
 # configure l3-agent to use the new router by name
-class { '::neutron::agents::l3':
+class { 'neutron::agents::l3':
   enabled        => true,
   use_namespaces => false,
   require        => Neutron_router['demo_router'],

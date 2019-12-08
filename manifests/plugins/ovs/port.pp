@@ -1,7 +1,7 @@
 #
 define neutron::plugins::ovs::port {
 
-  include ::neutron::deps
+  include neutron::deps
 
   $mapping = split($name, ':')
   vs_port {$mapping[1]:

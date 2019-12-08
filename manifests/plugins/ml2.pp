@@ -147,8 +147,8 @@ class neutron::plugins::ml2 (
   $overlay_ip_version        = $::os_service_default,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   if ! $mechanism_drivers {
     warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')

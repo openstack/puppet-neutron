@@ -44,8 +44,8 @@ class neutron::services::bgpvpn (
   $purge_config      = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   #This package just include the service API
   ensure_resource( 'package', $::neutron::params::bgpvpn_plugin_package, {

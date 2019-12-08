@@ -46,8 +46,8 @@ class neutron::agents::vpnaas (
   $purge_config                = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   case $vpn_device_driver {
     /\.OpenSwan/: {

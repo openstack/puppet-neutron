@@ -13,7 +13,7 @@ class neutron::plugins::ml2::fujitsu (
   $package_ensure = 'present'
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   ensure_resource('package', 'python-networking-fujitsu',
     {

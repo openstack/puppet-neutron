@@ -4,7 +4,7 @@ describe 'neutron::plugins::nuage' do
   let :pre_condition do
     "class { 'neutron':
       core_plugin     => 'nuage_neutron.plugins.nuage.plugin.NuagePlugin' }
-      class { '::neutron::keystone::authtoken':
+      class { 'neutron::keystone::authtoken':
         password => 'passw0rd',
       }
       class { 'neutron::server': }"

@@ -81,8 +81,8 @@ class neutron::agents::ml2::sriov (
   $number_of_vfs              = $::os_service_default,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   resources { 'neutron_sriov_agent_config':
     purge => $purge_config,

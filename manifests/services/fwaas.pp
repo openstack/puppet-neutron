@@ -54,8 +54,8 @@ class neutron::services::fwaas (
   $purge_config         = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   if ($::osfamily == 'Debian') {
     # Debian platforms

@@ -121,8 +121,8 @@ class neutron::plugins::plumgrid (
   $purge_config                 = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   ensure_resource('file', '/etc/neutron/plugins/plumgrid', {
     ensure => directory,

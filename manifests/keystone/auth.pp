@@ -87,7 +87,7 @@ class neutron::keystone::auth (
   $internal_url        = 'http://127.0.0.1:9696',
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   if $configure_endpoint {
     Keystone_endpoint["${region}/${service_name}::${service_type}"]  ~> Service <| tag == 'neutron-server-eventlet' |>

@@ -105,7 +105,7 @@ class neutron::server::notifications (
   $endpoint_type                      = $::os_service_default,
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   if is_service_default($tenant_id) and (! $tenant_name) {
     fail('You must provide either tenant_name or tenant_id.')

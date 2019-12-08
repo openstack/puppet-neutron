@@ -50,8 +50,8 @@ class neutron::services::sfc (
   $purge_config      = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   ensure_resource( 'package', $::neutron::params::sfc_package, {
     ensure => $package_ensure,

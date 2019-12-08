@@ -28,8 +28,8 @@ class neutron::policy (
   $policy_path = '/etc/neutron/policy.json',
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   validate_legacy(Hash, 'validate_hash', $policies)
 

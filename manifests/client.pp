@@ -12,8 +12,8 @@ class neutron::client (
   $package_ensure = present
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   package { 'python-neutronclient':
     ensure => $package_ensure,

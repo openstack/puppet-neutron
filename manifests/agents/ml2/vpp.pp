@@ -53,8 +53,8 @@ class neutron::agents::ml2::vpp (
   $etcd_pass      = $::os_service_default,
   $purge_config   = false,
 ) {
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   resources { 'neutron_agent_vpp':
     purge => $purge_config,

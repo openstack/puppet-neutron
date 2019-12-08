@@ -50,7 +50,7 @@ To utilize the neutron module's functionality you will need to declare multiple 
 
 ```puppet
 # enable the neutron service
-class { '::neutron':
+class { 'neutron':
     enabled               => true,
     bind_host             => '127.0.0.1',
     default_transport_url => 'rabbit://neutron:passw0rd@localhost:5672/neutron',
@@ -64,7 +64,7 @@ class { 'neutron::server':
 }
 
 # ml2 plugin with vxlan as ml2 driver and ovs as mechanism driver
-class { '::neutron::plugins::ml2':
+class { 'neutron::plugins::ml2':
   type_drivers         => ['vxlan'],
   tenant_network_types => ['vxlan'],
   vxlan_group          => '239.1.1.1',

@@ -14,8 +14,8 @@ class neutron::plugins::ml2::networking_baremetal(
   $package_ensure = 'present',
   ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   if($::osfamily != 'RedHat') {
     # Drivers are only packaged for RedHat at this time

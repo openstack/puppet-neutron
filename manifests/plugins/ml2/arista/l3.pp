@@ -57,7 +57,7 @@ class neutron::plugins::ml2::arista::l3(
 
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
   require ::neutron::plugins::ml2
 
   if !is_service_default($mlag_config) {

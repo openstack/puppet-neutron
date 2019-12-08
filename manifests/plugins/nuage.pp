@@ -52,8 +52,8 @@ class neutron::plugins::nuage (
   $purge_config           = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   file { '/etc/neutron/plugins/nuage':
     ensure => directory,

@@ -129,7 +129,7 @@ class neutron::logging (
   $fatal_deprecations            = $::os_service_default,
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
 
   oslo::log { 'neutron_config':
     debug                         => $debug,

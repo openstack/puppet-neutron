@@ -54,7 +54,7 @@ class neutron::plugins::ml2::opendaylight (
   $odl_features              = $::os_service_default,
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
   require ::neutron::plugins::ml2
 
   ensure_resource('package', 'python-networking-odl',

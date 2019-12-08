@@ -81,8 +81,8 @@ class neutron::plugins::nsx (
   $metadata_proxy_uuid    = undef,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   file { '/etc/neutron/plugins/vmware':
     ensure => directory,

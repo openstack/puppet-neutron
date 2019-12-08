@@ -23,8 +23,8 @@ class neutron::agents::bigswitch (
   $agent_enabled  = false,
 ) {
 
-  include ::neutron::deps
-  include ::neutron::params
+  include neutron::deps
+  include neutron::params
 
   if($::osfamily != 'Redhat') {
     fail("Unsupported osfamily ${::osfamily}")

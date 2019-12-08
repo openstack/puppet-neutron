@@ -52,7 +52,7 @@ class neutron::plugins::ml2::arista(
 
 ) {
 
-  include ::neutron::deps
+  include neutron::deps
   require ::neutron::plugins::ml2
 
   neutron_plugin_ml2 {

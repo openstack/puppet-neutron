@@ -294,11 +294,11 @@ class neutron::server (
   $ovs_integration_bridge           = $::os_service_default,
 ) inherits ::neutron::params {
 
-  include ::neutron::deps
-  include ::neutron::db
-  include ::neutron::policy
+  include neutron::deps
+  include neutron::db
+  include neutron::policy
   # Work-around LP#1551974. neutron requires the keystoneclient to auth tokens
-  include ::keystone::client
+  include keystone::client
 
   if !is_service_default($default_availability_zones) {
     validate_legacy(Array, 'validate_array', $default_availability_zones)
@@ -367,7 +367,7 @@ class neutron::server (
   }
 
   if $sync_db {
-    include ::neutron::db::sync
+    include neutron::db::sync
   }
 
   neutron_config {
@@ -418,7 +418,7 @@ class neutron::server (
 
   if ($auth_strategy == 'keystone') {
 
-    include ::neutron::keystone::authtoken
+    include neutron::keystone::authtoken
 
     neutron_api_config {
       'filter:authtoken/admin_tenant_name':   ensure => absent;
@@ -456,7 +456,7 @@ class neutron::server (
         tag        => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
       }
     } elsif $service_name == 'httpd' {
-      include ::apache::params
+      include apache::params
       service { 'neutron-server':
         ensure     => 'stopped',
         name       => $::neutron::params::server_service,

@@ -43,7 +43,7 @@ class neutron::services::vpnaas (
   $service_providers = $::os_service_default,
 ) {
 
-  include ::neutron::params
+  include neutron::params
   if !is_service_default($service_providers) {
     warning("service_providers in neutron::services::vpnaas is deprecated in newton release, \
 please use service provider in neutron::server class")

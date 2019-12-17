@@ -32,7 +32,6 @@ class {'::neutron::plugins::ml2::cisco::nexus':
     'n9372-1' => {
       'username'     => 'admin',
       'password'     => 'password',
-      'ssh_port'     => 22,
       'ip_address'   => '127.0.0.1',
       'nve_src_intf' => 1,
       'physnet'      => 'physnet',
@@ -48,7 +47,6 @@ class {'::neutron::plugins::ml2::cisco::nexus':
     'n9372-2' => {
       'username'     => 'admin',
       'password'     => 'password',
-      'ssh_port'     => 22,
       'ip_address'   => '127.0.0.2',
       'nve_src_intf' => 1,
       'physnet'      => 'physnet',

@@ -10,7 +10,6 @@
 # (required) Nexus switch configuration for neutron configuration file
 # Example nexus config format:
 #  { 'switch_hostname' => {'username' => 'admin',
-#    'ssh_port' => 22,
 #    'password' => "password",
 #    'ip_address' => "172.18.117.28",
 #    'nve_src_intf' => 1,
@@ -69,12 +68,12 @@
 #   VLAN 2001 it will be named 'q-2001' using the default prefix.
 #   The total length allowed for the prefix name and VLAN is 32 characters,
 #   the prefix will be truncated if the total length is greater than 32.
-#   Defaults to 'q-'
+#   Defaults to $::os_service_default
 #
 # [*svi_round_robin*]
 #   (optional) This configuration item is OBSOLETE.
 #   A flag to enable round robin scheduling of routers for SVI.
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*provider_vlan_name_prefix*]
 #   (optional) This configuration item is OBSOLETE.
@@ -83,7 +82,7 @@
 #   for provider VLAN 3003 it will be named 'p-3003' using the default prefix.
 #   The total length allowed for the prefix name and VLAN is 32 characters,
 #   the prefix will be truncated if the total length is greater than 32.
-#   Defaults to 'p-'
+#   Defaults to $::os_service_default
 #
 # [*persistent_switch_config*]
 #   (optional) This will be deprecated.  This variable makes
@@ -91,7 +90,7 @@
 #   after applying successful configurations.
 #   (default) This flag defaults to False keep consistent with
 #   existing functionality.
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*never_cache_ssh_connection*]
 #   (optional) This will be deprecated.  This configuration prevents
@@ -99,7 +98,7 @@
 #   (default) This defaults to False which indicates that ssh
 #   connections to Nexus switch are cached when the neutron
 #   controller has fewer than 8 processes.
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*switch_replay_count*]
 #   (optional) This configuration item is OBSOLETE.  The Nexus driver replay
@@ -114,29 +113,29 @@
 #   choice of driver methods to configure Nexus devices.
 #   (default) This value defaults to 'restapi' but can be configured
 #   to legacy driver 'ncclient' temporarily until it is deprecated.
-#   Defaults to 'restapi'
+#   Defaults to $::os_service_default
 #
 # [*host_key_checks*]
 #   (optional) This will be deprecated.   This flag indicates whether or
 #   not to enable strict host key checks when connecting to Nexus switches.
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 
 class neutron::plugins::ml2::cisco::nexus (
   $nexus_config,
   $managed_physical_network,
-  $vlan_name_prefix          = 'q-',
-  $svi_round_robin           = false,
-  $provider_vlan_name_prefix = 'p-',
-  $persistent_switch_config  = false,
-  $switch_heartbeat_time     = 0,
-  $never_cache_ssh_connection = false,
+  $vlan_name_prefix          = $::os_service_default,
+  $svi_round_robin           = $::os_service_default,
+  $provider_vlan_name_prefix = $::os_service_default,
+  $persistent_switch_config  = $::os_service_default,
+  $switch_heartbeat_time     = 30,
+  $never_cache_ssh_connection = $::os_service_default,
   $switch_replay_count       = $::os_service_default,
-  $nexus_driver              = 'restapi',
+  $nexus_driver              = $::os_service_default,
   $provider_vlan_auto_create = true,
   $provider_vlan_auto_trunk  = true,
   $vxlan_global_config       = true,
-  $host_key_checks           = false
+  $host_key_checks           = $::os_service_default
 ) {
 
   include ::neutron::deps

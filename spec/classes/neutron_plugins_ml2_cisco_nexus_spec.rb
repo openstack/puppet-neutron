@@ -20,7 +20,6 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
       :nexus_config => {
         'cvf2leaff2' => {
           'username' => 'prad',
-          "ssh_port" => 22,
           "password" => "password",
           "ip_address" => "172.18.117.28",
           "nve_src_intf" => 1,
@@ -30,24 +29,18 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
           "https_verify" => false,
           "https_local_certificate" => "",
           "servers" => {
-            "control02" => {"ports" => "portchannel:20"},
-            "control01" => {"ports" => "portchannel:10"}
+            "control02" => {"hostname"=> "control02",
+                            "ports" => "portchannel:20"},
+            "control01" => {"hostname"=> "control01",
+                            "ports" => "portchannel:10"}
           }
         }
       },
       :managed_physical_network  => 'physnet1',
-      :vlan_name_prefix          => 'q-',
-      :svi_round_robin           => false,
-      :provider_vlan_name_prefix => 'p-',
-      :persistent_switch_config  => false,
-      :never_cache_ssh_connection => false,
       :switch_heartbeat_time     => 30,
-      :switch_replay_count       => 3,
-      :nexus_driver              => 'restapi',
       :provider_vlan_auto_create => true,
       :provider_vlan_auto_trunk  => true,
-      :vxlan_global_config       => true,
-      :host_key_checks           => false
+      :vxlan_global_config       => true
     }
   end
 
@@ -72,18 +65,10 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
 
     it do
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/managed_physical_network').with_value(params[:managed_physical_network])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/vlan_name_prefix').with_value(params[:vlan_name_prefix])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/svi_round_robin').with_value(params[:svi_round_robin])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/provider_vlan_name_prefix').with_value(params[:provider_vlan_name_prefix])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/persistent_switch_config').with_value(params[:persistent_switch_config])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/never_cache_ssh_connection').with_value(params[:never_cache_ssh_connection])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/switch_heartbeat_time').with_value(params[:switch_heartbeat_time])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/switch_replay_count').with_value(params[:switch_replay_count])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/nexus_driver').with_value(params[:nexus_driver])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/provider_vlan_auto_create').with_value(params[:provider_vlan_auto_create])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/provider_vlan_auto_trunk').with_value(params[:provider_vlan_auto_trunk])
       is_expected.to contain_neutron_plugin_ml2('ml2_cisco/vxlan_global_config').with_value(params[:vxlan_global_config])
-      is_expected.to contain_neutron_plugin_ml2('ml2_cisco/host_key_checks').with_value(params[:host_key_checks])
     end
 
     it {

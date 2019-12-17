@@ -103,6 +103,7 @@
 # [*ssh_port*]
 # (optional)  This configuration item is deprecated.
 # The SSH port to use when connecting to the switch.
+# Defaults to $::os_service_default
 #
 define neutron::plugins::ml2::cisco::nexus_switch(
   $username,
@@ -122,6 +123,7 @@ define neutron::plugins::ml2::cisco::nexus_switch(
   include ::neutron::deps
 
   $section = "ML2_MECH_CISCO_NEXUS:${ip_address}"
+  $port_mappings = template("neutron/nexus_switch_port_mappings.erb")
   neutron_plugin_ml2 {
     "${section}/username":       value => $username;
     "${section}/password":       value => $password, secret => true;
@@ -134,10 +136,4 @@ define neutron::plugins::ml2::cisco::nexus_switch(
     #DEPRECATED ARGS
     "${section}/ssh_port":       value => $ssh_port;
   }
-
-  $server_defaults = {
-    'switch_ip_address' => $ip_address
-  }
-  create_resources(neutron::plugins::ml2::cisco::nexus_switch_server,
-    $servers, $server_defaults)
 }

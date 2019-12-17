@@ -49,6 +49,7 @@
 #
 # [*ssh_port*]
 # (not used) The SSH port to use when connecting to the switch.
+# Defaults to undef.
 #
 # [*nve_src_intf*]
 # (not used) Only valid if VXLAN overlay is configured and
@@ -113,7 +114,7 @@ define neutron::plugins::ml2::cisco::nexus_creds(
   $username,
   $password,
   $servers,
-  $ssh_port,
+  $ssh_port     = undef,
   # Used parameters
   $ip_address,
   $nve_src_intf = undef,

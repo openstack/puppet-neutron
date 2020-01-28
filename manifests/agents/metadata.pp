@@ -63,12 +63,6 @@
 #   in the metadata config.
 #   Defaults to false.
 #
-# DEPRECATED
-#
-# [*metadata_ip*]
-#   (optional) This option is deprecated an has no effect
-#
-
 class neutron::agents::metadata (
   $shared_secret,
   $package_ensure            = 'present',
@@ -86,7 +80,6 @@ class neutron::agents::metadata (
   $nova_client_cert          = $::os_service_default,
   $nova_client_priv_key      = $::os_service_default,
   $purge_config              = false,
-  $metadata_ip               = undef,
   ) {
 
   include neutron::deps
@@ -118,10 +111,6 @@ class neutron::agents::metadata (
     neutron_metadata_agent_config {
       'DEFAULT/cache_url': ensure => absent;
     }
-  }
-
-  if $metadata_ip {
-    warning('nova_metadata_ip is deprecated, please use nova_metadata_host instead')
   }
 
   if $::neutron::params::metadata_agent_package {

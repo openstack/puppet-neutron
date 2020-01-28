@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated parameter neutron::agents::metadata::metadata_ip is removed.
+    Please use the neutron::agents::metadata::metadata_host parameter.

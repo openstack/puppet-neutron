@@ -50,17 +50,19 @@ To utilize the neutron module's functionality you will need to declare multiple 
 
 ```puppet
 # enable the neutron service
-class { 'neutron':
-    enabled               => true,
-    bind_host             => '127.0.0.1',
-    default_transport_url => 'rabbit://neutron:passw0rd@localhost:5672/neutron',
-    debug                 => false,
+class { '::neutron':
+  enabled               => true,
+  bind_host             => '127.0.0.1',
+  default_transport_url => 'rabbit://neutron:passw0rd@localhost:5672/neutron',
+  debug                 => false,
 }
 
-# configure authentication
 class { 'neutron::server':
-    auth_password   => 'keystone_neutron_secret',
-    sql_connection  => 'mysql+pymysql://neutron:neutron_sql_secret@127.0.0.1/neutron?charset=utf8',
+  database_connection => 'mysql+pymysql://neutron:neutron_sql_secret@127.0.0.1/neutron?charset=utf8',
+}
+
+class { 'neutron::keystone::authtoken':
+  password => 'keystone_neutron_secret',
 }
 
 # ml2 plugin with vxlan as ml2 driver and ovs as mechanism driver

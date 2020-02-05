@@ -139,11 +139,6 @@
 #   (optional) The vhost-user socket directory for OVS
 #   Defaults to $::os_service_default
 #
-# [*ovsdb_interface*]
-#   (optional) The interface for interacting with the OVSDB
-#   Allowed values: vsctl, native
-#   Defaults to $::os_service_default
-#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the ovs config.
@@ -178,6 +173,11 @@
 # [*of_interface*]
 #   (optional) This option is deprecated an has no effect
 #
+# [*ovsdb_interface*]
+#   (optional) The interface for interacting with the OVSDB
+#   Allowed values: vsctl, native
+#   Defaults to undef
+#
 class neutron::agents::ml2::ovs (
   $package_ensure             = 'present',
   $enabled                    = true,
@@ -205,7 +205,6 @@ class neutron::agents::ml2::ovs (
   $tun_peer_patch_port        = $::os_service_default,
   $datapath_type              = $::os_service_default,
   $vhostuser_socket_dir       = $::os_service_default,
-  $ovsdb_interface            = $::os_service_default,
   $purge_config               = false,
   $enable_dpdk                = false,
   $enable_security_group      = $::os_service_default,
@@ -214,6 +213,7 @@ class neutron::agents::ml2::ovs (
   $tunnel_csum                = $::os_service_default,
   # DEPRECATED
   $of_interface               = undef,
+  $ovsdb_interface            = undef,
 ) {
 
   include neutron::deps
@@ -267,10 +267,6 @@ class neutron::agents::ml2::ovs (
     warning('of_interface is deprecated and will be removed in the future')
   }
 
-  if ! (is_service_default($ovsdb_interface)) and ! ($ovsdb_interface =~ /^(vsctl|native)$/) {
-    fail('A value of $ovsdb_interface is incorrect. The allowed values are vsctl and native')
-  }
-
   resources { 'neutron_agent_ovs':
     purge => $purge_config,
   }
@@ -304,6 +300,14 @@ class neutron::agents::ml2::ovs (
     }
   }
 
+  # TODO(tobias.urdin): Remove in V release.
+  if $ovsdb_interface != undef {
+    warning('ovsdb_interface is deprecated and has no effect')
+  }
+  neutron_agent_ovs {
+    'ovs/ovsdb_interface': ensure => absent;
+  }
+
   neutron_agent_ovs {
     'agent/polling_interval':               value => $polling_interval;
     'agent/l2_population':                  value => $l2_population;
@@ -320,7 +324,6 @@ class neutron::agents::ml2::ovs (
     'ovs/integration_bridge':               value => $integration_bridge;
     'ovs/datapath_type':                    value => $datapath_type;
     'ovs/vhostuser_socket_dir':             value => $vhostuser_socket_dir;
-    'ovs/ovsdb_interface':                  value => $ovsdb_interface;
     'ovs/of_interface':                     value => $of_interface;
     'securitygroup/enable_security_group':  value => $enable_security_group;
   }

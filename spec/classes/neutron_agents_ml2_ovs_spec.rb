@@ -49,7 +49,6 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('agent/tunnel_csum').with_value(['<SERVICE DEFAULT>'])
       should contain_neutron_agent_ovs('ovs/datapath_type').with_value(['<SERVICE DEFAULT>'])
       should contain_neutron_agent_ovs('ovs/vhostuser_socket_dir').with_value(['<SERVICE DEFAULT>'])
-      should contain_neutron_agent_ovs('ovs/ovsdb_interface').with_value(['<SERVICE DEFAULT>'])
       should contain_neutron_agent_ovs('ovs/ovsdb_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/of_connect_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/of_request_timeout').with_value('<SERVICE DEFAULT>')
@@ -307,25 +306,6 @@ describe 'neutron::agents::ml2::ovs' do
         it 'should enable DVR without L2 population' do
           should contain_neutron_agent_ovs('agent/enable_distributed_routing').with_value(true)
           should contain_neutron_agent_ovs('agent/l2_population').with_value(false)
-        end
-      end
-    end
-
-    context 'when supplying ovsdb_interface' do
-      context 'with incorrect value' do
-        before :each do
-          params.merge!(:ovsdb_interface => 'random')
-        end
-
-        it { should raise_error(Puppet::Error, /A value of \$ovsdb_interface is incorrect. The allowed values are vsctl and native/) }
-      end
-
-      context 'with supported value' do
-        before :each do
-          params.merge!(:ovsdb_interface => 'native')
-        end
-        it 'should configure ovsdb_interface for ovs' do
-          should contain_neutron_agent_ovs('ovs/ovsdb_interface').with_value('native')
         end
       end
     end

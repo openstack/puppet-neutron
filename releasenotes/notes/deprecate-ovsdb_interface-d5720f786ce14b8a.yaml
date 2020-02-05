@@ -1,0 +1,4 @@
+---
+deprecations:
+  - |
+    The neutron::agents::ml2::ovs::ovsdb_interface is deprecated and has no effect.

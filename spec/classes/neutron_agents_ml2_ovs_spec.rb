@@ -52,6 +52,7 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_neutron_agent_ovs('ovs/ovsdb_interface').with_value(['<SERVICE DEFAULT>'])
       is_expected.to contain_neutron_agent_ovs('ovs/of_interface').with_value(['<SERVICE DEFAULT>'])
       is_expected.to contain_neutron_agent_ovs('ovs/ovsdb_timeout').with_value(['<SERVICE DEFAULT>'])
+      is_expected.to contain_neutron_agent_ovs('ovs/of_inactivity_probe').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_neutron_agent_ovs('ovs/integration_bridge').with_value(p[:integration_bridge])
       is_expected.to contain_neutron_agent_ovs('securitygroup/firewall_driver').\
         with_value(p[:firewall_driver])
@@ -202,6 +203,16 @@ describe 'neutron::agents::ml2::ovs' do
 
       it 'configures ovsdb_timeout' do
         is_expected.to contain_neutron_agent_ovs('ovs/ovsdb_timeout').with_value(params[:ovsdb_timeout])
+      end
+    end
+
+    context 'when setting of_inactivity_probe' do
+      before :each do
+        params.merge!( :of_inactivity_probe => 20 )
+      end
+
+      it 'configures of_inactivity_probe' do
+        is_expected.to contain_neutron_agent_ovs('ovs/of_inactivity_probe').with_value(params[:of_inactivity_probe])
       end
     end
 

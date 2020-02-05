@@ -46,6 +46,11 @@
 #   (Optional) The timeout in seconds for OVSDB commands.
 #   Defaults to $::os_service_default
 #
+# [*of_inactivity_probe*]
+#   (Optional) The inactivity_probe interval in second for the local switch
+#   connnection to the controller. A value of 0 disables inactivity probes.
+#   Defaults to $::os_service_default
+#
 # [*integration_bridge*]
 #   (optional) Integration bridge in OVS
 #   Defaults to 'br-int'
@@ -178,6 +183,7 @@ class neutron::agents::ml2::ovs (
   $bridge_uplinks             = [],
   $bridge_mappings            = [],
   $ovsdb_timeout              = $::os_service_default,
+  $of_inactivity_probe        = $::os_service_default,
   $integration_bridge         = 'br-int',
   $tunnel_types               = [],
   $local_ip                   = false,
@@ -308,6 +314,7 @@ class neutron::agents::ml2::ovs (
     'agent/minimize_polling':               value => $minimize_polling;
     'agent/tunnel_csum':                    value => $tunnel_csum;
     'ovs/ovsdb_timeout':                    value => $ovsdb_timeout;
+    'ovs/of_inactivity_probe':              value => $of_inactivity_probe;
     'ovs/integration_bridge':               value => $integration_bridge;
     'ovs/datapath_type':                    value => $datapath_type;
     'ovs/vhostuser_socket_dir':             value => $vhostuser_socket_dir;

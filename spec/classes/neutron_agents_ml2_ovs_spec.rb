@@ -50,6 +50,7 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('ovs/datapath_type').with_value(['<SERVICE DEFAULT>'])
       should contain_neutron_agent_ovs('ovs/vhostuser_socket_dir').with_value(['<SERVICE DEFAULT>'])
       should contain_neutron_agent_ovs('ovs/ovsdb_interface').with_value(['<SERVICE DEFAULT>'])
+      should contain_neutron_agent_ovs('ovs/ovsdb_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/integration_bridge').with_value(p[:integration_bridge])
       should contain_neutron_agent_ovs('securitygroup/firewall_driver').\
         with_value(p[:firewall_driver])
@@ -190,6 +191,16 @@ describe 'neutron::agents::ml2::ovs' do
         should_not contain_neutron__plugins__ovs__port(params[:bridge_uplinks].join(',')).with(
           :before => 'Service[neutron-ovs-agent-service]'
         )
+      end
+    end
+
+    context 'when setting ovsdb_timeout' do
+      before :each do
+        params.merge!( :ovsdb_timeout => 30 )
+      end
+
+      it 'configures ovsdb_timeout' do
+        should contain_neutron_agent_ovs('ovs/ovsdb_timeout').with_value(params[:ovsdb_timeout])
       end
     end
 

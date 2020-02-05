@@ -42,6 +42,10 @@
 #   (optional) List of <physical_network>:<bridge>
 #   Defaults to empty list
 #
+# [*ovsdb_timeout*]
+#   (Optional) The timeout in seconds for OVSDB commands.
+#   Defaults to $::os_service_default
+#
 # [*integration_bridge*]
 #   (optional) Integration bridge in OVS
 #   Defaults to 'br-int'
@@ -167,6 +171,7 @@ class neutron::agents::ml2::ovs (
   $extensions                 = $::os_service_default,
   $bridge_uplinks             = [],
   $bridge_mappings            = [],
+  $ovsdb_timeout              = $::os_service_default,
   $integration_bridge         = 'br-int',
   $tunnel_types               = [],
   $local_ip                   = false,
@@ -291,6 +296,7 @@ class neutron::agents::ml2::ovs (
     'agent/extensions':                     value => join(any2array($extensions), ',');
     'agent/minimize_polling':               value => $minimize_polling;
     'agent/tunnel_csum':                    value => $tunnel_csum;
+    'ovs/ovsdb_timeout':                    value => $ovsdb_timeout;
     'ovs/integration_bridge':               value => $integration_bridge;
     'ovs/datapath_type':                    value => $datapath_type;
     'ovs/vhostuser_socket_dir':             value => $vhostuser_socket_dir;

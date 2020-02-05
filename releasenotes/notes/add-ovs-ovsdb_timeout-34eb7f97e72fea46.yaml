@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Added new parameter neutron::agents::ml2::ovs::ovsdb_timeout.

@@ -170,9 +170,6 @@
 #
 # DEPRECATED
 #
-# [*of_interface*]
-#   (optional) This option is deprecated an has no effect
-#
 # [*ovsdb_interface*]
 #   (optional) The interface for interacting with the OVSDB
 #   Allowed values: vsctl, native
@@ -212,7 +209,6 @@ class neutron::agents::ml2::ovs (
   $minimize_polling           = $::os_service_default,
   $tunnel_csum                = $::os_service_default,
   # DEPRECATED
-  $of_interface               = undef,
   $ovsdb_interface            = undef,
 ) {
 
@@ -263,10 +259,6 @@ class neutron::agents::ml2::ovs (
     }
   }
 
-  if $of_interface {
-    warning('of_interface is deprecated and will be removed in the future')
-  }
-
   resources { 'neutron_agent_ovs':
     purge => $purge_config,
   }
@@ -306,6 +298,7 @@ class neutron::agents::ml2::ovs (
   }
   neutron_agent_ovs {
     'ovs/ovsdb_interface': ensure => absent;
+    'ovs/of_interface': ensure => absent;
   }
 
   neutron_agent_ovs {
@@ -324,7 +317,6 @@ class neutron::agents::ml2::ovs (
     'ovs/integration_bridge':               value => $integration_bridge;
     'ovs/datapath_type':                    value => $datapath_type;
     'ovs/vhostuser_socket_dir':             value => $vhostuser_socket_dir;
-    'ovs/of_interface':                     value => $of_interface;
     'securitygroup/enable_security_group':  value => $enable_security_group;
   }
 

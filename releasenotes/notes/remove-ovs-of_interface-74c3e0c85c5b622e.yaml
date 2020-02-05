@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The parameter neutron::agents::ml2::ovs::of_interface is now removed.

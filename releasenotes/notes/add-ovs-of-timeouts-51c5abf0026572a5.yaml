@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Added new parameters of_connect_timeout and of_request_timeout in the
+    neutron::agents::ml2::ovs class.

@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Added new parameter neutron::agents::ml2::ovs::of_inactivity_probe.

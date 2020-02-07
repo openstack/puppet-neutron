@@ -57,7 +57,7 @@ describe 'neutron::agents::ovn_metadata' do
       should contain_ovn_metadata_agent_config('DEFAULT/nova_metadata_host').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/nova_metadata_port').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => '<SERVICE DEFAULT>')
-      should contain_ovn_metadata_agent_config('DEFAULT/metadata_workers').with(:value => facts[:os_workers])
+      should contain_ovn_metadata_agent_config('DEFAULT/metadata_workers').with(:value => 2)
       should contain_ovn_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/nova_metadata_insecure').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/state_path').with(:value => params[:state_path])

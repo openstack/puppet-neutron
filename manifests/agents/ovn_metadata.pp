@@ -45,7 +45,7 @@
 #   (optional) Number of separate worker processes to spawn.  Greater than 0
 #   launches that number of child processes as workers.  The parent process
 #   manages them.
-#   Defaults to: $::os_workers
+#   Defaults to: 2
 #
 # [*metadata_backlog*]
 #   (optional) Number of backlog requests to configure the metadata server socket with.
@@ -117,7 +117,7 @@ class neutron::agents::ovn_metadata (
   $metadata_host             = $::os_service_default,
   $metadata_port             = $::os_service_default,
   $metadata_protocol         = $::os_service_default,
-  $metadata_workers          = $::os_workers,
+  $metadata_workers          = 2,
   $metadata_backlog          = $::os_service_default,
   $metadata_insecure         = $::os_service_default,
   $nova_client_cert          = $::os_service_default,

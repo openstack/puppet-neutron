@@ -1,0 +1,11 @@
+---
+upgrade:
+  - |
+    Switched the default value of the ``metadata_workers`` configuration
+    option for the OVN metadata agents to 2 (from $::os_workers). While
+    the OVS metadata agents runs on the controllers/gateway nodes (and
+    defaults to $::os_workers) the OVN metadata agents are distributed
+    and runs on the compute nodes instead so, there's no point in running
+    dozen of them on each compute. Also, by reducing the number of workers
+    we also reduce the burden on the OVSDB that the OVN metadata agent
+    connects to making OVN more scalable.

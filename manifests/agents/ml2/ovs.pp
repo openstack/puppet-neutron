@@ -168,6 +168,18 @@
 #  outgoing IP packet carrying GRE/VXLAN tunnel.
 #  Defaults to $::os_service_default
 #
+# [*igmp_snooping_enable*]
+#   (Optional) Enable IGMP snooping for integration bridge. If this
+#   option is set to True, support for Internet Group Management
+#   Protocol (IGMP) is enabled in integration bridge.
+#   Setting this option to True will also enable Open vSwitch
+#   mcast-snooping-disable-flood-unregistered flag. This option will
+#   disable flooding of unregistered multicast packets to all ports.
+#   The switch will send unregistered multicast packets only to ports
+#   connected to multicast routers. This option is used by the ML2/OVS
+#   mechanism driver for Neutron.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED
 #
 # [*ovsdb_interface*]
@@ -208,6 +220,7 @@ class neutron::agents::ml2::ovs (
   $permitted_ethertypes       = $::os_service_default,
   $minimize_polling           = $::os_service_default,
   $tunnel_csum                = $::os_service_default,
+  $igmp_snooping_enable       = $::os_service_default,
   # DEPRECATED
   $ovsdb_interface            = undef,
 ) {
@@ -318,6 +331,7 @@ class neutron::agents::ml2::ovs (
     'ovs/datapath_type':                    value => $datapath_type;
     'ovs/vhostuser_socket_dir':             value => $vhostuser_socket_dir;
     'securitygroup/enable_security_group':  value => $enable_security_group;
+    'ovs/igmp_snooping_enable':             value => $igmp_snooping_enable;
   }
 
   if $firewall_driver {

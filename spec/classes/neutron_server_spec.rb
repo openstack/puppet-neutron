@@ -77,6 +77,7 @@ describe 'neutron::server' do
         :max_request_body_size        => '<SERVICE DEFAULT>',
       )
       should contain_neutron_config('DEFAULT/ovs_integration_bridge').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
     end
 
     context 'with manage_service as false' do
@@ -266,6 +267,16 @@ describe 'neutron::server' do
       end
 
       it { should contain_neutron_config('DEFAULT/ovs_integration_bridge').with_value('br-int') }
+    end
+
+    context 'with IGMP snooping enabled' do
+      before :each do
+        params.merge!(:igmp_snooping_enable => true)
+      end
+
+      it 'configure neutron.conf' do
+        should contain_neutron_config('ovs/igmp_snooping_enable').with_value(true)
+      end
     end
 
   end

@@ -247,6 +247,18 @@
 #   (Optional) Name of Open vSwitch bridge to use
 #   Defaults to $::os_service_default
 #
+# [*igmp_snooping_enable*]
+#   (Optional) Enable IGMP snooping for integration bridge. If this
+#   option is set to True, support for Internet Group Management
+#   Protocol (IGMP) is enabled in integration bridge.
+#   Setting this option to True will also enable Open vSwitch
+#   mcast-snooping-disable-flood-unregistered flag. This option will
+#   disable flooding of unregistered multicast packets to all ports.
+#   The switch will send unregistered multicast packets only to ports
+#   connected to multicast routers. This option is used by the ML2/OVN
+#   mechanism driver for Neutron.
+#   Defaults to $::os_service_default
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -292,6 +304,7 @@ class neutron::server (
   $enable_proxy_headers_parsing     = $::os_service_default,
   $max_request_body_size            = $::os_service_default,
   $ovs_integration_bridge           = $::os_service_default,
+  $igmp_snooping_enable             = $::os_service_default,
 ) inherits ::neutron::params {
 
   include ::neutron::deps
@@ -390,6 +403,7 @@ class neutron::server (
     'DEFAULT/network_auto_schedule':            value => $network_auto_schedule;
     'DEFAULT/ovs_integration_bridge':           value => $ovs_integration_bridge;
     'service_providers/service_provider':       value => $service_providers;
+    'ovs/igmp_snooping_enable':                 value => $igmp_snooping_enable;
   }
 
   if $server_package {

@@ -66,6 +66,7 @@ describe 'neutron::agents::ml2::ovs' do
       is_expected.to contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_ensure('absent')
       is_expected.to contain_neutron_agent_ovs('agent/tunnel_types').with_ensure('absent')
       is_expected.to contain_neutron_agent_ovs('agent/explicitly_egress_direct').with_value(['<SERVICE DEFAULT>'])
+      is_expected.to contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value(['<SERVICE DEFAULT>'])
     end
 
     it 'installs neutron ovs agent package' do
@@ -384,6 +385,16 @@ describe 'neutron::agents::ml2::ovs' do
 
       it 'configure neutron/plugins/ml2/ml2_conf.ini' do
         is_expected.to contain_neutron_agent_ovs('agent/explicitly_egress_direct').with_value(true)
+      end
+    end
+
+    context 'with IGMP snooping enabled' do
+      before :each do
+        params.merge!(:igmp_snooping_enable => true)
+      end
+
+      it 'configure neutron/plugins/ml2/ml2_conf.ini' do
+        should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value(true)
       end
     end
 

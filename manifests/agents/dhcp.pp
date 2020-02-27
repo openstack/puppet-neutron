@@ -50,6 +50,11 @@
 #   via DNS resolvers on the host running the DHCP agent.
 #   Defaults to $::os_service_default.
 #
+# [*dnsmasq_enable_addr6_list*]
+#   (optional) Enable dhcp-host entry with list of addresses when port has
+#   multiple IPv6 addresses in the same subnet.
+#   Defaults to $::os_service_default.
+#
 # [*enable_isolated_metadata*]
 #   (optional) enable metadata support on isolated networks.
 #   Defaults to false.
@@ -112,6 +117,7 @@ class neutron::agents::dhcp (
   $dnsmasq_config_file       = $::os_service_default,
   $dnsmasq_dns_servers       = $::os_service_default,
   $dnsmasq_local_resolv      = $::os_service_default,
+  $dnsmasq_enable_addr6_list = $::os_service_default,
   $enable_isolated_metadata  = false,
   $enable_force_metadata     = $::os_service_default,
   $enable_metadata_network   = false,
@@ -146,18 +152,19 @@ class neutron::agents::dhcp (
   # This only lists config specific to the agent.  neutron.conf supplies
   # the rest.
   neutron_dhcp_agent_config {
-    'DEFAULT/debug':                  value => $debug;
-    'DEFAULT/state_path':             value => $state_path;
-    'DEFAULT/resync_interval':        value => $resync_interval;
-    'DEFAULT/interface_driver':       value => $interface_driver;
-    'DEFAULT/dhcp_driver':            value => $dhcp_driver;
-    'DEFAULT/root_helper':            value => $root_helper;
-    'DEFAULT/dhcp_broadcast_reply':   value => $dhcp_broadcast_reply;
-    'DEFAULT/dnsmasq_config_file':    value => $dnsmasq_config_file;
-    'DEFAULT/dnsmasq_dns_servers':    value => join(any2array($dnsmasq_dns_servers), ',');
-    'DEFAULT/dnsmasq_local_resolv':   value => $dnsmasq_local_resolv;
-    'DEFAULT/ovs_integration_bridge': value => $ovs_integration_bridge;
-    'agent/availability_zone':        value => $availability_zone;
+    'DEFAULT/debug':                     value => $debug;
+    'DEFAULT/state_path':                value => $state_path;
+    'DEFAULT/resync_interval':           value => $resync_interval;
+    'DEFAULT/interface_driver':          value => $interface_driver;
+    'DEFAULT/dhcp_driver':               value => $dhcp_driver;
+    'DEFAULT/root_helper':               value => $root_helper;
+    'DEFAULT/dhcp_broadcast_reply':      value => $dhcp_broadcast_reply;
+    'DEFAULT/dnsmasq_config_file':       value => $dnsmasq_config_file;
+    'DEFAULT/dnsmasq_dns_servers':       value => join(any2array($dnsmasq_dns_servers), ',');
+    'DEFAULT/dnsmasq_local_resolv':      value => $dnsmasq_local_resolv;
+    'DEFAULT/dnsmasq_enable_addr6_list': value => $dnsmasq_enable_addr6_list;
+    'DEFAULT/ovs_integration_bridge':    value => $ovs_integration_bridge;
+    'agent/availability_zone':           value => $availability_zone;
   }
 
   if $ovsdb_connection =~ /^ssl:/ {

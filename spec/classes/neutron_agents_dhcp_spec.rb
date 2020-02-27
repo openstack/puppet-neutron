@@ -43,6 +43,7 @@ describe 'neutron::agents::dhcp' do
       should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/ovs_integration_bridge').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_enable_addr6_list').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('agent/availability_zone').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('OVS/ovsdb_connection').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('OVS/ssl_key_file').with_value('<SERVICE DEFAULT>');
@@ -175,6 +176,15 @@ describe 'neutron::agents::dhcp' do
       end
       it 'fails to configure' do
         should raise_error(Puppet::Error)
+      end
+    end
+
+    context 'when enabling dhcp-host entry with list of addresses' do
+      before :each do
+        params.merge!(:dnsmasq_enable_addr6_list => true)
+      end
+      it 'should enabling dhcp-host entry with list of addresses' do
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_enable_addr6_list').with_value('true');
       end
     end
   end

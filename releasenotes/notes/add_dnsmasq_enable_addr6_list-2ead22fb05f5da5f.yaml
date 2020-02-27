@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Add 'dnsmasq_enable_addr6_list' option support to dhcp agent settings.
+    (See bug: `#1861032 <https://bugs.launchpad.net/neutron/+bug/1861032>`_)

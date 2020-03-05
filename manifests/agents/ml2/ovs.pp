@@ -279,7 +279,7 @@ class neutron::agents::ml2::ovs (
 
     # Set config for bridges that we're going to create
     # The OVS neutron plugin will talk in terms of the networks in the bridge_mappings
-    $br_map_str = join($bridge_mappings, ',')
+    $br_map_str = join(any2array($bridge_mappings), ',')
     neutron_agent_ovs {
       'ovs/bridge_mappings': value => $br_map_str;
     }

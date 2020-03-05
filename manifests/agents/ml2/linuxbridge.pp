@@ -127,7 +127,7 @@ class neutron::agents::ml2::linuxbridge (
 
   if size($bridge_mappings) > 0 {
     neutron_agent_linuxbridge {
-      'linux_bridge/bridge_mappings': value => join($bridge_mappings, ',');
+      'linux_bridge/bridge_mappings': value => join(any2array($bridge_mappings), ',');
     }
   } else {
     neutron_agent_linuxbridge {

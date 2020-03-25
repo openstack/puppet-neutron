@@ -21,7 +21,6 @@ describe 'neutron::server' do
       :database_max_retries     => 10,
       :database_idle_timeout    => 3600,
       :database_retry_interval  => 10,
-      :database_min_pool_size   => 1,
       :database_max_pool_size   => 10,
       :database_max_overflow    => 20,
       :sync_db                  => false,

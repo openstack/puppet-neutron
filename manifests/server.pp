@@ -75,10 +75,6 @@
 #   (Optional) Interval between retries of opening a database connection.
 #   (Defaults to 10)
 #
-# [*database_min_pool_size*]
-#   (Optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to: undef.
-#
 # [*database_max_pool_size*]
 #   (Optional) Maximum number of SQL connections to keep open in a pool.
 #   Defaults to: undef.
@@ -259,6 +255,12 @@
 #   mechanism driver for Neutron.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*database_min_pool_size*]
+#   (Optional) Minimum number of SQL connections to keep open in a pool.
+#   Defaults to: undef.
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -274,7 +276,6 @@ class neutron::server (
   $database_max_retries             = undef,
   $database_idle_timeout            = undef,
   $database_retry_interval          = undef,
-  $database_min_pool_size           = undef,
   $database_max_pool_size           = undef,
   $database_max_overflow            = undef,
   $sync_db                          = false,
@@ -305,6 +306,8 @@ class neutron::server (
   $max_request_body_size            = $::os_service_default,
   $ovs_integration_bridge           = $::os_service_default,
   $igmp_snooping_enable             = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $database_min_pool_size           = undef,
 ) inherits ::neutron::params {
 
   include neutron::deps

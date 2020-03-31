@@ -20,6 +20,7 @@ describe 'neutron::plugins::ml2::bagpipe' do
 
     it 'should have' do
       should contain_package('python-networking-bagpipe').with(
+        :name   => platform_params[:bagpipe_package_name],
         :ensure => params[:package_ensure],
         :tag    => 'openstack'
         )
@@ -41,10 +42,18 @@ describe 'neutron::plugins::ml2::bagpipe' do
 
       let (:platform_params) do
         case facts[:osfamily]
-        when 'RedHat'
-          { :bagpipe_package_name => 'python-networking-bagpipe' }
         when 'Debian'
-          { :bagpipe_package_name => 'python-networking-bagpipe' }
+          { :bagpipe_package_name => 'python3-networking-bagpipe' }
+        when 'RedHat'
+          if facts[:operatingsystem] == 'Fedora'
+            { :bagpipe_package_name => 'python3-networking-bagpipe' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :bagpipe_package_name => 'python3-networking-bagpipe' }
+            else
+              { :bagpipe_package_name => 'python-networking-bagpipe' }
+            end
+          end
         end
       end
       it_behaves_like 'neutron plugin bagpipe ml2'

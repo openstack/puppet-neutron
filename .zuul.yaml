@@ -21,5 +21,7 @@
       featureset_override:
         run_tempest: false
         tempest_test_whitelist:
-          - 'network'
+          - 'tempest.api.network'
+          - 'tempest.scenario.test_network_basic_ops'
+          - 'neutron_tempest_plugin.api'
         use_os_tempest: true

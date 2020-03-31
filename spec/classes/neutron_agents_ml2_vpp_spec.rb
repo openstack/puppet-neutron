@@ -97,15 +97,21 @@ describe 'neutron::agents::ml2::vpp' do
       let :platform_params do
         case facts[:osfamily]
         when 'Debian'
-          {
-            :vpp_plugin_package => 'python3-networking-vpp',
-            :vpp_agent_service  => 'neutron-vpp-agent'
-          }
+          { :vpp_plugin_package => 'python3-networking-vpp',
+            :vpp_agent_service  => 'neutron-vpp-agent' }
         when 'RedHat'
-          {
-            :vpp_plugin_package => 'python-networking-vpp',
-            :vpp_agent_service  => 'neutron-vpp-agent'
-          }
+          if facts[:operatingsystem] == 'Fedora'
+            { :vpp_plugin_package => 'python3-networking-vpp',
+              :vpp_agent_service  => 'neutron-vpp-agent' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :vpp_plugin_package => 'python3-networking-vpp',
+                :vpp_agent_service  => 'neutron-vpp-agent' }
+            else
+              { :vpp_plugin_package => 'python-networking-vpp',
+                :vpp_agent_service  => 'neutron-vpp-agent' }
+            end
+          end
         end
       end
 

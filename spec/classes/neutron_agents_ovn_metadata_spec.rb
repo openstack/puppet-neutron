@@ -120,10 +120,18 @@ describe 'neutron::agents::ovn_metadata' do
             :ovn_metadata_agent_service => 'networking-ovn-metadata-agent'
           }
         when 'RedHat'
-          {
-            :ovn_metadata_agent_package => 'python-networking-ovn-metadata-agent',
-            :ovn_metadata_agent_service => 'networking-ovn-metadata-agent'
-          }
+          if facts[:operatingsystem] == 'Fedora'
+            { :ovn_metadata_agent_package => 'python3-networking-ovn-metadata-agent',
+              :ovn_metadata_agent_service => 'networking-ovn-metadata-agent' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :ovn_metadata_agent_package => 'python3-networking-ovn-metadata-agent',
+                :ovn_metadata_agent_service => 'networking-ovn-metadata-agent' }
+            else
+              { :ovn_metadata_agent_package => 'python-networking-ovn-metadata-agent',
+                :ovn_metadata_agent_service => 'networking-ovn-metadata-agent' }
+            end
+          end
         end
       end
 

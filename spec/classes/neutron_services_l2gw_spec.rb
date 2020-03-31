@@ -101,10 +101,18 @@ describe 'neutron::services::l2gw' do
 
       let (:platform_params) do
         case facts[:osfamily]
-        when 'RedHat'
-          { :l2gw_agent_package_name => 'python2-networking-l2gw' }
         when 'Debian'
-          { :l2gw_agent_package_name => 'python-networking-l2gw' }
+          { :l2gw_agent_package_name => 'python3-networking-l2gw' }
+        when 'RedHat'
+          if facts[:operatingsystem] == 'Fedora'
+            { :l2gw_agent_package_name => 'python3-networking-l2gw' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :l2gw_agent_package_name => 'python3-networking-l2gw' }
+            else
+              { :l2gw_agent_package_name => 'python-networking-l2gw' }
+            end
+          end
         end
       end
 

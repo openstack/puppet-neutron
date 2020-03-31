@@ -29,7 +29,15 @@ describe 'neutron::client' do
         when 'Debian'
           { :client_package => 'python3-neutronclient' }
         when 'RedHat'
-          { :client_package => 'python-neutronclient' }
+          if facts[:operatingsystem] == 'Fedora'
+            { :client_package => 'python3-neutronclient' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :client_package => 'python3-neutronclient' }
+            else
+              { :client_package => 'python-neutronclient' }
+            end
+          end
         end
       end
 

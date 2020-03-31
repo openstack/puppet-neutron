@@ -75,10 +75,14 @@ class neutron::params {
     $ovn_metadata_agent_package         = "python${pyvers}-networking-ovn-metadata-agent"
     $dynamic_routing_package            = false
     $bgp_dragent_package                = 'openstack-neutron-bgp-dragent'
-    if $::operatingsystemrelease =~ /^7.*/ or $::operatingsystem == 'Fedora' {
+    if $::operatingsystem == 'Fedora' {
       $openswan_package = 'libreswan'
     } else {
-      $openswan_package = 'openswan'
+      if $::operatingsystemmajrelease >= '7' {
+        $openswan_package = 'libreswan'
+      } else {
+        $openswan_package = 'openswan'
+      }
     }
     $libreswan_package                  = 'libreswan'
     $metadata_agent_package             = false

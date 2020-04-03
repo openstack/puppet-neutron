@@ -1,0 +1,12 @@
+---
+deprecations:
+  - |
+    The database_connection, database_max_retries, database_idle_timeout,
+    database_retry_interval, database_max_pool_size and database_max_overflow
+    parameters in neutron::server class is deprecated.
+upgrade:
+  - |
+    The database_connection, database_max_retries, database_idle_timeout,
+    database_retry_interval, database_max_pool_size and database_max_overflow
+    parameters in neutron::server class is deprecated. Please set them in the
+    neutron::db class instead.

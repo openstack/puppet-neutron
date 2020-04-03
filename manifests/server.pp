@@ -59,30 +59,6 @@
 #   (Optional) Whether to validate the service is working after any service refreshes
 #   Defaults to false
 #
-# [*database_connection*]
-#   (Optional) Connection url for the neutron database.
-#   (Defaults to undef)
-#
-# [*database_max_retries*]
-#   (Optional) Maximum database connection retries during startup.
-#   (Defaults to undef)
-#
-# [*database_idle_timeout*]
-#   (Optional) Timeout before idle database connections are reaped.
-#   (Defaults to undef)
-#
-# [*database_retry_interval*]
-#   (Optional) Interval between retries of opening a database connection.
-#   (Defaults to 10)
-#
-# [*database_max_pool_size*]
-#   (Optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to: undef.
-#
-# [*database_max_overflow*]
-#   (Optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to: undef.
-#
 # [*sync_db*]
 #   (Optional) Run neutron-db-manage on api nodes after installing the package.
 #   Defaults to false
@@ -261,6 +237,30 @@
 #   (Optional) Minimum number of SQL connections to keep open in a pool.
 #   Defaults to: undef.
 #
+# [*database_connection*]
+#   (Optional) Connection url for the neutron database.
+#   (Defaults to undef)
+#
+# [*database_max_retries*]
+#   (Optional) Maximum database connection retries during startup.
+#   (Defaults to undef)
+#
+# [*database_idle_timeout*]
+#   (Optional) Timeout before idle database connections are reaped.
+#   (Defaults to undef)
+#
+# [*database_retry_interval*]
+#   (Optional) Interval between retries of opening a database connection.
+#   (Defaults to 10)
+#
+# [*database_max_pool_size*]
+#   (Optional) Maximum number of SQL connections to keep open in a pool.
+#   Defaults to: undef.
+#
+# [*database_max_overflow*]
+#   (Optional) If set, use this value for max_overflow with sqlalchemy.
+#   Defaults to: undef.
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -272,12 +272,6 @@ class neutron::server (
   $rpc_package_name                 = $::neutron::params::rpc_package_name,
   $rpc_service_name                 = $::neutron::params::rpc_service_name,
   $validate                         = false,
-  $database_connection              = undef,
-  $database_max_retries             = undef,
-  $database_idle_timeout            = undef,
-  $database_retry_interval          = undef,
-  $database_max_pool_size           = undef,
-  $database_max_overflow            = undef,
   $sync_db                          = false,
   $api_workers                      = $::os_workers,
   $rpc_workers                      = $::os_workers,
@@ -308,6 +302,12 @@ class neutron::server (
   $igmp_snooping_enable             = $::os_service_default,
   # DEPRECATED PARAMETERS
   $database_min_pool_size           = undef,
+  $database_connection              = undef,
+  $database_max_retries             = undef,
+  $database_idle_timeout            = undef,
+  $database_retry_interval          = undef,
+  $database_max_pool_size           = undef,
+  $database_max_overflow            = undef,
 ) inherits ::neutron::params {
 
   include neutron::deps

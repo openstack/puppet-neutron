@@ -63,6 +63,7 @@ class neutron::db (
     warning('The database_min_pool_size parameter is deprecated, and will be removed in a future release.')
   }
 
+  # TODO(tobias-urdin): Remove the database_* params in neutron::server is removed.
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use neutron::<myparam> if neutron::db::<myparam> isn't specified.
   $database_connection_real = pick($::neutron::server::database_connection, $database_connection)

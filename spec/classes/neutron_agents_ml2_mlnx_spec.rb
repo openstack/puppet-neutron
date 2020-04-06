@@ -113,14 +113,28 @@ describe 'neutron::agents::ml2::mlnx' do
         case facts[:osfamily]
         when 'Debian'
           {
-            :mlnx_agent_package => 'python-networking-mlnx',
+            :mlnx_agent_package => 'python3-networking-mlnx',
             :mlnx_agent_service => 'neutron-plugin-mlnx-agent'
           }
         when 'RedHat'
-          {
-            :mlnx_agent_package => 'python-networking-mlnx',
-            :mlnx_agent_service => 'neutron-mlnx-agent'
-          }
+          if facts[:operatingsystem] == 'Fedora'
+            {
+              :mlnx_agent_package => 'python3-networking-mlnx',
+              :mlnx_agent_service => 'neutron-mlnx-agent'
+            }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              {
+                :mlnx_agent_package => 'python3-networking-mlnx',
+                :mlnx_agent_service => 'neutron-mlnx-agent'
+              }
+            else
+              {
+                :mlnx_agent_package => 'python-networking-mlnx',
+                :mlnx_agent_service => 'neutron-mlnx-agent'
+              }
+            end
+          end
         end
       end
 

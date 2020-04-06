@@ -67,7 +67,7 @@ describe 'neutron::services::vpnaas' do
         case facts[:osfamily]
         when 'Debian'
           {
-            :vpnaas_package_name => 'python-neutron-vpnaas'
+            :vpnaas_package_name => 'python3-neutron-vpnaas'
           }
         when 'RedHat'
           {

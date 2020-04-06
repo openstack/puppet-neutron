@@ -39,7 +39,7 @@ class neutron::params {
   $nsx_config_file             = '/etc/neutron/plugins/vmware/nsx.ini'
   $sfc_package                 = "python${pyvers}-networking-sfc"
   $group                       = 'neutron'
-  $mlnx_agent_package          = 'python-networking-mlnx'
+  $mlnx_agent_package          = "python${pyvers}-networking-mlnx"
   $eswitchd_service            = 'eswitchd'
 
   if($::osfamily == 'Redhat') {
@@ -131,7 +131,7 @@ class neutron::params {
     $nvp_server_package         = 'neutron-plugin-nicira'
     $dhcp_agent_package         = 'neutron-dhcp-agent'
     $metering_agent_package     = 'neutron-metering-agent'
-    $vpnaas_agent_package       = 'python-neutron-vpnaas'
+    $vpnaas_agent_package       = "python${pyvers}-neutron-vpnaas"
     $openswan_package           = 'strongswan'
     $libreswan_package          = false
     $metadata_agent_package     = 'neutron-metadata-agent'

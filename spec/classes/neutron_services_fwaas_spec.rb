@@ -119,7 +119,7 @@ describe 'neutron::services::fwaas' do
         when 'Debian'
           { 
             :fwaas_package_name   => 'python3-neutron-fwaas',
-            :vpnaas_package_name  => 'python-neutron-vpnaas'
+            :vpnaas_package_name  => 'python3-neutron-vpnaas'
           }
         when 'RedHat'
           {

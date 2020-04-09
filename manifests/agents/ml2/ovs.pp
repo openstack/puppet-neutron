@@ -185,48 +185,53 @@
 #   mechanism driver for Neutron.
 #   Defaults to $::os_service_default
 #
+# [*resource_provider_bandwidths*]
+#   (optional) List of <bridge>:<egress_bw>:<ingress_bw>
+#   Defaults to empty list
+#
 # DEPRECATED
 #
 # [*of_interface*]
 #   (optional) This option is deprecated an has no effect
 #
 class neutron::agents::ml2::ovs (
-  $package_ensure             = 'present',
-  $enabled                    = true,
-  $manage_service             = true,
-  $extensions                 = $::os_service_default,
-  $bridge_uplinks             = [],
-  $bridge_mappings            = [],
-  $ovsdb_timeout              = $::os_service_default,
-  $of_connect_timeout         = $::os_service_default,
-  $of_request_timeout         = $::os_service_default,
-  $of_inactivity_probe        = $::os_service_default,
-  $integration_bridge         = 'br-int',
-  $tunnel_types               = [],
-  $local_ip                   = false,
-  $tunnel_bridge              = 'br-tun',
-  $vxlan_udp_port             = 4789,
-  $polling_interval           = $::os_service_default,
-  $l2_population              = $::os_service_default,
-  $arp_responder              = $::os_service_default,
-  $firewall_driver            = 'iptables_hybrid',
-  $enable_distributed_routing = $::os_service_default,
-  $drop_flows_on_start        = false,
-  $manage_vswitch             = true,
-  $int_peer_patch_port        = $::os_service_default,
-  $tun_peer_patch_port        = $::os_service_default,
-  $datapath_type              = $::os_service_default,
-  $vhostuser_socket_dir       = $::os_service_default,
-  $ovsdb_interface            = $::os_service_default,
-  $purge_config               = false,
-  $enable_dpdk                = false,
-  $enable_security_group      = $::os_service_default,
-  $permitted_ethertypes       = $::os_service_default,
-  $minimize_polling           = $::os_service_default,
-  $tunnel_csum                = $::os_service_default,
-  $igmp_snooping_enable       = $::os_service_default,
+  $package_ensure               = 'present',
+  $enabled                      = true,
+  $manage_service               = true,
+  $extensions                   = $::os_service_default,
+  $bridge_uplinks               = [],
+  $bridge_mappings              = [],
+  $ovsdb_timeout                = $::os_service_default,
+  $of_connect_timeout           = $::os_service_default,
+  $of_request_timeout           = $::os_service_default,
+  $of_inactivity_probe          = $::os_service_default,
+  $integration_bridge           = 'br-int',
+  $tunnel_types                 = [],
+  $local_ip                     = false,
+  $tunnel_bridge                = 'br-tun',
+  $vxlan_udp_port               = 4789,
+  $polling_interval             = $::os_service_default,
+  $l2_population                = $::os_service_default,
+  $arp_responder                = $::os_service_default,
+  $firewall_driver              = 'iptables_hybrid',
+  $enable_distributed_routing   = $::os_service_default,
+  $drop_flows_on_start          = false,
+  $manage_vswitch               = true,
+  $int_peer_patch_port          = $::os_service_default,
+  $tun_peer_patch_port          = $::os_service_default,
+  $datapath_type                = $::os_service_default,
+  $vhostuser_socket_dir         = $::os_service_default,
+  $ovsdb_interface              = $::os_service_default,
+  $purge_config                 = false,
+  $enable_dpdk                  = false,
+  $enable_security_group        = $::os_service_default,
+  $permitted_ethertypes         = $::os_service_default,
+  $minimize_polling             = $::os_service_default,
+  $tunnel_csum                  = $::os_service_default,
+  $igmp_snooping_enable         = $::os_service_default,
+  $resource_provider_bandwidths = [],
   # DEPRECATED
-  $of_interface               = undef,
+  $of_interface                 = undef,
 ) {
 
   include ::neutron::deps
@@ -314,6 +319,13 @@ class neutron::agents::ml2::ovs (
       neutron::plugins::ovs::port{ $bridge_uplinks:
         before => Service['neutron-ovs-agent-service'],
       }
+    }
+  }
+
+  if ($resource_provider_bandwidths != []) {
+    $res_prov_bw_map_str = join(any2array($resource_provider_bandwidths), ',')
+    neutron_agent_ovs {
+      'ovs/resource_provider_bandwidths': value => $res_prov_bw_map_str;
     }
   }
 

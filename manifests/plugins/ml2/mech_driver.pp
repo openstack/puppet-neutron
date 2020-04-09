@@ -23,8 +23,18 @@
 #   (required) Supported PCI vendor devices, defined by vendor_id:product_id according
 #   to the PCI ID Repository. Default enables support for Intel and Mellanox SR-IOV capable NICs
 #
+# [*ovs_vnic_type_blacklist*]
+#  (optional) list of VNIC types for which support in Neutron is
+#  administratively prohibited by the OVS mechanism driver
+#
+# [*sriov_vnic_type_blacklist*]
+#  (optional) list of VNIC types for which support in Neutron is
+#  administratively prohibited by the SR-IOV mechanism driver
+#
 define neutron::plugins::ml2::mech_driver (
   $supported_pci_vendor_devs,
+  $ovs_vnic_type_blacklist      = [],
+  $sriov_vnic_type_blacklist    = [],
 ){
 
   include ::neutron::deps
@@ -49,6 +59,18 @@ define neutron::plugins::ml2::mech_driver (
       default: {
         fail("Unsupported osfamily ${::osfamily}")
       }
+    }
+  }
+
+  if ($ovs_vnic_type_blacklist != []) {
+    neutron_plugin_ml2 {
+      'ovs_driver/vnic_type_blacklist': value => join(any2array($ovs_vnic_type_blacklist), ',');
+    }
+  }
+
+  if ($sriov_vnic_type_blacklist != []) {
+    neutron_plugin_ml2 {
+      'sriov_driver/vnic_type_blacklist': value => join(any2array($sriov_vnic_type_blacklist), ',');
     }
   }
 }

@@ -66,6 +66,7 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_ensure('absent')
       should contain_neutron_agent_ovs('agent/tunnel_types').with_ensure('absent')
       should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
+      should_not contain_neutron_agent_ovs('ovs/resource_provider_bandwidths')
     end
 
     it 'installs neutron ovs agent package' do
@@ -338,6 +339,16 @@ describe 'neutron::agents::ml2::ovs' do
 
       it { should raise_error(Puppet::Error, /Enabling DPDK without manage vswitch does not have any effect/) }
     end
+
+    context 'when resource_provider_bandwidths is set' do
+      before :each do
+        params.merge!(:resource_provider_bandwidths => ['provider-a', 'provider-b'])
+      end
+
+      it { should contain_neutron_agent_ovs('ovs/resource_provider_bandwidths').\
+        with_value('provider-a,provider-b') }
+    end
+
   end
 
   shared_examples 'neutron::agents::ml2::ovs on Debian' do

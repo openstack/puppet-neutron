@@ -66,6 +66,10 @@ describe 'neutron::agents::ml2::sriov' do
       should contain_service('neutron-sriov-nic-agent-service').that_notifies('Anchor[neutron::service::end]')
     end
 
+    it 'does not configure resource_provider_bandwidths by default' do
+      should_not contain_neutron_sriov_agent_config('sriov_nic/resource_provider_bandwidths')
+    end
+
     context 'when number_of_vfs is empty' do
       before :each do
         params.merge!(:number_of_vfs => "")
@@ -127,6 +131,17 @@ describe 'neutron::agents::ml2::sriov' do
 
       it 'configures extensions' do
         should contain_neutron_sriov_agent_config('agent/extensions').with_value(params[:extensions].join(','))
+      end
+    end
+
+    context 'when resource_provider_bandwidths is set' do
+      before :each do
+        params.merge!(:resource_provider_bandwidths => ['provider-a', 'provider-b'])
+      end
+
+      it 'configures resource_provider_bandwidths' do
+        should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_bandwidths').\
+          with_value('provider-a,provider-b')
       end
     end
   end

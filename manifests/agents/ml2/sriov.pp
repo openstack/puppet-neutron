@@ -69,16 +69,21 @@
 #   it as "eth1:4,eth2:10"
 #   Defaults to $::os_service_default.
 #
+# [*resource_provider_bandwidths*]
+#   (optional) List of <network_device>:<egress_bw>:<ingress_bw>
+#   Defaults to empty list
+#
 class neutron::agents::ml2::sriov (
-  $package_ensure             = 'present',
-  $enabled                    = true,
-  $manage_service             = true,
-  $physical_device_mappings   = $::os_service_default,
-  $polling_interval           = 2,
-  $exclude_devices            = $::os_service_default,
-  $extensions                 = $::os_service_default,
-  $purge_config               = false,
-  $number_of_vfs              = $::os_service_default,
+  $package_ensure               = 'present',
+  $enabled                      = true,
+  $manage_service               = true,
+  $physical_device_mappings     = $::os_service_default,
+  $polling_interval             = 2,
+  $exclude_devices              = $::os_service_default,
+  $extensions                   = $::os_service_default,
+  $purge_config                 = false,
+  $number_of_vfs                = $::os_service_default,
+  $resource_provider_bandwidths = [],
 ) {
 
   include neutron::deps
@@ -121,6 +126,13 @@ class neutron::agents::ml2::sriov (
     name   => $::neutron::params::sriov_nic_agent_service,
     enable => $enabled,
     tag    => 'neutron-service',
+  }
+
+  if ($resource_provider_bandwidths != []) {
+    $res_prov_bw_map_str = join(any2array($resource_provider_bandwidths), ',')
+    neutron_sriov_agent_config {
+      'sriov_nic/resource_provider_bandwidths': value => $res_prov_bw_map_str;
+    }
   }
 
 }

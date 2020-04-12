@@ -1,0 +1,8 @@
+---
+deprecations:
+  - |
+    The following parameters were deprecated because these parameters are valid
+    only with Keystone v2, which is now completely deprecated.
+
+    - ``neutron::server::notifications::tenant_id``
+    - ``neutron::server::notifications::tenant_name``

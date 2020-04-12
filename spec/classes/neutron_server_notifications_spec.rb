@@ -23,7 +23,6 @@ describe 'neutron::server::notifications' do
       :auth_type                          => 'password',
       :username                           => 'nova',
       :password                           => 'secrete',
-      :tenant_name                        => 'services',
       :project_domain_id                  => 'default',
       :project_domain_name                => 'Default',
       :project_name                       => 'services',
@@ -43,7 +42,6 @@ describe 'neutron::server::notifications' do
       should contain_neutron_config('nova/username').with_value('nova')
       should contain_neutron_config('nova/password').with_value('secrete')
       should contain_neutron_config('nova/password').with_secret( true )
-      should contain_neutron_config('nova/tenant_name').with_value('services')
       should contain_neutron_config('nova/region_name').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('nova/project_domain_id').with_value('default')
       should contain_neutron_config('nova/project_domain_name').with_value('Default')
@@ -62,7 +60,6 @@ describe 'neutron::server::notifications' do
           :auth_type                          => 'password',
           :username                           => 'joe',
           :region_name                        => 'MyRegion',
-          :tenant_id                          => 'UUID2',
           :project_domain_id                  => 'default_1',
           :project_domain_name                => 'Default_2',
           :user_domain_id                     => 'default_3',
@@ -81,7 +78,6 @@ describe 'neutron::server::notifications' do
         should contain_neutron_config('nova/password').with_value('secrete')
         should contain_neutron_config('nova/password').with_secret( true )
         should contain_neutron_config('nova/region_name').with_value('MyRegion')
-        should contain_neutron_config('nova/tenant_id').with_value('UUID2')
         should contain_neutron_config('nova/project_domain_id').with_value('default_1')
         should contain_neutron_config('nova/project_domain_name').with_value('Default_2')
         should contain_neutron_config('nova/user_domain_id').with_value('default_3')
@@ -90,13 +86,6 @@ describe 'neutron::server::notifications' do
       end
     end
 
-    context 'when no tenant_id and tenant_name specified' do
-      before :each do
-        params.merge!({ :tenant_name => false })
-      end
-
-      it { should raise_error(Puppet::Error, /You must provide either tenant_name or tenant_id./) }
-    end
   end
 
   on_supported_os({

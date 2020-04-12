@@ -42,14 +42,6 @@
 #   (optional) Username for connection to nova in admin context
 #   Defaults to 'nova'
 #
-# [*tenant_id*]
-#   (optional) The UUID of the admin nova tenant. If provided this takes
-#   precedence over tenant_name.
-#
-# [*tenant_name*]
-#   (optional) The name of the admin nova tenant
-#   Defaults to 'services'
-#
 # [*project_domain_id*]
 #   (optional) Nova project's domain ID
 #   Defaults to 'default'
@@ -86,6 +78,17 @@
 #   the keystone catalog.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*tenant_id*]
+#   (optional) The UUID of the admin nova tenant. If provided this takes
+#   precedence over tenant_name.
+#   Defaults to undef
+#
+# [*tenant_name*]
+#   (optional) The name of the admin nova tenant
+#   Defaults to undef
+#
 class neutron::server::notifications (
   $password,
   $notify_nova_on_port_status_changes = true,
@@ -93,8 +96,6 @@ class neutron::server::notifications (
   $send_events_interval               = $::os_service_default,
   $auth_type                          = 'password',
   $username                           = 'nova',
-  $tenant_id                          = $::os_service_default,
-  $tenant_name                        = 'services',
   $project_domain_id                  = 'default',
   $project_domain_name                = 'Default',
   $project_name                       = 'services',
@@ -103,12 +104,21 @@ class neutron::server::notifications (
   $auth_url                           = 'http://127.0.0.1:5000',
   $region_name                        = $::os_service_default,
   $endpoint_type                      = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $tenant_id                          = undef,
+  $tenant_name                        = undef,
 ) {
 
   include neutron::deps
 
-  if is_service_default($tenant_id) and (! $tenant_name) {
-    fail('You must provide either tenant_name or tenant_id.')
+  if $tenant_id != undef {
+    warning('neutron::server::notifications::tenant_id is deprecated and \
+has no effect. Use neutron::server::notifications::project_name instead')
+  }
+
+  if $tenant_name != undef {
+    warning('neutron::server::notifications::tenant_name is deprecated and \
+has no effect. Use neutron::server::notifications::project_name instead')
   }
 
   neutron_config {
@@ -123,17 +133,6 @@ class neutron::server::notifications (
     'nova/region_name':         value => $region_name;
     'nova/endpoint_type':       value => $endpoint_type;
     'nova/auth_type':           value => $auth_type;
-  }
-  if ! is_service_default ($tenant_id) {
-    if $tenant_id {
-      neutron_config {
-        'nova/tenant_id': value => $tenant_id;
-      }
-    }
-  } else {
-    neutron_config {
-      'nova/tenant_name': value => $tenant_name;
-    }
   }
 
   neutron_config {

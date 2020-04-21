@@ -1,0 +1,15 @@
+---
+features:
+  - |
+    The following parameters are now deprecated, and will be removed in a
+    future release. Please use project_domain_name and user_domain_name
+    instead.
+
+    - ``neutron::ml2::networking_baremetal::project_domain_id``
+    - ``neutron::ml2::networking_baremetal::user_domain_id``
+    - ``neutron::ml2::designate::project_domain_id``
+    - ``neutron::ml2::designate::user_domain_id``
+    - ``neutron::ml2::server::placement::project_domain_id``
+    - ``neutron::ml2::server::placement::user_domain_id``
+    - ``neutron::ml2::server::notifications::project_domain_id``
+    - ``neutron::ml2::server::notifications::user_domain_id``

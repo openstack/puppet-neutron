@@ -21,10 +21,8 @@ describe 'neutron::server::placement' do
       :auth_type           => 'password',
       :username            => 'nova',
       :password            => 'secrete',
-      :project_domain_id   => 'default',
       :project_domain_name => 'Default',
       :project_name        => 'services',
-      :user_domain_id      => 'default',
       :user_domain_name    => 'Default',
       :auth_url            => 'http://127.0.0.1:5000',
     }
@@ -38,9 +36,9 @@ describe 'neutron::server::placement' do
       should contain_neutron_config('placement/password').with_value('secrete')
       should contain_neutron_config('placement/password').with_secret( true )
       should contain_neutron_config('placement/region_name').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('placement/project_domain_id').with_value('default')
+      should_not contain_neutron_config('placement/project_domain_id')
       should contain_neutron_config('placement/project_domain_name').with_value('Default')
-      should contain_neutron_config('placement/user_domain_id').with_value('default')
+      should_not contain_neutron_config('placement/user_domain_id')
       should contain_neutron_config('placement/user_domain_name').with_value('Default')
       should contain_neutron_config('placement/endpoint_type').with_value('<SERVICE DEFAULT>')
     end

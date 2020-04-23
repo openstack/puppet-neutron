@@ -60,10 +60,6 @@
 #   (optional) Username for connection to ironic in admin context
 #   Defaults to 'ironic'
 #
-# [*project_domain_id*]
-#   (optional) Domain ID containing project
-#   Defaults to 'default'
-#
 # [*project_domain_name*]
 #   (Optional) Domain name containing project
 #   Defaults to 'Default'
@@ -71,10 +67,6 @@
 # [*project_name*]
 #   (optional) Project name to scope to
 #   Defaults to 'services'
-#
-# [*user_domain_id*]
-#   (optional) User's domain ID for connection to ironic in admin context
-#   Defaults to 'default'
 #
 # [*user_domain_name*]
 #   (Optional) Name of domain for $username
@@ -98,6 +90,16 @@
 #   ironic-neutron-agent config.
 #   Defaults to false.
 #
+# DEPRECATED PARAMETERS
+#
+# [*project_domain_id*]
+#   (optional) Domain ID containing project
+#   Defaults to undef
+#
+# [*user_domain_id*]
+#   (optional) User's domain ID for connection to ironic in admin context
+#   Defaults to undef
+#
 class neutron::agents::ml2::networking_baremetal (
   $password,
   $enabled             = true,
@@ -112,15 +114,16 @@ class neutron::agents::ml2::networking_baremetal (
   $auth_type           = 'password',
   $auth_url            = 'http://127.0.0.1:5000',
   $username            = 'ironic',
-  $project_domain_id   = 'default',
   $project_domain_name = 'Default',
   $project_name        = 'services',
-  $user_domain_id      = 'default',
   $user_domain_name    = 'Default',
   $region_name         = $::os_service_default,
   $retry_interval      = $::os_service_default,
   $max_retries         = $::os_service_default,
   $purge_config        = false,
+  # DEPRECATED PARAMETERS
+  $project_domain_id   = undef,
+  $user_domain_id      = undef,
 ) {
 
   include neutron::deps
@@ -146,14 +149,28 @@ class neutron::agents::ml2::networking_baremetal (
     'ironic/auth_url':            value => $auth_url;
     'ironic/username':            value => $username;
     'ironic/password':            value => $password;
-    'ironic/project_domain_id':   value => $project_domain_id;
     'ironic/project_domain_name': value => $project_domain_name;
     'ironic/project_name':        value => $project_name;
-    'ironic/user_domain_id':      value => $user_domain_id;
     'ironic/user_domain_name':    value => $user_domain_name;
     'ironic/region_name':         value => $region_name;
     'ironic/retry_interval':      value => $retry_interval;
     'ironic/max_retries':         value => $max_retries;
+  }
+
+  if $project_domain_id != undef {
+    warning('project_domain_id is deprecated and will be removed in a future release. \
+Use project_domain_name instead')
+    ironic_neutron_agent_config {
+      'ironic/project_domain_id': value => $project_domain_id;
+    }
+  }
+
+  if $user_domain_id != undef {
+    warning('user_domain_id is deprecated and will be removed in a future release. \
+Use user_domain_name instead')
+    ironic_neutron_agent_config {
+      'ironic/user_domain_id': value => $user_domain_id;
+    }
   }
 
   package { 'python2-ironic-neutron-agent':

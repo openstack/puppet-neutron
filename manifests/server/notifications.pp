@@ -42,10 +42,6 @@
 #   (optional) Username for connection to nova in admin context
 #   Defaults to 'nova'
 #
-# [*project_domain_id*]
-#   (optional) Nova project's domain ID
-#   Defaults to 'default'
-#
 # [*project_domain_name*]
 #   (Optional) Name of domain for $project_name
 #   Defaults to 'Default'
@@ -53,10 +49,6 @@
 # [*project_name*]
 #   (optional) Nova project's name
 #   Defaults to 'services'
-#
-# [*user_domain_id*]
-#   (optional) User's domain ID for connection to nova in admin context
-#   Defaults to 'default'
 #
 # [*user_domain_name*]
 #   (Optional) Name of domain for $username
@@ -89,6 +81,14 @@
 #   (optional) The name of the admin nova tenant
 #   Defaults to undef
 #
+# [*project_domain_id*]
+#   (optional) Nova project's domain ID
+#   Defaults to undef
+#
+# [*user_domain_id*]
+#   (optional) User's domain ID for connection to nova in admin context
+#   Defaults to undef
+#
 class neutron::server::notifications (
   $password,
   $notify_nova_on_port_status_changes = true,
@@ -96,10 +96,8 @@ class neutron::server::notifications (
   $send_events_interval               = $::os_service_default,
   $auth_type                          = 'password',
   $username                           = 'nova',
-  $project_domain_id                  = 'default',
   $project_domain_name                = 'Default',
   $project_name                       = 'services',
-  $user_domain_id                     = 'default',
   $user_domain_name                   = 'Default',
   $auth_url                           = 'http://127.0.0.1:5000',
   $region_name                        = $::os_service_default,
@@ -107,6 +105,8 @@ class neutron::server::notifications (
   # DEPRECATED PARAMETERS
   $tenant_id                          = undef,
   $tenant_name                        = undef,
+  $project_domain_id                  = undef,
+  $user_domain_id                     = undef,
 ) {
 
   include neutron::deps
@@ -125,14 +125,28 @@ has no effect. Use neutron::server::notifications::project_name instead')
     'nova/auth_url':            value => $auth_url;
     'nova/username':            value => $username;
     'nova/password':            value => $password, secret => true;
-    'nova/project_domain_id':   value => $project_domain_id;
     'nova/project_domain_name': value => $project_domain_name;
     'nova/project_name':        value => $project_name;
-    'nova/user_domain_id':      value => $user_domain_id;
     'nova/user_domain_name':    value => $user_domain_name;
     'nova/region_name':         value => $region_name;
     'nova/endpoint_type':       value => $endpoint_type;
     'nova/auth_type':           value => $auth_type;
+  }
+
+  if $project_domain_id != undef {
+    warning('project_domain_id is deprecated and will be removed in a future release. \
+Use project_domain_name instead')
+    neutron_config {
+      'nova/project_domain_id': value => $project_domain_id;
+    }
+  }
+
+  if $user_domain_id != undef {
+    warning('user_domain_id is deprecated and will be removed in a future release. \
+Use user_domain_name instead')
+    neutron_config {
+      'nova/user_domain_id': value => $user_domain_id;
+    }
   }
 
   neutron_config {

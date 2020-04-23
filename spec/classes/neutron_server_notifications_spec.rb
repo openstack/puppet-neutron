@@ -23,10 +23,8 @@ describe 'neutron::server::notifications' do
       :auth_type                          => 'password',
       :username                           => 'nova',
       :password                           => 'secrete',
-      :project_domain_id                  => 'default',
       :project_domain_name                => 'Default',
       :project_name                       => 'services',
-      :user_domain_id                     => 'default',
       :user_domain_name                   => 'Default',
       :auth_url                           => 'http://127.0.0.1:5000',
     }
@@ -43,9 +41,9 @@ describe 'neutron::server::notifications' do
       should contain_neutron_config('nova/password').with_value('secrete')
       should contain_neutron_config('nova/password').with_secret( true )
       should contain_neutron_config('nova/region_name').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('nova/project_domain_id').with_value('default')
+      should_not contain_neutron_config('nova/project_domain_id')
       should contain_neutron_config('nova/project_domain_name').with_value('Default')
-      should contain_neutron_config('nova/user_domain_id').with_value('default')
+      should_not contain_neutron_config('nova/user_domain_id')
       should contain_neutron_config('nova/user_domain_name').with_value('Default')
       should contain_neutron_config('nova/endpoint_type').with_value('<SERVICE DEFAULT>')
     end

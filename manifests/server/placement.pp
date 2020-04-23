@@ -28,10 +28,6 @@
 #   (optional) Username for connection to nova in admin context
 #   Defaults to 'nova'
 #
-# [*project_domain_id*]
-#   (optional) Nova project's domain ID
-#   Defaults to 'default'
-#
 # [*project_domain_name*]
 #   (Optional) Name of domain for $project_name
 #   Defaults to 'Default'
@@ -39,10 +35,6 @@
 # [*project_name*]
 #   (optional) Nova project's name
 #   Defaults to 'services'
-#
-# [*user_domain_id*]
-#   (optional) User's domain ID for connection to nova in admin context
-#   Defaults to 'default'
 #
 # [*user_domain_name*]
 #   (Optional) Name of domain for $username
@@ -64,19 +56,29 @@
 #   the keystone catalog.
 #   Defaults to $::os_service_default
 #
-
+# DEPRECATED PARAMETERS
+#
+# [*project_domain_id*]
+#   (optional) Nova project's domain ID
+#   Defaults to undef
+#
+# [*user_domain_id*]
+#   (optional) User's domain ID for connection to nova in admin context
+#   Defaults to undef
+#
 class neutron::server::placement (
   $password,
   $auth_type           = 'password',
   $username            = 'nova',
-  $project_domain_id   = 'default',
   $project_domain_name = 'Default',
   $project_name        = 'services',
-  $user_domain_id      = 'default',
   $user_domain_name    = 'Default',
   $auth_url            = 'http://127.0.0.1:5000',
   $region_name         = $::os_service_default,
   $endpoint_type       = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $project_domain_id   = undef,
+  $user_domain_id      = undef,
 ) {
 
   include neutron::deps
@@ -85,14 +87,27 @@ class neutron::server::placement (
     'placement/auth_url':            value => $auth_url;
     'placement/username':            value => $username;
     'placement/password':            value => $password, secret => true;
-    'placement/project_domain_id':   value => $project_domain_id;
     'placement/project_domain_name': value => $project_domain_name;
     'placement/project_name':        value => $project_name;
-    'placement/user_domain_id':      value => $user_domain_id;
     'placement/user_domain_name':    value => $user_domain_name;
     'placement/region_name':         value => $region_name;
     'placement/endpoint_type':       value => $endpoint_type;
     'placement/auth_type':           value => $auth_type;
   }
 
+  if $project_domain_id != undef {
+    warning('project_domain_id is deprecated and will be removed in a future release. \
+Use project_domain_name instead')
+    neutron_config {
+      'placement/project_domain_id': value => $project_domain_id;
+    }
+  }
+
+  if $user_domain_id != undef {
+    warning('user_domain_id is deprecated and will be removed in a future release. \
+Use user_domain_name instead')
+    neutron_config {
+      'placement/user_domain_id': value => $user_domain_id;
+    }
+  }
 }

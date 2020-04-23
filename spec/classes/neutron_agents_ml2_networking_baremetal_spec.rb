@@ -9,10 +9,8 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       :auth_type           => 'password',
       :auth_url            => 'http://127.0.0.1:5000',
       :username            => 'ironic',
-      :project_domain_id   => 'default',
       :project_domain_name => 'Default',
       :project_name        => 'services',
-      :user_domain_id      => 'default',
       :user_domain_name    => 'Default',
       :purge_config        => false,
     }
@@ -47,10 +45,8 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       should contain_ironic_neutron_agent_config('ironic/auth_url').with_value(p[:auth_url])
       should contain_ironic_neutron_agent_config('ironic/username').with_value(p[:username])
       should contain_ironic_neutron_agent_config('ironic/password').with_value(p[:password])
-      should contain_ironic_neutron_agent_config('ironic/project_domain_id').with_value(p[:project_domain_id])
       should contain_ironic_neutron_agent_config('ironic/project_domain_name').with_value(p[:project_domain_name])
       should contain_ironic_neutron_agent_config('ironic/project_name').with_value(p[:project_name])
-      should contain_ironic_neutron_agent_config('ironic/user_domain_id').with_value(p[:user_domain_id])
       should contain_ironic_neutron_agent_config('ironic/user_domain_name').with_value(p[:user_domain_name])
       should contain_ironic_neutron_agent_config('ironic/region_name').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/retry_interval').with_value('<SERVICE DEFAULT>')

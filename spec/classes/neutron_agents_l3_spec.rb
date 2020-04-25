@@ -32,7 +32,6 @@ describe 'neutron::agents::l3' do
     it 'configures l3_agent.ini' do
       should contain_neutron_l3_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver])
-      should contain_neutron_l3_agent_config('DEFAULT/gateway_external_network_id').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/metadata_port').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value('<SERVICE DEFAULT>')

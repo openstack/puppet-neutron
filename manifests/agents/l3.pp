@@ -26,10 +26,6 @@
 #   (optional) Driver to interface with neutron
 #   Defaults to OVSInterfaceDriver
 #
-# [*gateway_external_network_id*]
-#   (optional) The ID of the external network in neutron
-#   Defaults to $::os_service_default
-#
 # [*handle_internal_only_routers*]
 #   (optional) L3 Agent will handle non-external routers
 #   Defaults to $::os_service_default
@@ -95,13 +91,18 @@
 #   will be passed.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*gateway_external_network_id*]
+#   (optional) The ID of the external network in neutron
+#   Defaults to undef
+#
 class neutron::agents::l3 (
   $package_ensure                   = 'present',
   $enabled                          = true,
   $manage_service                   = true,
   $debug                            = $::os_service_default,
   $interface_driver                 = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $gateway_external_network_id      = $::os_service_default,
   $handle_internal_only_routers     = $::os_service_default,
   $metadata_port                    = $::os_service_default,
   $periodic_interval                = $::os_service_default,
@@ -116,10 +117,20 @@ class neutron::agents::l3 (
   $availability_zone                = $::os_service_default,
   $extensions                       = $::os_service_default,
   $radvd_user                       = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $gateway_external_network_id      = undef,
 ) {
 
   include neutron::deps
   include neutron::params
+
+  if $gateway_external_network_id != undef {
+    warning('gateway_external_network_id parameter is deprecated and has no effect')
+  }
+
+  neutron_l3_agent_config {
+    'DEFAULT/gateway_external_network_id': ensure => absent;
+  }
 
   resources { 'neutron_l3_agent_config':
     purge => $purge_config,
@@ -136,7 +147,6 @@ class neutron::agents::l3 (
   neutron_l3_agent_config {
     'DEFAULT/debug':                            value => $debug;
     'DEFAULT/interface_driver':                 value => $interface_driver;
-    'DEFAULT/gateway_external_network_id':      value => $gateway_external_network_id;
     'DEFAULT/handle_internal_only_routers':     value => $handle_internal_only_routers;
     'DEFAULT/metadata_port':                    value => $metadata_port;
     'DEFAULT/periodic_interval':                value => $periodic_interval;

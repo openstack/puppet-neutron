@@ -45,8 +45,8 @@ Puppet::Type.newtype(:ovn_metadata_agent_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'python-networking-ovn-metadata-agent'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

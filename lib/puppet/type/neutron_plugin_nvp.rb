@@ -45,8 +45,8 @@ Puppet::Type.newtype(:neutron_plugin_nvp) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'neutron-plugin-nvp'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

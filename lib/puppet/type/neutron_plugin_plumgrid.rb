@@ -49,8 +49,8 @@ Puppet::Type.newtype(:neutron_plugin_plumgrid) do
     ['/etc/neutron/plugins/plumgrid']
   end
 
-  autorequire(:package) do
-    'neutron-plugin-plumgrid'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

@@ -31,8 +31,8 @@ Puppet::Type.newtype(:neutron_l2gw_service_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    ['python-networking-l2gw']
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

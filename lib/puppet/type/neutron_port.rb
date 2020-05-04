@@ -88,8 +88,8 @@ Puppet::Type.newtype(:neutron_port) do
     end
   end
 
-  autorequire(:service) do
-    ['neutron-server']
+  autorequire(:anchor) do
+    ['neutron::service::end']
   end
 
   autorequire(:keystone_tenant) do

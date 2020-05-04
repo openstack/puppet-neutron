@@ -88,8 +88,8 @@ Puppet::Type.newtype(:neutron_subnet) do
     desc 'A uuid identifying the tenant which will own the subnet.'
   end
 
-  autorequire(:service) do
-    ['neutron-server']
+  autorequire(:anchor) do
+    ['neutron::service::end']
   end
 
   autorequire(:keystone_tenant) do

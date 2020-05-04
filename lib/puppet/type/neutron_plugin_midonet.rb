@@ -7,8 +7,6 @@ Puppet::Type.newtype(:neutron_plugin_midonet) do
     newvalues(/\S+\/\S+/)
   end
 
-  autorequire(:package) do ['neutron'] end
-
   newproperty(:value) do
     desc 'The value of the setting to be defined.'
     munge do |value|
@@ -51,8 +49,8 @@ Puppet::Type.newtype(:neutron_plugin_midonet) do
     ['/etc/neutron/plugins/midonet']
   end
 
-  autorequire(:package) do
-    'python-networking-midonet'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

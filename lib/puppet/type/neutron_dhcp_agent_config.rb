@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_dhcp_agent_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'neutron'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

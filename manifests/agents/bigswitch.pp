@@ -33,7 +33,7 @@ class neutron::agents::bigswitch (
   ensure_packages("python${neutron::params::pyvers}-networking-bigswitch",
     {
       ensure => $package_ensure,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-package'],
     }
   )
 

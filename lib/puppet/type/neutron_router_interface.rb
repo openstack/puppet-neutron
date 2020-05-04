@@ -44,8 +44,8 @@ Puppet::Type.newtype(:neutron_router_interface) do
     desc 'An existing neutron port to which a router interface should be assigned'
   end
 
-  autorequire(:service) do
-    ['neutron-server']
+  autorequire(:anchor) do
+    ['neutron::service::end']
   end
 
   autorequire(:neutron_router) do

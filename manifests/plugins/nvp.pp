@@ -48,7 +48,7 @@ class neutron::plugins::nvp (
   package { 'neutron-plugin-nvp':
     ensure => $package_ensure,
     name   => $::neutron::params::nvp_server_package,
-    tag    => ['neutron-package', 'openstack'],
+    tag    => ['openstack', 'neutron-package'],
   }
 
   validate_legacy(Array, 'validate_array', $nvp_controllers)

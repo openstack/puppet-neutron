@@ -43,8 +43,8 @@ Puppet::Type.newtype(:neutron_plugin_ml2) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    ['neutron', 'neutron-plugin-ml2']
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

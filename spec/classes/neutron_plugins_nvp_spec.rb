@@ -41,7 +41,7 @@ describe 'neutron::plugins::nvp' do
       should contain_package('neutron-plugin-nvp').with(
                  :name   => platform_params[:nvp_server_package],
                  :ensure => p[:package_ensure],
-                 :tag    => ['neutron-package', 'openstack'],
+                 :tag    => ['openstack', 'neutron-package'],
              )
     end
 

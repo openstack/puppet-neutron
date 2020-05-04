@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_fwaas_service_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'neutron-fwaas'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

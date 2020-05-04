@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_rootwrap_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'neutron-common'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

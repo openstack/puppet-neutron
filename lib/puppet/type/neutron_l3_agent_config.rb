@@ -23,8 +23,8 @@ Puppet::Type.newtype(:neutron_l3_agent_config) do
 
   newparam(:transform_to)
 
-  autorequire(:package) do
-    'neutron'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

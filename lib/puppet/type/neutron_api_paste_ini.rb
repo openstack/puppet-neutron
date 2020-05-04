@@ -45,8 +45,8 @@ Puppet::Type.newtype(:neutron_api_paste_ini) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'neutron'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

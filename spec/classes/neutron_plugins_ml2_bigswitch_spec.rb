@@ -31,7 +31,7 @@ describe 'neutron::plugins::ml2::bigswitch' do
     it 'should have' do
       should contain_package('python-networking-bigswitch').with(
         :ensure => params[:package_ensure],
-        :tag    => 'openstack'
+        :tag    => ['openstack', 'neutron-plugin-ml2-package']
         )
     end
   end

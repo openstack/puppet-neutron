@@ -38,6 +38,7 @@ class neutron::plugins::ml2::networking_ansible(
   ) {
   include neutron::deps
   include neutron::params
+  require ::neutron::plugins::ml2
 
   if($::osfamily != 'RedHat') {
     # Drivers are only packaged for RedHat at this time
@@ -47,7 +48,7 @@ class neutron::plugins::ml2::networking_ansible(
   ensure_resource('package', 'python2-networking-ansible',
     {
       ensure => $package_ensure,
-      tag    => ['openstack', 'neutron-package']
+      tag    => ['openstack', 'neutron-plugin-ml2-package']
     }
   )
   create_resources(neutron::plugins::ml2::networking_ansible_host, $host_configs)

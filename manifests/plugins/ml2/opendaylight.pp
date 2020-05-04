@@ -60,7 +60,7 @@ class neutron::plugins::ml2::opendaylight (
   ensure_resource('package', 'python-networking-odl',
     {
       ensure => $package_ensure,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-plugin-ml2-package']
     }
   )
 

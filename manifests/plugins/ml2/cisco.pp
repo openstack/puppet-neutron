@@ -27,7 +27,7 @@ class neutron::plugins::ml2::cisco (
   ensure_resource('package', 'python-networking-cisco',
     {
       ensure => $package_ensure,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-plugin-ml2-package']
     }
   )
   warning('python-networking-cisco package management is deprecated, it will be dropped in a future release.')

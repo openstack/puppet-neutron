@@ -34,10 +34,10 @@ describe 'neutron::plugins::ml2::networking_ansible' do
       should contain_package('python2-networking-ansible').with(
         :name   => platform_params[:networking_ansible_package],
         :ensure => p[:package_ensure],
-        :tag    => ['openstack', 'neutron-package'],
+        :tag    => ['openstack', 'neutron-plugin-ml2-package'],
       )
       should contain_package('python2-networking-ansible').that_requires('Anchor[neutron::install::begin]')
-      should contain_package('python2-networking-ansible').that_notifies('Anchor[neutron::install::end]')
+      should contain_package('python2-networking-ansible').that_notifies('Anchor[neutron::config::end]')
     end
 
     it 'should configure non-host config' do

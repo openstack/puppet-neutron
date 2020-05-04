@@ -141,7 +141,7 @@ class neutron::plugins::ml2::ovn(
   ensure_resource('package', $::neutron::params::ovn_plugin_package,
     {
       ensure => $package_ensure,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-plugin-ml2-package']
     }
   )
 

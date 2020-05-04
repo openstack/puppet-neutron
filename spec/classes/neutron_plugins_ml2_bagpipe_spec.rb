@@ -22,7 +22,7 @@ describe 'neutron::plugins::ml2::bagpipe' do
       should contain_package('python-networking-bagpipe').with(
         :name   => platform_params[:bagpipe_package_name],
         :ensure => params[:package_ensure],
-        :tag    => 'openstack'
+        :tag    => ['openstack', 'neutron-plugin-ml2-package']
         )
     end
 

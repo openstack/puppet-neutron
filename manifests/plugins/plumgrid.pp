@@ -124,6 +124,9 @@ class neutron::plugins::plumgrid (
   include neutron::deps
   include neutron::params
 
+  warning('support for plumgrid plugin has been deprecated and will be removed \
+in a future release.')
+
   ensure_resource('file', '/etc/neutron/plugins/plumgrid', {
     ensure => directory,
     owner  => 'root',

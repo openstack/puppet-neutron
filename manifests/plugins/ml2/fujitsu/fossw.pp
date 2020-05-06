@@ -1,4 +1,5 @@
 #
+# DEPRECATED!
 # Configure the Fujitsu neutron ML2 plugin for FOS
 #
 # === Parameters
@@ -58,6 +59,8 @@ class neutron::plugins::ml2::fujitsu::fossw (
 )
 {
   require ::neutron::plugins::ml2
+
+  warning('FUJITSU plugin support is deprecated and will be removed in a future release')
 
   neutron_plugin_ml2 {
     'fujitsu_fossw/fossw_ips'              : value => join(any2array($fossw_ips), ',');

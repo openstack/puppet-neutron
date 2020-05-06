@@ -1,4 +1,5 @@
 #
+# DEPRECATED!
 # Install the Fujitsu ML2 plugin.
 #
 # === Parameters
@@ -14,6 +15,8 @@ class neutron::plugins::ml2::fujitsu (
 ) {
 
   include neutron::deps
+
+  warning('FUJITSU plugin support is deprecated and will be removed in a future release')
 
   ensure_resource('package', 'python-networking-fujitsu',
     {

@@ -17,6 +17,8 @@
 #
 # == Class: neutron::plugins::ml2::arista
 #
+# DEPRECATED!
+#
 # === Parameters
 #
 # [*eapi_host*]
@@ -54,6 +56,9 @@ class neutron::plugins::ml2::arista(
 
   include neutron::deps
   require ::neutron::plugins::ml2
+
+  warning('Support for Arista plugin is deprecated and will be removed \
+in a future release')
 
   neutron_plugin_ml2 {
     'ml2_arista/eapi_host'    : value => $eapi_host;

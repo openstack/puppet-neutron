@@ -17,6 +17,8 @@
 #
 # == Class: neutron::plugins::ml2::arista::l3_arista
 #
+# DEPRECATED!
+#
 # === Parameters
 #
 # [*primary_l3_host*]
@@ -59,6 +61,9 @@ class neutron::plugins::ml2::arista::l3(
 
   include neutron::deps
   require ::neutron::plugins::ml2
+
+  warning('Support for Arista plugin is deprecated and will be removed \
+in a future release')
 
   if !is_service_default($mlag_config) {
     validate_legacy(Boolean, 'validate_bool', $mlag_config)

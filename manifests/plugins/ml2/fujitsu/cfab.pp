@@ -1,4 +1,5 @@
 #
+# DEPRECATED!
 # Configure the Fujitsu neutron ML2 plugin for C-Fabric
 #
 # === Parameters
@@ -47,6 +48,8 @@ class neutron::plugins::ml2::fujitsu::cfab (
 )
 {
   require ::neutron::plugins::ml2
+
+  warning('FUJITSU plugin support is deprecated and will be removed in a future release')
 
   neutron_plugin_ml2 {
     'fujitsu_cfab/address'           : value => $address;

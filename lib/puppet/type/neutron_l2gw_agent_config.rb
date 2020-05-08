@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_l2gw_agent_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    ['neutron-l2gw-agent']
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

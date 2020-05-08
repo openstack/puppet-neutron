@@ -74,8 +74,8 @@ Puppet::Type.newtype(:neutron_network) do
   end
 
   # Require the neutron-server service to be running
-  autorequire(:service) do
-    ['neutron-server']
+  autorequire(:anchor) do
+    ['neutron::service::end']
   end
 
   autorequire(:keystone_tenant) do

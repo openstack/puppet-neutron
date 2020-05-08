@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_plugin_nuage) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'neutron-plugin-nuage'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
   autorequire(:file) do

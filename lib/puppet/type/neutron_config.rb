@@ -61,8 +61,8 @@ Puppet::Type.newtype(:neutron_config) do
       provider.create
   end
 
-  autorequire(:package) do
-    'neutron'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

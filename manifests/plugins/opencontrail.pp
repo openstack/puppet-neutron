@@ -74,7 +74,7 @@ class neutron::plugins::opencontrail (
   package { 'neutron-plugin-contrail':
     ensure => $package_ensure,
     name   => $::neutron::params::opencontrail_plugin_package,
-    tag    => ['neutron-package', 'openstack'],
+    tag    => ['openstack', 'neutron-package'],
   }
 
   ensure_resource('file', '/etc/neutron/plugins/opencontrail', {

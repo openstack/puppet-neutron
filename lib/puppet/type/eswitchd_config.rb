@@ -12,7 +12,9 @@ Puppet::Type.newtype(:eswitchd_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do ['neutron'] end
+  autorequire(:anchor) do
+    ['neutron::install::end']
+  end
 
   newproperty(:value) do
     desc 'The value of the setting to be defined.'

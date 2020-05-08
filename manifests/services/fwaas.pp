@@ -63,14 +63,14 @@ class neutron::services::fwaas (
       ensure_resource( 'package', 'neutron-vpn-agent', {
         'name'   => $::neutron::params::vpnaas_agent_package,
         'ensure' => $neutron::package_ensure,
-        'tag'    => ['neutron-package', 'openstack'],
+        'tag'    => ['openstack', 'neutron-package'],
       })
     }
     else {
       ensure_resource( 'package', 'neutron-fwaas' , {
         'name'   => $::neutron::params::fwaas_package,
         'ensure' => $neutron::package_ensure,
-        'tag'    => ['neutron-package', 'openstack'],
+        'tag'    => ['openstack', 'neutron-package'],
       })
     }
   } elsif($::osfamily == 'Redhat') {
@@ -78,7 +78,7 @@ class neutron::services::fwaas (
     ensure_resource( 'package', 'neutron-fwaas', {
       'name'   => $::neutron::params::fwaas_package,
       'ensure' => $neutron::package_ensure,
-      'tag'    => ['neutron-package', 'openstack'],
+      'tag'    => ['openstack', 'neutron-package'],
     })
   }
 

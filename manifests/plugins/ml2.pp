@@ -193,7 +193,7 @@ class neutron::plugins::ml2 (
     package { 'neutron-plugin-ml2':
       ensure => $package_ensure,
       name   => $::neutron::params::ml2_server_package,
-      tag    => ['neutron-package', 'openstack'],
+      tag    => ['openstack', 'neutron-package'],
     }
   }
 

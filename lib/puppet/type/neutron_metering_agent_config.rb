@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_metering_agent_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    ['neutron', 'neutron-metering-agent']
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

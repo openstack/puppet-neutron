@@ -9,12 +9,12 @@ describe 'Puppet::Type.type(:ironic_neutron_agent_config)' do
 
   it 'should autorequire the package that install the file' do
     catalog = Puppet::Resource::Catalog.new
-    package = Puppet::Type.type(:package).new(:name => 'python2-ironic-neutron-agent')
-    catalog.add_resource package, @ironic_neutron_agent_config
+    anchor = Puppet::Type.type(:anchor).new(:name => 'neutron::install::end')
+    catalog.add_resource anchor, @ironic_neutron_agent_config
     dependency = @ironic_neutron_agent_config.autorequire
     expect(dependency.size).to eq(1)
     expect(dependency[0].target).to eq(@ironic_neutron_agent_config)
-    expect(dependency[0].source).to eq(package)
+    expect(dependency[0].source).to eq(anchor)
   end
 
 end

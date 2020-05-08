@@ -50,8 +50,8 @@ Puppet::Type.newtype(:neutron_plugin_cisco_credentials) do
     ['/etc/neutron/plugins/cisco']
   end
 
-  autorequire(:package) do
-    'neutron-plugin-cisco'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

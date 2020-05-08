@@ -21,8 +21,8 @@ Puppet::Type.newtype(:ironic_neutron_agent_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'python2-ironic-neutron-agent'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

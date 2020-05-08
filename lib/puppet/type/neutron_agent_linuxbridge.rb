@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_agent_linuxbridge) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'neutron-plugin-linuxbridge-agent'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

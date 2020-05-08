@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_bgpvpn_bagpipe_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    ['openstack-bagpipe-bgp']
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

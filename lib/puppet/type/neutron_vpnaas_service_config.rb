@@ -33,8 +33,8 @@ Puppet::Type.newtype(:neutron_vpnaas_service_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'neutron-vpnaas-agent'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

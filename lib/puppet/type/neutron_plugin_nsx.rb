@@ -49,8 +49,8 @@ Puppet::Type.newtype(:neutron_plugin_nsx) do
     '/etc/neutron/plugins/vmware'
   end
 
-  autorequire(:package) do
-    'vmware-nsx'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

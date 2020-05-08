@@ -89,7 +89,7 @@ describe 'neutron::plugins::ml2' do
         should contain_package('neutron-plugin-ml2').with(
           :name   => platform_params[:ml2_server_package],
           :ensure => p[:package_ensure],
-          :tag    => ['neutron-package', 'openstack'],
+          :tag    => ['openstack', 'neutron-package'],
         )
         should contain_package('neutron-plugin-ml2').that_requires('Anchor[neutron::install::begin]')
         should contain_package('neutron-plugin-ml2').that_notifies('Anchor[neutron::install::end]')
@@ -274,7 +274,7 @@ describe 'neutron::plugins::ml2' do
           should contain_package('neutron-plugin-ml2').with(
             :name   => platform_params[:ml2_server_package],
             :ensure => params[:package_ensure],
-            :tag    => ['neutron-package', 'openstack'],
+            :tag    => ['openstack', 'neutron-package'],
           )
         end
       end

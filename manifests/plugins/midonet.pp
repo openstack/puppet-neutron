@@ -142,7 +142,7 @@ class neutron::plugins::midonet (
   package { 'python-networking-midonet':
     ensure => $package_ensure,
     name   => $::neutron::params::midonet_server_package,
-    tag    => ['neutron-package', 'openstack'],
+    tag    => ['openstack', 'neutron-package'],
     }
 
   neutron_plugin_midonet {

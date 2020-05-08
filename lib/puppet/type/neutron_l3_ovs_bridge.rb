@@ -11,8 +11,8 @@ Puppet::Type.newtype(:neutron_l3_ovs_bridge) do
     desc 'Name of the subnet that will use the bridge as gateway'
   end
 
-  autorequire(:service) do
-    ['neutron-server']
+  autorequire(:anchor) do
+    ['neutron::service::end']
   end
 
   autorequire(:vs_bridge) do

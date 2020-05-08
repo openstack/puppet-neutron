@@ -31,6 +31,8 @@ Puppet::Type.newtype(:neutron_sfc_service_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do ['python-networking-sfc'] end
+  autorequire(:anchor) do
+    ['neutron::install::end']
+  end
 
 end

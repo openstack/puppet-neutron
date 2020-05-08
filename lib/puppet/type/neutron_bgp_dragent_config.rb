@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_bgp_dragent_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    ['neutron-dynamic-routing', 'neutron-bgp-dragent']
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

@@ -21,8 +21,8 @@ Puppet::Type.newtype(:neutron_agent_ovs) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'neutron-ovs-agent'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

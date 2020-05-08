@@ -49,8 +49,8 @@ Puppet::Type.newtype(:neutron_plugin_opencontrail) do
     ['/etc/neutron/plugins/opencontrail']
   end
 
-  autorequire(:package) do
-    'neutron-plugin-opencontrail'
+  autorequire(:anchor) do
+    ['neutron::install::end']
   end
 
 end

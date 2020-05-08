@@ -65,7 +65,7 @@ describe 'neutron::services::fwaas' do
     it 'installs neutron fwaas package' do
       should contain_package('neutron-fwaas').with(
         :ensure => 'present',
-        :tag    => ['neutron-package', 'openstack'],
+        :tag    => ['openstack', 'neutron-package'],
         :name   => platform_params[:fwaas_package_name],
       )
     end
@@ -76,7 +76,7 @@ describe 'neutron::services::fwaas' do
       it 'installs neutron fwaas package' do
         should contain_package('neutron-fwaas').with(
           :ensure => 'present',
-          :tag    => ['neutron-package', 'openstack'],
+          :tag    => ['openstack', 'neutron-package'],
           :name   => platform_params[:fwaas_package_name],
         )
       end
@@ -91,7 +91,7 @@ describe 'neutron::services::fwaas' do
         should contain_package('neutron-vpn-agent').with(
           :ensure => 'present',
           :name   => platform_params[:vpnaas_package_name],
-          :tag    => ['neutron-package', 'openstack'],
+          :tag    => ['openstack', 'neutron-package'],
         )
       end
     end

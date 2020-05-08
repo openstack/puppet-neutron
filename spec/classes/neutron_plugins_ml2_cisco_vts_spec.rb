@@ -37,7 +37,7 @@ describe 'neutron::plugins::ml2::cisco::vts' do
     it 'should have' do
       should contain_package('python-cisco-controller').with(
           :ensure => params[:package_ensure],
-          :tag    => 'openstack'
+          :tag    => ['openstack', 'neutron-plugin-ml2-package']
       )
     end
 

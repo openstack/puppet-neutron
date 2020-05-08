@@ -59,7 +59,7 @@ class neutron::plugins::ml2::cisco::vts (
   ensure_resource('package', 'python-cisco-controller',
     {
       ensure => $package_ensure,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-plugin-ml2-package']
     }
   )
 

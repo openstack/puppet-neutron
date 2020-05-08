@@ -25,7 +25,7 @@ class neutron::plugins::ml2::bigswitch (
   ensure_packages('python-networking-bigswitch',
     {
       ensure => $package_ensure,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-plugin-ml2-package']
     }
   )
   warning('python-networking-bigswitch package management is deprecated, it will be dropped in a future release.')

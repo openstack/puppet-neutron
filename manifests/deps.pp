@@ -82,6 +82,13 @@ class neutron::deps {
   -> Package<| tag == 'neutron-support-package'|>
   -> Anchor['neutron::install::end']
 
+  # ml2 plugin packages should be install after we start actual configuration,
+  # because the configuraiton for ml2 plugin base should be applied before
+  # ml2 plugin packages are installed
+  Anchor['neutron::install::begin']
+  -> Package<| tag == 'neutron-plugin-ml2-package'|>
+  ~> Anchor['neutron::config::end']
+
   Anchor['neutron::service::end'] -> Neutron_l3_ovs_bridge<||>
   Anchor['neutron::service::end'] -> Neutron_network<||>
   Anchor['neutron::service::end'] -> Neutron_port<||>

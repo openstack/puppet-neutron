@@ -52,7 +52,7 @@ class neutron::plugins::ml2::bagpipe (
     package { 'python-networking-bagpipe':
       ensure => $package_ensure,
       name   => $::neutron::params::bgpvpn_bagpipe_package,
-      tag    => 'openstack',
+      tag    => ['openstack', 'neutron-plugin-ml2-package']
     }
   }
 }

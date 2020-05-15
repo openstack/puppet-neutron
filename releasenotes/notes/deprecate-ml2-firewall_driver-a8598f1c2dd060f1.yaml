@@ -1,0 +1,11 @@
+---
+deprecations:
+  - |
+    Usage of config option ``firewall_driver`` in the ``neutron::plugins::ml2``
+    class is now deprecated and has no effect on the deployment.
+    Config option ``firewall_driver`` should be set in the classes for agents'
+    configuration like ``neutron::agents::ml2::ovs`` instead.
+    Usage of this option in the Neutron server was there just for backward
+    compatibility with old agents which can't report what driver they are using.
+    Since Newton all Neutron drivers are reporting that in heartbeat messages and
+    there is no need to keep configure this in the neutron server's side.

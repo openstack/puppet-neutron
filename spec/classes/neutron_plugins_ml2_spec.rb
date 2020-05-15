@@ -73,7 +73,6 @@ describe 'neutron::plugins::ml2' do
       should contain_neutron_plugin_ml2('ml2/path_mtu').with_value(p[:path_mtu])
       should contain_neutron_plugin_ml2('ml2/physical_network_mtus').with_ensure('absent')
       should contain_neutron_plugin_ml2('ml2/overlay_ip_version').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('<SERVICE DEFAULT>')
       should contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('<SERVICE DEFAULT>')
     end
 
@@ -100,12 +99,10 @@ describe 'neutron::plugins::ml2' do
       before :each do
         params.merge!(
           :enable_security_group => true,
-          :firewall_driver       => 'iptables_hybrid',
         )
       end
       it 'configures enable_security_group and firewall_driver options' do
         should contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('true')
-        should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value('iptables_hybrid')
       end
     end
 

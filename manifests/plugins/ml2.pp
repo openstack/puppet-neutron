@@ -93,10 +93,6 @@
 #   It should be false when you use nova security group.
 #   Defaults to $::os_service_default.
 #
-# [*firewall_driver*]
-#   (optional) Firewall driver for realizing neutron security group function.
-#   Defaults to $::os_service_default
-#
 # [*package_ensure*]
 #   (optional) Ensure state for package.
 #   Defaults to 'present'.
@@ -127,6 +123,12 @@
 #   are 4 and 6.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*firewall_driver*]
+#   (optional) Firewall driver for realizing neutron security group function.
+#   Defaults to undef
+#
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
   $extension_drivers         = $::os_service_default,
@@ -138,24 +140,27 @@ class neutron::plugins::ml2 (
   $vxlan_group               = '224.0.0.1',
   $vni_ranges                = '10:100',
   $enable_security_group     = $::os_service_default,
-  $firewall_driver           = $::os_service_default,
   $package_ensure            = 'present',
   $physical_network_mtus     = $::os_service_default,
   $path_mtu                  = 0,
   $purge_config              = false,
   $max_header_size           = $::os_service_default,
   $overlay_ip_version        = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $firewall_driver           = undef,
 ) {
 
   include neutron::deps
   include neutron::params
 
-  if ! $mechanism_drivers {
-    warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')
+  if $firewall_driver != undef {
+    warning('Using "firewall_driver" option in the ml2 plugin is deprecated \
+and have no any effect. This option should be set in the L2 agent. \
+It will be removed in the future releases.')
   }
 
-  if !is_service_default($enable_security_group) and $enable_security_group and is_service_default($firewall_driver) {
-    warning('Security groups will not work without properly set firewall_driver')
+  if ! $mechanism_drivers {
+    warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')
   }
 
   # lint:ignore:only_variable_string
@@ -218,7 +223,6 @@ class neutron::plugins::ml2 (
     'ml2/extension_drivers':                value => join(any2array($extension_drivers), ',');
     'ml2/overlay_ip_version':               value => $overlay_ip_version;
     'securitygroup/enable_security_group':  value => $enable_security_group;
-    'securitygroup/firewall_driver':        value => $firewall_driver;
   }
 
   if is_service_default($physical_network_mtus) {

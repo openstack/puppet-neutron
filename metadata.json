@@ -10,10 +10,6 @@
             "version_requirement": ">=8.4.0 <11.0.0"
         },
         {
-            "name": "puppetlabs/mysql",
-            "version_requirement": ">=6.0.0 <11.0.0"
-        },
-        {
             "name": "openstack/keystone",
             "version_requirement": ">=16.3.0 <17.0.0"
         },

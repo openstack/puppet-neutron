@@ -35,11 +35,11 @@ class neutron::db::postgresql(
   include neutron::deps
 
   ::openstacklib::db::postgresql { 'neutron':
-    password_hash => postgresql_password($user, $password),
-    dbname        => $dbname,
-    user          => $user,
-    encoding      => $encoding,
-    privileges    => $privileges,
+    password   => $password,
+    dbname     => $dbname,
+    user       => $user,
+    encoding   => $encoding,
+    privileges => $privileges,
   }
 
   Anchor['neutron::db::begin']

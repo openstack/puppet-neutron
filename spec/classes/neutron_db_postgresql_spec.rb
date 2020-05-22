@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'neutron::db::postgresql' do
   shared_examples 'neutron::db::postgresql' do
     let :req_params do
-      { :password => 'pw' }
+      { :password => 'neutronpass' }
     end
 
     let :pre_condition do
@@ -15,9 +15,12 @@ describe 'neutron::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('neutron').with(
-        :user     => 'neutron',
-        :password => 'md5696acd1dd66513a556a18a1beccd03d1'
+      it { is_expected.to contain_openstacklib__db__postgresql('neutron').with(
+        :user       => 'neutron',
+        :password   => 'neutronpass',
+        :dbname     => 'neutron',
+        :encoding   => nil,
+        :privileges => 'ALL',
       )}
     end
 

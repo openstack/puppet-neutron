@@ -10,10 +10,6 @@
             "version_requirement": ">=17.0.0 <18.0.0"
         },
         {
-            "name": "openstack/nova",
-            "version_requirement": ">=17.0.0 <18.0.0"
-        },
-        {
             "name": "puppetlabs/stdlib",
             "version_requirement": ">=5.0.0 <7.0.0"
         },

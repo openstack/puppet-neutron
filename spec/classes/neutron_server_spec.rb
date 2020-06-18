@@ -69,7 +69,7 @@ describe 'neutron::server' do
         :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
         :max_request_body_size        => '<SERVICE DEFAULT>',
       )
-      should contain_neutron_config('DEFAULT/ovs_integration_bridge').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('ovs/integration_bridge').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
     end
 
@@ -259,7 +259,7 @@ describe 'neutron::server' do
         params.merge!({:ovs_integration_bridge => 'br-int' })
       end
 
-      it { should contain_neutron_config('DEFAULT/ovs_integration_bridge').with_value('br-int') }
+      it { should contain_neutron_config('ovs/integration_bridge').with_value('br-int') }
     end
 
     context 'with IGMP snooping enabled' do

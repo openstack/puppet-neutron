@@ -91,6 +91,10 @@
 #   will be passed.
 #   Defaults to $::os_service_default
 #
+# [*ovs_integration_bridge*]
+#   (optional) Name of Open vSwitch bridge to use
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*gateway_external_network_id*]
@@ -117,6 +121,7 @@ class neutron::agents::l3 (
   $availability_zone                = $::os_service_default,
   $extensions                       = $::os_service_default,
   $radvd_user                       = $::os_service_default,
+  $ovs_integration_bridge           = $::os_service_default,
   # DEPRECATED PARAMETERS
   $gateway_external_network_id      = undef,
 ) {
@@ -145,17 +150,18 @@ class neutron::agents::l3 (
   }
 
   neutron_l3_agent_config {
-    'DEFAULT/debug':                            value => $debug;
-    'DEFAULT/interface_driver':                 value => $interface_driver;
-    'DEFAULT/handle_internal_only_routers':     value => $handle_internal_only_routers;
-    'DEFAULT/metadata_port':                    value => $metadata_port;
-    'DEFAULT/periodic_interval':                value => $periodic_interval;
-    'DEFAULT/periodic_fuzzy_delay':             value => $periodic_fuzzy_delay;
-    'DEFAULT/enable_metadata_proxy':            value => $enable_metadata_proxy;
-    'DEFAULT/agent_mode':                       value => $agent_mode;
-    'DEFAULT/radvd_user':                       value => $radvd_user;
-    'agent/availability_zone':                  value => $availability_zone;
-    'agent/extensions':                         value => $extensions;
+    'DEFAULT/debug':                        value => $debug;
+    'DEFAULT/interface_driver':             value => $interface_driver;
+    'DEFAULT/handle_internal_only_routers': value => $handle_internal_only_routers;
+    'DEFAULT/metadata_port':                value => $metadata_port;
+    'DEFAULT/periodic_interval':            value => $periodic_interval;
+    'DEFAULT/periodic_fuzzy_delay':         value => $periodic_fuzzy_delay;
+    'DEFAULT/enable_metadata_proxy':        value => $enable_metadata_proxy;
+    'DEFAULT/agent_mode':                   value => $agent_mode;
+    'DEFAULT/radvd_user':                   value => $radvd_user;
+    'ovs/integration_bridge':               value => $ovs_integration_bridge;
+    'agent/availability_zone':              value => $availability_zone;
+    'agent/extensions':                     value => $extensions;
   }
 
   if $::neutron::params::l3_agent_package {

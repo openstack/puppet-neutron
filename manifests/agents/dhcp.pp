@@ -163,8 +163,13 @@ class neutron::agents::dhcp (
     'DEFAULT/dnsmasq_dns_servers':       value => join(any2array($dnsmasq_dns_servers), ',');
     'DEFAULT/dnsmasq_local_resolv':      value => $dnsmasq_local_resolv;
     'DEFAULT/dnsmasq_enable_addr6_list': value => $dnsmasq_enable_addr6_list;
-    'DEFAULT/ovs_integration_bridge':    value => $ovs_integration_bridge;
     'agent/availability_zone':           value => $availability_zone;
+  }
+
+  # DEFAULT/ovs_intergation_bridge was deprecated in favor of
+  # ovs/intergation_bridge. Make sure to purge the old parameter
+  neutron_dhcp_agent_config {
+    'DEFAULT/ovs_integration_bridge': ensure => 'absent'
   }
 
   if $ovsdb_connection =~ /^ssl:/ {
@@ -183,10 +188,11 @@ class neutron::agents::dhcp (
   }
 
   neutron_dhcp_agent_config {
-    'OVS/ovsdb_connection': value => $ovsdb_connection;
-    'OVS/ssl_key_file':     value => $ovsdb_agent_ssl_key_file;
-    'OVS/ssl_cert_file':    value => $ovsdb_agent_ssl_cert_file;
-    'OVS/ssl_ca_cert_file': value => $ovsdb_agent_ssl_ca_file;
+    'OVS/ovsdb_connection':   value => $ovsdb_connection;
+    'OVS/integration_bridge': value => $ovs_integration_bridge;
+    'OVS/ssl_key_file':       value => $ovsdb_agent_ssl_key_file;
+    'OVS/ssl_cert_file':      value => $ovsdb_agent_ssl_cert_file;
+    'OVS/ssl_ca_cert_file':   value => $ovsdb_agent_ssl_ca_file;
   }
 
   if $::neutron::params::dhcp_agent_package {

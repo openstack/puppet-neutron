@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new ``neutron::agent::l3::ovs_integration_bridge`` parameter was added
+    so that operators can set customized integration bridge name in l3 agent
+    configuration.

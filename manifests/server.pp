@@ -404,9 +404,15 @@ class neutron::server (
     'DEFAULT/dhcp_load_type':                   value => $dhcp_load_type;
     'DEFAULT/default_availability_zones':       value => join(any2array($default_availability_zones), ',');
     'DEFAULT/network_auto_schedule':            value => $network_auto_schedule;
-    'DEFAULT/ovs_integration_bridge':           value => $ovs_integration_bridge;
+    'ovs/integration_bridge':                   value => $ovs_integration_bridge;
     'service_providers/service_provider':       value => $service_providers;
     'ovs/igmp_snooping_enable':                 value => $igmp_snooping_enable;
+  }
+
+  # DEFAULT/ovs_intergation_bridge was deprecated in favor of
+  # ovs/intergation_bridge. Make sure to purge the old parameter
+  neutron_config {
+    'DEFAULT/ovs_integration_bridge': ensure => 'absent'
   }
 
   if $server_package {

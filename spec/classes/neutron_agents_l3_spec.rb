@@ -38,6 +38,7 @@ describe 'neutron::agents::l3' do
       should contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/radvd_user').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('ovs/integration_bridge').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('agent/availability_zone').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('agent/extensions').with_value('<SERVICE DEFAULT>')
     end
@@ -107,6 +108,15 @@ describe 'neutron::agents::l3' do
         should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_value(p[:ha_vrrp_auth_type])
         should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_value(p[:ha_vrrp_auth_password])
         should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value(p[:ha_vrrp_advert_int])
+      end
+    end
+
+    context 'with ovs_integration_bridge' do
+      before :each do
+        params.merge!(:ovs_integration_bridge => 'br-int')
+      end
+      it 'should configure ovs_integration_bridge' do
+        should contain_neutron_l3_agent_config('ovs/integration_bridge').with_value(p[:ovs_integration_bridge])
       end
     end
 

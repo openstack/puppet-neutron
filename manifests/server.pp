@@ -173,11 +173,6 @@
 #   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
 #   Defaults to false.
 #
-# [*ensure_fwaas_package*]
-#   (Optional) Ensures installation of FWaaS package before starting API service.
-#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
-#   Defaults to false.
-#
 # [*ensure_dr_package*]
 #   (Optional) Ensures installation of Neutron Dynamic Routing package before starting API service.
 #   Set to true to ensure installation of the package that is required to start neutron service if bgp service_plugin is enabled.
@@ -191,7 +186,6 @@
 #
 # [*service_providers*]
 #   (Optional) (Array) Configures the service providers for neutron server.
-#   This needs to be set for vpnaas, fwaas etc.
 #   Defaults to $::os_service_default
 #
 #   Example:
@@ -261,6 +255,11 @@
 #   (Optional) If set, use this value for max_overflow with sqlalchemy.
 #   Defaults to: undef.
 #
+# [*ensure_fwaas_package*]
+#   (Optional) Ensures installation of FWaaS package before starting API service.
+#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
+#   Defaults to undef.
+#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -291,7 +290,6 @@ class neutron::server (
   $l3_ha_net_cidr                   = $::os_service_default,
   $network_auto_schedule            = $::os_service_default,
   $ensure_vpnaas_package            = false,
-  $ensure_fwaas_package             = false,
   $ensure_dr_package                = false,
   $vpnaas_agent_package             = false,
   $service_providers                = $::os_service_default,
@@ -308,6 +306,7 @@ class neutron::server (
   $database_retry_interval          = undef,
   $database_max_pool_size           = undef,
   $database_max_overflow            = undef,
+  $ensure_fwaas_package             = undef,
 ) inherits ::neutron::params {
 
   include neutron::deps
@@ -330,6 +329,8 @@ class neutron::server (
   }
 
   if $ensure_fwaas_package {
+    warning('neutron::server::ensure_fwaas_package is deprecated and will be removed in a future release')
+
     if ($::osfamily == 'Debian') {
       # Debian platforms
       if $vpnaas_agent_package {

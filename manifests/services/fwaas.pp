@@ -16,6 +16,8 @@
 # under the License.
 #
 #
+# DEPRECATED!!!
+#
 # == Class: neutron::services::fwaas
 #
 # Configure the Firewall as a Service Neutron Plugin
@@ -56,6 +58,8 @@ class neutron::services::fwaas (
 
   include neutron::deps
   include neutron::params
+
+  warning('neutron::services:fwaas is deprecated and will be removed in a future release.')
 
   if ($::osfamily == 'Debian') {
     # Debian platforms

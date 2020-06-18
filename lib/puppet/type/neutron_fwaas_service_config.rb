@@ -1,3 +1,4 @@
+# DEPRECATED!
 Puppet::Type.newtype(:neutron_fwaas_service_config) do
 
   ensurable

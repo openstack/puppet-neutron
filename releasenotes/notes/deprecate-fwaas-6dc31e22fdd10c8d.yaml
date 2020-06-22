@@ -1,0 +1,11 @@
+---
+deprecations:
+  - |
+    The neutron::server::ensure_fwaas_package is deprecated and will be removed
+    in a future release.
+  - |
+    The neutron::services::fwaas class is deprecated and will be removed in
+    a future release.
+  - |
+    The neutron_fwaas_service_config resource is deprecated and will be removed
+    in a future release.

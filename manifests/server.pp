@@ -227,34 +227,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*database_min_pool_size*]
-#   (Optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to: undef.
-#
-# [*database_connection*]
-#   (Optional) Connection url for the neutron database.
-#   (Defaults to undef)
-#
-# [*database_max_retries*]
-#   (Optional) Maximum database connection retries during startup.
-#   (Defaults to undef)
-#
-# [*database_idle_timeout*]
-#   (Optional) Timeout before idle database connections are reaped.
-#   (Defaults to undef)
-#
-# [*database_retry_interval*]
-#   (Optional) Interval between retries of opening a database connection.
-#   (Defaults to 10)
-#
-# [*database_max_pool_size*]
-#   (Optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to: undef.
-#
-# [*database_max_overflow*]
-#   (Optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to: undef.
-#
 # [*ensure_fwaas_package*]
 #   (Optional) Ensures installation of FWaaS package before starting API service.
 #   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
@@ -299,13 +271,6 @@ class neutron::server (
   $ovs_integration_bridge           = $::os_service_default,
   $igmp_snooping_enable             = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $database_min_pool_size           = undef,
-  $database_connection              = undef,
-  $database_max_retries             = undef,
-  $database_idle_timeout            = undef,
-  $database_retry_interval          = undef,
-  $database_max_pool_size           = undef,
-  $database_max_overflow            = undef,
   $ensure_fwaas_package             = undef,
 ) inherits ::neutron::params {
 

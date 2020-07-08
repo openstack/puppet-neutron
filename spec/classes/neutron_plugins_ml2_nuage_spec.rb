@@ -56,15 +56,6 @@ describe 'neutron::plugins::ml2::nuage' do
       should contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(params[:nuage_default_allow_non_ip])
     end
 
-    context 'configure ml2 nuage with wrong core_plugin configuration' do
-      let :pre_condition do
-        "class { 'neutron':
-          core_plugin     => 'foo' }"
-      end
-
-      it { should raise_error(Puppet::Error, /Nuage should be the mechanism driver in neutron.conf/) }
-    end
-
     it 'should have a nuage plugin conf file' do
       should contain_file(platform_params[:nuage_conf_file]).with(
         :ensure => platform_params[:nuage_file_ensure],
@@ -79,15 +70,6 @@ describe 'neutron::plugins::ml2::nuage' do
       it 'default_allow_non_ip is set to true' do
         should contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(true)
       end
-    end
-
-    context 'configure ml2 nuage with wrong mechanism_driver configuration' do
-      let :pre_condition do
-        "class { 'neutron::plugins::ml2':
-          mechanism_drivers => ['bar'] }"
-      end
-
-      it { should raise_error(Puppet::Error, /Nuage should be the mechanism driver in neutron.conf/) }
     end
   end
 

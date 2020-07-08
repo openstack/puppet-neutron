@@ -106,8 +106,4 @@ class neutron::plugins::ml2::nuage (
     'RESTPROXY/cms_id':                     value => $nuage_cms_id;
     'PLUGIN/default_allow_non_ip':          value => $nuage_default_allow_non_ip;
   }
-
-  if $::neutron::core_plugin != 'ml2' or !('nuage' in $::neutron::plugins::ml2::mechanism_drivers) {
-    fail('Nuage should be the mechanism driver in neutron.conf')
-  }
 }

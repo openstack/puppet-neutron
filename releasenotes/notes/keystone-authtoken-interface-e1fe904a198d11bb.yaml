@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new ``neutron::keystone::authtoken::interface`` parameter has been
+    added, which can be used to set the interface parameter in authtoken
+    middleware.

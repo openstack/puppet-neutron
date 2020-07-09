@@ -60,7 +60,7 @@ class neutron::plugins::ml2::arista::l3(
 ) {
 
   include neutron::deps
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   warning('Support for Arista plugin is deprecated and will be removed \
 in a future release')

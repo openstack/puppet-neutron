@@ -266,7 +266,7 @@ class neutron::plugins::ovs::opendaylight (
       }
       |-END
   } elsif $enable_hw_offload {
-    require ::vswitch::ovs
+    require vswitch::ovs
     $host_config = @("END":json/L)
       {\
         "supported_vnic_types": [{\

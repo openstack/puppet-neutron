@@ -41,7 +41,7 @@ class neutron::plugins::ml2::bagpipe (
 
   include neutron::deps
   include neutron::params
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   neutron_plugin_ml2 {
     'bagpipe/bagpipe_bgp_port':       value => $bagpipe_bgp_port;

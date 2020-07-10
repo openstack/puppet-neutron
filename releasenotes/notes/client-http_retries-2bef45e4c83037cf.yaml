@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::server::notifications::http_retries`` parameter has been
+    added to set number of client retries.

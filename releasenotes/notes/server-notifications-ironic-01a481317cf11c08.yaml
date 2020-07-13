@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::server::notifications::ironic`` class has been added
+    to support configuration parameters to enable notifications to ironic.

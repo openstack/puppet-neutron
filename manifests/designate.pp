@@ -53,16 +53,6 @@
 # [*ptr_zone_email*]
 #   (optional) The email address to be used when creating PTR zones.
 #
-# DEPRECATED PARAMETERS
-#
-# [*project_domain_id*]
-#   (optional) Nova project's domain ID
-#   Defaults to undef
-#
-# [*user_domain_id*]
-#   (optional) User's domain ID for connection to designate in admin context
-#   Defaults to undef
-#
 class neutron::designate (
   $password,
   $url,
@@ -77,9 +67,6 @@ class neutron::designate (
   $ipv4_ptr_zone_prefix_size = $::os_service_default,
   $ipv6_ptr_zone_prefix_size = $::os_service_default,
   $ptr_zone_email            = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $project_domain_id         = undef,
-  $user_domain_id            = undef,
 ) {
   include neutron::deps
   include neutron::params
@@ -99,21 +86,5 @@ class neutron::designate (
     'designate/ipv4_ptr_zone_prefix_size': value => $ipv4_ptr_zone_prefix_size;
     'designate/ipv6_ptr_zone_prefix_size': value => $ipv6_ptr_zone_prefix_size;
     'designate/ptr_zone_email':            value => $ptr_zone_email;
-  }
-
-  if $project_domain_id != undef {
-    warning('project_domain_id is deprecated and will be removed in a future release. \
-Use project_domain_name instead')
-    neutron_config {
-      'designate/project_domain_id': value => $project_domain_id;
-    }
-  }
-
-  if $user_domain_id != undef {
-    warning('user_domain_id is deprecated and will be removed in a future release. \
-Use user_domain_name instead')
-    neutron_config {
-      'designate/user_domain_id': value => $user_domain_id;
-    }
   }
 }

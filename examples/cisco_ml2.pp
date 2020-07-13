@@ -17,14 +17,14 @@ class { 'neutron::plugins::ml2':
   mechanism_drivers    => ['openvswitch', 'cisco_ucsm', 'cisco_nexus'],
 }
 
-class {'::neutron::plugins::ml2::cisco::ucsm':
+class {'neutron::plugins::ml2::cisco::ucsm':
   ucsm_ip        => '127.0.0.1',
   ucsm_username  => 'admin',
   ucsm_password  => 'password',
   ucsm_host_list => 'host1:profile1, host2:profile2',
 }
 
-class {'::neutron::plugins::ml2::cisco::nexus':
+class {'neutron::plugins::ml2::cisco::nexus':
   managed_physical_network => 'physnet',
   nexus_config             => {
     'n9372-1' => {
@@ -60,7 +60,7 @@ class {'::neutron::plugins::ml2::cisco::nexus':
   },
 }
 
-class {'::neutron::plugins::ml2::cisco::type_nexus_vxlan':
+class {'neutron::plugins::ml2::cisco::type_nexus_vxlan':
   vni_ranges   => '20000:22000',
   mcast_ranges => '224.0.0.1:224.0.0.4',
 }

@@ -254,9 +254,9 @@ class neutron::agents::ml2::ovs (
 
   if $manage_vswitch {
     if $enable_dpdk {
-      require ::vswitch::dpdk
+      require vswitch::dpdk
     } else {
-      require ::vswitch::ovs
+      require vswitch::ovs
     }
   }
 

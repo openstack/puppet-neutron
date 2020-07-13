@@ -42,7 +42,7 @@ define neutron::plugins::ml2::networking_ansible_host(
   $manage_vlans                 = undef,
   ) {
   include neutron::deps
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   if (($ansible_ssh_pass == undef and $ansible_ssh_private_key_file == undef) or
       ($ansible_ssh_pass != undef and $ansible_ssh_private_key_file != undef)) {

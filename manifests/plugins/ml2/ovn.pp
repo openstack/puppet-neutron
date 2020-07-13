@@ -124,7 +124,7 @@ class neutron::plugins::ml2::ovn(
   ) {
 
   include neutron::deps
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   if ! is_service_default($ovn_l3_mode) {
     validate_legacy(Boolean, 'validate_bool', $ovn_l3_mode)

@@ -58,7 +58,7 @@ class neutron::plugins::ml2::fujitsu::fossw (
   $ovsdb_port             = 6640,
 )
 {
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   warning('FUJITSU plugin support is deprecated and will be removed in a future release')
 

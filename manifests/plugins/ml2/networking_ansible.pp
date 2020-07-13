@@ -38,7 +38,7 @@ class neutron::plugins::ml2::networking_ansible(
   ) {
   include neutron::deps
   include neutron::params
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   if($::osfamily != 'RedHat') {
     # Drivers are only packaged for RedHat at this time

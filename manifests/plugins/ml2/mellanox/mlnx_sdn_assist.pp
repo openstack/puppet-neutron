@@ -52,7 +52,7 @@ class neutron::plugins::ml2::mellanox::mlnx_sdn_assist (
 ) {
 
   include neutron::deps
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   neutron_plugin_ml2 {
     'sdn/username': value => $sdn_username;

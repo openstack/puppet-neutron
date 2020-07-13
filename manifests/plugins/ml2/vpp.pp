@@ -27,7 +27,7 @@ class neutron::plugins::ml2::vpp (
   $etcd_pass = $::os_service_default,
 ) {
   include neutron::deps
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   neutron_plugin_ml2 {
     'ml2_vpp/etcd_host': value => $etcd_host;

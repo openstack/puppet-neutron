@@ -101,7 +101,7 @@ class neutron::plugins::ml2::bigswitch::restproxy (
 ) {
 
   include neutron::deps
-  require ::neutron::plugins::ml2::bigswitch
+  require neutron::plugins::ml2::bigswitch
 
   neutron_plugin_ml2 {
     'restproxy/servers'               : value => $servers;

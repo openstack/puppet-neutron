@@ -54,7 +54,7 @@ class neutron::plugins::ml2::cisco::vts (
 ) {
 
   include neutron::deps
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   ensure_resource('package', 'python-cisco-controller',
     {

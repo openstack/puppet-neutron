@@ -15,7 +15,7 @@ class neutron::plugins::ml2::bigswitch (
 
   include neutron::deps
   include neutron::params
-  require ::neutron::plugins::ml2
+  require neutron::plugins::ml2
 
   if($::osfamily != 'Redhat') {
     # Drivers are only packaged for RedHat at this time

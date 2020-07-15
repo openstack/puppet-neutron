@@ -29,9 +29,7 @@ describe 'neutron::designate' do
           :username                  => 'user',
           :project_id                => 'id1',
           :project_name              => 'proj',
-          :project_domain_id         => 'domain1',
           :project_domain_name       => 'Domain1',
-          :user_domain_id            => 'domain2',
           :user_domain_name          => 'Domain2',
           :auth_url                  => 'http://auth/',
           :allow_reverse_dns_lookup  => false,
@@ -49,9 +47,7 @@ describe 'neutron::designate' do
         should contain_neutron_config('designate/auth_type').with_value('token')
         should contain_neutron_config('designate/project_id').with_value('id1')
         should contain_neutron_config('designate/project_name').with_value('proj')
-        should contain_neutron_config('designate/project_domain_id').with_value('domain1')
         should contain_neutron_config('designate/project_domain_name').with_value('Domain1')
-        should contain_neutron_config('designate/user_domain_id').with_value('domain2')
         should contain_neutron_config('designate/user_domain_name').with_value('Domain2')
         should contain_neutron_config('designate/auth_url').with_value('http://auth/')
         should contain_neutron_config('designate/allow_reverse_dns_lookup').with_value(false)

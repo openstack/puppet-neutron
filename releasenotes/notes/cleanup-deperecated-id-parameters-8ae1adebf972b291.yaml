@@ -1,0 +1,11 @@
+---
+upgrade:
+  - |
+    The following deprecated parameters has been removed
+
+    - ``neutron::server::notifications::project_domain_id``
+    - ``neutron::server::notifications::user_domain_id``
+    - ``neutron::server::notifications::tenant_id``
+    - ``neutron::server::notifications::tenant_name``
+    - ``neutron::designate::project_domain_id``
+    - ``neutron::designate::user_domain_id``

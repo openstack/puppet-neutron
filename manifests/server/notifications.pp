@@ -70,6 +70,10 @@
 #   the keystone catalog.
 #   Defaults to $::os_service_default
 #
+# [*http_retries*]
+#   (optional) Number of novaclient/ironicclient retries on failed http calls.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*tenant_id*]
@@ -102,6 +106,7 @@ class neutron::server::notifications (
   $auth_url                           = 'http://127.0.0.1:5000',
   $region_name                        = $::os_service_default,
   $endpoint_type                      = $::os_service_default,
+  $http_retries                       = $::os_service_default,
   # DEPRECATED PARAMETERS
   $tenant_id                          = undef,
   $tenant_name                        = undef,
@@ -153,5 +158,6 @@ Use user_domain_name instead')
     'DEFAULT/notify_nova_on_port_status_changes': value => $notify_nova_on_port_status_changes;
     'DEFAULT/notify_nova_on_port_data_changes':   value => $notify_nova_on_port_data_changes;
     'DEFAULT/send_events_interval':               value => $send_events_interval;
+    'DEFAULT/http_retries':                       value => $http_retries;
   }
 }

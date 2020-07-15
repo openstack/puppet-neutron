@@ -46,6 +46,7 @@ describe 'neutron::server::notifications' do
       should_not contain_neutron_config('nova/user_domain_id')
       should contain_neutron_config('nova/user_domain_name').with_value('Default')
       should contain_neutron_config('nova/endpoint_type').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('DEFAULT/http_retries').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -62,7 +63,8 @@ describe 'neutron::server::notifications' do
           :project_domain_name                => 'Default_2',
           :user_domain_id                     => 'default_3',
           :user_domain_name                   => 'Default_4',
-          :endpoint_type                      => 'internal'
+          :endpoint_type                      => 'internal',
+          :http_retries                       => 3,
         )
       end
 
@@ -81,6 +83,7 @@ describe 'neutron::server::notifications' do
         should contain_neutron_config('nova/user_domain_id').with_value('default_3')
         should contain_neutron_config('nova/user_domain_name').with_value('Default_4')
         should contain_neutron_config('nova/endpoint_type').with_value('internal')
+        should contain_neutron_config('DEFAULT/http_retries').with_value(3)
       end
     end
 

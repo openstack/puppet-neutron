@@ -1,0 +1,22 @@
+---
+features:
+  - |
+    The new ``server::notifications::nova`` class has been added to configure
+    parameters for notifications to nova.
+deprecations:
+  - |
+    The following parameters in ``server::notifications`` class has been
+    deprecated and will be removed in a future release. Use the corresponding
+    parameters in ``server::notifications::nova`` class.
+
+    - ``password``
+    - ``auth_type``
+    - ``username``
+    - ``project_name``
+    - ``user_domain_name``
+    - ``project_domain_name``
+    - ``auth_url``
+    - ``region_name``
+    - ``endpoint_type``
+    - ``notify_nova_on_port_status_changes``
+    - ``notify_nova_on_port_data_changes``

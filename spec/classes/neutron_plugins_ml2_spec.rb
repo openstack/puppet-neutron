@@ -101,7 +101,7 @@ describe 'neutron::plugins::ml2' do
           :enable_security_group => true,
         )
       end
-      it 'configures enable_security_group and firewall_driver options' do
+      it 'configures enable_security_group' do
         should contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('true')
       end
     end

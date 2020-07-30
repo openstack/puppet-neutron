@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated neutron::plugins::ml2::firewall_driver parameter is removed.
+    Please set the firewall_driver in the ML2 agent classes in neutron::agents::ml2 instead.

@@ -123,12 +123,6 @@
 #   are 4 and 6.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*firewall_driver*]
-#   (optional) Firewall driver for realizing neutron security group function.
-#   Defaults to undef
-#
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
   $extension_drivers         = $::os_service_default,
@@ -146,18 +140,10 @@ class neutron::plugins::ml2 (
   $purge_config              = false,
   $max_header_size           = $::os_service_default,
   $overlay_ip_version        = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $firewall_driver           = undef,
 ) {
 
   include neutron::deps
   include neutron::params
-
-  if $firewall_driver != undef {
-    warning('Using "firewall_driver" option in the ml2 plugin is deprecated \
-and have no any effect. This option should be set in the L2 agent. \
-It will be removed in the future releases.')
-  }
 
   if ! $mechanism_drivers {
     warning('Without networking mechanism driver, ml2 will not communicate with L2 agents')

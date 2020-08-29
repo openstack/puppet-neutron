@@ -33,6 +33,11 @@
 #   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
 #   Defaults to $::os_service_default
 #
+# [*mysql_enable_ndb*]
+#   (Optional) If True, transparently enables support for handling MySQL
+#   Cluster (NDB).
+#   Defaults to $::os_service_default
+#
 # [*database_db_max_retries*]
 #   (Optional) Maximum retries in case of connection error or deadlock error
 #   before error is raised. Set to -1 to specify an infinite retry count.
@@ -46,6 +51,7 @@ class neutron::db (
   $database_retry_interval          = $::os_service_default,
   $database_max_overflow            = $::os_service_default,
   $database_pool_timeout            = $::os_service_default,
+  $mysql_enable_ndb                 = $::os_service_default,
   $database_db_max_retries          = $::os_service_default,
 ) {
 
@@ -64,6 +70,7 @@ class neutron::db (
       max_pool_size           => $database_max_pool_size,
       max_overflow            => $database_max_overflow,
       pool_timeout            => $database_pool_timeout,
+      mysql_enable_ndb        => $mysql_enable_ndb,
       db_max_retries          => $database_db_max_retries,
     }
 

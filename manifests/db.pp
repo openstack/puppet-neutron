@@ -57,11 +57,7 @@ class neutron::db (
 
   include neutron::deps
 
-  validate_legacy(Oslo::Dbconn, 'validate_re', $database_connection,
-    ['^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?'])
-
   if $database_connection {
-
     oslo::db { 'neutron_config':
       connection              => $database_connection,
       connection_recycle_time => $database_connection_recycle_time,

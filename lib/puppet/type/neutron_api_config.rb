@@ -3,7 +3,7 @@ Puppet::Type.newtype(:neutron_api_config) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from api-paste.ini'
+    desc 'Section/setting name to manage from api-paste.ini (DEPRECATED!)'
     newvalues(/\S+\/\S+/)
   end
 

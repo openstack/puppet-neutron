@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The ``neutron_api_config`` type has been deprecated.
+    Use the ``neutron_api_paste_ini`` type instead.
+  - |
+    The ``neutron::config::api_config`` parameter has been deprecated and will
+    be removed in a future release. Use the ``neutron::config::api_paste_ini``
+    parameter instead.

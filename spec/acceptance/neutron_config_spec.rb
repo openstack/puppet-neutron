@@ -31,7 +31,7 @@ describe 'basic neutron_config resource' do
   Exec { logoutput => 'on_failure' }
 
   File <||> -> Neutron_config <||>
-  File <||> -> Neutron_api_config <||>
+  File <||> -> Neutron_api_paste_ini <||>
   File <||> -> Neutron_dhcp_agent_config <||>
   File <||> -> Neutron_fwaas_service_config <||>
   File <||> -> Neutron_l3_agent_config <||>
@@ -102,20 +102,20 @@ describe 'basic neutron_config resource' do
   file { $neutron_files :
     ensure => file,
   }
-  neutron_api_config { 'DEFAULT/thisshouldexist' :
+  neutron_api_paste_ini { 'DEFAULT/thisshouldexist' :
     value => 'foo',
   }
 
-  neutron_api_config { 'DEFAULT/thisshouldnotexist' :
+  neutron_api_paste_ini { 'DEFAULT/thisshouldnotexist' :
     value => '<SERVICE DEFAULT>',
   }
 
-  neutron_api_config { 'DEFAULT/thisshouldexist2' :
+  neutron_api_paste_ini { 'DEFAULT/thisshouldexist2' :
     value             => '<SERVICE DEFAULT>',
     ensure_absent_val => 'toto',
   }
 
-  neutron_api_config { 'DEFAULT/thisshouldnotexist2' :
+  neutron_api_paste_ini { 'DEFAULT/thisshouldnotexist2' :
     value             => 'toto',
     ensure_absent_val => 'toto',
   }
@@ -589,7 +589,7 @@ describe 'basic neutron_config resource' do
 
   EOS
 
-  resource_names = ['neutron_api_config',
+  resource_names = ['neutron_api_paste_ini',
                     'neutron_config',
                     'neutron_dhcp_agent_config',
                     'neutron_fwaas_service_config',

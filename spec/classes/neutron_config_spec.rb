@@ -22,15 +22,15 @@ describe 'neutron::config' do
     end
   end
 
-  shared_examples 'neutron_api_config' do
+  shared_examples 'neutron_api_paste_ini' do
     let :params do
-      { :api_config => config_hash }
+      { :api_paste_ini => config_hash }
     end
 
     it 'configures arbitrary neutron-api-config configurations' do
-      should contain_neutron_api_config('DEFAULT/foo').with_value('fooValue')
-      should contain_neutron_api_config('DEFAULT/bar').with_value('barValue')
-      should contain_neutron_api_config('DEFAULT/baz').with_ensure('absent')
+      should contain_neutron_api_paste_ini('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_api_paste_ini('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_api_paste_ini('DEFAULT/baz').with_ensure('absent')
     end
   end
 
@@ -204,7 +204,7 @@ describe 'neutron::config' do
       end
 
       it_behaves_like 'neutron_config'
-      it_behaves_like 'neutron_api_config'
+      it_behaves_like 'neutron_api_paste_ini'
       it_behaves_like 'neutron_agent_config'
       it_behaves_like 'neutron_plugin_config'
     end

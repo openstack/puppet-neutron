@@ -24,7 +24,7 @@
 # [*server_config*]
 #   (optional) Manage configuration of neutron.conf
 #
-# [*api_config*]
+# [*api_paste_ini*]
 #   (optional) Manage configuration of api-paste.ini
 #
 # [*bgpvpn_bagpipe_config*]
@@ -96,12 +96,17 @@
 # [*plugin_nsx_config*]
 #   (optional) Manage configuration of plugins/vmware/nsx.ini
 #
+# DEPRECATED PARAMETERS
+#
+# [*api_config*]
+#   (optional) Manage configuration of api-paste.ini
+#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class neutron::config (
   $server_config                 = {},
-  $api_config                    = {},
+  $api_paste_ini                 = {},
   $bgpvpn_bagpipe_config         = {},
   $bgpvpn_service_config         = {},
   $l2gw_agent_config             = {},
@@ -125,12 +130,22 @@ class neutron::config (
   $plugin_ml2_config             = {},
   $plugin_nsx_config             = {},
   $plugin_nvp_config             = {},
+  # DEPRECATED PARAMETERS
+  $api_config                    = undef,
 ) {
 
   include neutron::deps
 
+  if $api_config != undef {
+    warning('The neutron::config::api_config parameter has been deprecated and \
+will be removed in a future release. Use the api_paste_ini parameter instead.')
+    $api_paste_ini_real = $api_config
+  } else {
+    $api_paste_ini_real = $api_paste_ini
+  }
+
   validate_legacy(Hash, 'validate_hash', $server_config)
-  validate_legacy(Hash, 'validate_hash', $api_config)
+  validate_legacy(Hash, 'validate_hash', $api_paste_ini_real)
   validate_legacy(Hash, 'validate_hash', $bgpvpn_bagpipe_config)
   validate_legacy(Hash, 'validate_hash', $bgpvpn_service_config)
   validate_legacy(Hash, 'validate_hash', $l2gw_agent_config)
@@ -156,7 +171,7 @@ class neutron::config (
   validate_legacy(Hash, 'validate_hash', $plugin_nvp_config)
 
   create_resources('neutron_config', $server_config)
-  create_resources('neutron_api_config', $api_config)
+  create_resources('neutron_api_paste_ini', $api_paste_ini_real)
   create_resources('neutron_bgpvpn_bagpipe_config', $bgpvpn_bagpipe_config)
   create_resources('neutron_bgpvpn_service_config', $bgpvpn_service_config)
   create_resources('neutron_l2gw_agent_config', $l2gw_agent_config)

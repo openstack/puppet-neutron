@@ -406,16 +406,7 @@ class neutron::server (
   }
 
   if ($auth_strategy == 'keystone') {
-
     include neutron::keystone::authtoken
-
-    neutron_api_config {
-      'filter:authtoken/admin_tenant_name':   ensure => absent;
-      'filter:authtoken/admin_user':          ensure => absent;
-      'filter:authtoken/admin_password':      ensure => absent;
-      'filter:authtoken/identity_uri':        ensure => absent;
-    }
-
   }
 
   oslo::middleware { 'neutron_config':

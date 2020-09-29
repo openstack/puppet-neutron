@@ -67,6 +67,7 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('agent/tunnel_types').with_ensure('absent')
       should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
       should_not contain_neutron_agent_ovs('ovs/resource_provider_bandwidths')
+      should contain_neutron_agent_ovs('agent/explicitly_egress_direct').with_value(['<SERVICE DEFAULT>'])
     end
 
     it 'installs neutron ovs agent package' do
@@ -396,6 +397,16 @@ describe 'neutron::agents::ml2::ovs' do
 
       it 'configure neutron/plugins/ml2/ml2_conf.ini' do
         should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value(true)
+      end
+    end
+
+    context 'with direct output enabled for egress flows' do
+      before :each do
+        params.merge!(:explicitly_egress_direct => true)
+      end
+
+      it 'configure neutron/plugins/ml2/ml2_conf.ini' do
+        should contain_neutron_agent_ovs('agent/explicitly_egress_direct').with_value(true)
       end
     end
 

@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    Add new configuration parameter explicitly_egress_direct for ML2 OVS agent
+    When set to True, the accepted egress unicast traffic will not use action
+    NORMAL. The accepted egress packets will be taken care of in the final
+    egress tables direct output flows for unicast traffic so that operators can
+    set customized integration bridge name in l3 agent configuration.
+    This can be enabled on some nodes to prevent flooding on integration bridge.

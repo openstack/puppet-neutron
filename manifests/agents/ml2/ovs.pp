@@ -178,6 +178,12 @@
 #  outgoing IP packet carrying GRE/VXLAN tunnel.
 #  Defaults to $::os_service_default
 #
+# [*explicitly_egress_direct*]
+#  (optional) When set to True, the accepted egress unicast traffic will not
+#  use action NORMAL. The accepted egress packets will be taken care of in the
+#  final egress tables direct output flows for unicast traffic. (boolean value)
+#  Defaults to $::os_service_default
+#
 # [*igmp_snooping_enable*]
 #   (Optional) Enable IGMP snooping for integration bridge. If this
 #   option is set to True, support for Internet Group Management
@@ -189,6 +195,7 @@
 #   connected to multicast routers. This option is used by the ML2/OVS
 #   mechanism driver for Neutron.
 #   Defaults to $::os_service_default
+#
 # === Deprecated Parameters
 #
 # [*enable_tunneling*]
@@ -230,6 +237,7 @@ class neutron::agents::ml2::ovs (
   $permitted_ethertypes       = $::os_service_default,
   $minimize_polling           = $::os_service_default,
   $tunnel_csum                = $::os_service_default,
+  $explicitly_egress_direct   = $::os_service_default,
   $igmp_snooping_enable       = $::os_service_default,
   # DEPRECATED PARAMETERS
   $enable_tunneling           = false,
@@ -336,6 +344,7 @@ class neutron::agents::ml2::ovs (
     'agent/extensions':                     value => join(any2array($extensions), ',');
     'agent/minimize_polling':               value => $minimize_polling;
     'agent/tunnel_csum':                    value => $tunnel_csum;
+    'agent/explicitly_egress_direct':       value => $explicitly_egress_direct;
     'ovs/ovsdb_timeout':                    value => $ovsdb_timeout;
     'ovs/of_connect_timeout':               value => $of_connect_timeout;
     'ovs/of_request_timeout':               value => $of_request_timeout;

@@ -2,9 +2,7 @@
 #
 # This class is used to manage arbitrary Neutron configurations.
 #
-# === Parameters
-#
-# [*xxx_config*]
+# example xxx_config
 #   (optional) Allow configuration of arbitrary Neutron xxx specific configurations.
 #   The value is a hash of neutron_config resources. Example:
 #   server_config =>
@@ -20,6 +18,8 @@
 #       value: fooValue
 #     DEFAULT/bar:
 #       value: barValue
+#
+# === Parameters
 #
 # [*server_config*]
 #   (optional) Manage configuration of neutron.conf

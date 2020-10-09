@@ -12,6 +12,8 @@ describe 'neutron::db::mysql' do
   end
 
   shared_examples 'neutron::db::mysql' do
+    it { is_expected.to contain_class('neutron::deps') }
+
     context 'with only required params' do
       it { should contain_openstacklib__db__mysql('neutron').with(
         :user     => 'neutron',

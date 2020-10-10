@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The following parameters in the ``neutron::plugins::ml2:mech_driver`` class
+    have been deprecated and will be removed in a future release.
+    Use ``ovs_driver`` class or ``sriov_driver`` class instead.
+
+    - ``ovs_vnic_type_blacklist``
+    - ``sriov_vnic_type_blacklist``

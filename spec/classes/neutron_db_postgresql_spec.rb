@@ -15,6 +15,8 @@ describe 'neutron::db::postgresql' do
         req_params
       end
 
+      it { is_expected.to contain_class('neutron::deps') }
+
       it { is_expected.to contain_openstacklib__db__postgresql('neutron').with(
         :user       => 'neutron',
         :password   => 'neutronpass',

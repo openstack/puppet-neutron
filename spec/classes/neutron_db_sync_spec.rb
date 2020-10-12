@@ -2,6 +2,9 @@ require 'spec_helper'
 
 describe 'neutron::db::sync' do
   shared_examples 'neutron-dbsync' do
+
+    it { is_expected.to contain_class('neutron::deps') }
+
     it 'runs neutron-db-sync' do
       should contain_exec('neutron-db-sync').with(
         :command     => 'neutron-db-manage  upgrade heads',

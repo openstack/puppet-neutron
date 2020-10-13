@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Compatibility with el7 (RHEL7.x, CentOS7.x and so on) has been removed.

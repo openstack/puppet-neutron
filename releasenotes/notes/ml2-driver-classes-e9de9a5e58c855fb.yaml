@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following two new classes have been added, to set up parameters in
+    ovs_driver and sriov_driver section.
+
+    - ``neutron::plugins::ml2::ovs_driver``
+    - ``neutron::plugins::ml2::sriov_driver``

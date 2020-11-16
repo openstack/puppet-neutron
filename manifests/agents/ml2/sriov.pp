@@ -129,10 +129,12 @@ class neutron::agents::ml2::sriov (
   }
 
   if ($resource_provider_bandwidths != []) {
-    $res_prov_bw_map_str = join(any2array($resource_provider_bandwidths), ',')
-    neutron_sriov_agent_config {
-      'sriov_nic/resource_provider_bandwidths': value => $res_prov_bw_map_str;
-    }
+    $resource_provider_bandwidths_real = join(any2array($resource_provider_bandwidths), ',')
+  } else {
+    $resource_provider_bandwidths_real = $::os_service_default
+  }
+  neutron_sriov_agent_config {
+    'sriov_nic/resource_provider_bandwidths': value => $resource_provider_bandwidths_real;
   }
 
 }

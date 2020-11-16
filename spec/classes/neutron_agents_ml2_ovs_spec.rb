@@ -65,7 +65,8 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_ensure('absent')
       should contain_neutron_agent_ovs('agent/tunnel_types').with_ensure('absent')
       should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
-      should_not contain_neutron_agent_ovs('ovs/resource_provider_bandwidths')
+      should contain_neutron_agent_ovs('ovs/resource_provider_bandwidths').\
+        with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/explicitly_egress_direct').with_value(['<SERVICE DEFAULT>'])
     end
 

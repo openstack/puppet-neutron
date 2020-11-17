@@ -68,6 +68,8 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/resource_provider_bandwidths').\
         with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/resource_provider_hypervisors').\
+        with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/explicitly_egress_direct').with_value(['<SERVICE DEFAULT>'])
     end
 
@@ -342,13 +344,20 @@ describe 'neutron::agents::ml2::ovs' do
       it { should raise_error(Puppet::Error, /Enabling DPDK without manage vswitch does not have any effect/) }
     end
 
-    context 'when resource_provider_bandwidths is set' do
+    context 'when parameters for resource providers are set' do
       before :each do
-        params.merge!(:resource_provider_bandwidths => ['provider-a', 'provider-b'])
+        params.merge!(
+          :resource_provider_bandwidths  => ['provider-a', 'provider-b'],
+          :resource_provider_hypervisors => ['provider-a:compute-a', 'provider-b:compute-b'],
+        )
       end
 
-      it { should contain_neutron_agent_ovs('ovs/resource_provider_bandwidths').\
-        with_value('provider-a,provider-b') }
+      it 'configures resource providers' do
+        should contain_neutron_agent_ovs('ovs/resource_provider_bandwidths').\
+          with_value('provider-a,provider-b')
+        should contain_neutron_agent_ovs('ovs/resource_provider_hypervisors').\
+          with_value('provider-a:compute-a,provider-b:compute-b')
+      end
     end
 
   end

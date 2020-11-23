@@ -318,10 +318,13 @@ class neutron::agents::ml2::ovs (
   }
 
   if ($resource_provider_bandwidths != []) {
-    $res_prov_bw_map_str = join(any2array($resource_provider_bandwidths), ',')
-    neutron_agent_ovs {
-      'ovs/resource_provider_bandwidths': value => $res_prov_bw_map_str;
-    }
+    $resource_provider_bandwidths_real = join(any2array($resource_provider_bandwidths), ',')
+  } else {
+    $resource_provider_bandwidths_real = $::os_service_default
+  }
+
+  neutron_agent_ovs {
+    'ovs/resource_provider_bandwidths': value => $resource_provider_bandwidths_real;
   }
 
   # TODO(tobias.urdin): Remove in V release.

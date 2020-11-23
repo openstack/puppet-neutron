@@ -67,7 +67,8 @@ describe 'neutron::agents::ml2::sriov' do
     end
 
     it 'does not configure resource_provider_bandwidths by default' do
-      should_not contain_neutron_sriov_agent_config('sriov_nic/resource_provider_bandwidths')
+      should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_bandwidths').\
+        with_value('<SERVICE DEFAULT>')
     end
 
     context 'when number_of_vfs is empty' do

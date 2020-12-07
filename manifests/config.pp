@@ -27,6 +27,12 @@
 # [*api_paste_ini*]
 #   (optional) Manage configuration of api-paste.ini
 #
+# [*ovs_agent_config*]
+#   (optional) Manage configuration of openvswitch_agent.ini
+#
+# [*sriov_agent_config*]
+#   (optional) Manage configuration of sriov_agent.ini
+#
 # [*bgpvpn_bagpipe_config*]
 #   (optional) Manage configuration of bagpipe-bgp bgp.conf
 #
@@ -107,6 +113,8 @@
 class neutron::config (
   $server_config                 = {},
   $api_paste_ini                 = {},
+  $ovs_agent_config              = {},
+  $sriov_agent_config            = {},
   $bgpvpn_bagpipe_config         = {},
   $bgpvpn_service_config         = {},
   $l2gw_agent_config             = {},
@@ -146,6 +154,8 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
 
   validate_legacy(Hash, 'validate_hash', $server_config)
   validate_legacy(Hash, 'validate_hash', $api_paste_ini_real)
+  validate_legacy(Hash, 'validate_hash', $ovs_agent_config)
+  validate_legacy(Hash, 'validate_hash', $sriov_agent_config)
   validate_legacy(Hash, 'validate_hash', $bgpvpn_bagpipe_config)
   validate_legacy(Hash, 'validate_hash', $bgpvpn_service_config)
   validate_legacy(Hash, 'validate_hash', $l2gw_agent_config)
@@ -172,6 +182,8 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_paste_ini', $api_paste_ini_real)
+  create_resources('neutron_agent_ovs', $ovs_agent_config)
+  create_resources('neutron_sriov_agent_config', $sriov_agent_config)
   create_resources('neutron_bgpvpn_bagpipe_config', $bgpvpn_bagpipe_config)
   create_resources('neutron_bgpvpn_service_config', $bgpvpn_service_config)
   create_resources('neutron_l2gw_agent_config', $l2gw_agent_config)

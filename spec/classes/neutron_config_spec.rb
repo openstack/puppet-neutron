@@ -56,7 +56,9 @@ describe 'neutron::config' do
 
   shared_examples 'neutron_agent_config' do
     let :params do
-      { :l3_agent_config       => config_hash,
+      { :ovs_agent_config      => config_hash,
+        :sriov_agent_config    => config_hash,
+        :l3_agent_config       => config_hash,
         :dhcp_agent_config     => config_hash,
         :metadata_agent_config => config_hash,
         :metering_agent_config => config_hash,
@@ -64,6 +66,18 @@ describe 'neutron::config' do
         :l2gw_agent_config     => config_hash,
         :bgp_dragent_config    => config_hash,
       }
+    end
+
+    it 'configures arbitrary neutron_ovs_agent_config configurations' do
+      should contain_neutron_agent_ovs('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_agent_ovs('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_agent_ovs('DEFAULT/baz').with_ensure('absent')
+    end
+
+    it 'configures arbitrary neutron_sriov_agent_config configurations' do
+      should contain_neutron_sriov_agent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_sriov_agent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_sriov_agent_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary l3_agent_config configurations' do
@@ -205,6 +219,7 @@ describe 'neutron::config' do
 
       it_behaves_like 'neutron_config'
       it_behaves_like 'neutron_api_paste_ini'
+      it_behaves_like 'neutron_service_config'
       it_behaves_like 'neutron_agent_config'
       it_behaves_like 'neutron_plugin_config'
     end

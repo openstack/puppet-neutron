@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following new parameters have been added to support arbitrary
+    configurations for openvsiwtch_agent.ini and sriov_agent.ini
+
+    - ``neutron::config::ovs_agent_config``
+    - ``neutron::config::sriov_agent_config``

@@ -64,6 +64,7 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_ensure('absent')
       should contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_ensure('absent')
       should contain_neutron_agent_ovs('agent/tunnel_types').with_ensure('absent')
+      should contain_neutron_agent_ovs('ovs/bridge_mac_table_size').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/resource_provider_bandwidths').\
         with_value('<SERVICE DEFAULT>')
@@ -377,6 +378,16 @@ describe 'neutron::agents::ml2::ovs' do
 
       it 'should require vswitch::dpdk' do
         should contain_class('vswitch::dpdk')
+      end
+    end
+
+    context 'with mac table size on an ovs bridge set' do
+      before :each do
+        params.merge!(:bridge_mac_table_size => 50000)
+      end
+
+      it 'configure neutron/plugins/ml2/ml2_conf.ini' do
+        should contain_neutron_agent_ovs('ovs/bridge_mac_table_size').with_value(50000)
       end
     end
 

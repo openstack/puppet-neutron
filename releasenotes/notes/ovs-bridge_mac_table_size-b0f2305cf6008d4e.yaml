@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The ``bridge_mac_table_size`` parameter has been added to
+    the ``neutron::agents::ml2::ovs`` class, to support the correspoding
+    parameter in openvswitch_agent.ini .

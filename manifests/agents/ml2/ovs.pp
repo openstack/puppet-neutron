@@ -168,6 +168,11 @@
 #  outgoing IP packet carrying GRE/VXLAN tunnel.
 #  Defaults to $::os_service_default
 #
+# [*bridge_mac_table_size*]
+#   (optional) The maximum number of MAC addresses to learn on a bridge managed
+#   by the Neutron OVS agent.
+#   Defaults to $::os_service_default
+#
 # [*igmp_snooping_enable*]
 #   (Optional) Enable IGMP snooping for integration bridge. If this
 #   option is set to True, support for Internet Group Management
@@ -234,6 +239,7 @@ class neutron::agents::ml2::ovs (
   $permitted_ethertypes          = $::os_service_default,
   $minimize_polling              = $::os_service_default,
   $tunnel_csum                   = $::os_service_default,
+  $bridge_mac_table_size         = $::os_service_default,
   $igmp_snooping_enable          = $::os_service_default,
   $resource_provider_bandwidths  = [],
   $resource_provider_hypervisors = [],
@@ -366,6 +372,7 @@ class neutron::agents::ml2::ovs (
     'ovs/datapath_type':                    value => $datapath_type;
     'ovs/vhostuser_socket_dir':             value => $vhostuser_socket_dir;
     'securitygroup/enable_security_group':  value => $enable_security_group;
+    'ovs/bridge_mac_table_size':            value => $bridge_mac_table_size;
     'ovs/igmp_snooping_enable':             value => $igmp_snooping_enable;
   }
 

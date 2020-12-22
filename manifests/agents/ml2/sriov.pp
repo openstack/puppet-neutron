@@ -73,17 +73,22 @@
 #   (optional) List of <network_device>:<egress_bw>:<ingress_bw>
 #   Defaults to empty list
 #
+# [*resource_provider_hypervisors*]
+#   (optional) List of <bridge>:<hypervisor>
+#   Defaults to empty list
+#
 class neutron::agents::ml2::sriov (
-  $package_ensure               = 'present',
-  $enabled                      = true,
-  $manage_service               = true,
-  $physical_device_mappings     = $::os_service_default,
-  $polling_interval             = 2,
-  $exclude_devices              = $::os_service_default,
-  $extensions                   = $::os_service_default,
-  $purge_config                 = false,
-  $number_of_vfs                = $::os_service_default,
-  $resource_provider_bandwidths = [],
+  $package_ensure                = 'present',
+  $enabled                       = true,
+  $manage_service                = true,
+  $physical_device_mappings      = $::os_service_default,
+  $polling_interval              = 2,
+  $exclude_devices               = $::os_service_default,
+  $extensions                    = $::os_service_default,
+  $purge_config                  = false,
+  $number_of_vfs                 = $::os_service_default,
+  $resource_provider_bandwidths  = [],
+  $resource_provider_hypervisors = [],
 ) {
 
   include neutron::deps
@@ -133,8 +138,16 @@ class neutron::agents::ml2::sriov (
   } else {
     $resource_provider_bandwidths_real = $::os_service_default
   }
+
+  if ($resource_provider_hypervisors != []) {
+    $resource_provider_hypervisors_real = join(any2array($resource_provider_hypervisors), ',')
+  } else {
+    $resource_provider_hypervisors_real = $::os_service_default
+  }
+
   neutron_sriov_agent_config {
-    'sriov_nic/resource_provider_bandwidths': value => $resource_provider_bandwidths_real;
+    'sriov_nic/resource_provider_bandwidths':  value => $resource_provider_bandwidths_real;
+    'sriov_nic/resource_provider_hypervisors': value => $resource_provider_hypervisors_real;
   }
 
 }

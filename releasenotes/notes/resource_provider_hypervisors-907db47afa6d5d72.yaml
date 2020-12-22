@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following two parameters have been added to define mapping of
+    bridge name and hyper visor name to locate the parent of the resource
+    provider tree.
+
+    - ``neutron::agents::ml2::ovs::resource_provider_hypervisors``
+    - ``neutorn::agents::ml2::sriov::resource_provider_hypervisors``

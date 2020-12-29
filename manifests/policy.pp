@@ -20,12 +20,12 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (Optional) Path to the neutron policy.json file
-#   Defaults to /etc/neutron/policy.json
+#   (Optional) Path to the neutron policy.yaml file
+#   Defaults to /etc/neutron/policy.yaml
 #
 class neutron::policy (
   $policies    = {},
-  $policy_path = '/etc/neutron/policy.json',
+  $policy_path = '/etc/neutron/policy.yaml',
 ) {
 
   include neutron::deps
@@ -34,9 +34,10 @@ class neutron::policy (
   validate_legacy(Hash, 'validate_hash', $policies)
 
   Openstacklib::Policy::Base {
-    file_path  => $policy_path,
-    file_user  => 'root',
-    file_group => $::neutron::params::group,
+    file_path   => $policy_path,
+    file_user   => 'root',
+    file_group  => $::neutron::params::group,
+    file_format => 'yaml',
   }
 
   create_resources('openstacklib::policy::base', $policies)

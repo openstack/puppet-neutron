@@ -8,7 +8,7 @@ describe 'neutron::agents::bigswitch' do
   shared_examples 'neutron::agents::bigswitch' do
     context 'neutron bigswitch base' do
       it 'should have' do
-        should contain_package('python-networking-bigswitch').with(
+        should contain_package('python3-networking-bigswitch').with(
           :ensure => 'present',
           :tag    => ['openstack', 'neutron-package'],
         )

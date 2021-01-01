@@ -23,9 +23,14 @@ class neutron::plugins::ml2::ovs_driver (
   $vnic_type_blacklist = [],
 ){
 
+  validate_legacy(Array, 'validate_array', $vnic_type_blacklist)
   if !empty($vnic_type_blacklist) {
     neutron_plugin_ml2 {
       'ovs_driver/vnic_type_blacklist': value => join(any2array($vnic_type_blacklist), ',');
+    }
+  } else {
+    neutron_plugin_ml2 {
+      'ovs_driver/vnic_type_blacklist': value => $::os_service_default;
     }
   }
 }

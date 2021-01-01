@@ -17,6 +17,16 @@ require 'spec_helper'
 describe 'neutron::plugins::ml2::ovs_driver' do
 
   shared_examples 'neutron::plugins::ml2::ovs_driver' do
+    context 'with defaults' do
+      let :params do
+        {}
+      end
+
+      it 'should set the default values' do
+        should contain_neutron_plugin_ml2('ovs_driver/vnic_type_blacklist').with_value("<SERVICE DEFAULT>")
+      end
+    end
+
     context 'when vnic_type_blacklist is not empty list' do
       let :params do
         { :vnic_type_blacklist => ['direct'] }

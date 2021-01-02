@@ -23,17 +23,17 @@ describe 'neutron::plugins::ml2::sriov_driver' do
       end
 
       it 'should set the default values' do
-        should contain_neutron_plugin_ml2('sriov_driver/vnic_type_blacklist').with_value("<SERVICE DEFAULT>")
+        should contain_neutron_plugin_ml2('sriov_driver/vnic_type_prohibit_list').with_value("<SERVICE DEFAULT>")
       end
     end
 
-    context 'when vnic_type_blacklist is not empty list' do
+    context 'when vnic_type_prohibit_list is not empty list' do
       let :params do
-        { :vnic_type_blacklist => ['direct'] }
+        { :vnic_type_prohibit_list => ['direct'] }
       end
 
-      it 'should configure direct in vnic_type_blacklist' do
-        should contain_neutron_plugin_ml2('sriov_driver/vnic_type_blacklist').with_value("direct")
+      it 'should configure direct in vnic_type_prohibit_list' do
+        should contain_neutron_plugin_ml2('sriov_driver/vnic_type_prohibit_list').with_value("direct")
       end
     end
   end

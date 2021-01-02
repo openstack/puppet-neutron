@@ -114,9 +114,6 @@ describe 'neutron::config' do
     let :params do
       {
         :plugin_linuxbridge_config     => config_hash,
-        :plugin_cisco_db_conn_config   => config_hash,
-        :plugin_cisco_l2network_config => config_hash,
-        :plugin_cisco_config           => config_hash,
         :plugin_midonet_config         => config_hash,
         :plugin_plumgrid_config        => config_hash,
         :plugin_nsx_config             => config_hash,
@@ -131,24 +128,6 @@ describe 'neutron::config' do
       should contain_neutron_plugin_linuxbridge('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_plugin_linuxbridge('DEFAULT/bar').with_value('barValue')
       should contain_neutron_plugin_linuxbridge('DEFAULT/baz').with_ensure('absent')
-    end
-
-    it 'configures arbitrary neutron_plugin_cisco_db_conn configurations' do
-      should contain_neutron_plugin_cisco_db_conn('DEFAULT/foo').with_value('fooValue')
-      should contain_neutron_plugin_cisco_db_conn('DEFAULT/bar').with_value('barValue')
-      should contain_neutron_plugin_cisco_db_conn('DEFAULT/baz').with_ensure('absent')
-    end
-
-    it 'configures arbitrary neutron_plugin_cisco_l2network configurations' do
-      should contain_neutron_plugin_cisco_l2network('DEFAULT/foo').with_value('fooValue')
-      should contain_neutron_plugin_cisco_l2network('DEFAULT/bar').with_value('barValue')
-      should contain_neutron_plugin_cisco_l2network('DEFAULT/baz').with_ensure('absent')
-    end
-
-    it 'configures arbitrary neutron_plugin_cisco configurations' do
-      should contain_neutron_plugin_cisco('DEFAULT/foo').with_value('fooValue')
-      should contain_neutron_plugin_cisco('DEFAULT/bar').with_value('barValue')
-      should contain_neutron_plugin_cisco('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_midonet configurations' do

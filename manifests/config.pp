@@ -69,15 +69,6 @@
 # [*plugin_nvp_config*]
 #   (optional) Manage configuration of /etc/neutron/plugins/nicira/nvp.ini
 #
-# [*plugin_cisco_db_conn_config*]
-#   (optional) Manage configuration of plugins/cisco/db_conn.ini
-#
-# [*plugin_cisco_l2network_config*]
-#   (optional) Manage configuration of plugins/cisco/l2network_plugin.ini
-#
-# [*plugin_cisco_config*]
-#   (optional) Manage configuration of cisco_plugins.ini
-#
 # [*plugin_midonet_config*]
 #   (optional) Manage configuration of plugins/midonet/midonet.ini
 #
@@ -101,6 +92,15 @@
 # [*api_config*]
 #   (optional) Manage configuration of api-paste.ini
 #
+# [*plugin_cisco_db_conn_config*]
+#   (optional) Manage configuration of plugins/cisco/db_conn.ini
+#
+# [*plugin_cisco_l2network_config*]
+#   (optional) Manage configuration of plugins/cisco/l2network_plugin.ini
+#
+# [*plugin_cisco_config*]
+#   (optional) Manage configuration of cisco_plugins.ini
+#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -120,9 +120,6 @@ class neutron::config (
   $vpnaas_agent_config           = {},
   $bgp_dragent_config            = {},
   $plugin_linuxbridge_config     = {},
-  $plugin_cisco_db_conn_config   = {},
-  $plugin_cisco_l2network_config = {},
-  $plugin_cisco_config           = {},
   $plugin_midonet_config         = {},
   $plugin_plumgrid_config        = {},
   $plugin_opencontrail_config    = {},
@@ -132,6 +129,9 @@ class neutron::config (
   $plugin_nvp_config             = {},
   # DEPRECATED PARAMETERS
   $api_config                    = undef,
+  $plugin_cisco_db_conn_config   = undef,
+  $plugin_cisco_l2network_config = undef,
+  $plugin_cisco_config           = undef,
 ) {
 
   include neutron::deps
@@ -142,6 +142,18 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
     $api_paste_ini_real = $api_config
   } else {
     $api_paste_ini_real = $api_paste_ini
+  }
+
+  $cisco_plugin_param_names = [
+    'plugin_cisco_db_conn_config',
+    'plugin_cisco_l2network_config',
+    'plugin_cisco_config',
+  ]
+  $cisco_plugin_param_names.each |$param_name| {
+    $param = getvar($param_name)
+    if $param != undef{
+      warning("The ${param_name} parameter is deprecated and has no effect.")
+    }
   }
 
   validate_legacy(Hash, 'validate_hash', $server_config)
@@ -159,9 +171,6 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
   validate_legacy(Hash, 'validate_hash', $vpnaas_agent_config)
   validate_legacy(Hash, 'validate_hash', $bgp_dragent_config)
   validate_legacy(Hash, 'validate_hash', $plugin_linuxbridge_config)
-  validate_legacy(Hash, 'validate_hash', $plugin_cisco_db_conn_config)
-  validate_legacy(Hash, 'validate_hash', $plugin_cisco_l2network_config)
-  validate_legacy(Hash, 'validate_hash', $plugin_cisco_config)
   validate_legacy(Hash, 'validate_hash', $plugin_midonet_config)
   validate_legacy(Hash, 'validate_hash', $plugin_plumgrid_config)
   validate_legacy(Hash, 'validate_hash', $plugin_opencontrail_config)
@@ -183,9 +192,6 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
   create_resources('neutron_plugin_linuxbridge', $plugin_linuxbridge_config)
-  create_resources('neutron_plugin_cisco_db_conn', $plugin_cisco_db_conn_config)
-  create_resources('neutron_plugin_cisco_l2network', $plugin_cisco_l2network_config)
-  create_resources('neutron_plugin_cisco', $plugin_cisco_config)
   create_resources('neutron_plugin_midonet', $plugin_midonet_config)
   create_resources('neutron_plugin_plumgrid', $plugin_plumgrid_config)
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)

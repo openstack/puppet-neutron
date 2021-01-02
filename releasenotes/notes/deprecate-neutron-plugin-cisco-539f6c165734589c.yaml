@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::plugins::cisco`` class has been deprecated and has no effect
+    now.

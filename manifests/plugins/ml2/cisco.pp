@@ -1,4 +1,5 @@
 #
+# DEPRECATED !
 # Install the Cisco plugins and generate the config file
 # from parameters in the other classes.
 #
@@ -15,20 +16,5 @@ class neutron::plugins::ml2::cisco (
   $package_ensure = 'present'
 ) {
 
-  include neutron::deps
-  include neutron::params
-  require neutron::plugins::ml2
-
-  if($::osfamily != 'Redhat') {
-    # Drivers are only packaged for RedHat at this time
-    fail("Unsupported osfamily ${::osfamily}")
-  }
-
-  ensure_resource('package', 'python-networking-cisco',
-    {
-      ensure => $package_ensure,
-      tag    => ['openstack', 'neutron-plugin-ml2-package']
-    }
-  )
-  warning('python-networking-cisco package management is deprecated, it will be dropped in a future release.')
+  warning('Support for networking-cisco has been deprecated and has no effect')
 }

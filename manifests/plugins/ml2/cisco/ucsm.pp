@@ -57,18 +57,6 @@ class neutron::plugins::ml2::cisco::ucsm (
   $ucsm_https_verify = $::os_service_default,
 ) {
 
-  include neutron::deps
-  include neutron::plugins::ml2::cisco
-
-  neutron_plugin_ml2 {
-    'ml2_cisco_ucsm/ucsm_ip'            : value => $ucsm_ip;
-    'ml2_cisco_ucsm/ucsm_username'      : value => $ucsm_username;
-    'ml2_cisco_ucsm/ucsm_password'      : value => $ucsm_password, secret => true;
-    'ml2_cisco_ucsm/ucsm_host_list'     : value => $ucsm_host_list;
-    'ml2_cisco_ucsm/sp_template_list'   : value => $sp_template_list;
-    'ml2_cisco_ucsm/vnic_template_list' : value => $vnic_template_list;
-    'ml2_cisco_ucsm/supported_pci_devs' : value => $supported_pci_devs;
-    'ml2_cisco_ucsm/ucsm_https_verify'  : value => $ucsm_https_verify;
-  }
+  warning('Support for networking-cisco has been deprecated and has no effect')
 }
 

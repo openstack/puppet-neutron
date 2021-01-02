@@ -1,4 +1,5 @@
 #
+# DEPRECATED!!
 # Configure the Mech Driver for cisco nexus 1000v neutron plugin
 #
 # === Parameters
@@ -85,26 +86,8 @@ class neutron::plugins::ml2::cisco::nexus1000v (
   $max_vsm_retries               = '2',
   $restrict_policy_profiles      = 'False',
   $enable_vif_type_n1kv          = 'False',
-)
-{
+) {
 
-  include neutron::deps
-  include neutron::plugins::ml2::cisco
-
-  neutron_plugin_ml2 {
-    'ml2_cisco_n1kv/n1kv_vsm_ips'                  : value => $n1kv_vsm_ip;
-    'ml2_cisco_n1kv/username'                      : value => $n1kv_vsm_username;
-    'ml2_cisco_n1kv/password'                      : value => $n1kv_vsm_password, secret => true;
-    'ml2_cisco_n1kv/default_policy_profile'        : value => $default_policy_profile;
-    'ml2_cisco_n1kv/default_vlan_network_profile'  : value => $default_vlan_network_profile;
-    'ml2_cisco_n1kv/default_vxlan_network_profile' : value => $default_vxlan_network_profile;
-    'ml2_cisco_n1kv/poll_duration'                 : value => $poll_duration;
-    'ml2_cisco_n1kv/http_pool_size'                : value => $http_pool_size;
-    'ml2_cisco_n1kv/http_timeout'                  : value => $http_timeout;
-    'ml2_cisco_n1kv/sync_interval'                 : value => $sync_interval;
-    'ml2_cisco_n1kv/max_vsm_retries'               : value => $max_vsm_retries;
-    'ml2_cisco_n1kv/restrict_policy_profiles'      : value => $restrict_policy_profiles;
-    'ml2_cisco_n1kv/enable_vif_type_n1kv'          : value => $enable_vif_type_n1kv;
-  }
+  warning('The support N1kv driver was deprecated and has no effect')
 }
 

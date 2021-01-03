@@ -10,13 +10,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# neutron::plugins::ml2::ovs_driver
+# neutron::plugins::ml2::sriov_driver
 #
 # === Parameters:
 #
 # [*vnic_type_blacklist*]
 #  (optional) list of VNIC types for which support in Neutron is
-#  administratively prohibited by the OVS mechanism driver
+#  administratively prohibited by the SRIOV mechanism driver
 #  Defaults to []
 #
 class neutron::plugins::ml2::sriov_driver (

@@ -1,0 +1,10 @@
+---
+upgrade:
+  - |
+    Support for plumgrid plugin has been removed.
+
+deprecations:
+  - |
+    The ``neutron::config::plugin_plumgrid_config`` parameter has been
+    deprecated. This parameter has no effect, since support for plumgrid plugin
+    has been removed.

@@ -19,9 +19,6 @@ class neutron::params {
   $ovn_plugin_package          = "python${pyvers}-networking-ovn"
   $vpp_plugin_package          = "python${pyvers}-networking-vpp"
   $vpp_agent_service           = 'neutron-vpp-agent'
-  $plumgrid_plugin_package     = 'networking-plumgrid'
-  $plumgrid_pythonlib_package  = 'plumgrid-pythonlib'
-  $plumgrid_config_file        = '/etc/neutron/plugins/plumgrid/plumgrid.ini'
   $nuage_config_file           = '/etc/neutron/plugins/nuage/plugin.ini'
   $dhcp_agent_service          = 'neutron-dhcp-agent'
   $haproxy_package             = 'haproxy'

@@ -78,9 +78,6 @@
 # [*plugin_midonet_config*]
 #   (optional) Manage configuration of plugins/midonet/midonet.ini
 #
-# [*plugin_plumgrid_config*]
-#   (optional) Manage configuration of plugins/plumgrid/plumgrid.ini
-#
 # [*plugin_opencontrail_config*]
 #   (optional) Manage configuration of plugins/opencontrail/ContrailPlugin.ini
 #
@@ -107,6 +104,9 @@
 # [*plugin_cisco_config*]
 #   (optional) Manage configuration of cisco_plugins.ini
 #
+# [*plugin_plumgrid_config*]
+#   (optional) Manage configuration of plugins/plumgrid/plumgrid.ini
+#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -129,7 +129,6 @@ class neutron::config (
   $bgp_dragent_config            = {},
   $plugin_linuxbridge_config     = {},
   $plugin_midonet_config         = {},
-  $plugin_plumgrid_config        = {},
   $plugin_opencontrail_config    = {},
   $plugin_nuage_config           = {},
   $plugin_ml2_config             = {},
@@ -140,9 +139,14 @@ class neutron::config (
   $plugin_cisco_db_conn_config   = undef,
   $plugin_cisco_l2network_config = undef,
   $plugin_cisco_config           = undef,
+  $plugin_plumgrid_config        = undef,
 ) {
 
   include neutron::deps
+
+  if $plugin_plumgrid_config != undef {
+    warning('The plugin_plumgrid_config parameter was deprecated and has no effect')
+  }
 
   if $api_config != undef {
     warning('The neutron::config::api_config parameter has been deprecated and \
@@ -182,7 +186,6 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
   validate_legacy(Hash, 'validate_hash', $bgp_dragent_config)
   validate_legacy(Hash, 'validate_hash', $plugin_linuxbridge_config)
   validate_legacy(Hash, 'validate_hash', $plugin_midonet_config)
-  validate_legacy(Hash, 'validate_hash', $plugin_plumgrid_config)
   validate_legacy(Hash, 'validate_hash', $plugin_opencontrail_config)
   validate_legacy(Hash, 'validate_hash', $plugin_nuage_config)
   validate_legacy(Hash, 'validate_hash', $plugin_ml2_config)
@@ -205,7 +208,6 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
   create_resources('neutron_plugin_linuxbridge', $plugin_linuxbridge_config)
   create_resources('neutron_plugin_midonet', $plugin_midonet_config)
-  create_resources('neutron_plugin_plumgrid', $plugin_plumgrid_config)
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
   create_resources('neutron_plugin_nuage', $plugin_nuage_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)

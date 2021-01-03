@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::plugins::ml2::ovn::vif_type`` parameter has been deprecated
+    and has no effect.

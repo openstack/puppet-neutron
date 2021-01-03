@@ -15,7 +15,7 @@ describe 'neutron::designate' do
       it 'configures designate in neutron.conf' do
         should contain_neutron_config('DEFAULT/external_dns_driver').with_value('designate')
         should contain_neutron_config('designate/url').with_value('http://ip/designate')
-        should contain_neutron_config('designate/password').with_value('secret')
+        should contain_neutron_config('designate/password').with_value('secret').with_secret(true)
         should contain_neutron_config('designate/username').with_value('neutron')
         should contain_neutron_config('designate/auth_type').with_value('password')
         should contain_neutron_config('designate/project_name').with_value('services')
@@ -42,7 +42,7 @@ describe 'neutron::designate' do
       it 'configures designate in neutron.conf' do
         should contain_neutron_config('DEFAULT/external_dns_driver').with_value('designate')
         should contain_neutron_config('designate/url').with_value('http://ip/designate')
-        should contain_neutron_config('designate/password').with_value('secret')
+        should contain_neutron_config('designate/password').with_value('secret').with_secret(true)
         should contain_neutron_config('designate/username').with_value('user')
         should contain_neutron_config('designate/auth_type').with_value('token')
         should contain_neutron_config('designate/project_id').with_value('id1')

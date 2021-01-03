@@ -73,7 +73,7 @@ class neutron::designate (
 
   neutron_config {
     'DEFAULT/external_dns_driver':         value => 'designate';
-    'designate/password':                  value => $password;
+    'designate/password':                  value => $password, secret => true;
     'designate/url':                       value => $url;
     'designate/auth_type':                 value => $auth_type;
     'designate/username':                  value => $username;

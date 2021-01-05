@@ -1,0 +1,10 @@
+---
+deprecations:
+  - |
+    The parameters for quotas in Neutron LBaaS v2 have been deprecated and have
+    no effect. These parameters will be removed in a future release.
+
+    - ``neutron::quota::quota_loadbalancer``
+    - ``neutron::quota::quota_pool``
+    - ``neutron::quota::quota_member``
+    - ``neutron::quota::quota_health_monitor``

@@ -42,18 +42,6 @@
 #   (optional) Default driver to use for quota checks.
 #   Defaults to $::os_service_default.
 #
-# [*quota_firewall*]
-#   (optional) Number of firewalls allowed per tenant, -1 for unlimited.
-#   Defaults to $::os_service_default.
-#
-# [*quota_firewall_policy*]
-#   (optional) Number of firewalls policies allowed per tenant, -1 for unlimited.
-#   Defaults to $::os_service_default.
-#
-# [*quota_firewall_rule*]
-#   (optional) Number of firewalls rules allowed per tenant, -1 for unlimited.
-#   Defaults to '-1'.
-#
 # [*quota_network_gateway*]
 #   (optional) Number of network gateways allowed per tenant, -1 for unlimited.
 #   Defaults to '5'.
@@ -89,6 +77,18 @@
 #   A negative value means unlimited.
 #   Defaults to undef.
 #
+# [*quota_firewall*]
+#   (optional) Number of firewalls allowed per tenant, -1 for unlimited.
+#   Defaults to undef.
+#
+# [*quota_firewall_policy*]
+#   (optional) Number of firewalls policies allowed per tenant, -1 for unlimited.
+#   Defaults to undef.
+#
+# [*quota_firewall_rule*]
+#   (optional) Number of firewalls rules allowed per tenant, -1 for unlimited.
+#   Defaults to undef.
+#
 class neutron::quota (
   $default_quota             = $::os_service_default,
   $quota_network             = $::os_service_default,
@@ -101,9 +101,6 @@ class neutron::quota (
   $quota_security_group      = $::os_service_default,
   $quota_security_group_rule = $::os_service_default,
   $quota_driver              = $::os_service_default,
-  $quota_firewall            = $::os_service_default,
-  $quota_firewall_policy     = $::os_service_default,
-  $quota_firewall_rule       = -1,
   $quota_network_gateway     = 5,
   $quota_packet_filter       = 100,
   $quota_vip                 = $::os_service_default,
@@ -112,12 +109,16 @@ class neutron::quota (
   $quota_pool                = undef,
   $quota_member              = undef,
   $quota_healthmonitor       = undef,
+  $quota_firewall            = undef,
+  $quota_firewall_policy     = undef,
+  $quota_firewall_rule       = undef,
 ) {
 
   include neutron::deps
 
   $deprecated_param_names = [
-    'quota_loadbalancer', 'quota_pool', 'quota_member', 'quota_healthmonitor'
+    'quota_loadbalancer', 'quota_pool', 'quota_member', 'quota_healthmonitor',
+    'quota_firewall', 'quota_firewall_policy', 'quota_firewall_rule'
   ]
   $deprecated_param_names.each |$param_name| {
     $param = getvar($param_name)
@@ -136,9 +137,6 @@ class neutron::quota (
     'quotas/quota_security_group':      value => $quota_security_group;
     'quotas/quota_security_group_rule': value => $quota_security_group_rule;
     'quotas/quota_driver':              value => $quota_driver;
-    'quotas/quota_firewall':            value => $quota_firewall;
-    'quotas/quota_firewall_policy':     value => $quota_firewall_policy;
-    'quotas/quota_firewall_rule':       value => $quota_firewall_rule;
     'quotas/quota_network_gateway':     value => $quota_network_gateway;
     'quotas/quota_packet_filter':       value => $quota_packet_filter;
     'quotas/quota_vip':                 value => $quota_vip;

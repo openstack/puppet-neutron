@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The parameters for quotas in Neutron FWaaS have been deprecated and have
+    no effect. These parameters will be removed in a future release.
+
+    - ``neutron::quota::quota_firewall``
+    - ``neutron::quota::quota_firewall_policy``
+    - ``neutron::quota::quota_firewall_rule``

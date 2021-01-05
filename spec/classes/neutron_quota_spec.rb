@@ -7,7 +7,6 @@ describe 'neutron::quota' do
 
   let :default_params do
     {
-      :quota_firewall_rule   => -1,
       :quota_network_gateway => 5,
       :quota_packet_filter   => 100
     }
@@ -40,9 +39,6 @@ describe 'neutron::quota' do
           :quota_floatingip          => 100,
           :quota_security_group      => 20,
           :quota_security_group_rule => 200,
-          :quota_firewall            => 1,
-          :quota_firewall_policy     => 1,
-          :quota_firewall_rule       => -1,
           :quota_network_gateway     => 5,
           :quota_packet_filter       => 100,
           :quota_vip                 => 10

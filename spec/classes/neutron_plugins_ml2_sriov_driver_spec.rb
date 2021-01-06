@@ -12,23 +12,31 @@
 #
 # Unit tests for neutron::plugins::ml2::sriov_driver class
 
-required 'spec_helper'
+require 'spec_helper'
 
 describe 'neutron::plugins::ml2::sriov_driver' do
 
-  let :default_params do
-    {
-        :vnic_type_blacklist  => []
-    }
+  shared_examples 'neutron::plugins::ml2::sriov_driver' do
+    context 'when vnic_type_blacklist is not empty list' do
+      let :params do
+        { :vnic_type_blacklist => ['direct'] }
+      end
+
+      it 'should configure direct in vnic_type_blacklist' do
+        should contain_neutron_plugin_ml2('sriov_driver/vnic_type_blacklist').with_value("direct")
+      end
+    end
   end
 
-  context 'when vnic_type_blacklist is not empty list' do
-    before :each do
-      params.merge!(:vnic_type_blacklist => ['direct'])
-    end
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-    it 'should configure direct in vnic_type_blacklist' do
-      shoud contain_neutron_plugin_ml2('sriov_driver/vnic_type_blacklist').with_value("direct")
+      it_behaves_like 'neutron::plugins::ml2::sriov_driver'
     end
   end
 end

@@ -1,5 +1,5 @@
-
 #
+# DEPRECATED !
 # Configure the cisco neutron plugin
 # More info available here:
 # https://wiki.openstack.org/wiki/Cisco-neutron
@@ -119,108 +119,7 @@ class neutron::plugins::cisco(
   $max_networks      = '65568',
   $package_ensure    = 'present',
   $purge_config      = false,
-)
-{
-  include neutron::deps
+) {
 
-  ensure_resource('file', '/etc/neutron/plugins', {
-    ensure => directory,
-    owner  => 'root',
-    group  => 'neutron',
-    mode   => '0640'}
-  )
-
-  ensure_resource('file', '/etc/neutron/plugins/cisco', {
-    ensure => directory,
-    owner  => 'root',
-    group  => 'neutron',
-    mode   => '0640'}
-  )
-
-  if $::operatingsystem == 'Ubuntu' {
-    file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path  => '/etc/default/neutron-server',
-      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line  => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::cisco_config_file}",
-      tag   => 'neutron-file-line',
-    }
-  }
-
-  package { 'neutron-plugin-cisco':
-    ensure => $package_ensure,
-    name   => $::neutron::params::cisco_server_package,
-    tag    => ['neutron-support-package', 'openstack'],
-  }
-
-  # Setting purge for all configs
-  resources { 'neutron_plugin_cisco':
-    purge => $purge_config,
-  }
-
-  resources { 'neutron_plugin_cisco_db_conn':
-    purge => $purge_config,
-  }
-
-  resources { 'neutron_plugin_cisco_l2network':
-    purge => $purge_config,
-  }
-
-  resources { 'neutron_plugin_cisco_credentials':
-    purge => $purge_config,
-  }
-
-  neutron_plugin_cisco {
-    'PLUGINS/nexus_plugin' : value => $nexus_plugin;
-  }
-
-  if $vswitch_plugin {
-    neutron_plugin_cisco {
-      'PLUGINS/vswitch_plugin' : value => $vswitch_plugin;
-    }
-  }
-
-  # neutron-server will crash if the inventory section is empty.
-  # this is usually used for specifying which physical nexus
-  # devices are to be used.
-  neutron_plugin_cisco {
-    'INVENTORY/dummy' : value => 'dummy';
-  }
-
-  neutron_plugin_cisco_db_conn {
-    'DATABASE/name': value => $database_name;
-    'DATABASE/user': value => $database_user;
-    'DATABASE/pass': value => $database_pass;
-    'DATABASE/host': value => $database_host;
-  }
-
-  neutron_plugin_cisco_l2network {
-    'VLANS/vlan_start':               value => $vlan_start;
-    'VLANS/vlan_end':                 value => $vlan_end;
-    'VLANS/vlan_name_prefix':         value => $vlan_name_prefix;
-    'MODEL/model_class':              value => $model_class;
-    'PORTS/max_ports':                value => $max_ports;
-    'PORTPROFILES/max_port_profiles': value => $max_port_profiles;
-    'NETWORKS/max_networks':          value => $max_networks;
-    'SEGMENTATION/manager_class':     value => $manager_class;
-  }
-
-  neutron_plugin_cisco_credentials {
-    'keystone/username': value => $keystone_username;
-    'keystone/password': value => $keystone_password, secret => true;
-    'keystone/auth_url': value => $keystone_auth_url;
-    'keystone/tenant'  : value => $keystone_tenant;
-  }
-
-  # In RH, this link is used to start Neutron process but in Debian, it's used only
-  # to manage database synchronization.
-  if defined(File['/etc/neutron/plugin.ini']) {
-    File <| path == '/etc/neutron/plugin.ini' |> { target => '/etc/neutron/plugins/cisco/cisco_plugins.ini' }
-  }
-  else {
-    file {'/etc/neutron/plugin.ini':
-      ensure => link,
-      target => '/etc/neutron/plugins/cisco/cisco_plugins.ini',
-      tag    => 'neutron-config-file',
-    }
-  }
+  warning('Support for the Neutron Cisco plugin was deprecated and has no effect')
 }

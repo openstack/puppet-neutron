@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The following parameters of the ``neutron::rootwrap`` class have been
+    deprecated and have no effect.
+
+    - ``xenapi_connection_url``
+    - ``xenapi_connection_username``
+    - ``xenapi_connection_password``

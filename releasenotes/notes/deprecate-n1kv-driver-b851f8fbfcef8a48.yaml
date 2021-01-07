@@ -1,0 +1,4 @@
+---
+deprecations:
+  - |
+    Support for Nexus 1000v driver has been deprecated and has no effect now.

@@ -1,5 +1,6 @@
 # == Class: neutron::plugins::ml2::cisco::nexus
 #
+# DEPRECATED !
 # Configure the Cisco Nexus Mech Driver for neutron ML2 plugin
 # More info available here:
 # http://networking-cisco.readthedocs.io
@@ -70,19 +71,5 @@ class neutron::plugins::ml2::cisco::nexus (
   $vxlan_global_config       = true
 ) {
 
-  include neutron::deps
-  include neutron::plugins::ml2::cisco
-
-  neutron_plugin_ml2 {
-    'ml2_cisco/managed_physical_network'  : value => $managed_physical_network;
-    'ml2_cisco/switch_heartbeat_time'     : value => $switch_heartbeat_time;
-    'ml2_cisco/provider_vlan_auto_create' : value => $provider_vlan_auto_create;
-    'ml2_cisco/provider_vlan_auto_trunk'  : value => $provider_vlan_auto_trunk;
-    'ml2_cisco/vxlan_global_config'       : value => $vxlan_global_config;
-  }
-
-  create_resources(neutron::plugins::ml2::cisco::nexus_switch, $nexus_config)
-
-  create_resources(neutron::plugins::ml2::cisco::nexus_creds, $nexus_config)
-
+  warning('Support for networking-cisco has been deprecated and has no effect')
 }

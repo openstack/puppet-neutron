@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    Support for networking-cisco has been deprecated and has no effect now. It
+    will be removed in a future release.

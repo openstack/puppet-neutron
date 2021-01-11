@@ -1,4 +1,5 @@
 #
+# DEPRECATED !
 # Configure the Nexus VXLAN Type Driver
 # More info available here:
 # http://networking-cisco.readthedocs.io
@@ -25,12 +26,7 @@ class neutron::plugins::ml2::cisco::type_nexus_vxlan (
   $vni_ranges,
   $mcast_ranges,
 ) {
-  include neutron::deps
-  include neutron::plugins::ml2::cisco
 
-  neutron_plugin_ml2 {
-    'ml2_type_nexus_vxlan/vni_ranges'   : value => $vni_ranges;
-    'ml2_type_nexus_vxlan/mcast_ranges' : value => $mcast_ranges;
-  }
+  warning('Support for networking-cisco has been deprecated and has no effect')
 }
 

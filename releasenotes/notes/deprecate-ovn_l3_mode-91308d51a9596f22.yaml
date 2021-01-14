@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::plugins::ml2::ovn::ovn_l3_mode`` parameter has been
+    deprecated and has no effect now.

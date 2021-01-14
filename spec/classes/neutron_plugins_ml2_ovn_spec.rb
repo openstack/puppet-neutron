@@ -21,7 +21,6 @@ describe 'neutron::plugins::ml2::ovn' do
        :ovn_sb_ca_cert           => 'sb_ca_cert',
        :ovsdb_connection_timeout => '60',
        :neutron_sync_mode        => 'log',
-       :ovn_l3_mode              => true,
        :vif_type                 => 'ovs',
        :dvr_enabled              => false,
        :dns_servers              => ['8.8.8.8', '10.10.10.10'],
@@ -50,7 +49,6 @@ describe 'neutron::plugins::ml2::ovn' do
       should contain_neutron_plugin_ml2('ovn/ovn_sb_ca_cert').with_value(params[:ovn_sb_ca_cert])
       should contain_neutron_plugin_ml2('ovn/ovsdb_connection_timeout').with_value(params[:ovsdb_connection_timeout])
       should contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(params[:neutron_sync_mode])
-      should contain_neutron_plugin_ml2('ovn/ovn_l3_mode').with_value(params[:ovn_l3_mode])
       should contain_neutron_plugin_ml2('ovn/vif_type').with_value(params[:vif_type])
       should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
       should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(params[:dns_servers].join(','))

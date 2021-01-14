@@ -60,12 +60,6 @@
 #            that are no longer in Neutron.
 #   Defaults to $::os_service_default
 #
-# [*ovn_l3_mode*]
-#   (optional) Whether to use OVN native L3 support. Do not change the
-#   value for existing deployments that contain routers.
-#   Type: boolean
-#   Defaults to $::os_service_default
-#
 # [*vif_type*]
 #   (optional) Type of VIF to be used for ports.
 #   Valid values are 'ovs', 'vhostuser'
@@ -101,7 +95,15 @@
 #              grep "Check pkt length action".
 #   Type: boolean
 #   Defaults to $::os_service_default
-
+#
+# DEPRECATED PARAMETERS
+#
+# [*ovn_l3_mode*]
+#   (optional) Whether to use OVN native L3 support. Do not change the
+#   value for existing deployments that contain routers.
+#   Type: boolean
+#   Defaults to undef
+#
 class neutron::plugins::ml2::ovn(
   $ovn_nb_connection        = $::os_service_default,
   $ovn_sb_connection        = $::os_service_default,
@@ -114,20 +116,21 @@ class neutron::plugins::ml2::ovn(
   $package_ensure           = 'present',
   $ovsdb_connection_timeout = $::os_service_default,
   $neutron_sync_mode        = $::os_service_default,
-  $ovn_l3_mode              = $::os_service_default,
   $vif_type                 = $::os_service_default,
   $ovn_metadata_enabled     = $::os_service_default,
   $dvr_enabled              = $::os_service_default,
   $dns_servers              = $::os_service_default,
   $vhostuser_socket_dir     = $::os_service_default,
   $ovn_emit_need_to_frag    = $::os_service_default,
-  ) {
+  # DEPRECATED PARAMETERS
+  $ovn_l3_mode              = undef,
+) {
 
   include neutron::deps
   require neutron::plugins::ml2
 
-  if ! is_service_default($ovn_l3_mode) {
-    validate_legacy(Boolean, 'validate_bool', $ovn_l3_mode)
+  if $ovn_l3_mode != undef {
+    warning('The ovn_l3_mode parameter has been deprecated and has no effect')
   }
 
   if ! ( $vif_type in ['ovs', 'vhostuser', $::os_service_default] ) {
@@ -156,12 +159,16 @@ class neutron::plugins::ml2::ovn(
     'ovn/ovn_sb_ca_cert'           : value => $ovn_sb_ca_cert;
     'ovn/ovsdb_connection_timeout' : value => $ovsdb_connection_timeout;
     'ovn/neutron_sync_mode'        : value => $neutron_sync_mode;
-    'ovn/ovn_l3_mode'              : value => $ovn_l3_mode;
     'ovn/vif_type'                 : value => $vif_type;
     'ovn/ovn_metadata_enabled'     : value => $ovn_metadata_enabled;
     'ovn/enable_distributed_floating_ip' : value => $dvr_enabled;
     'ovn/dns_servers'              : value => join(any2array($dns_servers), ',');
     'ovn/vhost_sock_dir'           : value => $vhostuser_socket_dir;
     'ovn/ovn_emit_need_to_frag'    : value => $ovn_emit_need_to_frag;
+  }
+
+  # TODO(tkajinam): Remove this when removing the deprecated parameters
+  neutron_plugin_ml2 {
+    'ovn/ovn_l3_mode' : ensure => absent;
   }
 }

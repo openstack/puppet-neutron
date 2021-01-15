@@ -116,7 +116,6 @@ class neutron::plugins::ml2::ovn(
   $package_ensure           = 'present',
   $ovsdb_connection_timeout = $::os_service_default,
   $neutron_sync_mode        = $::os_service_default,
-  $vif_type                 = $::os_service_default,
   $ovn_metadata_enabled     = $::os_service_default,
   $dvr_enabled              = $::os_service_default,
   $dns_servers              = $::os_service_default,
@@ -124,6 +123,7 @@ class neutron::plugins::ml2::ovn(
   $ovn_emit_need_to_frag    = $::os_service_default,
   # DEPRECATED PARAMETERS
   $ovn_l3_mode              = undef,
+  $vif_type                 = undef,
 ) {
 
   include neutron::deps
@@ -133,8 +133,8 @@ class neutron::plugins::ml2::ovn(
     warning('The ovn_l3_mode parameter has been deprecated and has no effect')
   }
 
-  if ! ( $vif_type in ['ovs', 'vhostuser', $::os_service_default] ) {
-    fail( 'Invalid value for vif_type parameter' )
+  if $vif_type != undef {
+    warning('The vif_type parameter has been deprecated and has no effect')
   }
 
   if ! ( $neutron_sync_mode in ['off', 'log', 'repair', $::os_service_default] ) {
@@ -159,7 +159,6 @@ class neutron::plugins::ml2::ovn(
     'ovn/ovn_sb_ca_cert'           : value => $ovn_sb_ca_cert;
     'ovn/ovsdb_connection_timeout' : value => $ovsdb_connection_timeout;
     'ovn/neutron_sync_mode'        : value => $neutron_sync_mode;
-    'ovn/vif_type'                 : value => $vif_type;
     'ovn/ovn_metadata_enabled'     : value => $ovn_metadata_enabled;
     'ovn/enable_distributed_floating_ip' : value => $dvr_enabled;
     'ovn/dns_servers'              : value => join(any2array($dns_servers), ',');
@@ -170,5 +169,6 @@ class neutron::plugins::ml2::ovn(
   # TODO(tkajinam): Remove this when removing the deprecated parameters
   neutron_plugin_ml2 {
     'ovn/ovn_l3_mode' : ensure => absent;
+    'ovn/vif_type'    : ensure => absent;
   }
 }

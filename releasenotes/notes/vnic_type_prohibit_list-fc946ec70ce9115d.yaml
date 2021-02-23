@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``vnic_type_blacklist`` parameter has been deprecated. Use the
+    ``vnic_type_prohibit_list`` parameter instead.

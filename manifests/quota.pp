@@ -55,6 +55,11 @@
 #   A negative value means unlimited.
 #   Defaults to $::os_service_default.
 #
+# [*quota_rbac_policy*]
+#   (optional) Number of rbac policies allowed per tenant.
+#   A negative value means unlimited.
+#   Defaults to $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*quota_loadbalancer*]
@@ -104,6 +109,8 @@ class neutron::quota (
   $quota_network_gateway     = 5,
   $quota_packet_filter       = 100,
   $quota_vip                 = $::os_service_default,
+  # rbac extension
+  $quota_rbac_policy         = $::os_service_default,
   # DEPRECATED PARAMETERS
   $quota_loadbalancer        = undef,
   $quota_pool                = undef,
@@ -140,5 +147,6 @@ class neutron::quota (
     'quotas/quota_network_gateway':     value => $quota_network_gateway;
     'quotas/quota_packet_filter':       value => $quota_packet_filter;
     'quotas/quota_vip':                 value => $quota_vip;
+    'quotas/quota_rbac_policy':         value => $quota_rbac_policy;
   }
 }

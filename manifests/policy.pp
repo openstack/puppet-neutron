@@ -4,6 +4,10 @@
 #
 # === Parameters
 #
+# [*enforce_scope*]
+#  (Optional) Whether or not to enforce scope when evaluating policies.
+#  Defaults to $::os_service_default.
+#
 # [*policies*]
 #   (Optional) Set of policies to configure for neutron
 #   Example :
@@ -24,8 +28,9 @@
 #   Defaults to /etc/neutron/policy.yaml
 #
 class neutron::policy (
-  $policies    = {},
-  $policy_path = '/etc/neutron/policy.yaml',
+  $enforce_scope = $::os_service_default,
+  $policies      = {},
+  $policy_path   = '/etc/neutron/policy.yaml',
 ) {
 
   include neutron::deps
@@ -42,6 +47,9 @@ class neutron::policy (
 
   create_resources('openstacklib::policy::base', $policies)
 
-  oslo::policy { 'neutron_config': policy_file => $policy_path }
+  oslo::policy { 'neutron_config':
+    enforce_scope => $enforce_scope,
+    policy_file   => $policy_path
+  }
 
 }

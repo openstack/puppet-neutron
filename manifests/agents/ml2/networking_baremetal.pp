@@ -148,7 +148,7 @@ class neutron::agents::ml2::networking_baremetal (
     'ironic/auth_type':           value => $auth_type;
     'ironic/auth_url':            value => $auth_url;
     'ironic/username':            value => $username;
-    'ironic/password':            value => $password;
+    'ironic/password':            value => $password, secret => true;
     'ironic/project_domain_name': value => $project_domain_name;
     'ironic/project_name':        value => $project_name;
     'ironic/user_domain_name':    value => $user_domain_name;

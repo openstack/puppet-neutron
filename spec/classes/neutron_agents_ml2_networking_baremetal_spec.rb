@@ -44,7 +44,7 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       should contain_ironic_neutron_agent_config('ironic/auth_type').with_value(p[:auth_type])
       should contain_ironic_neutron_agent_config('ironic/auth_url').with_value(p[:auth_url])
       should contain_ironic_neutron_agent_config('ironic/username').with_value(p[:username])
-      should contain_ironic_neutron_agent_config('ironic/password').with_value(p[:password])
+      should contain_ironic_neutron_agent_config('ironic/password').with_value(p[:password]).with_secret(true)
       should contain_ironic_neutron_agent_config('ironic/project_domain_name').with_value(p[:project_domain_name])
       should contain_ironic_neutron_agent_config('ironic/project_name').with_value(p[:project_name])
       should contain_ironic_neutron_agent_config('ironic/user_domain_name').with_value(p[:user_domain_name])

@@ -13,9 +13,6 @@ class neutron::params {
   $cisco_config_file           = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
   $opencontrail_plugin_package = 'neutron-plugin-contrail'
   $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
-  $midonet_server_package      = "python${pyvers}-networking-midonet"
-  $midonet_server_package_ext  = "python${pyvers}-networking-midonet-ext"
-  $midonet_config_file         = '/etc/neutron/plugins/midonet/midonet.ini'
   $ovn_plugin_package          = "python${pyvers}-networking-ovn"
   $vpp_plugin_package          = "python${pyvers}-networking-vpp"
   $vpp_agent_service           = 'neutron-vpp-agent'

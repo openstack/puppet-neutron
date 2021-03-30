@@ -1,5 +1,6 @@
 # == Class: midonet::neutron_plugin
 #
+# DEPERECATED !
 # Install and configure Midonet Neutron Plugin. Please note that this manifest
 # does not install the 'python-networking-midonet' package, it only
 # configures Neutron to do so needed for this deployment.  Check out the
@@ -110,83 +111,5 @@ class neutron::plugins::midonet (
   include neutron::deps
   include neutron::params
 
-  if $midonet_api_ip {
-    # If we got midonet_api_ip here, display deprecation warning and use this value.
-    warning('The midonet_api_ip parameter is going to be removed in future releases. Use the midonet_cluster_ip parameter instead.')
-    $cluster_ip = $midonet_api_ip
-  } else {
-    $cluster_ip = $midonet_cluster_ip
-  }
-
-  if $midonet_api_port {
-    # If we got midonet_api_port here, display deprecation warning and use this value.
-    warning('The midonet_api_port parameter is going to be removed in future releases. Use the midonet_cluster_port parameter instead.')
-    $cluster_port = $midonet_api_port
-  } else {
-    $cluster_port = $midonet_cluster_port
-  }
-
-  ensure_resource('file', '/etc/neutron/plugins/midonet',
-    {
-      ensure => directory,
-      owner  => 'root',
-      group  => 'neutron',
-      mode   => '0640'
-    }
-  )
-
-  resources { 'neutron_plugin_midonet':
-    purge => $purge_config,
-  }
-
-  package { 'python-networking-midonet':
-    ensure => $package_ensure,
-    name   => $::neutron::params::midonet_server_package,
-    tag    => ['openstack', 'neutron-package'],
-    }
-
-  neutron_plugin_midonet {
-    'MIDONET/midonet_uri':  value => "http://${cluster_ip}:${cluster_port}/midonet-api";
-    'MIDONET/username':     value => $keystone_username;
-    'MIDONET/password':     value => $keystone_password, secret =>true;
-    'MIDONET/project_id':   value => $keystone_tenant;
-  }
-
-  if $::osfamily == 'Debian' {
-    file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path  => '/etc/default/neutron-server',
-      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line  => "NEUTRON_PLUGIN_CONFIG=${::neutron::params::midonet_config_file}",
-      tag   => 'neutron-file-line',
-    }
-  }
-
-  # In RH, this link is used to start Neutron process but in Debian, it's used only
-  # to manage database synchronization.
-  if defined(File['/etc/neutron/plugin.ini']) {
-    File <| path == '/etc/neutron/plugin.ini' |> { target => $::neutron::params::midonet_config_file }
-  }
-  else {
-    file {'/etc/neutron/plugin.ini':
-      ensure => link,
-      target => $::neutron::params::midonet_config_file,
-      tag    => 'neutron-config-file'
-    }
-  }
-
-  if $sync_db {
-    Package<| title == 'python-networking-midonet' |>     ~> Exec['midonet-db-sync']
-    exec { 'midonet-db-sync':
-      command     => 'neutron-db-manage --subproject networking-midonet upgrade head',
-      path        => '/usr/bin',
-      subscribe   => [
-        Anchor['neutron::install::end'],
-        Anchor['neutron::config::end'],
-        Anchor['neutron::dbsync::begin'],
-        Exec['neutron-db-sync']
-      ],
-      notify      => Anchor['neutron::dbsync::end'],
-      refreshonly => true
-    }
-  }
+  warning('Support for the midonet plugin has been deprecated and has no effect')
 }

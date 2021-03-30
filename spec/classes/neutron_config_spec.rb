@@ -128,7 +128,6 @@ describe 'neutron::config' do
     let :params do
       {
         :plugin_linuxbridge_config     => config_hash,
-        :plugin_midonet_config         => config_hash,
         :plugin_nsx_config             => config_hash,
         :plugin_nvp_config             => config_hash,
         :plugin_opencontrail_config    => config_hash,
@@ -141,12 +140,6 @@ describe 'neutron::config' do
       should contain_neutron_plugin_linuxbridge('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_plugin_linuxbridge('DEFAULT/bar').with_value('barValue')
       should contain_neutron_plugin_linuxbridge('DEFAULT/baz').with_ensure('absent')
-    end
-
-    it 'configures arbitrary neutron_plugin_midonet configurations' do
-      should contain_neutron_plugin_midonet('DEFAULT/foo').with_value('fooValue')
-      should contain_neutron_plugin_midonet('DEFAULT/bar').with_value('barValue')
-      should contain_neutron_plugin_midonet('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_nsx configurations' do

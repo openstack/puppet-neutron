@@ -32,11 +32,16 @@
 #   (Optional) Path to the neutron policy.yaml file
 #   Defaults to /etc/neutron/policy.yaml
 #
+# [*policy_dirs*]
+#   (Optional) Path to the neutron policy folder
+#   Defaults to $::os_service_default
+#
 class neutron::policy (
   $enforce_scope        = $::os_service_default,
   $enforce_new_defaults = $::os_service_default,
   $policies             = {},
   $policy_path          = '/etc/neutron/policy.yaml',
+  $policy_dirs          = $::os_service_default,
 ) {
 
   include neutron::deps
@@ -56,7 +61,8 @@ class neutron::policy (
   oslo::policy { 'neutron_config':
     enforce_scope        => $enforce_scope,
     enforce_new_defaults => $enforce_new_defaults,
-    policy_file          => $policy_path
+    policy_file          => $policy_path,
+    policy_dirs          => $policy_dirs,
   }
 
 }

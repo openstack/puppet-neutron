@@ -7,6 +7,7 @@ describe 'neutron::policy' do
         :enforce_scope        => false,
         :enforce_new_defaults => false,
         :policy_path          => '/etc/neutron/policy.yaml',
+        :policy_dirs          => '/etc/neutron/policy.d',
         :policies             => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
@@ -28,6 +29,7 @@ describe 'neutron::policy' do
         :enforce_scope        => false,
         :enforce_new_defaults => false,
         :policy_file          => '/etc/neutron/policy.yaml',
+        :policy_dirs          => '/etc/neutron/policy.d',
       )
     end
   end

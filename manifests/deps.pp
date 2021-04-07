@@ -67,6 +67,8 @@ class neutron::deps {
   Anchor['neutron::config::begin'] -> Neutron_rootwrap_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Ovn_metadata_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Ironic_neutron_agent_config<||> ~> Anchor['neutron::config::end']
+  Anchor['neutron::config::begin'] -> Neutron_api_uwsgi_config<||> ~> Anchor['neutron::config::end']
+
 
   # Support packages need to be installed in the install phase, but we don't
   # put them in the chain above because we don't want any false dependencies

@@ -120,6 +120,26 @@ describe 'neutron::agents::l3' do
         should contain_neutron_l3_agent_config('agent/availability_zone').with_value(p[:availability_zone])
       end
     end
+
+    context 'with extensions in string' do
+      before :each do
+        params.merge!(:extensions => 'fip_qos,gateway_ip_qos,port_forwarding')
+      end
+
+      it 'configures extentions' do
+        should contain_neutron_l3_agent_config('agent/extensions').with_value('fip_qos,gateway_ip_qos,port_forwarding')
+      end
+    end
+
+    context 'with extensions in array' do
+      before :each do
+        params.merge!(:extensions => ['fip_qos', 'gateway_ip_qos', 'port_forwarding'])
+      end
+
+      it 'configures extentions' do
+        should contain_neutron_l3_agent_config('agent/extensions').with_value('fip_qos,gateway_ip_qos,port_forwarding')
+      end
+    end
   end
 
   shared_examples 'neutron::agents::l3 on Debian' do

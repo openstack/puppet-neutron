@@ -80,7 +80,7 @@
 #   Defaults to $::os_service_default
 #
 # [*extensions*]
-#   (optional) L3 agent extensions to enable.
+#   (optional) List of the L3 agent extensions to enable.
 #   Defaults to $::os_service_default
 #
 # [*radvd_user*]
@@ -161,7 +161,7 @@ class neutron::agents::l3 (
     'DEFAULT/radvd_user':                   value => $radvd_user;
     'ovs/integration_bridge':               value => $ovs_integration_bridge;
     'agent/availability_zone':              value => $availability_zone;
-    'agent/extensions':                     value => $extensions;
+    'agent/extensions':                     value => join(any2array($extensions), ',');
   }
 
   if $::neutron::params::l3_agent_package {

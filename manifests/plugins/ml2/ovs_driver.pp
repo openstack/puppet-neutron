@@ -19,38 +19,17 @@
 #  administratively prohibited by the OVS mechanism driver
 #  Defaults to []
 #
-# DEPRECATED PARAMETERS
-#
-# [*vnic_type_blacklist*]
-#  (optional) list of VNIC types for which support in Neutron is
-#  administratively prohibited by the OVS mechanism driver
-#  Defaults to undef
-#
 class neutron::plugins::ml2::ovs_driver (
   $vnic_type_prohibit_list = [],
-  # DEPRECATED PARAMETERS
-  $vnic_type_blacklist     = undef,
 ){
-
-  if $vnic_type_blacklist != undef {
-    warning('The vnic_type_blacklist parameter is deprecated. Use vnic_type_prohibit_list instead')
-    $vnic_type_prohibit_list_real = $vnic_type_blacklist
-  } else {
-    $vnic_type_prohibit_list_real = $vnic_type_prohibit_list
-  }
-
-  validate_legacy(Array, 'validate_array', $vnic_type_prohibit_list_real)
-  if !empty($vnic_type_prohibit_list_real) {
+  validate_legacy(Array, 'validate_array', $vnic_type_prohibit_list)
+  if !empty($vnic_type_prohibit_list) {
     neutron_plugin_ml2 {
-      'ovs_driver/vnic_type_prohibit_list': value => join(any2array($vnic_type_prohibit_list_real), ',');
+      'ovs_driver/vnic_type_prohibit_list': value => join(any2array($vnic_type_prohibit_list), ',');
     }
   } else {
     neutron_plugin_ml2 {
       'ovs_driver/vnic_type_prohibit_list': value => $::os_service_default;
     }
-  }
-
-  neutron_plugin_ml2 {
-    'ovs_driver/vnic_type_blacklist': ensure => absent;
   }
 }

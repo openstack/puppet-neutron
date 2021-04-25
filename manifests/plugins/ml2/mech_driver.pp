@@ -23,21 +23,8 @@
 #   (required) Supported PCI vendor devices, defined by vendor_id:product_id according
 #   to the PCI ID Repository. Default enables support for Intel and Mellanox SR-IOV capable NICs
 #
-# DEPRECATED PARAMETERS
-#
-# [*ovs_vnic_type_blacklist*]
-#  (optional) list of VNIC types for which support in Neutron is
-#  administratively prohibited by the OVS mechanism driver
-#
-# [*sriov_vnic_type_blacklist*]
-#  (optional) list of VNIC types for which support in Neutron is
-#  administratively prohibited by the SR-IOV mechanism driver
-#
 define neutron::plugins::ml2::mech_driver (
   $supported_pci_vendor_devs,
-  # DEPRECATED PARAMETERS
-  $ovs_vnic_type_blacklist      = undef,
-  $sriov_vnic_type_blacklist    = undef,
 ){
 
   include neutron::deps
@@ -62,22 +49,6 @@ define neutron::plugins::ml2::mech_driver (
       default: {
         fail("Unsupported osfamily ${::osfamily}")
       }
-    }
-  }
-
-  if ($ovs_vnic_type_blacklist != undef) {
-    warning('neutron::plugins::ml2::mech_driver::ovs_vnic_type_blacklist has been \
-deperecated. Use neutron::plugins::ml2::ovs_driver class')
-    class { 'neutron::plugins::ml2::ovs_driver':
-      vnic_type_blacklist => $ovs_vnic_type_blacklist
-    }
-  }
-
-  if ($sriov_vnic_type_blacklist != undef) {
-    warning('neutron::plugins::ml2::mech_driver::sriov_vnic_type_blacklist has been \
-deperecated. Use neutron::plugins::ml2::sriov_driver class')
-    class { 'neutron::plugins::ml2::sriov_vnic_type_blacklist':
-      vnic_type_blacklist => $sriov_vnic_type_blacklist
     }
   }
 }

@@ -1,0 +1,9 @@
+---
+upgrade:
+  - |
+    The following four parmaeters have been removed.
+
+    - ``neutron::plugins::ml2::mech_driver::ovs_vnic_type_blacklist``
+    - ``neutron::plugins::ml2::mech_driver::sriov_vnic_type_blacklist``
+    - ``neutron::plugins::ml2::ovs_driver``
+    - ``neutron::plugins::ml2::sriov_driver``

@@ -56,16 +56,6 @@
 #   the keystone catalog.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*project_domain_id*]
-#   (optional) Nova project's domain ID
-#   Defaults to undef
-#
-# [*user_domain_id*]
-#   (optional) User's domain ID for connection to nova in admin context
-#   Defaults to undef
-#
 class neutron::server::placement (
   $password,
   $auth_type           = 'password',
@@ -76,9 +66,6 @@ class neutron::server::placement (
   $auth_url            = 'http://127.0.0.1:5000',
   $region_name         = $::os_service_default,
   $endpoint_type       = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $project_domain_id   = undef,
-  $user_domain_id      = undef,
 ) {
 
   include neutron::deps
@@ -93,21 +80,5 @@ class neutron::server::placement (
     'placement/region_name':         value => $region_name;
     'placement/endpoint_type':       value => $endpoint_type;
     'placement/auth_type':           value => $auth_type;
-  }
-
-  if $project_domain_id != undef {
-    warning('project_domain_id is deprecated and will be removed in a future release. \
-Use project_domain_name instead')
-    neutron_config {
-      'placement/project_domain_id': value => $project_domain_id;
-    }
-  }
-
-  if $user_domain_id != undef {
-    warning('user_domain_id is deprecated and will be removed in a future release. \
-Use user_domain_name instead')
-    neutron_config {
-      'placement/user_domain_id': value => $user_domain_id;
-    }
   }
 }

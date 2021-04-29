@@ -121,9 +121,6 @@ class neutron::agents::ml2::networking_baremetal (
   $retry_interval      = $::os_service_default,
   $max_retries         = $::os_service_default,
   $purge_config        = false,
-  # DEPRECATED PARAMETERS
-  $project_domain_id   = undef,
-  $user_domain_id      = undef,
 ) {
 
   include neutron::deps
@@ -155,22 +152,6 @@ class neutron::agents::ml2::networking_baremetal (
     'ironic/region_name':         value => $region_name;
     'ironic/retry_interval':      value => $retry_interval;
     'ironic/max_retries':         value => $max_retries;
-  }
-
-  if $project_domain_id != undef {
-    warning('project_domain_id is deprecated and will be removed in a future release. \
-Use project_domain_name instead')
-    ironic_neutron_agent_config {
-      'ironic/project_domain_id': value => $project_domain_id;
-    }
-  }
-
-  if $user_domain_id != undef {
-    warning('user_domain_id is deprecated and will be removed in a future release. \
-Use user_domain_name instead')
-    ironic_neutron_agent_config {
-      'ironic/user_domain_id': value => $user_domain_id;
-    }
   }
 
   package { 'python-ironic-neutron-agent':

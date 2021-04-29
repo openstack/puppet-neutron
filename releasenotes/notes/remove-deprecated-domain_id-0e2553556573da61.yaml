@@ -1,0 +1,10 @@
+---
+upgrade:
+  - |
+    The following deprecated parameters have been removed.
+
+    - ``neutron::ml2::server::placement::project_domain_id``
+    - ``neutron::ml2::server::placement::user_domain_id``
+    - ``neutron::ml2::networking_baremetal::project_domain_id``
+    - ``neutron::ml2::networking_baremetal::user_domain_id``
+

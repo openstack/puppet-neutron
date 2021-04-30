@@ -44,9 +44,10 @@ class neutron::plugins::ml2::networking_ansible(
     fail("Unsupported osfamily ${::osfamily}")
   }
 
-  ensure_resource('package', 'python2-networking-ansible',
+  ensure_resource('package', 'python-networking-ansible',
     {
       ensure => $package_ensure,
+      name   => $::neutron::params::networking_ansible_package,
       tag    => ['openstack', 'neutron-package']
     }
   )

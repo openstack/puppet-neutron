@@ -18,14 +18,14 @@ describe 'neutron::plugins::ml2::networking_baremetal' do
 
     it { should contain_class('neutron::params') }
 
-    it 'installs networking-baremetal python2-networking-baremetal package' do
-      should contain_package('python2-networking-baremetal').with(
+    it 'installs networking-baremetal python-networking-baremetal package' do
+      should contain_package('python-networking-baremetal').with(
         :name   => platform_params[:networking_baremetal_package],
         :ensure => p[:package_ensure],
         :tag    => ['openstack', 'neutron-plugin-ml2-package'],
       )
-      should contain_package('python2-networking-baremetal').that_requires('Anchor[neutron::install::begin]')
-      should contain_package('python2-networking-baremetal').that_notifies('Anchor[neutron::config::end]')
+      should contain_package('python-networking-baremetal').that_requires('Anchor[neutron::install::begin]')
+      should contain_package('python-networking-baremetal').that_notifies('Anchor[neutron::config::end]')
     end
   end
 
@@ -39,7 +39,15 @@ describe 'neutron::plugins::ml2::networking_baremetal' do
       let (:platform_params) do
         case facts[:osfamily]
         when 'RedHat'
-          { :networking_baremetal_package => 'python2-networking-baremetal'}
+          if facts[:operatingsystem] == 'Fedora'
+            { :networking_baremetal_package => 'python3-networking-baremetal'}
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :networking_baremetal_package => 'python3-networking-baremetal'}
+            else
+              { :networking_baremetal_package => 'python2-networking-baremetal'}
+            end
+          end
         end
       end
       case facts[:osfamily]

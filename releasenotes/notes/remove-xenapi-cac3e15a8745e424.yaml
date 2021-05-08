@@ -1,0 +1,10 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``neutron::rootwrap`` class have been
+    removed.
+
+    - ``xenapi_connection_url``
+    - ``xenapi_connection_username``
+    - ``xenapi_connection_password``
+

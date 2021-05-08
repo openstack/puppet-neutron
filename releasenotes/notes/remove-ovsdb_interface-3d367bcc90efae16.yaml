@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``neutron::agents::ml2::ovs::ovsdb_interface`` parameter has been
+    removed.

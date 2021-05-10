@@ -199,13 +199,6 @@
 #  final egress tables direct output flows for unicast traffic. (boolean value)
 #  Defaults to $::os_service_default
 #
-# DEPRECATED
-#
-# [*ovsdb_interface*]
-#   (optional) The interface for interacting with the OVSDB
-#   Allowed values: vsctl, native
-#   Defaults to undef
-#
 class neutron::agents::ml2::ovs (
   $package_ensure                = 'present',
   $enabled                       = true,
@@ -244,8 +237,6 @@ class neutron::agents::ml2::ovs (
   $resource_provider_bandwidths  = [],
   $resource_provider_hypervisors = [],
   $explicitly_egress_direct      = $::os_service_default,
-  # DEPRECATED
-  $ovsdb_interface               = undef,
 ) {
 
   include neutron::deps
@@ -343,15 +334,6 @@ class neutron::agents::ml2::ovs (
   neutron_agent_ovs {
     'ovs/resource_provider_bandwidths':  value => $resource_provider_bandwidths_real;
     'ovs/resource_provider_hypervisors': value => $resource_provider_hypervisors_real;
-  }
-
-  # TODO(tobias.urdin): Remove in V release.
-  if $ovsdb_interface != undef {
-    warning('ovsdb_interface is deprecated and has no effect')
-  }
-  neutron_agent_ovs {
-    'ovs/ovsdb_interface': ensure => absent;
-    'ovs/of_interface': ensure => absent;
   }
 
   neutron_agent_ovs {

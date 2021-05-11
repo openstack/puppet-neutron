@@ -272,7 +272,7 @@ class neutron::server (
   $igmp_snooping_enable             = $::os_service_default,
   # DEPRECATED PARAMETERS
   $ensure_fwaas_package             = undef,
-) inherits ::neutron::params {
+) inherits neutron::params {
 
   include neutron::deps
   include neutron::db

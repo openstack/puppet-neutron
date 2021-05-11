@@ -90,16 +90,6 @@
 #   ironic-neutron-agent config.
 #   Defaults to false.
 #
-# DEPRECATED PARAMETERS
-#
-# [*project_domain_id*]
-#   (optional) Domain ID containing project
-#   Defaults to undef
-#
-# [*user_domain_id*]
-#   (optional) User's domain ID for connection to ironic in admin context
-#   Defaults to undef
-#
 class neutron::agents::ml2::networking_baremetal (
   $password,
   $enabled             = true,

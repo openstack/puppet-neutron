@@ -65,6 +65,15 @@ describe 'neutron::agents::ml2::vpp' do
       end
     end
 
+    context 'with the host parameter' do
+      before :each do
+        params.merge!(:host => 'myhost')
+      end
+      it 'should set the host parameter' do
+        should contain_neutron_agent_vpp('DEFAULT/host').with_value('myhost')
+      end
+    end
+
     context 'when supplying a physnet mapping' do
       before :each do
         params.merge!(:physnets => 'physnet0:GigabitEthernet2/2/0,physnet1:GigabitEthernet2/2/1')

@@ -277,8 +277,6 @@ class neutron::server (
   include neutron::deps
   include neutron::db
   include neutron::policy
-  # Work-around LP#1551974. neutron requires the keystoneclient to auth tokens
-  include keystone::client
 
   if !is_service_default($default_availability_zones) {
     validate_legacy(Array, 'validate_array', $default_availability_zones)

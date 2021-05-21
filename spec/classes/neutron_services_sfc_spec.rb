@@ -86,15 +86,7 @@ describe 'neutron::services::sfc' do
         when 'Debian'
           { :sfc_package_name => 'python3-networking-sfc' }
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :sfc_package_name => 'python3-networking-sfc' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :sfc_package_name => 'python3-networking-sfc' }
-            else
-              { :sfc_package_name => 'python-networking-sfc' }
-            end
-          end
+          { :sfc_package_name => 'python3-networking-sfc' }
         end
       end
       it_behaves_like 'neutron sfc service plugin'

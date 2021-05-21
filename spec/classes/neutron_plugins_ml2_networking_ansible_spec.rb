@@ -73,15 +73,7 @@ describe 'neutron::plugins::ml2::networking_ansible' do
       let (:platform_params) do
         case facts[:osfamily]
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :networking_ansible_package => 'python3-networking-ansible'}
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :networking_ansible_package => 'python3-networking-ansible'}
-            else
-              { :networking_ansible_package => 'python2-networking-ansible'}
-            end
-          end
+          { :networking_ansible_package => 'python3-networking-ansible'}
         end
       end
       case facts[:osfamily]

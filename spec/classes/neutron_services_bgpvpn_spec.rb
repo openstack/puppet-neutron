@@ -80,15 +80,7 @@ describe 'neutron::services::bgpvpn' do
         when 'Debian'
           { :bgpvpn_package_name => 'python3-networking-bgpvpn' }
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :bgpvpn_package_name => 'python3-networking-bgpvpn' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :bgpvpn_package_name => 'python3-networking-bgpvpn' }
-            else
-              { :bgpvpn_package_name => 'python-networking-bgpvpn' }
-            end
-          end
+          { :bgpvpn_package_name => 'python3-networking-bgpvpn' }
         end
       end
       it_behaves_like 'neutron bgpvpn service plugin'

@@ -58,13 +58,13 @@ describe 'neutron::agents::ml2::networking_baremetal' do
     end
 
     it 'installs ironic-neutron-agent agent package' do
-      should contain_package('python2-ironic-neutron-agent').with(
+      should contain_package('python-ironic-neutron-agent').with(
         :name   => platform_params[:networking_baremetal_agent_package],
         :ensure => p[:package_ensure],
         :tag    => ['openstack', 'neutron-package'],
       )
-      should contain_package('python2-ironic-neutron-agent').that_requires('Anchor[neutron::install::begin]')
-      should contain_package('python2-ironic-neutron-agent').that_notifies('Anchor[neutron::install::end]')
+      should contain_package('python-ironic-neutron-agent').that_requires('Anchor[neutron::install::begin]')
+      should contain_package('python-ironic-neutron-agent').that_notifies('Anchor[neutron::install::end]')
     end
 
     it 'configures networking-baremetal ironic-neutron-agent service' do
@@ -105,8 +105,18 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       let (:platform_params) do
         case facts[:osfamily]
         when 'RedHat'
-          { :networking_baremetal_agent_package => 'python2-ironic-neutron-agent',
-            :networking_baremetal_agent_service => 'ironic-neutron-agent' }
+          if facts[:operatingsystem] == 'Fedora'
+            { :networking_baremetal_agent_package => 'python3-ironic-neutron-agent',
+              :networking_baremetal_agent_service => 'ironic-neutron-agent' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :networking_baremetal_agent_package => 'python3-ironic-neutron-agent',
+                :networking_baremetal_agent_service => 'ironic-neutron-agent' }
+            else
+              { :networking_baremetal_agent_package => 'python-ironic-neutron-agent',
+                :networking_baremetal_agent_service => 'ironic-neutron-agent' }
+            end
+          end
         end
       end
       case facts[:osfamily]

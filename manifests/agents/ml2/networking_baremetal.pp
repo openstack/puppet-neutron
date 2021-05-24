@@ -156,7 +156,7 @@ class neutron::agents::ml2::networking_baremetal (
     'ironic/max_retries':         value => $max_retries;
   }
 
-  package { 'python2-ironic-neutron-agent':
+  package { 'python-ironic-neutron-agent':
     ensure => $package_ensure,
     name   => $::neutron::params::networking_baremetal_agent_package,
     tag    => ['openstack', 'neutron-package'],

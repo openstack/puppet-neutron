@@ -30,14 +30,14 @@ describe 'neutron::plugins::ml2::networking_ansible' do
 
     it { should contain_class('neutron::params') }
 
-    it 'installs networking-ansible python2-networking-ansible package' do
-      should contain_package('python2-networking-ansible').with(
+    it 'installs networking-ansible python-networking-ansible package' do
+      should contain_package('python-networking-ansible').with(
         :name   => platform_params[:networking_ansible_package],
         :ensure => p[:package_ensure],
         :tag    => ['openstack', 'neutron-plugin-ml2-package'],
       )
-      should contain_package('python2-networking-ansible').that_requires('Anchor[neutron::install::begin]')
-      should contain_package('python2-networking-ansible').that_notifies('Anchor[neutron::config::end]')
+      should contain_package('python-networking-ansible').that_requires('Anchor[neutron::install::begin]')
+      should contain_package('python-networking-ansible').that_notifies('Anchor[neutron::config::end]')
     end
 
     it 'should configure non-host config' do
@@ -73,7 +73,15 @@ describe 'neutron::plugins::ml2::networking_ansible' do
       let (:platform_params) do
         case facts[:osfamily]
         when 'RedHat'
-          { :networking_ansible_package => 'python2-networking-ansible'}
+          if facts[:operatingsystem] == 'Fedora'
+            { :networking_ansible_package => 'python3-networking-ansible'}
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :networking_ansible_package => 'python3-networking-ansible'}
+            else
+              { :networking_ansible_package => 'python-networking-ansible'}
+            end
+          end
         end
       end
       case facts[:osfamily]

@@ -75,8 +75,8 @@ class neutron::params {
     $fwaas_package                      = 'openstack-neutron-fwaas'
     $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
     $neutron_wsgi_script_source         = '/usr/bin/neutron-api'
-    $networking_baremetal_package       = 'python2-networking-baremetal'
-    $networking_baremetal_agent_package = 'python2-ironic-neutron-agent'
+    $networking_baremetal_package       = "python${pyvers}-networking-baremetal"
+    $networking_baremetal_agent_package = "python${pyvers}-ironic-neutron-agent"
     $networking_baremetal_agent_service = 'ironic-neutron-agent'
     $networking_ansible_package         = "python${pyvers}-networking-ansible"
     $mlnx_agent_service                 = 'neutron-mlnx-agent'

@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The default value of neutron::server::placement::username is currently 'nova' but will be
+    changed to 'placement' in the next release. We recommend deployments to explicitly set it
+    to an appropriate value if the new value is not wanted.

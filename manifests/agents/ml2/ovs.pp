@@ -188,6 +188,11 @@
 #   (optional) List of <bridge>:<hypervisor>
 #   Defaults to empty list
 #
+# [*resource_provider_default_hypervisor*]
+#   (optional) The default hypervisor name used to locate the parent of
+#   the resource provider.
+#   Defaults to $::os_service_default
+#
 # [*explicitly_egress_direct*]
 #  (optional) When set to True, the accepted egress unicast traffic will not
 #  use action NORMAL. The accepted egress packets will be taken care of in the
@@ -254,6 +259,7 @@ class neutron::agents::ml2::ovs (
   $igmp_snooping_enable                 = $::os_service_default,
   $resource_provider_bandwidths         = [],
   $resource_provider_hypervisors        = [],
+  $resource_provider_default_hypervisor = $::os_service_default,
   $explicitly_egress_direct             = $::os_service_default,
   $network_log_rate_limit               = $::os_service_default,
   $network_log_burst_limit              = $::os_service_default,
@@ -355,8 +361,9 @@ class neutron::agents::ml2::ovs (
   }
 
   neutron_agent_ovs {
-    'ovs/resource_provider_bandwidths':  value => $resource_provider_bandwidths_real;
-    'ovs/resource_provider_hypervisors': value => $resource_provider_hypervisors_real;
+    'ovs/resource_provider_bandwidths':         value => $resource_provider_bandwidths_real;
+    'ovs/resource_provider_hypervisors':        value => $resource_provider_hypervisors_real;
+    'ovs/resource_provider_default_hypervisor': value => $resource_provider_default_hypervisor;
   }
 
   # TODO(tobias.urdin): Remove in V release.

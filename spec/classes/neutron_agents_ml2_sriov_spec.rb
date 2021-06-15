@@ -66,8 +66,12 @@ describe 'neutron::agents::ml2::sriov' do
       should contain_service('neutron-sriov-nic-agent-service').that_notifies('Anchor[neutron::service::end]')
     end
 
-    it 'does not configure resource_provider_bandwidths by default' do
+    it 'does not configure resource provider parameters by default' do
       should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_bandwidths').\
+        with_value('<SERVICE DEFAULT>')
+      should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_hypervisors').\
+        with_value('<SERVICE DEFAULT>')
+      should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_default_hypervisor').\
         with_value('<SERVICE DEFAULT>')
     end
 
@@ -138,8 +142,9 @@ describe 'neutron::agents::ml2::sriov' do
     context 'when parameters for resource providers are set' do
       before :each do
         params.merge!(
-          :resource_provider_bandwidths  => ['provider-a', 'provider-b'],
-          :resource_provider_hypervisors => ['provider-a:compute-a', 'provider-b:compute-b'],
+          :resource_provider_bandwidths         => ['provider-a', 'provider-b'],
+          :resource_provider_hypervisors        => ['provider-a:compute-a', 'provider-b:compute-b'],
+          :resource_provider_default_hypervisor => 'compute-c'
         )
       end
 
@@ -148,6 +153,8 @@ describe 'neutron::agents::ml2::sriov' do
           with_value('provider-a,provider-b')
         should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_hypervisors').\
           with_value('provider-a:compute-a,provider-b:compute-b')
+        should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_default_hypervisor').\
+          with_value('compute-c')
       end
     end
   end

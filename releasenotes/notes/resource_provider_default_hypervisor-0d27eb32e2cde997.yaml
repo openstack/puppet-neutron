@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Now the ``neutron::agents::ml2::ovs`` class and
+    the ``neutron::agents::ml2::sriov`` class supports
+    the resource_provider_default_hypervisor parameter to set the corresponding
+    parameter in ovs-agent and sriov-agent.

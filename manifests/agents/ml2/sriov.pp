@@ -77,18 +77,24 @@
 #   (optional) List of <bridge>:<hypervisor>
 #   Defaults to empty list
 #
+# [*resource_provider_default_hypervisor*]
+#   (optional) The default hypervisor name used to locate the parent of
+#   the resource provider.
+#   Defaults to $::os_service_default
+#
 class neutron::agents::ml2::sriov (
-  $package_ensure                = 'present',
-  $enabled                       = true,
-  $manage_service                = true,
-  $physical_device_mappings      = $::os_service_default,
-  $polling_interval              = 2,
-  $exclude_devices               = $::os_service_default,
-  $extensions                    = $::os_service_default,
-  $purge_config                  = false,
-  $number_of_vfs                 = $::os_service_default,
-  $resource_provider_bandwidths  = [],
-  $resource_provider_hypervisors = [],
+  $package_ensure                       = 'present',
+  $enabled                              = true,
+  $manage_service                       = true,
+  $physical_device_mappings             = $::os_service_default,
+  $polling_interval                     = 2,
+  $exclude_devices                      = $::os_service_default,
+  $extensions                           = $::os_service_default,
+  $purge_config                         = false,
+  $number_of_vfs                        = $::os_service_default,
+  $resource_provider_bandwidths         = [],
+  $resource_provider_hypervisors        = [],
+  $resource_provider_default_hypervisor = $::os_service_default,
 ) {
 
   include ::neutron::deps
@@ -146,8 +152,9 @@ class neutron::agents::ml2::sriov (
   }
 
   neutron_sriov_agent_config {
-    'sriov_nic/resource_provider_bandwidths':  value => $resource_provider_bandwidths_real;
-    'sriov_nic/resource_provider_hypervisors': value => $resource_provider_hypervisors_real;
+    'sriov_nic/resource_provider_bandwidths':         value => $resource_provider_bandwidths_real;
+    'sriov_nic/resource_provider_hypervisors':        value => $resource_provider_hypervisors_real;
+    'sriov_nic/resource_provider_default_hypervisor': value => $resource_provider_default_hypervisor;
   }
 
 }

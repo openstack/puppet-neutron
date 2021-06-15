@@ -36,8 +36,7 @@ describe 'neutron::agents::ml2::networking_baremetal' do
     end
 
     it 'configures /etc/neutron/plugins/ml2/ironic_neutron_agent.ini' do
-      should contain_ironic_neutron_agent_config('ironic/auth_strategy').with_value('<SERVICE DEFAULT>')
-      should contain_ironic_neutron_agent_config('ironic/ironic_url').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/endpoint_override').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/cafile').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/certfile').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/keyfile').with_value('<SERVICE DEFAULT>')
@@ -49,8 +48,8 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       should contain_ironic_neutron_agent_config('ironic/project_name').with_value(p[:project_name])
       should contain_ironic_neutron_agent_config('ironic/user_domain_name').with_value(p[:user_domain_name])
       should contain_ironic_neutron_agent_config('ironic/region_name').with_value('<SERVICE DEFAULT>')
-      should contain_ironic_neutron_agent_config('ironic/retry_interval').with_value('<SERVICE DEFAULT>')
-      should contain_ironic_neutron_agent_config('ironic/max_retries').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/status_code_retry_delay').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/status_code_retries').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs ironic-neutron-agent agent package' do

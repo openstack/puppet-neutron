@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``neutron::agents::ovn_metadata::ovn_remote_probe_interval`` parameter
+    has been deprecated and has no effect now. This parameter will be removed
+    in a future release.

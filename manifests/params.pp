@@ -4,17 +4,16 @@
 #
 class neutron::params {
   include openstacklib::defaults
-  $pyvers = $::openstacklib::defaults::pyvers
 
-  $client_package              = "python${pyvers}-neutronclient"
+  $client_package              = 'python3-neutronclient'
   $ovs_agent_service           = 'neutron-openvswitch-agent'
   $destroy_patch_ports_service = 'neutron-destroy-patch-ports'
   $linuxbridge_agent_service   = 'neutron-linuxbridge-agent'
   $cisco_config_file           = '/etc/neutron/plugins/cisco/cisco_plugins.ini'
   $opencontrail_plugin_package = 'neutron-plugin-contrail'
   $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
-  $ovn_plugin_package          = "python${pyvers}-networking-ovn"
-  $vpp_plugin_package          = "python${pyvers}-networking-vpp"
+  $ovn_plugin_package          = 'python3-networking-ovn'
+  $vpp_plugin_package          = 'python3-networking-vpp'
   $vpp_agent_service           = 'neutron-vpp-agent'
   $nuage_config_file           = '/etc/neutron/plugins/nuage/plugin.ini'
   $dhcp_agent_service          = 'neutron-dhcp-agent'
@@ -25,15 +24,15 @@ class neutron::params {
   $ovn_metadata_agent_service  = 'networking-ovn-metadata-agent'
   $bgp_dragent_service         = 'neutron-bgp-dragent'
   $bagpipe_bgp_package         = 'openstack-bagpipe-bgp'
-  $bgpvpn_bagpipe_package      = "python${pyvers}-networking-bagpipe"
+  $bgpvpn_bagpipe_package      = 'python3-networking-bagpipe'
   $bgpvpn_bagpipe_service      = 'bagpipe-bgp'
-  $bgpvpn_plugin_package       = "python${pyvers}-networking-bgpvpn"
+  $bgpvpn_plugin_package       = 'python3-networking-bgpvpn'
   $l2gw_agent_service          = 'neutron-l2gw-agent'
   $nsx_plugin_package          = 'vmware-nsx'
   $nsx_config_file             = '/etc/neutron/plugins/vmware/nsx.ini'
-  $sfc_package                 = "python${pyvers}-networking-sfc"
+  $sfc_package                 = 'python3-networking-sfc'
   $group                       = 'neutron'
-  $mlnx_agent_package          = "python${pyvers}-networking-mlnx"
+  $mlnx_agent_package          = 'python3-networking-mlnx'
   $eswitchd_service            = 'eswitchd'
 
   if($::osfamily == 'Redhat') {
@@ -64,8 +63,8 @@ class neutron::params {
     $metering_agent_package             = 'openstack-neutron-metering-agent'
     $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
     $l2gw_agent_package                 = 'openstack-neutron-l2gw-agent'
-    $l2gw_package                       = "python${pyvers}-networking-l2gw"
-    $ovn_metadata_agent_package         = "python${pyvers}-networking-ovn-metadata-agent"
+    $l2gw_package                       = 'python3-networking-l2gw'
+    $ovn_metadata_agent_package         = 'python3-networking-ovn-metadata-agent'
     $dynamic_routing_package            = false
     $bgp_dragent_package                = 'openstack-neutron-bgp-dragent'
     $openswan_package                   = 'libreswan'
@@ -75,10 +74,10 @@ class neutron::params {
     $fwaas_package                      = 'openstack-neutron-fwaas'
     $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
     $neutron_wsgi_script_source         = '/usr/bin/neutron-api'
-    $networking_baremetal_package       = "python${pyvers}-networking-baremetal"
-    $networking_baremetal_agent_package = "python${pyvers}-ironic-neutron-agent"
+    $networking_baremetal_package       = 'python3-networking-baremetal'
+    $networking_baremetal_agent_package = 'python3-ironic-neutron-agent'
     $networking_baremetal_agent_service = 'ironic-neutron-agent'
-    $networking_ansible_package         = "python${pyvers}-networking-ansible"
+    $networking_ansible_package         = 'python3-networking-ansible'
     $mlnx_agent_service                 = 'neutron-mlnx-agent'
   } elsif($::osfamily == 'Debian') {
     $nobody_user_group          = 'nogroup'
@@ -100,7 +99,7 @@ class neutron::params {
       $api_service_name         = false
       $rpc_package_name         = false
       $rpc_service_name         = false
-      $dynamic_routing_package  = "python${pyvers}-neutron-dynamic-routing"
+      $dynamic_routing_package  = 'python3-neutron-dynamic-routing'
     }
     $bgp_dragent_package        = 'neutron-bgp-dragent'
     $ovs_agent_package          = 'neutron-openvswitch-agent'
@@ -115,14 +114,14 @@ class neutron::params {
     $nvp_server_package         = 'neutron-plugin-nicira'
     $dhcp_agent_package         = 'neutron-dhcp-agent'
     $metering_agent_package     = 'neutron-metering-agent'
-    $vpnaas_agent_package       = "python${pyvers}-neutron-vpnaas"
+    $vpnaas_agent_package       = 'python3-neutron-vpnaas'
     $openswan_package           = 'strongswan'
     $libreswan_package          = false
     $metadata_agent_package     = 'neutron-metadata-agent'
     $l3_agent_package           = 'neutron-l3-agent'
-    $fwaas_package              = "python${pyvers}-neutron-fwaas"
+    $fwaas_package              = 'python3-neutron-fwaas'
     $l2gw_agent_package         = 'neutron-l2gateway-agent'
-    $l2gw_package               = "python${pyvers}-networking-l2gw"
+    $l2gw_package               = 'python3-networking-l2gw'
     $neutron_wsgi_script_path   = '/usr/lib/cgi-bin/neutron'
     $neutron_wsgi_script_source = '/usr/bin/neutron-api'
     $mlnx_agent_service         = 'neutron-plugin-mlnx-agent'

@@ -45,15 +45,7 @@ describe 'neutron::plugins::ml2::bagpipe' do
         when 'Debian'
           { :bagpipe_package_name => 'python3-networking-bagpipe' }
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :bagpipe_package_name => 'python3-networking-bagpipe' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :bagpipe_package_name => 'python3-networking-bagpipe' }
-            else
-              { :bagpipe_package_name => 'python-networking-bagpipe' }
-            end
-          end
+          { :bagpipe_package_name => 'python3-networking-bagpipe' }
         end
       end
       it_behaves_like 'neutron plugin bagpipe ml2'

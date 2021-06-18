@@ -30,7 +30,7 @@ class neutron::agents::bigswitch (
     fail("Unsupported osfamily ${::osfamily}")
   }
 
-  ensure_packages("python${neutron::params::pyvers}-networking-bigswitch",
+  ensure_packages('python3-networking-bigswitch',
     {
       ensure => $package_ensure,
       tag    => ['openstack', 'neutron-package'],

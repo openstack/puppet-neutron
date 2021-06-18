@@ -38,16 +38,10 @@ describe 'neutron::plugins::ml2::networking_baremetal' do
       end
       let (:platform_params) do
         case facts[:osfamily]
+        when 'Debian'
+          { :networking_baremetal_package => 'python3-networking-baremetal'}
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :networking_baremetal_package => 'python3-networking-baremetal'}
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :networking_baremetal_package => 'python3-networking-baremetal'}
-            else
-              { :networking_baremetal_package => 'python2-networking-baremetal'}
-            end
-          end
+          { :networking_baremetal_package => 'python3-networking-baremetal'}
         end
       end
       case facts[:osfamily]

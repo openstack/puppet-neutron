@@ -101,18 +101,8 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       let (:platform_params) do
         case facts[:osfamily]
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :networking_baremetal_agent_package => 'python3-ironic-neutron-agent',
-              :networking_baremetal_agent_service => 'ironic-neutron-agent' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :networking_baremetal_agent_package => 'python3-ironic-neutron-agent',
-                :networking_baremetal_agent_service => 'ironic-neutron-agent' }
-            else
-              { :networking_baremetal_agent_package => 'python2-ironic-neutron-agent',
-                :networking_baremetal_agent_service => 'ironic-neutron-agent' }
-            end
-          end
+          { :networking_baremetal_agent_package => 'python3-ironic-neutron-agent',
+            :networking_baremetal_agent_service => 'ironic-neutron-agent' }
         end
       end
       case facts[:osfamily]

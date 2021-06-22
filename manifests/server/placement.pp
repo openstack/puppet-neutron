@@ -17,7 +17,7 @@
 # === Parameters
 #
 # [*password*]
-#   (required) Password for connection to nova in admin context.
+#   (required) Password for user used when talking to placement.
 #
 # [*auth_type*]
 #   (optional) An authentication type to use with an OpenStack Identity server.
@@ -25,7 +25,7 @@
 #   Defaults to 'password'
 #
 # [*username*]
-#   (optional) Username for connection to nova in admin context
+#   (optional) Username when talking to placement.
 #   Defaults to 'nova'
 #
 # [*project_domain_name*]
@@ -33,7 +33,7 @@
 #   Defaults to 'Default'
 #
 # [*project_name*]
-#   (optional) Nova project's name
+#   (optional) Project name for configured user.
 #   Defaults to 'services'
 #
 # [*user_domain_name*]
@@ -41,18 +41,18 @@
 #   Defaults to 'Default'
 #
 # [*auth_url*]
-#   (optional) Authorization URL for connection to nova in admin context.
+#   (optional) Keystone auth URL.
 #   If version independent identity plugin is used available versions will be
 #   determined using auth_url
 #   Defaults to 'http://127.0.0.1:5000'
 #
 # [*region_name*]
-#   (optional) Name of nova region to use. Useful if keystone manages more than
+#   (optional) Name of region to use. Useful if keystone manages more than
 #   one region.
 #   Defaults to $::os_service_default
 #
 # [*endpoint_type*]
-#   (optional) The type of nova endpoint to use when looking up in
+#   (optional) The type endpoint to use when looking up in
 #   the keystone catalog.
 #   Defaults to $::os_service_default
 #
@@ -69,6 +69,11 @@ class neutron::server::placement (
 ) {
 
   include neutron::deps
+
+  # TODO(tobias-urdin): Update default value to placement in next release.
+  if $username == 'nova' {
+    warning('The default value of username will change to placement in the next release')
+  }
 
   neutron_config {
     'placement/auth_url':            value => $auth_url;

@@ -49,16 +49,36 @@ describe 'neutron::server' do
     end
 
     it 'configures neutron server service' do
-      should contain_service('neutron-server').with(
-        :name    => platform_params[:server_service],
-        :enable  => true,
-        :ensure  => 'running',
-        :tag     => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
-      )
-      should contain_service('neutron-server').that_subscribes_to('Anchor[neutron::service::begin]')
-      should contain_service('neutron-server').that_notifies('Anchor[neutron::service::end]')
+      if platform_params.has_key?(:server_service)
+        should contain_service('neutron-server').with(
+          :name    => platform_params[:server_service],
+          :enable  => true,
+          :ensure  => 'running',
+          :tag     => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
+        )
+        should contain_service('neutron-server').that_subscribes_to('Anchor[neutron::service::begin]')
+        should contain_service('neutron-server').that_notifies('Anchor[neutron::service::end]')
+      else
+        should contain_service('neutron-api').with(
+          :name    => platform_params[:api_service_name],
+          :enable  => true,
+          :ensure  => 'running',
+          :tag     => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
+        )
+        should contain_service('neutron-api').that_subscribes_to('Anchor[neutron::service::begin]')
+        should contain_service('neutron-api').that_notifies('Anchor[neutron::service::end]')
+
+        should contain_service('neutron-rpc-server').with(
+          :name    => platform_params[:rpc_service_name],
+          :enable  => true,
+          :ensure  => 'running',
+          :tag     => ['neutron-service', 'neutron-db-sync-service'],
+        )
+        should contain_service('neutron-rpc-server').that_subscribes_to('Anchor[neutron::service::begin]')
+        should contain_service('neutron-rpc-server').that_notifies('Anchor[neutron::service::end]')
+      end
+
       should_not contain_class('neutron::db::sync')
-      should contain_service('neutron-server').with_name('neutron-server')
       should contain_neutron_config('DEFAULT/api_workers').with_value(facts[:os_workers])
       should contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:os_workers])
       should contain_neutron_config('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>')
@@ -79,7 +99,12 @@ describe 'neutron::server' do
       end
 
       it 'should not start/stop service' do
-        should contain_service('neutron-server').without_ensure
+        if platform_params.has_key?(:server_service)
+          should contain_service('neutron-server').without_ensure
+        else
+          should contain_service('neutron-api').without_ensure
+          should contain_service('neutron-rpc-server').without_ensure
+        end
       end
     end
 
@@ -218,7 +243,11 @@ describe 'neutron::server' do
 
     context 'when running neutron-api in wsgi' do
       before :each do
-        params.merge!( :service_name => 'httpd' )
+        params.merge!(
+          :service_name     => false,
+          :api_service_name => 'httpd',
+          :rpc_service_name => 'neutron-rpc-server',
+        )
       end
 
       let :pre_condition do
@@ -230,11 +259,27 @@ describe 'neutron::server' do
       end
 
       it 'configures neutron-api service with Apache' do
-        should contain_service('neutron-server').with(
-          :ensure     => 'stopped',
-          :name       => platform_params[:server_service],
-          :enable     => false,
-          :tag        => ['neutron-service', 'neutron-db-sync-service'],
+        if platform_params.has_key?(:server_service)
+          should contain_service('neutron-server').with(
+            :ensure     => 'stopped',
+            :name       => platform_params[:server_service],
+            :enable     => false,
+            :tag        => ['neutron-service'],
+          )
+        else
+          should contain_service('neutron-api').with(
+            :ensure     => 'stopped',
+            :name       => platform_params[:api_service_name],
+            :enable     => false,
+            :tag        => ['neutron-service'],
+          )
+        end
+
+        should contain_service('neutron-rpc-server').with(
+          :ensure => 'running',
+          :name   => 'neutron-rpc-server',
+          :enable => true,
+          :tag    => ['neutron-service', 'neutron-db-sync-service'],
         )
       end
     end
@@ -331,13 +376,22 @@ describe 'neutron::server' do
       let (:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          {
-            :server_package => 'neutron-server',
-            :server_service => 'neutron-server'
-          }
+          if facts[:operatingsystem] == 'Ubuntu'
+            {
+              :server_package   => 'neutron-server',
+              :server_service   => 'neutron-server',
+              :rpc_service_name => 'neutron-rpc-server',
+            }
+          else
+            {
+              :api_service_name => 'neutron-api',
+              :rpc_service_name => 'neutron-rpc-server',
+            }
+          end
         when 'RedHat'
           {
-            :server_service => 'neutron-server'
+            :server_service   => 'neutron-server',
+            :rpc_service_name => 'neutron-rpc-server',
           }
         end
       end

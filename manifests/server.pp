@@ -397,19 +397,9 @@ class neutron::server (
         tag        => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
       }
     } elsif $service_name == 'httpd' {
-      include apache::params
-      service { 'neutron-server':
-        ensure     => 'stopped',
-        name       => $::neutron::params::server_service,
-        enable     => false,
-        hasstatus  => true,
-        hasrestart => true,
-        tag        => ['neutron-service', 'neutron-db-sync-service'],
-      }
-      Service <| title == 'httpd' |> { tag +> 'neutron-service' }
-      # we need to make sure neutron-server is stopped before trying to start apache
-      Service[$::neutron::params::server_service] -> Service[$service_name]
+      fail('Use api_service_name and rpc_service_name to run api service by httpd')
     } else {
+      warning('Support for arbitaly service name is deprecated')
       # backward compatibility so operators can customize the service name.
       service { 'neutron-server':
         ensure     => $service_ensure,
@@ -421,14 +411,54 @@ class neutron::server (
       }
     }
   } else {
-    if $api_service_name {
+    if $::neutron::params::server_service {
+      # we need to make sure neutron-server is stopped before trying to
+      # start separate services.
       service { 'neutron-server':
-        ensure     => $service_ensure,
-        name       => $api_service_name,
-        enable     => $enabled,
+        ensure     => 'stopped',
+        name       => $::neutron::params::server_service,
+        enable     => false,
         hasstatus  => true,
         hasrestart => true,
-        tag        => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
+        tag        => ['neutron-service'],
+      }
+    }
+
+    if $api_service_name {
+      if $api_service_name == 'httpd' {
+        include apache::params
+        Service <| title == 'httpd' |> { tag +> 'neutron-service' }
+
+        if $::neutron::params::server_service {
+          Service['neutron-server'] -> Service['httpd']
+        }
+
+        if $::neutron::params::api_service_name {
+          # we need to make sure api service is stopped before trying to
+          # start apache
+          service { 'neutron-api':
+            ensure     => 'stopped',
+            name       => $::neutron::params::api_service_name,
+            enable     => false,
+            hasstatus  => true,
+            hasrestart => true,
+            tag        => ['neutron-service'],
+          }
+          Service['neutron-api'] -> Service['httpd']
+        }
+      } else {
+        service { 'neutron-api':
+          ensure     => $service_ensure,
+          name       => $api_service_name,
+          enable     => $enabled,
+          hasstatus  => true,
+          hasrestart => true,
+          tag        => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
+        }
+
+        if $::neutron::params::server_service {
+          Service['neutron-server'] -> Service['neutron-api']
+        }
       }
     }
 
@@ -440,6 +470,10 @@ class neutron::server (
         hasstatus  => true,
         hasrestart => true,
         tag        => ['neutron-service', 'neutron-db-sync-service'],
+      }
+
+      if $::neutron::params::server_service {
+        Service['neutron-server'] -> Service['neutron-rpc-server']
       }
     }
   }
@@ -464,6 +498,6 @@ class neutron::server (
         'try_sleep'   => '2',
       }
     }
-    create_resources('openstacklib::service_validation', $validation_cmd, {'subscribe' => 'Service[neutron-server]'})
+    create_resources('openstacklib::service_validation', $validation_cmd, {'subscribe' => 'Anchor[neutron::service::end]'})
   }
 }

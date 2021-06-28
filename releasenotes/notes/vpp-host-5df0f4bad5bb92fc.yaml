@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``host`` parameter has been added to
+    the ``neutron::agents::ml2::vpp`` class.

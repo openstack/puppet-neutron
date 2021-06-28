@@ -16,6 +16,10 @@
 #   (optional) Whether to start/stop the service
 #   Defaults to true
 #
+# [*host*]
+#   (optional) Hostname to be used by the server, agents and services.
+#   Defaults to $::hostname
+#
 # [*physnets*]
 #   (optional) Comma-separated list of <physical_network>:<physical_interface>
 #   tuples mapping physical network names to agent's node-specific physical
@@ -46,6 +50,7 @@ class neutron::agents::ml2::vpp (
   $package_ensure = 'present',
   $enabled        = true,
   $manage_service = true,
+  $host           = $::host,
   $physnets       = $::os_service_default,
   $etcd_host      = $::os_service_default,
   $etcd_port      = $::os_service_default,
@@ -66,7 +71,7 @@ class neutron::agents::ml2::vpp (
     'ml2_vpp/etcd_port': value => $etcd_port;
     'ml2_vpp/etcd_user': value => $etcd_user;
     'ml2_vpp/etcd_pass': value => $etcd_pass;
-    'DEFAULT/host':      value => $::hostname;
+    'DEFAULT/host':      value => $host;
   }
 
   package { 'neutron-vpp-agent':

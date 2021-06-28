@@ -70,6 +70,8 @@ describe 'neutron::agents::ml2::ovs' do
         with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/resource_provider_hypervisors').\
         with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/resource_provider_default_hypervisor').\
+        with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/explicitly_egress_direct').with_value(['<SERVICE DEFAULT>'])
     end
 
@@ -328,8 +330,9 @@ describe 'neutron::agents::ml2::ovs' do
     context 'when parameters for resource providers are set' do
       before :each do
         params.merge!(
-          :resource_provider_bandwidths  => ['provider-a', 'provider-b'],
-          :resource_provider_hypervisors => ['provider-a:compute-a', 'provider-b:compute-b'],
+          :resource_provider_bandwidths         => ['provider-a', 'provider-b'],
+          :resource_provider_hypervisors        => ['provider-a:compute-a', 'provider-b:compute-b'],
+          :resource_provider_default_hypervisor => 'compute-c',
         )
       end
 
@@ -338,6 +341,8 @@ describe 'neutron::agents::ml2::ovs' do
           with_value('provider-a,provider-b')
         should contain_neutron_agent_ovs('ovs/resource_provider_hypervisors').\
           with_value('provider-a:compute-a,provider-b:compute-b')
+        should contain_neutron_agent_ovs('ovs/resource_provider_default_hypervisor').\
+          with_value('compute-c')
       end
     end
 

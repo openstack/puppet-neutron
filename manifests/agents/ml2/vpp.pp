@@ -61,7 +61,7 @@ class neutron::agents::ml2::vpp (
   }
 
   neutron_agent_vpp {
-    'ml2_vpp/physnets':  value => $physnets;
+    'ml2_vpp/physnets':  value => join(any2array($physnets), ',');
     'ml2_vpp/etcd_host': value => $etcd_host;
     'ml2_vpp/etcd_port': value => $etcd_port;
     'ml2_vpp/etcd_user': value => $etcd_user;

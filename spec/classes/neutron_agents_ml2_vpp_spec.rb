@@ -67,10 +67,19 @@ describe 'neutron::agents::ml2::vpp' do
 
     context 'when supplying a physnet mapping' do
       before :each do
-        params.merge!(:physnets => 'physnet:GigabitEthernet2/2/0')
+        params.merge!(:physnets => 'physnet0:GigabitEthernet2/2/0,physnet1:GigabitEthernet2/2/1')
       end
       it 'should configure physnets' do
-        should contain_neutron_agent_vpp('ml2_vpp/physnets').with_value('physnet:GigabitEthernet2/2/0')
+        should contain_neutron_agent_vpp('ml2_vpp/physnets').with_value('physnet0:GigabitEthernet2/2/0,physnet1:GigabitEthernet2/2/1')
+      end
+    end
+
+    context 'when supplying a physnet mapping in array' do
+      before :each do
+        params.merge!(:physnets => ['physnet0:GigabitEthernet2/2/0', 'physnet1:GigabitEthernet2/2/1'])
+      end
+      it 'should configure physnets' do
+        should contain_neutron_agent_vpp('ml2_vpp/physnets').with_value('physnet0:GigabitEthernet2/2/0,physnet1:GigabitEthernet2/2/1')
       end
     end
 

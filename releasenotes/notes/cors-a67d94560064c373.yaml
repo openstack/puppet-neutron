@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``neutron::cors`` class has been added.

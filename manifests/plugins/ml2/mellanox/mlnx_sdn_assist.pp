@@ -1,4 +1,7 @@
 #
+# == Class: neutron::plugins::ml2::mellanox::mlnx_sdn_assist
+#
+# DEPRECATED !
 # Install the OpenDaylight and generate config file
 # from parameters in the other classes.
 #
@@ -50,6 +53,7 @@ class neutron::plugins::ml2::mellanox::mlnx_sdn_assist (
   $bind_normal_ports            = false,
   $bind_normal_ports_physnets   = [],
 ) {
+  warning('Support for networking-mlnx has been deprecated')
 
   include neutron::deps
   require neutron::plugins::ml2

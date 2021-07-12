@@ -1,4 +1,7 @@
 #
+# == Class: neutron::plugins::ml2::mellanox
+#
+# DEPRECATED !
 # Install the Mellanox plugins and generate the config file
 # from parameters in the other classes.
 #
@@ -14,6 +17,7 @@
 class neutron::plugins::ml2::mellanox (
   $package_ensure = 'present'
 ) {
+  warning('Support for networking-mlnx has been deprecated')
 
   include neutron::deps
   include neutron::params

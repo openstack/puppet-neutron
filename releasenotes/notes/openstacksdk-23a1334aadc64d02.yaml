@@ -1,0 +1,14 @@
+---
+deprecations:
+  - |
+    The ``neutron::agents::ml2::networking_baremetal::auth_strategy`` parameter
+    has been deprecated and has no effect.
+
+  - |
+    The following parameters of ``neutron::agents::ml2::networking_baremetal``
+    class have been renamed. Old parameters were deprecated and will be removed
+    in a future release.
+
+    - ``ironic_url`` => ``endpoint_override``
+    - ``retry_interval`` => ``status_code_retry_delay``
+    - ``max_retries`` => ``status_code_retries``

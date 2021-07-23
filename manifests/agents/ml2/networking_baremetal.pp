@@ -144,22 +144,22 @@ class neutron::agents::ml2::networking_baremetal (
   }
 
   if $auth_strategy != undef {
-    warn('neutron::agents::ml2::networking_baremetal::auth_strategy is now deprecated \
+    warning('neutron::agents::ml2::networking_baremetal::auth_strategy is now deprecated \
 and has no effect.')
   }
 
   if $ironic_url != undef {
-    warn('neutron::agents::ml2::networking_baremetal::ironic_url is now deprecated. \
+    warning('neutron::agents::ml2::networking_baremetal::ironic_url is now deprecated. \
 Use endpoint_override instead.')
   }
 
   if $retry_interval != undef {
-    warn('neutron::agents::ml2::networking_baremetal::retry_interval is now deprecated. \
+    warning('neutron::agents::ml2::networking_baremetal::retry_interval is now deprecated. \
 Use status_code_retry_delay instead.')
   }
 
   if $max_retries != undef {
-    warn('neutron::agents::ml2::networking_baremetal::max_retries is now deprecated. \
+    warning('neutron::agents::ml2::networking_baremetal::max_retries is now deprecated. \
 Use status_code_retries instead.')
   }
 

@@ -1,5 +1,0 @@
----
-deprecations:
-  - |
-    Support for networking-mlnx has been deprecated and will be removed in
-    a future release.

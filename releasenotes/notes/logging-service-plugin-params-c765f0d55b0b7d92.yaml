@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    Support for the logging serivce plugin parameters has been added to
+    the following classes.
+
+    - ``neutron::agent::l3``
+    - ``neutron::agent::ml2::ovs``
+    - ``neutron::plugins::ml2::ovn``

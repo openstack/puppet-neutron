@@ -95,6 +95,23 @@
 #   (optional) Name of Open vSwitch bridge to use
 #   Defaults to $::os_service_default
 #
+# [*network_log_rate_limit*]
+#   (Optional) Maximum packets logging per second.
+#   Used by logging service plugin.
+#   Defaults to $::os_service_default.
+#   Minimum possible value is 100.
+#
+# [*network_log_burst_limit*]
+#   (Optional) Maximum number of packets per rate_limit.
+#   Used by logging service plugin.
+#   Defaults to $::os_service_default.
+#   Minimum possible value is 25.
+#
+# [*network_log_local_output_log_base*]
+#   (Optional) Output logfile path on agent side, default syslog file.
+#   Used by logging service plugin.
+#   Defaults to $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*gateway_external_network_id*]
@@ -102,26 +119,29 @@
 #   Defaults to undef
 #
 class neutron::agents::l3 (
-  $package_ensure                   = 'present',
-  $enabled                          = true,
-  $manage_service                   = true,
-  $debug                            = $::os_service_default,
-  $interface_driver                 = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $handle_internal_only_routers     = $::os_service_default,
-  $metadata_port                    = $::os_service_default,
-  $periodic_interval                = $::os_service_default,
-  $periodic_fuzzy_delay             = $::os_service_default,
-  $enable_metadata_proxy            = $::os_service_default,
-  $ha_enabled                       = false,
-  $ha_vrrp_auth_type                = 'PASS',
-  $ha_vrrp_auth_password            = $::os_service_default,
-  $ha_vrrp_advert_int               = '3',
-  $agent_mode                       = 'legacy',
-  $purge_config                     = false,
-  $availability_zone                = $::os_service_default,
-  $extensions                       = $::os_service_default,
-  $radvd_user                       = $::os_service_default,
-  $ovs_integration_bridge           = $::os_service_default,
+  $package_ensure                    = 'present',
+  $enabled                           = true,
+  $manage_service                    = true,
+  $debug                             = $::os_service_default,
+  $interface_driver                  = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $handle_internal_only_routers      = $::os_service_default,
+  $metadata_port                     = $::os_service_default,
+  $periodic_interval                 = $::os_service_default,
+  $periodic_fuzzy_delay              = $::os_service_default,
+  $enable_metadata_proxy             = $::os_service_default,
+  $ha_enabled                        = false,
+  $ha_vrrp_auth_type                 = 'PASS',
+  $ha_vrrp_auth_password             = $::os_service_default,
+  $ha_vrrp_advert_int                = '3',
+  $agent_mode                        = 'legacy',
+  $purge_config                      = false,
+  $availability_zone                 = $::os_service_default,
+  $extensions                        = $::os_service_default,
+  $radvd_user                        = $::os_service_default,
+  $ovs_integration_bridge            = $::os_service_default,
+  $network_log_rate_limit            = $::os_service_default,
+  $network_log_burst_limit           = $::os_service_default,
+  $network_log_local_output_log_base = $::os_service_default,
   # DEPRECATED PARAMETERS
   $gateway_external_network_id      = undef,
 ) {
@@ -162,6 +182,9 @@ class neutron::agents::l3 (
     'ovs/integration_bridge':               value => $ovs_integration_bridge;
     'agent/availability_zone':              value => $availability_zone;
     'agent/extensions':                     value => join(any2array($extensions), ',');
+    'network_log/rate_limit':               value => $network_log_rate_limit;
+    'network_log/burst_limit':              value => $network_log_burst_limit;
+    'network_log/local_output_log_base':    value => $network_log_local_output_log_base;
   }
 
   if $::neutron::params::l3_agent_package {

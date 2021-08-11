@@ -52,8 +52,10 @@ describe 'neutron::plugins::ml2::ovn' do
       should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(params[:dns_servers].join(','))
       should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value('<SERVICE DEFAULT>')
       should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(params[:ovn_emit_need_to_frag])
+      should contain_neutron_plugin_ml2('network_log/rate_limit').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_plugin_ml2('network_log/burst_limit').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_plugin_ml2('network_log/local_output_log_base').with_value('<SERVICE DEFAULT>')
     end
-
   end
 
   shared_examples 'Validating parameters' do

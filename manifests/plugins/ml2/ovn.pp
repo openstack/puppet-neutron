@@ -96,6 +96,23 @@
 #   Type: boolean
 #   Defaults to $::os_service_default
 #
+# [*network_log_rate_limit*]
+#   (Optional) Maximum packets logging per second.
+#   Used by logging service plugin.
+#   Defaults to $::os_service_default.
+#   Minimum possible value is 100.
+#
+# [*network_log_burst_limit*]
+#   (Optional) Maximum number of packets per rate_limit.
+#   Used by logging service plugin.
+#   Defaults to $::os_service_default.
+#   Minimum possible value is 25.
+#
+# [*network_log_local_output_log_base*]
+#   (Optional) Output logfile path on agent side, default syslog file.
+#   Used by logging service plugin.
+#   Defaults to $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*ovn_l3_mode*]
@@ -105,25 +122,28 @@
 #   Defaults to undef
 #
 class neutron::plugins::ml2::ovn(
-  $ovn_nb_connection        = $::os_service_default,
-  $ovn_sb_connection        = $::os_service_default,
-  $ovn_nb_private_key       = $::os_service_default,
-  $ovn_nb_certificate       = $::os_service_default,
-  $ovn_nb_ca_cert           = $::os_service_default,
-  $ovn_sb_private_key       = $::os_service_default,
-  $ovn_sb_certificate       = $::os_service_default,
-  $ovn_sb_ca_cert           = $::os_service_default,
-  $package_ensure           = 'present',
-  $ovsdb_connection_timeout = $::os_service_default,
-  $neutron_sync_mode        = $::os_service_default,
-  $ovn_metadata_enabled     = $::os_service_default,
-  $dvr_enabled              = $::os_service_default,
-  $dns_servers              = $::os_service_default,
-  $vhostuser_socket_dir     = $::os_service_default,
-  $ovn_emit_need_to_frag    = $::os_service_default,
+  $ovn_nb_connection                 = $::os_service_default,
+  $ovn_sb_connection                 = $::os_service_default,
+  $ovn_nb_private_key                = $::os_service_default,
+  $ovn_nb_certificate                = $::os_service_default,
+  $ovn_nb_ca_cert                    = $::os_service_default,
+  $ovn_sb_private_key                = $::os_service_default,
+  $ovn_sb_certificate                = $::os_service_default,
+  $ovn_sb_ca_cert                    = $::os_service_default,
+  $package_ensure                    = 'present',
+  $ovsdb_connection_timeout          = $::os_service_default,
+  $neutron_sync_mode                 = $::os_service_default,
+  $ovn_metadata_enabled              = $::os_service_default,
+  $dvr_enabled                       = $::os_service_default,
+  $dns_servers                       = $::os_service_default,
+  $vhostuser_socket_dir              = $::os_service_default,
+  $ovn_emit_need_to_frag             = $::os_service_default,
+  $network_log_rate_limit            = $::os_service_default,
+  $network_log_burst_limit           = $::os_service_default,
+  $network_log_local_output_log_base = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $ovn_l3_mode              = undef,
-  $vif_type                 = undef,
+  $ovn_l3_mode                       = undef,
+  $vif_type                          = undef,
 ) {
 
   include neutron::deps
@@ -149,21 +169,24 @@ class neutron::plugins::ml2::ovn(
   )
 
   neutron_plugin_ml2 {
-    'ovn/ovn_nb_connection'        : value => $ovn_nb_connection;
-    'ovn/ovn_sb_connection'        : value => $ovn_sb_connection;
-    'ovn/ovn_nb_private_key'       : value => $ovn_nb_private_key;
-    'ovn/ovn_nb_certificate'       : value => $ovn_nb_certificate;
-    'ovn/ovn_nb_ca_cert'           : value => $ovn_nb_ca_cert;
-    'ovn/ovn_sb_private_key'       : value => $ovn_sb_private_key;
-    'ovn/ovn_sb_certificate'       : value => $ovn_sb_certificate;
-    'ovn/ovn_sb_ca_cert'           : value => $ovn_sb_ca_cert;
-    'ovn/ovsdb_connection_timeout' : value => $ovsdb_connection_timeout;
-    'ovn/neutron_sync_mode'        : value => $neutron_sync_mode;
-    'ovn/ovn_metadata_enabled'     : value => $ovn_metadata_enabled;
-    'ovn/enable_distributed_floating_ip' : value => $dvr_enabled;
-    'ovn/dns_servers'              : value => join(any2array($dns_servers), ',');
-    'ovn/vhost_sock_dir'           : value => $vhostuser_socket_dir;
-    'ovn/ovn_emit_need_to_frag'    : value => $ovn_emit_need_to_frag;
+    'ovn/ovn_nb_connection'             : value => $ovn_nb_connection;
+    'ovn/ovn_sb_connection'             : value => $ovn_sb_connection;
+    'ovn/ovn_nb_private_key'            : value => $ovn_nb_private_key;
+    'ovn/ovn_nb_certificate'            : value => $ovn_nb_certificate;
+    'ovn/ovn_nb_ca_cert'                : value => $ovn_nb_ca_cert;
+    'ovn/ovn_sb_private_key'            : value => $ovn_sb_private_key;
+    'ovn/ovn_sb_certificate'            : value => $ovn_sb_certificate;
+    'ovn/ovn_sb_ca_cert'                : value => $ovn_sb_ca_cert;
+    'ovn/ovsdb_connection_timeout'      : value => $ovsdb_connection_timeout;
+    'ovn/neutron_sync_mode'             : value => $neutron_sync_mode;
+    'ovn/ovn_metadata_enabled'          : value => $ovn_metadata_enabled;
+    'ovn/enable_distributed_floating_ip': value => $dvr_enabled;
+    'ovn/dns_servers'                   : value => join(any2array($dns_servers), ',');
+    'ovn/vhost_sock_dir'                : value => $vhostuser_socket_dir;
+    'ovn/ovn_emit_need_to_frag'         : value => $ovn_emit_need_to_frag;
+    'network_log/rate_limit'            : value => $network_log_rate_limit;
+    'network_log/burst_limit'           : value => $network_log_burst_limit;
+    'network_log/local_output_log_base' : value => $network_log_local_output_log_base;
   }
 
   # TODO(tkajinam): Remove this when removing the deprecated parameters

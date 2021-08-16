@@ -204,6 +204,23 @@
 #  final egress tables direct output flows for unicast traffic. (boolean value)
 #  Defaults to $::os_service_default
 #
+# [*network_log_rate_limit*]
+#   (Optional) Maximum packets logging per second.
+#   Used by logging service plugin.
+#   Defaults to $::os_service_default.
+#   Minimum possible value is 100.
+#
+# [*network_log_burst_limit*]
+#   (Optional) Maximum number of packets per rate_limit.
+#   Used by logging service plugin.
+#   Defaults to $::os_service_default.
+#   Minimum possible value is 25.
+#
+# [*network_log_local_output_log_base*]
+#   (Optional) Output logfile path on agent side, default syslog file.
+#   Used by logging service plugin.
+#   Defaults to $::os_service_default.
+#
 class neutron::agents::ml2::ovs (
   $package_ensure                       = 'present',
   $enabled                              = true,
@@ -243,6 +260,9 @@ class neutron::agents::ml2::ovs (
   $resource_provider_hypervisors        = [],
   $resource_provider_default_hypervisor = $::os_service_default,
   $explicitly_egress_direct             = $::os_service_default,
+  $network_log_rate_limit               = $::os_service_default,
+  $network_log_burst_limit              = $::os_service_default,
+  $network_log_local_output_log_base    = $::os_service_default,
 ) {
 
   include neutron::deps
@@ -363,6 +383,9 @@ class neutron::agents::ml2::ovs (
     'securitygroup/enable_security_group':  value => $enable_security_group;
     'ovs/bridge_mac_table_size':            value => $bridge_mac_table_size;
     'ovs/igmp_snooping_enable':             value => $igmp_snooping_enable;
+    'network_log/rate_limit':               value => $network_log_rate_limit;
+    'network_log/burst_limit':              value => $network_log_burst_limit;
+    'network_log/local_output_log_base':    value => $network_log_local_output_log_base;
   }
 
   if $firewall_driver {

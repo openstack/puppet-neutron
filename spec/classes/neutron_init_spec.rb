@@ -321,7 +321,9 @@ describe 'neutron' do
   end
 
   shared_examples 'without service_plugins' do
-    it { should_not contain_neutron_config('DEFAULT/service_plugins') }
+    it do
+      should contain_neutron_config('DEFAULT/service_plugins').with_value('<SERVICE DEFAULT>')
+    end
   end
 
   shared_examples 'with service_plugins' do
@@ -334,7 +336,6 @@ describe 'neutron' do
     it do
       should contain_neutron_config('DEFAULT/service_plugins').with_value('router,firewall,vpnaas,metering,qos')
     end
-
   end
 
   shared_examples 'with global_physnet_mtu defined' do

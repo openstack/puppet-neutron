@@ -478,12 +478,8 @@ will be removed in a future release.')
     transport_url => $notification_transport_url,
   }
 
-  if ! is_service_default ($service_plugins) and ($service_plugins) {
-    if is_array($service_plugins) {
-      neutron_config { 'DEFAULT/service_plugins': value => join($service_plugins, ',') }
-    } else {
-      fail('service_plugins should be an array.')
-    }
+  neutron_config {
+    'DEFAULT/service_plugins': value => join(any2array($service_plugins), ',')
   }
 
   oslo::messaging::rabbit {'neutron_config':

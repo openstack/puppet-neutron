@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``neutron::cache`` class has been added.

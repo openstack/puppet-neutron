@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    It is now possible to set the report interval for the networking-baremetal
+    ml2 agent by using new parameter ``report_interval`` in the
+    ``neutron::agents::ml2::networking_baremetal`` class.
+

@@ -90,6 +90,13 @@
 #   ironic-neutron-agent config.
 #   Defaults to false.
 #
+# [*report_interval*]
+#   (optional) Set the agent report interval. By default the global report
+#   interval in neutron.conf ([agent]/report_interval) is used. This parameter
+#   can be used to override the reporting interval for the
+#   ironic-neutron-agent.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*project_domain_id*]
@@ -121,6 +128,7 @@ class neutron::agents::ml2::networking_baremetal (
   $retry_interval      = $::os_service_default,
   $max_retries         = $::os_service_default,
   $purge_config        = false,
+  $report_interval     = $::os_service_default,
   # DEPRECATED PARAMETERS
   $project_domain_id   = undef,
   $user_domain_id      = undef,
@@ -155,6 +163,7 @@ class neutron::agents::ml2::networking_baremetal (
     'ironic/region_name':         value => $region_name;
     'ironic/retry_interval':      value => $retry_interval;
     'ironic/max_retries':         value => $max_retries;
+    'agent/report_interval':      value => $report_interval;
   }
 
   if $project_domain_id != undef {

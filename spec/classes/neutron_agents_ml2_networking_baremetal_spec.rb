@@ -51,6 +51,7 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       should contain_ironic_neutron_agent_config('ironic/region_name').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/retry_interval').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/max_retries').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('agent/report_interval').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs ironic-neutron-agent agent package' do

@@ -85,6 +85,13 @@
 #   ironic-neutron-agent config.
 #   Defaults to false.
 #
+# [*report_interval*]
+#   (optional) Set the agent report interval. By default the global report
+#   interval in neutron.conf ([agent]/report_interval) is used. This parameter
+#   can be used to override the reporting interval for the
+#   ironic-neutron-agent.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*auth_strategy*]
@@ -124,6 +131,7 @@ class neutron::agents::ml2::networking_baremetal (
   $status_code_retry_delay = $::os_service_default,
   $status_code_retries     = $::os_service_default,
   $purge_config            = false,
+  $report_interval         = $::os_service_default,
   # DEPRECATED PARAMETERS
   $auth_strategy           = undef,
   $ironic_url              = undef,
@@ -190,6 +198,7 @@ Use status_code_retries instead.')
     'ironic/region_name':             value => $region_name;
     'ironic/status_code_retry_delay': value => $status_code_retry_delay_real;
     'ironic/status_code_retries':     value => $status_code_retries_real;
+    'agent/report_interval':          value => $report_interval;
   }
 
   package { 'python-ironic-neutron-agent':

@@ -187,6 +187,10 @@
 #  "public", "internal" or "admin".
 #  Defaults to $::os_service_default.
 #
+# [*params*]
+#  (Optional) Hash of additional parameters to pass through to the keystone
+#  authtoken class. Values set here override the individual parameters above.
+#
 class neutron::keystone::authtoken(
   $username                       = 'neutron',
   $password                       = $::os_service_default,
@@ -224,6 +228,7 @@ class neutron::keystone::authtoken(
   $service_token_roles_required   = $::os_service_default,
   $service_type                   = $::os_service_default,
   $interface                      = $::os_service_default,
+  $params                         = {},
 ) {
 
   include neutron::deps
@@ -232,42 +237,45 @@ class neutron::keystone::authtoken(
     fail('Please set password for neutron service user')
   }
 
-  keystone::resource::authtoken { 'neutron_config':
-    username                       => $username,
-    password                       => $password,
-    project_name                   => $project_name,
-    auth_url                       => $auth_url,
-    www_authenticate_uri           => $www_authenticate_uri,
-    auth_version                   => $auth_version,
-    auth_type                      => $auth_type,
-    auth_section                   => $auth_section,
-    user_domain_name               => $user_domain_name,
-    project_domain_name            => $project_domain_name,
-    insecure                       => $insecure,
-    cache                          => $cache,
-    cafile                         => $cafile,
-    certfile                       => $certfile,
-    delay_auth_decision            => $delay_auth_decision,
-    enforce_token_bind             => $enforce_token_bind,
-    http_connect_timeout           => $http_connect_timeout,
-    http_request_max_retries       => $http_request_max_retries,
-    include_service_catalog        => $include_service_catalog,
-    keyfile                        => $keyfile,
-    memcache_pool_conn_get_timeout => $memcache_pool_conn_get_timeout,
-    memcache_pool_dead_retry       => $memcache_pool_dead_retry,
-    memcache_pool_maxsize          => $memcache_pool_maxsize,
-    memcache_pool_socket_timeout   => $memcache_pool_socket_timeout,
-    memcache_secret_key            => $memcache_secret_key,
-    memcache_security_strategy     => $memcache_security_strategy,
-    memcache_use_advanced_pool     => $memcache_use_advanced_pool,
-    memcache_pool_unused_timeout   => $memcache_pool_unused_timeout,
-    memcached_servers              => $memcached_servers,
-    manage_memcache_package        => $manage_memcache_package,
-    region_name                    => $region_name,
-    token_cache_time               => $token_cache_time,
-    service_token_roles            => $service_token_roles,
-    service_token_roles_required   => $service_token_roles_required,
-    service_type                   => $service_type,
-    interface                      => $interface,
+  keystone::resource::authtoken {
+    'neutron_config':
+      *                              => $params;
+    default:
+      username                       => $username,
+      password                       => $password,
+      project_name                   => $project_name,
+      auth_url                       => $auth_url,
+      www_authenticate_uri           => $www_authenticate_uri,
+      auth_version                   => $auth_version,
+      auth_type                      => $auth_type,
+      auth_section                   => $auth_section,
+      user_domain_name               => $user_domain_name,
+      project_domain_name            => $project_domain_name,
+      insecure                       => $insecure,
+      cache                          => $cache,
+      cafile                         => $cafile,
+      certfile                       => $certfile,
+      delay_auth_decision            => $delay_auth_decision,
+      enforce_token_bind             => $enforce_token_bind,
+      http_connect_timeout           => $http_connect_timeout,
+      http_request_max_retries       => $http_request_max_retries,
+      include_service_catalog        => $include_service_catalog,
+      keyfile                        => $keyfile,
+      memcache_pool_conn_get_timeout => $memcache_pool_conn_get_timeout,
+      memcache_pool_dead_retry       => $memcache_pool_dead_retry,
+      memcache_pool_maxsize          => $memcache_pool_maxsize,
+      memcache_pool_socket_timeout   => $memcache_pool_socket_timeout,
+      memcache_secret_key            => $memcache_secret_key,
+      memcache_security_strategy     => $memcache_security_strategy,
+      memcache_use_advanced_pool     => $memcache_use_advanced_pool,
+      memcache_pool_unused_timeout   => $memcache_pool_unused_timeout,
+      memcached_servers              => $memcached_servers,
+      manage_memcache_package        => $manage_memcache_package,
+      region_name                    => $region_name,
+      token_cache_time               => $token_cache_time,
+      service_token_roles            => $service_token_roles,
+      service_token_roles_required   => $service_token_roles_required,
+      service_type                   => $service_type,
+      interface                      => $interface;
   }
 }

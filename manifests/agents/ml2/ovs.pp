@@ -87,6 +87,12 @@
 #   polling for local device changes.
 #   Defaults to $::os_service_default
 #
+# [*report_interval*]
+#   (optional) Set the agent report interval. By default the global report
+#   interval in neutron.conf ([agent]/report_interval) is used. This parameter
+#   can be used to override the reporting interval for the openvswitch-agent.
+#   Defaults to $::os_service_default
+#
 # [*l2_population*]
 #   (optional) Extension to use alongside ml2 plugin's l2population
 #   mechanism driver.
@@ -238,6 +244,7 @@ class neutron::agents::ml2::ovs (
   $tunnel_bridge                        = 'br-tun',
   $vxlan_udp_port                       = 4789,
   $polling_interval                     = $::os_service_default,
+  $report_interval                      = $::os_service_default,
   $l2_population                        = $::os_service_default,
   $arp_responder                        = $::os_service_default,
   $firewall_driver                      = 'iptables_hybrid',
@@ -365,6 +372,7 @@ class neutron::agents::ml2::ovs (
 
   neutron_agent_ovs {
     'agent/polling_interval':               value => $polling_interval;
+    'agent/report_interval':                value => $report_interval;
     'agent/l2_population':                  value => $l2_population;
     'agent/arp_responder':                  value => $arp_responder;
     'agent/enable_distributed_routing':     value => $enable_distributed_routing;

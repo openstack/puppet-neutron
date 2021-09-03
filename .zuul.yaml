@@ -14,7 +14,7 @@
 
 - job:
     name: puppet-neutron-tripleo-standalone
-    parent: tripleo-puppet-ci-centos-7-standalone
+    parent: tripleo-puppet-ci-centos-8-standalone
     description: |
       TripleO standalone Job running Neutron specific Tempest tests.
     vars:

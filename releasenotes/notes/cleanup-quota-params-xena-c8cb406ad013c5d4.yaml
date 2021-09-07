@@ -1,0 +1,13 @@
+---
+upgrade:
+  - |
+    The following deprecated parameters of the ``neutron::quota`` class have
+    been removed.
+
+    - ``quota_loadbalancer``
+    - ``quota_pool``
+    - ``quota_member``
+    - ``quota_health_monitor``
+    - ``quota_firewall``
+    - ``quota_firewall_policy``
+    - ``quota_firewall_rule``

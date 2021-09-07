@@ -60,40 +60,6 @@
 #   A negative value means unlimited.
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*quota_loadbalancer*]
-#   (optional) Number of loadbalancers allowed per tenant.
-#   A negative value means unlimited.
-#   Defaults to undef.
-#
-# [*quota_pool*]
-#   (optional) Number of pools allowed per tenant.
-#   A negative value means unlimited.
-#   Defaults to undef.
-#
-# [*quota_member*]
-#   (optional) Number of pool members allowed per tenant.
-#   A negative value means unlimited
-#   Defaults to undef.
-#
-# [*quota_healthmonitor*]
-#   (optional) Number of health monitors allowed per tenant.
-#   A negative value means unlimited.
-#   Defaults to undef.
-#
-# [*quota_firewall*]
-#   (optional) Number of firewalls allowed per tenant, -1 for unlimited.
-#   Defaults to undef.
-#
-# [*quota_firewall_policy*]
-#   (optional) Number of firewalls policies allowed per tenant, -1 for unlimited.
-#   Defaults to undef.
-#
-# [*quota_firewall_rule*]
-#   (optional) Number of firewalls rules allowed per tenant, -1 for unlimited.
-#   Defaults to undef.
-#
 class neutron::quota (
   $default_quota             = $::os_service_default,
   $quota_network             = $::os_service_default,
@@ -111,28 +77,9 @@ class neutron::quota (
   $quota_vip                 = $::os_service_default,
   # rbac extension
   $quota_rbac_policy         = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $quota_loadbalancer        = undef,
-  $quota_pool                = undef,
-  $quota_member              = undef,
-  $quota_healthmonitor       = undef,
-  $quota_firewall            = undef,
-  $quota_firewall_policy     = undef,
-  $quota_firewall_rule       = undef,
 ) {
 
   include neutron::deps
-
-  $deprecated_param_names = [
-    'quota_loadbalancer', 'quota_pool', 'quota_member', 'quota_healthmonitor',
-    'quota_firewall', 'quota_firewall_policy', 'quota_firewall_rule'
-  ]
-  $deprecated_param_names.each |$param_name| {
-    $param = getvar($param_name)
-    if $param != undef {
-      warning("The ${param_name} parameter has been deprecated and has no effect")
-    }
-  }
 
   neutron_config {
     'quotas/default_quota':             value => $default_quota;

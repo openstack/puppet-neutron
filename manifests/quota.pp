@@ -46,11 +46,6 @@
 #   (optional) Number of network gateways allowed per tenant, -1 for unlimited.
 #   Defaults to '5'.
 #
-# [*quota_vip*]
-#   (optional) Number of vips allowed per tenant.
-#   A negative value means unlimited.
-#   Defaults to $::os_service_default.
-#
 # [*quota_rbac_policy*]
 #   (optional) Number of rbac policies allowed per tenant.
 #   A negative value means unlimited.
@@ -60,6 +55,11 @@
 #
 # [*quota_packet_filter*]
 #   (optional) Number of packet_filters allowed per tenant, -1 for unlimited.
+#   Defaults to undef.
+#
+# [*quota_vip*]
+#   (optional) Number of vips allowed per tenant.
+#   A negative value means unlimited.
 #   Defaults to undef.
 #
 class neutron::quota (
@@ -75,17 +75,21 @@ class neutron::quota (
   $quota_security_group_rule = $::os_service_default,
   $quota_driver              = $::os_service_default,
   $quota_network_gateway     = 5,
-  $quota_vip                 = $::os_service_default,
   # rbac extension
   $quota_rbac_policy         = $::os_service_default,
   # DEPRECATED PARAMETERS
   $quota_packet_filter       = undef,
+  $quota_vip                 = undef,
 ) {
 
   include neutron::deps
 
   if $quota_packet_filter != undef {
     warning('The neutron::quota::quota_packet_filter parameter is deprecated and has no effect')
+  }
+
+  if $quota_vip != undef {
+    warning('The neutron::quota::quota_vip parameter is deprecated and has no effect')
   }
 
   neutron_config {
@@ -99,7 +103,6 @@ class neutron::quota (
     'quotas/quota_security_group_rule': value => $quota_security_group_rule;
     'quotas/quota_driver':              value => $quota_driver;
     'quotas/quota_network_gateway':     value => $quota_network_gateway;
-    'quotas/quota_vip':                 value => $quota_vip;
     'quotas/quota_rbac_policy':         value => $quota_rbac_policy;
   }
 }

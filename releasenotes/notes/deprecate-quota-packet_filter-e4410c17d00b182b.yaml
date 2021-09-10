@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::quota::quota_packet_filter`` parameter has been deprecated
+    and has no effect now.

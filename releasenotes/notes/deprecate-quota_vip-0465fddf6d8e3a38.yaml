@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::quota::quota_vip`` parameter has been deprecated and has no
+    effect.

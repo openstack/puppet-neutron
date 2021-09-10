@@ -39,7 +39,6 @@ describe 'neutron::quota' do
           :quota_security_group      => 20,
           :quota_security_group_rule => 200,
           :quota_network_gateway     => 5,
-          :quota_vip                 => 10,
           :quota_rbac_policy         => 10
         })
       end

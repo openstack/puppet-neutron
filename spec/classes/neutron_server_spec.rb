@@ -274,16 +274,14 @@ describe 'neutron::server' do
 
   end
 
-  shared_examples 'VPNaaS and FWaaS package installation' do
+  shared_examples 'VPNaaS package installation' do
     before do
       params.merge!(
         :ensure_vpnaas_package => true,
-        :ensure_fwaas_package  => true,
       )
     end
 
     it 'should install *aaS packages' do
-      should contain_package('neutron-fwaas')
       should contain_package('neutron-vpnaas-agent')
     end
   end

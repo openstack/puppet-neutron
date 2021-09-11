@@ -43,7 +43,6 @@ class neutron::deps {
   Anchor['neutron::config::begin'] -> Neutron_sfc_service_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_dhcp_agent_config<||> ~> Anchor['neutron::config::end']
-  Anchor['neutron::config::begin'] -> Neutron_fwaas_service_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_l2gw_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_l3_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_metadata_agent_config<||> ~> Anchor['neutron::config::end']

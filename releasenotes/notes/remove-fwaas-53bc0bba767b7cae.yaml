@@ -1,0 +1,8 @@
+---
+upgrades:
+  - |
+    The ``neutron::server::ensure_fwaas_package`` parameter has been removed
+  - |
+    The ``neutron::services::fwaas`` class has been removed.
+  - |
+    The ``neutron_fwaas_service_config`` resource has been removed.

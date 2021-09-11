@@ -71,7 +71,6 @@ class neutron::params {
     $libreswan_package                  = 'libreswan'
     $metadata_agent_package             = false
     $l3_agent_package                   = false
-    $fwaas_package                      = 'openstack-neutron-fwaas'
     $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
     $neutron_wsgi_script_source         = '/usr/bin/neutron-api'
     $networking_baremetal_package       = 'python3-networking-baremetal'
@@ -119,7 +118,6 @@ class neutron::params {
     $libreswan_package          = false
     $metadata_agent_package     = 'neutron-metadata-agent'
     $l3_agent_package           = 'neutron-l3-agent'
-    $fwaas_package              = 'python3-neutron-fwaas'
     $l2gw_agent_package         = 'neutron-l2gateway-agent'
     $l2gw_package               = 'python3-networking-l2gw'
     $neutron_wsgi_script_path   = '/usr/lib/cgi-bin/neutron'

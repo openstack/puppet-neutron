@@ -92,15 +92,6 @@
 # [*api_config*]
 #   (optional) Manage configuration of api-paste.ini
 #
-# [*plugin_cisco_db_conn_config*]
-#   (optional) Manage configuration of plugins/cisco/db_conn.ini
-#
-# [*plugin_cisco_l2network_config*]
-#   (optional) Manage configuration of plugins/cisco/l2network_plugin.ini
-#
-# [*plugin_cisco_config*]
-#   (optional) Manage configuration of cisco_plugins.ini
-#
 # [*plugin_plumgrid_config*]
 #   (optional) Manage configuration of plugins/plumgrid/plumgrid.ini
 #
@@ -135,9 +126,6 @@ class neutron::config (
   $plugin_nvp_config             = {},
   # DEPRECATED PARAMETERS
   $api_config                    = undef,
-  $plugin_cisco_db_conn_config   = undef,
-  $plugin_cisco_l2network_config = undef,
-  $plugin_cisco_config           = undef,
   $plugin_plumgrid_config        = undef,
   $plugin_midonet_config         = undef,
 ) {
@@ -154,18 +142,6 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
     $api_paste_ini_real = $api_config
   } else {
     $api_paste_ini_real = $api_paste_ini
-  }
-
-  $cisco_plugin_param_names = [
-    'plugin_cisco_db_conn_config',
-    'plugin_cisco_l2network_config',
-    'plugin_cisco_config',
-  ]
-  $cisco_plugin_param_names.each |$param_name| {
-    $param = getvar($param_name)
-    if $param != undef{
-      warning("The ${param_name} parameter is deprecated and has no effect.")
-    }
   }
 
   if $plugin_midonet_config != undef {

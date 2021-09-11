@@ -11,10 +11,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/metering_agent.ini',
                      '/etc/neutron/l2gw_plugin.ini',
                      '/etc/neutron/l2gateway_agent.ini',
-                     '/etc/neutron/plugins/cisco/cisco_plugins.ini',
-                     '/etc/neutron/plugins/cisco/credentials.ini',
-                     '/etc/neutron/plugins/cisco/db_conn.ini',
-                     '/etc/neutron/plugins/cisco/l2network_plugin.ini',
                      '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/plugins/nicira/nvp.ini',
@@ -36,10 +32,6 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_l3_agent_config <||>
   File <||> -> Neutron_metadata_agent_config <||>
   File <||> -> Neutron_metering_agent_config <||>
-  File <||> -> Neutron_plugin_cisco <||>
-  File <||> -> Neutron_plugin_cisco_credentials <||>
-  File <||> -> Neutron_plugin_cisco_db_conn <||>
-  File <||> -> Neutron_plugin_cisco_l2network <||>
   File <||> -> Neutron_plugin_linuxbridge <||>
   File <||> -> Neutron_plugin_ml2 <||>
   File <||> -> Neutron_plugin_nvp <||>
@@ -58,7 +50,6 @@ describe 'basic neutron_config resource' do
 
   $neutron_directories = ['/etc/neutron',
                           '/etc/neutron/plugins',
-                          '/etc/neutron/plugins/cisco',
                           '/etc/neutron/plugins/linuxbridge',
                           '/etc/neutron/plugins/ml2',
                           '/etc/neutron/plugins/nicira',
@@ -75,10 +66,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/metering_agent.ini',
                      '/etc/neutron/l2gw_plugin.ini',
                      '/etc/neutron/l2gateway_agent.ini',
-                     '/etc/neutron/plugins/cisco/cisco_plugins.ini',
-                     '/etc/neutron/plugins/cisco/credentials.ini',
-                     '/etc/neutron/plugins/cisco/db_conn.ini',
-                     '/etc/neutron/plugins/cisco/l2network_plugin.ini',
                      '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/plugins/nicira/nvp.ini',
@@ -219,78 +206,6 @@ describe 'basic neutron_config resource' do
   }
 
   neutron_metering_agent_config { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_cisco { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_plugin_cisco { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_plugin_cisco { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_cisco { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_cisco_credentials { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_plugin_cisco_credentials { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_plugin_cisco_credentials { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_cisco_credentials { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_cisco_db_conn { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_plugin_cisco_db_conn { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_plugin_cisco_db_conn { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_cisco_db_conn { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_cisco_l2network { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_plugin_cisco_l2network { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_plugin_cisco_l2network { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_cisco_l2network { 'DEFAULT/thisshouldnotexist2' :
     value             => 'toto',
     ensure_absent_val => 'toto',
   }
@@ -555,10 +470,6 @@ describe 'basic neutron_config resource' do
                     'neutron_fwaas_service_config',
                     'neutron_l3_agent_config',
                     'neutron_metadata_agent_config',
-                    'neutron_plugin_cisco',
-                    'neutron_plugin_cisco_credentials',
-                    'neutron_plugin_cisco_db_conn',
-                    'neutron_plugin_cisco_l2network',
                     'neutron_plugin_linuxbridge',
                     'neutron_metering_agent_config',
                     'neutron_plugin_ml2',

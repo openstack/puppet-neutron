@@ -92,9 +92,6 @@
 # [*api_config*]
 #   (optional) Manage configuration of api-paste.ini
 #
-# [*plugin_plumgrid_config*]
-#   (optional) Manage configuration of plugins/plumgrid/plumgrid.ini
-#
 # [*plugin_midonet_config*]
 #   (optional) Manage configuration of plugins/midonet/midonet.ini
 #
@@ -126,15 +123,10 @@ class neutron::config (
   $plugin_nvp_config             = {},
   # DEPRECATED PARAMETERS
   $api_config                    = undef,
-  $plugin_plumgrid_config        = undef,
   $plugin_midonet_config         = undef,
 ) {
 
   include neutron::deps
-
-  if $plugin_plumgrid_config != undef {
-    warning('The plugin_plumgrid_config parameter was deprecated and has no effect')
-  }
 
   if $api_config != undef {
     warning('The neutron::config::api_config parameter has been deprecated and \

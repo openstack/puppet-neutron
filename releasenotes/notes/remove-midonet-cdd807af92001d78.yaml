@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for the midonet plugin has been removed.

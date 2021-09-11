@@ -92,9 +92,6 @@
 # [*api_config*]
 #   (optional) Manage configuration of api-paste.ini
 #
-# [*plugin_midonet_config*]
-#   (optional) Manage configuration of plugins/midonet/midonet.ini
-#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -123,7 +120,6 @@ class neutron::config (
   $plugin_nvp_config             = {},
   # DEPRECATED PARAMETERS
   $api_config                    = undef,
-  $plugin_midonet_config         = undef,
 ) {
 
   include neutron::deps
@@ -134,10 +130,6 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
     $api_paste_ini_real = $api_config
   } else {
     $api_paste_ini_real = $api_paste_ini
-  }
-
-  if $plugin_midonet_config != undef {
-    warning('The plugin_midonet_config parameter has been deprecated and has no effect')
   }
 
   validate_legacy(Hash, 'validate_hash', $server_config)

@@ -115,9 +115,6 @@ define neutron::plugins::ml2::type_driver (
   elsif ($name == 'nexus_vxlan') {
     # Nexus_vxlan type driver has its own class separate from this one
   }
-  elsif ($name == 'midonet') or ($name == 'uplink') {
-    # midonet type driver has its own class separate from this one
-  }
   elsif ($name == 'geneve') {
     validate_vni_ranges($vni_ranges)
     if !is_service_default($max_header_size) {

@@ -225,13 +225,6 @@
 #   mechanism driver for Neutron.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*ensure_fwaas_package*]
-#   (Optional) Ensures installation of FWaaS package before starting API service.
-#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
-#   Defaults to undef.
-#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -270,8 +263,6 @@ class neutron::server (
   $max_request_body_size            = $::os_service_default,
   $ovs_integration_bridge           = $::os_service_default,
   $igmp_snooping_enable             = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $ensure_fwaas_package             = undef,
 ) inherits neutron::params {
 
   include neutron::deps
@@ -289,34 +280,6 @@ class neutron::server (
 
   if !is_service_default($service_providers) {
     validate_legacy(Array, 'validate_array', $service_providers)
-  }
-
-  if $ensure_fwaas_package {
-    warning('neutron::server::ensure_fwaas_package is deprecated and will be removed in a future release')
-
-    if ($::osfamily == 'Debian') {
-      # Debian platforms
-      if $vpnaas_agent_package {
-        ensure_resource( 'package', $::neutron::params::vpnaas_agent_package, {
-          'ensure' => $neutron::package_ensure,
-          'tag'    => ['openstack', 'neutron-package'],
-        })
-        Package[$::neutron::params::vpnaas_agent_package] -> Neutron_fwaas_service_config<||>
-      } else {
-        ensure_resource( 'package', 'neutron-fwaas' , {
-          'name'   => $::neutron::params::fwaas_package,
-          'ensure' => $neutron::package_ensure,
-          'tag'    => ['openstack', 'neutron-package'],
-        })
-      }
-    } elsif($::osfamily == 'Redhat') {
-      # RH platforms
-      ensure_resource( 'package', 'neutron-fwaas', {
-        'name'   => $::neutron::params::fwaas_package,
-        'ensure' => $neutron::package_ensure,
-        'tag'    => ['openstack', 'neutron-package'],
-      })
-    }
   }
 
   if $ensure_vpnaas_package {

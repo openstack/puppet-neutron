@@ -43,7 +43,13 @@
 # [*polling_interval*]
 #   (optional) The number of seconds the agent will wait between
 #   polling for local device changes.
-#   Defaults to '2"
+#   Defaults to 2
+#
+# [*report_interval*]
+#   (optional) Set the agent report interval. By default the global report
+#   interval in neutron.conf ([agent]/report_interval) is used. This parameter
+#   can be used to override the reporting interval for the sriov-agent.
+#   Defaults to $::os_service_default
 #
 # [*exclude_devices*]
 #   (optional) Array of <network_device>:<excluded_devices> mapping
@@ -88,6 +94,7 @@ class neutron::agents::ml2::sriov (
   $manage_service                       = true,
   $physical_device_mappings             = $::os_service_default,
   $polling_interval                     = 2,
+  $report_interval                      = $::os_service_default,
   $exclude_devices                      = $::os_service_default,
   $extensions                           = $::os_service_default,
   $purge_config                         = false,
@@ -109,6 +116,7 @@ class neutron::agents::ml2::sriov (
     'sriov_nic/physical_device_mappings': value => pick(join(any2array($physical_device_mappings), ','), $::os_service_default);
     'agent/extensions':                   value => join(any2array($extensions), ',');
     'agent/polling_interval':             value => $polling_interval;
+    'agent/report_interval':              value => $report_interval;
     # As of now security groups are not supported for SR-IOV ports.
     # It is required to disable Firewall driver in the SR-IOV agent config.
     'securitygroup/firewall_driver':      value => 'noop';

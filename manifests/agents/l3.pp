@@ -83,6 +83,12 @@
 #   (optional) List of the L3 agent extensions to enable.
 #   Defaults to $::os_service_default
 #
+# [*report_interval*]
+#   (optional) Set the agent report interval. By default the global report
+#   interval in neutron.conf ([agent]/report_interval) is used. This parameter
+#   can be used to override the reporting interval for l3-agent.
+#   Defaults to $::os_service_default
+#
 # [*radvd_user*]
 #   (optional) The username passed to radvd, used to drop root privileges and
 #   change user ID to username and group ID to the primary group of username.
@@ -137,6 +143,7 @@ class neutron::agents::l3 (
   $purge_config                      = false,
   $availability_zone                 = $::os_service_default,
   $extensions                        = $::os_service_default,
+  $report_interval                   = $::os_service_default,
   $radvd_user                        = $::os_service_default,
   $ovs_integration_bridge            = $::os_service_default,
   $network_log_rate_limit            = $::os_service_default,
@@ -182,6 +189,7 @@ class neutron::agents::l3 (
     'ovs/integration_bridge':               value => $ovs_integration_bridge;
     'agent/availability_zone':              value => $availability_zone;
     'agent/extensions':                     value => join(any2array($extensions), ',');
+    'agent/report_interval':                value => $report_interval;
     'network_log/rate_limit':               value => $network_log_rate_limit;
     'network_log/burst_limit':              value => $network_log_burst_limit;
     'network_log/local_output_log_base':    value => $network_log_local_output_log_base;

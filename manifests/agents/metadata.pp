@@ -58,6 +58,12 @@
 #   (optional) Allow to perform insecure SSL (https) requests to nova metadata.
 #   Defaults to $::os_service_default
 #
+# [*report_interval*]
+#   (optional) Set the agent report interval. By default the global report
+#   interval in neutron.conf ([agent]/report_interval) is used. This parameter
+#   can be used to override the reporting interval for the sriov-agent.
+#   Defaults to $::os_service_default
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the metadata config.
@@ -79,6 +85,7 @@ class neutron::agents::metadata (
   $metadata_insecure         = $::os_service_default,
   $nova_client_cert          = $::os_service_default,
   $nova_client_priv_key      = $::os_service_default,
+  $report_interval           = $::os_service_default,
   $purge_config              = false,
   ) {
 
@@ -101,6 +108,7 @@ class neutron::agents::metadata (
     'DEFAULT/metadata_backlog':               value => $metadata_backlog;
     'DEFAULT/nova_client_cert':               value => $nova_client_cert;
     'DEFAULT/nova_client_priv_key':           value => $nova_client_priv_key;
+    'agent/report_interval':                  value => $report_interval;
   }
 
   if ! is_service_default ($metadata_memory_cache_ttl) and ($metadata_memory_cache_ttl) {

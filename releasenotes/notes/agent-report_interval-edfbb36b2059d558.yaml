@@ -1,0 +1,11 @@
+---
+features:
+  - |
+    The following classes now support the ``report_interval`` parameter, to
+    override the report interval of a specific neutron agents.
+
+    - ``neutron::agent::dhcp``
+    - ``neutron::agent::metadata``
+    - ``neutron::agent::ml2::ovs``
+    - ``neutron::agent::ml2::sriov``
+    - ``neutron::agent::l3``

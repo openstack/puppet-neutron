@@ -41,6 +41,7 @@ describe 'neutron::agents::ml2::ovs' do
 
     it 'configures plugins/ml2/openvswitch_agent.ini' do
       should contain_neutron_agent_ovs('agent/polling_interval').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('agent/report_interval').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/l2_population').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/arp_responder').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/drop_flows_on_start').with_value(p[:drop_flows_on_start])

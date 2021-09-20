@@ -104,6 +104,12 @@
 # (optional) The SSL CA cert file to use for Neutron agents to connect to OVSDB
 # Defaults to $::os_service_default
 #
+# [*report_interval*]
+#   (optional) Set the agent report interval. By default the global report
+#   interval in neutron.conf ([agent]/report_interval) is used. This parameter
+#   can be used to override the reporting interval for the dhcp-agent.
+#   Defaults to $::os_service_default
+#
 class neutron::agents::dhcp (
   $package_ensure            = present,
   $enabled                   = true,
@@ -129,6 +135,7 @@ class neutron::agents::dhcp (
   $ovsdb_agent_ssl_key_file  = $::os_service_default,
   $ovsdb_agent_ssl_cert_file = $::os_service_default,
   $ovsdb_agent_ssl_ca_file   = $::os_service_default,
+  $report_interval           = $::os_service_default,
 ) {
 
   include neutron::deps
@@ -164,6 +171,7 @@ class neutron::agents::dhcp (
     'DEFAULT/dnsmasq_local_resolv':      value => $dnsmasq_local_resolv;
     'DEFAULT/dnsmasq_enable_addr6_list': value => $dnsmasq_enable_addr6_list;
     'agent/availability_zone':           value => $availability_zone;
+    'agent/report_interval':             value => $report_interval;
   }
 
   # DEFAULT/ovs_intergation_bridge was deprecated in favor of

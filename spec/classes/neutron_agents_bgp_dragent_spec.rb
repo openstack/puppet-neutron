@@ -19,7 +19,7 @@ require 'spec_helper'
 describe 'neutron::agents::bgp_dragent' do
   let :default_params do
     {
-      :package_ensure     => 'present',
+      :package_ensure     => 'installed',
       :enabled            => true,
       :manage_service     => true,
       :bgp_speaker_driver => 'neutron_dynamic_routing.services.bgp.agent.driver.os_ken.driver.OsKenBgpDriver',

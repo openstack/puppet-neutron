@@ -13,7 +13,7 @@ describe 'neutron::plugins::ml2::bigswitch' do
 
   let :default_params do
     {
-      :package_ensure => 'present'
+      :package_ensure => 'installed'
     }
   end
 

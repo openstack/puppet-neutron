@@ -7,7 +7,14 @@ describe 'neutron::quota' do
 
   let :default_params do
     {
-      :quota_network_gateway => 5,
+      :quota_network             => '<SERVICE DEFAULT>',
+      :quota_subnet              => '<SERVICE DEFAULT>',
+      :quota_port                => '<SERVICE DEFAULT>',
+      :quota_router              => '<SERVICE DEFAULT>',
+      :quota_floatingip          => '<SERVICE DEFAULT>',
+      :quota_security_group      => '<SERVICE DEFAULT>',
+      :quota_security_group_rule => '<SERVICE DEFAULT>',
+      :quota_rbac_policy         => '<SERVICE DEFAULT>',
     }
   end
 
@@ -38,7 +45,6 @@ describe 'neutron::quota' do
           :quota_floatingip          => 100,
           :quota_security_group      => 20,
           :quota_security_group_rule => 200,
-          :quota_network_gateway     => 5,
           :quota_rbac_policy         => 10
         })
       end

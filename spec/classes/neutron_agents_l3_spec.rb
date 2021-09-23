@@ -30,6 +30,9 @@ describe 'neutron::agents::l3' do
     it { should contain_class('neutron::params') }
 
     it 'configures l3_agent.ini' do
+      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_ensure('absent')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_ensure('absent')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_ensure('absent')
       should contain_neutron_l3_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver])
       should contain_neutron_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value('<SERVICE DEFAULT>')

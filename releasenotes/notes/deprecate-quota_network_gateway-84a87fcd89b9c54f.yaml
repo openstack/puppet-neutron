@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::quota::quota_network_gateway`` parameter has been deprecated
+    and has no effect now.

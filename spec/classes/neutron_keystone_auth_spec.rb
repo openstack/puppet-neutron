@@ -1,145 +1,68 @@
+#
+# Unit tests for neutron::keystone::auth
+#
+
 require 'spec_helper'
 
 describe 'neutron::keystone::auth' do
-  shared_examples 'neutron::keystone::auth' do
+  shared_examples_for 'neutron::keystone::auth' do
     context 'with default class parameters' do
       let :params do
-        {
-          :password => 'neutron_password',
-          :tenant   => 'foobar'
-        }
+        { :password => 'neutron_password' }
       end
 
-      it { should contain_keystone_user('neutron').with(
-        :ensure   => 'present',
-        :password => 'neutron_password',
-      )}
-
-      it { should contain_keystone_user_role('neutron@foobar').with(
-        :ensure  => 'present',
-        :roles   => ['admin']
-      )}
-
-      it { should contain_keystone_service('neutron::network').with(
-        :ensure      => 'present',
-        :description => 'Neutron Networking Service'
-      )}
-
-      it { should contain_keystone_endpoint('RegionOne/neutron::network').with(
-        :ensure       => 'present',
-        :public_url   => "http://127.0.0.1:9696",
-        :admin_url    => "http://127.0.0.1:9696",
-        :internal_url => "http://127.0.0.1:9696"
-      )}
-    end
-
-    context 'when configuring neutron-server' do
-      let :pre_condition do
-        "class { 'neutron::keystone::authtoken':
-          password => 'test',
-         }
-         class { 'neutron::server': }"
-      end
-
-      let :params do
-        {
-          :password => 'neutron_password',
-          :tenant   => 'foobar'
-        }
-      end
-
-    end
-
-    context 'with endpoint URL parameters' do
-      let :params do
-        {
-          :password     => 'neutron_password',
-          :public_url   => 'https://10.10.10.10:80',
-          :internal_url => 'https://10.10.10.11:81',
-          :admin_url    => 'https://10.10.10.12:81'
-        }
-      end
-
-      it { should contain_keystone_endpoint('RegionOne/neutron::network').with(
-        :ensure       => 'present',
-        :public_url   => 'https://10.10.10.10:80',
-        :internal_url => 'https://10.10.10.11:81',
-        :admin_url    => 'https://10.10.10.12:81'
+      it { is_expected.to contain_keystone__resource__service_identity('neutron').with(
+        :configure_user      => true,
+        :configure_user_role => true,
+        :configure_endpoint  => true,
+        :service_name        => 'neutron',
+        :service_type        => 'network',
+        :service_description => 'Neutron Networking Service',
+        :region              => 'RegionOne',
+        :auth_name           => 'neutron',
+        :password            => 'neutron_password',
+        :email               => 'neutron@localhost',
+        :tenant              => 'services',
+        :public_url          => 'http://127.0.0.1:9696',
+        :internal_url        => 'http://127.0.0.1:9696',
+        :admin_url           => 'http://127.0.0.1:9696',
       ) }
     end
 
-    context 'when overriding auth name' do  
+    context 'when overriding parameters' do
       let :params do
-        {
-          :password  => 'foo',
-          :auth_name => 'neutrony'
-        }
-      end
-
-      it { should contain_keystone_user('neutrony') } 
-      it { should contain_keystone_user_role('neutrony@services') } 
-      it { should contain_keystone_service('neutron::network') }
-      it { should contain_keystone_endpoint('RegionOne/neutron::network') }
-    end
-
-    context 'when overriding service name' do
-      let :params do
-        {
-          :service_name => 'neutron_service',
-          :password     => 'neutron_password'
-        }
-      end
-
-      it { should contain_keystone_user('neutron') }
-      it { should contain_keystone_user_role('neutron@services') }
-      it { should contain_keystone_service('neutron_service::network') }
-      it { should contain_keystone_endpoint('RegionOne/neutron_service::network') }
-    end
-
-    context 'when disabling user configuration' do
-      let :params do
-        {
-          :password       => 'neutron_password',
-          :configure_user => false
-        }
-      end
-
-      it { should_not contain_keystone_user('neutron') }
-      it { should contain_keystone_user_role('neutron@services') }
-
-      it { should contain_keystone_service('neutron::network').with(
-        :ensure      => 'present',
-        :description => 'Neutron Networking Service'
-      )}
-    end
-
-    context 'when disabling user and user role configuration' do  
-      let :params do
-        {
-          :password            => 'neutron_password',
+        { :password            => 'neutron_password',
+          :auth_name           => 'alt_neutron',
+          :email               => 'alt_neutron@alt_localhost',
+          :tenant              => 'alt_service',
+          :configure_endpoint  => false,
           :configure_user      => false,
-          :configure_user_role => false
-        }
+          :configure_user_role => false,
+          :service_description => 'Alternative Neutron Networking Service',
+          :service_name        => 'alt_service',
+          :service_type        => 'alt_network',
+          :region              => 'RegionTwo',
+          :public_url          => 'https://10.10.10.10:80',
+          :internal_url        => 'http://10.10.10.11:81',
+          :admin_url           => 'http://10.10.10.12:81' }
       end
 
-      it { should_not contain_keystone_user('neutron') }
-      it { should_not contain_keystone_user_role('neutron@services') }
-
-      it { should contain_keystone_service('neutron::network').with(
-        :ensure      => 'present',
-        :description => 'Neutron Networking Service'
-      )}
-    end
-
-    context 'when disabling endpoint configuration' do
-      let :params do
-        {
-          :password           => 'neutron_password',
-          :configure_endpoint => false
-        }
-      end
-
-      it { should_not contain_keystone_endpoint('RegionOne/neutron::network') }
+      it { is_expected.to contain_keystone__resource__service_identity('neutron').with(
+        :configure_user      => false,
+        :configure_user_role => false,
+        :configure_endpoint  => false,
+        :service_name        => 'alt_service',
+        :service_type        => 'alt_network',
+        :service_description => 'Alternative Neutron Networking Service',
+        :region              => 'RegionTwo',
+        :auth_name           => 'alt_neutron',
+        :password            => 'neutron_password',
+        :email               => 'alt_neutron@alt_localhost',
+        :tenant              => 'alt_service',
+        :public_url          => 'https://10.10.10.10:80',
+        :internal_url        => 'http://10.10.10.11:81',
+        :admin_url           => 'http://10.10.10.12:81',
+      ) }
     end
   end
 

@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    Support for the Nicira NVP plugin has been deprecated and will be removed
+    in a future release.

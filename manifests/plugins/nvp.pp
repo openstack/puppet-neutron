@@ -1,4 +1,4 @@
-#
+# DEPRECAED !!
 # Configure the Nicira NVP plugin for neutron.
 #
 # === Parameters
@@ -42,6 +42,8 @@ class neutron::plugins::nvp (
 
   include neutron::deps
   include neutron::params
+
+  warning('Support for the Nicira NVP plugin has been deprecated')
 
   Package['neutron'] -> Package['neutron-plugin-nvp']
 

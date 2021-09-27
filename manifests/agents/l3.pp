@@ -174,6 +174,12 @@ class neutron::agents::l3 (
       'DEFAULT/ha_vrrp_auth_password': value => $ha_vrrp_auth_password, secret => true;
       'DEFAULT/ha_vrrp_advert_int':    value => $ha_vrrp_advert_int;
     }
+  } else {
+    neutron_l3_agent_config {
+      'DEFAULT/ha_vrrp_auth_type':     ensure => absent;
+      'DEFAULT/ha_vrrp_auth_password': ensure => absent;
+      'DEFAULT/ha_vrrp_advert_int':    ensure => absent;
+    }
   }
 
   neutron_l3_agent_config {

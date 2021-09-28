@@ -37,7 +37,7 @@ describe provider_class do
     provider = provider_class.new(resource)
     expect(provider.section).to eq('DEFAULT')
     expect(provider.setting).to eq('foo')
-    expect(provider.file_path).to eq('/etc/neutron/plugins/networking-ovn/networking-ovn-metadata-agent.ini')
+    expect(provider.file_path).to eq('/etc/neutron/neutron_ovn_metadata_agent.ini')
   end
 
   it 'should allow setting to be set explicitly' do
@@ -50,7 +50,7 @@ describe provider_class do
     provider = provider_class.new(resource)
     expect(provider.section).to eq('dude')
     expect(provider.setting).to eq('foo')
-    expect(provider.file_path).to eq('/etc/neutron/plugins/networking-ovn/networking-ovn-metadata-agent.ini')
+    expect(provider.file_path).to eq('/etc/neutron/neutron_ovn_metadata_agent.ini')
   end
 
   it 'should ensure absent when <SERVICE DEFAULT> is specified as a value' do

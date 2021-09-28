@@ -1,0 +1,10 @@
+---
+fixes:
+  - |
+    The independent ovn plugin package(``pythonN-networking-ovn``) is no longer
+    required. The package is no longer available since Ussuri, and all codes
+    are now included in the base neutron package.
+
+  - |
+    The ``neutron-ovn-metadata-agent`` package is now installed in Ubuntu and
+    Debian.

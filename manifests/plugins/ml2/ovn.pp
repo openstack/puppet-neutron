@@ -172,13 +172,6 @@ class neutron::plugins::ml2::ovn(
     fail( 'Invalid value for neutron_sync_mode parameter' )
   }
 
-  ensure_resource('package', $::neutron::params::ovn_plugin_package,
-    {
-      ensure => $package_ensure,
-      tag    => ['openstack', 'neutron-plugin-ml2-package']
-    }
-  )
-
   neutron_plugin_ml2 {
     'ovn/ovn_nb_connection'             : value => $ovn_nb_connection;
     'ovn/ovn_sb_connection'             : value => $ovn_sb_connection;

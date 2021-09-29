@@ -336,12 +336,17 @@ class neutron::agents::ml2::ovs (
     # (The bridge names can be nearly anything, they just have to match between
     # mappings and uplinks; they're what the OVS switches will get named.)
 
+    $bridge_mappings_real = $bridge_mappings ? {
+      String  => $bridge_mappings.split(',').strip(),
+      default => $bridge_mappings,
+    }
+
     # Set config for bridges that we're going to create
     # The OVS neutron plugin will talk in terms of the networks in the bridge_mappings
-    $br_map_str = join(any2array($bridge_mappings), ',')
     neutron_agent_ovs {
-      'ovs/bridge_mappings': value => $br_map_str;
+      'ovs/bridge_mappings': value => join(any2array($bridge_mappings_real), ',');
     }
+
     if ($manage_vswitch) {
       neutron::plugins::ovs::bridge{ $bridge_mappings:
         before => Service['neutron-ovs-agent-service'],

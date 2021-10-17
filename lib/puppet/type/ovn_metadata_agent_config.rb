@@ -3,7 +3,7 @@ Puppet::Type.newtype(:ovn_metadata_agent_config) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from networking-ovn-metadata-agent.ini'
+    desc 'Section/setting name to manage from neutron_ovn_metadata_agent.ini'
     newvalues(/\S+\/\S+/)
   end
 

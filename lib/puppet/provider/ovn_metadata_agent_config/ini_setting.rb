@@ -4,7 +4,7 @@ Puppet::Type.type(:ovn_metadata_agent_config).provide(
 ) do
 
   def self.file_path
-    '/etc/neutron/plugins/networking-ovn/networking-ovn-metadata-agent.ini'
+    '/etc/neutron/neutron_ovn_metadata_agent.ini'
   end
 
   # added for backwards compatibility with older versions of inifile

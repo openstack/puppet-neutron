@@ -1,6 +1,6 @@
 # == Class: neutron::agents::ovn_metadata
 #
-# Setup and configure networking-ovn metadata agent.
+# Setup and configure neutron ovn metadata agent.
 #
 # === Parameters
 #

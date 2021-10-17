@@ -69,6 +69,19 @@ describe 'neutron::agents::ovn_metadata' do
       should contain_ovn_metadata_agent_config('ovn/ovn_sb_connection').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('ovn/ovn_remote_probe_interval').with(:value => '<SERVICE DEFAULT>')
     end
+
+    it 'installs ovn metadata agent package' do
+      should contain_package('ovn-metadata').with(
+        :ensure => params[:package_ensure],
+        :name   => platform_params[:ovn_metadata_agent_package],
+        :tag    => ['openstack', 'neutron-package'],
+      )
+    end
+
+    it 'configures subscription to ovn-metadata package' do
+      should contain_service('ovn-metadata').that_subscribes_to('Anchor[neutron::service::begin]')
+      should contain_service('ovn-metadata').that_notifies('Anchor[neutron::service::end]')
+    end
   end
 
   shared_examples 'ovn metadata agent with auth_ca_cert set' do
@@ -90,21 +103,6 @@ describe 'neutron::agents::ovn_metadata' do
     end
   end
 
-  shared_examples 'neutron::agents::ovn::metadata on RedHat based' do
-    it 'installs ovn metadata agent package' do
-      should contain_package('ovn-metadata').with(
-        :ensure => params[:package_ensure],
-        :name   => platform_params[:ovn_metadata_agent_package],
-        :tag    => ['openstack', 'neutron-package'],
-      )
-    end
-
-    it 'configures subscription to ovn-metadata package' do
-      should contain_service('ovn-metadata').that_subscribes_to('Anchor[neutron::service::begin]')
-      should contain_service('ovn-metadata').that_notifies('Anchor[neutron::service::end]')
-    end
-  end
-
   on_supported_os({
     :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -116,21 +114,16 @@ describe 'neutron::agents::ovn_metadata' do
       let (:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          {
-            :ovn_metadata_agent_service => 'networking-ovn-metadata-agent'
-          }
+          { :ovn_metadata_agent_package => 'neutron-ovn-metadata-agent',
+            :ovn_metadata_agent_service => 'neutron-ovn-metadata-agent' }
         when 'RedHat'
-          { :ovn_metadata_agent_package => 'python3-networking-ovn-metadata-agent',
-            :ovn_metadata_agent_service => 'networking-ovn-metadata-agent' }
+          { :ovn_metadata_agent_package => 'openstack-neutron-ovn-metadata-agent',
+            :ovn_metadata_agent_service => 'neutron-ovn-metadata-agent' }
         end
       end
 
       it_behaves_like 'ovn metadata agent'
       it_behaves_like 'ovn metadata agent with auth_ca_cert set'
-
-      if facts[:osfamily] == 'RedHat'
-        it_behaves_like 'neutron::agents::ovn::metadata on RedHat based'
-      end
     end
   end
 end

@@ -4,20 +4,15 @@
 #
 # === Parameters
 #
-# [*sdn_username*]
-# (optional) The Mellanox controller username
+# [*sdn_token*]
+# (optional) The Mellanox controller token
 # Defaults to $::os_service_default
-# Example: 'admin'
-#
-# [*sdn_password*]
-# (optional) The Mellanox controller password
-# Defaults to $::os_service_default
-# Example: 'admin'
+# Example: 'abcdef'
 #
 # [*sdn_url*]
 # (optional) The Mellanox controller neutron URL
 # Defaults to $::os_service_default
-# Example: 'http://127.0.0.1/neo'
+# Example: 'http://127.0.0.1/ufmRestV3/'
 #
 # [*sdn_domain*]
 # (optional) The Mellanox controller domain
@@ -41,22 +36,48 @@
 # The list must be a subset of physical_networks
 # Defaults to []
 #
+# DEPRECATED PARAMETERS
+#
+# [*sdn_username*]
+# (optional) The Mellanox controller username
+# Defaults to undef.
+#
+# [*sdn_password*]
+# (optional) The Mellanox controller password
+# Defaults to undef.
+#
 class neutron::plugins::ml2::mellanox::mlnx_sdn_assist (
-  $sdn_username = $::os_service_default,
-  $sdn_password = $::os_service_default,
+  $sdn_token    = $::os_service_default,
   $sdn_url      = $::os_service_default,
   $sdn_domain   = $::os_service_default,
   $sync_enabled                 = true,
   $bind_normal_ports            = false,
   $bind_normal_ports_physnets   = [],
+  # DEPRECATED PARAMETERS
+  $sdn_username = undef,
+  $sdn_password = undef,
 ) {
 
   include neutron::deps
   require neutron::plugins::ml2
 
+  if $sdn_username != undef {
+    warning('neutron::plugins::ml2::mellanox::mlnx_sdn_assist::sdn_username is now deprecated \
+and has no effect.')
+  }
+
+  if $sdn_password != undef {
+    warning('neutron::plugins::ml2::mellanox::mlnx_sdn_assist::sdn_password is now deprecated \
+and has no effect.')
+  }
+
   neutron_plugin_ml2 {
-    'sdn/username': value => $sdn_username;
-    'sdn/password': value => $sdn_password, secret => true;
+    'sdn/username':  ensure => absent;
+    'sdn/password ': ensure => absent;
+  }
+
+  neutron_plugin_ml2 {
+    'sdn/token':    value => $sdn_token, secret => true;
     'sdn/url':      value => $sdn_url;
     'sdn/domain':   value => $sdn_domain;
     'sdn/sync_enabled':                 value => $sync_enabled;

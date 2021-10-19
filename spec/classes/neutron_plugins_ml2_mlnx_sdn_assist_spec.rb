@@ -19,6 +19,7 @@ describe 'neutron::plugins::ml2::mellanox::mlnx_sdn_assist' do
 
   let :params do
     {
+      :sdn_token => 'token',
       :sdn_username => 'user',
       :sdn_password => 'password',
     }
@@ -30,6 +31,7 @@ describe 'neutron::plugins::ml2::mellanox::mlnx_sdn_assist' do
     end
 
     it 'configures sdn settings' do
+      should contain_neutron_plugin_ml2('sdn/token').with_value(params[:sdn_token]).with_secret(true)
       should contain_neutron_plugin_ml2('sdn/password').with_value(params[:sdn_password]).with_secret(true)
       should contain_neutron_plugin_ml2('sdn/username').with_value(params[:sdn_username])
       should contain_neutron_plugin_ml2('sdn/url').with_value(params[:sdn_url])

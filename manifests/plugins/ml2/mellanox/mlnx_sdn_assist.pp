@@ -4,6 +4,11 @@
 #
 # === Parameters
 #
+# [*sdn_token*]
+# (optional) The Mellanox controller token
+# Defaults to $::os_service_default
+# Example: 'abcdef'
+#
 # [*sdn_username*]
 # (optional) The Mellanox controller username
 # Defaults to $::os_service_default
@@ -17,7 +22,7 @@
 # [*sdn_url*]
 # (optional) The Mellanox controller neutron URL
 # Defaults to $::os_service_default
-# Example: 'http://127.0.0.1/neo'
+# Example: 'http://127.0.0.1/ufmRestV3/'
 #
 # [*sdn_domain*]
 # (optional) The Mellanox controller domain
@@ -42,6 +47,7 @@
 # Defaults to []
 #
 class neutron::plugins::ml2::mellanox::mlnx_sdn_assist (
+  $sdn_token    = $::os_service_default,
   $sdn_username = $::os_service_default,
   $sdn_password = $::os_service_default,
   $sdn_url      = $::os_service_default,
@@ -54,7 +60,9 @@ class neutron::plugins::ml2::mellanox::mlnx_sdn_assist (
   include neutron::deps
   require neutron::plugins::ml2
 
+
   neutron_plugin_ml2 {
+    'sdn/token':    value => $sdn_token, secret => true;
     'sdn/username': value => $sdn_username;
     'sdn/password': value => $sdn_password, secret => true;
     'sdn/url':      value => $sdn_url;

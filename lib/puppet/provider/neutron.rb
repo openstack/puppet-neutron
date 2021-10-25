@@ -170,6 +170,16 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
     @neutron_credentials = nil
   end
 
+  def self.get_network_name(id)
+    network = self.request('network', 'show', [id])
+    return network[:name]
+  end
+
+  def self.get_subnet_name(id)
+    subnet = self.request('subnet', 'show', [id])
+    return subnet[:name]
+  end
+
   def self.list_neutron_resources(type)
     ids = []
     list = cleanup_csv_with_id(auth_neutron("#{type}-list", '--format=csv',

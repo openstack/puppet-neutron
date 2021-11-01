@@ -167,15 +167,6 @@ Puppet::Type.type(:neutron_network).provide(
     @property_hash[:ensure] = :absent
   end
 
-  def self.parse_availability_zone_hint(value)
-    hints = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"').gsub('\'','"'))
-    if hints.length > 1
-      hints
-    else
-      hints.first
-    end
-  end
-
   [
     :admin_state_up,
     :shared,

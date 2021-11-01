@@ -180,6 +180,20 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
     return subnet[:name]
   end
 
+  def self.parse_subnet_id(value)
+    fixed_ips = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"').gsub('\'','"'))
+    subnet_ids = []
+    fixed_ips.each do |fixed_ip|
+      subnet_ids << fixed_ip['subnet_id']
+    end
+
+    if subnet_ids.length > 1
+      subnet_ids
+    else
+      subnet_ids.first
+    end
+  end
+
   def self.list_neutron_resources(type)
     ids = []
     list = cleanup_csv_with_id(auth_neutron("#{type}-list", '--format=csv',
@@ -214,31 +228,6 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
       end
     end
     return attrs
-  end
-
-  def self.list_router_ports(router_name_or_id)
-    results = []
-    cmd_output = auth_neutron("router-port-list",
-                              '--format=csv',
-                              router_name_or_id)
-    if ! cmd_output
-      return results
-    end
-
-    headers = nil
-    CSV.parse(cleanup_csv(cmd_output)) do |row|
-      if headers == nil
-        headers = row
-      else
-        result = Hash[*headers.zip(row).flatten]
-        match_data = /.*"subnet_id": "(.*)", .*/.match(result['fixed_ips'])
-        if match_data
-          result['subnet_id'] = match_data[1]
-        end
-        results << result
-      end
-    end
-    return results
   end
 
   def self.get_tenant_id(catalog, name, domain='Default')

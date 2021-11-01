@@ -50,7 +50,7 @@ describe 'neutron::server::notifications::ironic' do
           :region_name          => 'MyRegion',
           :project_domain_name  => 'Default_1',
           :user_domain_name     => 'Default_2',
-          :valid_interfaces     => 'internal',
+          :valid_interfaces     => 'internal,public',
           :enable_notifications => false,
         )
       end
@@ -63,11 +63,22 @@ describe 'neutron::server::notifications::ironic' do
         should contain_neutron_config('ironic/region_name').with_value('MyRegion')
         should contain_neutron_config('ironic/project_domain_name').with_value('Default_1')
         should contain_neutron_config('ironic/user_domain_name').with_value('Default_2')
-        should contain_neutron_config('ironic/valid_interfaces').with_value('internal')
+        should contain_neutron_config('ironic/valid_interfaces').with_value('internal,public')
         should contain_neutron_config('ironic/enable_notifications').with_value(false)
       end
     end
 
+    context 'when valid_interfaces is an array' do
+      before :each do
+        params.merge!(
+          :valid_interfaces => ['internal', 'public']
+        )
+      end
+
+      it 'should configure the valid_interfaces parameter with a commma-separated string' do
+        should contain_neutron_config('ironic/valid_interfaces').with_value('internal,public')
+      end
+    end
   end
 
   on_supported_os({

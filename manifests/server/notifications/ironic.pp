@@ -84,7 +84,7 @@ class neutron::server::notifications::ironic (
     'ironic/user_domain_name':     value => $user_domain_name;
     'ironic/region_name':          value => $region_name;
     'ironic/auth_type':            value => $auth_type;
-    'ironic/valid_interfaces':     value => $valid_interfaces;
+    'ironic/valid_interfaces':     value => join(any2array($valid_interfaces), ',');
     'ironic/enable_notifications': value => $enable_notifications;
   }
 }

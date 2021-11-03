@@ -106,9 +106,11 @@
 #   in the metadata config.
 #   Defaults to false.
 #
+# DEPRECATED PARAMETERS
+#
 # [*ovn_remote_probe_interval*]
 #  (optional) Set probe interval, based on user configuration, value is in ms
-#  Defaults to 60000
+#  Defaults to undef
 #
 class neutron::agents::ovn_metadata (
   $shared_secret,
@@ -137,11 +139,19 @@ class neutron::agents::ovn_metadata (
   $root_helper_daemon        = $::os_service_default,
   $state_path                = '/var/lib/neutron',
   $purge_config              = false,
-  $ovn_remote_probe_interval = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $ovn_remote_probe_interval = undef,
   ) {
 
   include neutron::deps
   include neutron::params
+
+  if $ovn_remote_probe_interval != undef {
+    warning('The ovn_remote_probe_interval parameter is deprecated and has no effect')
+  }
+  ovn_metadata_agent_config {
+    'ovn/ovn_remote_probe_interval': ensure => absent;
+  }
 
   resources { 'ovn_metadata_agent_config':
     purge => $purge_config,
@@ -169,7 +179,6 @@ class neutron::agents::ovn_metadata (
     'ovn/ovn_sb_private_key':                 value => $ovn_sb_private_key;
     'ovn/ovn_sb_certificate':                 value => $ovn_sb_certificate;
     'ovn/ovn_sb_ca_cert':                     value => $ovn_sb_ca_cert;
-    'ovn/ovn_remote_probe_interval':          value => $ovn_remote_probe_interval;
   }
 
   if $::neutron::params::ovn_metadata_agent_package {

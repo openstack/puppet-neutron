@@ -34,7 +34,6 @@ class neutron::params {
   $eswitchd_service            = 'eswitchd'
 
   if($::osfamily == 'Redhat') {
-    $nobody_user_group                  = 'nobody'
     $package_name                       = 'openstack-neutron'
     $server_service                     = 'neutron-server'
     $server_package                     = false
@@ -46,8 +45,6 @@ class neutron::params {
     $ovs_agent_package                  = false
     $ovs_server_package                 = 'openstack-neutron-openvswitch'
     $ovs_cleanup_service                = 'neutron-ovs-cleanup'
-    $libnl_package                      = 'libnl'
-    $package_provider                   = 'rpm'
     $linuxbridge_agent_package          = false
     $linuxbridge_server_package         = 'openstack-neutron-linuxbridge'
     $sriov_nic_agent_service            = 'neutron-sriov-nic-agent'
@@ -77,7 +74,6 @@ class neutron::params {
     $networking_ansible_package         = 'python3-networking-ansible'
     $mlnx_agent_service                 = 'neutron-mlnx-agent'
   } elsif($::osfamily == 'Debian') {
-    $nobody_user_group          = 'nogroup'
     $package_name               = 'neutron-common'
     if $::os_package_type =='debian' {
       $ml2_server_package       = false
@@ -102,8 +98,6 @@ class neutron::params {
     $ovs_agent_package          = 'neutron-openvswitch-agent'
     $ovs_server_package         = 'neutron-plugin-openvswitch'
     $ovs_cleanup_service        = false
-    $libnl_package              = 'libnl1'
-    $package_provider           = 'dpkg'
     $linuxbridge_agent_package  = 'neutron-linuxbridge-agent'
     $linuxbridge_server_package = 'neutron-plugin-linuxbridge'
     $sriov_nic_agent_service    = 'neutron-sriov-agent'

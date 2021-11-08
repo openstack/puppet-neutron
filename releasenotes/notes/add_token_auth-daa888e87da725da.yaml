@@ -1,0 +1,13 @@
+---
+features:
+  - The new ``sdn_token`` parameter to authenticate sdn has been added to
+    the ``neutron::plugins::ml2::mellanox::mlnx_sdn_assist`` class.
+
+deprecations:
+  - |
+    The following two parameters of
+    the ``neutron::plugins::ml2::mellanox::mlnx_sdn_assist`` class have been
+    deprecated and have no effect now.
+
+    - ``sdn_username``
+    - ``sdn_password``

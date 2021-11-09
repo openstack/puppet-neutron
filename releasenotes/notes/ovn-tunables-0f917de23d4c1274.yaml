@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The ``neutron::plugins::ml2::ovn`` class now supports the following two
+    new parameters.
+
+    - ``ovsdb_retry_max_interval``
+    - ``ovsdb_probe_interval``

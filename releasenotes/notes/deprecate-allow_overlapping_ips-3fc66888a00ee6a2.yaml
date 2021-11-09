@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::allow_overlapping_ips`` parameter has been deprecated and
+    will be remove in a future release.

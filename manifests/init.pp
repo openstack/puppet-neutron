@@ -76,10 +76,6 @@
 #   (optional) Enable bulk crud operations
 #   Defaults to $::os_service_default
 #
-# [*allow_overlapping_ips*]
-#   (optional) Enables network namespaces
-#   Defaults to $::os_service_default
-#
 # [*api_extensions_path*]
 #   (optional) Specify additional paths for API extensions that the
 #   module in use needs to load.
@@ -327,6 +323,10 @@
 #   (Optional) Accept clients using either SSL or plain TCP
 #   Defaults to undef.
 #
+# [*allow_overlapping_ips*]
+#   (optional) Enables network namespaces
+#   Defaults to undef
+#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
@@ -343,7 +343,6 @@ class neutron (
   $global_physnet_mtu                   = $::os_service_default,
   $dhcp_agent_notification              = $::os_service_default,
   $allow_bulk                           = $::os_service_default,
-  $allow_overlapping_ips                = $::os_service_default,
   $api_extensions_path                  = $::os_service_default,
   $root_helper                          = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $root_helper_daemon                   = $::os_service_default,
@@ -396,6 +395,7 @@ class neutron (
   $vlan_transparent                     = $::os_service_default,
   # DEPRECATED PARAMETERS
   $amqp_allow_insecure_clients          = undef,
+  $allow_overlapping_ips                = undef,
 ) {
 
   include neutron::deps
@@ -405,6 +405,12 @@ class neutron (
     warning('The amqp_allow_insecure_clients parameter is deprecated and \
 will be removed in a future release.')
   }
+
+  if $allow_overlapping_ips != undef {
+    warning('The allow_overlapping_ips parameter is deprecated and \
+will be removed in a future release.')
+  }
+  $allow_overlapping_ips_real = pick($allow_overlapping_ips, $::os_service_default)
 
   if ! is_service_default($use_ssl) and ($use_ssl) {
     if is_service_default($cert_file) {
@@ -452,7 +458,7 @@ will be removed in a future release.')
     'DEFAULT/dhcp_agents_per_network':  value => $dhcp_agents_per_network;
     'DEFAULT/dhcp_agent_notification':  value => $dhcp_agent_notification;
     'DEFAULT/allow_bulk':               value => $allow_bulk;
-    'DEFAULT/allow_overlapping_ips':    value => $allow_overlapping_ips;
+    'DEFAULT/allow_overlapping_ips':    value => $allow_overlapping_ips_real;
     'DEFAULT/api_extensions_path':      value => $api_extensions_path;
     'DEFAULT/state_path':               value => $state_path;
     'DEFAULT/global_physnet_mtu':       value => $global_physnet_mtu;

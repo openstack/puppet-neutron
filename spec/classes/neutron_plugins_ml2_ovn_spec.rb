@@ -19,7 +19,9 @@ describe 'neutron::plugins::ml2::ovn' do
        :ovn_sb_private_key       => 'sb_key',
        :ovn_sb_certificate       => 'sb_cert',
        :ovn_sb_ca_cert           => 'sb_ca_cert',
-       :ovsdb_connection_timeout => '60',
+       :ovsdb_connection_timeout => 60,
+       :ovsdb_retry_max_interval => 180,
+       :ovsdb_probe_interval     => 60000,
        :neutron_sync_mode        => 'log',
        :dvr_enabled              => false,
        :dns_servers              => ['8.8.8.8', '10.10.10.10'],
@@ -47,6 +49,8 @@ describe 'neutron::plugins::ml2::ovn' do
       should contain_neutron_plugin_ml2('ovn/ovn_sb_certificate').with_value(params[:ovn_sb_certificate])
       should contain_neutron_plugin_ml2('ovn/ovn_sb_ca_cert').with_value(params[:ovn_sb_ca_cert])
       should contain_neutron_plugin_ml2('ovn/ovsdb_connection_timeout').with_value(params[:ovsdb_connection_timeout])
+      should contain_neutron_plugin_ml2('ovn/ovsdb_retry_max_interval').with_value(params[:ovsdb_retry_max_interval])
+      should contain_neutron_plugin_ml2('ovn/ovsdb_probe_interval').with_value(params[:ovsdb_probe_interval])
       should contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(params[:neutron_sync_mode])
       should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
       should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(params[:dns_servers].join(','))

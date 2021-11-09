@@ -48,6 +48,15 @@
 #   (optional) Timeout in seconds for the OVSDB connection transaction
 #   Defaults to $::os_service_default
 #
+# [*ovsdb_retry_max_interval*]
+#   (optional) Max intervla in seconds between each retry to get the OVN NB
+#   and SB IDLs.
+#   Defaults to $::os_service_default
+#
+# [*ovsdb_probe_interval*]
+#   (optional) The probe interval for the OVSDB session in milliseconds.
+#   Defaults to $::os_service_default.
+#
 # [*neutron_sync_mode*]
 #   (optional) The synchronization mode of OVN with Neutron DB.
 #   Valid values are - 'log', 'off', 'repair'
@@ -130,6 +139,8 @@ class neutron::plugins::ml2::ovn(
   $ovn_sb_ca_cert                    = $::os_service_default,
   $package_ensure                    = 'present',
   $ovsdb_connection_timeout          = $::os_service_default,
+  $ovsdb_retry_max_interval          = $::os_service_default,
+  $ovsdb_probe_interval              = $::os_service_default,
   $neutron_sync_mode                 = $::os_service_default,
   $ovn_l3_mode                       = $::os_service_default,
   $vif_type                          = $::os_service_default,
@@ -175,6 +186,8 @@ class neutron::plugins::ml2::ovn(
     'ovn/ovn_sb_certificate'            : value => $ovn_sb_certificate;
     'ovn/ovn_sb_ca_cert'                : value => $ovn_sb_ca_cert;
     'ovn/ovsdb_connection_timeout'      : value => $ovsdb_connection_timeout;
+    'ovn/ovsdb_retry_max_interval'      : value => $ovsdb_retry_max_interval;
+    'ovn/ovsdb_probe_interval'          : value => $ovsdb_probe_interval;
     'ovn/neutron_sync_mode'             : value => $neutron_sync_mode;
     'ovn/ovn_l3_mode'                   : value => $ovn_l3_mode;
     'ovn/vif_type'                      : value => $vif_type;

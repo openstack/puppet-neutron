@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::server::rpc_state_report_workers`` parameter has been
+    added.

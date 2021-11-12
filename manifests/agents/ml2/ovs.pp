@@ -93,6 +93,10 @@
 #   can be used to override the reporting interval for the openvswitch-agent.
 #   Defaults to $::os_service_default
 #
+# [*rpc_response_max_timeout*]
+#   (Optional) Maximum seconds to wait for a response from an RPC call
+#   Defaults to: $::os_service_default
+#
 # [*l2_population*]
 #   (optional) Extension to use alongside ml2 plugin's l2population
 #   mechanism driver.
@@ -245,6 +249,7 @@ class neutron::agents::ml2::ovs (
   $vxlan_udp_port                       = 4789,
   $polling_interval                     = $::os_service_default,
   $report_interval                      = $::os_service_default,
+  $rpc_response_max_timeout             = $::os_service_default,
   $l2_population                        = $::os_service_default,
   $arp_responder                        = $::os_service_default,
   $firewall_driver                      = 'iptables_hybrid',
@@ -378,6 +383,7 @@ class neutron::agents::ml2::ovs (
   neutron_agent_ovs {
     'agent/polling_interval':               value => $polling_interval;
     'agent/report_interval':                value => $report_interval;
+    'DEFAULT/rpc_response_max_timeout':     value => $rpc_response_max_timeout;
     'agent/l2_population':                  value => $l2_population;
     'agent/arp_responder':                  value => $arp_responder;
     'agent/enable_distributed_routing':     value => $enable_distributed_routing;

@@ -1,0 +1,13 @@
+---
+features:
+  - |
+    Now the following classes support the ``rpc_response_max_timeout``
+    parameter.
+
+    - ``neutron::agents::dhcp``
+    - ``neutron::agents::metadata``
+    - ``neutron::agents::metering``
+    - ``neutron::agents::l3``
+    - ``neutron::agents::ml2::linuxbridge``
+    - ``neutron::agents::ml2::ovs``
+    - ``neutron::agents::ml2::sriov``

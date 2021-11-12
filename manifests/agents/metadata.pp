@@ -64,6 +64,10 @@
 #   can be used to override the reporting interval for the sriov-agent.
 #   Defaults to $::os_service_default
 #
+# [*rpc_response_max_timeout*]
+#   (Optional) Maximum seconds to wait for a response from an RPC call
+#   Defaults to: $::os_service_default
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the metadata config.
@@ -86,6 +90,7 @@ class neutron::agents::metadata (
   $nova_client_cert          = $::os_service_default,
   $nova_client_priv_key      = $::os_service_default,
   $report_interval           = $::os_service_default,
+  $rpc_response_max_timeout  = $::os_service_default,
   $purge_config              = false,
   ) {
 
@@ -109,6 +114,7 @@ class neutron::agents::metadata (
     'DEFAULT/nova_client_cert':               value => $nova_client_cert;
     'DEFAULT/nova_client_priv_key':           value => $nova_client_priv_key;
     'agent/report_interval':                  value => $report_interval;
+    'DEFAULT/rpc_response_max_timeout':       value => $rpc_response_max_timeout;
   }
 
   if ! is_service_default ($metadata_memory_cache_ttl) and ($metadata_memory_cache_ttl) {

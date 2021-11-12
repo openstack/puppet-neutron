@@ -33,6 +33,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
       end
 
       it 'configures ml2_conf.ini' do
+        should contain_neutron_agent_linuxbridge('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>')
         should contain_neutron_agent_linuxbridge('agent/polling_interval').with_value('<SERVICE DEFAULT>')
         should contain_neutron_agent_linuxbridge('linux_bridge/physical_interface_mappings').with_value(default_params[:physical_interface_mappings].join(','))
         should contain_neutron_agent_linuxbridge('linux_bridge/bridge_mappings').with_ensure('absent')

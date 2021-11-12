@@ -48,6 +48,10 @@
 #   (optional) Interval between two metering reports.
 #   Defaults to 300.
 #
+# [*rpc_response_max_timeout*]
+#   (Optional) Maximum seconds to wait for a response from an RPC call
+#   Defaults to: $::os_service_default
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the metering config.
@@ -55,15 +59,16 @@
 #
 
 class neutron::agents::metering (
-  $package_ensure   = present,
-  $enabled          = true,
-  $manage_service   = true,
-  $debug            = $::os_service_default,
-  $interface_driver = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $driver           = 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
-  $measure_interval = $::os_service_default,
-  $report_interval  = $::os_service_default,
-  $purge_config     = false,
+  $package_ensure           = present,
+  $enabled                  = true,
+  $manage_service           = true,
+  $debug                    = $::os_service_default,
+  $interface_driver         = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $driver                   = 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
+  $measure_interval         = $::os_service_default,
+  $report_interval          = $::os_service_default,
+  $rpc_response_max_timeout = $::os_service_default,
+  $purge_config             = false,
 ) {
 
   include neutron::deps
@@ -77,11 +82,12 @@ class neutron::agents::metering (
   # This only lists config specific to the agent.  neutron.conf supplies
   # the rest.
   neutron_metering_agent_config {
-    'DEFAULT/debug':              value => $debug;
-    'DEFAULT/interface_driver':   value => $interface_driver;
-    'DEFAULT/driver':             value => $driver;
-    'DEFAULT/measure_interval':   value => $measure_interval;
-    'DEFAULT/report_interval':    value => $report_interval;
+    'DEFAULT/debug':                    value => $debug;
+    'DEFAULT/interface_driver':         value => $interface_driver;
+    'DEFAULT/driver':                   value => $driver;
+    'DEFAULT/measure_interval':         value => $measure_interval;
+    'DEFAULT/report_interval':          value => $report_interval;
+    'DEFAULT/rpc_response_max_timeout': value => $rpc_response_max_timeout;
   }
 
   if $::neutron::params::metering_agent_package {

@@ -44,6 +44,10 @@
 #   polling for local device changes.
 #   Defaults to 2.
 #
+# [*rpc_response_max_timeout*]
+#   (Optional) Maximum seconds to wait for a response from an RPC call
+#   Defaults to: $::os_service_default
+#
 # [*l2_population*]
 #   (optional) Extension to use alongside ml2 plugin's l2population
 #   mechanism driver. It enables the plugin to populate VXLAN forwarding table.
@@ -68,20 +72,21 @@
 #   Defaults to false.
 #
 class neutron::agents::ml2::linuxbridge (
-  $package_ensure   = 'present',
-  $enabled          = true,
-  $manage_service   = true,
-  $tunnel_types     = [],
-  $local_ip         = false,
-  $vxlan_group      = $::os_service_default,
-  $vxlan_ttl        = $::os_service_default,
-  $vxlan_tos        = $::os_service_default,
-  $polling_interval = $::os_service_default,
-  $l2_population    = $::os_service_default,
+  $package_ensure              = 'present',
+  $enabled                     = true,
+  $manage_service              = true,
+  $tunnel_types                = [],
+  $local_ip                    = false,
+  $vxlan_group                 = $::os_service_default,
+  $vxlan_ttl                   = $::os_service_default,
+  $vxlan_tos                   = $::os_service_default,
+  $polling_interval            = $::os_service_default,
+  $rpc_response_max_timeout    = $::os_service_default,
+  $l2_population               = $::os_service_default,
   $physical_interface_mappings = [],
-  $bridge_mappings  = [],
-  $firewall_driver  = 'iptables',
-  $purge_config     = false,
+  $bridge_mappings             = [],
+  $firewall_driver             = 'iptables',
+  $purge_config                = false,
 ) {
 
   validate_legacy(Array, 'validate_array', $tunnel_types)
@@ -137,6 +142,7 @@ class neutron::agents::ml2::linuxbridge (
 
   neutron_agent_linuxbridge {
     'agent/polling_interval':                   value => $polling_interval;
+    'DEFAULT/rpc_response_max_timeout':         value => $rpc_response_max_timeout;
     'linux_bridge/physical_interface_mappings': value => join($physical_interface_mappings, ',');
   }
 

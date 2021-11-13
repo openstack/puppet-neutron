@@ -110,6 +110,10 @@
 #   can be used to override the reporting interval for the dhcp-agent.
 #   Defaults to $::os_service_default
 #
+# [*rpc_response_max_timeout*]
+#   (Optional) Maximum seconds to wait for a response from an RPC call
+#   Defaults to: $::os_service_default
+#
 class neutron::agents::dhcp (
   $package_ensure            = present,
   $enabled                   = true,
@@ -136,6 +140,7 @@ class neutron::agents::dhcp (
   $ovsdb_agent_ssl_cert_file = $::os_service_default,
   $ovsdb_agent_ssl_ca_file   = $::os_service_default,
   $report_interval           = $::os_service_default,
+  $rpc_response_max_timeout  = $::os_service_default,
 ) {
 
   include neutron::deps
@@ -172,6 +177,7 @@ class neutron::agents::dhcp (
     'DEFAULT/dnsmasq_enable_addr6_list': value => $dnsmasq_enable_addr6_list;
     'agent/availability_zone':           value => $availability_zone;
     'agent/report_interval':             value => $report_interval;
+    'DEFAULT/rpc_response_max_timeout':  value => $rpc_response_max_timeout;
   }
 
   # DEFAULT/ovs_intergation_bridge was deprecated in favor of

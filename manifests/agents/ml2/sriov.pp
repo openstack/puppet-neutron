@@ -40,6 +40,10 @@
 #   interfaces on each agent.
 #   Value should be of type array, Defaults to $::os_service_default
 #
+# [*rpc_response_max_timeout*]
+#   (Optional) Maximum seconds to wait for a response from an RPC call
+#   Defaults to: $::os_service_default
+#
 # [*polling_interval*]
 #   (optional) The number of seconds the agent will wait between
 #   polling for local device changes.
@@ -93,6 +97,7 @@ class neutron::agents::ml2::sriov (
   $enabled                              = true,
   $manage_service                       = true,
   $physical_device_mappings             = $::os_service_default,
+  $rpc_response_max_timeout             = $::os_service_default,
   $polling_interval                     = 2,
   $report_interval                      = $::os_service_default,
   $exclude_devices                      = $::os_service_default,
@@ -115,6 +120,7 @@ class neutron::agents::ml2::sriov (
     'sriov_nic/exclude_devices':          value => pick(join(any2array($exclude_devices), ','), $::os_service_default);
     'sriov_nic/physical_device_mappings': value => pick(join(any2array($physical_device_mappings), ','), $::os_service_default);
     'agent/extensions':                   value => join(any2array($extensions), ',');
+    'DEFAULT/rpc_response_max_timeout':   value => $rpc_response_max_timeout;
     'agent/polling_interval':             value => $polling_interval;
     'agent/report_interval':              value => $report_interval;
     # As of now security groups are not supported for SR-IOV ports.

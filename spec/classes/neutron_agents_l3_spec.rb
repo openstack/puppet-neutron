@@ -45,6 +45,7 @@ describe 'neutron::agents::l3' do
       should contain_neutron_l3_agent_config('agent/availability_zone').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('agent/extensions').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('agent/report_interval').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('network_log/rate_limit').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('network_log/burst_limit').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('network_log/local_output_log_base').with_value('<SERVICE DEFAULT>')

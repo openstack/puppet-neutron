@@ -1,0 +1,17 @@
+---
+features:
+  - |
+    Now ``neutron::server::api_service_name`` can accept and handle ``httpd``
+    as a valid service name, to run api service by httpd+mod_wsgi.
+
+upgrade:
+  - |
+    The ``neutron::server::service_name`` parameter no longer accepts
+    ``httpd`` as a valid service name. To run api service by httpd,
+    the ``neutron::server::api_service_name`` parameter should be used instead
+    along with the ``neutron::server::rpc_service_name``.
+
+deprecations:
+  - |
+    Usage of arbitaly service name for the ``neutron::server::service_name``
+    has been deprecated and will be removed in a future release.

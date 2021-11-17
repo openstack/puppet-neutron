@@ -75,7 +75,7 @@ class neutron::params {
     $mlnx_agent_service                 = 'neutron-mlnx-agent'
   } elsif($::osfamily == 'Debian') {
     $package_name               = 'neutron-common'
-    if $::os_package_type =='debian' {
+    if $::operatingsystem == 'Debian' {
       $ml2_server_package       = false
       $server_service           = false
       $server_package           = false

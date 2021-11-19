@@ -41,6 +41,15 @@
 #   determined using auth_url
 #   Defaults to 'http://127.0.0.1:5000'
 #
+# [*cafile*]
+#   (Optional) A PEM encoded Certificate Authority to use when verifying HTTPs
+#   connections.
+#   Defaults to $::os_service_default.
+#
+# [*certfile*]
+#   (Optional) Required if identity server requires client certificate
+#   Defaults to $::os_service_default.
+#
 # [*allow_reverse_dns_lookup*]
 #   (optional) Enable or not the creation of reverse lookup (PTR) records.
 #
@@ -70,6 +79,8 @@ class neutron::designate (
   $project_domain_name       = 'Default',
   $system_scope              = $::os_service_default,
   $auth_url                  = 'http://127.0.0.1:5000',
+  $cafile                    = $::os_service_default,
+  $certfile                  = $::os_service_default,
   $allow_reverse_dns_lookup  = $::os_service_default,
   $ipv4_ptr_zone_prefix_size = $::os_service_default,
   $ipv6_ptr_zone_prefix_size = $::os_service_default,
@@ -106,6 +117,8 @@ class neutron::designate (
     'designate/project_domain_name':       value => $project_domain_name_real;
     'designate/system_scope':              value => $system_scope;
     'designate/auth_url':                  value => $auth_url;
+    'designate/cafile':                    value => $cafile;
+    'designate/certfile':                  value => $certfile;
     'designate/allow_reverse_dns_lookup':  value => $allow_reverse_dns_lookup;
     'designate/ipv4_ptr_zone_prefix_size': value => $ipv4_ptr_zone_prefix_size;
     'designate/ipv6_ptr_zone_prefix_size': value => $ipv6_ptr_zone_prefix_size;

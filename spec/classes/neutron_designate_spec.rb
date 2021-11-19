@@ -19,6 +19,13 @@ describe 'neutron::designate' do
         should contain_neutron_config('designate/username').with_value('neutron')
         should contain_neutron_config('designate/auth_type').with_value('password')
         should contain_neutron_config('designate/project_name').with_value('services')
+        should contain_neutron_config('designate/project_domain_name').with_value('Default')
+        should contain_neutron_config('designate/user_domain_name').with_value('Default')
+        should contain_neutron_config('designate/auth_url').with_value('http://127.0.0.1:5000')
+        should contain_neutron_config('designate/allow_reverse_dns_lookup').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('designate/ipv4_ptr_zone_prefix_size').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('designate/ipv6_ptr_zone_prefix_size').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('designate/ptr_zone_email').with_value('<SERVICE DEFAULT>')
       end
     end
 

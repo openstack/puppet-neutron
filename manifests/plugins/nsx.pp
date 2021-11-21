@@ -84,6 +84,12 @@ class neutron::plugins::nsx (
   include neutron::deps
   include neutron::params
 
+  package { 'vmware-nsx':
+    ensure => $package_ensure,
+    name   => $::neutron::params::nsx_plugin_package,
+    tag    => ['openstack', 'neutron-package'],
+  }
+
   file { '/etc/neutron/plugins/vmware':
     ensure => directory,
     tag    => 'neutron-config-file',

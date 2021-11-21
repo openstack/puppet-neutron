@@ -15,7 +15,6 @@ class neutron::params {
   $vpp_agent_service           = 'neutron-vpp-agent'
   $nuage_config_file           = '/etc/neutron/plugins/nuage/plugin.ini'
   $dhcp_agent_service          = 'neutron-dhcp-agent'
-  $haproxy_package             = 'haproxy'
   $metering_agent_service      = 'neutron-metering-agent'
   $l3_agent_service            = 'neutron-l3-agent'
   $metadata_agent_service      = 'neutron-metadata-agent'

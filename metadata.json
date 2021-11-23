@@ -15,11 +15,11 @@
         },
         {
             "name": "openstack/keystone",
-            "version_requirement": ">=16.3.0 <17.0.0"
+            "version_requirement": ">=16.4.0 <17.0.0"
         },
         {
             "name": "openstack/nova",
-            "version_requirement": ">=16.3.0 <17.0.0"
+            "version_requirement": ">=16.6.0 <17.0.0"
         },
         {
             "name": "puppetlabs/stdlib",
@@ -27,7 +27,7 @@
         },
         {
             "name": "openstack/vswitch",
-            "version_requirement": ">=12.3.0 <13.0.0"
+            "version_requirement": ">=12.4.0 <13.0.0"
         },
         {
             "name": "duritong/sysctl",
@@ -35,11 +35,11 @@
         },
         {
             "name": "openstack/openstacklib",
-            "version_requirement": ">=16.3.0 <17.0.0"
+            "version_requirement": ">=16.4.0 <17.0.0"
         },
         {
             "name": "openstack/oslo",
-            "version_requirement": ">=16.3.0 <17.0.0"
+            "version_requirement": ">=16.4.0 <17.0.0"
         }
     ],
     "description": "Installs and configures OpenStack Neutron (Networking).",
@@ -87,5 +87,5 @@
     ],
     "source": "git://github.com/openstack/puppet-neutron.git",
     "summary": "Puppet module for OpenStack Neutron",
-    "version": "16.4.0"
+    "version": "16.5.0"
 }

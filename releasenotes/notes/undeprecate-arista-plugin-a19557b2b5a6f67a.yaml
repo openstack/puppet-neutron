@@ -1,0 +1,5 @@
+---
+other:
+  - |
+    Deprecaiton of support for Arista plugin has been reverted, since
+    the repository is still maintained.

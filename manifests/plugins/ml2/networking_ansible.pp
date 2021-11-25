@@ -54,5 +54,12 @@ class neutron::plugins::ml2::networking_ansible(
   )
   create_resources(neutron::plugins::ml2::networking_ansible_host, $host_configs)
 
-  neutron_plugin_ml2 {'ml2_ansible/coordination_uri': value => $coordination_uri; }
+  oslo::coordination { 'neutron_plugin_ml2':
+    backend_url   => $coordination_uri,
+    manage_config => false,
+  }
+
+  neutron_plugin_ml2 {
+    'ml2_ansible/coordination_uri': value => $coordination_uri;
+  }
 }

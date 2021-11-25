@@ -41,6 +41,11 @@ describe 'neutron::plugins::ml2::networking_ansible' do
     end
 
     it 'should configure non-host config' do
+      should contain_oslo__coordination('neutron_plugin_ml2').with(
+        :backend_url   => 'etcd://127.0.0.1:2379',
+        :manage_config => false,
+      )
+
       should contain_neutron_plugin_ml2('ml2_ansible/coordination_uri').with_value('etcd://127.0.0.1:2379')
     end
 

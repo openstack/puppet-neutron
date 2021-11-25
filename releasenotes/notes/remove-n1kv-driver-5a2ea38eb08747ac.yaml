@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The following deprecated classes have been removed.
+
+    - ``neutron::agents::n1kv_vem``
+    - ``neutron::plugins::ml2::cisco::nexus100v``

@@ -24,10 +24,6 @@
 #   The value should contain auth plugin name
 #   Defaults to 'password'
 #
-# [*username*]
-#   (optional) Username when talking to placement.
-#   Defaults to 'nova'
-#
 # [*project_domain_name*]
 #   (Optional) Name of domain for $project_name
 #   Defaults to 'Default'
@@ -36,9 +32,17 @@
 #   (optional) Project name for configured user.
 #   Defaults to 'services'
 #
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
+#
 # [*user_domain_name*]
 #   (Optional) Name of domain for $username
 #   Defaults to 'Default'
+#
+# [*username*]
+#   (optional) Username when talking to placement.
+#   Defaults to 'nova'
 #
 # [*auth_url*]
 #   (optional) Keystone auth URL.
@@ -59,10 +63,11 @@
 class neutron::server::placement (
   $password,
   $auth_type           = 'password',
-  $username            = 'nova',
   $project_domain_name = 'Default',
   $project_name        = 'services',
+  $system_scope        = $::os_service_default,
   $user_domain_name    = 'Default',
+  $username            = 'nova',
   $auth_url            = 'http://127.0.0.1:5000',
   $region_name         = $::os_service_default,
   $endpoint_type       = $::os_service_default,
@@ -75,15 +80,24 @@ class neutron::server::placement (
     warning('The default value of username will change to placement in the next release')
   }
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   neutron_config {
-    'placement/auth_url':            value => $auth_url;
+    'placement/auth_type':           value => $auth_type;
+    'placement/project_domain_name': value => $project_domain_name_real;
+    'placement/project_name':        value => $project_name_real;
+    'placement/system_scope':        value => $system_scope;
+    'placement/user_domain_name':    value => $user_domain_name;
     'placement/username':            value => $username;
     'placement/password':            value => $password, secret => true;
-    'placement/project_domain_name': value => $project_domain_name;
-    'placement/project_name':        value => $project_name;
-    'placement/user_domain_name':    value => $user_domain_name;
+    'placement/auth_url':            value => $auth_url;
     'placement/region_name':         value => $region_name;
     'placement/endpoint_type':       value => $endpoint_type;
-    'placement/auth_type':           value => $auth_type;
   }
 }

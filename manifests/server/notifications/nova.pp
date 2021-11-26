@@ -33,6 +33,10 @@
 #   The value should contain auth plugin name
 #   Defaults to 'password'
 #
+# [*user_domain_name*]
+#   (Optional) Name of domain for $username
+#   Defaults to 'Default'
+#
 # [*username*]
 #   (optional) Username for connection to nova in admin context
 #   Defaults to 'nova'
@@ -45,9 +49,9 @@
 #   (optional) Nova project's name
 #   Defaults to 'services'
 #
-# [*user_domain_name*]
-#   (Optional) Name of domain for $username
-#   Defaults to 'Default'
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
 #
 # [*auth_url*]
 #   (optional) Authorization URL for connection to nova in admin context.
@@ -70,10 +74,11 @@ class neutron::server::notifications::nova (
   $notify_nova_on_port_status_changes = $::os_service_default,
   $notify_nova_on_port_data_changes   = $::os_service_default,
   $auth_type                          = 'password',
+  $user_domain_name                   = 'Default',
   $username                           = 'nova',
   $project_domain_name                = 'Default',
   $project_name                       = 'services',
-  $user_domain_name                   = 'Default',
+  $system_scope                       = $::os_service_default,
   $auth_url                           = 'http://127.0.0.1:5000',
   $region_name                        = $::os_service_default,
   $endpoint_type                      = $::os_service_default,
@@ -81,16 +86,25 @@ class neutron::server::notifications::nova (
 
   include neutron::deps
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   neutron_config {
-    'nova/auth_url':            value => $auth_url;
+    'nova/auth_type':           value => $auth_type;
+    'nova/user_domain_name':    value => $user_domain_name;
     'nova/username':            value => $username;
     'nova/password':            value => $password, secret => true;
-    'nova/project_domain_name': value => $project_domain_name;
-    'nova/project_name':        value => $project_name;
-    'nova/user_domain_name':    value => $user_domain_name;
+    'nova/project_domain_name': value => $project_domain_name_real;
+    'nova/project_name':        value => $project_name_real;
+    'nova/system_scope':        value => $system_scope;
+    'nova/auth_url':            value => $auth_url;
     'nova/region_name':         value => $region_name;
     'nova/endpoint_type':       value => $endpoint_type;
-    'nova/auth_type':           value => $auth_type;
   }
 
   neutron_config {

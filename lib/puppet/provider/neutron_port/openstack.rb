@@ -175,20 +175,6 @@ Puppet::Type.type(:neutron_port).provide(
     @property_hash[:ensure] = :absent
   end
 
-  def self.parse_subnet_id(value)
-    fixed_ips = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"').gsub('\'','"'))
-    subnet_ids = []
-    fixed_ips.each do |fixed_ip|
-      subnet_ids << fixed_ip['subnet_id']
-    end
-
-    if subnet_ids.length > 1
-      subnet_ids
-    else
-      subnet_ids.first
-    end
-  end
-
   def self.parse_ip_address(value)
     fixed_ips = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"').gsub('\'','"'))
     ips = []

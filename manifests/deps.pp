@@ -89,6 +89,10 @@ class neutron::deps {
   Anchor['neutron::service::end'] -> Neutron_router<||>
   Anchor['neutron::service::end'] -> Neutron_subnet<||>
 
+  # all cache settings should be applied and all packages should be installed
+  # before service startup
+  Oslo::Cache<||> -> Anchor['neutron::service::begin']
+
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
   Oslo::Db<||> -> Anchor['neutron::dbsync::begin']

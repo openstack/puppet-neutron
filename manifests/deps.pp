@@ -64,6 +64,10 @@ class neutron::deps {
   Anchor['neutron::config::begin'] -> Ironic_neutron_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_api_uwsgi_config<||> ~> Anchor['neutron::config::end']
 
+  # policy config should occur in the config block also.
+  Anchor['neutron::config::begin']
+  -> Openstacklib::Policy<||>
+  ~> Anchor['neutron::config::end']
 
   # Support packages need to be installed in the install phase, but we don't
   # put them in the chain above because we don't want any false dependencies

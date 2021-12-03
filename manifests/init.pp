@@ -104,7 +104,7 @@
 #
 # [*control_exchange*]
 #   (optional) What RPC queue/exchange to use
-#   Defaults to neutron
+#   Defaults to $::os_service_default
 #
 # [*executor_thread_pool_size*]
 #   (optional) Size of executor thread pool when executor is threading or eventlet.
@@ -348,7 +348,7 @@ class neutron (
   $root_helper                          = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $root_helper_daemon                   = $::os_service_default,
   $report_interval                      = $::os_service_default,
-  $control_exchange                     = 'neutron',
+  $control_exchange                     = $::os_service_default,
   $executor_thread_pool_size            = $::os_service_default,
   $default_transport_url                = $::os_service_default,
   $rpc_response_timeout                 = $::os_service_default,

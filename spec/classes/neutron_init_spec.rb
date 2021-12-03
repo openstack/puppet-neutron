@@ -102,7 +102,7 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/allow_bulk').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/allow_overlapping_ips').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/api_extensions_path').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('DEFAULT/control_exchange').with_value('neutron')
+      should contain_neutron_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/state_path').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('oslo_concurrency/lock_path').with_value('$state_path/lock')
       should contain_neutron_config('DEFAULT/executor_thread_pool_size').with_value('<SERVICE DEFAULT>')

@@ -128,31 +128,6 @@ class neutron::wsgi::apache (
 
   include neutron::deps
   include neutron::params
-  include apache
-  include apache::mod::wsgi
-  if $ssl_real {
-    include apache::mod::ssl
-  }
-
-  # The httpd package is untagged, but needs to have ordering enforced,
-  # so handle it here rather than in the deps class.
-  Anchor['neutron::install::begin']
-  -> Package['httpd']
-  -> Anchor['neutron::install::end']
-
-  # Configure apache during the config phase
-  Anchor['neutron::config::begin']
-  -> Apache::Vhost<||>
-  ~> Anchor['neutron::config::end']
-
-  # Start the service during the service phase
-  Anchor['neutron::service::begin']
-  -> Service['httpd']
-  -> Anchor['neutron::service::end']
-
-  # Notify the service when config changes
-  Anchor['neutron::config::end']
-  ~> Service['httpd']
 
   ::openstacklib::wsgi::apache { 'neutron_wsgi':
     bind_host                   => $bind_host,

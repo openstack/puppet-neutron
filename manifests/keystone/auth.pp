@@ -80,7 +80,7 @@ class neutron::keystone::auth (
   $configure_user_role = true,
   $service_name        = 'neutron',
   $service_type        = 'network',
-  $service_description = 'Neutron Networking Service',
+  $service_description = 'OpenStack Networking Service',
   $region              = 'RegionOne',
   $public_url          = 'http://127.0.0.1:9696',
   $admin_url           = 'http://127.0.0.1:9696',

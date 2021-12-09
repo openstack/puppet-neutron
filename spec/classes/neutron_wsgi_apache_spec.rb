@@ -4,9 +4,6 @@ describe 'neutron::wsgi::apache' do
   shared_examples 'apache serving neutron with mod_wsgi' do
     context 'with default parameters' do
       it { should contain_class('neutron::params') }
-      it { should contain_class('apache') }
-      it { should contain_class('apache::mod::wsgi') }
-      it { should contain_class('apache::mod::ssl') }
       it { should contain_openstacklib__wsgi__apache('neutron_wsgi').with(
         :bind_port                   => 9696,
         :group                       => 'neutron',
@@ -45,9 +42,6 @@ describe 'neutron::wsgi::apache' do
         }
       end
       it { should contain_class('neutron::params') }
-      it { should contain_class('apache') }
-      it { should contain_class('apache::mod::wsgi') }
-      it { should_not contain_class('apache::mod::ssl') }
       it { should contain_openstacklib__wsgi__apache('neutron_wsgi').with(
         :bind_host                   => '10.42.51.1',
         :bind_port                   => 12345,

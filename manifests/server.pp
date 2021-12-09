@@ -432,7 +432,6 @@ class neutron::server (
 
     if $api_service_name {
       if $api_service_name == 'httpd' {
-        include apache::params
         Service <| title == 'httpd' |> { tag +> 'neutron-service' }
 
         if $::neutron::params::server_service {

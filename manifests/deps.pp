@@ -97,6 +97,10 @@ class neutron::deps {
   # before service startup
   Oslo::Cache<||> -> Anchor['neutron::service::begin']
 
+  # all coordination settings should be applied and all packages should be
+  # installed before service startup
+  Oslo::Coordination<||> -> Anchor['neutron::service::begin']
+
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
   Oslo::Db<||> -> Anchor['neutron::dbsync::begin']

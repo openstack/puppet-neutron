@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The service validation feature of the ``neutron::server`` class is
+    deprecated, and the ``neutron::server::validate`` parameter has no effect
+    now.

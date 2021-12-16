@@ -42,11 +42,12 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       should contain_ironic_neutron_agent_config('ironic/keyfile').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/auth_type').with_value(p[:auth_type])
       should contain_ironic_neutron_agent_config('ironic/auth_url').with_value(p[:auth_url])
+      should contain_ironic_neutron_agent_config('ironic/user_domain_name').with_value(p[:user_domain_name])
       should contain_ironic_neutron_agent_config('ironic/username').with_value(p[:username])
       should contain_ironic_neutron_agent_config('ironic/password').with_value(p[:password]).with_secret(true)
       should contain_ironic_neutron_agent_config('ironic/project_domain_name').with_value(p[:project_domain_name])
       should contain_ironic_neutron_agent_config('ironic/project_name').with_value(p[:project_name])
-      should contain_ironic_neutron_agent_config('ironic/user_domain_name').with_value(p[:user_domain_name])
+      should contain_ironic_neutron_agent_config('ironic/system_scope').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/region_name').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/status_code_retry_delay').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/status_code_retries').with_value('<SERVICE DEFAULT>')
@@ -87,6 +88,20 @@ describe 'neutron::agents::ml2::networking_baremetal' do
         )
         should contain_service('ironic-neutron-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
         should contain_service('ironic-neutron-agent-service').that_notifies('Anchor[neutron::service::end]')
+      end
+    end
+
+    context 'when system_scope is set' do
+      before :each do
+        params.merge!(
+          :system_scope => 'all'
+        )
+      end
+
+      it 'should configure system scope credential' do
+        should contain_ironic_neutron_agent_config('ironic/project_domain_name').with_value('<SERVICE DEFAULT>')
+        should contain_ironic_neutron_agent_config('ironic/project_name').with_value('<SERVICE DEFAULT>')
+        should contain_ironic_neutron_agent_config('ironic/system_scope').with_value('all')
       end
     end
   end

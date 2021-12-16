@@ -24,21 +24,25 @@
 #   The value should contain auth plugin name
 #   Defaults to 'password'
 #
+# [*user_domain_name*]
+#   (optional) Name of domain for $username
+#   Defaults to 'Default'
+#
 # [*username*]
 #   (optional) Username for connection to ironic in admin context
 #   Defaults to 'ironic'
 #
 # [*project_domain_name*]
-#   (Optional) Name of domain for $project_name
+#   (optional) Name of domain for $project_name
 #   Defaults to 'Default'
 #
 # [*project_name*]
 #   (optional) ironic project's name
 #   Defaults to 'services'
 #
-# [*user_domain_name*]
-#   (Optional) Name of domain for $username
-#   Defaults to 'Default'
+# [*system_scope*]
+#   (optional) Scope for system operations
+#   Defaults to $::os_service_default
 #
 # [*auth_url*]
 #   (optional) Authorization URL for connection to ironic in admin context.
@@ -64,9 +68,10 @@ class neutron::server::notifications::ironic (
   $password,
   $auth_type            = 'password',
   $username             = 'ironic',
+  $user_domain_name     = 'Default',
   $project_domain_name  = 'Default',
   $project_name         = 'services',
-  $user_domain_name     = 'Default',
+  $system_scope         = $::os_service_default,
   $auth_url             = 'http://127.0.0.1:5000',
   $region_name          = $::os_service_default,
   $valid_interfaces     = $::os_service_default,
@@ -75,15 +80,24 @@ class neutron::server::notifications::ironic (
 
   include neutron::deps
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   neutron_config {
-    'ironic/auth_url':             value => $auth_url;
+    'ironic/auth_type':            value => $auth_type;
+    'ironic/user_domain_name':     value => $user_domain_name;
     'ironic/username':             value => $username;
     'ironic/password':             value => $password, secret => true;
-    'ironic/project_domain_name':  value => $project_domain_name;
-    'ironic/project_name':         value => $project_name;
-    'ironic/user_domain_name':     value => $user_domain_name;
+    'ironic/project_domain_name':  value => $project_domain_name_real;
+    'ironic/project_name':         value => $project_name_real;
+    'ironic/system_scope':         value => $system_scope;
+    'ironic/auth_url':             value => $auth_url;
     'ironic/region_name':          value => $region_name;
-    'ironic/auth_type':            value => $auth_type;
     'ironic/valid_interfaces':     value => join(any2array($valid_interfaces), ',');
     'ironic/enable_notifications': value => $enable_notifications;
   }

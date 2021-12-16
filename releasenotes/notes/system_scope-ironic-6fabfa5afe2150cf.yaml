@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The ``system_scope`` parameter has been added to the following two classes.
+
+    - ``neutron::server::notifications::ironic``
+    - ``neutron::agents::ml2::networking_baremetal``

@@ -1,0 +1,18 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``neutron::server::notifications`` class
+    has been removed.
+
+    - ``password``
+    - ``auth_type``
+    - ``username``
+    - ``project_name``
+    - ``user_domain_name``
+    - ``project_domain_name``
+    - ``auth_url``
+    - ``region_name``
+    - ``endpoint_type``
+    - ``notify_nova_on_port_status_changes``
+    - ``notify_nova_on_port_data_changes``
+

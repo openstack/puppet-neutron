@@ -66,7 +66,7 @@
 #   Defaults to $::os_service_default
 #
 class neutron::server::notifications::nova (
-  $password                           = undef,
+  $password,
   $notify_nova_on_port_status_changes = $::os_service_default,
   $notify_nova_on_port_data_changes   = $::os_service_default,
   $auth_type                          = 'password',
@@ -81,45 +81,20 @@ class neutron::server::notifications::nova (
 
   include neutron::deps
 
-  $password_real = pick($::neutron::server::notifications::password, $password)
-  if $password_real == undef {
-    fail('password should be set')
+  neutron_config {
+    'nova/auth_url':            value => $auth_url;
+    'nova/username':            value => $username;
+    'nova/password':            value => $password, secret => true;
+    'nova/project_domain_name': value => $project_domain_name;
+    'nova/project_name':        value => $project_name;
+    'nova/user_domain_name':    value => $user_domain_name;
+    'nova/region_name':         value => $region_name;
+    'nova/endpoint_type':       value => $endpoint_type;
+    'nova/auth_type':           value => $auth_type;
   }
 
-  $auth_type_real = pick($::neutron::server::notifications::auth_type, $auth_type)
-  $username_real = pick($::neutron::server::notifications::username, $username)
-  $project_name_real = pick($::neutron::server::notifications::project_name, $project_name)
-  $user_domain_name_real = pick(
-    $::neutron::server::notifications::user_domain_name,
-    $user_domain_name)
-  $project_domain_name_real = pick(
-    $::neutron::server::notifications::project_domain_name,
-    $project_domain_name)
-  $auth_url_real = pick($::neutron::server::notifications::auth_url, $auth_url)
-  $region_name_real = pick($::neutron::server::notifications::region_name, $region_name)
-  $endpoint_type_real = pick($::neutron::server::notifications::endpoint_type, $endpoint_type)
-
   neutron_config {
-    'nova/auth_url':            value => $auth_url_real;
-    'nova/username':            value => $username_real;
-    'nova/password':            value => $password_real, secret => true;
-    'nova/project_domain_name': value => $project_domain_name_real;
-    'nova/project_name':        value => $project_name_real;
-    'nova/user_domain_name':    value => $user_domain_name_real;
-    'nova/region_name':         value => $region_name_real;
-    'nova/endpoint_type':       value => $endpoint_type_real;
-    'nova/auth_type':           value => $auth_type_real;
-  }
-
-  $notify_nova_on_port_status_changes_real = pick(
-    $::neutron::server::notifications::notify_nova_on_port_status_changes,
-    $notify_nova_on_port_status_changes)
-  $notify_nova_on_port_data_changes_real = pick(
-    $::neutron::server::notifications::notify_nova_on_port_data_changes,
-    $notify_nova_on_port_data_changes)
-
-  neutron_config {
-    'DEFAULT/notify_nova_on_port_status_changes': value => $notify_nova_on_port_status_changes_real;
-    'DEFAULT/notify_nova_on_port_data_changes':   value => $notify_nova_on_port_data_changes_real;
+    'DEFAULT/notify_nova_on_port_status_changes': value => $notify_nova_on_port_status_changes;
+    'DEFAULT/notify_nova_on_port_data_changes':   value => $notify_nova_on_port_data_changes;
   }
 }

@@ -1,0 +1,13 @@
+---
+features:
+  - |
+    The ``system_scope`` parameter has been added to
+    the ``neutron::keystone::authtoken`` class.
+
+  - |
+    The ``neutron::keystone::auth`` class now supports customizing roles
+    assigned to the neutron service user.
+
+  - |
+    The ``neutron::keystone::auth`` class now supports defining assignmet of
+    system-scoped roles to the neutron service user.

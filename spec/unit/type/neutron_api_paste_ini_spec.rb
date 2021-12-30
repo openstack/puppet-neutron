@@ -1,16 +1,4 @@
 require 'spec_helper'
-# this hack is required for now to ensure that the path is set up correctly
-# to retrieve the parent provider
-$LOAD_PATH.push(
-  File.join(
-    File.dirname(__FILE__),
-    '..',
-    '..',
-    'fixtures',
-    'modules',
-    'inifile',
-    'lib')
-)
 require 'puppet/type/neutron_api_paste_ini'
 describe 'Puppet::Type.type(:neutron_api_paste_ini)' do
   before :each do

@@ -31,12 +31,14 @@ describe 'neutron::server::notifications::ironic' do
   shared_examples 'neutron::server::notifications::ironic' do
     it 'configure neutron.conf' do
       should contain_neutron_config('ironic/auth_type').with_value('password')
-      should contain_neutron_config('ironic/auth_url').with_value('http://127.0.0.1:5000')
+      should contain_neutron_config('ironic/user_domain_name').with_value('Default')
       should contain_neutron_config('ironic/username').with_value('ironic')
       should contain_neutron_config('ironic/password').with_value('secrete').with_secret( true )
-      should contain_neutron_config('ironic/region_name').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ironic/project_domain_name').with_value('Default')
-      should contain_neutron_config('ironic/user_domain_name').with_value('Default')
+      should contain_neutron_config('ironic/project_name').with_value('services')
+      should contain_neutron_config('ironic/system_scope').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('ironic/auth_url').with_value('http://127.0.0.1:5000')
+      should contain_neutron_config('ironic/region_name').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ironic/valid_interfaces').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ironic/enable_notifications').with_value('<SERVICE DEFAULT>')
     end
@@ -44,25 +46,28 @@ describe 'neutron::server::notifications::ironic' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :auth_url             => 'http://keystone:5000/v3',
           :auth_type            => 'password',
-          :username             => 'joe',
-          :region_name          => 'MyRegion',
-          :project_domain_name  => 'Default_1',
           :user_domain_name     => 'Default_2',
+          :username             => 'joe',
+          :project_domain_name  => 'Default_1',
+          :project_name         => 'alt_services',
+          :auth_url             => 'http://keystone:5000/v3',
+          :region_name          => 'MyRegion',
           :valid_interfaces     => 'internal,public',
           :enable_notifications => false,
         )
       end
 
       it 'should configure neutron server with overrided parameters' do
-        should contain_neutron_config('ironic/auth_url').with_value('http://keystone:5000/v3')
         should contain_neutron_config('ironic/auth_type').with_value('password')
+        should contain_neutron_config('ironic/user_domain_name').with_value('Default_2')
         should contain_neutron_config('ironic/username').with_value('joe')
         should contain_neutron_config('ironic/password').with_value('secrete').with_secret(true)
-        should contain_neutron_config('ironic/region_name').with_value('MyRegion')
         should contain_neutron_config('ironic/project_domain_name').with_value('Default_1')
-        should contain_neutron_config('ironic/user_domain_name').with_value('Default_2')
+        should contain_neutron_config('ironic/project_name').with_value('alt_services')
+        should contain_neutron_config('ironic/system_scope').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('ironic/auth_url').with_value('http://keystone:5000/v3')
+        should contain_neutron_config('ironic/region_name').with_value('MyRegion')
         should contain_neutron_config('ironic/valid_interfaces').with_value('internal,public')
         should contain_neutron_config('ironic/enable_notifications').with_value(false)
       end
@@ -77,6 +82,20 @@ describe 'neutron::server::notifications::ironic' do
 
       it 'should configure the valid_interfaces parameter with a commma-separated string' do
         should contain_neutron_config('ironic/valid_interfaces').with_value('internal,public')
+      end
+    end
+
+    context 'when system_scope is set' do
+      before :each do
+        params.merge!(
+          :system_scope => 'all'
+        )
+      end
+
+      it 'should configure system scope credential' do
+        should contain_neutron_config('ironic/project_domain_name').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('ironic/project_name').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('ironic/system_scope').with_value('all')
       end
     end
   end

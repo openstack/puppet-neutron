@@ -51,6 +51,10 @@
 #   (optional) The ironic endpoint URL for requests
 #   Defaults to $::os_service_default
 #
+# [*user_domain_name*]
+#   (Optional) Name of domain for $username
+#   Defaults to 'Default'
+#
 # [*username*]
 #   (optional) Username for connection to ironic in admin context
 #   Defaults to 'ironic'
@@ -63,9 +67,9 @@
 #   (optional) Project name to scope to
 #   Defaults to 'services'
 #
-# [*user_domain_name*]
-#   (Optional) Name of domain for $username
-#   Defaults to 'Default'
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
 #
 # [*region_name*]
 #   (optional) Name of region to use. Useful if keystone manages more than one
@@ -123,10 +127,11 @@ class neutron::agents::ml2::networking_baremetal (
   $insecure                = $::os_service_default,
   $auth_type               = 'password',
   $auth_url                = 'http://127.0.0.1:5000',
+  $user_domain_name        = 'Default',
   $username                = 'ironic',
   $project_domain_name     = 'Default',
   $project_name            = 'services',
-  $user_domain_name        = 'Default',
+  $system_scope            = $::os_service_default,
   $region_name             = $::os_service_default,
   $status_code_retry_delay = $::os_service_default,
   $status_code_retries     = $::os_service_default,
@@ -182,6 +187,14 @@ Use status_code_retries instead.')
   $status_code_retry_delay_real = pick($retry_interval, $status_code_retry_delay)
   $status_code_retries_real = pick($max_retries, $status_code_retries)
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   ironic_neutron_agent_config {
     'ironic/endpoint_override':       value => $endpoint_override_real;
     'ironic/cafile':                  value => $cafile;
@@ -190,11 +203,12 @@ Use status_code_retries instead.')
     'ironic/insecure':                value => $insecure;
     'ironic/auth_type':               value => $auth_type;
     'ironic/auth_url':                value => $auth_url;
+    'ironic/user_domain_name':        value => $user_domain_name;
     'ironic/username':                value => $username;
     'ironic/password':                value => $password, secret => true;
-    'ironic/project_domain_name':     value => $project_domain_name;
-    'ironic/project_name':            value => $project_name;
-    'ironic/user_domain_name':        value => $user_domain_name;
+    'ironic/project_domain_name':     value => $project_domain_name_real;
+    'ironic/project_name':            value => $project_name_real;
+    'ironic/system_scope':            value => $system_scope;
     'ironic/region_name':             value => $region_name;
     'ironic/status_code_retry_delay': value => $status_code_retry_delay_real;
     'ironic/status_code_retries':     value => $status_code_retries_real;

@@ -157,5 +157,6 @@ class neutron::wsgi::apache (
     access_log_file             => $access_log_file,
     access_log_format           => $access_log_format,
     error_log_file              => $error_log_file,
+    require                     => Anchor['neutron::install::end'],
   }
 }

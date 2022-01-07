@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The deprecated ``nova::config::api_config`` parameter has been removed.

@@ -87,11 +87,6 @@
 # [*plugin_nsx_config*]
 #   (optional) Manage configuration of plugins/vmware/nsx.ini
 #
-# DEPRECATED PARAMETERS
-#
-# [*api_config*]
-#   (optional) Manage configuration of api-paste.ini
-#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -118,22 +113,12 @@ class neutron::config (
   $plugin_ml2_config             = {},
   $plugin_nsx_config             = {},
   $plugin_nvp_config             = {},
-  # DEPRECATED PARAMETERS
-  $api_config                    = undef,
 ) {
 
   include neutron::deps
 
-  if $api_config != undef {
-    warning('The neutron::config::api_config parameter has been deprecated and \
-will be removed in a future release. Use the api_paste_ini parameter instead.')
-    $api_paste_ini_real = $api_config
-  } else {
-    $api_paste_ini_real = $api_paste_ini
-  }
-
   validate_legacy(Hash, 'validate_hash', $server_config)
-  validate_legacy(Hash, 'validate_hash', $api_paste_ini_real)
+  validate_legacy(Hash, 'validate_hash', $api_paste_ini)
   validate_legacy(Hash, 'validate_hash', $ovs_agent_config)
   validate_legacy(Hash, 'validate_hash', $sriov_agent_config)
   validate_legacy(Hash, 'validate_hash', $bgpvpn_bagpipe_config)
@@ -156,7 +141,7 @@ will be removed in a future release. Use the api_paste_ini parameter instead.')
   validate_legacy(Hash, 'validate_hash', $plugin_nvp_config)
 
   create_resources('neutron_config', $server_config)
-  create_resources('neutron_api_paste_ini', $api_paste_ini_real)
+  create_resources('neutron_api_paste_ini', $api_paste_ini)
   create_resources('neutron_agent_ovs', $ovs_agent_config)
   create_resources('neutron_sriov_agent_config', $sriov_agent_config)
   create_resources('neutron_bgpvpn_bagpipe_config', $bgpvpn_bagpipe_config)

@@ -97,10 +97,6 @@ describe 'neutron::agents::bgp_dragent' do
   end
 
   shared_examples 'neutron::agents::bgp_dragent on Debian' do
-    before do
-      facts.merge!( :os_package_type => 'debian' )
-    end
-
     context 'with default params' do
       it { should contain_package('neutron-dynamic-routing').with(
         :ensure => default_params[:package_ensure],

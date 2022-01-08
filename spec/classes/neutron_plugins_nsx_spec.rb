@@ -33,6 +33,14 @@ describe 'neutron::plugins::nsx' do
     context 'with defaults' do
       it { should contain_class('neutron::params') }
 
+      it 'should install the plugin package' do
+        should contain_package('vmware-nsx').with(
+          :ensure => 'present',
+          :name   => 'vmware-nsx',
+          :tag    => ['openstack', 'neutron-package']
+        )
+      end
+
       it 'should have a nsx plugin ini file' do
         should contain_file('/etc/neutron/plugins/vmware/nsx.ini').with(
           :ensure => 'file',

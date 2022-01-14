@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::server::notifications::nova::live_migration_events``
+    parameter has been deprecated and will be removed in a future release.

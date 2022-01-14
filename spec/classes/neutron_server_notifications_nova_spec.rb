@@ -40,6 +40,7 @@ describe 'neutron::server::notifications::nova' do
       should contain_neutron_config('nova/project_domain_name').with_value('Default')
       should contain_neutron_config('nova/user_domain_name').with_value('Default')
       should contain_neutron_config('nova/endpoint_type').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('nova/live_migration_events').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -54,6 +55,7 @@ describe 'neutron::server::notifications::nova' do
           :project_domain_name                => 'Default_1',
           :user_domain_name                   => 'Default_2',
           :endpoint_type                      => 'internal',
+          :live_migration_events              => true,
         )
       end
 
@@ -68,6 +70,7 @@ describe 'neutron::server::notifications::nova' do
         should contain_neutron_config('nova/project_domain_name').with_value('Default_1')
         should contain_neutron_config('nova/user_domain_name').with_value('Default_2')
         should contain_neutron_config('nova/endpoint_type').with_value('internal')
+        should contain_neutron_config('nova/live_migration_events').with_value(true)
       end
     end
 

@@ -65,6 +65,12 @@
 #   the keystone catalog.
 #   Defaults to $::os_service_default
 #
+# [*live_migration_events*]
+#   (optional) When this option is enabled, during the live migration, the OVS
+#   agent will only send the "vif-plugged-event" when the destination host
+#   interface is bound.
+#   Defaults to $::os_service_default
+#
 class neutron::server::notifications::nova (
   $password                           = undef,
   $notify_nova_on_port_status_changes = $::os_service_default,
@@ -77,6 +83,7 @@ class neutron::server::notifications::nova (
   $auth_url                           = 'http://127.0.0.1:5000',
   $region_name                        = $::os_service_default,
   $endpoint_type                      = $::os_service_default,
+  $live_migration_events              = $::os_service_default,
 ) {
 
   include neutron::deps
@@ -119,6 +126,7 @@ class neutron::server::notifications::nova (
     $notify_nova_on_port_data_changes)
 
   neutron_config {
+    'nova/live_migration_events':                 value => $live_migration_events;
     'DEFAULT/notify_nova_on_port_status_changes': value => $notify_nova_on_port_status_changes_real;
     'DEFAULT/notify_nova_on_port_data_changes':   value => $notify_nova_on_port_data_changes_real;
   }

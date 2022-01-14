@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new ``neutron::server::notifications::nova::live_migration_events``
+    parameter has been added. This parameter controls
+    the ``[nova] live_migation_events`` parameter in ``neutron.conf``.

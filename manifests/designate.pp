@@ -19,10 +19,6 @@
 #   (optional) Username for connection to designate in admin context
 #   Defaults to 'neutron'
 #
-# [*project_id*]
-#   (optional) The UUID of the admin designate project. If provided this takes
-#   precedence over project_name.
-#
 # [*project_name*]
 #   (optional) The name of the admin project
 #   Defaults to 'services'
@@ -53,12 +49,18 @@
 # [*ptr_zone_email*]
 #   (optional) The email address to be used when creating PTR zones.
 #
+# DEPRECATED PARAMETERS
+#
+# [*project_id*]
+#   (optional) The UUID of the admin designate project. If provided this takes
+#   precedence over project_name.
+#   defaults to undef
+#
 class neutron::designate (
   $password,
   $url,
   $auth_type                 = 'password',
   $username                  = 'neutron',
-  $project_id                = $::os_service_default,
   $project_name              = 'services',
   $project_domain_name       = 'Default',
   $user_domain_name          = 'Default',
@@ -67,9 +69,15 @@ class neutron::designate (
   $ipv4_ptr_zone_prefix_size = $::os_service_default,
   $ipv6_ptr_zone_prefix_size = $::os_service_default,
   $ptr_zone_email            = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $project_id                = undef,
 ) {
   include neutron::deps
   include neutron::params
+
+  if $project_id != undef {
+    warning('The neutron::designate::project_id parmaeter is deprecated. Use the project_name parameter.')
+  }
 
   neutron_config {
     'DEFAULT/external_dns_driver':         value => 'designate';
@@ -77,7 +85,7 @@ class neutron::designate (
     'designate/url':                       value => $url;
     'designate/auth_type':                 value => $auth_type;
     'designate/username':                  value => $username;
-    'designate/project_id':                value => $project_id;
+    'designate/project_id':                value => pick($project_id, $::os_service_default);
     'designate/project_name':              value => $project_name;
     'designate/project_domain_name':       value => $project_domain_name;
     'designate/user_domain_name':          value => $user_domain_name;

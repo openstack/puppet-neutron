@@ -19,6 +19,10 @@
 #   (optional) Username for connection to designate in admin context
 #   Defaults to 'neutron'
 #
+# [*user_domain_name*]
+#   (Optional) Name of domain for $username
+#   Defaults to 'Default'
+#
 # [*project_name*]
 #   (optional) The name of the admin project
 #   Defaults to 'services'
@@ -27,9 +31,9 @@
 #   (Optional) Name of domain for $project_name
 #   Defaults to 'Default'
 #
-# [*user_domain_name*]
-#   (Optional) Name of domain for $username
-#   Defaults to 'Default'
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
 #
 # [*auth_url*]
 #   (optional) Authorization URI for connection to designate in admin context.
@@ -61,9 +65,10 @@ class neutron::designate (
   $url,
   $auth_type                 = 'password',
   $username                  = 'neutron',
+  $user_domain_name          = 'Default',
   $project_name              = 'services',
   $project_domain_name       = 'Default',
-  $user_domain_name          = 'Default',
+  $system_scope              = $::os_service_default,
   $auth_url                  = 'http://127.0.0.1:5000',
   $allow_reverse_dns_lookup  = $::os_service_default,
   $ipv4_ptr_zone_prefix_size = $::os_service_default,
@@ -79,16 +84,27 @@ class neutron::designate (
     warning('The neutron::designate::project_id parmaeter is deprecated. Use the project_name parameter.')
   }
 
+  if is_service_default($system_scope){
+    $project_id_real = pick($project_id, $::os_service_default)
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_id_real = $::os_service_default
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   neutron_config {
     'DEFAULT/external_dns_driver':         value => 'designate';
     'designate/password':                  value => $password, secret => true;
     'designate/url':                       value => $url;
     'designate/auth_type':                 value => $auth_type;
     'designate/username':                  value => $username;
-    'designate/project_id':                value => pick($project_id, $::os_service_default);
-    'designate/project_name':              value => $project_name;
-    'designate/project_domain_name':       value => $project_domain_name;
     'designate/user_domain_name':          value => $user_domain_name;
+    'designate/project_id':                value => $project_id_real;
+    'designate/project_name':              value => $project_name_real;
+    'designate/project_domain_name':       value => $project_domain_name_real;
+    'designate/system_scope':              value => $system_scope;
     'designate/auth_url':                  value => $auth_url;
     'designate/allow_reverse_dns_lookup':  value => $allow_reverse_dns_lookup;
     'designate/ipv4_ptr_zone_prefix_size': value => $ipv4_ptr_zone_prefix_size;

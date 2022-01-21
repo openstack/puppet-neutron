@@ -212,4 +212,6 @@ class neutron::agents::ovn_metadata (
     path    => '/usr/sbin:/usr/bin:/sbin:/bin',
     notify  => Service['ovn-metadata'],
   }
+
+  Package<| title == 'ovn-metadata' |> -> Exec['Set OVS Manager']
 }

@@ -427,15 +427,6 @@ will be removed in a future release.')
     }
   }
 
-  if (is_service_default($kombu_ssl_certfile) and ! is_service_default($kombu_ssl_keyfile))
-      or (is_service_default($kombu_ssl_keyfile) and ! is_service_default($kombu_ssl_certfile)) {
-    fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
-  }
-  if ! is_service_default($kombu_missing_consumer_retry_timeout) and ! is_service_default($rpc_response_timeout)
-      and ($kombu_missing_consumer_retry_timeout > $rpc_response_timeout) {
-    warning('kombu_missing_consumer_retry_timeout should not be longer than rpc_response_timeout')
-  }
-
   package { 'neutron':
     ensure => $package_ensure,
     name   => $::neutron::params::package_name,

@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``neutron::designate::project_id`` parameter has been deprecated and
+    will be removed in a future release. Use the ``project_name`` parameter
+    instead.

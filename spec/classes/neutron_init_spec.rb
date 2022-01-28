@@ -72,19 +72,27 @@ describe 'neutron' do
     end
 
     it 'configures messaging notifications' do
-      should contain_neutron_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
+      should contain_oslo__messaging__notifications('neutron_config').with(
+        :transport_url => '<SERVICE DEFAULT>',
+        :driver        => '<SERVICE DEFAULT>',
+        :topics        => '<SERVICE DEFAULT>',
+      )
     end
 
     it 'configures rabbit' do
-      should contain_neutron_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value( '<SERVICE DEFAULT>' )
-      should contain_neutron_config('oslo_messaging_rabbit/kombu_missing_consumer_retry_timeout').with_value( '<SERVICE DEFAULT>' )
-      should contain_neutron_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value( '<SERVICE DEFAULT>' )
-      should contain_neutron_config('oslo_messaging_rabbit/kombu_compression').with_value( '<SERVICE DEFAULT>' )
+      should contain_oslo__messaging__rabbit('neutron_config').with(
+        :heartbeat_timeout_threshold          => '<SERVICE DEFAULT>',
+        :heartbeat_rate                       => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread                 => '<SERVICE DEFAULT>',
+        :rabbit_use_ssl                       => '<SERVICE DEFAULT>',
+        :rabbit_transient_queues_ttl          => '<SERVICE DEFAULT>',
+        :kombu_reconnect_delay                => '<SERVICE DEFAULT>',
+        :kombu_missing_consumer_retry_timeout => '<SERVICE DEFAULT>',
+        :kombu_failover_strategy              => '<SERVICE DEFAULT>',
+        :kombu_compression                    => '<SERVICE DEFAULT>',
+        :amqp_durable_queues                  => '<SERVICE DEFAULT>',
+        :rabbit_ha_queues                     => '<SERVICE DEFAULT>',
+      )
     end
 
     it 'configures neutron.conf' do
@@ -107,9 +115,13 @@ describe 'neutron' do
       should contain_oslo__concurrency('neutron_config').with(
         :lock_path => '$state_path/lock'
       )
-      should contain_neutron_config('DEFAULT/executor_thread_pool_size').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
+      should contain_oslo__messaging__default('neutron_config').with(
+        :executor_thread_pool_size => '<SERVICE DEFAULT>',
+        :transport_url             => '<SERVICE DEFAULT>',
+        :rpc_response_timeout      => '<SERVICE DEFAULT>',
+        :control_exchange          => '<SERVICE DEFAULT>',
+      )
+
       should contain_neutron_config('DEFAULT/vlan_transparent').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       should contain_neutron_config('agent/root_helper_daemon').with_value('<SERVICE DEFAULT>')
@@ -119,35 +131,45 @@ describe 'neutron' do
 
   shared_examples 'rabbit with heartbeat configured' do
     it 'in neutron.conf' do
-      should contain_neutron_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60')
-      should contain_neutron_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10')
-      should contain_neutron_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value(true)
+      should contain_oslo__messaging__rabbit('neutron_config').with(
+        :heartbeat_timeout_threshold => '60',
+        :heartbeat_rate              => '10',
+        :heartbeat_in_pthread        => true,
+      )
     end
   end
 
   shared_examples 'rabbit with durable queues' do
     it 'in neutron.conf' do
-      should contain_neutron_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true)
+      should contain_oslo__messaging__rabbit('neutron_config').with(
+        :amqp_durable_queues => true
+      )
     end
   end
 
   shared_examples 'rabbit with non default transient_queues_ttl' do
     it 'in neutron.conf' do
-      should contain_neutron_config('oslo_messaging_rabbit/rabbit_transient_queues_ttl').with_value(20)
+      should contain_oslo__messaging__rabbit('neutron_config').with(
+        :rabbit_transient_queues_ttl => 20
+      )
     end
   end
 
   shared_examples 'rabbit_ha_queues set to false' do
     it 'in neutron.conf' do
-      should contain_neutron_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(false)
+      should contain_oslo__messaging__rabbit('neutron_config').with(
+        :rabbit_ha_queues => true
+      )
     end
   end
 
   shared_examples 'notification_driver and notification_topics' do
     it 'in neutron.conf' do
-      should contain_neutron_config('oslo_messaging_notifications/driver').with_value( params[:notification_driver] )
-      should contain_neutron_config('oslo_messaging_notifications/topics').with_value( params[:notification_topics] )
-      should contain_neutron_config('oslo_messaging_notifications/transport_url').with_value( params[:notification_transport_url] )
+      should contain_oslo__messaging__notifications('neutron_config').with(
+        :transport_url => params[:notification_transport_url],
+        :driver        => params[:notification_driver],
+        :topics        => params[:notification_topics],
+      )
     end
   end
 
@@ -224,10 +246,12 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('30')
-      should contain_neutron_config('oslo_messaging_rabbit/kombu_missing_consumer_retry_timeout').with_value('5')
-      should contain_neutron_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('shuffle')
-      should contain_neutron_config('oslo_messaging_rabbit/kombu_compression').with_value('gzip')
+      should contain_oslo__messaging__rabbit('neutron_config').with(
+        :kombu_reconnect_delay                => '30',
+        :kombu_missing_consumer_retry_timeout => '5',
+        :kombu_failover_strategy              => 'shuffle',
+        :kombu_compression                    => 'gzip',
+      )
     end
   end
 
@@ -378,7 +402,9 @@ describe 'neutron' do
     end
 
     it do
-      should contain_neutron_config('DEFAULT/transport_url').with_value(params[:default_transport_url])
+      should contain_oslo__messaging__default('neutron_config').with(
+        :transport_url => params[:default_transport_url]
+      )
     end
   end
 
@@ -396,21 +422,23 @@ describe 'neutron' do
 
   shared_examples 'amqp support' do
     context 'with default amqp parameters' do
-      it { should contain_neutron_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/idle_timeout').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/trace').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/ssl_ca_file').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/ssl_cert_file').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/ssl_key_file').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/ssl_key_password').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/username').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>') }
+      it { should contain_oslo__messaging__amqp('neutron_config').with(
+        :server_request_prefix => '<SERVICE DEFAULT>',
+        :broadcast_prefix      => '<SERVICE DEFAULT>',
+        :group_request_prefix  => '<SERVICE DEFAULT>',
+        :container_name        => '<SERVICE DEFAULT>',
+        :idle_timeout          => '<SERVICE DEFAULT>',
+        :trace                 => '<SERVICE DEFAULT>',
+        :ssl_ca_file           => '<SERVICE DEFAULT>',
+        :ssl_cert_file         => '<SERVICE DEFAULT>',
+        :ssl_key_file          => '<SERVICE DEFAULT>',
+        :ssl_key_password      => '<SERVICE DEFAULT>',
+        :sasl_mechanisms       => '<SERVICE DEFAULT>',
+        :sasl_config_dir       => '<SERVICE DEFAULT>',
+        :sasl_config_name      => '<SERVICE DEFAULT>',
+        :username              => '<SERVICE DEFAULT>',
+        :password              => '<SERVICE DEFAULT>',
+      ) }
     end
 
     context 'with overridden amqp parameters' do
@@ -424,20 +452,23 @@ describe 'neutron' do
         :amqp_password      => 'password',
       ) }
 
-      it { should contain_neutron_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/idle_timeout').with_value('60') }
-      it { should contain_neutron_config('oslo_messaging_amqp/trace').with_value('true') }
-      it { should contain_neutron_config('oslo_messaging_amqp/ssl_ca_file').with_value('/path/to/ca.cert') }
-      it { should contain_neutron_config('oslo_messaging_amqp/ssl_cert_file').with_value('/path/to/certfile') }
-      it { should contain_neutron_config('oslo_messaging_amqp/ssl_key_file').with_value('/path/to/key') }
-      it { should contain_neutron_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
-      it { should contain_neutron_config('oslo_messaging_amqp/username').with_value('amqp_user') }
-      it { should contain_neutron_config('oslo_messaging_amqp/password').with_value('password') }
+      it { should contain_oslo__messaging__amqp('neutron_config').with(
+        :server_request_prefix => '<SERVICE DEFAULT>',
+        :broadcast_prefix      => '<SERVICE DEFAULT>',
+        :group_request_prefix  => '<SERVICE DEFAULT>',
+        :container_name        => '<SERVICE DEFAULT>',
+        :idle_timeout          => '60',
+        :trace                 => true,
+        :ssl_ca_file           => '/path/to/ca.cert',
+        :ssl_cert_file         => '/path/to/certfile',
+        :ssl_key_file          => '/path/to/key',
+        :ssl_key_password      => '<SERVICE DEFAULT>',
+        :sasl_mechanisms       => '<SERVICE DEFAULT>',
+        :sasl_config_dir       => '<SERVICE DEFAULT>',
+        :sasl_config_name      => '<SERVICE DEFAULT>',
+        :username              => 'amqp_user',
+        :password              => 'password',
+      ) }
     end
   end
 

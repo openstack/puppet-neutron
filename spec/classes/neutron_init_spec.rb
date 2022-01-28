@@ -279,14 +279,6 @@ describe 'neutron' do
       )
     end
 
-    context 'without required parameters' do
-
-      context 'without kombu_ssl_keyfile parameter' do
-        before { params.delete(:kombu_ssl_keyfile) }
-        it { should raise_error(Puppet::Error, /The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together/) }
-      end
-    end
-
   end
 
   shared_examples 'with state and lock paths set' do

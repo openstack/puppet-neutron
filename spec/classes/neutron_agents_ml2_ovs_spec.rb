@@ -72,9 +72,15 @@ describe 'neutron::agents::ml2::ovs' do
         with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/resource_provider_hypervisors').\
         with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/resource_provider_packet_processing_without_direction').\
+        with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/resource_provider_packet_processing_with_direction').\
+        with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/resource_provider_default_hypervisor').\
         with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/resource_provider_inventory_defaults').\
+        with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/resource_provider_packet_processing_inventory_defaults').\
         with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/explicitly_egress_direct').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('network_log/rate_limit').with_value('<SERVICE DEFAULT>')
@@ -339,8 +345,11 @@ describe 'neutron::agents::ml2::ovs' do
         params.merge!(
           :resource_provider_bandwidths         => ['provider-a', 'provider-b'],
           :resource_provider_hypervisors        => ['provider-a:compute-a', 'provider-b:compute-b'],
+          :resource_provider_packet_processing_without_direction => [':1000:1000'],
+          :resource_provider_packet_processing_with_direction    => [':2000:2000'],
           :resource_provider_default_hypervisor => 'compute-c',
           :resource_provider_inventory_defaults => ['allocation_ratio:1.0', 'min_unit:1', 'step_size:1'],
+          :resource_provider_packet_processing_inventory_defaults => ['allocation_ratio:2.0', 'min_unit:2', 'step_size:2'],
         )
       end
 
@@ -349,10 +358,16 @@ describe 'neutron::agents::ml2::ovs' do
           with_value('provider-a,provider-b')
         should contain_neutron_agent_ovs('ovs/resource_provider_hypervisors').\
           with_value('provider-a:compute-a,provider-b:compute-b')
+        should contain_neutron_agent_ovs('ovs/resource_provider_packet_processing_without_direction').\
+          with_value(':1000:1000')
+        should contain_neutron_agent_ovs('ovs/resource_provider_packet_processing_with_direction').\
+          with_value(':2000:2000')
         should contain_neutron_agent_ovs('ovs/resource_provider_default_hypervisor').\
           with_value('compute-c')
         should contain_neutron_agent_ovs('ovs/resource_provider_inventory_defaults').\
           with_value('allocation_ratio:1.0,min_unit:1,step_size:1')
+        should contain_neutron_agent_ovs('ovs/resource_provider_packet_processing_inventory_defaults').\
+          with_value('allocation_ratio:2.0,min_unit:2,step_size:2')
       end
     end
 
@@ -364,12 +379,19 @@ describe 'neutron::agents::ml2::ovs' do
             'min_unit'         => '1',
             'step_size'        => '1'
           },
+          :resource_provider_packet_processing_inventory_defaults => {
+            'allocation_ratio' => '2.0',
+            'min_unit'         => '2',
+            'step_size'        => '2'
+          }
         )
       end
 
       it 'configures resource providers' do
         should contain_neutron_agent_ovs('ovs/resource_provider_inventory_defaults').\
           with_value('allocation_ratio:1.0,min_unit:1,step_size:1')
+        should contain_neutron_agent_ovs('ovs/resource_provider_packet_processing_inventory_defaults').\
+          with_value('allocation_ratio:2.0,min_unit:2,step_size:2')
       end
     end
   end

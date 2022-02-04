@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following parameters have been added to
+    the ``neutron::agent::ml2::ovs`` class.
+
+    - ``resource_provider_packet_processing_without_direction``
+    - ``resource_provider_packet_processing_with_direction``
+    - ``resource_provider_packet_processing_inventory_defaults``

@@ -203,12 +203,27 @@
 #   (optional) List of <bridge>:<hypervisor>
 #   Defaults to empty list
 #
+# [*resource_provider_packet_processing_without_direction*]
+#   (optional) List of <hypervisor>:<packet_rate> tuples, defining the minimum
+#   pachet rate the OVS backend can guarantee in kilo (1000) packet per second.
+#   Defaults to empty list
+#
+# [*resource_provider_packet_processing_with_direction*]
+#   (optional) Similar to resource_provider_packet_processing_without_direction
+#   but used in case the OVS backend has hardware offload capabilities.
+#   Defauls to empty list
+#
 # [*resource_provider_default_hypervisor*]
 #   (optional) The default hypervisor name used to locate the parent of
 #   the resource provider.
 #   Defaults to $::os_service_default
 #
 # [*resource_provider_inventory_defaults*]
+#   (optional) Key:value pairs to specify defaults used while reporting packet
+#   rate inventories,.
+#   Defauls to empty hash
+#
+# [*resource_provider_packet_processing_inventory_defaults*]
 #   (optional) Key:value pairs to specify defaults used while reporting packet
 #   rate inventories,.
 #   Defauls to empty hash
@@ -274,9 +289,15 @@ class neutron::agents::ml2::ovs (
   $bridge_mac_table_size                = $::os_service_default,
   $igmp_snooping_enable                 = $::os_service_default,
   $resource_provider_bandwidths         = [],
+  $resource_provider_packet_processing_without_direction
+                                        = [],
+  $resource_provider_packet_processing_with_direction
+                                        = [],
   $resource_provider_hypervisors        = [],
   $resource_provider_default_hypervisor = $::os_service_default,
   $resource_provider_inventory_defaults = {},
+  $resource_provider_packet_processing_inventory_defaults
+                                        = {},
   $explicitly_egress_direct             = $::os_service_default,
   $network_log_rate_limit               = $::os_service_default,
   $network_log_burst_limit              = $::os_service_default,
@@ -380,21 +401,59 @@ class neutron::agents::ml2::ovs (
     $resource_provider_hypervisors_real = $::os_service_default
   }
 
+  if ($resource_provider_packet_processing_without_direction != []){
+    $resource_provider_packet_processing_without_direction_real =
+      join(any2array($resource_provider_packet_processing_without_direction), ',')
+  } else {
+    $resource_provider_packet_processing_without_direction_real = $::os_service_default
+  }
+
+  if ($resource_provider_packet_processing_with_direction != []){
+    $resource_provider_packet_processing_with_direction_real =
+      join(any2array($resource_provider_packet_processing_with_direction), ',')
+  } else {
+    $resource_provider_packet_processing_with_direction_real = $::os_service_default
+  }
+
   if empty($resource_provider_inventory_defaults) {
     $resource_provider_inventory_defaults_real = $::os_service_default
   } else {
     if ($resource_provider_inventory_defaults =~ Hash){
-      $resource_provider_inventory_defaults_real = join(join_keys_to_values($resource_provider_inventory_defaults, ':'), ',')
+      $resource_provider_inventory_defaults_real =
+        join(join_keys_to_values($resource_provider_inventory_defaults, ':'), ',')
     } else {
-      $resource_provider_inventory_defaults_real = join(any2array($resource_provider_inventory_defaults), ',')
+      $resource_provider_inventory_defaults_real =
+        join(any2array($resource_provider_inventory_defaults), ',')
+    }
+  }
+
+  if empty($resource_provider_packet_processing_inventory_defaults) {
+    $resource_provider_packet_processing_inventory_defaults_real = $::os_service_default
+  } else {
+    if ($resource_provider_packet_processing_inventory_defaults =~ Hash){
+      $resource_provider_packet_processing_inventory_defaults_real =
+        join(join_keys_to_values($resource_provider_packet_processing_inventory_defaults, ':'), ',')
+    } else {
+      $resource_provider_packet_processing_inventory_defaults_real =
+        join(any2array($resource_provider_packet_processing_inventory_defaults), ',')
     }
   }
 
   neutron_agent_ovs {
-    'ovs/resource_provider_bandwidths':         value => $resource_provider_bandwidths_real;
-    'ovs/resource_provider_hypervisors':        value => $resource_provider_hypervisors_real;
-    'ovs/resource_provider_default_hypervisor': value => $resource_provider_default_hypervisor;
-    'ovs/resource_provider_inventory_defaults': value => $resource_provider_inventory_defaults_real;
+    'ovs/resource_provider_bandwidths':
+      value => $resource_provider_bandwidths_real;
+    'ovs/resource_provider_hypervisors':
+      value => $resource_provider_hypervisors_real;
+    'ovs/resource_provider_packet_processing_without_direction':
+      value => $resource_provider_packet_processing_without_direction_real;
+    'ovs/resource_provider_packet_processing_with_direction':
+      value => $resource_provider_packet_processing_with_direction_real;
+    'ovs/resource_provider_default_hypervisor':
+      value => $resource_provider_default_hypervisor;
+    'ovs/resource_provider_inventory_defaults':
+      value => $resource_provider_inventory_defaults_real;
+    'ovs/resource_provider_packet_processing_inventory_defaults':
+      value => $resource_provider_packet_processing_inventory_defaults_real;
   }
 
   neutron_agent_ovs {

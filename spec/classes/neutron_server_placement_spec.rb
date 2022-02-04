@@ -29,7 +29,7 @@ describe 'neutron::server::placement' do
       should contain_neutron_config('placement/project_name').with_value('services')
       should contain_neutron_config('placement/system_scope').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('placement/user_domain_name').with_value('Default')
-      should contain_neutron_config('placement/username').with_value('nova')
+      should contain_neutron_config('placement/username').with_value('placement')
       should contain_neutron_config('placement/password').with_value('secrete').with_secret( true )
       should contain_neutron_config('placement/auth_url').with_value('http://127.0.0.1:5000')
       should contain_neutron_config('placement/region_name').with_value('<SERVICE DEFAULT>')

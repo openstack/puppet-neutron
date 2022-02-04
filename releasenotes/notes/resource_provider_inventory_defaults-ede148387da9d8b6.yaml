@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new ``resource_provider_inventory_defaults`` parameter has been added
+    to the ``neutron::agent::ml2::ovs`` class and
+    the ``neutron::agent::ml2::sriov`` class.

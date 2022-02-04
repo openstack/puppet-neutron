@@ -75,6 +75,8 @@ describe 'neutron::agents::ml2::sriov' do
         with_value('<SERVICE DEFAULT>')
       should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_default_hypervisor').\
         with_value('<SERVICE DEFAULT>')
+      should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_inventory_defaults').\
+        with_value('<SERVICE DEFAULT>')
     end
 
     context 'when number_of_vfs is empty' do
@@ -146,7 +148,8 @@ describe 'neutron::agents::ml2::sriov' do
         params.merge!(
           :resource_provider_bandwidths         => ['provider-a', 'provider-b'],
           :resource_provider_hypervisors        => ['provider-a:compute-a', 'provider-b:compute-b'],
-          :resource_provider_default_hypervisor => 'compute-c'
+          :resource_provider_default_hypervisor => 'compute-c',
+          :resource_provider_inventory_defaults => ['allocation_ratio:1.0', 'min_unit:1', 'step_size:1'],
         )
       end
 
@@ -157,6 +160,25 @@ describe 'neutron::agents::ml2::sriov' do
           with_value('provider-a:compute-a,provider-b:compute-b')
         should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_default_hypervisor').\
           with_value('compute-c')
+        should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_inventory_defaults').\
+          with_value('allocation_ratio:1.0,min_unit:1,step_size:1')
+      end
+    end
+
+    context 'when parameters for resource providers are set by hash' do
+      before :each do
+        params.merge!(
+          :resource_provider_inventory_defaults => {
+            'allocation_ratio' => '1.0',
+            'min_unit'         => '1',
+            'step_size'        => '1'
+          },
+        )
+      end
+
+      it 'configures resource providers' do
+        should contain_neutron_sriov_agent_config('sriov_nic/resource_provider_inventory_defaults').\
+          with_value('allocation_ratio:1.0,min_unit:1,step_size:1')
       end
     end
   end

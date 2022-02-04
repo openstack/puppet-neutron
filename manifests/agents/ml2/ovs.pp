@@ -208,6 +208,11 @@
 #   the resource provider.
 #   Defaults to $::os_service_default
 #
+# [*resource_provider_inventory_defaults*]
+#   (optional) Key:value pairs to specify defaults used while reporting packet
+#   rate inventories,.
+#   Defauls to empty hash
+#
 # [*explicitly_egress_direct*]
 #  (optional) When set to True, the accepted egress unicast traffic will not
 #  use action NORMAL. The accepted egress packets will be taken care of in the
@@ -271,6 +276,7 @@ class neutron::agents::ml2::ovs (
   $resource_provider_bandwidths         = [],
   $resource_provider_hypervisors        = [],
   $resource_provider_default_hypervisor = $::os_service_default,
+  $resource_provider_inventory_defaults = {},
   $explicitly_egress_direct             = $::os_service_default,
   $network_log_rate_limit               = $::os_service_default,
   $network_log_burst_limit              = $::os_service_default,
@@ -374,10 +380,21 @@ class neutron::agents::ml2::ovs (
     $resource_provider_hypervisors_real = $::os_service_default
   }
 
+  if empty($resource_provider_inventory_defaults) {
+    $resource_provider_inventory_defaults_real = $::os_service_default
+  } else {
+    if ($resource_provider_inventory_defaults =~ Hash){
+      $resource_provider_inventory_defaults_real = join(join_keys_to_values($resource_provider_inventory_defaults, ':'), ',')
+    } else {
+      $resource_provider_inventory_defaults_real = join(any2array($resource_provider_inventory_defaults), ',')
+    }
+  }
+
   neutron_agent_ovs {
     'ovs/resource_provider_bandwidths':         value => $resource_provider_bandwidths_real;
     'ovs/resource_provider_hypervisors':        value => $resource_provider_hypervisors_real;
     'ovs/resource_provider_default_hypervisor': value => $resource_provider_default_hypervisor;
+    'ovs/resource_provider_inventory_defaults': value => $resource_provider_inventory_defaults_real;
   }
 
   neutron_agent_ovs {

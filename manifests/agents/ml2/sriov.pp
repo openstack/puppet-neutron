@@ -92,6 +92,11 @@
 #   the resource provider.
 #   Defaults to $::os_service_default
 #
+# [*resource_provider_inventory_defaults*]
+#   (optional) Key:value pairs to specify defaults used while reporting packet
+#   rate inventories,.
+#   Defauls to empty hash
+#
 class neutron::agents::ml2::sriov (
   $package_ensure                       = 'present',
   $enabled                              = true,
@@ -107,6 +112,7 @@ class neutron::agents::ml2::sriov (
   $resource_provider_bandwidths         = [],
   $resource_provider_hypervisors        = [],
   $resource_provider_default_hypervisor = $::os_service_default,
+  $resource_provider_inventory_defaults = {},
 ) {
 
   include neutron::deps
@@ -165,10 +171,21 @@ class neutron::agents::ml2::sriov (
     $resource_provider_hypervisors_real = $::os_service_default
   }
 
+  if empty($resource_provider_inventory_defaults) {
+    $resource_provider_inventory_defaults_real = $::os_service_default
+  } else {
+    if ($resource_provider_inventory_defaults =~ Hash){
+      $resource_provider_inventory_defaults_real = join(join_keys_to_values($resource_provider_inventory_defaults, ':'), ',')
+    } else {
+      $resource_provider_inventory_defaults_real = join(any2array($resource_provider_inventory_defaults), ',')
+    }
+  }
+
   neutron_sriov_agent_config {
     'sriov_nic/resource_provider_bandwidths':         value => $resource_provider_bandwidths_real;
     'sriov_nic/resource_provider_hypervisors':        value => $resource_provider_hypervisors_real;
     'sriov_nic/resource_provider_default_hypervisor': value => $resource_provider_default_hypervisor;
+    'sriov_nic/resource_provider_inventory_defaults': value => $resource_provider_inventory_defaults_real;
   }
 
 }

@@ -104,12 +104,7 @@ class neutron::keystone::auth (
 
   include neutron::deps
 
-  Keystone_user_role<| name == "${auth_name}@${tenant}" |> -> Anchor['neutron::service::end']
-  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> -> Anchor['neutron::service::end']
-
-  if $configure_endpoint {
-    Keystone_endpoint["${region}/${service_name}::${service_type}"] -> Anchor['neutron::service::end']
-  }
+  Keystone::Resource::Service_identity['neutron'] -> Anchor['neutron::service::end']
 
   keystone::resource::service_identity { 'neutron':
     configure_user      => $configure_user,

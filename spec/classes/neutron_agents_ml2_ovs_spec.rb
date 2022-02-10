@@ -114,8 +114,8 @@ describe 'neutron::agents::ml2::ovs' do
       before :each do
         params.merge!(:manage_service => false)
       end
-      it 'should not start/stop service' do
-        should contain_service('neutron-ovs-agent-service').without_ensure
+      it 'should not manage the service' do
+        should_not contain_service('neutron-ovs-agent-service')
       end
     end
 

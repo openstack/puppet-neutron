@@ -540,31 +540,31 @@ class neutron::agents::ml2::ovs (
     } else {
       $service_ensure = 'stopped'
     }
-  }
 
-  service { 'neutron-ovs-agent-service':
-    ensure => $service_ensure,
-    name   => $::neutron::params::ovs_agent_service,
-    enable => $enabled,
-    tag    => ['neutron-service', 'neutron-db-sync-service'],
-  }
-
-  if ($::osfamily == 'Redhat') {
-    service { 'neutron-destroy-patch-ports-service':
+    service { 'neutron-ovs-agent-service':
       ensure => $service_ensure,
-      name   => $::neutron::params::destroy_patch_ports_service,
+      name   => $::neutron::params::ovs_agent_service,
       enable => $enabled,
-      tag    => ['neutron-service'],
+      tag    => ['neutron-service', 'neutron-db-sync-service'],
     }
-  }
 
-  if $::neutron::params::ovs_cleanup_service {
-    service { 'ovs-cleanup-service':
-      name    => $::neutron::params::ovs_cleanup_service,
-      enable  => $enabled,
-      # TODO: Remove this require once ovs-cleanup service
-      # script is packaged in neutron-openvswitch package
-      require => Anchor['neutron::install::end'],
+    if ($::osfamily == 'Redhat') {
+      service { 'neutron-destroy-patch-ports-service':
+        ensure => $service_ensure,
+        name   => $::neutron::params::destroy_patch_ports_service,
+        enable => $enabled,
+        tag    => ['neutron-service'],
+      }
+    }
+
+    if $::neutron::params::ovs_cleanup_service {
+      service { 'ovs-cleanup-service':
+        name    => $::neutron::params::ovs_cleanup_service,
+        enable  => $enabled,
+        # TODO: Remove this require once ovs-cleanup service
+        # script is packaged in neutron-openvswitch package
+        require => Anchor['neutron::install::end'],
+      }
     }
   }
 }

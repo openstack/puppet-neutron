@@ -88,6 +88,15 @@ describe 'neutron::agents::l3' do
       end
     end
 
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not manage the service' do
+        should_not contain_service('neutron-l3')
+      end
+    end
+
     context 'with DVR' do
       before :each do
         params.merge!(:agent_mode => 'dvr')

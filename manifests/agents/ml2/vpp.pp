@@ -86,12 +86,11 @@ class neutron::agents::ml2::vpp (
     } else {
       $service_ensure = 'stopped'
     }
-  }
-
-  service { 'neutron-vpp-agent-service':
-    ensure => $service_ensure,
-    name   => $::neutron::params::vpp_agent_service,
-    enable => $enabled,
-    tag    => ['neutron-service'],
+    service { 'neutron-vpp-agent-service':
+      ensure => $service_ensure,
+      name   => $::neutron::params::vpp_agent_service,
+      enable => $enabled,
+      tag    => ['neutron-service'],
+    }
   }
 }

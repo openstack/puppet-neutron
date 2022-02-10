@@ -7,9 +7,8 @@ describe 'neutron::agents::ml2::mlnx' do
 
   let :default_params do
     {
-      :package_ensure            => 'present',
-      :enabled                   => true,
-      :manage_service            => true
+      :package_ensure => 'present',
+      :enabled        => true,
     }
   end
 
@@ -57,9 +56,9 @@ describe 'neutron::agents::ml2::mlnx' do
       before :each do
         params.merge!(:manage_service => false)
       end
-      it 'should not start/stop service' do
-        should contain_service(platform_params[:mlnx_agent_service]).without_ensure
-        should contain_service('eswitchd').without_ensure
+      it 'should not manage the  services' do
+        should_not contain_service(platform_params[:mlnx_agent_service])
+        should_not contain_service('eswitchd')
       end
     end
 

@@ -21,7 +21,6 @@ describe 'neutron::agents::l2gw' do
     { :package_ensure                   => 'present',
       :purge_config                     => false,
       :enabled                          => true,
-      :manage_service                   => true,
       :enable_manager                   => false,
       :manager_table_listening_port     => '6632',
       :socket_timeout                   => '30',
@@ -65,6 +64,15 @@ describe 'neutron::agents::l2gw' do
 
     it 'l2 agent service running' do
       should contain_service('neutron-l2gw-agent').with_ensure('running')
+    end
+
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not manage the service' do
+        should_not contain_service('neutron-l2gw-agent')
+      end
     end
 
     context 'with multiple ovsdb_hosts' do

@@ -150,13 +150,12 @@ class neutron::agents::ml2::sriov (
     } else {
       $service_ensure = 'stopped'
     }
-  }
-
-  service { 'neutron-sriov-nic-agent-service':
-    ensure => $service_ensure,
-    name   => $::neutron::params::sriov_nic_agent_service,
-    enable => $enabled,
-    tag    => 'neutron-service',
+    service { 'neutron-sriov-nic-agent-service':
+      ensure => $service_ensure,
+      name   => $::neutron::params::sriov_nic_agent_service,
+      enable => $enabled,
+      tag    => 'neutron-service',
+    }
   }
 
   if ($resource_provider_bandwidths != []) {

@@ -8,7 +8,6 @@ describe 'neutron::agents::ml2::vpp' do
   let :default_params do
     { :package_ensure => 'present',
       :enabled        => true,
-      :manage_service => true,
       :etcd_host      => '127.0.0.1',
       :etcd_port      => 4001,
       }
@@ -60,8 +59,8 @@ describe 'neutron::agents::ml2::vpp' do
       before :each do
         params.merge!(:manage_service => false)
       end
-      it 'should not start/stop service' do
-        should contain_service('neutron-vpp-agent-service').without_ensure
+      it 'should not manage the service' do
+        should_not contain_service('neutron-vpp-agent-service')
       end
     end
 

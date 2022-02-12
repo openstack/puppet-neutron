@@ -51,7 +51,6 @@ ha="True"
 id="d73f453a-77ca-4843-977a-3af0fda8dfcb"
 name="router1"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
-project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="ACTIVE"')
           provider.create
           expect(provider.exists?).to be_truthy
@@ -326,7 +325,6 @@ external_gateway_info="None"
 ha="False"
 id="c3e93a5b-45ee-4029-b3a3-3331cb3e3f2a"
 name="router2"
-project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="DOWN"')
 

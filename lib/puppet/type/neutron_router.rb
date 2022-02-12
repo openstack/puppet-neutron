@@ -56,12 +56,20 @@ Puppet::Type.newtype(:neutron_router) do
     end
   end
 
+  newparam(:project_name) do
+    desc 'The name of the project which will own the router.'
+  end
+
+  newproperty(:project_id) do
+    desc 'A uuid identifying the project which will own the router.'
+  end
+
   newparam(:tenant_name) do
-    desc 'The name of the tenant which will own the router.'
+    desc 'The name of the tenant which will own the router.(DEPRECATED)'
   end
 
   newproperty(:tenant_id) do
-    desc 'A uuid identifying the tenant which will own the router.'
+    desc 'A uuid identifying the tenant which will own the router.(DEPRECATED)'
   end
 
   autorequire(:anchor) do
@@ -69,7 +77,11 @@ Puppet::Type.newtype(:neutron_router) do
   end
 
   autorequire(:keystone_tenant) do
-    [self[:tenant_name]] if self[:tenant_name]
+    if self[:tenant_name]
+      [self[:tenant_name]]
+    else
+      [self[:project_name]] if self[:project_name]
+    end
   end
 
   autorequire(:neutron_network) do
@@ -100,9 +112,19 @@ Puppet::Type.newtype(:neutron_router) do
     if self[:ensure] != :present
       return
     end
-    if self[:tenant_id] && self[:tenant_name]
+
+    if self[:tenant_id]
+      warning('The tenant_id property is deprecated. Use project_id.')
+    end
+    if self[:tenant_name]
+      warning('The tenant_name property is deprecated. Use project_id.')
+    end
+
+    project_id = self[:tenant_id] or self[:project_id]
+    project_name = self[:tenant_name] or self[:project_name]
+    if project_id && project_name
       raise(Puppet::Error, <<-EOT
-Please provide a value for only one of tenant_name and tenant_id.
+Please provide a value for only one of project_name and project_id.
 EOT
             )
     end

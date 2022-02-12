@@ -1,0 +1,11 @@
+---
+deprecations:
+  - |
+    The ``tenant_name`` property and the ``tenant_id`` property of the resource
+    types below have been deprecated and will be removed in a future release.
+    Use the ``project_name`` property and the ``project_id`` property instead.
+
+    - ``neutron_network``
+    - ``neutron_subnet``
+    - ``neutron_port``
+    - ``neutron_router``

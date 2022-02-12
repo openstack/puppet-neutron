@@ -42,6 +42,7 @@ Puppet::Type.type(:neutron_router).provide(
         :distributed            => router[:distributed],
         :ha                     => router[:ha],
         :tenant_id              => router[:project_id],
+        :project_id             => router[:project_id],
         :availability_zone_hint => parse_availability_zone_hint(router[:availability_zone_hints])
       )
     end
@@ -77,6 +78,10 @@ Puppet::Type.type(:neutron_router).provide(
       opts << "--project=#{@resource[:tenant_name]}"
     elsif @resource[:tenant_id]
       opts << "--project=#{@resource[:tenant_id]}"
+    elsif @resource[:project_name]
+      opts << "--project=#{@resource[:project_name]}"
+    elsif @resource[:project_id]
+      opts << "--project=#{@resource[:project_id]}"
     end
 
     if @resource[:distributed]
@@ -124,6 +129,7 @@ Puppet::Type.type(:neutron_router).provide(
       :distributed            => router[:distributed],
       :ha                     => router[:ha],
       :tenant_id              => router[:project_id],
+      :project_id             => router[:project_id],
       :availability_zone_hint => self.class.parse_availability_zone_hint(router[:availability_zone_hints])
     }
   end

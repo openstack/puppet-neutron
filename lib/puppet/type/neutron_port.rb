@@ -97,7 +97,11 @@ Puppet::Type.newtype(:neutron_port) do
   end
 
   autorequire(:neutron_network) do
-    [self[:name]]
+    [self[:network_name]]
+  end
+
+  autorequire(:neutron_subnet) do
+    [self[:subnet_name]] if self[:subnet_name]
   end
 
   validate do

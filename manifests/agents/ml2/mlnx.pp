@@ -120,20 +120,19 @@ class neutron::agents::ml2::mlnx (
     } else {
       $service_ensure = 'stopped'
     }
-  }
 
-  service { $mlnx_agent_service:
-    ensure => $service_ensure,
-    name   => $mlnx_agent_service,
-    enable => $enabled,
-    tag    => 'neutron-service',
-  }
+    service { $mlnx_agent_service:
+      ensure => $service_ensure,
+      name   => $mlnx_agent_service,
+      enable => $enabled,
+      tag    => 'neutron-service',
+    }
 
-  service { $eswitchd_service:
-    ensure => $service_ensure,
-    name   => $eswitchd_service,
-    enable => $enabled,
-    tag    => 'neutron-service',
+    service { $eswitchd_service:
+      ensure => $service_ensure,
+      name   => $eswitchd_service,
+      enable => $enabled,
+      tag    => 'neutron-service',
+    }
   }
-
 }

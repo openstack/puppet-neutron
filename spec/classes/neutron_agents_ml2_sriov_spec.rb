@@ -9,7 +9,6 @@ describe 'neutron::agents::ml2::sriov' do
     {
       :package_ensure            => 'present',
       :enabled                   => true,
-      :manage_service            => true,
       :polling_interval          => 2,
       :supported_pci_vendor_devs => [],
       :purge_config              => false,
@@ -104,8 +103,8 @@ describe 'neutron::agents::ml2::sriov' do
       before :each do
         params.merge!(:manage_service => false)
       end
-      it 'should not start/stop service' do
-        should contain_service('neutron-sriov-nic-agent-service').without_ensure
+      it 'should not manage the service' do
+        should_not contain_service('neutron-sriov-nic-agent-service')
       end
     end
 

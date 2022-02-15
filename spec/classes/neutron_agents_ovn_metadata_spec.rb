@@ -37,8 +37,8 @@ describe 'neutron::agents::ovn_metadata' do
         params.merge!(:manage_service => false)
       end
 
-      it 'should not start/stop service' do
-        should contain_service('ovn-metadata').without_ensure
+      it 'should not manage the service' do
+        should_not contain_service('ovn-metadata')
       end
     end
 

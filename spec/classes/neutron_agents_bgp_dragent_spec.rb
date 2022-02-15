@@ -21,7 +21,6 @@ describe 'neutron::agents::bgp_dragent' do
     {
       :package_ensure     => 'installed',
       :enabled            => true,
-      :manage_service     => true,
       :bgp_speaker_driver => 'neutron_dynamic_routing.services.bgp.agent.driver.os_ken.driver.OsKenBgpDriver',
       :purge_config       => false,
     }
@@ -94,6 +93,15 @@ describe 'neutron::agents::bgp_dragent' do
         :tag    => 'neutron-service',
       )}
     end
+
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not manage the service' do
+        should_not contain_service('neutron-bgp-dragent')
+      end
+    end
   end
 
   shared_examples 'neutron::agents::bgp_dragent on Debian' do
@@ -143,6 +151,15 @@ describe 'neutron::agents::bgp_dragent' do
         :tag    => 'neutron-service',
       )}
     end
+
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not manage the service' do
+        should_not contain_service('neutron-bgp-dragent')
+      end
+    end
   end
 
   shared_examples 'neutron::agents::bgp_dragent on Ubuntu' do
@@ -191,6 +208,15 @@ describe 'neutron::agents::bgp_dragent' do
         :enable => false,
         :tag    => 'neutron-service',
       )}
+    end
+
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+      it 'should not manage the service' do
+        should_not contain_service('neutron-bgp-dragent')
+      end
     end
   end
 

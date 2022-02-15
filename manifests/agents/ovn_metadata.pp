@@ -195,13 +195,13 @@ class neutron::agents::ovn_metadata (
     } else {
       $service_ensure = 'stopped'
     }
-  }
-
-  service { 'ovn-metadata':
-    ensure => $service_ensure,
-    name   => $::neutron::params::ovn_metadata_agent_service,
-    enable => $enabled,
-    tag    => 'neutron-service',
+    service { 'ovn-metadata':
+      ensure => $service_ensure,
+      name   => $::neutron::params::ovn_metadata_agent_service,
+      enable => $enabled,
+      tag    => 'neutron-service',
+    }
+    Exec['Set OVS Manager'] -> Service['ovn-metadata']
   }
 
   # Set OVS manager so that metadata agent can connect to Open vSwitch
@@ -210,7 +210,6 @@ class neutron::agents::ovn_metadata (
                -- add Open_vSwitch . manager_options @manager",
     unless  => "ovs-vsctl show | grep \"${ovs_manager}\"",
     path    => '/usr/sbin:/usr/bin:/sbin:/bin',
-    notify  => Service['ovn-metadata'],
   }
 
   Package<| title == 'ovn-metadata' |> -> Exec['Set OVS Manager']

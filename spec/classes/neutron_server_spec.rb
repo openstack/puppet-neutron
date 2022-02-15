@@ -99,12 +99,12 @@ describe 'neutron::server' do
         params.merge!(:manage_service => false)
       end
 
-      it 'should not start/stop service' do
+      it 'should not manage the service' do
         if platform_params.has_key?(:server_service)
-          should contain_service('neutron-server').without_ensure
+          should_not contain_service('neutron-server')
         else
-          should contain_service('neutron-api').without_ensure
-          should contain_service('neutron-rpc-server').without_ensure
+          should_not contain_service('neutron-api')
+          should_not contain_service('neutron-rpc-server')
         end
       end
     end

@@ -25,7 +25,6 @@ describe 'neutron::agents::bagpipe' do
       :dataplane_driver_ipvpn => 'ovs',
       :enabled                => true,
       :enable_rtc             => true,
-      :manage_service         => true,
       :mpls_interface         => '*gre*',
       :ovs_bridge             => 'br-mpls',
       :package_ensure         => 'present',
@@ -87,6 +86,17 @@ describe 'neutron::agents::bagpipe' do
         ).with_value(p[:peers].join(','))
       end
     end
+
+    context 'with manage_service as false' do
+      before :each do
+        params.merge!(:manage_service => false)
+      end
+
+      it 'should not manage the service' do
+        should_not contain_service('bagpipe-bgp')
+      end
+    end
+
   end
 
   on_supported_os({

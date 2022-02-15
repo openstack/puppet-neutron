@@ -176,21 +176,11 @@ class neutron::agents::ml2::linuxbridge (
     } else {
       $service_ensure = 'stopped'
     }
-  }
-
-  if $::neutron::default_transport_url  {
-    $linuxbridge_agent_subscribe = [
-      Neutron_config['DEFAULT/transport_url']
-    ]
-  } else {
-    $linuxbridge_agent_subscribe = undef
-  }
-
-  service { 'neutron-plugin-linuxbridge-agent':
-    ensure    => $service_ensure,
-    name      => $::neutron::params::linuxbridge_agent_service,
-    enable    => $enabled,
-    tag       => 'neutron-service',
-    subscribe => $linuxbridge_agent_subscribe,
+    service { 'neutron-plugin-linuxbridge-agent':
+      ensure => $service_ensure,
+      name   => $::neutron::params::linuxbridge_agent_service,
+      enable => $enabled,
+      tag    => 'neutron-service',
+    }
   }
 }

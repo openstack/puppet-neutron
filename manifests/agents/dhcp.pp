@@ -223,12 +223,11 @@ class neutron::agents::dhcp (
     } else {
       $service_ensure = 'stopped'
     }
-  }
-
-  service { 'neutron-dhcp-service':
-    ensure => $service_ensure,
-    name   => $::neutron::params::dhcp_agent_service,
-    enable => $enabled,
-    tag    => 'neutron-service',
+    service { 'neutron-dhcp-service':
+      ensure => $service_ensure,
+      name   => $::neutron::params::dhcp_agent_service,
+      enable => $enabled,
+      tag    => 'neutron-service',
+    }
   }
 }

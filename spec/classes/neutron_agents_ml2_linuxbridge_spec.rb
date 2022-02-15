@@ -9,7 +9,6 @@ describe 'neutron::agents::ml2::linuxbridge' do
     {
       :package_ensure              => 'present',
       :enabled                     => true,
-      :manage_service              => true,
       :tunnel_types                => [],
       :local_ip                    => false,
       :physical_interface_mappings => [],
@@ -70,8 +69,8 @@ describe 'neutron::agents::ml2::linuxbridge' do
         before :each do
           params.merge!(:manage_service => false)
         end
-        it 'should not start/stop service' do
-          should contain_service('neutron-plugin-linuxbridge-agent').without_ensure
+        it 'should not manage the service' do
+          should_not contain_service('neutron-plugin-linuxbridge-agent')
         end
       end
 

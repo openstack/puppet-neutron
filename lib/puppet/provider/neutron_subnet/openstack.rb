@@ -48,6 +48,7 @@ Puppet::Type.type(:neutron_subnet).provide(
         :network_id        => subnet[:network_id],
         :network_name      => get_network_name(subnet[:network_id]),
         :tenant_id         => subnet[:project_id],
+        :project_id        => subnet[:project_id],
       )
     end
     self.do_not_manage = false
@@ -164,6 +165,10 @@ Puppet::Type.type(:neutron_subnet).provide(
       opts << "--project=#{@resource[:tenant_name]}"
     elsif @resource[:tenant_id]
       opts << "--project=#{@resource[:tenant_id]}"
+    elsif @resource[:project_name]
+      opts << "--project=#{@resource[:project_name]}"
+    elsif @resource[:project_id]
+      opts << "--project=#{@resource[:project_id]}"
     end
 
     if @resource[:network_name]
@@ -191,6 +196,7 @@ Puppet::Type.type(:neutron_subnet).provide(
       :network_id        => subnet[:network_id],
       :network_name      => self.class.get_network_name(subnet[:network_id]),
       :tenant_id         => subnet[:project_id],
+      :project_id        => subnet[:project_id],
     }
   end
 
@@ -277,6 +283,9 @@ Puppet::Type.type(:neutron_subnet).provide(
    :ipv6_address_mode,
    :network_id,
    :tenant_id,
+   :tenant_name,
+   :project_id,
+   :project_name,
   ].each do |attr|
     define_method(attr.to_s + "=") do |value|
       fail("Property #{attr.to_s} does not support being updated")

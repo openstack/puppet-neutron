@@ -15,7 +15,7 @@
 
 - job:
     name: puppet-neutron-tripleo-standalone
-    parent: tripleo-puppet-ci-centos-8-standalone
+    parent: tripleo-puppet-ci-centos-9-standalone
     description: |
       TripleO standalone Job running Neutron specific Tempest tests.
     vars:
@@ -29,4 +29,4 @@
           - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
         use_os_tempest: true
     dependencies:
-      - tripleo-puppet-ci-centos-8-content-provider
+      - tripleo-puppet-ci-centos-9-content-provider

@@ -139,7 +139,7 @@ EOT
       warning('The tenant_id property is deprecated. Use project_id.')
     end
     if self[:tenant_name]
-      warning('The tenant_name property is deprecated. Use project_id.')
+      warning('The tenant_name property is deprecated. Use project_name.')
     end
 
     project_id = self[:tenant_id] or self[:project_id]

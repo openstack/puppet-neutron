@@ -101,6 +101,7 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
   def self.reset
     @neutron_conf        = nil
     @neutron_credentials = nil
+    @auth_endpoint       = nil
   end
 
   def self.get_network_name(id)

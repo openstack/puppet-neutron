@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    Remaining implementations for networking-cisco support have been removed.
+    These have had no effect since deprecation.

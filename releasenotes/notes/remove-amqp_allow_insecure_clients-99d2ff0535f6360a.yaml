@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``neutron::amqp_allow_insecure_clients`` parameter has been removed.

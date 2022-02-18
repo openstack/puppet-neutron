@@ -319,10 +319,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*amqp_allow_insecure_clients*]
-#   (Optional) Accept clients using either SSL or plain TCP
-#   Defaults to undef.
-#
 # [*allow_overlapping_ips*]
 #   (optional) Enables network namespaces
 #   Defaults to undef
@@ -394,17 +390,11 @@ class neutron (
   $max_allowed_address_pair             = $::os_service_default,
   $vlan_transparent                     = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $amqp_allow_insecure_clients          = undef,
   $allow_overlapping_ips                = undef,
 ) {
 
   include neutron::deps
   include neutron::params
-
-  if $amqp_allow_insecure_clients != undef {
-    warning('The amqp_allow_insecure_clients parameter is deprecated and \
-will be removed in a future release.')
-  }
 
   if $allow_overlapping_ips != undef {
     warning('The allow_overlapping_ips parameter is deprecated and \

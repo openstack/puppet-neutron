@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    Defaut value of the ``neutron::server::placement::username`` has been
+    changed from ``nova`` to ``placement``.

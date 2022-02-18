@@ -42,7 +42,7 @@
 #
 # [*username*]
 #   (optional) Username when talking to placement.
-#   Defaults to 'nova'
+#   Defaults to 'placement'
 #
 # [*auth_url*]
 #   (optional) Keystone auth URL.
@@ -67,18 +67,13 @@ class neutron::server::placement (
   $project_name        = 'services',
   $system_scope        = $::os_service_default,
   $user_domain_name    = 'Default',
-  $username            = 'nova',
+  $username            = 'placement',
   $auth_url            = 'http://127.0.0.1:5000',
   $region_name         = $::os_service_default,
   $endpoint_type       = $::os_service_default,
 ) {
 
   include neutron::deps
-
-  # TODO(tobias-urdin): Update default value to placement in next release.
-  if $username == 'nova' {
-    warning('The default value of username will change to placement in the next release')
-  }
 
   if is_service_default($system_scope) {
     $project_name_real = $project_name

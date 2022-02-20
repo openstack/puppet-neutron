@@ -134,7 +134,7 @@ class neutron::wsgi::apache (
   ::openstacklib::wsgi::apache { 'neutron_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
-    group                       => 'neutron',
+    group                       => $::neutron::params::group,
     path                        => $path,
     priority                    => $priority,
     servername                  => $servername,
@@ -147,7 +147,7 @@ class neutron::wsgi::apache (
     ssl_crl_path                => $ssl_crl_path,
     ssl_key                     => $ssl_key,
     threads                     => $threads,
-    user                        => 'neutron',
+    user                        => $::neutron::params::user,
     workers                     => $workers,
     wsgi_daemon_process         => 'neutron',
     wsgi_process_display_name   => $wsgi_process_display_name,

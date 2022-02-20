@@ -98,7 +98,7 @@ class neutron::plugins::nsx (
   file { $::neutron::params::nsx_config_file:
     ensure  => file,
     owner   => 'root',
-    group   => 'neutron',
+    group   => $::neutron::params::group,
     require => File['/etc/neutron/plugins/vmware'],
     mode    => '0640',
     tag     => 'neutron-config-file',

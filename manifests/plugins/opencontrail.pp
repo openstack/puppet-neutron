@@ -80,7 +80,7 @@ class neutron::plugins::opencontrail (
   ensure_resource('file', '/etc/neutron/plugins/opencontrail', {
     ensure => directory,
     owner  => 'root',
-    group  => 'neutron',
+    group  => $::neutron::params::group,
     mode   => '0640'}
   )
 

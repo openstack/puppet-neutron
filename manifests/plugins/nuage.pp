@@ -81,7 +81,7 @@ class neutron::plugins::nuage (
   file { '/etc/neutron/plugins/nuage/plugin.ini':
     ensure  => file,
     owner   => 'root',
-    group   => 'neutron',
+    group   => $::neutron::params::group,
     require => File['/etc/neutron/plugins/nuage'],
     mode    => '0640',
     tag     => 'neutron-config-file',

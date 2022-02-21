@@ -1,0 +1,16 @@
+---
+deprecations:
+  - |
+    The following resource types have been using the credential written in
+    the ``[keystone_authtoken]`` section of ``neutron.conf``. However this
+    behavior has been deprecated and now these resource types first look for
+    the yaml files in ``/etc/openstack/puppet``. Make sure one of
+    ``clouds.yaml`` or ``admin-clouds.yaml`` (which is created by
+    puppet-keystone) is created in that directory.
+
+    - ``neutron_network``
+    - ``neutron_subnet``
+    - ``neutron_port``
+    - ``neutron_router``
+    - ``neutron_router_interface``
+    - ``neutron_security_group``

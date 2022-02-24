@@ -7,7 +7,7 @@
         },
         {
             "name": "openstack/keystone",
-            "version_requirement": ">=20.1.0 <21.0.0"
+            "version_requirement": ">=20.2.0 <21.0.0"
         },
         {
             "name": "puppetlabs/stdlib",
@@ -15,15 +15,15 @@
         },
         {
             "name": "openstack/vswitch",
-            "version_requirement": ">=16.1.0 <17.0.0"
+            "version_requirement": ">=16.2.0 <17.0.0"
         },
         {
             "name": "openstack/openstacklib",
-            "version_requirement": ">=20.1.0 <21.0.0"
+            "version_requirement": ">=20.2.0 <21.0.0"
         },
         {
             "name": "openstack/oslo",
-            "version_requirement": ">=20.1.0 <21.0.0"
+            "version_requirement": ">=20.2.0 <21.0.0"
         }
     ],
     "description": "Installs and configures OpenStack Neutron (Networking).",
@@ -67,5 +67,5 @@
     ],
     "source": "https://opendev.org/openstack/puppet-neutron.git",
     "summary": "Puppet module for OpenStack Neutron",
-    "version": "20.1.0"
+    "version": "20.2.0"
 }

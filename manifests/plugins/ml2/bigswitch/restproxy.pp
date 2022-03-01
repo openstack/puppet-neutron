@@ -1,4 +1,4 @@
-#
+# DEPRECATED !!
 # Set config file parameters for connecting Neutron server to Big
 # Switch controllers.
 #

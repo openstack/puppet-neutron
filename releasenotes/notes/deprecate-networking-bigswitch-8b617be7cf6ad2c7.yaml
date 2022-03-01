@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    Support for networking-bigswitch has been deprecated because the plugin is
+    unmaintained.

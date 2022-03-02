@@ -1,4 +1,4 @@
-#
+# DEPRECATED !!
 # Install the Big Switch ML2 plugin.
 #
 # === Parameters
@@ -12,6 +12,8 @@
 class neutron::plugins::ml2::bigswitch (
   $package_ensure = 'present',
 ) {
+
+  warning('Support for networking-bigswitch has been deprecated.')
 
   include neutron::deps
   include neutron::params

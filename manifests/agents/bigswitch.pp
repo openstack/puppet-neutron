@@ -1,5 +1,5 @@
 # == Class: neutron::agents::bigswitch
-#
+# DEPRECATED !!
 # Installs and configures the Big Switch agent and lldp
 #
 # === Parameters
@@ -25,6 +25,8 @@ class neutron::agents::bigswitch (
 
   include neutron::deps
   include neutron::params
+
+  warning('Support for networking-bigswitch has been deprecated.')
 
   if($::osfamily != 'Redhat') {
     fail("Unsupported osfamily ${::osfamily}")

@@ -65,6 +65,28 @@
 #   (floating point value)
 #   Defaults to $::os_service_default
 #
+# [*enable_socket_keepalive*]
+#   (Optional) Global toggle for the socket keepalive of dogpile's
+#   pymemcache backend
+#   Defaults to $::os_service_default
+#
+# [*socket_keepalive_idle*]
+#   (Optional) The time (in seconds) the connection needs to remain idle
+#   before TCP starts sending keepalive probes. Should be a positive integer
+#   most greater than zero.
+#   Defaults to $::os_service_default
+#
+# [*socket_keepalive_interval*]
+#   (Optional) The time (in seconds) between individual keepalive probes.
+#   Should be a positive integer most greater than zero.
+#   Defaults to $::os_service_default
+#
+# [*socket_keepalive_count*]
+#   (Optional) The maximum number of keepalive probes TCP should send before
+#   dropping the connection. Should be a positive integer most greater than
+#   zero.
+#   Defaults to $::os_service_default
+#
 # [*memcache_pool_maxsize*]
 #   (Optional) Max total number of open connections to every memcached server.
 #   (oslo_cache.memcache_pool backend only). (integer value)
@@ -163,6 +185,10 @@ class neutron::cache (
   $memcache_pool_maxsize                = $::os_service_default,
   $memcache_pool_unused_timeout         = $::os_service_default,
   $memcache_pool_connection_get_timeout = $::os_service_default,
+  $enable_socket_keepalive              = $::os_service_default,
+  $socket_keepalive_idle                = $::os_service_default,
+  $socket_keepalive_interval            = $::os_service_default,
+  $socket_keepalive_count               = $::os_service_default,
   $manage_backend_package               = true,
   $tls_enabled                          = $::os_service_default,
   $tls_cafile                           = $::os_service_default,
@@ -190,6 +216,10 @@ class neutron::cache (
     memcache_servers                     => $memcache_servers,
     memcache_dead_retry                  => $memcache_dead_retry,
     memcache_socket_timeout              => $memcache_socket_timeout,
+    enable_socket_keepalive              => $enable_socket_keepalive,
+    socket_keepalive_idle                => $socket_keepalive_idle,
+    socket_keepalive_interval            => $socket_keepalive_interval,
+    socket_keepalive_count               => $socket_keepalive_count,
     memcache_pool_maxsize                => $memcache_pool_maxsize,
     memcache_pool_unused_timeout         => $memcache_pool_unused_timeout,
     memcache_pool_connection_get_timeout => $memcache_pool_connection_get_timeout,

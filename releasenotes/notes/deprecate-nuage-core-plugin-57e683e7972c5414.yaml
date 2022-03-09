@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    Support for Nuage core plugin has been deprecated and will be removed in
+    a future release.

@@ -22,6 +22,7 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
   end
 
   def self.neutron_request(service, action, error, properties=nil)
+    warning('Usage of keystone_authtoken parameters is deprecated.')
     properties ||= []
     @credentials.username = neutron_credentials['username']
     @credentials.password = neutron_credentials['password']

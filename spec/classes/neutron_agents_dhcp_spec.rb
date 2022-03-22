@@ -14,7 +14,6 @@ describe 'neutron::agents::dhcp' do
       :package_ensure           => 'present',
       :enabled                  => true,
       :state_path               => '/var/lib/neutron',
-      :resync_interval          => 30,
       :interface_driver         => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :root_helper              => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
       :enable_isolated_metadata => false,
@@ -33,7 +32,7 @@ describe 'neutron::agents::dhcp' do
     it 'configures dhcp_agent.ini' do
       should contain_neutron_dhcp_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/state_path').with_value(p[:state_path]);
-      should contain_neutron_dhcp_agent_config('DEFAULT/resync_interval').with_value(p[:resync_interval]);
+      should contain_neutron_dhcp_agent_config('DEFAULT/resync_interval').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
       should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_driver').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/root_helper').with_value(p[:root_helper]);
@@ -93,6 +92,15 @@ describe 'neutron::agents::dhcp' do
       end
       it 'should not manage the service' do
         should_not contain_service('neutron-dhcp-service')
+      end
+    end
+
+    context 'when resync_interval is set' do
+      before :each do
+        params.merge!(:resync_interval => 5)
+      end
+      it 'should configure the resync_interval parameter' do
+        should contain_neutron_dhcp_agent_config('DEFAULT/resync_interval').with_value(params[:resync_interval]);
       end
     end
 

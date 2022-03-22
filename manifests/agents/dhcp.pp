@@ -24,7 +24,8 @@
 # [*resync_interval*]
 #   (optional) The DHCP agent will resync its state with Neutron to recover
 #   from any transient notification or rpc errors. The interval is number of
-#   seconds between attempts. Defaults to 30.
+#   seconds between attempts.
+#   Defaults to $::os_service_default.
 #
 # [*interface_driver*]
 #   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
@@ -128,7 +129,7 @@ class neutron::agents::dhcp (
   $manage_service            = true,
   $debug                     = $::os_service_default,
   $state_path                = '/var/lib/neutron',
-  $resync_interval           = 30,
+  $resync_interval           = $::os_service_default,
   $interface_driver          = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $dhcp_driver               = $::os_service_default,
   $root_helper               = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',

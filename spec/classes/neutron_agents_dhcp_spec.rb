@@ -23,7 +23,7 @@ describe 'neutron::agents::dhcp' do
     }
   end
 
-  shared_examples 'neutron dhcp agent' do
+  shared_examples 'neutron::agents::dhcp' do
     let :p do
       default_params.merge(params)
     end
@@ -51,7 +51,7 @@ describe 'neutron::agents::dhcp' do
       should contain_neutron_dhcp_agent_config('OVS/ssl_ca_cert_file').with_value('<SERVICE DEFAULT>');
     end
 
-    it 'installs neutron dhcp agent package' do
+    it 'installs neutron-dhcp-agent package' do
       if platform_params.has_key?(:dhcp_agent_package)
         should contain_package('neutron-dhcp-agent').with(
           :name   => platform_params[:dhcp_agent_package],
@@ -68,7 +68,7 @@ describe 'neutron::agents::dhcp' do
       end
     end
 
-    it 'configures neutron dhcp agent service' do
+    it 'configures neutron-dhcp-agent service' do
       should contain_service('neutron-dhcp-service').with(
         :name    => platform_params[:dhcp_agent_service],
         :enable  => true,
@@ -187,38 +187,38 @@ describe 'neutron::agents::dhcp' do
         should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_enable_addr6_list').with_value('true');
       end
     end
-  end
 
-  shared_examples 'neutron dhcp agent with dnsmasq_config_file specified' do
-    before do
-      params.merge!(
-        :dnsmasq_config_file => '/foo'
-      )
+    context 'with dnsmasq_config_file specified' do
+      before do
+        params.merge!(
+          :dnsmasq_config_file => '/foo'
+        )
+      end
+      it 'configures dnsmasq_config_file' do
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value(params[:dnsmasq_config_file])
+      end
     end
-    it 'configures dnsmasq_config_file' do
-      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value(params[:dnsmasq_config_file])
-    end
-  end
 
-  shared_examples 'enable advertisement of the DNS resolver on the host.' do
-    before do
-      params.merge!(
-        :dnsmasq_local_resolv => true
-      )
+    context 'enable advertisement of the DNS resolver on the host.' do
+      before do
+        params.merge!(
+          :dnsmasq_local_resolv => true
+        )
+      end
+      it 'configures dnsmasq_local_resolv' do
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value(params[:dnsmasq_local_resolv])
+      end
     end
-    it 'configures dnsmasq_local_resolv' do
-      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value(params[:dnsmasq_config_file])
-    end
-  end
 
-  shared_examples 'neutron dhcp agent with dnsmasq_dns_servers set' do
-    before do
-      params.merge!(
-        :dnsmasq_dns_servers => ['1.2.3.4','5.6.7.8']
-      )
-    end
-    it 'should set dnsmasq_dns_servers' do
-      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_servers').with_value(params[:dnsmasq_dns_servers].join(','))
+    context 'with dnsmasq_dns_servers set' do
+      before do
+        params.merge!(
+          :dnsmasq_dns_servers => ['1.2.3.4','5.6.7.8']
+        )
+      end
+      it 'should set dnsmasq_dns_servers' do
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_servers').with_value(params[:dnsmasq_dns_servers].join(','))
+      end
     end
   end
 
@@ -250,9 +250,7 @@ describe 'neutron::agents::dhcp' do
         end
       end
 
-      it_behaves_like 'neutron dhcp agent'
-      it_behaves_like 'neutron dhcp agent with dnsmasq_config_file specified'
-      it_behaves_like 'neutron dhcp agent with dnsmasq_dns_servers set'
+      it_behaves_like 'neutron::agents::dhcp'
 
       if facts[:osfamily] == 'Debian'
         it_behaves_like 'neutron::agents::dhcp on Debian'

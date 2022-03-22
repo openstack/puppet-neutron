@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``neutron::agent::dhcp``
+    class.
+
+    - ``dnsmasq_base_log_dir``
+    - ``dnsmasq_lease_max``

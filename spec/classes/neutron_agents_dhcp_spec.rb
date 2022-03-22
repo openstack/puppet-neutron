@@ -181,45 +181,31 @@ describe 'neutron::agents::dhcp' do
       end
     end
 
-    context 'when enabling dhcp-host entry with list of addresses' do
+    context 'with dnsmasq parameters' do
       before :each do
-        params.merge!(:dnsmasq_enable_addr6_list => true)
+        params.merge!({
+          :dnsmasq_config_file       => '/foo',
+          :dnsmasq_dns_servers       => ['192.0.2.11', '192.0.2.12'],
+          :dnsmasq_base_log_dir      => '/var/log/neutron',
+          :dnsmasq_local_resolv      => true,
+          :dnsmasq_lease_max         => 16777216,
+          :dnsmasq_enable_addr6_list => false,
+        })
       end
-      it 'should enabling dhcp-host entry with list of addresses' do
-        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_enable_addr6_list').with_value('true');
-      end
-    end
 
-    context 'with dnsmasq_config_file specified' do
-      before do
-        params.merge!(
-          :dnsmasq_config_file => '/foo'
-        )
-      end
-      it 'configures dnsmasq_config_file' do
-        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value(params[:dnsmasq_config_file])
-      end
-    end
-
-    context 'enable advertisement of the DNS resolver on the host.' do
-      before do
-        params.merge!(
-          :dnsmasq_local_resolv => true
-        )
-      end
-      it 'configures dnsmasq_local_resolv' do
-        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value(params[:dnsmasq_local_resolv])
-      end
-    end
-
-    context 'with dnsmasq_dns_servers set' do
-      before do
-        params.merge!(
-          :dnsmasq_dns_servers => ['1.2.3.4','5.6.7.8']
-        )
-      end
-      it 'should set dnsmasq_dns_servers' do
-        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_servers').with_value(params[:dnsmasq_dns_servers].join(','))
+      it 'should configure the dnsmasq parameters' do
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file')\
+          .with_value(params[:dnsmasq_config_file])
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_servers')\
+          .with_value(params[:dnsmasq_dns_servers].join(','))
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_base_log_dir')\
+          .with_value(params[:dnsmasq_base_log_dir])
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv')\
+          .with_value(params[:dnsmasq_local_resolv])
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_lease_max')\
+          .with_value(params[:dnsmasq_lease_max])
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_enable_addr6_list')\
+          .with_value(params[:dnsmasq_enable_addr6_list]);
       end
     end
   end

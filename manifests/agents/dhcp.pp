@@ -45,9 +45,17 @@
 #   (optional) List of servers to use as dnsmasq forwarders.
 #   Defaults to $::os_service_default.
 #
+# [*dnsmasq_base_log_dir*]
+#   (optional) base log dir for dnsmasq logging.
+#   Defaults to $::os_service_default.
+#
 # [*dnsmasq_local_resolv*]
 #   (optional) Enables the dnsmasq service to provide name resolution for instances
 #   via DNS resolvers on the host running the DHCP agent.
+#   Defaults to $::os_service_default.
+#
+# [*dnsmasq_lease_max*]
+#   (optional) Limit number of leases to prevent a denial-of-service.
 #   Defaults to $::os_service_default.
 #
 # [*dnsmasq_enable_addr6_list*]
@@ -126,7 +134,9 @@ class neutron::agents::dhcp (
   $root_helper               = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $dnsmasq_config_file       = $::os_service_default,
   $dnsmasq_dns_servers       = $::os_service_default,
+  $dnsmasq_base_log_dir      = $::os_service_default,
   $dnsmasq_local_resolv      = $::os_service_default,
+  $dnsmasq_lease_max         = $::os_service_default,
   $dnsmasq_enable_addr6_list = $::os_service_default,
   $enable_isolated_metadata  = false,
   $enable_force_metadata     = $::os_service_default,
@@ -173,7 +183,9 @@ class neutron::agents::dhcp (
     'DEFAULT/dhcp_broadcast_reply':      value => $dhcp_broadcast_reply;
     'DEFAULT/dnsmasq_config_file':       value => $dnsmasq_config_file;
     'DEFAULT/dnsmasq_dns_servers':       value => join(any2array($dnsmasq_dns_servers), ',');
+    'DEFAULT/dnsmasq_base_log_dir':      value => $dnsmasq_base_log_dir;
     'DEFAULT/dnsmasq_local_resolv':      value => $dnsmasq_local_resolv;
+    'DEFAULT/dnsmasq_lease_max':         value => $dnsmasq_lease_max;
     'DEFAULT/dnsmasq_enable_addr6_list': value => $dnsmasq_enable_addr6_list;
     'agent/availability_zone':           value => $availability_zone;
     'agent/report_interval':             value => $report_interval;

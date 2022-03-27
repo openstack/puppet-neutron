@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``neutron::quota`` class have been removed.
+
+    - ``quota_packet_filter``
+    - ``quota_vip``
+    - ``quota_network_gateway``

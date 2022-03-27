@@ -1,0 +1,10 @@
+---
+upgrade:
+  - |
+    The following deprecated parameters of
+    the ``neutron::agents::ml2::networking_baremetal`` class have been removed.
+
+    - ``auth_strategy``
+    - ``ironic_url``
+    - ``retry_interval``
+    - ``max_retries``

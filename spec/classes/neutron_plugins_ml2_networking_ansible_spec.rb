@@ -3,22 +3,22 @@ require 'spec_helper'
 describe 'neutron::plugins::ml2::networking_ansible' do
   let :default_params do
     {
-      :package_ensure   => 'present',
+      :package_ensure => 'present',
     }
   end
 
   let :params do
     { :host_configs     => {
         'host1' => { 'ansible_network_os' => 'junos',
-                     'ansible_host' => '10.0.0.1',
-                     'ansible_user' => 'ansible',
-                     'ansible_ssh_pass' => 'password1' },
-        'host2' => { 'ansible_network_os' => 'junos',
-                     'ansible_host' => '10.0.0.1',
-                     'ansible_user' => 'ansible',
+                     'ansible_host'       => '192.0.2.1',
+                     'ansible_user'       => 'ansible',
+                     'ansible_ssh_pass'   => 'password1' },
+        'host2' => { 'ansible_network_os'           => 'junos',
+                     'ansible_host'                 => '192.0.2.1',
+                     'ansible_user'                 => 'ansible',
                      'ansible_ssh_private_key_file' => '/path/to/key',
-                     'mac' => '01:23:45:67:89:AB',
-                     'manage_vlans' => false},},
+                     'mac'                          => '01:23:45:67:89:AB',
+                     'manage_vlans'                 => false},},
       :coordination_uri => 'etcd://127.0.0.1:2379'
     }
   end
@@ -54,15 +54,15 @@ describe 'neutron::plugins::ml2::networking_ansible' do
        should contain_neutron__plugins__ml2__networking_ansible_host(host_config.first)
 
        should contain_neutron_plugin_ml2('ansible:host1/ansible_ssh_pass').with_value('password1')
-       should contain_neutron_plugin_ml2('ansible:host1/ansible_ssh_private_key_file').with_value(nil)
+       should contain_neutron_plugin_ml2('ansible:host1/ansible_ssh_private_key_file').with_value('<SERVICE DEFAULT>')
 
        should contain_neutron_plugin_ml2('ansible:host2/ansible_ssh_private_key_file').with_value('/path/to/key')
-       should contain_neutron_plugin_ml2('ansible:host2/ansible_ssh_pass').with_value(nil)
+       should contain_neutron_plugin_ml2('ansible:host2/ansible_ssh_pass').with_value('<SERVICE DEFAULT>')
 
-       should contain_neutron_plugin_ml2('ansible:host1/mac').with_value(nil)
+       should contain_neutron_plugin_ml2('ansible:host1/mac').with_value('<SERVICE DEFAULT>')
        should contain_neutron_plugin_ml2('ansible:host2/mac').with_value('01:23:45:67:89:AB')
 
-       should contain_neutron_plugin_ml2('ansible:host1/manage_vlans').with_value(nil)
+       should contain_neutron_plugin_ml2('ansible:host1/manage_vlans').with_value('<SERVICE DEFAULT>')
        should contain_neutron_plugin_ml2('ansible:host2/manage_vlans').with_value(false)
      end
     }

@@ -5,47 +5,53 @@
 # === Parameters
 #
 # [*ansible_network_os*]
-#   (required) Operating system of the network device
+#   (Required) Operating system of the network device
 #
 # [*ansible_host*]
-#   (required) IP Address of the network device
+#   (Required) IP Address of the network device
 #
 # [*ansible_user*]
-#   (required) Username to connect to the network device
+#   (Required) Username to connect to the network device
 #
 # [*ansible_ssh_pass*]
-#   SSH password to connect to the network device
+#   (Optional) SSH password to connect to the network device
 #   This or ansible_ssh_private_key_file should be provided
+#   Defaults to $::os_service_default
 #
 # [*ansible_ssh_private_key_file*]
-#   SSH private key to connect to the network device
+#   (Optional) SSH private key to connect to the network device
 #   This or ansible_ssh_pass should be provided
+#   Defaults to $::os_service_default
 #
 # [*hostname*]
-#   (required) The hostname of a host connected to the switch.
+#   (Optional) The hostname of a host connected to the switch.
+#   Defaults to $title
 #
 # [*mac*]
-#   Chassis MAC ID of the network device. Used to map lldp provided value
-#   to the hostname when using ironic introspection.
+#   (Optional) Chassis MAC ID of the network device. Used to map lldp provided
+#   value to the hostname when using ironic introspection.
+#   Defaults to $::os_service_default
 #
 # [*manage_vlans*]
 #   Should networking-ansible create and delete VLANs on the device.
+#   Defaults to $::os_service_default
 #
 define neutron::plugins::ml2::networking_ansible_host(
   $ansible_network_os,
   $ansible_host,
   $ansible_user,
-  $ansible_ssh_pass             = undef,
-  $ansible_ssh_private_key_file = undef,
-  $mac                          = undef,
+  $ansible_ssh_pass             = $::os_service_default,
+  $ansible_ssh_private_key_file = $::os_service_default,
+  $mac                          = $::os_service_default,
   $hostname                     = $title,
-  $manage_vlans                 = undef,
-  ) {
+  $manage_vlans                 = $::os_service_default,
+) {
+
   include neutron::deps
   require neutron::plugins::ml2
 
-  if (($ansible_ssh_pass == undef and $ansible_ssh_private_key_file == undef) or
-      ($ansible_ssh_pass != undef and $ansible_ssh_private_key_file != undef)) {
+  if ((is_service_default($ansible_ssh_pass) and is_service_default($ansible_ssh_private_key_file)) or
+      (!is_service_default($ansible_ssh_pass) and !is_service_default($ansible_ssh_private_key_file))) {
     fail('One of ansible_ssh_pass OR ansible_ssh_private_key_file should be set')
   }
 

@@ -147,11 +147,6 @@ class neutron::agents::ml2::networking_baremetal (
   include neutron::deps
   include neutron::params
 
-  if($::osfamily != 'RedHat') {
-    # Drivers are only packaged for RedHat at this time
-    fail("Unsupported osfamily ${::osfamily}")
-  }
-
   resources { 'ironic_neutron_agent_config':
     purge => $purge_config,
   }

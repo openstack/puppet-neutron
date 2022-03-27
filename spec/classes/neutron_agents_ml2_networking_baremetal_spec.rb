@@ -22,7 +22,7 @@ describe 'neutron::agents::ml2::networking_baremetal' do
     }
   end
 
-  shared_examples 'networking-baremetal ironic-neutron-agent with ml2 plugin' do
+  shared_examples 'neutron::agents::ml2::networking_baremetal' do
     let :p do
       default_params.merge(params)
     end
@@ -124,21 +124,19 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
       end
+
       let (:platform_params) do
         case facts[:osfamily]
+        when 'Debian'
+          { :networking_baremetal_agent_package => 'ironic-neutron-agent',
+            :networking_baremetal_agent_service => 'ironic-neutron-agent' }
         when 'RedHat'
           { :networking_baremetal_agent_package => 'python3-ironic-neutron-agent',
             :networking_baremetal_agent_service => 'ironic-neutron-agent' }
         end
       end
-      case facts[:osfamily]
-      when 'RedHat'
-        it_behaves_like 'networking-baremetal ironic-neutron-agent with ml2 plugin'
-      when facts[:osfamily] != 'RedHat'
-        it 'fails with unsupported osfamily' do
-          should raise_error(Puppet::Error, /Unsupported osfamily.*/)
-        end
-      end
+
+      it_behaves_like 'neutron::agents::ml2::networking_baremetal'
     end
   end
 end

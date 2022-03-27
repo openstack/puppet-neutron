@@ -17,14 +17,9 @@ class neutron::plugins::ml2::networking_baremetal(
   include neutron::deps
   include neutron::params
 
-  if($::osfamily != 'RedHat') {
-    # Drivers are only packaged for RedHat at this time
-    fail("Unsupported osfamily ${::osfamily}")
-  } else {
-    package { 'python-networking-baremetal':
-      ensure => $package_ensure,
-      name   => $::neutron::params::networking_baremetal_package,
-      tag    => ['openstack', 'neutron-plugin-ml2-package'],
-    }
+  package { 'python-networking-baremetal':
+    ensure => $package_ensure,
+    name   => $::neutron::params::networking_baremetal_package,
+    tag    => ['openstack', 'neutron-plugin-ml2-package'],
   }
 }

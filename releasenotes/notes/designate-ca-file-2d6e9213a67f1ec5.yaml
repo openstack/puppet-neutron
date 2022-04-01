@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The ``neutron::designate`` class has now the new parameters, ``cafile`` and
+    ``certfile``, to allow using a self-signed certificate for the Designate
+    API.

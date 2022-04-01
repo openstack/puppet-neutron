@@ -19,10 +19,13 @@ describe 'neutron::designate' do
         should contain_neutron_config('designate/auth_type').with_value('password')
         should contain_neutron_config('designate/username').with_value('neutron')
         should contain_neutron_config('designate/user_domain_name').with_value('Default')
+        should contain_neutron_config('designate/project_id').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/project_name').with_value('services')
         should contain_neutron_config('designate/project_domain_name').with_value('Default')
         should contain_neutron_config('designate/system_scope').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/auth_url').with_value('http://127.0.0.1:5000')
+        should contain_neutron_config('designate/cafile').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('designate/certfile').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/allow_reverse_dns_lookup').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/ipv4_ptr_zone_prefix_size').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/ipv6_ptr_zone_prefix_size').with_value('<SERVICE DEFAULT>')
@@ -33,13 +36,15 @@ describe 'neutron::designate' do
     context 'with provided parameters' do
       let :params do
         req_params.merge!({
-          :auth_type                 => 'token',
-          :username                  => 'user',
+          :auth_type                 => 'v3password',
+          :username                  => 'alt_neutron',
           :user_domain_name          => 'Domain2',
-          :project_id                => 'id1',
-          :project_name              => 'proj',
+          :project_id                => '53eceb0b-9913-4c0c-883d-3f43d90dcf9c',
+          :project_name              => 'alt_service',
           :project_domain_name       => 'Domain1',
-          :auth_url                  => 'http://auth/',
+          :auth_url                  => 'http://localhost:5000',
+          :cafile                    => '/path/to/cafile',
+          :certfile                  => '/path/to/certfile',
           :allow_reverse_dns_lookup  => false,
           :ipv4_ptr_zone_prefix_size => 765,
           :ipv6_ptr_zone_prefix_size => 876,
@@ -51,14 +56,16 @@ describe 'neutron::designate' do
         should contain_neutron_config('DEFAULT/external_dns_driver').with_value('designate')
         should contain_neutron_config('designate/url').with_value('http://ip/designate')
         should contain_neutron_config('designate/password').with_value('secret').with_secret(true)
-        should contain_neutron_config('designate/auth_type').with_value('token')
-        should contain_neutron_config('designate/username').with_value('user')
+        should contain_neutron_config('designate/auth_type').with_value('v3password')
+        should contain_neutron_config('designate/username').with_value('alt_neutron')
         should contain_neutron_config('designate/user_domain_name').with_value('Domain2')
-        should contain_neutron_config('designate/project_id').with_value('id1')
-        should contain_neutron_config('designate/project_name').with_value('proj')
+        should contain_neutron_config('designate/project_id').with_value('53eceb0b-9913-4c0c-883d-3f43d90dcf9c')
+        should contain_neutron_config('designate/project_name').with_value('alt_service')
         should contain_neutron_config('designate/project_domain_name').with_value('Domain1')
         should contain_neutron_config('designate/system_scope').with_value('<SERVICE DEFAULT>')
-        should contain_neutron_config('designate/auth_url').with_value('http://auth/')
+        should contain_neutron_config('designate/auth_url').with_value('http://localhost:5000')
+        should contain_neutron_config('designate/cafile').with_value('/path/to/cafile')
+        should contain_neutron_config('designate/certfile').with_value('/path/to/certfile')
         should contain_neutron_config('designate/allow_reverse_dns_lookup').with_value(false)
         should contain_neutron_config('designate/ipv4_ptr_zone_prefix_size').with_value(765)
         should contain_neutron_config('designate/ipv6_ptr_zone_prefix_size').with_value(876)

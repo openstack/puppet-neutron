@@ -549,11 +549,14 @@ class neutron::agents::ml2::ovs (
     }
 
     if ($::osfamily == 'Redhat') {
+      # NOTE(tkajinam): The service should not be started in a running system.
+      #                 DO NOT define ensure so the service status is not
+      #                 changed.
       service { 'neutron-destroy-patch-ports-service':
-        ensure => $service_ensure,
-        name   => $::neutron::params::destroy_patch_ports_service,
-        enable => $enabled,
-        tag    => ['neutron-service'],
+        name    => $::neutron::params::destroy_patch_ports_service,
+        enable  => $enabled,
+        require => Anchor['neutron::service::begin'],
+        before  => Anchor['neutron::service::end']
       }
     }
 

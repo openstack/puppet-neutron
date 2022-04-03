@@ -412,10 +412,11 @@ describe 'neutron::agents::ml2::ovs' do
 
     it 'configures neutron destroy patch ports service' do
       should contain_service('neutron-destroy-patch-ports-service').with(
-        :name   => platform_params[:destroy_patch_ports_service],
-        :enable => true,
-        :ensure => 'running',
-        :tag    => ['neutron-service'],
+        :name    => platform_params[:destroy_patch_ports_service],
+        :enable  => true,
+        :ensure  => nil,
+        :require => 'Anchor[neutron::service::begin]',
+        :before  => 'Anchor[neutron::service::end]',
       )
     end
 

@@ -404,10 +404,11 @@ describe 'neutron::agents::ml2::ovs' do
     it 'configures neutron ovs cleanup service' do
       should contain_service('ovs-cleanup-service').with(
         :name    => platform_params[:ovs_cleanup_service],
-        :enable  => true
-      ).that_requires('Anchor[neutron::install::end]')
-      should contain_package('neutron-ovs-agent').that_requires('Anchor[neutron::install::begin]')
-      should contain_package('neutron-ovs-agent').that_notifies('Anchor[neutron::install::end]')
+        :enable  => true,
+        :ensure  => nil,
+        :require => 'Anchor[neutron::service::begin]',
+        :before  => 'Anchor[neutron::service::end]',
+      )
     end
 
     it 'configures neutron destroy patch ports service' do

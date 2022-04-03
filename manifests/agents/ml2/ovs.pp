@@ -558,12 +558,13 @@ class neutron::agents::ml2::ovs (
     }
 
     if $::neutron::params::ovs_cleanup_service {
+      # NOTE(tkajinam): This service should not be restarted, because it can
+      #                 cause disruption of network connectivity.
       service { 'ovs-cleanup-service':
         name    => $::neutron::params::ovs_cleanup_service,
         enable  => $enabled,
-        # TODO: Remove this require once ovs-cleanup service
-        # script is packaged in neutron-openvswitch package
-        require => Anchor['neutron::install::end'],
+        require => Anchor['neutron::service::begin'],
+        before  => Anchor['neutron::service::end']
       }
     }
   }

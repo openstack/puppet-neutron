@@ -491,11 +491,11 @@ class neutron::agents::ml2::ovs (
 
   if $enable_tunneling {
     neutron_agent_ovs {
-      'ovs/tunnel_bridge':         value => $tunnel_bridge;
-      'ovs/local_ip':              value => $local_ip;
-      'ovs/int_peer_patch_port':   value => $int_peer_patch_port;
-      'ovs/tun_peer_patch_port':   value => $tun_peer_patch_port;
-      'agent/tunnel_types':        value => join($tunnel_types, ',');
+      'ovs/tunnel_bridge':       value => $tunnel_bridge;
+      'ovs/local_ip':            value => $local_ip;
+      'ovs/int_peer_patch_port': value => $int_peer_patch_port;
+      'ovs/tun_peer_patch_port': value => $tun_peer_patch_port;
+      'agent/tunnel_types':      value => join($tunnel_types, ',');
     }
 
     if 'vxlan' in $tunnel_types {
@@ -503,14 +503,19 @@ class neutron::agents::ml2::ovs (
       neutron_agent_ovs {
         'agent/vxlan_udp_port': value => $vxlan_udp_port;
       }
+    } else {
+      neutron_agent_ovs {
+        'agent/vxlan_udp_port': ensure => absent;
+      }
     }
   } else {
     neutron_agent_ovs {
-      'ovs/tunnel_bridge':         ensure => absent;
-      'ovs/local_ip':              ensure => absent;
-      'ovs/int_peer_patch_port':   ensure => absent;
-      'ovs/tun_peer_patch_port':   ensure => absent;
-      'agent/tunnel_types':        ensure => absent;
+      'ovs/tunnel_bridge':       ensure => absent;
+      'ovs/local_ip':            ensure => absent;
+      'ovs/int_peer_patch_port': ensure => absent;
+      'ovs/tun_peer_patch_port': ensure => absent;
+      'agent/tunnel_types':      ensure => absent;
+      'agent/vxlan_udp_port':    ensure => absent;
     }
   }
 

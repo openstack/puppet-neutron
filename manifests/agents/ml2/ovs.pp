@@ -62,7 +62,7 @@
 #
 # [*integration_bridge*]
 #   (optional) Integration bridge in OVS
-#   Defaults to 'br-int'
+#   Defaults to $::os_service_default
 #
 # [*tunnel_types*]
 #   (optional) List of types of tunnels to use when utilizing tunnels,
@@ -76,11 +76,11 @@
 #
 # [*tunnel_bridge*]
 #   (optional) Bridge used to transport tunnels
-#   Defaults to 'br-tun'
+#   Defaults to $::os_service_default
 #
 # [*vxlan_udp_port*]
 #   (optional) The UDP port to use for VXLAN tunnels.
-#   Defaults to '4789'
+#   Defaults to $::os_service_default
 #
 # [*polling_interval*]
 #   (optional) The number of seconds the agent will wait between
@@ -119,7 +119,7 @@
 # [*drop_flows_on_start*]
 #   (optional) Set to True to drop all flows during agent start for a clean
 #   flow tables resetting
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*manage_vswitch*]
 #   (optional) This boolean is used to indicate if this class should manage the
@@ -262,11 +262,11 @@ class neutron::agents::ml2::ovs (
   $of_connect_timeout                   = $::os_service_default,
   $of_request_timeout                   = $::os_service_default,
   $of_inactivity_probe                  = $::os_service_default,
-  $integration_bridge                   = 'br-int',
+  $integration_bridge                   = $::os_service_default,
   $tunnel_types                         = [],
   $local_ip                             = false,
-  $tunnel_bridge                        = 'br-tun',
-  $vxlan_udp_port                       = 4789,
+  $tunnel_bridge                        = $::os_service_default,
+  $vxlan_udp_port                       = $::os_service_default,
   $polling_interval                     = $::os_service_default,
   $report_interval                      = $::os_service_default,
   $rpc_response_max_timeout             = $::os_service_default,
@@ -274,7 +274,7 @@ class neutron::agents::ml2::ovs (
   $arp_responder                        = $::os_service_default,
   $firewall_driver                      = 'iptables_hybrid',
   $enable_distributed_routing           = $::os_service_default,
-  $drop_flows_on_start                  = false,
+  $drop_flows_on_start                  = $::os_service_default,
   $manage_vswitch                       = true,
   $int_peer_patch_port                  = $::os_service_default,
   $tun_peer_patch_port                  = $::os_service_default,
@@ -499,7 +499,9 @@ class neutron::agents::ml2::ovs (
     }
 
     if 'vxlan' in $tunnel_types {
-      validate_vxlan_udp_port($vxlan_udp_port)
+      if ! is_service_default($vxlan_udp_port) {
+        validate_vxlan_udp_port($vxlan_udp_port)
+      }
       neutron_agent_ovs {
         'agent/vxlan_udp_port': value => $vxlan_udp_port;
       }

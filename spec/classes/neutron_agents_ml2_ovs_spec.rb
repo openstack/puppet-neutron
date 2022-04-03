@@ -6,19 +6,16 @@ describe 'neutron::agents::ml2::ovs' do
   end
 
   let :default_params do
-    { :package_ensure             => 'present',
-      :enabled                    => true,
-      :bridge_uplinks             => [],
-      :bridge_mappings            => [],
-      :integration_bridge         => 'br-int',
-      :local_ip                   => false,
-      :tunnel_types               => [],
-      :tunnel_bridge              => 'br-tun',
-      :drop_flows_on_start        => false,
-      :firewall_driver            => 'iptables_hybrid',
-      :manage_vswitch             => true,
-      :purge_config               => false,
-      :enable_dpdk                => false,
+    { :package_ensure  => 'present',
+      :enabled         => true,
+      :bridge_uplinks  => [],
+      :bridge_mappings => [],
+      :local_ip        => false,
+      :tunnel_types    => [],
+      :firewall_driver => 'iptables_hybrid',
+      :manage_vswitch  => true,
+      :purge_config    => false,
+      :enable_dpdk     => false,
       }
   end
 
@@ -45,7 +42,7 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/l2_population').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/arp_responder').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_agent_ovs('agent/drop_flows_on_start').with_value(p[:drop_flows_on_start])
+      should contain_neutron_agent_ovs('agent/drop_flows_on_start').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/extensions').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/minimize_polling').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/tunnel_csum').with_value('<SERVICE DEFAULT>')
@@ -55,7 +52,7 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('ovs/of_connect_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/of_request_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/of_inactivity_probe').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_agent_ovs('ovs/integration_bridge').with_value(p[:integration_bridge])
+      should contain_neutron_agent_ovs('ovs/integration_bridge').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('securitygroup/firewall_driver').\
         with_value(p[:firewall_driver])
       should contain_neutron_agent_ovs('securitygroup/enable_security_group').\
@@ -294,11 +291,11 @@ describe 'neutron::agents::ml2::ovs' do
           })
         end
         it 'should configure ovs for tunneling' do
-          should contain_neutron_agent_ovs('ovs/tunnel_bridge').with_value(default_params[:tunnel_bridge])
+          should contain_neutron_agent_ovs('ovs/tunnel_bridge').with_value('<SERVICE DEFAULT>')
           should contain_neutron_agent_ovs('ovs/local_ip').with_value('127.0.0.1')
           should contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_value('<SERVICE DEFAULT>')
           should contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_value('<SERVICE DEFAULT>')
-          should contain_neutron_agent_ovs('agent/vxlan_udp_port').with_value(4789)
+          should contain_neutron_agent_ovs('agent/vxlan_udp_port').with_value('<SERVICE DEFAULT>')
         end
       end
 

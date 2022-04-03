@@ -522,15 +522,10 @@ class neutron::agents::ml2::ovs (
       tag    => ['openstack', 'neutron-package'],
     }
   } else {
-    # Some platforms (RedHat) do not provide a separate
-    # neutron plugin ovs agent package. The configuration file for
-    # the ovs agent is provided by the neutron ovs plugin package.
-    if ! defined(Package['neutron-ovs-agent']) {
-      package { 'neutron-ovs-agent':
-        ensure => $package_ensure,
-        name   => $::neutron::params::ovs_server_package,
-        tag    => ['openstack', 'neutron-package'],
-      }
+    package { 'neutron-ovs-agent':
+      ensure => $package_ensure,
+      name   => $::neutron::params::ovs_server_package,
+      tag    => ['openstack', 'neutron-package'],
     }
   }
 

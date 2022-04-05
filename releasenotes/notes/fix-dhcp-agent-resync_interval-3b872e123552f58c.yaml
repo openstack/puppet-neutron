@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    Default value of ``neutron::agent::dhcp::resync_interval`` was changed
+    from ``30`` to ``$::os_service_default``, which results in the service
+    default value(``5``).

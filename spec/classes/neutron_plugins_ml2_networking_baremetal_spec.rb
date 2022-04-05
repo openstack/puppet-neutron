@@ -39,19 +39,13 @@ describe 'neutron::plugins::ml2::networking_baremetal' do
       let (:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          { :networking_baremetal_package => 'python3-networking-baremetal'}
+          { :networking_baremetal_package => 'python3-ironic-neutron-agent'}
         when 'RedHat'
           { :networking_baremetal_package => 'python3-networking-baremetal'}
         end
       end
-      case facts[:osfamily]
-      when 'RedHat'
-        it_behaves_like 'networking-baremetal ml2 plugin'
-      when facts[:osfamily] != 'RedHat'
-        it 'fails with unsupported osfamily' do
-          should raise_error(Puppet::Error, /Unsupported osfamily.*/)
-        end
-      end
+
+      it_behaves_like 'networking-baremetal ml2 plugin'
     end
   end
 end

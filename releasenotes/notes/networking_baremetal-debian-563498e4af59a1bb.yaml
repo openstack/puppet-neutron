@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Now this module supports configuration of networking-baremetal in Debian
+    and Ubuntu. Previously it was supported in RHEL/CentOS only.

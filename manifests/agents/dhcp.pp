@@ -70,7 +70,7 @@
 #
 # [*enable_force_metadata*]
 #   (optional) enable metadata support on all networks.
-#   Defaults to $::os_service_default
+#   Defaults to false.
 #
 # [*enable_metadata_network*]
 #   (optional) Allows for serving metadata requests coming from a dedicated metadata
@@ -140,7 +140,7 @@ class neutron::agents::dhcp (
   $dnsmasq_lease_max         = $::os_service_default,
   $dnsmasq_enable_addr6_list = $::os_service_default,
   $enable_isolated_metadata  = false,
-  $enable_force_metadata     = $::os_service_default,
+  $enable_force_metadata     = false,
   $enable_metadata_network   = false,
   $dhcp_broadcast_reply      = $::os_service_default,
   $purge_config              = false,
@@ -157,14 +157,18 @@ class neutron::agents::dhcp (
   include neutron::deps
   include neutron::params
 
+  validate_legacy('Boolean', 'validate_bool', $enable_isolated_metadata)
+  validate_legacy('Boolean', 'validate_bool', $enable_force_metadata)
+  validate_legacy('Boolean', 'validate_bool', $enable_metadata_network)
+
   if (! ($enable_isolated_metadata or $enable_force_metadata)) and $enable_metadata_network {
     fail('enable_metadata_network to true requires enable_isolated_metadata or enable_force_metadata also enabled.')
-  } else {
-    neutron_dhcp_agent_config {
-      'DEFAULT/enable_isolated_metadata': value => $enable_isolated_metadata;
-      'DEFAULT/force_metadata':           value => $enable_force_metadata;
-      'DEFAULT/enable_metadata_network':  value => $enable_metadata_network;
-    }
+  }
+
+  neutron_dhcp_agent_config {
+    'DEFAULT/enable_isolated_metadata': value => $enable_isolated_metadata;
+    'DEFAULT/force_metadata':           value => $enable_force_metadata;
+    'DEFAULT/enable_metadata_network':  value => $enable_metadata_network;
   }
 
   resources { 'neutron_dhcp_agent_config':

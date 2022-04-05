@@ -17,6 +17,7 @@ describe 'neutron::agents::dhcp' do
       :interface_driver         => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :root_helper              => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
       :enable_isolated_metadata => false,
+      :enable_force_metadata    => false,
       :enable_metadata_network  => false,
       :purge_config             => false
     }
@@ -37,7 +38,7 @@ describe 'neutron::agents::dhcp' do
       should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_driver').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/root_helper').with_value(p[:root_helper]);
       should contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(p[:enable_isolated_metadata]);
-      should contain_neutron_dhcp_agent_config('DEFAULT/force_metadata').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_dhcp_agent_config('DEFAULT/force_metadata').with_value(p[:enable_force_metadata]);
       should contain_neutron_dhcp_agent_config('DEFAULT/enable_metadata_network').with_value(p[:enable_metadata_network]);
       should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value('<SERVICE DEFAULT>');

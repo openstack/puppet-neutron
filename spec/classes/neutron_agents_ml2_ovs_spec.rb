@@ -66,6 +66,7 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_ensure('absent')
       should contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_ensure('absent')
       should contain_neutron_agent_ovs('agent/tunnel_types').with_ensure('absent')
+      should contain_neutron_agent_ovs('agent/vxlan_udp_port').with_ensure('absent')
       should contain_neutron_agent_ovs('ovs/bridge_mac_table_size').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/resource_provider_bandwidths').\
@@ -277,28 +278,37 @@ describe 'neutron::agents::ml2::ovs' do
     context 'when enabling tunneling' do
       context 'without local ip address' do
         before :each do
-          params.merge!(:tunnel_types => ['vxlan'])
+          params.merge!({
+            :tunnel_types => ['vxlan']
+          })
         end
 
         it { should raise_error(Puppet::Error, /Local ip for ovs agent must be set when tunneling is enabled/) }
       end
+
       context 'with default params' do
         before :each do
-          params.merge!(:tunnel_types => ['vxlan'], :local_ip => '127.0.0.1' )
+          params.merge!({
+            :tunnel_types => ['vxlan'],
+            :local_ip     => '127.0.0.1'
+          })
         end
         it 'should configure ovs for tunneling' do
           should contain_neutron_agent_ovs('ovs/tunnel_bridge').with_value(default_params[:tunnel_bridge])
           should contain_neutron_agent_ovs('ovs/local_ip').with_value('127.0.0.1')
           should contain_neutron_agent_ovs('ovs/int_peer_patch_port').with_value('<SERVICE DEFAULT>')
           should contain_neutron_agent_ovs('ovs/tun_peer_patch_port').with_value('<SERVICE DEFAULT>')
+          should contain_neutron_agent_ovs('agent/vxlan_udp_port').with_value(4789)
         end
       end
 
       context 'with vxlan tunneling' do
         before :each do
-          params.merge!(:local_ip => '127.0.0.1',
-                        :tunnel_types => ['vxlan'],
-                        :vxlan_udp_port => '4789')
+          params.merge!({
+            :tunnel_types   => ['vxlan'],
+            :local_ip       => '127.0.0.1',
+            :vxlan_udp_port => 49155
+          })
         end
 
         it 'should perform vxlan network configuration' do
@@ -309,10 +319,12 @@ describe 'neutron::agents::ml2::ovs' do
 
       context 'when l2 population is disabled and DVR and tunneling enabled' do
         before :each do
-          params.merge!(:enable_distributed_routing => true,
-                        :l2_population              => false,
-                        :tunnel_types               => ['vxlan'],
-                        :local_ip                   => '127.0.0.1' )
+          params.merge!({
+            :enable_distributed_routing => true,
+            :l2_population              => false,
+            :tunnel_types               => ['vxlan'],
+            :local_ip                   => '127.0.0.1'
+          })
         end
 
         it { should raise_error(Puppet::Error, /L2 population must be enabled when DVR and tunneling are enabled/) }
@@ -320,9 +332,11 @@ describe 'neutron::agents::ml2::ovs' do
 
       context 'when DVR is enabled and l2 population and tunneling are disabled' do
         before :each do
-          params.merge!(:enable_distributed_routing => true,
-                        :l2_population              => false,
-                        :tunnel_types               => [] )
+          params.merge!({
+            :enable_distributed_routing => true,
+            :l2_population              => false,
+            :tunnel_types               => []
+          })
         end
 
         it 'should enable DVR without L2 population' do

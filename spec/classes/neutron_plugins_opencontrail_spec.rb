@@ -1,36 +1,15 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::opencontrail' do
-  let :pre_condition do
-    "class { 'neutron::keystone::authtoken':
-      password => 'passw0rd',
-     }
-     class { 'neutron::server': }
-     class { 'neutron': }"
-  end
-
-  let :default_params do
-    {
-      :api_server_ip              => '10.0.0.1',
-      :api_server_port            => '8082',
-      :multi_tenancy              => 'true',
-      :contrail_extensions        => ['ipam:ipam','policy:policy','route-table'],
-      :keystone_auth_url          => 'http://keystone-server:5000/v3',
-      :keystone_admin_user        => 'admin',
-      :keystone_admin_tenant_name => 'admin',
-      :keystone_admin_password    => 'admin',
-      :keystone_admin_token       => 'token1',
-      :purge_config               => false,
-    }
-  end
-
-  shared_examples 'neutron opencontrail plugin' do
+  shared_examples 'neutron::opencontrail::plugin' do
     let :params do
-      {}
-    end
-
-    before do
-      params.merge!(default_params)
+      {
+        :api_server_ip       => '10.0.0.1',
+        :api_server_port     => '8082',
+        :multi_tenancy       => 'true',
+        :contrail_extensions => ['ipam:ipam','policy:policy','route-table'],
+        :purge_config        => false,
+      }
     end
 
     it 'passes purge to resource' do
@@ -44,11 +23,6 @@ describe 'neutron::plugins::opencontrail' do
       should contain_neutron_plugin_opencontrail('APISERVER/api_server_port').with_value(params[:api_server_port])
       should contain_neutron_plugin_opencontrail('APISERVER/multi_tenancy').with_value(params[:multi_tenancy])
       should contain_neutron_plugin_opencontrail('APISERVER/contrail_extensions').with_value(params[:contrail_extensions].join(','))
-      should contain_neutron_plugin_opencontrail('KEYSTONE/auth_url').with_value(params[:keystone_auth_url])
-      should contain_neutron_plugin_opencontrail('KEYSTONE/admin_user').with_value(params[:keystone_admin_user])
-      should contain_neutron_plugin_opencontrail('KEYSTONE/admin_tenant_name').with_value(params[:keystone_admin_tenant_name])
-      should contain_neutron_plugin_opencontrail('KEYSTONE/admin_password').with_value(params[:keystone_admin_password]).with_secret(true)
-      should contain_neutron_plugin_opencontrail('KEYSTONE/admin_token').with_value(params[:keystone_admin_token])
     end
   end
 
@@ -95,7 +69,7 @@ describe 'neutron::plugins::opencontrail' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_behaves_like 'neutron opencontrail plugin'
+      it_behaves_like 'neutron::opencontrail::plugin'
       it_behaves_like "neutron::plugins::opencontrail on #{facts[:osfamily]}"
     end
   end

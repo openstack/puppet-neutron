@@ -96,25 +96,6 @@
 #   ironic-neutron-agent.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*auth_strategy*]
-#   (optional) Method to use for authentication: noauth or keystone.
-#   Defaults to undef
-#
-# [*ironic_url*]
-#   (optional) Ironic API URL, used to set Ironic API URL when auth_strategy
-#   option is noauth to work with standalone Ironic without keystone.
-#   Defaults to undef
-#
-# [*retry_interval*]
-#   (optional) Interval between retries in case of conflict error (HTTP 409).
-#   Defaults to undef
-#
-# [*max_retries*]
-#   (optional) Maximum number of retries in case of conflict error (HTTP 409).
-#   Defaults to undef
-#
 class neutron::agents::ml2::networking_baremetal (
   $password,
   $enabled                 = true,
@@ -137,11 +118,6 @@ class neutron::agents::ml2::networking_baremetal (
   $status_code_retries     = $::os_service_default,
   $purge_config            = false,
   $report_interval         = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $auth_strategy           = undef,
-  $ironic_url              = undef,
-  $retry_interval          = undef,
-  $max_retries             = undef,
 ) {
 
   include neutron::deps
@@ -156,37 +132,6 @@ class neutron::agents::ml2::networking_baremetal (
     purge => $purge_config,
   }
 
-  if $auth_strategy != undef {
-    warning('neutron::agents::ml2::networking_baremetal::auth_strategy is now deprecated \
-and has no effect.')
-  }
-
-  if $ironic_url != undef {
-    warning('neutron::agents::ml2::networking_baremetal::ironic_url is now deprecated. \
-Use endpoint_override instead.')
-  }
-
-  if $retry_interval != undef {
-    warning('neutron::agents::ml2::networking_baremetal::retry_interval is now deprecated. \
-Use status_code_retry_delay instead.')
-  }
-
-  if $max_retries != undef {
-    warning('neutron::agents::ml2::networking_baremetal::max_retries is now deprecated. \
-Use status_code_retries instead.')
-  }
-
-  ironic_neutron_agent_config {
-    'ironic/auth_strategy':  ensure => absent;
-    'ironic/ironic_url':     ensure => absent;
-    'ironic/retry_interval': ensure => absent;
-    'ironic/max_retries':    ensure => absent;
-  }
-
-  $endpoint_override_real = pick($ironic_url, $endpoint_override)
-  $status_code_retry_delay_real = pick($retry_interval, $status_code_retry_delay)
-  $status_code_retries_real = pick($max_retries, $status_code_retries)
-
   if is_service_default($system_scope) {
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
@@ -196,7 +141,7 @@ Use status_code_retries instead.')
   }
 
   ironic_neutron_agent_config {
-    'ironic/endpoint_override':       value => $endpoint_override_real;
+    'ironic/endpoint_override':       value => $endpoint_override;
     'ironic/cafile':                  value => $cafile;
     'ironic/certfile':                value => $certfile;
     'ironic/keyfile':                 value => $keyfile;
@@ -210,8 +155,8 @@ Use status_code_retries instead.')
     'ironic/project_name':            value => $project_name_real;
     'ironic/system_scope':            value => $system_scope;
     'ironic/region_name':             value => $region_name;
-    'ironic/status_code_retry_delay': value => $status_code_retry_delay_real;
-    'ironic/status_code_retries':     value => $status_code_retries_real;
+    'ironic/status_code_retry_delay': value => $status_code_retry_delay;
+    'ironic/status_code_retries':     value => $status_code_retries;
     'agent/report_interval':          value => $report_interval;
   }
 

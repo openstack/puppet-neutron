@@ -10,10 +10,6 @@
 #   (Optional) Port of the API Server.
 #   Defaults to $::os_service_default
 #
-# [*multi_tenancy*]
-#   (Optional) Whether to enable multi-tenancy
-#   Default to $::os_service_default
-#
 # [*contrail_extensions*]
 #   (Optional) Array of OpenContrail extensions to be supported
 #   Defaults to $::os_service_default
@@ -62,10 +58,13 @@
 #   Admin token
 #   Defaults to undef
 #
+# [*multi_tenancy*]
+#   (Optional) Whether to enable multi-tenancy
+#   Default to undef
+#
 class neutron::plugins::opencontrail (
   $api_server_ip              = $::os_service_default,
   $api_server_port            = $::os_service_default,
-  $multi_tenancy              = $::os_service_default,
   $contrail_extensions        = $::os_service_default,
   $timeout                    = $::os_service_default,
   $connection_timeout         = $::os_service_default,
@@ -77,6 +76,7 @@ class neutron::plugins::opencontrail (
   $keystone_admin_tenant_name = undef,
   $keystone_admin_password    = undef,
   $keystone_admin_token       = undef,
+  $multi_tenancy              = undef,
 ) {
 
   include neutron::deps
@@ -92,6 +92,10 @@ class neutron::plugins::opencontrail (
     if getvar($key_opt) != undef {
       warning("The ${key_opt} parameter is deprecated and has no effect.")
     }
+  }
+
+  if $multi_tenancy != undef {
+    warning('The multi_tenancy parameter is deprecated and has no effect.')
   }
 
   validate_legacy(Array, 'validate_array', $contrail_extensions)
@@ -134,7 +138,6 @@ class neutron::plugins::opencontrail (
   neutron_plugin_opencontrail {
     'APISERVER/api_server_ip':       value => $api_server_ip;
     'APISERVER/api_server_port':     value => $api_server_port;
-    'APISERVER/multi_tenancy':       value => $multi_tenancy;
     'APISERVER/contrail_extensions': value => join($contrail_extensions, ',');
     'APISERVER/timeout':             value => $timeout;
     'APISERVER/connection_timeout':  value => $connection_timeout;
@@ -146,6 +149,7 @@ class neutron::plugins::opencontrail (
     'KEYSTONE/admin_tenant_name': ensure => absent;
     'KEYSTONE/admin_password':    ensure => absent;
     'KEYSTONE/admin_token':       ensure => absent;
+    'APISERVER/multi_tenancy':    ensure => absent;
   }
 
 }

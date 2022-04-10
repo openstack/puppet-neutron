@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::plugins::ml2::vpp`` class now supports the ``l3_hosts``
+    parameter and the ``enable_l3_ha`` parameter.

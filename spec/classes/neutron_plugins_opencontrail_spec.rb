@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::opencontrail' do
-  shared_examples 'neutron::opencontrail::plugin' do
+  shared_examples 'neutron::plugins::contrail' do
     let :params do
       {
         :api_server_ip       => '10.0.0.1',
@@ -23,6 +23,8 @@ describe 'neutron::plugins::opencontrail' do
       should contain_neutron_plugin_opencontrail('APISERVER/api_server_port').with_value(params[:api_server_port])
       should contain_neutron_plugin_opencontrail('APISERVER/multi_tenancy').with_value(params[:multi_tenancy])
       should contain_neutron_plugin_opencontrail('APISERVER/contrail_extensions').with_value(params[:contrail_extensions].join(','))
+      should contain_neutron_plugin_opencontrail('APISERVER/timeout').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_plugin_opencontrail('APISERVER/connection_timeout').with_value('<SERVICE DEFAULT>')
     end
   end
 
@@ -69,7 +71,7 @@ describe 'neutron::plugins::opencontrail' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_behaves_like 'neutron::opencontrail::plugin'
+      it_behaves_like 'neutron::plugins::contrail'
       it_behaves_like "neutron::plugins::opencontrail on #{facts[:osfamily]}"
     end
   end

@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::plugins::contrail`` class now support the ``timeout``
+    parameter and the ``connection_timeout`` parameter.

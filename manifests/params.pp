@@ -53,7 +53,6 @@ class neutron::params {
     $bigswitch_agent_package            = 'openstack-neutron-bigswitch-agent'
     $bigswitch_lldp_service             = 'neutron-bsn-lldp'
     $bigswitch_agent_service            = 'neutron-bsn-agent'
-    $nvp_server_package                 = 'openstack-neutron-nicira'
     $dhcp_agent_package                 = false
     $metering_agent_package             = 'openstack-neutron-metering-agent'
     $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
@@ -102,7 +101,6 @@ class neutron::params {
     $linuxbridge_server_package         = 'neutron-plugin-linuxbridge'
     $sriov_nic_agent_service            = 'neutron-sriov-agent'
     $sriov_nic_agent_package            = 'neutron-sriov-agent'
-    $nvp_server_package                 = 'neutron-plugin-nicira'
     $dhcp_agent_package                 = 'neutron-dhcp-agent'
     $metering_agent_package             = 'neutron-metering-agent'
     $vpnaas_agent_package               = 'python3-neutron-vpnaas'

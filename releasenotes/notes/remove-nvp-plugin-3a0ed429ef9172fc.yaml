@@ -1,0 +1,9 @@
+---
+upgrade:
+  - |
+    Support for the Nicira NVP plugin has been removed.
+
+deprecations:
+  - |
+    The ``neutron::config::plugin_nvp_config`` parameter has been deprecated
+    and has no effect.

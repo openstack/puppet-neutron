@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new ``neutron::agents::metering::agent_report_interval`` has been
+    added. This parameter determines the ``[AGENT] report_interval`` parameter
+    of the ``meterng-agent`` service.

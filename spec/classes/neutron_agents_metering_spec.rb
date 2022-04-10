@@ -61,6 +61,7 @@ describe 'neutron::agents::metering' do
       should contain_neutron_metering_agent_config('DEFAULT/measure_interval').with_value('<SERVICE DEFAULT>');
       should contain_neutron_metering_agent_config('DEFAULT/report_interval').with_value('<SERVICE DEFAULT>');
       should contain_neutron_metering_agent_config('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_metering_agent_config('agent/report_interval').with_value('<SERVICE DEFAULT>');
     end
 
     it 'installs neutron metering agent package' do

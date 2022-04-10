@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Now this module supports configuring the ``networking-mlnx`` plugin in
+    Debian and Ubuntu.

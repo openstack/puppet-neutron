@@ -79,6 +79,7 @@ class neutron::agents::ml2::mlnx (
 
   $mlnx_agent_package = $::neutron::params::mlnx_agent_package
   $mlnx_agent_service = $::neutron::params::mlnx_agent_service
+  $eswitchd_package   = $::neutron::params::eswitchd_package
   $eswitchd_service   = $::neutron::params::eswitchd_service
 
   neutron_mlnx_agent_config {
@@ -117,6 +118,15 @@ class neutron::agents::ml2::mlnx (
     #                 plugin. This is required to avoid conflict with
     #                 neutron::plugins::ml2::mellanox
     Package<| title == $mlnx_agent_package |> { tag +> 'neutron-package' }
+
+    # NOTE(tkajinam): Ubuntu/Debuan requires a separate package for eswitchd
+    #                 service.
+    if $eswitchd_package {
+      ensure_packages($eswitchd_package, {
+        ensure => $package_ensure,
+        tag    => ['openstack', 'neutron-package'],
+      })
+    }
   }
 
   if $manage_service {

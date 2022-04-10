@@ -51,6 +51,9 @@ describe 'neutron::plugins::ml2::nuage' do
     it 'should configure plugin.ini' do
       should contain_neutron_plugin_nuage('RESTPROXY/default_net_partition_name').with_value(params[:nuage_net_partition_name])
       should contain_neutron_plugin_nuage('RESTPROXY/server').with_value(params[:nuage_vsd_ip])
+      should contain_neutron_plugin_nuage('RESTPROXY/serverauth')\
+        .with_value("#{params[:nuage_vsd_username]}:#{params[:nuage_vsd_password]}")\
+        .with_secret(true)
       should contain_neutron_plugin_nuage('RESTPROXY/organization').with_value(params[:nuage_vsd_organization])
       should contain_neutron_plugin_nuage('RESTPROXY/cms_id').with_value(params[:nuage_cms_id])
       should contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(params[:nuage_default_allow_non_ip])

@@ -98,7 +98,7 @@ class neutron::plugins::ml2::nuage (
   neutron_plugin_nuage {
     'RESTPROXY/default_net_partition_name': value => $nuage_net_partition_name;
     'RESTPROXY/server':                     value => $nuage_vsd_ip;
-    'RESTPROXY/serverauth':                 value => "${nuage_vsd_username}:${nuage_vsd_password}";
+    'RESTPROXY/serverauth':                 value => "${nuage_vsd_username}:${nuage_vsd_password}", secret => true;
     'RESTPROXY/organization':               value => $nuage_vsd_organization;
     'RESTPROXY/auth_resource':              value => $nuage_auth_resource;
     'RESTPROXY/serverssl':                  value => $nuage_server_ssl;

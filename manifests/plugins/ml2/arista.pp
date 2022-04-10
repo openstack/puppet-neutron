@@ -20,36 +20,42 @@
 # === Parameters
 #
 # [*eapi_host*]
-# (required) The Arista EOS IP address.
+#   (required) The Arista EOS IP address.
 #
 # [*eapi_username*]
-# (required) The Arista EOS api username.
+#   (required) The Arista EOS api username.
 #
 # [*eapi_password*]
-# (required) The Arista EOS api password.
+#   (required) The Arista EOS api password.
 #
 # [*region_name*]
-# (optional) Region name that is assigned to the OpenStack controller.
-# This setting must be set if multiple regions are using the same Arista
-# hardware.
-# Defaults to $::os_service_default
+#   (optional) Region name that is assigned to the OpenStack controller.
+#   This setting must be set if multiple regions are using the same Arista
+#   hardware.
+#   Defaults to $::os_service_default
 #
 # [*sync_interval*]
-# (optional) Sync interval in seconds between neutron plugin and EOS.
-# Defaults to $::os_service_default
+#   (optional) Sync interval in seconds between neutron plugin and EOS.
+#   Defaults to $::os_service_default
 #
 # [*use_fqdn*]
-# (optional) Defines if hostnames are sent to Arista EOS as FQDNS
-# Defaults to $::os_service_default
+#   (optional) Defines if hostnames are sent to Arista EOS as FQDNS
+#   Defaults to $::os_service_default
+#
+# [*package_ensure*]
+#   (optional) The intended state of the python-networking-baremetal
+#   package, i.e. any of the possible values of the 'ensure'
+#   property for a package resource type.
+#   Defaults to 'present'
 #
 class neutron::plugins::ml2::arista(
   $eapi_host,
   $eapi_username,
   $eapi_password,
-  $region_name   = $::os_service_default,
-  $sync_interval = $::os_service_default,
-  $use_fqdn      = $::os_service_default,
-
+  $region_name    = $::os_service_default,
+  $sync_interval  = $::os_service_default,
+  $use_fqdn       = $::os_service_default,
+  $package_ensure = 'present'
 ) {
 
   include neutron::deps
@@ -62,5 +68,11 @@ class neutron::plugins::ml2::arista(
     'ml2_arista/region_name'  : value => $region_name;
     'ml2_arista/sync_interval': value => $sync_interval;
     'ml2_arista/use_fqdn'     : value => $use_fqdn;
+  }
+
+  package { 'python-networking-arista':
+    ensure => $package_ensure,
+    name   => $::neutron::params::arista_plugin_package,
+    tag    => ['openstack', 'neutron-plugin-ml2-package'],
   }
 }

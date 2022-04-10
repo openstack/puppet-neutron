@@ -45,14 +45,25 @@ describe 'neutron::plugins::ml2::arista' do
   end
 
   shared_examples 'neutron plugin ml2 arista' do
-    before do
-      params.merge!(default_params)
+    let :p do
+      default_params.merge(params)
     end
 
     it 'configures ml2 arista settings' do
-      should contain_neutron_plugin_ml2('ml2_arista/eapi_host').with_value(params[:eapi_host])
-      should contain_neutron_plugin_ml2('ml2_arista/eapi_username').with_value(params[:eapi_username])
-      should contain_neutron_plugin_ml2('ml2_arista/eapi_password').with_value(params[:eapi_password]).with_secret(true)
+      should contain_neutron_plugin_ml2('ml2_arista/eapi_host').with_value(p[:eapi_host])
+      should contain_neutron_plugin_ml2('ml2_arista/eapi_username').with_value(p[:eapi_username])
+      should contain_neutron_plugin_ml2('ml2_arista/eapi_password').with_value(p[:eapi_password]).with_secret(true)
+      should contain_neutron_plugin_ml2('ml2_arista/region_name').with_value(p[:region_name])
+      should contain_neutron_plugin_ml2('ml2_arista/sync_interval').with_value(p[:sync_interval])
+      should contain_neutron_plugin_ml2('ml2_arista/use_fqdn').with_value(p[:use_fqdn])
+    end
+
+    it 'installs the plugin package' do
+      should contain_package('python-networking-arista').with(
+        :ensure => 'present',
+        :name   => 'python3-networking-arista',
+        :tag    => ['openstack', 'neutron-plugin-ml2-package'],
+      )
     end
   end
 

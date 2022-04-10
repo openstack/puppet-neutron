@@ -30,6 +30,7 @@ class neutron::params {
   $sfc_package                 = 'python3-networking-sfc'
   $user                        = 'neutron'
   $group                       = 'neutron'
+  $arista_plugin_package       = 'python3-networking-arista'
 
   if($::osfamily == 'Redhat') {
     $package_name                       = 'openstack-neutron'

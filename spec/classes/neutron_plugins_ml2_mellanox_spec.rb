@@ -11,26 +11,16 @@ describe 'neutron::plugins::ml2::mellanox' do
      }"
   end
 
-  let :default_params do
-    {
-      :package_ensure => 'present'
-    }
-  end
-
   let :params do
     {}
   end
 
   shared_examples 'neutron plugin mellanox ml2' do
-    before do
-      params.merge!(default_params)
-    end
-
     it { should contain_class('neutron::params') }
 
     it 'should have' do
-      should contain_package('python-networking-mlnx').with(
-        :ensure => params[:package_ensure],
+      should contain_package(platform_params[:mlnx_plugin_package]).with(
+        :ensure => 'installed',
         :tag    => ['openstack', 'neutron-plugin-ml2-package']
         )
     end
@@ -42,6 +32,19 @@ describe 'neutron::plugins::ml2::mellanox' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
+      end
+
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          {
+            :mlnx_plugin_package => 'python3-networking-mlnx',
+          }
+        when 'RedHat'
+          {
+            :mlnx_plugin_package => 'python3-networking-mlnx',
+          }
+        end
       end
 
       if facts[:osfamily] == 'RedHat'

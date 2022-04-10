@@ -24,10 +24,15 @@ class neutron::plugins::ml2::mellanox (
     fail("Unsupported osfamily ${::osfamily}")
   }
 
-  ensure_resource('package', 'python-networking-mlnx',
-    {
-      ensure => $package_ensure,
-      tag    => ['openstack', 'neutron-plugin-ml2-package']
-    }
-  )
+  $mlnx_plugin_package = $::neutron::params::mlnx_plugin_package
+
+  ensure_packages($mlnx_plugin_package, {
+    ensure => $package_ensure,
+    tag    => ['openstack'],
+  })
+
+  # NOTE(tkajinam): CentOS/RHEL uses the same package for both agent and
+  #                 plugin. This is required to avoid conflict with
+  #                 neutron::agens::ml2::mlnx
+  Package<| title == $mlnx_plugin_package |> { tag +> 'neutron-plugin-ml2-package' }
 }

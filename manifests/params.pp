@@ -31,6 +31,7 @@ class neutron::params {
   $user                        = 'neutron'
   $group                       = 'neutron'
   $mlnx_agent_package          = 'python3-networking-mlnx'
+  $mlnx_plugin_package         = 'python3-networking-mlnx'
   $eswitchd_service            = 'eswitchd'
 
   if($::osfamily == 'Redhat') {

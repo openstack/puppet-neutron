@@ -5,22 +5,11 @@ describe 'neutron::agents::ml2::mlnx' do
     "class { 'neutron': }"
   end
 
-  let :default_params do
-    {
-      :package_ensure => 'present',
-      :enabled        => true,
-    }
-  end
-
   let :params do
     {}
   end
 
   shared_examples 'neutron mlnx agent with ml2 plugin' do
-    let :p do
-      default_params.merge(params)
-    end
-
     it { should contain_class('neutron::params') }
 
 
@@ -32,7 +21,7 @@ describe 'neutron::agents::ml2::mlnx' do
     it 'installs neutron mlnx agent package' do
       should contain_package(platform_params[:mlnx_agent_package]).with(
         :name   => platform_params[:mlnx_agent_package],
-        :ensure => p[:package_ensure],
+        :ensure => 'installed',
         :tag    => ['openstack', 'neutron-package'],
       )
       should contain_package(platform_params[:mlnx_agent_package]).that_requires('Anchor[neutron::install::begin]')

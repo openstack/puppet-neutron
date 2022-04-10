@@ -77,9 +77,9 @@ class neutron::agents::ml2::mlnx (
   include neutron::deps
   include neutron::params
 
-  $mlnx_agent_package          = $::neutron::params::mlnx_agent_package
-  $mlnx_agent_service          = $::neutron::params::mlnx_agent_service
-  $eswitchd_service            = $::neutron::params::eswitchd_service
+  $mlnx_agent_package = $::neutron::params::mlnx_agent_package
+  $mlnx_agent_service = $::neutron::params::mlnx_agent_service
+  $eswitchd_service   = $::neutron::params::eswitchd_service
 
   neutron_mlnx_agent_config {
     'eswitch/physical_interface_mappings': value => pick(join(any2array($physical_interface_mappings), ','), $::os_service_default);
@@ -108,10 +108,15 @@ class neutron::agents::ml2::mlnx (
   }
 
   if $manage_package {
-    package { $mlnx_agent_package:
+    ensure_packages($mlnx_agent_package, {
       ensure => $package_ensure,
-      tag    => ['openstack', 'neutron-package'],
-    }
+      tag    => ['openstack'],
+    })
+
+    # NOTE(tkajinam): CentOS/RHEL uses the same package for both agent and
+    #                 plugin. This is required to avoid conflict with
+    #                 neutron::plugins::ml2::mellanox
+    Package<| title == $mlnx_agent_package |> { tag +> 'neutron-package' }
   }
 
   if $manage_service {

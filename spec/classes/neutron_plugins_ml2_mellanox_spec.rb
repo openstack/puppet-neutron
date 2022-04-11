@@ -47,9 +47,7 @@ describe 'neutron::plugins::ml2::mellanox' do
         end
       end
 
-      if facts[:osfamily] == 'RedHat'
-        it_behaves_like 'neutron plugin mellanox ml2'
-      end
+      it_behaves_like 'neutron plugin mellanox ml2'
     end
   end
 end

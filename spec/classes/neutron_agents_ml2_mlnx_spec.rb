@@ -24,8 +24,14 @@ describe 'neutron::agents::ml2::mlnx' do
         :ensure => 'installed',
         :tag    => ['openstack', 'neutron-package'],
       )
-      should contain_package(platform_params[:mlnx_agent_package]).that_requires('Anchor[neutron::install::begin]')
-      should contain_package(platform_params[:mlnx_agent_package]).that_notifies('Anchor[neutron::install::end]')
+
+      if platform_params[:eswitchd_package]
+        should contain_package(platform_params[:eswitchd_package]).with(
+          :name   => platform_params[:eswitchd_package],
+          :ensure => 'installed',
+          :tag    => ['openstack', 'neutron-package'],
+        )
+      end
     end
 
     it 'configures neutron mlnx agent service' do
@@ -35,10 +41,12 @@ describe 'neutron::agents::ml2::mlnx' do
         :ensure  => 'running',
         :tag     => 'neutron-service',
       )
-      should contain_service(platform_params[:mlnx_agent_service]).that_subscribes_to('Anchor[neutron::service::begin]')
-      should contain_service(platform_params[:mlnx_agent_service]).that_notifies('Anchor[neutron::service::end]')
-      should contain_service('eswitchd').that_subscribes_to('Anchor[neutron::service::begin]')
-      should contain_service('eswitchd').that_notifies('Anchor[neutron::service::end]')
+      should contain_service(platform_params[:eswitchd_service]).with(
+        :name    => platform_params[:eswitchd_service],
+        :enable  => true,
+        :ensure  => 'running',
+        :tag     => 'neutron-service',
+      )
     end
 
     context 'with manage_service as false' do
@@ -47,7 +55,7 @@ describe 'neutron::agents::ml2::mlnx' do
       end
       it 'should not manage the  services' do
         should_not contain_service(platform_params[:mlnx_agent_service])
-        should_not contain_service('eswitchd')
+        should_not contain_service(platform_params[:eswitchd_service])
       end
     end
 
@@ -101,13 +109,17 @@ describe 'neutron::agents::ml2::mlnx' do
         case facts[:osfamily]
         when 'Debian'
           {
-            :mlnx_agent_package => 'python3-networking-mlnx',
-            :mlnx_agent_service => 'neutron-plugin-mlnx-agent'
+            :mlnx_agent_package => 'neutron-mlnx-agent',
+            :mlnx_agent_service => 'neutron-mlnx-agent',
+            :eswitchd_package   => 'networking-mlnx-eswitchd',
+            :eswitchd_service   => 'networking-mlnx-eswitchd',
           }
         when 'RedHat'
           {
             :mlnx_agent_package => 'python3-networking-mlnx',
-            :mlnx_agent_service => 'neutron-mlnx-agent'
+            :mlnx_agent_service => 'neutron-mlnx-agent',
+            :eswitchd_package   => false,
+            :eswitchd_service   => 'eswitchd',
           }
         end
       end

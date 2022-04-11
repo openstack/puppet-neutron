@@ -19,11 +19,6 @@ class neutron::plugins::ml2::mellanox (
   include neutron::params
   require neutron::plugins::ml2
 
-  if($::osfamily != 'RedHat') {
-    # Drivers are only packaged for RedHat at this time
-    fail("Unsupported osfamily ${::osfamily}")
-  }
-
   $mlnx_plugin_package = $::neutron::params::mlnx_plugin_package
 
   ensure_packages($mlnx_plugin_package, {

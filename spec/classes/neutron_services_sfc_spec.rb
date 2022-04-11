@@ -43,6 +43,7 @@ describe 'neutron::services::sfc' do
         should contain_exec('sfc-db-sync').with(
           :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-sfc upgrade head',
           :path        => '/usr/bin',
+          :user        => 'neutron',
           :subscribe   => ['Anchor[neutron::install::end]',
                            'Anchor[neutron::config::end]',
                            'Anchor[neutron::dbsync::begin]'

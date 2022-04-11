@@ -72,9 +72,6 @@
 # [*plugin_linuxbridge_config*]
 #   (optional) Manage configuration of linuxbridge_conf.ini
 #
-# [*plugin_nvp_config*]
-#   (optional) Manage configuration of /etc/neutron/plugins/nicira/nvp.ini
-#
 # [*plugin_opencontrail_config*]
 #   (optional) Manage configuration of plugins/opencontrail/ContrailPlugin.ini
 #
@@ -86,6 +83,11 @@
 #
 # [*plugin_nsx_config*]
 #   (optional) Manage configuration of plugins/vmware/nsx.ini
+#
+# DEPRECATED PRAMETERS
+#
+# [*plugin_nvp_config*]
+#   (optional) Manage configuration of /etc/neutron/plugins/nicira/nvp.ini
 #
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
@@ -112,10 +114,15 @@ class neutron::config (
   $plugin_nuage_config           = {},
   $plugin_ml2_config             = {},
   $plugin_nsx_config             = {},
-  $plugin_nvp_config             = {},
+  # DEPRECATED PARAMETERS
+  $plugin_nvp_config             = undef,
 ) {
 
   include neutron::deps
+
+  if $plugin_nvp_config != undef {
+    warning('The plugin_nvp_config parameter is deprecated and has no effect.')
+  }
 
   validate_legacy(Hash, 'validate_hash', $server_config)
   validate_legacy(Hash, 'validate_hash', $api_paste_ini)
@@ -138,7 +145,6 @@ class neutron::config (
   validate_legacy(Hash, 'validate_hash', $plugin_nuage_config)
   validate_legacy(Hash, 'validate_hash', $plugin_ml2_config)
   validate_legacy(Hash, 'validate_hash', $plugin_nsx_config)
-  validate_legacy(Hash, 'validate_hash', $plugin_nvp_config)
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_paste_ini', $api_paste_ini)
@@ -160,6 +166,5 @@ class neutron::config (
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
   create_resources('neutron_l2gw_service_config', $l2gw_service_config)
   create_resources('neutron_plugin_nsx', $plugin_nsx_config)
-  create_resources('neutron_plugin_nvp', $plugin_nvp_config)
   create_resources('ovn_metadata_agent_config', $ovn_metadata_agent_config)
 }

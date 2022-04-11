@@ -129,7 +129,6 @@ describe 'neutron::config' do
       {
         :plugin_linuxbridge_config     => config_hash,
         :plugin_nsx_config             => config_hash,
-        :plugin_nvp_config             => config_hash,
         :plugin_opencontrail_config    => config_hash,
         :plugin_nuage_config           => config_hash,
         :plugin_ml2_config             => config_hash
@@ -146,12 +145,6 @@ describe 'neutron::config' do
       should contain_neutron_plugin_nsx('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_plugin_nsx('DEFAULT/bar').with_value('barValue')
       should contain_neutron_plugin_nsx('DEFAULT/baz').with_ensure('absent')
-    end
-
-    it 'configures arbitrary neutron_plugin_nvp configurations' do
-      should contain_neutron_plugin_nvp('DEFAULT/foo').with_value('fooValue')
-      should contain_neutron_plugin_nvp('DEFAULT/bar').with_value('barValue')
-      should contain_neutron_plugin_nvp('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_opencontrail configurations' do

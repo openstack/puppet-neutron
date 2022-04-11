@@ -47,10 +47,6 @@ class neutron::params {
     $linuxbridge_server_package         = 'openstack-neutron-linuxbridge'
     $sriov_nic_agent_service            = 'neutron-sriov-nic-agent'
     $sriov_nic_agent_package            = 'openstack-neutron-sriov-nic-agent'
-    $bigswitch_lldp_package             = 'openstack-neutron-bigswitch-lldp'
-    $bigswitch_agent_package            = 'openstack-neutron-bigswitch-agent'
-    $bigswitch_lldp_service             = 'neutron-bsn-lldp'
-    $bigswitch_agent_service            = 'neutron-bsn-agent'
     $dhcp_agent_package                 = false
     $metering_agent_package             = 'openstack-neutron-metering-agent'
     $vpnaas_agent_package               = 'openstack-neutron-vpnaas'

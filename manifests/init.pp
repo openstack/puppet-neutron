@@ -24,7 +24,7 @@
 # [*core_plugin*]
 #   (optional) Neutron plugin provider
 #   Defaults to ml2
-#   Could be bigswitch, brocade, embrane, hyperv, ml2, mlnx, nec, ryu, nuage,
+#   Could be brocade, embrane, hyperv, ml2, mlnx, nec, ryu, nuage,
 #   opencontrail, nsx
 #
 #   Example for nuage:

@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for networking-bigswitch has been removed.

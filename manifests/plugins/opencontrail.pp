@@ -23,6 +23,14 @@
 #       contrail_extensions => ['ipam:neutron_plugin_contrail.plugins.opencontrail.contrail_plugin_ipam.NeutronPluginContrailIpam']
 #     }
 #
+# [*timeout*]
+#   (Optional) VNC API Server request timeout in seconds.
+#   Defaults to $::os_service_default
+#
+# [*connection_timeout*]
+#   (Optional) VNC API Server connection timeout in seconds.
+#   Defaults to $::os_service_default
+#
 # [*package_ensure*]
 #   (Optional) Ensure state for package.
 #   Defaults to 'present'.
@@ -59,6 +67,8 @@ class neutron::plugins::opencontrail (
   $api_server_port            = $::os_service_default,
   $multi_tenancy              = $::os_service_default,
   $contrail_extensions        = $::os_service_default,
+  $timeout                    = $::os_service_default,
+  $connection_timeout         = $::os_service_default,
   $package_ensure             = 'present',
   $purge_config               = false,
   # DEPRECATED PARAMETERS
@@ -126,6 +136,8 @@ class neutron::plugins::opencontrail (
     'APISERVER/api_server_port':     value => $api_server_port;
     'APISERVER/multi_tenancy':       value => $multi_tenancy;
     'APISERVER/contrail_extensions': value => join($contrail_extensions, ',');
+    'APISERVER/timeout':             value => $timeout;
+    'APISERVER/connection_timeout':  value => $connection_timeout;
   }
 
   neutron_plugin_opencontrail {

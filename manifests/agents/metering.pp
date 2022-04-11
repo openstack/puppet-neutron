@@ -52,12 +52,17 @@
 #   (Optional) Maximum seconds to wait for a response from an RPC call
 #   Defaults to: $::os_service_default
 #
+# [*agent_report_interval*]
+#   (optional) Set the agent report interval. By default the global report
+#   interval in neutron.conf ([agent]/report_interval) is used. This parameter
+#   can be used to override the reporting interval for the metering-agent.
+#   Defaults to $::os_service_default
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the metering config.
 #   Defaults to false.
 #
-
 class neutron::agents::metering (
   $package_ensure           = present,
   $enabled                  = true,
@@ -68,6 +73,7 @@ class neutron::agents::metering (
   $measure_interval         = $::os_service_default,
   $report_interval          = $::os_service_default,
   $rpc_response_max_timeout = $::os_service_default,
+  $agent_report_interval    = $::os_service_default,
   $purge_config             = false,
 ) {
 
@@ -88,6 +94,7 @@ class neutron::agents::metering (
     'DEFAULT/measure_interval':         value => $measure_interval;
     'DEFAULT/report_interval':          value => $report_interval;
     'DEFAULT/rpc_response_max_timeout': value => $rpc_response_max_timeout;
+    'agent/report_interval':            value => $agent_report_interval;
   }
 
   if $::neutron::params::metering_agent_package {

@@ -6,7 +6,6 @@ describe 'neutron::plugins::opencontrail' do
       {
         :api_server_ip       => '10.0.0.1',
         :api_server_port     => '8082',
-        :multi_tenancy       => 'true',
         :contrail_extensions => ['ipam:ipam','policy:policy','route-table'],
         :purge_config        => false,
       }
@@ -21,7 +20,6 @@ describe 'neutron::plugins::opencontrail' do
     it 'should perform default configuration of' do
       should contain_neutron_plugin_opencontrail('APISERVER/api_server_ip').with_value(params[:api_server_ip])
       should contain_neutron_plugin_opencontrail('APISERVER/api_server_port').with_value(params[:api_server_port])
-      should contain_neutron_plugin_opencontrail('APISERVER/multi_tenancy').with_value(params[:multi_tenancy])
       should contain_neutron_plugin_opencontrail('APISERVER/contrail_extensions').with_value(params[:contrail_extensions].join(','))
       should contain_neutron_plugin_opencontrail('APISERVER/timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_plugin_opencontrail('APISERVER/connection_timeout').with_value('<SERVICE DEFAULT>')

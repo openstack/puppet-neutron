@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::plugins::opencontrail::multi_tenancy`` parmaeter has been
+    deprecated and has no effect.

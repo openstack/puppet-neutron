@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::quota::sfc`` class has been added. This class manages
+    the ``[quota]`` parameters for the ``networking-sfc`` plugin.

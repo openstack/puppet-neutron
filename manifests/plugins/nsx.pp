@@ -137,7 +137,7 @@ class neutron::plugins::nsx (
     'nsx_v3/default_tier0_router':     value => $default_tier0_router;
     'nsx_v3/nsx_api_managers':         value => $nsx_api_managers;
     'nsx_v3/nsx_api_user':             value => $nsx_api_user;
-    'nsx_v3/nsx_api_password':         value => $nsx_api_password;
+    'nsx_v3/nsx_api_password':         value => $nsx_api_password, secret => true;
     'nsx_v3/dhcp_profile':             value => pick($dhcp_profile_uuid, $dhcp_profile);
     'nsx_v3/dhcp_relay_service':       value => $dhcp_relay_service;
     'nsx_v3/metadata_proxy':           value => pick($metadata_proxy_uuid, $metadata_proxy);

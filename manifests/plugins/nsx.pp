@@ -4,52 +4,66 @@
 # === Parameters
 #
 # [*default_overlay_tz*]
-#   Name or UUID of the default overlay Transport Zone to be used for creating
-#   tunneled isolated "Neutron" networks. This option MUST be specified.
+#   (Optional) Name or UUID of the default overlay Transport Zone to be used
+#   for creating tunneled isolated "Neutron" networks. This option MUST be
+#   specified.
+#   Defaults to $::os_service_default
 #
 # [*default_vlan_tz*]
-#   (optional) Name or UUID of the default VLAN Transport Zone to be used for
+#   (Optional) Name or UUID of the default VLAN Transport Zone to be used for
 #   creating VLAN networks.
+#   Defaults to $::os_service_default
 #
 # [*default_bridge_cluster*]
-#   (optional) Name or UUID of the default NSX bridge cluster that will be
+#   (Optional) Name or UUID of the default NSX bridge cluster that will be
 #   used to perform L2 gateway bridging between VXLAN and VLAN networks.
+#   Defaults to $::os_service_default
 #
 # [*default_tier0_router*]
-#   Name or UUID of the pre-created default tier0 (provider) router on NSX
-#   backend. This option is used to create external networks and MUST be
+#   (Optional) Name or UUID of the pre-created default tier0 (provider) router
+#   on NSX backend. This option is used to create external networks and MUST be
 #   specified.
+#   Defaults to $::os_service_default
 #
 # [*nsx_api_managers*]
-#   Comma separated NSX manager IP addresses. This option MUST be specified.
+#   (Optional) Comma separated NSX manager IP addresses. This option MUST be
+#   specified.
+#   Defaults to $::os_service_default
 #
 # [*nsx_api_user*]
-#   The username for NSX manager.
+#   (Optional) The username for NSX manager.
+#   Defaults to $::os_service_default
 #
 # [*nsx_api_password*]
-#   The password for NSX manager.
+#   (Optional) The password for NSX manager.
+#   Defaults to $::os_service_default
 #
 # [*dhcp_profile*]
-#   Name or UUID of the pre-created DHCP profile on NSX backend to support
-#   native DHCP. This option MUST be specified if native_dhcp_metadata is True.
+#   (Optional) Name or UUID of the pre-created DHCP profile on NSX backend to
+#   support native DHCP. This option MUST be specified if native_dhcp_metadata
+#   is True.
+#   Defaults to $::os_service_default
 #
 # [*dhcp_relay_service*]
-#   (optional) This is the name or UUID of the NSX relay service that will be
+#   (Optional) This is the name or UUID of the NSX relay service that will be
 #   used to enable DHCP relay on router ports.
+#   Defaults to $::os_service_default
 #
 # [*metadata_proxy*]
-#   Name or UUID of the pre-created Metadata Proxy on NSX backend. This option
-#   MUST be specified if native_dhcp_metadata is True.
+#   (Optional) Name or UUID of the pre-created Metadata Proxy on NSX backend.
+#   This option MUST be specified if native_dhcp_metadata is True.
+#   Defaults to $::os_service_default
 #
 # [*native_dhcp_metadata*]
-#   Flag to enable native DHCP and Metadata.
+#   (Optional) Flag to enable native DHCP and Metadata.
+#   Defaults to $::os_service_default
 #
 # [*package_ensure*]
-#   (optional) Ensure state for package.
+#   (Optional) Ensure state for package.
 #   Defaults to 'present'.
 #
 # [*purge_config*]
-#   (optional) Whether to set only the specified config options
+#   (Optional) Whether to set only the specified config options
 #   in the nvp config.
 #   Defaults to false.
 #

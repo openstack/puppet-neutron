@@ -149,7 +149,7 @@ class neutron::plugins::nsx (
     'nsx_v3/default_vlan_tz':          value => $default_vlan_tz;
     'nsx_v3/default_bridge_cluster':   value => $default_bridge_cluster;
     'nsx_v3/default_tier0_router':     value => $default_tier0_router;
-    'nsx_v3/nsx_api_managers':         value => $nsx_api_managers;
+    'nsx_v3/nsx_api_managers':         value => join(any2array($nsx_api_managers), ',');
     'nsx_v3/nsx_api_user':             value => $nsx_api_user;
     'nsx_v3/nsx_api_password':         value => $nsx_api_password, secret => true;
     'nsx_v3/dhcp_profile':             value => pick($dhcp_profile_uuid, $dhcp_profile);

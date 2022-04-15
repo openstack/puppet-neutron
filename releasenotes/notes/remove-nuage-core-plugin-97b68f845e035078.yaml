@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for Nuage core plugin ha sbeen removed.

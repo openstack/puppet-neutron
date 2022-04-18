@@ -24,14 +24,6 @@
 # [*core_plugin*]
 #   (optional) Neutron plugin provider
 #   Defaults to ml2
-#   Could be brocade, embrane, hyperv, ml2, mlnx, nec, ryu, nuage,
-#   opencontrail, nsx
-#
-#   Example for nuage:
-#
-#     class {'neutron' :
-#       core_plugin => 'nuage'
-#     }
 #
 # [*service_plugins*]
 #   (optional) Advanced service modules.

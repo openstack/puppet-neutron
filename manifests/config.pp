@@ -33,6 +33,9 @@
 # [*sriov_agent_config*]
 #   (optional) Manage configuration of sriov_agent.ini
 #
+# [*linuxbridge_agent_config*]
+#   (optional) Manage configuration of linuxbridge_agent.ini
+#
 # [*bgpvpn_bagpipe_config*]
 #   (optional) Manage configuration of bagpipe-bgp bgp.conf
 #
@@ -97,6 +100,7 @@ class neutron::config (
   $api_paste_ini                 = {},
   $ovs_agent_config              = {},
   $sriov_agent_config            = {},
+  $linuxbridge_agent_config      = {},
   $bgpvpn_bagpipe_config         = {},
   $bgpvpn_service_config         = {},
   $l2gw_agent_config             = {},
@@ -128,6 +132,7 @@ class neutron::config (
   validate_legacy(Hash, 'validate_hash', $api_paste_ini)
   validate_legacy(Hash, 'validate_hash', $ovs_agent_config)
   validate_legacy(Hash, 'validate_hash', $sriov_agent_config)
+  validate_legacy(Hash, 'validate_hash', $linuxbridge_agent_config)
   validate_legacy(Hash, 'validate_hash', $bgpvpn_bagpipe_config)
   validate_legacy(Hash, 'validate_hash', $bgpvpn_service_config)
   validate_legacy(Hash, 'validate_hash', $l2gw_agent_config)
@@ -150,13 +155,16 @@ class neutron::config (
   create_resources('neutron_api_paste_ini', $api_paste_ini)
   create_resources('neutron_agent_ovs', $ovs_agent_config)
   create_resources('neutron_sriov_agent_config', $sriov_agent_config)
+  create_resources('neutron_agent_linuxbridge', $linuxbridge_agent_config)
   create_resources('neutron_bgpvpn_bagpipe_config', $bgpvpn_bagpipe_config)
   create_resources('neutron_bgpvpn_service_config', $bgpvpn_service_config)
   create_resources('neutron_l2gw_agent_config', $l2gw_agent_config)
+  create_resources('neutron_l2gw_service_config', $l2gw_service_config)
   create_resources('neutron_sfc_service_config', $sfc_service_config)
   create_resources('neutron_l3_agent_config', $l3_agent_config)
   create_resources('neutron_dhcp_agent_config', $dhcp_agent_config)
   create_resources('neutron_metadata_agent_config', $metadata_agent_config)
+  create_resources('ovn_metadata_agent_config', $ovn_metadata_agent_config)
   create_resources('neutron_metering_agent_config', $metering_agent_config)
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
@@ -164,7 +172,5 @@ class neutron::config (
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
   create_resources('neutron_plugin_nuage', $plugin_nuage_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
-  create_resources('neutron_l2gw_service_config', $l2gw_service_config)
   create_resources('neutron_plugin_nsx', $plugin_nsx_config)
-  create_resources('ovn_metadata_agent_config', $ovn_metadata_agent_config)
 }

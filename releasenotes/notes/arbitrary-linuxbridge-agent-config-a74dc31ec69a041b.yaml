@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new ``neutron::config::linuxbridge_agent_config`` parameter has been
+    added. This parameter provides the interface to define arbitrary
+    configurations to the ``linuxbridge_agent.ini`` file.

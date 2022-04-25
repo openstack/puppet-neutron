@@ -67,15 +67,6 @@
 #   in the nvp config.
 #   Defaults to false.
 #
-# DEPRECATED
-#
-# [*dhcp_profile_uuid*]
-#   (DEPRECATED) UUID of the pre-created DHCP profile on NSX backend to support
-#   native DHCP.
-#
-# [*metadata_proxy_uuid*]
-#   (DEPRECATED) UUID of the pre-created Metadata Proxy on NSX backend.
-#
 class neutron::plugins::nsx (
   $default_overlay_tz     = $::os_service_default,
   $default_vlan_tz        = $::os_service_default,
@@ -90,9 +81,6 @@ class neutron::plugins::nsx (
   $native_dhcp_metadata   = $::os_service_default,
   $package_ensure         = 'present',
   $purge_config           = false,
-  # DEPRECATED
-  $dhcp_profile_uuid      = undef,
-  $metadata_proxy_uuid    = undef,
 ) {
 
   include neutron::deps
@@ -136,10 +124,6 @@ class neutron::plugins::nsx (
     }
   }
 
-  if $dhcp_profile_uuid or $metadata_proxy_uuid {
-    warning('dhcp_profile_uuid and $metadata_proxy_uuid are deprecated and will be removed in the future')
-  }
-
   resources { 'neutron_plugin_nsx':
     purge => $purge_config,
   }
@@ -152,9 +136,9 @@ class neutron::plugins::nsx (
     'nsx_v3/nsx_api_managers':         value => join(any2array($nsx_api_managers), ',');
     'nsx_v3/nsx_api_user':             value => $nsx_api_user;
     'nsx_v3/nsx_api_password':         value => $nsx_api_password, secret => true;
-    'nsx_v3/dhcp_profile':             value => pick($dhcp_profile_uuid, $dhcp_profile);
+    'nsx_v3/dhcp_profile':             value => $dhcp_profile;
     'nsx_v3/dhcp_relay_service':       value => $dhcp_relay_service;
-    'nsx_v3/metadata_proxy':           value => pick($metadata_proxy_uuid, $metadata_proxy);
+    'nsx_v3/metadata_proxy':           value => $metadata_proxy;
     'nsx_v3/native_dhcp_metadata':     value => $native_dhcp_metadata;
   }
 

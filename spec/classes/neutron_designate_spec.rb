@@ -19,7 +19,6 @@ describe 'neutron::designate' do
         should contain_neutron_config('designate/auth_type').with_value('password')
         should contain_neutron_config('designate/username').with_value('neutron')
         should contain_neutron_config('designate/user_domain_name').with_value('Default')
-        should contain_neutron_config('designate/project_id').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/project_name').with_value('services')
         should contain_neutron_config('designate/project_domain_name').with_value('Default')
         should contain_neutron_config('designate/system_scope').with_value('<SERVICE DEFAULT>')
@@ -39,7 +38,6 @@ describe 'neutron::designate' do
           :auth_type                 => 'v3password',
           :username                  => 'alt_neutron',
           :user_domain_name          => 'Domain2',
-          :project_id                => '53eceb0b-9913-4c0c-883d-3f43d90dcf9c',
           :project_name              => 'alt_service',
           :project_domain_name       => 'Domain1',
           :auth_url                  => 'http://localhost:5000',
@@ -59,7 +57,6 @@ describe 'neutron::designate' do
         should contain_neutron_config('designate/auth_type').with_value('v3password')
         should contain_neutron_config('designate/username').with_value('alt_neutron')
         should contain_neutron_config('designate/user_domain_name').with_value('Domain2')
-        should contain_neutron_config('designate/project_id').with_value('53eceb0b-9913-4c0c-883d-3f43d90dcf9c')
         should contain_neutron_config('designate/project_name').with_value('alt_service')
         should contain_neutron_config('designate/project_domain_name').with_value('Domain1')
         should contain_neutron_config('designate/system_scope').with_value('<SERVICE DEFAULT>')
@@ -76,7 +73,6 @@ describe 'neutron::designate' do
     context 'with system_scope' do
       let :params do
         req_params.merge!({
-          :project_id          => 'id1',
           :project_name        => 'proj',
           :project_domain_name => 'Domain1',
           :system_scope        => 'all',
@@ -84,7 +80,6 @@ describe 'neutron::designate' do
       end
 
       it 'configures designate in neutron.conf' do
-        should contain_neutron_config('designate/project_id').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/project_name').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/project_domain_name').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/system_scope').with_value('all')

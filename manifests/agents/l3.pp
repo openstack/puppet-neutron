@@ -122,12 +122,6 @@
 #   Used by logging service plugin.
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*gateway_external_network_id*]
-#   (optional) The ID of the external network in neutron
-#   Defaults to undef
-#
 class neutron::agents::l3 (
   $package_ensure                    = 'present',
   $enabled                           = true,
@@ -154,20 +148,10 @@ class neutron::agents::l3 (
   $network_log_rate_limit            = $::os_service_default,
   $network_log_burst_limit           = $::os_service_default,
   $network_log_local_output_log_base = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $gateway_external_network_id      = undef,
 ) {
 
   include neutron::deps
   include neutron::params
-
-  if $gateway_external_network_id != undef {
-    warning('gateway_external_network_id parameter is deprecated and has no effect')
-  }
-
-  neutron_l3_agent_config {
-    'DEFAULT/gateway_external_network_id': ensure => absent;
-  }
 
   resources { 'neutron_l3_agent_config':
     purge => $purge_config,

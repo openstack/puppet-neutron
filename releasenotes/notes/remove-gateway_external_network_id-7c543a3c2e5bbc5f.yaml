@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``neutron::agents::l3::gateway_external_network_id`` parameter has been
+    removed.

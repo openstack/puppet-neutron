@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``neutron::designate::project_id`` parameter has been removed.

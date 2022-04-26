@@ -62,13 +62,6 @@
 # [*ptr_zone_email*]
 #   (optional) The email address to be used when creating PTR zones.
 #
-# DEPRECATED PARAMETERS
-#
-# [*project_id*]
-#   (optional) The UUID of the admin designate project. If provided this takes
-#   precedence over project_name.
-#   defaults to undef
-#
 class neutron::designate (
   $password,
   $url,
@@ -85,22 +78,14 @@ class neutron::designate (
   $ipv4_ptr_zone_prefix_size = $::os_service_default,
   $ipv6_ptr_zone_prefix_size = $::os_service_default,
   $ptr_zone_email            = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $project_id                = undef,
 ) {
   include neutron::deps
   include neutron::params
 
-  if $project_id != undef {
-    warning('The neutron::designate::project_id parmaeter is deprecated. Use the project_name parameter.')
-  }
-
   if is_service_default($system_scope){
-    $project_id_real = pick($project_id, $::os_service_default)
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_id_real = $::os_service_default
     $project_name_real = $::os_service_default
     $project_domain_name_real = $::os_service_default
   }
@@ -112,7 +97,6 @@ class neutron::designate (
     'designate/auth_type':                 value => $auth_type;
     'designate/username':                  value => $username;
     'designate/user_domain_name':          value => $user_domain_name;
-    'designate/project_id':                value => $project_id_real;
     'designate/project_name':              value => $project_name_real;
     'designate/project_domain_name':       value => $project_domain_name_real;
     'designate/system_scope':              value => $system_scope;

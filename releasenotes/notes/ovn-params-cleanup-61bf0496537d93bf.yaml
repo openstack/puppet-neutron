@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``neutron::plugins::ml2::ovn`` class have
+    been removed.
+
+    - ``ovn_l3_mode``
+    - ``vif_type``

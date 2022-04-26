@@ -69,11 +69,6 @@
 #            that are no longer in Neutron.
 #   Defaults to $::os_service_default
 #
-# [*vif_type*]
-#   (optional) Type of VIF to be used for ports.
-#   Valid values are 'ovs', 'vhostuser'
-#   Defaults to $::os_service_default
-#
 # [*ovn_metadata_enabled*]
 #   (optional) Whether to enable metadata service in OVN.
 #   Type: boolean
@@ -122,14 +117,6 @@
 #   Used by logging service plugin.
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*ovn_l3_mode*]
-#   (optional) Whether to use OVN native L3 support. Do not change the
-#   value for existing deployments that contain routers.
-#   Type: boolean
-#   Defaults to undef
-#
 class neutron::plugins::ml2::ovn(
   $ovn_nb_connection                 = $::os_service_default,
   $ovn_sb_connection                 = $::os_service_default,
@@ -152,21 +139,10 @@ class neutron::plugins::ml2::ovn(
   $network_log_rate_limit            = $::os_service_default,
   $network_log_burst_limit           = $::os_service_default,
   $network_log_local_output_log_base = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $ovn_l3_mode                       = undef,
-  $vif_type                          = undef,
 ) {
 
   include neutron::deps
   require neutron::plugins::ml2
-
-  if $ovn_l3_mode != undef {
-    warning('The ovn_l3_mode parameter has been deprecated and has no effect')
-  }
-
-  if $vif_type != undef {
-    warning('The vif_type parameter has been deprecated and has no effect')
-  }
 
   if ! ( $neutron_sync_mode in ['off', 'log', 'repair', $::os_service_default] ) {
     fail( 'Invalid value for neutron_sync_mode parameter' )
@@ -193,11 +169,5 @@ class neutron::plugins::ml2::ovn(
     'network_log/rate_limit'            : value => $network_log_rate_limit;
     'network_log/burst_limit'           : value => $network_log_burst_limit;
     'network_log/local_output_log_base' : value => $network_log_local_output_log_base;
-  }
-
-  # TODO(tkajinam): Remove this when removing the deprecated parameters
-  neutron_plugin_ml2 {
-    'ovn/ovn_l3_mode' : ensure => absent;
-    'ovn/vif_type'    : ensure => absent;
   }
 }

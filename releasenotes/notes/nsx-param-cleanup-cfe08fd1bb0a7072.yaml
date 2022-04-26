@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``neutron::plugins::nsx`` class have been
+    removed.
+
+    - ``dhcp_profile_uuid``
+    - ``metadata_proxy_uuid``

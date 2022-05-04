@@ -219,11 +219,11 @@ class neutron::agents::dhcp (
   }
 
   neutron_dhcp_agent_config {
-    'OVS/ovsdb_connection':   value => $ovsdb_connection;
-    'OVS/integration_bridge': value => $ovs_integration_bridge;
-    'OVS/ssl_key_file':       value => $ovsdb_agent_ssl_key_file;
-    'OVS/ssl_cert_file':      value => $ovsdb_agent_ssl_cert_file;
-    'OVS/ssl_ca_cert_file':   value => $ovsdb_agent_ssl_ca_file;
+    'ovs/ovsdb_connection':   value => $ovsdb_connection;
+    'ovs/integration_bridge': value => $ovs_integration_bridge;
+    'ovs/ssl_key_file':       value => $ovsdb_agent_ssl_key_file;
+    'ovs/ssl_cert_file':      value => $ovsdb_agent_ssl_cert_file;
+    'ovs/ssl_ca_cert_file':   value => $ovsdb_agent_ssl_ca_file;
   }
 
   if $::neutron::params::dhcp_agent_package {

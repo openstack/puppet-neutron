@@ -46,11 +46,11 @@ describe 'neutron::agents::dhcp' do
       should contain_neutron_dhcp_agent_config('agent/availability_zone').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('agent/report_interval').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>');
-      should contain_neutron_dhcp_agent_config('OVS/ovsdb_connection').with_value('<SERVICE DEFAULT>');
-      should contain_neutron_dhcp_agent_config('OVS/integration_bridge').with_value('<SERVICE DEFAULT>');
-      should contain_neutron_dhcp_agent_config('OVS/ssl_key_file').with_value('<SERVICE DEFAULT>');
-      should contain_neutron_dhcp_agent_config('OVS/ssl_cert_file').with_value('<SERVICE DEFAULT>');
-      should contain_neutron_dhcp_agent_config('OVS/ssl_ca_cert_file').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_dhcp_agent_config('ovs/ovsdb_connection').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_dhcp_agent_config('ovs/integration_bridge').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_dhcp_agent_config('ovs/ssl_key_file').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_dhcp_agent_config('ovs/ssl_cert_file').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_dhcp_agent_config('ovs/ssl_ca_cert_file').with_value('<SERVICE DEFAULT>');
     end
 
     it 'installs neutron-dhcp-agent package' do
@@ -172,10 +172,10 @@ describe 'neutron::agents::dhcp' do
         })
       end
       it 'configures neutron SSL settings' do
-        should contain_neutron_dhcp_agent_config('OVS/ovsdb_connection').with_value(params[:ovsdb_connection])
-        should contain_neutron_dhcp_agent_config('OVS/ssl_key_file').with_value(params[:ovsdb_agent_ssl_key_file])
-        should contain_neutron_dhcp_agent_config('OVS/ssl_cert_file').with_value(params[:ovsdb_agent_ssl_cert_file])
-        should contain_neutron_dhcp_agent_config('OVS/ssl_ca_cert_file').with_value(params[:ovsdb_agent_ssl_ca_file])
+        should contain_neutron_dhcp_agent_config('ovs/ovsdb_connection').with_value(params[:ovsdb_connection])
+        should contain_neutron_dhcp_agent_config('ovs/ssl_key_file').with_value(params[:ovsdb_agent_ssl_key_file])
+        should contain_neutron_dhcp_agent_config('ovs/ssl_cert_file').with_value(params[:ovsdb_agent_ssl_cert_file])
+        should contain_neutron_dhcp_agent_config('ovs/ssl_ca_cert_file').with_value(params[:ovsdb_agent_ssl_ca_file])
       end
     end
 

@@ -28,7 +28,8 @@
 #   (optional) Defaults to 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver'.
 #
 # [*interface_driver*]
-#  (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
+#   (optional) The driver used to manage the virtual interface.
+#   Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*ipsec_status_check_interval*]
 #   (optional) Status check interval. Defaults to $::os_service_default.

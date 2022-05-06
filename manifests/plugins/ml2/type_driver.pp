@@ -112,9 +112,6 @@ define neutron::plugins::ml2::type_driver (
   elsif ($name == 'local') {
     warning('local type_driver is useful only for single-box, because it provides no connectivity between hosts')
   }
-  elsif ($name == 'nexus_vxlan') {
-    # Nexus_vxlan type driver has its own class separate from this one
-  }
   elsif ($name == 'geneve') {
     validate_vni_ranges($vni_ranges)
     if !is_service_default($max_header_size) {

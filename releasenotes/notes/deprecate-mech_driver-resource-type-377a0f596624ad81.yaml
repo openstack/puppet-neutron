@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``neutron::plugins::ml2::mech_driver`` defined resource type has been
+    deprecated and has no effect. This defined type was quite outdated and
+    its implementation was no longer compatible with the recent versions.

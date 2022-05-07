@@ -108,7 +108,6 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/global_physnet_mtu').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/dhcp_agent_notification').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/allow_bulk').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('DEFAULT/allow_overlapping_ips').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/api_extensions_path').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/state_path').with_value('<SERVICE DEFAULT>')

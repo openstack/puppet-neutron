@@ -7,7 +7,6 @@
 #
 
 class { 'neutron':
-  allow_overlapping_ips => true,
   default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
   service_plugins       => ['router']
 }

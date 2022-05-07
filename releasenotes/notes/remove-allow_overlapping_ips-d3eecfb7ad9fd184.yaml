@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``neutron::allow_overlapping_ips`` parameter has been removed.

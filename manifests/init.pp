@@ -309,12 +309,6 @@
 #   (optional) Allow plugins that support it to create VLAN transparent networks
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*allow_overlapping_ips*]
-#   (optional) Enables network namespaces
-#   Defaults to undef
-#
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
@@ -381,18 +375,10 @@ class neutron (
   $notification_transport_url           = $::os_service_default,
   $max_allowed_address_pair             = $::os_service_default,
   $vlan_transparent                     = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $allow_overlapping_ips                = undef,
 ) {
 
   include neutron::deps
   include neutron::params
-
-  if $allow_overlapping_ips != undef {
-    warning('The allow_overlapping_ips parameter is deprecated and \
-will be removed in a future release.')
-  }
-  $allow_overlapping_ips_real = pick($allow_overlapping_ips, $::os_service_default)
 
   if ! is_service_default($use_ssl) and ($use_ssl) {
     if is_service_default($cert_file) {
@@ -431,7 +417,6 @@ will be removed in a future release.')
     'DEFAULT/dhcp_agents_per_network':  value => $dhcp_agents_per_network;
     'DEFAULT/dhcp_agent_notification':  value => $dhcp_agent_notification;
     'DEFAULT/allow_bulk':               value => $allow_bulk;
-    'DEFAULT/allow_overlapping_ips':    value => $allow_overlapping_ips_real;
     'DEFAULT/api_extensions_path':      value => $api_extensions_path;
     'DEFAULT/state_path':               value => $state_path;
     'DEFAULT/global_physnet_mtu':       value => $global_physnet_mtu;

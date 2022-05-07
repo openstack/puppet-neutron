@@ -3,7 +3,6 @@
 # General Neutron stuff
 # Configures everything in neutron.conf
 class { 'neutron':
-  allow_overlapping_ips => true,
   default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
   service_plugins       => ['metering']
 }
@@ -46,7 +45,6 @@ class { 'neutron::plugins::ml2':
 # Generally, any machine with a neutron element running on it talks
 # over Rabbit and needs to know if overlapping IPs (namespaces) are in use
 class { 'neutron':
-  allow_overlapping_ips => true,
   default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
 }
 

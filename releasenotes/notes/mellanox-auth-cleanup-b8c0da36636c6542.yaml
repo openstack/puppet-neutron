@@ -1,0 +1,9 @@
+---
+upgrade:
+  - |
+    The following parameters of
+    the ``neutron::plugins::ml2::mellanox::mlnx_sdn_assist`` class have been
+    removed.
+
+    - ``sdn_username``
+    - ``sdn_password``

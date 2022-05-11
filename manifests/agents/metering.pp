@@ -35,10 +35,12 @@
 #   (optional) Show debugging output in log. Defaults to $::os_service_default.
 #
 # [*interface_driver*]
-#   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
+#   (optional) The driver used to manage the virtual interface.
+#   Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*driver*]
-#   (optional) Defaults to 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver'.
+#   (optional) Metering driver.
+#   Defaults to 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver'.
 #
 # [*measure_interval*]
 #   (optional) Interval between two metering measures.

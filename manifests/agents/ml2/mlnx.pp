@@ -38,7 +38,7 @@
 #   Defaults to $::os_service_default
 #
 # [*interface_driver*]
-#   (optional) Driver to interface with neutron
+#   (optional) The driver used to manage the virtual interface.
 #   Defaults to $::os_service_default
 #
 # [*multi_interface_driver_mappings*]

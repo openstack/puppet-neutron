@@ -23,8 +23,8 @@
 #   Defaults to $::os_service_default
 #
 # [*interface_driver*]
-#   (optional) Driver to interface with neutron
-#   Defaults to OVSInterfaceDriver
+#   (optional) The driver used to manage the virtual interface.
+#   Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*handle_internal_only_routers*]
 #   (optional) L3 Agent will handle non-external routers

@@ -28,7 +28,8 @@
 #   Defaults to $::os_service_default.
 #
 # [*interface_driver*]
-#   (optional) Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
+#   (optional) The driver used to manage the virtual interface.
+#   Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*dhcp_driver*]
 #   (optional) Defaults to $::os_service_default.

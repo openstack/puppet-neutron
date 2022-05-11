@@ -84,6 +84,10 @@
 #   (optional) Maximum number of retries in case of conflict error (HTTP 409).
 #   Defaults to $::os_service_default
 #
+# [*valid_interfaces*]
+#   (Optional) List of interfaces, in order of preference for endpoint URL.
+#   Defaults to $::os_service_default
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options in the
 #   ironic-neutron-agent config.
@@ -116,6 +120,7 @@ class neutron::agents::ml2::networking_baremetal (
   $region_name             = $::os_service_default,
   $status_code_retry_delay = $::os_service_default,
   $status_code_retries     = $::os_service_default,
+  $valid_interfaces        = $::os_service_default,
   $purge_config            = false,
   $report_interval         = $::os_service_default,
 ) {
@@ -152,6 +157,7 @@ class neutron::agents::ml2::networking_baremetal (
     'ironic/region_name':             value => $region_name;
     'ironic/status_code_retry_delay': value => $status_code_retry_delay;
     'ironic/status_code_retries':     value => $status_code_retries;
+    'ironic/valid_interfaces':        value => join(any2array($valid_interfaces), ',');
     'agent/report_interval':          value => $report_interval;
   }
 

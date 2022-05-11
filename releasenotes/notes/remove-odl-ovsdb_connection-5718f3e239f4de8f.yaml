@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated ``neutron::plugins::ml2::opendaylight::ovsdb_connection``
+    parameter has been removed.

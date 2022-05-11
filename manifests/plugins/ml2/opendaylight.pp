@@ -37,18 +37,11 @@
 # (optional) List of ODL features to enable
 # Defaults to $::os_service_default
 #
-# === Deprecated Parameters
-#
-# [*ovsdb_connection*]
-# (optional) Deprecated.  The URI used to connect to the local OVSDB server
-# Defaults to 'tcp:127.0.0.1:6639'
-#
 class neutron::plugins::ml2::opendaylight (
   $package_ensure            = 'present',
   $odl_username              = $::os_service_default,
   $odl_password              = $::os_service_default,
   $odl_url                   = $::os_service_default,
-  $ovsdb_connection          = 'tcp:127.0.0.1:6639',
   $port_binding_controller   = $::os_service_default,
   $odl_hostconf_uri          = $::os_service_default,
   $odl_features              = $::os_service_default,
@@ -73,11 +66,8 @@ class neutron::plugins::ml2::opendaylight (
     'ml2_odl/odl_features':            value => join(any2array($odl_features), ',');
   }
 
-  if $ovsdb_connection != 'tcp:127.0.0.1:6639' {
-    warning('The ovsdb_connection parameter is deprecated and will be removed in future releases')
-  }
-
+  # TODO(tkajinam): Remove this after Zed release.
   neutron_config {
-    'OVS/ovsdb_connection': value => $ovsdb_connection;
+    'OVS/ovsdb_connection': ensure => absent;
   }
 }

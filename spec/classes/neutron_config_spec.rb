@@ -56,19 +56,20 @@ describe 'neutron::config' do
 
   shared_examples 'neutron_agent_config' do
     let :params do
-      { :ovs_agent_config      => config_hash,
-        :sriov_agent_config    => config_hash,
-        :l3_agent_config       => config_hash,
-        :dhcp_agent_config     => config_hash,
-        :metadata_agent_config => config_hash,
-        :metering_agent_config => config_hash,
-        :vpnaas_agent_config   => config_hash,
-        :l2gw_agent_config     => config_hash,
-        :bgp_dragent_config    => config_hash,
+      { :ovs_agent_config         => config_hash,
+        :sriov_agent_config       => config_hash,
+        :linuxbridge_agent_config => config_hash,
+        :l3_agent_config          => config_hash,
+        :dhcp_agent_config        => config_hash,
+        :metadata_agent_config    => config_hash,
+        :metering_agent_config    => config_hash,
+        :vpnaas_agent_config      => config_hash,
+        :l2gw_agent_config        => config_hash,
+        :bgp_dragent_config       => config_hash,
       }
     end
 
-    it 'configures arbitrary neutron_ovs_agent_config configurations' do
+    it 'configures arbitrary neutron_agent_ovs configurations' do
       should contain_neutron_agent_ovs('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_agent_ovs('DEFAULT/bar').with_value('barValue')
       should contain_neutron_agent_ovs('DEFAULT/baz').with_ensure('absent')
@@ -78,6 +79,12 @@ describe 'neutron::config' do
       should contain_neutron_sriov_agent_config('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_sriov_agent_config('DEFAULT/bar').with_value('barValue')
       should contain_neutron_sriov_agent_config('DEFAULT/baz').with_ensure('absent')
+    end
+
+    it 'configures arbitrary neutron_agent_linuxbridge configurations' do
+      should contain_neutron_agent_linuxbridge('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_agent_linuxbridge('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_agent_linuxbridge('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary l3_agent_config configurations' do

@@ -349,12 +349,6 @@ class neutron::server (
     'ovs/igmp_snooping_enable':                 value => $igmp_snooping_enable;
   }
 
-  # DEFAULT/ovs_intergation_bridge was deprecated in favor of
-  # ovs/intergation_bridge. Make sure to purge the old parameter
-  neutron_config {
-    'DEFAULT/ovs_integration_bridge': ensure => 'absent'
-  }
-
   if $server_package {
     package { 'neutron-server':
       ensure => $package_ensure,

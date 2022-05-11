@@ -197,12 +197,6 @@ class neutron::agents::dhcp (
     'DEFAULT/rpc_response_max_timeout':  value => $rpc_response_max_timeout;
   }
 
-  # DEFAULT/ovs_intergation_bridge was deprecated in favor of
-  # ovs/intergation_bridge. Make sure to purge the old parameter
-  neutron_dhcp_agent_config {
-    'DEFAULT/ovs_integration_bridge': ensure => 'absent'
-  }
-
   if $ovsdb_connection =~ /^ssl:/ {
     $req_ssl_opts = {
       'ovsdb_agent_ssl_key_file'  => $ovsdb_agent_ssl_key_file,

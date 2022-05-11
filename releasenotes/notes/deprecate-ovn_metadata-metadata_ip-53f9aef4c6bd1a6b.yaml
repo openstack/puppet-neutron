@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::agents::ovn_metadata::metadata_ip`` parameter has been
+    deprecated and has no effect now.

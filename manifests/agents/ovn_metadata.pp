@@ -29,9 +29,6 @@
 # [*nova_client_priv_key*]
 #   Private key of client certificate. (Defaults to $::os_service_default)
 #
-# [*metadata_ip*]
-#   The IP address of the metadata service. Defaults to $::os_service_default.
-#
 # [*metadata_host*]
 #   The hostname of the metadata service. Defaults to $::os_service_default.
 #
@@ -112,6 +109,10 @@
 #  (optional) Set probe interval, based on user configuration, value is in ms
 #  Defaults to undef
 #
+# [*metadata_ip*]
+#   The IP address of the metadata service.
+#   Defaults to undef
+#
 class neutron::agents::ovn_metadata (
   $shared_secret,
   $package_ensure            = 'present',
@@ -119,7 +120,6 @@ class neutron::agents::ovn_metadata (
   $manage_service            = true,
   $debug                     = false,
   $auth_ca_cert              = $::os_service_default,
-  $metadata_ip               = $::os_service_default,
   $metadata_host             = $::os_service_default,
   $metadata_port             = $::os_service_default,
   $metadata_protocol         = $::os_service_default,
@@ -141,6 +141,7 @@ class neutron::agents::ovn_metadata (
   $purge_config              = false,
   # DEPRECATED PARAMETERS
   $ovn_remote_probe_interval = undef,
+  $metadata_ip               = undef,
   ) {
 
   include neutron::deps
@@ -153,6 +154,13 @@ class neutron::agents::ovn_metadata (
     'ovn/ovn_remote_probe_interval': ensure => absent;
   }
 
+  if $metadata_ip != undef {
+    warning('The metadata_ip parameter is deprecated and has no effect')
+  }
+  ovn_metadata_agent_config {
+    'DEFAULT/nova_metadata_ip': ensure => absent;
+  }
+
   resources { 'ovn_metadata_agent_config':
     purge => $purge_config,
   }
@@ -160,7 +168,6 @@ class neutron::agents::ovn_metadata (
   ovn_metadata_agent_config {
     'DEFAULT/debug':                          value => $debug;
     'DEFAULT/auth_ca_cert':                   value => $auth_ca_cert;
-    'DEFAULT/nova_metadata_ip':               value => $metadata_ip;
     'DEFAULT/nova_metadata_host':             value => $metadata_host;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/nova_metadata_protocol':         value => $metadata_protocol;

@@ -54,11 +54,15 @@ class neutron::services::bgpvpn (
     tag    => ['openstack', 'neutron-package'],
   })
 
-  if !is_service_default($service_providers) {
-    # default value is uncommented setting, so we should not touch it at all
-    neutron_bgpvpn_service_config { 'service_providers/service_provider':
-      value => $service_providers,
-    }
+  if is_service_default($service_providers) {
+    # NOTE(tkajinam): bgpvpn requires the additional 'default' value.
+    $service_providers_real = 'BGPVPN:Dummy:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default'
+  } else {
+    $service_providers_real = $service_providers
+  }
+
+  neutron_bgpvpn_service_config { 'service_providers/service_provider':
+    value => $service_providers_real,
   }
 
   resources { 'neutron_bgpvpn_service_config':

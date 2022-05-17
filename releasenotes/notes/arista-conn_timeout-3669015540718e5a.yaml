@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The ``neutron::plugins::ml2::arista`` class and
+    the ``neutron::plugins::ml2::arista::l3`` class now support the new
+    ``conn_timeout`` parameter.

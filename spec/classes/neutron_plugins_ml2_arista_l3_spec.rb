@@ -34,6 +34,7 @@ describe 'neutron::plugins::ml2::arista::l3' do
       :secondary_l3_host => '<SERVICE DEFAULT>',
       :mlag_config       => '<SERVICE DEFAULT>',
       :l3_sync_interval  => '<SERVICE DEFAULT>',
+      :conn_timeout      => '<SERVICE DEFAULT>',
       :use_vrf           => '<SERVICE DEFAULT>'
     }
   end
@@ -57,6 +58,7 @@ describe 'neutron::plugins::ml2::arista::l3' do
       should contain_neutron_plugin_ml2('l3_arista/secondary_l3_host').with_value(p[:secondary_l3_host])
       should contain_neutron_plugin_ml2('l3_arista/mlag_config').with_value(p[:mlag_config])
       should contain_neutron_plugin_ml2('l3_arista/l3_sync_interval').with_value(p[:l3_sync_interval])
+      should contain_neutron_plugin_ml2('l3_arista/conn_timeout').with_value(p[:conn_timeout])
       should contain_neutron_plugin_ml2('l3_arista/use_vrf').with_value(p[:use_vrf])
     end
 

@@ -33,6 +33,7 @@ describe 'neutron::plugins::ml2::arista' do
     {
       :region_name   => '<SERVICE DEFAULT>',
       :sync_interval => '<SERVICE DEFAULT>',
+      :conn_timeout  => '<SERVICE DEFAULT>',
       :use_fqdn      => '<SERVICE DEFAULT>'
     }
   end
@@ -55,6 +56,7 @@ describe 'neutron::plugins::ml2::arista' do
       should contain_neutron_plugin_ml2('ml2_arista/eapi_password').with_value(p[:eapi_password]).with_secret(true)
       should contain_neutron_plugin_ml2('ml2_arista/region_name').with_value(p[:region_name])
       should contain_neutron_plugin_ml2('ml2_arista/sync_interval').with_value(p[:sync_interval])
+      should contain_neutron_plugin_ml2('ml2_arista/conn_timeout').with_value(p[:conn_timeout])
       should contain_neutron_plugin_ml2('ml2_arista/use_fqdn').with_value(p[:use_fqdn])
     end
 

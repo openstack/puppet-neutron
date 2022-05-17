@@ -20,31 +20,35 @@
 # === Parameters
 #
 # [*primary_l3_host*]
-# (required) The Arista EOS IP address.
+#   (required) The Arista EOS IP address.
 #
 # [*primary_l3_host_username*]
-# (required) The Arista EOS username.
+#   (required) The Arista EOS username.
 #
 # [*primary_l3_host_password*]
-# (required) The Arista EOS password.
+#   (required) The Arista EOS password.
 #
 # [*secondary_l3_host*]
-# (optional) The Arist EOS IP address for second switch MLAGed
-# with the first one. Only required if $mlag_config is set to true.
-# Defaults to $::os_service_default
+#   (optional) The Arist EOS IP address for second switch MLAGed
+#   with the first one. Only required if $mlag_config is set to true.
+#   Defaults to $::os_service_default
 #
 # [*mlag_config*]
-# (optional) Indicates that the switch is in MLAG mode.
-# Defaults to $::os_service_default
+#   (optional) Indicates that the switch is in MLAG mode.
+#   Defaults to $::os_service_default
 #
 # [*l3_sync_interval*]
-# (optional) Sync interval in seconds between l3 service plugin and
-# the EOS.
-# Defaults to $::os_service_default
+#   (optional) Sync interval in seconds between l3 service plugin and
+#   the EOS.
+#   Defaults to $::os_service_default
+#
+# [*conn_timeout*]
+#   (optional) Connection timeout interval in seconds.
+#   Defaults to $::os_service_default
 #
 # [*use_vrf*]
-# (optional) If it should create a router in VRF.
-# Defaults to $::os_service_default
+#   (optional) If it should create a router in VRF.
+#   Defaults to $::os_service_default
 #
 class neutron::plugins::ml2::arista::l3(
   $primary_l3_host,
@@ -53,8 +57,8 @@ class neutron::plugins::ml2::arista::l3(
   $secondary_l3_host        = $::os_service_default,
   $mlag_config              = $::os_service_default,
   $l3_sync_interval         = $::os_service_default,
-  $use_vrf                  = $::os_service_default
-
+  $conn_timeout             = $::os_service_default,
+  $use_vrf                  = $::os_service_default,
 ) {
 
   include neutron::deps
@@ -74,6 +78,7 @@ class neutron::plugins::ml2::arista::l3(
     'l3_arista/secondary_l3_host'       : value => $secondary_l3_host;
     'l3_arista/mlag_config'             : value => $mlag_config;
     'l3_arista/l3_sync_interval'        : value => $l3_sync_interval;
+    'l3_arista/conn_timeout'            : value => $conn_timeout;
     'l3_arista/use_vrf'                 : value => $use_vrf;
   }
 }

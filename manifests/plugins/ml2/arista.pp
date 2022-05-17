@@ -42,6 +42,10 @@
 #   (optional) Defines if hostnames are sent to Arista EOS as FQDNS
 #   Defaults to $::os_service_default
 #
+# [*conn_timeout*]
+#   (optional) Connection timeout interval in seconds.
+#   Defaults to $::os_service_default
+#
 # [*package_ensure*]
 #   (optional) The intended state of the python-networking-baremetal
 #   package, i.e. any of the possible values of the 'ensure'
@@ -54,6 +58,7 @@ class neutron::plugins::ml2::arista(
   $eapi_password,
   $region_name    = $::os_service_default,
   $sync_interval  = $::os_service_default,
+  $conn_timeout   = $::os_service_default,
   $use_fqdn       = $::os_service_default,
   $package_ensure = 'present'
 ) {
@@ -67,6 +72,7 @@ class neutron::plugins::ml2::arista(
     'ml2_arista/eapi_password': value => $eapi_password, secret => true;
     'ml2_arista/region_name'  : value => $region_name;
     'ml2_arista/sync_interval': value => $sync_interval;
+    'ml2_arista/conn_timeout' : value => $conn_timeout;
     'ml2_arista/use_fqdn'     : value => $use_fqdn;
   }
 

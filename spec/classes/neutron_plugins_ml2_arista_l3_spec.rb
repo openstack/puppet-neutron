@@ -46,29 +46,30 @@ describe 'neutron::plugins::ml2::arista::l3' do
   end
 
   shared_examples 'neutron plugin ml2 arista l3_arista' do
-    before do
-      params.merge!(default_params)
+    let :p do
+      default_params.merge(params)
     end
 
     it 'configures ml2 arista l3_arista settings' do
-      should contain_neutron_plugin_ml2('l3_arista/primary_l3_host').with_value(params[:primary_l3_host])
-      should contain_neutron_plugin_ml2('l3_arista/primary_l3_host_username').with_value(params[:primary_l3_host_username])
-      should contain_neutron_plugin_ml2('l3_arista/primary_l3_host_password').with_value(params[:primary_l3_host_password]).with_secret(true)
-    end
-  end
-
-  shared_examples 'ml2 l3_arista should fail when mlag is true and secondary is service default' do
-    let :params do
-      {}
+      should contain_neutron_plugin_ml2('l3_arista/primary_l3_host').with_value(p[:primary_l3_host])
+      should contain_neutron_plugin_ml2('l3_arista/primary_l3_host_username').with_value(p[:primary_l3_host_username])
+      should contain_neutron_plugin_ml2('l3_arista/primary_l3_host_password').with_value(p[:primary_l3_host_password]).with_secret(true)
+      should contain_neutron_plugin_ml2('l3_arista/secondary_l3_host').with_value(p[:secondary_l3_host])
+      should contain_neutron_plugin_ml2('l3_arista/mlag_config').with_value(p[:mlag_config])
+      should contain_neutron_plugin_ml2('l3_arista/l3_sync_interval').with_value(p[:l3_sync_interval])
+      should contain_neutron_plugin_ml2('l3_arista/use_vrf').with_value(p[:use_vrf])
     end
 
-    before do
-      params.merge!(default_params)
-      params[:mlag_config] = true
-    end
+    context 'with mlag enabled but secondary l3 host missing' do
+      before :each do
+        params.merge!({
+          :mlag_config => true
+        })
+      end
 
-    it 'should fail when mlag is true and secondary l3 host is service default' do
-      should raise_error(Puppet::Error, /Must set secondary_l3_host when mlag_config is true./)
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Must set secondary_l3_host when mlag_config is true./)
+      end
     end
   end
 

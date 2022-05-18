@@ -74,8 +74,7 @@ Puppet::Type.type(:neutron_subnet).provide(
     return [] if values.empty? or values == '[]'
     values = values.gsub('[', '').gsub(']', '')
     for value in Array(values)
-      allocation_pool = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"')
-                                   .gsub('\'','"'))
+      allocation_pool = JSON.parse(value.gsub(/\\"/,'"').gsub('\'','"'))
       start_ip = allocation_pool['start']
       end_ip = allocation_pool['end']
       allocation_pools << "start=#{start_ip},end=#{end_ip}"
@@ -88,8 +87,7 @@ Puppet::Type.type(:neutron_subnet).provide(
     return [] if values.empty? or values == '[]'
     values = values.gsub('[', '').gsub(']', '')
     for value in Array(values)
-      host_route = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"')
-                              .gsub('\'','"'))
+      host_route = JSON.parse(value.gsub(/\\"/,'"').gsub('\'','"'))
       nexthop = host_route['nexthop']
       destination = host_route['destination']
       host_routes << "destination=#{destination},nexthop=#{nexthop}"
@@ -99,8 +97,8 @@ Puppet::Type.type(:neutron_subnet).provide(
 
   def self.parse_dns_nameservers(values)
     if values.is_a? String
-        values = values.gsub('u\'', '').gsub('\'','').gsub('[', '')
-                       .gsub(']', '').gsub(',', '').split(' ')
+        values = values.gsub('\'','').gsub('[', '').gsub(']', '')
+                       .gsub(',', '').split(' ')
     end
     # just enforce that this is actually an array
     return Array(values)

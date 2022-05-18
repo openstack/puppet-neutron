@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The ``neutron::agents::ml2::networking_baremetal`` class now supports
+    the new ``valid_interfaces`` parameter. This parameter controls
+    the ``[ironic] valid_interfaces`` option in ``ironic_neutron_agent.ini``.

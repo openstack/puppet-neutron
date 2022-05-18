@@ -50,6 +50,14 @@ describe 'neutron::services::bgpvpn' do
           :refreshonly => 'true',
         )
       end
+
+      it 'configures networking_bgpvpn.conf' do
+        should contain_neutron_bgpvpn_service_config(
+          'service_providers/service_provider'
+        ).with_value(
+          'BGPVPN:Dummy:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default'
+        )
+      end
     end
 
     context 'with multiple service providers' do

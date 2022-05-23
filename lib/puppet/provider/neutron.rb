@@ -115,7 +115,7 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
   end
 
   def self.parse_subnet_id(value)
-    fixed_ips = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"').gsub('\'','"'))
+    fixed_ips = JSON.parse(value.gsub(/\\"/,'"').gsub('\'','"'))
     subnet_ids = []
     fixed_ips.each do |fixed_ip|
       subnet_ids << fixed_ip['subnet_id']
@@ -129,7 +129,7 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
   end
 
   def self.parse_availability_zone_hint(value)
-    hints = JSON.parse(value.gsub(/\\"/,'"').gsub('u\'', '"').gsub('\'','"'))
+    hints = JSON.parse(value.gsub(/\\"/,'"').gsub('\'','"'))
     if hints.length > 1
       hints
     else

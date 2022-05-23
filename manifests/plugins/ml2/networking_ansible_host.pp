@@ -1,6 +1,7 @@
-# Defined type for networking-ansible configuration for a host/switch
+# == Define: neutron::plugins::ml2::networking_ansible_host
 #
-# == Class: neutron::plugins::ml2::networking_ansible_host
+# DEPRECATED !!
+# Defined type for networking-ansible configuration for a host/switch
 #
 # === Parameters
 #
@@ -49,6 +50,9 @@ define neutron::plugins::ml2::networking_ansible_host(
 
   include neutron::deps
   require neutron::plugins::ml2
+
+  warning('Support for networking-ansible has been deprecated and \
+will be removed in a future release.')
 
   if ((is_service_default($ansible_ssh_pass) and is_service_default($ansible_ssh_private_key_file)) or
       (!is_service_default($ansible_ssh_pass) and !is_service_default($ansible_ssh_private_key_file))) {

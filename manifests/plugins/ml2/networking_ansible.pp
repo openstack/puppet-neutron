@@ -1,5 +1,6 @@
 # == Class: neutron::plugins::ml2::networking_ansible
 #
+# DEPRECATED !!
 # Configures the networking-ansible ML2 Mechanism Driver
 #
 # === Parameters
@@ -35,10 +36,13 @@ class neutron::plugins::ml2::networking_ansible(
   $host_configs,
   $coordination_uri = $::os_service_default,
   $package_ensure   = 'present'
-  ) {
+) {
   include neutron::deps
   include neutron::params
   require neutron::plugins::ml2
+
+  warning('Support for networking-ansible has been deprecated and \
+will be removed in a future release.')
 
   if($::osfamily != 'RedHat') {
     # Drivers are only packaged for RedHat at this time

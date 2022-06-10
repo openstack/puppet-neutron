@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    ``macvtap`` mechanism driver is now supported.

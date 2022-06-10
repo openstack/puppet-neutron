@@ -9,6 +9,7 @@ class neutron::params {
   $ovs_agent_service           = 'neutron-openvswitch-agent'
   $destroy_patch_ports_service = 'neutron-destroy-patch-ports'
   $linuxbridge_agent_service   = 'neutron-linuxbridge-agent'
+  $macvtap_agent_service       = 'neutron-macvtap-agent'
   $opencontrail_plugin_package = 'neutron-plugin-contrail'
   $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
   $vpp_plugin_package          = 'python3-networking-vpp'
@@ -48,6 +49,7 @@ class neutron::params {
     $linuxbridge_server_package         = 'openstack-neutron-linuxbridge'
     $sriov_nic_agent_service            = 'neutron-sriov-nic-agent'
     $sriov_nic_agent_package            = 'openstack-neutron-sriov-nic-agent'
+    $macvtap_agent_package              = 'openstack-neutron-macvtap-agent'
     $dhcp_agent_package                 = false
     $metering_agent_package             = 'openstack-neutron-metering-agent'
     $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
@@ -100,6 +102,7 @@ class neutron::params {
     $linuxbridge_server_package         = 'neutron-plugin-linuxbridge'
     $sriov_nic_agent_service            = 'neutron-sriov-agent'
     $sriov_nic_agent_package            = 'neutron-sriov-agent'
+    $macvtap_agent_package              = 'neutron-macvtap-agent'
     $dhcp_agent_package                 = 'neutron-dhcp-agent'
     $metering_agent_package             = 'neutron-metering-agent'
     $vpnaas_agent_package               = 'python3-neutron-vpnaas'

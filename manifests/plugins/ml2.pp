@@ -47,7 +47,7 @@
 #   entrypoints to be loaded from the neutron.ml2.mechanism_drivers namespace.
 #   Should be an array that can have these elements:
 #   logger, test, linuxbridge, openvswitch, hyperv, ncs, arista, cisco_nexus,
-#   l2population, sriovnicswitch
+#   l2population, sriovnicswitch, macvtap
 #   Default to ['openvswitch', 'linuxbridge'].
 #
 # [*flat_networks*]

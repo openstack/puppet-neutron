@@ -44,8 +44,7 @@ class neutron::params {
     $ovs_agent_package                  = false
     $ovs_server_package                 = 'openstack-neutron-openvswitch'
     $ovs_cleanup_service                = 'neutron-ovs-cleanup'
-    $linuxbridge_agent_package          = false
-    $linuxbridge_server_package         = 'openstack-neutron-linuxbridge'
+    $linuxbridge_agent_package          = 'openstack-neutron-linuxbridge'
     $sriov_nic_agent_service            = 'neutron-sriov-nic-agent'
     $sriov_nic_agent_package            = 'openstack-neutron-sriov-nic-agent'
     $dhcp_agent_package                 = false
@@ -97,7 +96,6 @@ class neutron::params {
     $ovs_server_package                 = 'neutron-plugin-openvswitch'
     $ovs_cleanup_service                = false
     $linuxbridge_agent_package          = 'neutron-linuxbridge-agent'
-    $linuxbridge_server_package         = 'neutron-plugin-linuxbridge'
     $sriov_nic_agent_service            = 'neutron-sriov-agent'
     $sriov_nic_agent_package            = 'neutron-sriov-agent'
     $dhcp_agent_package                 = 'neutron-dhcp-agent'

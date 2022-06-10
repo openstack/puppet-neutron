@@ -152,22 +152,10 @@ class neutron::agents::ml2::linuxbridge (
     neutron_agent_linuxbridge { 'securitygroup/firewall_driver': ensure => absent }
   }
 
-  if $::neutron::params::linuxbridge_agent_package {
-    package { 'neutron-plugin-linuxbridge-agent':
-      ensure => $package_ensure,
-      name   => $::neutron::params::linuxbridge_agent_package,
-      tag    => ['openstack', 'neutron-package'],
-    }
-  } else {
-    # Some platforms (RedHat) do not provide a separate
-    # neutron plugin linuxbridge agent package.
-    if ! defined(Package['neutron-plugin-linuxbridge-agent']) {
-      package { 'neutron-plugin-linuxbridge-agent':
-        ensure => $package_ensure,
-        name   => $::neutron::params::linuxbridge_server_package,
-        tag    => ['openstack', 'neutron-package'],
-      }
-    }
+  package { 'neutron-plugin-linuxbridge-agent':
+    ensure => $package_ensure,
+    name   => $::neutron::params::linuxbridge_agent_package,
+    tag    => ['openstack', 'neutron-package'],
   }
 
   if $manage_service {

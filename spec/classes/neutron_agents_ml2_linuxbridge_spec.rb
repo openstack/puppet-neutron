@@ -41,14 +41,8 @@ describe 'neutron::agents::ml2::linuxbridge' do
       end
 
       it 'installs neutron linuxbridge agent package' do
-        if platform_params.has_key?(:linuxbridge_agent_package)
-          linuxbridge_agent_package = platform_params[:linuxbridge_agent_package]
-        else
-          linuxbridge_agent_package = platform_params[:linuxbridge_server_package]
-        end
-
         should contain_package('neutron-plugin-linuxbridge-agent').with(
-          :name   => linuxbridge_agent_package,
+          :name   => platform_params[:linuxbridge_agent_package],
           :ensure => default_params[:package_ensure],
           :tag    => ['openstack', 'neutron-package'],
         )
@@ -172,8 +166,8 @@ describe 'neutron::agents::ml2::linuxbridge' do
           }
         when 'RedHat'
           {
-            :linuxbridge_server_package => 'openstack-neutron-linuxbridge',
-            :linuxbridge_agent_service  => 'neutron-linuxbridge-agent'
+            :linuxbridge_agent_package => 'openstack-neutron-linuxbridge',
+            :linuxbridge_agent_service => 'neutron-linuxbridge-agent'
           }
         end
       end

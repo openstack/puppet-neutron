@@ -522,18 +522,10 @@ class neutron::agents::ml2::ovs (
   }
 
 
-  if $::neutron::params::ovs_agent_package {
-    package { 'neutron-ovs-agent':
-      ensure => $package_ensure,
-      name   => $::neutron::params::ovs_agent_package,
-      tag    => ['openstack', 'neutron-package'],
-    }
-  } else {
-    package { 'neutron-ovs-agent':
-      ensure => $package_ensure,
-      name   => $::neutron::params::ovs_server_package,
-      tag    => ['openstack', 'neutron-package'],
-    }
+  package { 'neutron-ovs-agent':
+    ensure => $package_ensure,
+    name   => $::neutron::params::ovs_agent_package,
+    tag    => ['openstack', 'neutron-package'],
   }
 
   if $manage_service {

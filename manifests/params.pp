@@ -41,8 +41,7 @@ class neutron::params {
     $rpc_package_name                   = false
     $rpc_service_name                   = false
     $ml2_server_package                 = 'openstack-neutron-ml2'
-    $ovs_agent_package                  = false
-    $ovs_server_package                 = 'openstack-neutron-openvswitch'
+    $ovs_agent_package                  = 'openstack-neutron-openvswitch'
     $ovs_cleanup_service                = 'neutron-ovs-cleanup'
     $linuxbridge_agent_package          = false
     $linuxbridge_server_package         = 'openstack-neutron-linuxbridge'
@@ -94,7 +93,6 @@ class neutron::params {
     }
     $bgp_dragent_package                = 'neutron-bgp-dragent'
     $ovs_agent_package                  = 'neutron-openvswitch-agent'
-    $ovs_server_package                 = 'neutron-plugin-openvswitch'
     $ovs_cleanup_service                = false
     $linuxbridge_agent_package          = 'neutron-linuxbridge-agent'
     $linuxbridge_server_package         = 'neutron-plugin-linuxbridge'

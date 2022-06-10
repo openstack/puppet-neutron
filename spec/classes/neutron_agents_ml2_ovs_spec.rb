@@ -87,14 +87,11 @@ describe 'neutron::agents::ml2::ovs' do
     end
 
     it 'installs neutron ovs agent package' do
-      if platform_params.has_key?(:ovs_agent_package)
-        should contain_package('neutron-ovs-agent').with(
-          :name   => platform_params[:ovs_agent_package],
-          :ensure => p[:package_ensure],
-          :tag    => ['openstack', 'neutron-package'],
-        )
-      else
-      end
+      should contain_package('neutron-ovs-agent').with(
+        :name   => platform_params[:ovs_agent_package],
+        :ensure => p[:package_ensure],
+        :tag    => ['openstack', 'neutron-package'],
+      )
     end
 
     it 'configures neutron ovs agent service' do
@@ -493,7 +490,8 @@ describe 'neutron::agents::ml2::ovs' do
           { :ovs_agent_package => 'neutron-openvswitch-agent',
             :ovs_agent_service => 'neutron-openvswitch-agent' }
         when 'RedHat'
-          { :ovs_cleanup_service         => 'neutron-ovs-cleanup',
+          { :ovs_agent_package           => 'openstack-neutron-openvswitch',
+            :ovs_cleanup_service         => 'neutron-ovs-cleanup',
             :ovs_agent_service           => 'neutron-openvswitch-agent',
             :destroy_patch_ports_service => 'neutron-destroy-patch-ports' }
         end

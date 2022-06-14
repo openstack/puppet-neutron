@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The ``neutron::config::plugin_linuxbridge_config`` parameter has been
+    deprecated and has no effect.
+
+  - |
+    The ``neutron_plugin_linuxbridge`` resource type has been deprecated and
+    will be removed in a futrue release.

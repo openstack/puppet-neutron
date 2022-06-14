@@ -3,7 +3,7 @@ Puppet::Type.newtype(:neutron_plugin_linuxbridge) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from linuxbridge_conf.ini'
+    desc 'Section/setting name to manage from linuxbridge_conf.ini (DEPRECATED)'
     newvalues(/\S+\/\S+/)
   end
 

@@ -11,92 +11,127 @@ describe 'neutron::plugins::ml2::ovn' do
 
   let :default_params do
     {
-       :ovn_nb_connection        => 'tcp:127.0.0.1:6641',
-       :ovn_sb_connection        => 'tcp:127.0.0.1:6642',
-       :ovn_nb_private_key       => 'nb_key',
-       :ovn_nb_certificate       => 'nb_cert',
-       :ovn_nb_ca_cert           => 'nb_ca_cert',
-       :ovn_sb_private_key       => 'sb_key',
-       :ovn_sb_certificate       => 'sb_cert',
-       :ovn_sb_ca_cert           => 'sb_ca_cert',
-       :ovsdb_connection_timeout => 60,
-       :ovsdb_retry_max_interval => 180,
-       :ovsdb_probe_interval     => 60000,
-       :neutron_sync_mode        => 'log',
-       :dvr_enabled              => false,
-       :dns_servers              => ['8.8.8.8', '10.10.10.10'],
-       :ovn_emit_need_to_frag    => false,
+      :ovn_nb_connection                 => '<SERVICE DEFAULT>',
+      :ovn_sb_connection                 => '<SERVICE DEFAULT>',
+      :ovn_nb_private_key                => '<SERVICE DEFAULT>',
+      :ovn_nb_certificate                => '<SERVICE DEFAULT>',
+      :ovn_nb_ca_cert                    => '<SERVICE DEFAULT>',
+      :ovn_sb_private_key                => '<SERVICE DEFAULT>',
+      :ovn_sb_certificate                => '<SERVICE DEFAULT>',
+      :ovn_sb_ca_cert                    => '<SERVICE DEFAULT>',
+      :ovsdb_connection_timeout          => '<SERVICE DEFAULT>',
+      :ovsdb_retry_max_interval          => '<SERVICE DEFAULT>',
+      :ovsdb_probe_interval              => '<SERVICE DEFAULT>',
+      :neutron_sync_mode                 => '<SERVICE DEFAULT>',
+      :dvr_enabled                       => '<SERVICE DEFAULT>',
+      :dns_servers                       => '<SERVICE DEFAULT>',
+      :vhostuser_socket_dir              => '<SERVICE DEFAULT>',
+      :ovn_emit_need_to_frag             => '<SERVICE DEFAULT>',
+      :network_log_rate_limit            => '<SERVICE DEFAULT>',
+      :network_log_burst_limit           => '<SERVICE DEFAULT>',
+      :network_log_local_output_log_base => '<SERVICE DEFAULT>',
     }
   end
 
-  shared_examples 'neutron ovn plugin' do
+  shared_examples 'neutron::plugins::ml2::ovn' do
 
     let :params do
       {}
     end
 
-    before do
-      params.merge!(default_params)
+    let :p do
+      default_params.merge(params)
     end
 
-    it 'should perform default configuration of' do
-      should contain_neutron_plugin_ml2('ovn/ovn_nb_connection').with_value(params[:ovn_nb_connection])
-      should contain_neutron_plugin_ml2('ovn/ovn_sb_connection').with_value(params[:ovn_sb_connection])
-      should contain_neutron_plugin_ml2('ovn/ovn_nb_private_key').with_value(params[:ovn_nb_private_key])
-      should contain_neutron_plugin_ml2('ovn/ovn_nb_certificate').with_value(params[:ovn_nb_certificate])
-      should contain_neutron_plugin_ml2('ovn/ovn_nb_ca_cert').with_value(params[:ovn_nb_ca_cert])
-      should contain_neutron_plugin_ml2('ovn/ovn_sb_private_key').with_value(params[:ovn_sb_private_key])
-      should contain_neutron_plugin_ml2('ovn/ovn_sb_certificate').with_value(params[:ovn_sb_certificate])
-      should contain_neutron_plugin_ml2('ovn/ovn_sb_ca_cert').with_value(params[:ovn_sb_ca_cert])
-      should contain_neutron_plugin_ml2('ovn/ovsdb_connection_timeout').with_value(params[:ovsdb_connection_timeout])
-      should contain_neutron_plugin_ml2('ovn/ovsdb_retry_max_interval').with_value(params[:ovsdb_retry_max_interval])
-      should contain_neutron_plugin_ml2('ovn/ovsdb_probe_interval').with_value(params[:ovsdb_probe_interval])
-      should contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(params[:neutron_sync_mode])
-      should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
-      should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(params[:dns_servers].join(','))
-      should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(params[:ovn_emit_need_to_frag])
-      should contain_neutron_plugin_ml2('network_log/rate_limit').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_plugin_ml2('network_log/burst_limit').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_plugin_ml2('network_log/local_output_log_base').with_value('<SERVICE DEFAULT>')
-    end
-  end
-
-  shared_examples 'Validating parameters' do
-    let :params do
-      {}
-    end
-
-    before :each do
-      params.clear
-      params.merge!(default_params)
-      params.merge!(:vhostuser_socket_dir => 'test')
-    end
-
-    it 'should fail with invalid neutron_sync_mode' do
-      params[:neutron_sync_mode] = 'invalid'
-      should raise_error(Puppet::Error, /Invalid value for neutron_sync_mode parameter/)
-    end
-
-    it 'should contain valid vhostuser socket dir' do
-      should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value('test')
-    end
-
-    context 'with DVR' do
-      before :each do
-        params.merge!(:dvr_enabled => true)
-      end
-      it 'should enable DVR mode' do
-        should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(params[:dvr_enabled])
+    context 'with defaults' do
+      it 'should configure defaults' do
+        should contain_neutron_plugin_ml2('ovn/ovn_nb_connection').with_value(p[:ovn_nb_connection])
+        should contain_neutron_plugin_ml2('ovn/ovn_sb_connection').with_value(p[:ovn_sb_connection])
+        should contain_neutron_plugin_ml2('ovn/ovn_nb_private_key').with_value(p[:ovn_nb_private_key])
+        should contain_neutron_plugin_ml2('ovn/ovn_nb_certificate').with_value(p[:ovn_nb_certificate])
+        should contain_neutron_plugin_ml2('ovn/ovn_nb_ca_cert').with_value(p[:ovn_nb_ca_cert])
+        should contain_neutron_plugin_ml2('ovn/ovn_sb_private_key').with_value(p[:ovn_sb_private_key])
+        should contain_neutron_plugin_ml2('ovn/ovn_sb_certificate').with_value(p[:ovn_sb_certificate])
+        should contain_neutron_plugin_ml2('ovn/ovn_sb_ca_cert').with_value(p[:ovn_sb_ca_cert])
+        should contain_neutron_plugin_ml2('ovn/ovsdb_connection_timeout').with_value(p[:ovsdb_connection_timeout])
+        should contain_neutron_plugin_ml2('ovn/ovsdb_retry_max_interval').with_value(p[:ovsdb_retry_max_interval])
+        should contain_neutron_plugin_ml2('ovn/ovsdb_probe_interval').with_value(p[:ovsdb_probe_interval])
+        should contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(p[:neutron_sync_mode])
+        should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(p[:dvr_enabled])
+        should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(p[:dns_servers])
+        should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value(p[:vhostuser_socket_dir])
+        should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(p[:ovn_emit_need_to_frag])
+        should contain_neutron_plugin_ml2('network_log/rate_limit').with_value(p[:network_log_rate_limit])
+        should contain_neutron_plugin_ml2('network_log/burst_limit').with_value(p[:network_log_burst_limit])
+        should contain_neutron_plugin_ml2('network_log/local_output_log_base').with_value(p[:network_log_local_output_log_base])
       end
     end
 
-    context 'with emit need to fragment enabled' do
-      before :each do
-        params.merge!(:ovn_emit_need_to_frag => true)
+    context 'with parameters' do
+      let :params do
+        {
+          :ovn_nb_connection        => 'tcp:127.0.0.1:6641',
+          :ovn_sb_connection        => 'tcp:127.0.0.1:6642',
+          :ovn_nb_private_key       => 'nb_key',
+          :ovn_nb_certificate       => 'nb_cert',
+          :ovn_nb_ca_cert           => 'nb_ca_cert',
+          :ovn_sb_private_key       => 'sb_key',
+          :ovn_sb_certificate       => 'sb_cert',
+          :ovn_sb_ca_cert           => 'sb_ca_cert',
+          :ovsdb_connection_timeout => 60,
+          :ovsdb_retry_max_interval => 180,
+          :ovsdb_probe_interval     => 60000,
+          :neutron_sync_mode        => 'log',
+          :dvr_enabled              => false,
+          :dns_servers              => '8.8.8.8,10.10.10.10',
+          :ovn_emit_need_to_frag    => false,
+        }
       end
-      it 'should enable emit need to fragment option' do
-        should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(params[:ovn_emit_need_to_frag])
+
+      it 'should configure given values' do
+        should contain_neutron_plugin_ml2('ovn/ovn_nb_connection').with_value(p[:ovn_nb_connection])
+        should contain_neutron_plugin_ml2('ovn/ovn_sb_connection').with_value(p[:ovn_sb_connection])
+        should contain_neutron_plugin_ml2('ovn/ovn_nb_private_key').with_value(p[:ovn_nb_private_key])
+        should contain_neutron_plugin_ml2('ovn/ovn_nb_certificate').with_value(p[:ovn_nb_certificate])
+        should contain_neutron_plugin_ml2('ovn/ovn_nb_ca_cert').with_value(p[:ovn_nb_ca_cert])
+        should contain_neutron_plugin_ml2('ovn/ovn_sb_private_key').with_value(p[:ovn_sb_private_key])
+        should contain_neutron_plugin_ml2('ovn/ovn_sb_certificate').with_value(p[:ovn_sb_certificate])
+        should contain_neutron_plugin_ml2('ovn/ovn_sb_ca_cert').with_value(p[:ovn_sb_ca_cert])
+        should contain_neutron_plugin_ml2('ovn/ovsdb_connection_timeout').with_value(p[:ovsdb_connection_timeout])
+        should contain_neutron_plugin_ml2('ovn/ovsdb_retry_max_interval').with_value(p[:ovsdb_retry_max_interval])
+        should contain_neutron_plugin_ml2('ovn/ovsdb_probe_interval').with_value(p[:ovsdb_probe_interval])
+        should contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(p[:neutron_sync_mode])
+        should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(p[:dvr_enabled])
+        should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(p[:dns_servers])
+        should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value(p[:vhostuser_socket_dir])
+        should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(p[:ovn_emit_need_to_frag])
+        should contain_neutron_plugin_ml2('network_log/rate_limit').with_value(p[:network_log_rate_limit])
+        should contain_neutron_plugin_ml2('network_log/burst_limit').with_value(p[:network_log_burst_limit])
+        should contain_neutron_plugin_ml2('network_log/local_output_log_base').with_value(p[:network_log_local_output_log_base])
+      end
+    end
+
+    context 'with invalid neutron_sync_mode' do
+      let :params do
+        {
+          :neutron_sync_mode => 'invalid'
+        }
+      end
+
+      it {
+        should raise_error(Puppet::Error, /Invalid value for neutron_sync_mode parameter/)
+      }
+    end
+
+    context 'with parameters set by arrays' do
+      let :params do
+        {
+          :dns_servers => ['8.8.8.8', '10.10.10.10'],
+        }
+      end
+
+      it 'should configure comma-separated strings' do
+        should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(p[:dns_servers].join(','))
       end
     end
   end
@@ -106,11 +141,10 @@ describe 'neutron::plugins::ml2::ovn' do
   }).each do |os,facts|
     context "on #{os}" do
       let (:facts) do
-        facts.merge(OSDefaults.get_facts({:processorcount => 8}))
+        facts.merge(OSDefaults.get_facts())
       end
 
-      it_behaves_like 'neutron ovn plugin'
-      it_behaves_like 'Validating parameters'
+      it_behaves_like 'neutron::plugins::ml2::ovn'
     end
   end
 end

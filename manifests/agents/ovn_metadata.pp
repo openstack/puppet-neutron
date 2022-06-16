@@ -183,7 +183,7 @@ class neutron::agents::ovn_metadata (
     'ovs/ovsdb_connection_timeout':           value => $ovsdb_connection_timeout;
     'ovn/ovsdb_retry_max_interval':           value => $ovsdb_retry_max_interval;
     'ovn/ovsdb_probe_interval':               value => $ovsdb_probe_interval;
-    'ovn/ovn_sb_connection':                  value => $ovn_sb_connection;
+    'ovn/ovn_sb_connection':                  value => join(any2array($ovn_sb_connection), ',');
     'ovn/ovn_sb_private_key':                 value => $ovn_sb_private_key;
     'ovn/ovn_sb_certificate':                 value => $ovn_sb_certificate;
     'ovn/ovn_sb_ca_cert':                     value => $ovn_sb_ca_cert;

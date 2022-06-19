@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``neutron::agents::bagpipe::api_host`` parameter has been added.

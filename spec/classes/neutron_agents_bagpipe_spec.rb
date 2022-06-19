@@ -21,6 +21,7 @@ describe 'neutron::agents::bagpipe' do
   let :params do
     {
       :my_as                  => 64512,
+      :api_host               => '192.168.0.100',
       :api_port               => 8082,
       :dataplane_driver_ipvpn => 'ovs',
       :enabled                => true,
@@ -58,6 +59,7 @@ describe 'neutron::agents::bagpipe' do
     end
 
     it 'configures bgp.conf' do
+      should contain_neutron_bgpvpn_bagpipe_config('api/host').with_value(p[:api_host])
       should contain_neutron_bgpvpn_bagpipe_config('api/port').with_value(p[:api_port])
       should contain_neutron_bgpvpn_bagpipe_config('bgp/local_address').with_value(p[:local_address])
       should contain_neutron_bgpvpn_bagpipe_config('bgp/peers').with_value(p[:peers])

@@ -105,10 +105,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*ovn_remote_probe_interval*]
-#  (optional) Set probe interval, based on user configuration, value is in ms
-#  Defaults to undef
-#
 # [*metadata_ip*]
 #   The IP address of the metadata service.
 #   Defaults to undef
@@ -140,19 +136,11 @@ class neutron::agents::ovn_metadata (
   $state_path                = '/var/lib/neutron',
   $purge_config              = false,
   # DEPRECATED PARAMETERS
-  $ovn_remote_probe_interval = undef,
   $metadata_ip               = undef,
   ) {
 
   include neutron::deps
   include neutron::params
-
-  if $ovn_remote_probe_interval != undef {
-    warning('The ovn_remote_probe_interval parameter is deprecated and has no effect')
-  }
-  ovn_metadata_agent_config {
-    'ovn/ovn_remote_probe_interval': ensure => absent;
-  }
 
   if $metadata_ip != undef {
     warning('The metadata_ip parameter is deprecated and has no effect')

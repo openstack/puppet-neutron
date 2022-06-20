@@ -287,13 +287,6 @@ class neutron::agents::ml2::ovs (
     fail('vhost user socket directory for ovs agent must be set when DPDK is enabled')
   }
 
-  if ! is_service_default($permitted_ethertypes) {
-    validate_legacy(Array, 'validate_array', $permitted_ethertypes)
-    neutron_agent_ovs {
-      'securitygroup/permitted_ethertypes':   value => join($permitted_ethertypes, ',');
-    }
-  }
-
   if $manage_vswitch {
     if $enable_dpdk {
       require vswitch::dpdk
@@ -394,6 +387,7 @@ class neutron::agents::ml2::ovs (
     'ovs/datapath_type':                    value => $datapath_type;
     'ovs/vhostuser_socket_dir':             value => $vhostuser_socket_dir;
     'securitygroup/enable_security_group':  value => $enable_security_group;
+    'securitygroup/permitted_ethertypes':   value => join(any2array($permitted_ethertypes), ',');
     'ovs/bridge_mac_table_size':            value => $bridge_mac_table_size;
     'ovs/igmp_snooping_enable':             value => $igmp_snooping_enable;
     'network_log/rate_limit':               value => $network_log_rate_limit;

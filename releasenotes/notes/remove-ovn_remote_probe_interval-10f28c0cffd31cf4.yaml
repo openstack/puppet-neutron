@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``neutron::agents::ovn_metadata::ovn_remote_probe_interval`` parameter
+    has been removed.

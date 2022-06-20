@@ -25,8 +25,12 @@
 #   (required) Private Autonomous System number
 #   Defaults to $::os_service_default
 #
+# [*api_host*]
+#   (optional) BGP component API host
+#   Defaults to $::os_service_default
+#
 # [*api_port*]
-#   BGP component API port
+#   (optional) BGP component API port
 #   Defaults to $::os_service_default
 #
 # [*dataplane_driver_ipvpn*]
@@ -76,6 +80,7 @@
 #
 class neutron::agents::bagpipe (
   $my_as,
+  $api_host                = $::os_service_default,
   $api_port                = $::os_service_default,
   $dataplane_driver_ipvpn  = 'ovs',
   $enabled                 = true,
@@ -98,6 +103,7 @@ class neutron::agents::bagpipe (
   }
 
   neutron_bgpvpn_bagpipe_config {
+    'api/host':                                value => $api_host;
     'api/port':                                value => $api_port;
     'bgp/local_address':                       value => $local_address;
     'bgp/peers':                               value => join(any2array($peers), ',');

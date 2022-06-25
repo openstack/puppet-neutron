@@ -3,7 +3,7 @@ Puppet::Type.newtype(:neutron_plugin_nsx) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from vmware/nsx.ini'
+    desc 'Section/setting name to manage from vmware/nsx.ini (DEPRECATED)'
     newvalues(/\S+\/\S+/)
   end
 

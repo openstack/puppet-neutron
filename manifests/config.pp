@@ -84,9 +84,6 @@
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
-# [*plugin_nsx_config*]
-#   (optional) Manage configuration of plugins/vmware/nsx.ini
-#
 # DEPRECATED PARAMETERS
 #
 # [*plugin_nvp_config*]
@@ -94,6 +91,9 @@
 #
 # [*plugin_linuxbridge_config*]
 #   (optional) Manage configuration of linuxbridge_conf.ini
+#
+# [*plugin_nsx_config*]
+#   (optional) Manage configuration of plugins/vmware/nsx.ini
 #
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
@@ -120,10 +120,10 @@ class neutron::config (
   $plugin_opencontrail_config    = {},
   $plugin_nuage_config           = {},
   $plugin_ml2_config             = {},
-  $plugin_nsx_config             = {},
   # DEPRECATED PARAMETERS
   $plugin_nvp_config             = undef,
   $plugin_linuxbridge_config     = undef,
+  $plugin_nsx_config             = undef,
 ) {
 
   include neutron::deps
@@ -134,6 +134,13 @@ class neutron::config (
 
   if $plugin_linuxbridge_config != undef {
     warning('The plugin_linuxbridge_config parameter is deprecated and has no effect.')
+  }
+
+  if $plugin_nsx_config != undef {
+    warning('The plugin_nsx_config parameter is deprecated.')
+    $plugin_nsx_config_real = $plugin_nsx_config
+  } else {
+    $plugin_nsx_config_real = {}
   }
 
   validate_legacy(Hash, 'validate_hash', $server_config)
@@ -157,7 +164,7 @@ class neutron::config (
   validate_legacy(Hash, 'validate_hash', $plugin_opencontrail_config)
   validate_legacy(Hash, 'validate_hash', $plugin_nuage_config)
   validate_legacy(Hash, 'validate_hash', $plugin_ml2_config)
-  validate_legacy(Hash, 'validate_hash', $plugin_nsx_config)
+  validate_legacy(Hash, 'validate_hash', $plugin_nsx_config_real)
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_paste_ini', $api_paste_ini)
@@ -180,5 +187,5 @@ class neutron::config (
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
   create_resources('neutron_plugin_nuage', $plugin_nuage_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
-  create_resources('neutron_plugin_nsx', $plugin_nsx_config)
+  create_resources('neutron_plugin_nsx', $plugin_nsx_config_real)
 }

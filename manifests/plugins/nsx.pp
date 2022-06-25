@@ -1,4 +1,5 @@
 #
+# DEPRECATED !!
 # Configure the VMware NSX plugin for neutron.
 #
 # === Parameters
@@ -85,6 +86,8 @@ class neutron::plugins::nsx (
 
   include neutron::deps
   include neutron::params
+
+  warning('Support for NSX plugin has been deprecated and will be removed.')
 
   package { 'vmware-nsx':
     ensure => $package_ensure,

@@ -172,8 +172,8 @@ class neutron::plugins::ovs::opendaylight (
 
       $odl_ip = regsubst($ovsdb_uri, 'ssl:(.+):[0-9]+', '\1')
       $odl_url_prefix = "https://${odl_ip}:${odl_rest_port}"
-      $cert_rest_url = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:setNodeCertifcate"
-      $cert_rest_get = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:getNodeCertifcate"
+      $cert_rest_url = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:setNodeCertificate"
+      $cert_rest_get = "${odl_url_prefix}/restconf/operations/aaa-cert-rpc:getNodeCertificate"
       exec { "Add trusted cert: ${tls_cert_file} to ${odl_url_prefix}":
         command   => "${curl_post} -u ${odl_username}:${odl_password} -d '${rest_data}' ${cert_rest_url}",
         tries     => 5,

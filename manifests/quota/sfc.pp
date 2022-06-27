@@ -1,4 +1,4 @@
-# == Class: neutron::quta::sfc
+# == Class: neutron::quota::sfc
 #
 # Setups neutron quota for networking-sfc.
 #

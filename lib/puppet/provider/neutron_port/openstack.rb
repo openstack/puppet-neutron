@@ -164,7 +164,7 @@ Puppet::Type.type(:neutron_port).provide(
       end
 
       if @property_flush.has_key?(:availability_zone_hint)
-        opts << "--avialability-zone-hint=#{@property_flush[:availability_zone_hint]}"
+        opts << "--availability-zone-hint=#{@property_flush[:availability_zone_hint]}"
       end
 
       self.class.request('port', 'set', opts)

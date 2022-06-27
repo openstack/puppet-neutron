@@ -119,7 +119,7 @@ class neutron::agents::ml2::mlnx (
     #                 neutron::plugins::ml2::mellanox
     Package<| title == $mlnx_agent_package |> { tag +> 'neutron-package' }
 
-    # NOTE(tkajinam): Ubuntu/Debuan requires a separate package for eswitchd
+    # NOTE(tkajinam): Ubuntu/Debian requires a separate package for eswitchd
     #                 service.
     if $eswitchd_package {
       ensure_packages($eswitchd_package, {

@@ -152,7 +152,7 @@ describe 'neutron::agents::l3' do
         params.merge!(:extensions => 'fip_qos,gateway_ip_qos,port_forwarding')
       end
 
-      it 'configures extentions' do
+      it 'configures extensions' do
         should contain_neutron_l3_agent_config('agent/extensions').with_value('fip_qos,gateway_ip_qos,port_forwarding')
       end
     end
@@ -162,7 +162,7 @@ describe 'neutron::agents::l3' do
         params.merge!(:extensions => ['fip_qos', 'gateway_ip_qos', 'port_forwarding'])
       end
 
-      it 'configures extentions' do
+      it 'configures extensions' do
         should contain_neutron_l3_agent_config('agent/extensions').with_value('fip_qos,gateway_ip_qos,port_forwarding')
       end
     end

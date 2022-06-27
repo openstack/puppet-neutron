@@ -172,12 +172,12 @@
 # [*kombu_reconnect_delay*]
 #   (optional) The amount of time to wait before attempting to reconnect
 #   to MQ provider. This is used in some cases where you may need to wait
-#   for the provider to propery premote the master before attempting to
+#   for the provider to properly promote the master before attempting to
 #   reconnect. See https://review.opendev.org/#/c/76686
 #   Defaults to $::os_service_default
 #
 # [*kombu_missing_consumer_retry_timeout*]
-#   (Optional) How long to wait a missing client beforce abandoning to send it
+#   (Optional) How long to wait a missing client before abandoning to send it
 #   its replies. This value should not be longer than rpc_response_timeout.
 #   (integer value)
 #   Defaults to $::os_service_default
@@ -190,7 +190,7 @@
 #
 # [*kombu_compression*]
 #   (optional) Possible values are: gzip, bz2. If not set compression will not
-#   be used. This option may notbe available in future versions. EXPERIMENTAL.
+#   be used. This option may not be available in future versions. EXPERIMENTAL.
 #   (string value)
 #   Defaults to $::os_service_default
 #
@@ -255,11 +255,11 @@
 #   Defaults to $::os_service_default.
 #
 # [*use_ssl*]
-#   (optinal) Enable SSL on the API server
+#   (optional) Enable SSL on the API server
 #   Defaults to $::os_service_default
 #
 # [*cert_file*]
-#   (optinal) certificate file to use when starting api server securely
+#   (optional) certificate file to use when starting api server securely
 #   defaults to $::os_service_default
 #
 # [*key_file*]

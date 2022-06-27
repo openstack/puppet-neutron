@@ -49,7 +49,7 @@
 #   Defaults to $::os_service_default
 #
 # [*ovsdb_retry_max_interval*]
-#   (optional) Max intervla in seconds between each retry to get the OVN NB
+#   (optional) Max interval in seconds between each retry to get the OVN NB
 #   and SB IDLs.
 #   Defaults to $::os_service_default
 #

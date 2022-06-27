@@ -29,7 +29,7 @@
 # Defaults to $::os_service_default
 #
 # [*vts_retry_count*]
-# (optional) Numer of retries for synchronization with VTS.
+# (optional) Number of retries for synchronization with VTS.
 # Defaults to $::os_service_default
 #
 # [*vts_vmmid*]

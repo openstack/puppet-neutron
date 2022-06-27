@@ -60,7 +60,7 @@
 #   Defaults to 'RegionOne'.
 #
 # [*public_url*]
-#   (0ptional) The endpoint's public url.
+#   (Optional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
 #   Defaults to 'http://127.0.0.1:9696'
 #

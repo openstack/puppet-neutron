@@ -71,7 +71,7 @@ class neutron::deps {
   # Support packages need to be installed in the install phase, but we don't
   # put them in the chain above because we don't want any false dependencies
   # between packages with the neutron-package tag and the neutron-support-package
-  # tag.  Note: the package resources here will have a 'before' relationshop on
+  # tag.  Note: the package resources here will have a 'before' relationship on
   # the neutron::install::end anchor.  The line between neutron-support-package and
   # neutron-package should be whether or not neutron services would need to be
   # restarted if the package state was changed.
@@ -80,7 +80,7 @@ class neutron::deps {
   -> Anchor['neutron::install::end']
 
   # ml2 plugin packages should be install after we start actual configuration,
-  # because the configuraiton for ml2 plugin base should be applied before
+  # because the configuration for ml2 plugin base should be applied before
   # ml2 plugin packages are installed
   Anchor['neutron::install::begin']
   -> Package<| tag == 'neutron-plugin-ml2-package'|>

@@ -121,7 +121,7 @@
 #   Defaults to $::os_service_default
 #
 # [*dhcp_load_type*]
-#   (Optional) The resource type whos load is being reported by the agent.
+#   (Optional) The resource type whose load is being reported by the agent.
 #   The expected values are either 'networks', 'subnets', 'ports'.
 #   Defaults to $::os_service_default
 #
@@ -405,7 +405,7 @@ class neutron::server (
       } elsif $service_name == 'httpd' {
         fail('Use api_service_name and rpc_service_name to run api service by httpd')
       } else {
-        warning('Support for arbitaly service name is deprecated')
+        warning('Support for arbitrary service name is deprecated')
         # backward compatibility so operators can customize the service name.
         service { 'neutron-server':
           ensure     => $service_ensure,

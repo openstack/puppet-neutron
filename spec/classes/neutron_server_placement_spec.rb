@@ -50,7 +50,7 @@ describe 'neutron::server::placement' do
         )
       end
 
-      it 'should configure neutron server with overrided parameters' do
+      it 'should configure neutron server with overridden parameters' do
         should contain_neutron_config('placement/auth_type').with_value('password')
         should contain_neutron_config('placement/project_domain_name').with_value('Default_2')
         should contain_neutron_config('placement/project_name').with_value('alt_services')

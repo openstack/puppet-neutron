@@ -40,7 +40,7 @@ describe 'neutron::server::notifications' do
         )
       end
 
-      it 'should configure neutron server with overrided parameters' do
+      it 'should configure neutron server with overridden parameters' do
         should contain_neutron_config('DEFAULT/send_events_interval').with_value('10')
         should contain_neutron_config('DEFAULT/http_retries').with_value(3)
       end

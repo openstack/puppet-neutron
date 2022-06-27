@@ -57,7 +57,7 @@
 #
 # [*of_inactivity_probe*]
 #   (Optional) The inactivity_probe interval in second for the local switch
-#   connnection to the controller. A value of 0 disables inactivity probes.
+#   connection to the controller. A value of 0 disables inactivity probes.
 #   Defaults to $::os_service_default
 #
 # [*integration_bridge*]
@@ -104,7 +104,7 @@
 #
 # [*arp_responder*]
 #   (optional) Enable or not the ARP responder.
-#   Recommanded when using l2 population mechanism driver.
+#   Recommended when using l2 population mechanism driver.
 #   Defaults to $::os_service_default
 #
 # [*firewall_driver*]
@@ -205,13 +205,13 @@
 #
 # [*resource_provider_packet_processing_without_direction*]
 #   (optional) List of <hypervisor>:<packet_rate> tuples, defining the minimum
-#   pachet rate the OVS backend can guarantee in kilo (1000) packet per second.
+#   packet rate the OVS backend can guarantee in kilo (1000) packet per second.
 #   Defaults to empty list
 #
 # [*resource_provider_packet_processing_with_direction*]
 #   (optional) Similar to resource_provider_packet_processing_without_direction
 #   but used in case the OVS backend has hardware offload capabilities.
-#   Defauls to empty list
+#   Defaults to empty list
 #
 # [*resource_provider_default_hypervisor*]
 #   (optional) The default hypervisor name used to locate the parent of
@@ -221,12 +221,12 @@
 # [*resource_provider_inventory_defaults*]
 #   (optional) Key:value pairs to specify defaults used while reporting packet
 #   rate inventories,.
-#   Defauls to empty hash
+#   Defaults to empty hash
 #
 # [*resource_provider_packet_processing_inventory_defaults*]
 #   (optional) Key:value pairs to specify defaults used while reporting packet
 #   rate inventories,.
-#   Defauls to empty hash
+#   Defaults to empty hash
 #
 # [*explicitly_egress_direct*]
 #  (optional) When set to True, the accepted egress unicast traffic will not

@@ -87,7 +87,7 @@
 # [*plugin_nsx_config*]
 #   (optional) Manage configuration of plugins/vmware/nsx.ini
 #
-# DEPRECATED PRAMETERS
+# DEPRECATED PARAMETERS
 #
 # [*plugin_nvp_config*]
 #   (optional) Manage configuration of /etc/neutron/plugins/nicira/nvp.ini

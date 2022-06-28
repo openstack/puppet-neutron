@@ -75,7 +75,7 @@
 # [*number_of_vfs*]
 #   (optional) List of <physical_network>:<number_of_vfs> specifying the number
 #   VFs to be exposed per physical interface.
-#   For example, to configure two inteface with number of VFs, specify
+#   For example, to configure two interface with number of VFs, specify
 #   it as "eth1:4,eth2:10"
 #   Defaults to $::os_service_default.
 #
@@ -95,7 +95,7 @@
 # [*resource_provider_inventory_defaults*]
 #   (optional) Key:value pairs to specify defaults used while reporting packet
 #   rate inventories,.
-#   Defauls to empty hash
+#   Defaults to empty hash
 #
 class neutron::agents::ml2::sriov (
   $package_ensure                       = 'present',

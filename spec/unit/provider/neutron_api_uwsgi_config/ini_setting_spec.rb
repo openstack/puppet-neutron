@@ -2,7 +2,7 @@
 # these tests are a little concerning b/c they are hacking around the
 # modulepath, so these tests will not catch issues that may eventually arise
 # related to loading these plugins.
-# I could not, for the life of me, figure out how to programatcally set the modulepath
+# I could not, for the life of me, figure out how to programmatically set the modulepath
 require 'spec_helper'
 provider_class = Puppet::Type.type(:neutron_api_uwsgi_config).provider(:ini_setting)
 describe provider_class do

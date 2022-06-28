@@ -58,7 +58,7 @@ describe 'neutron::server::notifications::ironic' do
         )
       end
 
-      it 'should configure neutron server with overrided parameters' do
+      it 'should configure neutron server with overridden parameters' do
         should contain_neutron_config('ironic/auth_type').with_value('password')
         should contain_neutron_config('ironic/user_domain_name').with_value('Default_2')
         should contain_neutron_config('ironic/username').with_value('joe')
@@ -80,7 +80,7 @@ describe 'neutron::server::notifications::ironic' do
         )
       end
 
-      it 'should configure the valid_interfaces parameter with a commma-separated string' do
+      it 'should configure the valid_interfaces parameter with a comma-separated string' do
         should contain_neutron_config('ironic/valid_interfaces').with_value('internal,public')
       end
     end

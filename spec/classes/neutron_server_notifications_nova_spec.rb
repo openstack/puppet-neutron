@@ -56,7 +56,7 @@ describe 'neutron::server::notifications::nova' do
         )
       end
 
-      it 'should configure neutron server with overrided parameters' do
+      it 'should configure neutron server with overridden parameters' do
         should contain_neutron_config('DEFAULT/notify_nova_on_port_status_changes').with_value(false)
         should contain_neutron_config('DEFAULT/notify_nova_on_port_data_changes').with_value(false)
         should contain_neutron_config('nova/auth_type').with_value('password')

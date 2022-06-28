@@ -68,7 +68,7 @@ describe 'neutron::agents::ml2::linuxbridge' do
         end
       end
 
-      it 'does not configre VXLAN tunneling' do
+      it 'does not configure VXLAN tunneling' do
         should contain_neutron_agent_linuxbridge('vxlan/enable_vxlan').with_value(false)
         should contain_neutron_agent_linuxbridge('vxlan/local_ip').with_ensure('absent')
         should_not contain_neutron_agent_linuxbridge('vxlan/vxlan_group')

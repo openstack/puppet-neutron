@@ -13,7 +13,7 @@ Puppet::Type.type(:neutron_router_interface).provide(
     It is not possible to manage an interface for the subnet used by
     the gateway network, and such an interface will appear in the list
     of resources ('puppet resource [type]').  Attempting to manage the
-    gateway interfae will result in an error.
+    gateway interface will result in an error.
   EOT
 
   @credentials = Puppet::Provider::Openstack::CredentialsV3.new

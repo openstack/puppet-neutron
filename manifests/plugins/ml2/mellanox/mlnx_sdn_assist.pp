@@ -31,7 +31,7 @@
 #
 # [*bind_normal_ports_physnets*]
 # (optional) A list of physnets in which binding of normal
-# ports is allowed. This option is used in  conjuction
+# ports is allowed. This option is used in  conjunction
 # with bind_normal_ports.
 # The list must be a subset of physical_networks
 # Defaults to []

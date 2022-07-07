@@ -33,9 +33,6 @@
 # [*sriov_agent_config*]
 #   (optional) Manage configuration of sriov_agent.ini
 #
-# [*linuxbridge_agent_config*]
-#   (optional) Manage configuration of linuxbridge_agent.ini
-#
 # [*macvtap_agent_config*]
 #   (optional) Manage configuration of macvtap_agent.ini
 #
@@ -95,6 +92,9 @@
 # [*plugin_nsx_config*]
 #   (optional) Manage configuration of plugins/vmware/nsx.ini
 #
+# [*linuxbridge_agent_config*]
+#   (optional) Manage configuration of linuxbridge_agent.ini
+#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -103,7 +103,6 @@ class neutron::config (
   $api_paste_ini                 = {},
   $ovs_agent_config              = {},
   $sriov_agent_config            = {},
-  $linuxbridge_agent_config      = {},
   $macvtap_agent_config          = {},
   $bgpvpn_bagpipe_config         = {},
   $bgpvpn_service_config         = {},
@@ -124,6 +123,7 @@ class neutron::config (
   $plugin_nvp_config             = undef,
   $plugin_linuxbridge_config     = undef,
   $plugin_nsx_config             = undef,
+  $linuxbridge_agent_config      = undef,
 ) {
 
   include neutron::deps
@@ -143,11 +143,18 @@ class neutron::config (
     $plugin_nsx_config_real = {}
   }
 
+  if $linuxbridge_agent_config != undef {
+    warning('The linuxbridge_agent_config parameter is deprecated.')
+    $linuxbridge_agent_config_real = $linuxbridge_agent_config
+  } else {
+    $linuxbridge_agent_config_real = {}
+  }
+
   validate_legacy(Hash, 'validate_hash', $server_config)
   validate_legacy(Hash, 'validate_hash', $api_paste_ini)
   validate_legacy(Hash, 'validate_hash', $ovs_agent_config)
   validate_legacy(Hash, 'validate_hash', $sriov_agent_config)
-  validate_legacy(Hash, 'validate_hash', $linuxbridge_agent_config)
+  validate_legacy(Hash, 'validate_hash', $linuxbridge_agent_config_real)
   validate_legacy(Hash, 'validate_hash', $macvtap_agent_config)
   validate_legacy(Hash, 'validate_hash', $bgpvpn_bagpipe_config)
   validate_legacy(Hash, 'validate_hash', $bgpvpn_service_config)
@@ -170,7 +177,7 @@ class neutron::config (
   create_resources('neutron_api_paste_ini', $api_paste_ini)
   create_resources('neutron_agent_ovs', $ovs_agent_config)
   create_resources('neutron_sriov_agent_config', $sriov_agent_config)
-  create_resources('neutron_agent_linuxbridge', $linuxbridge_agent_config)
+  create_resources('neutron_agent_linuxbridge', $linuxbridge_agent_config_real)
   create_resources('neutron_agent_macvtap', $macvtap_agent_config)
   create_resources('neutron_bgpvpn_bagpipe_config', $bgpvpn_bagpipe_config)
   create_resources('neutron_bgpvpn_service_config', $bgpvpn_service_config)

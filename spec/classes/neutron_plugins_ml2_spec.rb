@@ -31,7 +31,7 @@ describe 'neutron::plugins::ml2' do
     {
       :type_drivers          => ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
       :tenant_network_types  => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
-      :mechanism_drivers     => ['openvswitch', 'linuxbridge'],
+      :mechanism_drivers     => ['openvswitch'],
       :flat_networks         => '*',
       :network_vlan_ranges   => '10:50',
       :tunnel_id_ranges      => '20:100',

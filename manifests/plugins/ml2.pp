@@ -48,7 +48,7 @@
 #   Should be an array that can have these elements:
 #   logger, test, linuxbridge, openvswitch, hyperv, ncs, arista, cisco_nexus,
 #   l2population, sriovnicswitch, macvtap
-#   Default to ['openvswitch', 'linuxbridge'].
+#   Default to ['openvswitch'].
 #
 # [*flat_networks*]
 #   (optional) List of physical_network names with which flat networks
@@ -127,7 +127,7 @@ class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
   $extension_drivers         = $::os_service_default,
   $tenant_network_types      = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
-  $mechanism_drivers         = ['openvswitch', 'linuxbridge'],
+  $mechanism_drivers         = ['openvswitch'],
   $flat_networks             = '*',
   $network_vlan_ranges       = 'physnet1:1000:2999',
   $tunnel_id_ranges          = '20:100',

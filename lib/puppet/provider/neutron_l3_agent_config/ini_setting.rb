@@ -14,17 +14,4 @@ Puppet::Type.type(:neutron_l3_agent_config).provide(
   def file_path
     self.class.file_path
   end
-
-  def to_uuid(name)
-    neutron = Puppet::Provider::Neutron.new
-    neutron.auth_neutron('router-show', "#{name}",
-                         '--format=value', '--column=id').chop
-  end
-
-  def from_uuid(uuid)
-    neutron = Puppet::Provider::Neutron.new
-    neutron.auth_neutron('router-show', "#{uuid}",
-                         '--format=value', '--column=name').chop
-  end
-
 end

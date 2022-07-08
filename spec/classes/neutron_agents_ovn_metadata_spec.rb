@@ -68,6 +68,8 @@ describe 'neutron::agents::ovn_metadata' do
       should contain_ovn_metadata_agent_config('ovs/ovsdb_connection').with(:value => params[:ovsdb_connection])
       should contain_ovn_metadata_agent_config('ovn/ovn_sb_connection').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('ovn/ovn_remote_probe_interval').with(:value => '<SERVICE DEFAULT>')
+      should contain_ovn_metadata_agent_config('ovn/ovsdb_retry_max_interval').with(:value => '<SERVICE DEFAULT>')
+      should contain_ovn_metadata_agent_config('ovn/ovsdb_probe_interval').with(:value => '<SERVICE DEFAULT>')
     end
   end
 

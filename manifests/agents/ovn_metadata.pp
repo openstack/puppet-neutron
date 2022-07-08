@@ -83,6 +83,15 @@
 #   (optional) Timeout in seconds for the OVSDB connection transaction
 #   Defaults to $::os_service_default
 #
+# [*ovsdb_retry_max_interval*]
+#   (optional) Max interval in seconds between each retry to get the OVN NB
+#   and SB IDLs.
+#   Defaults to $::os_service_default.
+#
+# [*ovsdb_probe_interval*]
+#   (optional) The probe interval for the OVSDB session in milliseconds.
+#   Defaults to $::os_service_default.
+#
 # [*root_helper*]
 #  (optional) Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
 #  root filter facility. Change to "sudo" to skip the filtering and just run the command
@@ -131,6 +140,8 @@ class neutron::agents::ovn_metadata (
   $ovn_sb_certificate        = $::os_service_default,
   $ovn_sb_ca_cert            = $::os_service_default,
   $ovsdb_connection_timeout  = $::os_service_default,
+  $ovsdb_retry_max_interval  = $::os_service_default,
+  $ovsdb_probe_interval      = $::os_service_default,
   $root_helper               = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $root_helper_daemon        = $::os_service_default,
   $state_path                = '/var/lib/neutron',
@@ -170,6 +181,8 @@ class neutron::agents::ovn_metadata (
     'agent/root_helper_daemon':               value => $root_helper_daemon;
     'ovs/ovsdb_connection':                   value => $ovsdb_connection;
     'ovs/ovsdb_connection_timeout':           value => $ovsdb_connection_timeout;
+    'ovn/ovsdb_retry_max_interval':           value => $ovsdb_retry_max_interval;
+    'ovn/ovsdb_probe_interval':               value => $ovsdb_probe_interval;
     'ovn/ovn_sb_connection':                  value => $ovn_sb_connection;
     'ovn/ovn_sb_private_key':                 value => $ovn_sb_private_key;
     'ovn/ovn_sb_certificate':                 value => $ovn_sb_certificate;

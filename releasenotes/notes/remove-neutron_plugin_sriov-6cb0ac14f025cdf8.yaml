@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``neutron_plugin_sriov`` resource type has been removed.

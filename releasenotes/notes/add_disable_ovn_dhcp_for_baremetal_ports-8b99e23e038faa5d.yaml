@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add ``disable_ovn_dhcp_for_baremetal_ports`` parameter to
+    ``neutron::plugins::ml2::ovn`` class which allows disabling
+    OVN's built-in DHCP for baremetal ports.

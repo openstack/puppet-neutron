@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::wsgi::apache`` class now supports customizing
+    request/response headers added by apache.

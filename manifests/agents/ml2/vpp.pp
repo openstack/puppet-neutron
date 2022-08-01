@@ -1,5 +1,6 @@
 # == Class: neutron::agents::ml2::vpp
 #
+# DEPRECATED !!
 # Configure networking-vpp Neutron agent for ML2 plugin.
 #
 # === Parameters
@@ -60,6 +61,8 @@ class neutron::agents::ml2::vpp (
 ) {
   include neutron::deps
   include neutron::params
+
+  warning('Support for the networking-vpp plugin has been deprecated.')
 
   resources { 'neutron_agent_vpp':
     purge => $purge_config,

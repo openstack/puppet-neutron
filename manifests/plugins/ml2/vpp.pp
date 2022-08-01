@@ -1,4 +1,6 @@
+# == Class: neutron::plugins::ml2::vpp
 #
+# DEPRECATED !!
 # Install the networking-vpp ML2 mechanism driver and generate config file
 # from parameters in the other classes.
 #
@@ -38,6 +40,8 @@ class neutron::plugins::ml2::vpp (
 ) {
   include neutron::deps
   require neutron::plugins::ml2
+
+  warning('Support for the networking-vpp plugin has been deprecated.')
 
   neutron_plugin_ml2 {
     'ml2_vpp/etcd_host':    value => $etcd_host;

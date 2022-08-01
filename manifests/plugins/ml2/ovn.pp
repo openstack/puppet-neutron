@@ -155,8 +155,8 @@ class neutron::plugins::ml2::ovn(
   }
 
   neutron_plugin_ml2 {
-    'ovn/ovn_nb_connection'                   : value => $ovn_nb_connection;
-    'ovn/ovn_sb_connection'                   : value => $ovn_sb_connection;
+    'ovn/ovn_nb_connection'                   : value => join(any2array($ovn_nb_connection), ',');
+    'ovn/ovn_sb_connection'                   : value => join(any2array($ovn_sb_connection), ',');
     'ovn/ovn_nb_private_key'                  : value => $ovn_nb_private_key;
     'ovn/ovn_nb_certificate'                  : value => $ovn_nb_certificate;
     'ovn/ovn_nb_ca_cert'                      : value => $ovn_nb_ca_cert;

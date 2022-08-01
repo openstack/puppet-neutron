@@ -130,11 +130,15 @@ describe 'neutron::plugins::ml2::ovn' do
     context 'with parameters set by arrays' do
       let :params do
         {
-          :dns_servers => ['8.8.8.8', '10.10.10.10'],
+          :ovn_nb_connection => ['tcp:192.0.2.11:6641', 'tcp:192.0.2.12:6641'],
+          :ovn_sb_connection => ['tcp:192.0.2.11:6642', 'tcp:192.0.2.12:6642'],
+          :dns_servers       => ['8.8.8.8', '10.10.10.10'],
         }
       end
 
       it 'should configure comma-separated strings' do
+        should contain_neutron_plugin_ml2('ovn/ovn_nb_connection').with_value(p[:ovn_nb_connection].join(','))
+        should contain_neutron_plugin_ml2('ovn/ovn_sb_connection').with_value(p[:ovn_sb_connection].join(','))
         should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(p[:dns_servers].join(','))
       end
     end

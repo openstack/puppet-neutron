@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``neutron_l3_agent_config`` resource type no longer supports
+    the ``transform_to`` property.

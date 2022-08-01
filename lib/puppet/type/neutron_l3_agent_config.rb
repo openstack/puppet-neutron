@@ -43,8 +43,6 @@ Puppet::Type.newtype(:neutron_l3_agent_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  newparam(:transform_to)
-
   autorequire(:anchor) do
     ['neutron::install::end']
   end

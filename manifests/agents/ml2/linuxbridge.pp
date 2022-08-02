@@ -1,5 +1,6 @@
 # == Class: neutron::agents::ml2::linuxbridge
 #
+# DEPRECATED !!
 # Setups Linuxbridge Neutron agent for ML2 plugin.
 #
 # === Parameters
@@ -95,6 +96,8 @@ class neutron::agents::ml2::linuxbridge (
 
   include neutron::deps
   include neutron::params
+
+  warning('Support for the linuxbridge mechanism driver has been deprecated.')
 
   resources { 'neutron_agent_linuxbridge':
     purge => $purge_config,

@@ -1,0 +1,10 @@
+---
+upgrade:
+  - |
+    The linuxbridge mechanism driver is no longer enabled by default.
+
+deprecations:
+  - |
+    Support for the linuxbridge mechanism driver has been deprecated.
+    The feature is now marked as an experimental one in Neutron and is no
+    longer actively maintained.

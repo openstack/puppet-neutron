@@ -15,7 +15,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
                      '/etc/neutron/plugins/vmware/nsx.ini',
-                     '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
                      '/etc/neutron/plugins/ml2/sriov_agent.ini',
                      '/etc/neutron/plugins/ml2/vpp_agent.ini']
 
@@ -35,7 +34,6 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_plugin_opencontrail <||>
   File <||> -> Neutron_agent_linuxbridge <||>
   File <||> -> Neutron_agent_ovs <||>
-  File <||> -> Neutron_plugin_sriov <||>
   File <||> -> Neutron_sriov_agent_config <||>
   File <||> -> Neutron_agent_vpp <||>
   File <||> -> Neutron_l2gw_agent_config <||>
@@ -63,7 +61,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
                      '/etc/neutron/plugins/vmware/nsx.ini',
-                     '/etc/neutron/plugins/ml2/ml2_conf_sriov.ini',
                      '/etc/neutron/plugins/ml2/sriov_agent.ini',
                      '/etc/neutron/plugins/ml2/vpp_agent.ini']
 
@@ -308,24 +305,6 @@ describe 'basic neutron_config resource' do
     ensure_absent_val => 'toto',
   }
 
-  neutron_plugin_sriov { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_plugin_sriov { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_plugin_sriov { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_sriov { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
   neutron_sriov_agent_config { 'DEFAULT/thisshouldexist' :
     value => 'foo',
   }
@@ -412,7 +391,6 @@ describe 'basic neutron_config resource' do
                     'neutron_plugin_opencontrail',
                     'neutron_agent_linuxbridge',
                     'neutron_agent_ovs',
-                    'neutron_plugin_sriov',
                     'neutron_sriov_agent_config',
                     'neutron_agent_vpp',
                     'neutron_l2gw_service_config',

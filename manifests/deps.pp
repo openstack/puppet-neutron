@@ -53,7 +53,6 @@ class neutron::deps {
   Anchor['neutron::config::begin'] -> Neutron_plugin_ml2<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_plugin_nuage<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_plugin_opencontrail<||> ~> Anchor['neutron::config::end']
-  Anchor['neutron::config::begin'] -> Neutron_plugin_sriov<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_sriov_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_vpnaas_agent_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_vpnaas_service_config<||> ~> Anchor['neutron::config::end']

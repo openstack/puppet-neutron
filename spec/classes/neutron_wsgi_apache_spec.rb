@@ -90,15 +90,11 @@ describe 'neutron::wsgi::apache' do
         case facts[:osfamily]
         when 'Debian'
           {
-            :httpd_service_name => 'apache2',
-            :httpd_ports_file   => '/etc/apache2/ports.conf',
             :wsgi_script_path   => '/usr/lib/cgi-bin/neutron',
             :wsgi_script_source => '/usr/bin/neutron-api'
           }
         when 'RedHat'
           {
-            :httpd_service_name => 'httpd',
-            :httpd_ports_file   => '/etc/httpd/conf/ports.conf',
             :wsgi_script_path   => '/var/www/cgi-bin/neutron',
             :wsgi_script_source => '/usr/bin/neutron-api'
           }

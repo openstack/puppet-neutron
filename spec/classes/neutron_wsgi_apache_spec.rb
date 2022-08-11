@@ -8,6 +8,7 @@ describe 'neutron::wsgi::apache' do
         :bind_port                   => 9696,
         :group                       => 'neutron',
         :path                        => '/',
+        :priority                    => 10,
         :servername                  => facts[:fqdn],
         :ssl                         => false,
         :threads                     => 1,
@@ -21,8 +22,8 @@ describe 'neutron::wsgi::apache' do
         :custom_wsgi_process_options => {},
         :headers                     => nil,
         :request_headers             => nil,
-        :access_log_file             => false,
-        :access_log_format           => false,
+        :access_log_file             => nil,
+        :access_log_format           => nil,
       )}
     end
 

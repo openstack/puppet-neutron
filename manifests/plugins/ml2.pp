@@ -155,6 +155,15 @@ class neutron::plugins::ml2 (
   }
   # lint:endignore
 
+  if $::osfamily == 'Debian' {
+    file {'/etc/default/neutron-server':
+      ensure => present,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+      tag    => 'neutron-config-file',
+    }
+  }
   if $::operatingsystem == 'Ubuntu' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
       path  => '/etc/default/neutron-server',
@@ -169,13 +178,6 @@ class neutron::plugins::ml2 (
   file {'/etc/neutron/plugin.ini':
     ensure => link,
     target => '/etc/neutron/plugins/ml2/ml2_conf.ini',
-    tag    => 'neutron-config-file',
-  }
-  file {'/etc/default/neutron-server':
-    ensure => present,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
     tag    => 'neutron-config-file',
   }
 

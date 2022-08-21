@@ -59,13 +59,6 @@ describe 'neutron::plugins::ml2::nuage' do
       should contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(params[:nuage_default_allow_non_ip])
     end
 
-    it 'should have a nuage plugin conf file' do
-      should contain_file(platform_params[:nuage_conf_file]).with(
-        :ensure => platform_params[:nuage_file_ensure],
-        :target => platform_params[:nuage_file_target]
-      )
-    end
-
     context 'when allowing Non-IP' do
       before :each do
         params.merge!(:nuage_default_allow_non_ip => true)
@@ -73,6 +66,28 @@ describe 'neutron::plugins::ml2::nuage' do
       it 'default_allow_non_ip is set to true' do
         should contain_neutron_plugin_nuage('PLUGIN/default_allow_non_ip').with_value(true)
       end
+    end
+  end
+
+  shared_examples 'neutron plugin ml2 nuage on Debian' do
+    it 'configures /etc/default/neutron-server' do
+      should contain_file_line('neutron-server-DAEMON_ARGS').with(
+        :path => '/etc/default/neutron-server',
+        :line => 'DAEMON_ARGS="$DAEMON_ARGS --config-file /etc/neutron/plugins/nuage/plugin.ini"',
+        :tag  => 'neutron-file-line',
+      )
+      should contain_file_line('neutron-server-DAEMON_ARGS').that_requires('Anchor[neutron::config::begin]')
+      should contain_file_line('neutron-server-DAEMON_ARGS').that_notifies('Anchor[neutron::config::end]')
+    end
+  end
+
+  shared_examples 'neutron plugin ml2 nuage on RedHat' do
+    it 'should create plugin symbolic link' do
+      should contain_file('/etc/neutron/conf.d/neutron-server/nuage_plugin.conf').with(
+        :ensure => 'link',
+        :target => '/etc/neutron/plugins/nuage/plugin.ini',
+        :tag    => 'neutron-config-file'
+      )
     end
   end
 
@@ -84,22 +99,8 @@ describe 'neutron::plugins::ml2::nuage' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      let (:platform_params) do
-        case facts[:osfamily]
-        when 'RedHat'
-          { :nuage_conf_file   => '/etc/neutron/conf.d/neutron-server/nuage_plugin.conf',
-            :nuage_file_ensure => 'link',
-            :nuage_file_target => '/etc/neutron/plugins/nuage/plugin.ini'
-          }
-        when 'Debian'
-          { :nuage_conf_file   => '/etc/default/neutron-server',
-            :nuage_file_ensure => 'present',
-            :nuage_file_target => nil
-          }
-        end
-      end
-
       it_behaves_like 'neutron plugin ml2 nuage'
+      it_behaves_like "neutron plugin ml2 nuage on #{facts[:osfamily]}"
     end
   end
 end

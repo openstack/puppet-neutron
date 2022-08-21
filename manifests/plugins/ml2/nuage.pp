@@ -69,6 +69,7 @@ class neutron::plugins::ml2::nuage (
     file_line { 'neutron-server-DAEMON_ARGS':
       path => '/etc/default/neutron-server',
       line => 'DAEMON_ARGS="$DAEMON_ARGS --config-file /etc/neutron/plugins/nuage/plugin.ini"',
+      tag  => 'neutron-file-line'
     }
   }
 

@@ -120,26 +120,24 @@ describe 'neutron::plugins::nsx' do
   end
 
   shared_examples 'neutron plugin nsx on Debian' do
-    context 'with defaults' do
-      it 'configures /etc/default/neutron-server' do
-        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
-          :path    => '/etc/default/neutron-server',
-          :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-          :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/vmware/nsx.ini',
-        )
-        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
-        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
-      end
+    it 'configures /etc/default/neutron-server' do
+      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
+        :path    => '/etc/default/neutron-server',
+        :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
+        :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/vmware/nsx.ini',
+      )
+      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
+      should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
     end
   end
 
   shared_examples 'neutron plugin nsx on RedHat' do
-    context 'with defaults' do
-     it 'should create plugin symbolic link' do
-        should contain_file('/etc/neutron/plugin.ini').with(
-          :ensure  => 'link',
-          :target  => '/etc/neutron/plugins/vmware/nsx.ini')
-      end
+    it 'should create plugin symbolic link' do
+       should contain_file('/etc/neutron/plugin.ini').with(
+         :ensure => 'link',
+         :target => '/etc/neutron/plugins/vmware/nsx.ini',
+         :tag    => 'neutron-config-file',
+       )
     end
   end
 

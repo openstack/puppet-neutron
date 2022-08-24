@@ -93,19 +93,27 @@ class neutron::agents::ml2::mlnx (
   $mappings_array = pick(join(any2array($multi_interface_driver_mappings), ','), $::os_service_default);
 
   neutron_dhcp_agent_config {
-    'DEFAULT/dhcp_broadcast_reply'                            : value => $dhcp_broadcast_reply;
-    'DEFAULT/interface_driver'                                : value => $interface_driver;
     'DEFAULT/multi_interface_driver_mappings'                 : value => $mappings_array;
     'DEFAULT/ipoib_physical_interface'                        : value => $ipoib_physical_interface;
     'DEFAULT/enable_multi_interface_driver_cache_maintenance' : value => $enable_multi_interface_driver_cache_maintenance;
   }
 
   neutron_l3_agent_config {
-    'DEFAULT/interface_driver'                                : value => $interface_driver;
     'DEFAULT/multi_interface_driver_mappings'                 : value => $mappings_array;
     'DEFAULT/ipoib_physical_interface'                        : value => $ipoib_physical_interface;
     'DEFAULT/enable_multi_interface_driver_cache_maintenance' : value => $enable_multi_interface_driver_cache_maintenance;
   }
+
+  # NOTE(tkajinam): These are required to allow workaround for bug 1987460
+  ensure_resource('neutron_dhcp_agent_config', 'DEFAULT/interface_driver', {
+    'value' => $interface_driver
+  })
+  ensure_resource('neutron_l3_agent_config', 'DEFAULT/interface_driver', {
+    'value' => $interface_driver
+  })
+  ensure_resource('neutron_dhcp_agent_config', 'DEFAULT/dhcp_broadcast_reply', {
+    'value' => $dhcp_broadcast_reply
+  })
 
   if $manage_package {
     package { $mlnx_agent_package:

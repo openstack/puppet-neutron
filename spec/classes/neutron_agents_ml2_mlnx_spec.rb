@@ -22,7 +22,7 @@ describe 'neutron::agents::ml2::mlnx' do
       should contain_package(platform_params[:mlnx_agent_package]).with(
         :name   => platform_params[:mlnx_agent_package],
         :ensure => 'installed',
-        :tag    => ['openstack', 'neutron-package'],
+        :tag    => platform_params[:mlnx_agent_package_tag]
       )
 
       if platform_params[:eswitchd_package]
@@ -109,17 +109,19 @@ describe 'neutron::agents::ml2::mlnx' do
         case facts[:osfamily]
         when 'Debian'
           {
-            :mlnx_agent_package => 'neutron-mlnx-agent',
-            :mlnx_agent_service => 'neutron-mlnx-agent',
-            :eswitchd_package   => 'networking-mlnx-eswitchd',
-            :eswitchd_service   => 'networking-mlnx-eswitchd',
+            :mlnx_agent_package     => 'neutron-mlnx-agent',
+            :mlnx_agent_service     => 'neutron-mlnx-agent',
+            :eswitchd_package       => 'networking-mlnx-eswitchd',
+            :eswitchd_service       => 'networking-mlnx-eswitchd',
+            :mlnx_agent_package_tag => ['openstack', 'neutron-package'],
           }
         when 'RedHat'
           {
-            :mlnx_agent_package => 'python3-networking-mlnx',
-            :mlnx_agent_service => 'neutron-mlnx-agent',
-            :eswitchd_package   => false,
-            :eswitchd_service   => 'eswitchd',
+            :mlnx_agent_package     => 'python3-networking-mlnx',
+            :mlnx_agent_service     => 'neutron-mlnx-agent',
+            :eswitchd_package       => false,
+            :eswitchd_service       => 'eswitchd',
+            :mlnx_agent_package_tag => ['openstack', 'neutron-plugin-ml2-package'],
           }
         end
       end

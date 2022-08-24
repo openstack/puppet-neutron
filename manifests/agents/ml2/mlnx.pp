@@ -77,10 +77,11 @@ class neutron::agents::ml2::mlnx (
   include neutron::deps
   include neutron::params
 
-  $mlnx_agent_package = $::neutron::params::mlnx_agent_package
-  $mlnx_agent_service = $::neutron::params::mlnx_agent_service
-  $eswitchd_package   = $::neutron::params::eswitchd_package
-  $eswitchd_service   = $::neutron::params::eswitchd_service
+  $mlnx_agent_package  = $::neutron::params::mlnx_agent_package
+  $mlnx_agent_service  = $::neutron::params::mlnx_agent_service
+  $eswitchd_package    = $::neutron::params::eswitchd_package
+  $eswitchd_service    = $::neutron::params::eswitchd_service
+  $mlnx_plugin_package = $::neutron::params::mlnx_plugin_package
 
   neutron_mlnx_agent_config {
     'eswitch/physical_interface_mappings': value => pick(join(any2array($physical_interface_mappings), ','), $::os_service_default);
@@ -109,15 +110,16 @@ class neutron::agents::ml2::mlnx (
   }
 
   if $manage_package {
+    if $mlnx_agent_package != $mlnx_plugin_package {
+      $mlnx_agent_package_tag = ['openstack', 'neutron-package']
+    } else {
+      $mlnx_agent_package_tag = ['openstack', 'neutron-plugin-ml2-package']
+      Package[$mlnx_agent_package] -> Neutron_mlnx_agent_config<||>
+    }
     ensure_packages($mlnx_agent_package, {
       ensure => $package_ensure,
-      tag    => ['openstack'],
+      tag    => $mlnx_agent_package_tag,
     })
-
-    # NOTE(tkajinam): CentOS/RHEL uses the same package for both agent and
-    #                 plugin. This is required to avoid conflict with
-    #                 neutron::plugins::ml2::mellanox
-    Package<| title == $mlnx_agent_package |> { tag +> 'neutron-package' }
 
     # NOTE(tkajinam): Ubuntu/Debian requires a separate package for eswitchd
     #                 service.

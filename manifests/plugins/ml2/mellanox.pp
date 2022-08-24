@@ -23,11 +23,6 @@ class neutron::plugins::ml2::mellanox (
 
   ensure_packages($mlnx_plugin_package, {
     ensure => $package_ensure,
-    tag    => ['openstack'],
+    tag    => ['openstack', 'neutron-plugin-ml2-package'],
   })
-
-  # NOTE(tkajinam): CentOS/RHEL uses the same package for both agent and
-  #                 plugin. This is required to avoid conflict with
-  #                 neutron::agens::ml2::mlnx
-  Package<| title == $mlnx_plugin_package |> { tag +> 'neutron-plugin-ml2-package' }
 }

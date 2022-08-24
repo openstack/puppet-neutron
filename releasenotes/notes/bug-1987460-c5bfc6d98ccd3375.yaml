@@ -1,0 +1,14 @@
+---
+fixes:
+  - |
+    `Bug #1987460 <https://bugs.launchpad.net/puppet-neutron/+bug/1987460>`_:
+    Previously the ``neutron::agents::ml2::mlnx`` class causes duplicate
+    resources when used with the ``neutron::agents::dhcp`` class or
+    the ``neutron::agents::l3`` class. Now it is possible to workaround
+    the error by implementing the following mitigation.
+
+    - Include the ``neutron::agents::ml2::mlnx`` class AFTER
+      the ``neutron::agents::dhcp`` class or the ``neutron::agents::l3``
+
+    - Set the ``interface_driver`` parameter and the ``dhcp_broadcast_reply``
+      parameter consistently.

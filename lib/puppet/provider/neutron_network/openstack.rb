@@ -44,7 +44,8 @@ Puppet::Type.type(:neutron_network).provide(
         :shared                    => network[:shared],
         :tenant_id                 => network[:project_id],
         :project_id                => network[:project_id],
-        :availability_zone_hint    => parse_availability_zone_hint(network[:availability_zone_hints])
+        :availability_zone_hint    => parse_availability_zone_hint(network[:availability_zone_hints]),
+        :mtu                       => network[:mtu],
       )
     end
     self.do_not_manage = false
@@ -114,6 +115,10 @@ Puppet::Type.type(:neutron_network).provide(
       end
     end
 
+    if @resource[:mtu]
+      opts << "--mtu=#{@resource[:mtu]}"
+    end
+
     network = self.class.request('network', 'create', opts)
     @property_hash = {
       :ensure                    => :present,
@@ -127,7 +132,8 @@ Puppet::Type.type(:neutron_network).provide(
       :shared                    => network[:shared],
       :tenant_id                 => network[:project_id],
       :project_id                => network[:project_id],
-      :availability_zone_hint    => self.class.parse_availability_zone_hint(network[:availability_zone_hints])
+      :availability_zone_hint    => self.class.parse_availability_zone_hint(network[:availability_zone_hints]),
+      :mtu                       => network[:mtu],
     }
   end
 
@@ -159,6 +165,10 @@ Puppet::Type.type(:neutron_network).provide(
         end
       end
 
+      if @property_flush[:mtu]
+        opts << "--mtu=#{@property_flush[:mtu]}"
+      end
+
       self.class.request('network', 'set', opts)
       @property_flush.clear
     end
@@ -177,6 +187,7 @@ Puppet::Type.type(:neutron_network).provide(
     :admin_state_up,
     :shared,
     :router_external,
+    :mtu
   ].each do |attr|
     define_method(attr.to_s + "=") do |value|
       if self.class.do_not_manage

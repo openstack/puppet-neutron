@@ -48,13 +48,15 @@ availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 router_external="False"
-shared="False"')
+shared="False"
+mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
           expect(provider.admin_state_up).to eq('True')
           expect(provider.tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
           expect(provider.router_external).to eq('False')
           expect(provider.shared).to eq('False')
+          expect(provider.mtu).to eq('1500')
         end
       end
 
@@ -76,7 +78,8 @@ availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 router_external="False"
-shared="False"')
+shared="False"
+mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
           expect(provider.admin_state_up).to eq('False')
@@ -101,7 +104,8 @@ availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 router_external="False"
-shared="True"')
+shared="True"
+mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
           expect(provider.shared).to eq('True')
@@ -126,7 +130,8 @@ availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 router_external="False"
-shared="False"')
+shared="False"
+mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
         end
@@ -157,7 +162,8 @@ provider_network_type="vlan"
 provider_physical_network="datacentre"
 provider_segmentation_id="10"
 router_external="False"
-shared="False"')
+shared="False"
+mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
           expect(provider.provider_network_type).to eq('vlan')
@@ -184,10 +190,36 @@ availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 router_external="True"
-shared="False"')
+shared="False"
+mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
           expect(provider.router_external).to eq('True')
+        end
+      end
+
+      context 'with mtu' do
+        let :net_attrs do
+          {
+            :name => net_name,
+            :mtu  => 9000,
+          }
+        end
+
+        it 'creates network' do
+          provider_class.expects(:openstack)
+            .with('network', 'create', '--format', 'shell',
+                  ['net1', '--mtu=9000'])
+            .returns('admin_state_up="True"
+availability_zone_hints="[]"
+id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
+project_id="60f9544eb94c42a6b7e8e98c2be981b1"
+router_external="True"
+shared="False"
+mtu="9000"')
+          provider.create
+          expect(provider.exists?).to be_truthy
+          expect(provider.mtu).to eq('9000')
         end
       end
     end
@@ -243,6 +275,15 @@ shared="False"')
           provider.flush
         end
       end
+
+      context '.mtu' do
+        it 'updates mtu' do
+          provider_class.expects(:openstack)
+            .with('network', 'set', ['net1', '--mtu=1490'])
+          provider.mtu = 1490
+          provider.flush
+        end
+      end
     end
 
     describe '#instances' do
@@ -261,7 +302,8 @@ availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 router_external="False"
-shared="False"')
+shared="False"
+mtu="1500"')
         provider_class.expects(:openstack)
           .with('network', 'show', '--format', 'shell',
                 '34e8f42b-89db-4a5b-92db-76ca7073414d')
@@ -270,7 +312,8 @@ availability_zone_hints="[]"
 id="34e8f42b-89db-4a5b-92db-76ca7073414d"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 router_external="True"
-shared="True"')
+shared="True"
+mtu="9000"')
 
         instances = provider_class.instances
         expect(instances.length).to eq(2)
@@ -281,6 +324,7 @@ shared="True"')
         expect(instances[0].router_external).to eq('False')
         expect(instances[0].tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
         expect(instances[0].shared).to eq('False')
+        expect(instances[0].mtu).to eq('1500')
 
         expect(instances[1].id).to eq('34e8f42b-89db-4a5b-92db-76ca7073414d')
         expect(instances[1].name).to eq('net2')
@@ -288,6 +332,7 @@ shared="True"')
         expect(instances[1].tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
         expect(instances[1].router_external).to eq('True')
         expect(instances[1].shared).to eq('True')
+        expect(instances[1].mtu).to eq('9000')
       end
     end
   end

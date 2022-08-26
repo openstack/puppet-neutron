@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron_network`` resource type now supports the new ``mtu`` property
+    to set network MTU.

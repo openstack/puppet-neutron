@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The following parameters of the ``neutron::agents::ml2::mlnx`` class have
+    been deprecated. Use the parameters of the ``neutron::agents::dhcp`` class
+    and the ``neutron::agents::l3`` class.
+
+    - ``interface_driver``
+    - ``dhcp_broadcast_reply``

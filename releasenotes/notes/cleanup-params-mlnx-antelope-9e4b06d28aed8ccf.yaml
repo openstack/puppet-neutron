@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``neutron::agents::ml2::mlnx`` class have
+    been removed.
+
+    - ``dhcp_broadcast_reply``
+    - ``interface_driver``

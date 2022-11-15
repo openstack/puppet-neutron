@@ -92,27 +92,6 @@ describe 'neutron::agents::ml2::mlnx' do
       should contain_neutron_l3_agent_config('DEFAULT/ipoib_physical_interface').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/enable_multi_interface_driver_cache_maintenance').with_value(false)
     end
-
-    context 'with interface_driver' do
-      before :each do
-        params.merge!(:interface_driver => 'multi')
-      end
-      it 'configures neutron dhcp agent' do
-        should contain_neutron_dhcp_agent_config('DEFAULT/interface_driver').with_value('multi')
-      end
-      it 'configures neutron l3 agent' do
-        should contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value('multi')
-      end
-    end
-
-    context 'with dhcp_broadcast_reply' do
-      before :each do
-        params.merge!(:dhcp_broadcast_reply => true)
-      end
-      it 'configures neutron dhcp agent' do
-        should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value(true)
-      end
-    end
   end
 
   on_supported_os({

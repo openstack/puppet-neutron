@@ -36,67 +36,18 @@
 #   in the opencontrail config.
 #   Defaults to false.
 #
-# DEPRECATED PARAMETERS
-#
-# [*keystone_auth_url*]
-#   Url of the keystone auth server
-#   Defaults to undef
-#
-# [*keystone_admin_user*]
-#   Admin user name
-#   Defaults to undef
-#
-# [*keystone_admin_tenant_name*]
-#   Admin_tenant_name
-#   Defaults to undef
-#
-# [*keystone_admin_password*]
-#   Admin password
-#   Defaults to undef
-#
-# [*keystone_admin_token*]
-#   Admin token
-#   Defaults to undef
-#
-# [*multi_tenancy*]
-#   (Optional) Whether to enable multi-tenancy
-#   Default to undef
-#
 class neutron::plugins::opencontrail (
-  $api_server_ip              = $::os_service_default,
-  $api_server_port            = $::os_service_default,
-  $contrail_extensions        = $::os_service_default,
-  $timeout                    = $::os_service_default,
-  $connection_timeout         = $::os_service_default,
-  $package_ensure             = 'present',
-  $purge_config               = false,
-  # DEPRECATED PARAMETERS
-  $keystone_auth_url          = undef,
-  $keystone_admin_user        = undef,
-  $keystone_admin_tenant_name = undef,
-  $keystone_admin_password    = undef,
-  $keystone_admin_token       = undef,
-  $multi_tenancy              = undef,
+  $api_server_ip       = $::os_service_default,
+  $api_server_port     = $::os_service_default,
+  $contrail_extensions = $::os_service_default,
+  $timeout             = $::os_service_default,
+  $connection_timeout  = $::os_service_default,
+  $package_ensure      = 'present',
+  $purge_config        = false,
 ) {
 
   include neutron::deps
   include neutron::params
-
-  [
-    'keystone_auth_url',
-    'keystone_admin_user',
-    'keystone_admin_tenant_name',
-    'keystone_admin_password',
-    'keystone_admin_token'
-  ].each |String $key_opt| {
-    if getvar($key_opt) != undef {
-      warning("The ${key_opt} parameter is deprecated and has no effect.")
-    }
-  }
-
-  if $multi_tenancy != undef {
-    warning('The multi_tenancy parameter is deprecated and has no effect.')
-  }
 
   validate_legacy(Array, 'validate_array', $contrail_extensions)
 
@@ -142,14 +93,4 @@ class neutron::plugins::opencontrail (
     'APISERVER/timeout':             value => $timeout;
     'APISERVER/connection_timeout':  value => $connection_timeout;
   }
-
-  neutron_plugin_opencontrail {
-    'KEYSTONE/auth_url':          ensure => absent;
-    'KEYSTONE/admin_user' :       ensure => absent;
-    'KEYSTONE/admin_tenant_name': ensure => absent;
-    'KEYSTONE/admin_password':    ensure => absent;
-    'KEYSTONE/admin_token':       ensure => absent;
-    'APISERVER/multi_tenancy':    ensure => absent;
-  }
-
 }

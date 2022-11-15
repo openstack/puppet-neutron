@@ -83,9 +83,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*plugin_nvp_config*]
-#   (optional) Manage configuration of /etc/neutron/plugins/nicira/nvp.ini
-#
 # [*plugin_linuxbridge_config*]
 #   (optional) Manage configuration of linuxbridge_conf.ini
 #
@@ -120,17 +117,12 @@ class neutron::config (
   $plugin_nuage_config           = {},
   $plugin_ml2_config             = {},
   # DEPRECATED PARAMETERS
-  $plugin_nvp_config             = undef,
   $plugin_linuxbridge_config     = undef,
   $plugin_nsx_config             = undef,
   $linuxbridge_agent_config      = undef,
 ) {
 
   include neutron::deps
-
-  if $plugin_nvp_config != undef {
-    warning('The plugin_nvp_config parameter is deprecated and has no effect.')
-  }
 
   if $plugin_linuxbridge_config != undef {
     warning('The plugin_linuxbridge_config parameter is deprecated and has no effect.')

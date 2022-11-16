@@ -1,0 +1,12 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``neutron::plugins::opencontrail`` class
+    have been removed.
+
+    - ``keystone_auth_url``
+    - ``keystone_admin_user``
+    - ``keystone_admin_tenant_name``
+    - ``keystone_admin_password``
+    - ``keystone_admin_token``
+    - ``multi_tenancy``

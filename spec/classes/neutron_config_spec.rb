@@ -141,17 +141,10 @@ describe 'neutron::config' do
   shared_examples 'neutron_plugin_config' do
     let :params do
       {
-        :plugin_nsx_config             => config_hash,
         :plugin_opencontrail_config    => config_hash,
         :plugin_nuage_config           => config_hash,
         :plugin_ml2_config             => config_hash
       }
-    end
-
-    it 'configures arbitrary neutron_plugin_nsx configurations' do
-      should contain_neutron_plugin_nsx('DEFAULT/foo').with_value('fooValue')
-      should contain_neutron_plugin_nsx('DEFAULT/bar').with_value('barValue')
-      should contain_neutron_plugin_nsx('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_plugin_opencontrail configurations' do

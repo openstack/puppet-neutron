@@ -26,8 +26,6 @@ class neutron::params {
   $bgpvpn_bagpipe_service      = 'bagpipe-bgp'
   $bgpvpn_plugin_package       = 'python3-networking-bgpvpn'
   $l2gw_agent_service          = 'neutron-l2gw-agent'
-  $nsx_plugin_package          = 'vmware-nsx'
-  $nsx_config_file             = '/etc/neutron/plugins/vmware/nsx.ini'
   $sfc_package                 = 'python3-networking-sfc'
   $user                        = 'neutron'
   $group                       = 'neutron'

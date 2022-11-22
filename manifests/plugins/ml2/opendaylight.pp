@@ -65,9 +65,4 @@ class neutron::plugins::ml2::opendaylight (
     'ml2_odl/odl_hostconf_uri':        value => $odl_hostconf_uri;
     'ml2_odl/odl_features':            value => join(any2array($odl_features), ',');
   }
-
-  # TODO(tkajinam): Remove this after Zed release.
-  neutron_config {
-    'OVS/ovsdb_connection': ensure => absent;
-  }
 }

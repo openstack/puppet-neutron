@@ -44,7 +44,6 @@ describe 'basic neutron_config resource' do
                           '/etc/neutron/plugins',
                           '/etc/neutron/plugins/linuxbridge',
                           '/etc/neutron/plugins/ml2',
-                          '/etc/neutron/plugins/nicira',
                           '/etc/neutron/plugins/opencontrail',
                           '/etc/neutron/plugins/vmware']
 

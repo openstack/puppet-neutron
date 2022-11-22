@@ -20,7 +20,7 @@
 #   Defaults to 'neutron'
 #
 # [*user_domain_name*]
-#   (Optional) Name of domain for $username
+#   (optional) Name of domain for $username
 #   Defaults to 'Default'
 #
 # [*project_name*]
@@ -28,11 +28,11 @@
 #   Defaults to 'services'
 #
 # [*project_domain_name*]
-#   (Optional) Name of domain for $project_name
+#   (optional) Name of domain for $project_name
 #   Defaults to 'Default'
 #
 # [*system_scope*]
-#   (Optional) Scope for system operations
+#   (optional) Scope for system operations
 #   Defaults to $::os_service_default
 #
 # [*auth_url*]
@@ -42,25 +42,29 @@
 #   Defaults to 'http://127.0.0.1:5000'
 #
 # [*cafile*]
-#   (Optional) A PEM encoded Certificate Authority to use when verifying HTTPs
+#   (optional) A PEM encoded Certificate Authority to use when verifying HTTPs
 #   connections.
 #   Defaults to $::os_service_default.
 #
 # [*certfile*]
-#   (Optional) Required if identity server requires client certificate
+#   (optional) Required if identity server requires client certificate
 #   Defaults to $::os_service_default.
 #
 # [*allow_reverse_dns_lookup*]
 #   (optional) Enable or not the creation of reverse lookup (PTR) records.
+#   Defaults to $::os_service_default.
 #
 # [*ipv4_ptr_zone_prefix_size*]
 #   (optional) Enable or not the creation of reverse lookup (PTR) records.
+#   Defaults to $::os_service_default.
 #
 # [*ipv6_ptr_zone_prefix_size*]
 #   (optional) Enable or not the creation of reverse lookup (PTR) records.
+#   Defaults to $::os_service_default.
 #
 # [*ptr_zone_email*]
 #   (optional) The email address to be used when creating PTR zones.
+#   Defaults to $::os_service_default.
 #
 class neutron::designate (
   $password,

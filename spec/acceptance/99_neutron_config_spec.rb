@@ -13,8 +13,7 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
-                     '/etc/neutron/plugins/ml2/sriov_agent.ini',
-                     '/etc/neutron/plugins/ml2/vpp_agent.ini']
+                     '/etc/neutron/plugins/ml2/sriov_agent.ini']
 
   pp= <<-EOS
   Exec { logoutput => 'on_failure' }
@@ -32,7 +31,6 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_agent_linuxbridge <||>
   File <||> -> Neutron_agent_ovs <||>
   File <||> -> Neutron_sriov_agent_config <||>
-  File <||> -> Neutron_agent_vpp <||>
   File <||> -> Neutron_l2gw_agent_config <||>
 
 
@@ -52,8 +50,7 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
-                     '/etc/neutron/plugins/ml2/sriov_agent.ini',
-                     '/etc/neutron/plugins/ml2/vpp_agent.ini']
+                     '/etc/neutron/plugins/ml2/sriov_agent.ini']
 
   file { $neutron_directories :
     ensure => directory,
@@ -278,24 +275,6 @@ describe 'basic neutron_config resource' do
     ensure_absent_val => 'toto',
   }
 
-  neutron_agent_vpp { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_agent_vpp { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_agent_vpp { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_agent_vpp { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
   neutron_l2gw_service_config { 'DEFAULT/thisshouldexist' :
     value => 'foo',
   }
@@ -346,7 +325,6 @@ describe 'basic neutron_config resource' do
                     'neutron_agent_linuxbridge',
                     'neutron_agent_ovs',
                     'neutron_sriov_agent_config',
-                    'neutron_agent_vpp',
                     'neutron_l2gw_service_config',
                     'neutron_l2gw_agent_config']
 

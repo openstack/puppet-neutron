@@ -10,7 +10,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/metering_agent.ini',
                      '/etc/neutron/l2gw_plugin.ini',
                      '/etc/neutron/l2gateway_agent.ini',
-                     '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
@@ -27,7 +26,6 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_l3_agent_config <||>
   File <||> -> Neutron_metadata_agent_config <||>
   File <||> -> Neutron_metering_agent_config <||>
-  File <||> -> Neutron_plugin_linuxbridge <||>
   File <||> -> Neutron_plugin_ml2 <||>
   File <||> -> Neutron_l2gw_service_config <||>
   File <||> -> Neutron_vpnaas_agent_config <||>
@@ -42,7 +40,6 @@ describe 'basic neutron_config resource' do
 
   $neutron_directories = ['/etc/neutron',
                           '/etc/neutron/plugins',
-                          '/etc/neutron/plugins/linuxbridge',
                           '/etc/neutron/plugins/ml2',
                           '/etc/neutron/plugins/opencontrail',
                           '/etc/neutron/plugins/vmware']
@@ -55,7 +52,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/metering_agent.ini',
                      '/etc/neutron/l2gw_plugin.ini',
                      '/etc/neutron/l2gateway_agent.ini',
-                     '/etc/neutron/plugins/linuxbridge/linuxbridge_conf.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
@@ -174,24 +170,6 @@ describe 'basic neutron_config resource' do
   }
 
   neutron_metering_agent_config { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_linuxbridge { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_plugin_linuxbridge { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_plugin_linuxbridge { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_linuxbridge { 'DEFAULT/thisshouldnotexist2' :
     value             => 'toto',
     ensure_absent_val => 'toto',
   }
@@ -383,7 +361,6 @@ describe 'basic neutron_config resource' do
                     'neutron_dhcp_agent_config',
                     'neutron_l3_agent_config',
                     'neutron_metadata_agent_config',
-                    'neutron_plugin_linuxbridge',
                     'neutron_metering_agent_config',
                     'neutron_plugin_ml2',
                     'neutron_vpnaas_agent_config',

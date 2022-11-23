@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The ``neutron::config::plugin_linuxbridge_config`` parameter has been
+    removed.
+
+  - |
+    The ``neutron_plugin_linuxbridge`` resource type has been removed.

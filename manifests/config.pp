@@ -83,9 +83,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*plugin_linuxbridge_config*]
-#   (optional) Manage configuration of linuxbridge_conf.ini
-#
 # [*plugin_nsx_config*]
 #   (optional) Manage configuration of plugins/vmware/nsx.ini
 #
@@ -117,16 +114,11 @@ class neutron::config (
   $plugin_nuage_config           = {},
   $plugin_ml2_config             = {},
   # DEPRECATED PARAMETERS
-  $plugin_linuxbridge_config     = undef,
   $plugin_nsx_config             = undef,
   $linuxbridge_agent_config      = undef,
 ) {
 
   include neutron::deps
-
-  if $plugin_linuxbridge_config != undef {
-    warning('The plugin_linuxbridge_config parameter is deprecated and has no effect.')
-  }
 
   if $plugin_nsx_config != undef {
     warning('The plugin_nsx_config parameter is deprecated.')

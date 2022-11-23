@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for the NSX plugin has been removed.

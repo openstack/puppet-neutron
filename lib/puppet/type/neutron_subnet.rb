@@ -81,11 +81,11 @@ Puppet::Type.newtype(:neutron_subnet) do
   end
 
   newparam(:project_name) do
-    desc 'The name of the project which will own the subnet.(DEPRECATED)'
+    desc 'The name of the project which will own the subnet.'
   end
 
   newproperty(:project_id) do
-    desc 'A uuid identifying the project which will own the subnet.(DEPRECATED)'
+    desc 'A uuid identifying the project which will own the subnet.'
   end
 
   newparam(:tenant_name) do

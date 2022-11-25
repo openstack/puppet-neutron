@@ -33,11 +33,11 @@ Puppet::Type.newtype(:neutron_network) do
   end
 
   newparam(:project_name) do
-    desc 'The name of the project which will own the network.(DEPRECATED)'
+    desc 'The name of the project which will own the network.'
   end
 
   newproperty(:project_id) do
-    desc 'A uuid identifying the project which will own the network.(DEPRECATED)'
+    desc 'A uuid identifying the project which will own the network.'
   end
 
   newparam(:tenant_name) do

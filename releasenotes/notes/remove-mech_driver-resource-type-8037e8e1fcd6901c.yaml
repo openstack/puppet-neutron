@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``neutron::plugin::ml2::mech_driver`` defined resource type has been
+    removed.

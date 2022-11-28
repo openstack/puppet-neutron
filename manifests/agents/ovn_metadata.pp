@@ -112,12 +112,6 @@
 #   in the metadata config.
 #   Defaults to false.
 #
-# DEPRECATED PARAMETERS
-#
-# [*metadata_ip*]
-#   The IP address of the metadata service.
-#   Defaults to undef
-#
 class neutron::agents::ovn_metadata (
   $shared_secret,
   $package_ensure            = 'present',
@@ -146,19 +140,10 @@ class neutron::agents::ovn_metadata (
   $root_helper_daemon        = $::os_service_default,
   $state_path                = '/var/lib/neutron',
   $purge_config              = false,
-  # DEPRECATED PARAMETERS
-  $metadata_ip               = undef,
   ) {
 
   include neutron::deps
   include neutron::params
-
-  if $metadata_ip != undef {
-    warning('The metadata_ip parameter is deprecated and has no effect')
-  }
-  ovn_metadata_agent_config {
-    'DEFAULT/nova_metadata_ip': ensure => absent;
-  }
 
   resources { 'ovn_metadata_agent_config':
     purge => $purge_config,

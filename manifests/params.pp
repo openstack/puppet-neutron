@@ -61,7 +61,6 @@ class neutron::params {
     $networking_baremetal_package       = 'python3-networking-baremetal'
     $networking_baremetal_agent_package = 'python3-ironic-neutron-agent'
     $networking_baremetal_agent_service = 'ironic-neutron-agent'
-    $networking_ansible_package         = 'python3-networking-ansible'
     $mlnx_agent_package                 = 'python3-networking-mlnx'
     $mlnx_plugin_package                = 'python3-networking-mlnx'
     $eswitchd_package                   = false

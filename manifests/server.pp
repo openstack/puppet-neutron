@@ -164,6 +164,16 @@
 #   (Optional) CIDR of the administrative network if HA mode is enabled.
 #   Defaults to $::os_service_default
 #
+# [*l3_ha_network_type*]
+#   (Optional) The network type to use when creating the HA network for an HA
+#   router.
+#   Defaults to $::os_service_default
+#
+# [*l3_ha_network_physical_name*]
+#   (Optional) The physical network name with which the HA network can be
+#   created.
+#   Defaults to $::os_service_default
+#
 # [*network_auto_schedule*]
 #   (Optional) Allow auto scheduling networks to DHCP agent
 #   Defaults to $::os_service_default.
@@ -259,6 +269,8 @@ class neutron::server (
   $l3_ha                            = false,
   $max_l3_agents_per_router         = 3,
   $l3_ha_net_cidr                   = $::os_service_default,
+  $l3_ha_network_type               = $::os_service_default,
+  $l3_ha_network_physical_name      = $::os_service_default,
   $network_auto_schedule            = $::os_service_default,
   $ensure_vpnaas_package            = false,
   $ensure_dr_package                = false,
@@ -329,6 +341,8 @@ class neutron::server (
     'DEFAULT/l3_ha':                            value => $l3_ha;
     'DEFAULT/max_l3_agents_per_router':         value => $max_l3_agents_per_router;
     'DEFAULT/l3_ha_net_cidr':                   value => $l3_ha_net_cidr;
+    'DEFAULT/l3_ha_network_type':               value => $l3_ha_network_type;
+    'DEFAULT/l3_ha_network_physical_name':      value => $l3_ha_network_physical_name;
     'DEFAULT/api_workers':                      value => $api_workers;
     'DEFAULT/rpc_workers':                      value => $rpc_workers;
     'DEFAULT/rpc_state_report_workers':         value => $rpc_state_report_workers;

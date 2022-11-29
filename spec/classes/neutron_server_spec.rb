@@ -138,6 +138,8 @@ describe 'neutron::server' do
         should contain_neutron_config('DEFAULT/l3_ha').with_value(true)
         should contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(3)
         should contain_neutron_config('DEFAULT/l3_ha_net_cidr').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('DEFAULT/l3_ha_network_type').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('DEFAULT/l3_ha_network_physical_name').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -150,17 +152,35 @@ describe 'neutron::server' do
         should contain_neutron_config('DEFAULT/l3_ha').with_value(false)
         should contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(3)
         should contain_neutron_config('DEFAULT/l3_ha_net_cidr').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('DEFAULT/l3_ha_network_type').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('DEFAULT/l3_ha_network_physical_name').with_value('<SERVICE DEFAULT>')
       end
     end
 
     context 'with HA routers enabled with unlimited l3 agents per router' do
       before :each do
-        params.merge!(:l3_ha                    => true,
-                      :max_l3_agents_per_router => 0 )
+        params.merge!({
+          :l3_ha                    => true,
+          :max_l3_agents_per_router => 0
+        })
       end
 
       it 'should enable HA routers' do
         should contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(0)
+      end
+    end
+
+    context 'with HA routers options' do
+      before :each do
+        params.merge!({
+          :l3_ha_network_type          => 'vlan',
+          :l3_ha_network_physical_name => 'datacentre'
+        })
+      end
+
+      it 'should configure the HA routers options' do
+        should contain_neutron_config('DEFAULT/l3_ha_network_type').with_value('vlan')
+        should contain_neutron_config('DEFAULT/l3_ha_network_physical_name').with_value('datacentre')
       end
     end
 

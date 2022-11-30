@@ -225,12 +225,6 @@
 #   mechanism driver for Neutron.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*validate*]
-#   (Optional) Whether to validate the service is working after any service refreshes
-#   Defaults to undef
-#
 class neutron::server (
   $package_ensure                   = 'present',
   $enabled                          = true,
@@ -269,17 +263,11 @@ class neutron::server (
   $max_request_body_size            = $::os_service_default,
   $ovs_integration_bridge           = $::os_service_default,
   $igmp_snooping_enable             = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $validate                         = undef,
 ) inherits neutron::params {
 
   include neutron::deps
   include neutron::db
   include neutron::policy
-
-  if $validate != undef {
-    warning('The neutron::server::validate parameter has been deprecated and has no effect')
-  }
 
   if !is_service_default($default_availability_zones) {
     validate_legacy(Array, 'validate_array', $default_availability_zones)

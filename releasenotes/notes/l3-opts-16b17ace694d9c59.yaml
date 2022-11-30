@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following two parameters have been added to the ``neutron::server``
+    class.
+
+    - ``l3_ha_network_type``
+    - ``l3_ha_network_physical_name``

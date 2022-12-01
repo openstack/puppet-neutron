@@ -215,6 +215,8 @@ Puppet::Type.type(:neutron_router).provide(
     :availability_zone_hint,
     :tenant_id,
     :tenant_name,
+    :project_id,
+    :project_name
   ].each do |attr|
     define_method(attr.to_s + "=") do |value|
       fail("Property #{attr.to_s} does not support being updated")

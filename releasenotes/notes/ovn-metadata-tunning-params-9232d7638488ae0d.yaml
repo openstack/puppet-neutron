@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    The ``neutron::agents::ovn_metadata`` class now supports
+    the following two new parameters.
+
+    - ``ovsdb_probe_interval`` parameter to configure
+      ``[ovn]ovsdb_probe_interval`` in ovn metadata agent config
+      file.
+    - ``ovsdb_retry_max_interval`` parameter to configure
+      ``[ovn]ovsdb_retry_max_interval`` in ovn metadata agent
+      config file.

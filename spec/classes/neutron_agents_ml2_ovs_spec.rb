@@ -186,19 +186,23 @@ describe 'neutron::agents::ml2::ovs' do
       end
 
       it 'configures bridge mappings' do
-        should contain_neutron_agent_ovs('ovs/bridge_mappings')
+        should contain_neutron_agent_ovs('ovs/bridge_mappings').with_value(params[:bridge_mappings].join(','))
       end
 
       it 'should configure bridge mappings' do
-        should contain_neutron__plugins__ovs__bridge(params[:bridge_mappings].join(',')).with(
-          :before => 'Service[neutron-ovs-agent-service]'
-        )
+        params[:bridge_mappings].each do |bridge_mapping|
+          should contain_neutron__plugins__ovs__bridge(bridge_mapping).with(
+            :before => 'Service[neutron-ovs-agent-service]'
+          )
+        end
       end
 
       it 'should configure bridge uplinks' do
-        should contain_neutron__plugins__ovs__port(params[:bridge_uplinks].join(',')).with(
-          :before => 'Service[neutron-ovs-agent-service]'
-        )
+        params[:bridge_uplinks].each do |bridge_uplink|
+          should contain_neutron__plugins__ovs__port(bridge_uplink).with(
+            :before => 'Service[neutron-ovs-agent-service]'
+          )
+        end
       end
     end
 
@@ -212,19 +216,52 @@ describe 'neutron::agents::ml2::ovs' do
       end
 
       it 'configures bridge mappings' do
-        should contain_neutron_agent_ovs('ovs/bridge_mappings')
+        should contain_neutron_agent_ovs('ovs/bridge_mappings').with_value(params[:bridge_mappings].join(','))
       end
 
       it 'should not configure bridge mappings' do
-        should_not contain_neutron__plugins__ovs__bridge(params[:bridge_mappings].join(',')).with(
-          :before => 'Service[neutron-ovs-agent-service]'
-        )
+        params[:bridge_mappings].each do |bridge_mapping|
+          should_not contain_neutron__plugins__ovs__bridge(bridge_mapping)
+        end
       end
 
       it 'should not configure bridge uplinks' do
-        should_not contain_neutron__plugins__ovs__port(params[:bridge_uplinks].join(',')).with(
-          :before => 'Service[neutron-ovs-agent-service]'
-        )
+        params[:bridge_uplinks].each do |bridge_uplink|
+          should_not contain_neutron__plugins__ovs__port(bridge_uplink)
+        end
+      end
+    end
+
+    context 'when supplying multiple bridge mappings' do
+      before :each do
+        params.merge!({
+          :bridge_uplinks  => ['br-ex:eth2','br-tenant:eth3'],
+          :bridge_mappings => ['default:br-ex','tenant:br-tenant'],
+        })
+      end
+
+      it 'should require vswitch::ovs' do
+        should contain_class('vswitch::ovs')
+      end
+
+      it 'configures bridge mappings' do
+        should contain_neutron_agent_ovs('ovs/bridge_mappings').with_value(params[:bridge_mappings].join(','))
+      end
+
+      it 'should configure bridge mappings' do
+        params[:bridge_mappings].each do |bridge_mapping|
+          should contain_neutron__plugins__ovs__bridge(bridge_mapping).with(
+            :before => 'Service[neutron-ovs-agent-service]'
+          )
+        end
+      end
+
+      it 'should configure bridge uplinks' do
+        params[:bridge_uplinks].each do |bridge_uplink|
+          should contain_neutron__plugins__ovs__port(bridge_uplink).with(
+            :before => 'Service[neutron-ovs-agent-service]'
+          )
+        end
       end
     end
 

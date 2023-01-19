@@ -37,6 +37,7 @@ describe 'neutron::agents::ml2::ovs' do
     end
 
     it 'configures plugins/ml2/openvswitch_agent.ini' do
+      should contain_neutron_agent_ovs('ovs/bridge_mappings').with_ensure('absent')
       should contain_neutron_agent_ovs('agent/polling_interval').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('agent/report_interval').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>')

@@ -341,7 +341,7 @@ class neutron::agents::ml2::ovs (
     }
 
     if ($manage_vswitch) {
-      neutron::plugins::ovs::bridge{ $bridge_mappings:
+      neutron::plugins::ovs::bridge{ $bridge_mappings_real:
         before => Service['neutron-ovs-agent-service'],
       }
       neutron::plugins::ovs::port{ $bridge_uplinks:

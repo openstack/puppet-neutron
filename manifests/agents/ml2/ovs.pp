@@ -380,6 +380,10 @@ class neutron::agents::ml2::ovs (
         before => Service['neutron-ovs-agent-service'],
       }
     }
+  } else {
+    neutron_agent_ovs {
+      'ovs/bridge_mappings': ensure => absent
+    }
   }
 
   if ($resource_provider_bandwidths != []) {

@@ -13,7 +13,8 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
-                     '/etc/neutron/plugins/ml2/sriov_agent.ini']
+                     '/etc/neutron/plugins/ml2/sriov_agent.ini',
+                     '/etc/neutron/neutron_ovn_metadata_agent.ini']
 
   pp= <<-EOS
   Exec { logoutput => 'on_failure' }
@@ -32,6 +33,7 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_agent_ovs <||>
   File <||> -> Neutron_sriov_agent_config <||>
   File <||> -> Neutron_l2gw_agent_config <||>
+  File <||> -> Ovn_metadata_agent_config <||>
 
 
   $neutron_directories = ['/etc/neutron',
@@ -50,7 +52,8 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
-                     '/etc/neutron/plugins/ml2/sriov_agent.ini']
+                     '/etc/neutron/plugins/ml2/sriov_agent.ini',
+                     '/etc/neutron/neutron_ovn_metadata_agent.ini']
 
   file { $neutron_directories :
     ensure => directory,
@@ -311,6 +314,24 @@ describe 'basic neutron_config resource' do
     ensure_absent_val => 'toto',
   }
 
+  ovn_metadata_agent_config { 'DEFAULT/thisshouldexist' :
+    value => 'foo',
+  }
+
+  ovn_metadata_agent_config { 'DEFAULT/thisshouldnotexist' :
+    value => '<SERVICE DEFAULT>',
+  }
+
+  ovn_metadata_agent_config { 'DEFAULT/thisshouldexist2' :
+    value             => '<SERVICE DEFAULT>',
+    ensure_absent_val => 'toto',
+  }
+
+  ovn_metadata_agent_config { 'DEFAULT/thisshouldnotexist2' :
+    value             => 'toto',
+    ensure_absent_val => 'toto',
+  }
+
   EOS
 
   resource_names = ['neutron_api_paste_ini',
@@ -326,7 +347,8 @@ describe 'basic neutron_config resource' do
                     'neutron_agent_ovs',
                     'neutron_sriov_agent_config',
                     'neutron_l2gw_service_config',
-                    'neutron_l2gw_agent_config']
+                    'neutron_l2gw_agent_config',
+                    'ovn_metadata_agent_config']
 
   pp_resource_names = "  $resource_names = [" + resource_names.collect { |r| "    '#{r}'," }.join("\n") + "   ]\n"
 

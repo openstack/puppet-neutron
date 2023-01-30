@@ -145,8 +145,8 @@ describe 'neutron::plugins::ml2' do
 
     context 'configure ml2 with bad driver value' do
       before :each do
-       scope.expects(:warning).with('type_driver unknown.')
-       params.merge!(:type_drivers => ['foobar'])
+        allow(scope).to receive(:warning).with('type_driver unknown.')
+        params.merge!(:type_drivers => ['foobar'])
       end
     end
 

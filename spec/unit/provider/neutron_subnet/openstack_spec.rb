@@ -42,11 +42,11 @@ describe provider_class do
     describe '#create' do
       context 'with defaults' do
         it 'creates subnet' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'create', '--format', 'shell',
                   ['subnet1', '--dhcp', '--network=net1',
                    '--subnet-range=10.0.0.0/24'])
-            .returns('allocation_pools="[{\'start\': \'10.0.0.2\', \'end\': \'10.0.0.254\'}]"
+            .and_return('allocation_pools="[{\'start\': \'10.0.0.2\', \'end\': \'10.0.0.254\'}]"
 cidr="10.0.0.0/24"
 description=""
 dns_nameservers="[]"
@@ -59,10 +59,10 @@ ipv6_ra_mode="None"
 name="subnet1"
 network_id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'show', '--format', 'shell',
                   ['076520cc-b783-4cf5-a4a9-4cb5a5e93a9b'])
-            .returns('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
+            .and_return('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 name="net1"')
           provider.create
           expect(provider.exists?).to be_truthy
@@ -88,7 +88,7 @@ name="net1"')
           }
         end
         it 'creates subnet' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'create', '--format', 'shell',
                   ['subnet1', '--ip-version=4',
                    '--gateway=10.0.0.1', '--no-dhcp',
@@ -97,7 +97,7 @@ name="net1"')
                    '--host-route=destination=10.0.1.0/24,nexthop=10.0.0.1',
                    '--network=net1',
                    '--subnet-range=10.0.0.0/24'])
-            .returns('allocation_pools="[{\'start\': \'10.0.0.2\', \'end\': \'10.0.0.10\'}]"
+            .and_return('allocation_pools="[{\'start\': \'10.0.0.2\', \'end\': \'10.0.0.10\'}]"
 cidr="10.0.0.0/24"
 description=""
 dns_nameservers="[\'8.8.8.8\']"
@@ -110,10 +110,10 @@ ipv6_ra_mode="None"
 name="subnet1"
 network_id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'show', '--format', 'shell',
                   ['076520cc-b783-4cf5-a4a9-4cb5a5e93a9b'])
-            .returns('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
+            .and_return('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 name="net1"')
           provider.create
           expect(provider.exists?).to be_truthy
@@ -139,7 +139,7 @@ name="net1"')
         end
 
         it 'creates ipv6 subnet' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'create', '--format', 'shell',
                   ['subnet1', '--ip-version=6',
                    '--gateway=2001:abcd::1', '--dhcp',
@@ -148,7 +148,7 @@ name="net1"')
                    '--host-route=destination=2001:abcd:0:1::/64,nexthop=2001:abcd::1',
                    '--network=net1',
                    '--subnet-range=2001:abcd::/64'])
-            .returns('allocation_pools="[{\'start\': \'2001:abcd::2\', \'end\': \'2001:abcd::ffff:ffff:ffff:fffe\'}]"
+            .and_return('allocation_pools="[{\'start\': \'2001:abcd::2\', \'end\': \'2001:abcd::ffff:ffff:ffff:fffe\'}]"
 cird="2001:abcd::/64"
 description=""
 dns_nameservers="[\'2001:4860:4860::8888\']"
@@ -161,10 +161,10 @@ ipv6_ra_mode="None"
 name="subnet1"
 network_id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'show', '--format', 'shell',
                   ['076520cc-b783-4cf5-a4a9-4cb5a5e93a9b'])
-            .returns('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
+            .and_return('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 name="net1"')
           provider.create
           expect(provider.exists?).to be_truthy
@@ -177,7 +177,7 @@ name="net1"')
 
     describe '#destroy' do
       it 'removes subnet' do
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('subnet', 'delete', 'subnet1')
         provider.destroy
         expect(provider.exists?).to be_falsey
@@ -187,12 +187,12 @@ name="net1"')
     describe '#flush' do
       context 'gateway_ip' do
         it 'updates subnet' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--gateway=10.0.0.1'])
           provider.gateway_ip = '10.0.0.1'
           provider.flush
 
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--gateway=none'])
           provider.gateway_ip = ''
           provider.flush
@@ -200,12 +200,12 @@ name="net1"')
       end
       context '.enable_dhcp' do
         it 'updates subnet' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--no-dhcp'])
           provider.enable_dhcp = 'False'
           provider.flush
 
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--dhcp'])
           provider.enable_dhcp = 'True'
           provider.flush
@@ -213,9 +213,9 @@ name="net1"')
       end
       context '.allocation_pools' do
         it 'updates subnet' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--no-allocation-pool'])
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--allocation-pool=start=10.0.0.2,end=10.0.0.10'])
           provider.allocation_pools = 'start=10.0.0.2,end=10.0.0.10'
           provider.flush
@@ -223,9 +223,9 @@ name="net1"')
       end
       context '.dns_nameservers' do
         it 'updates subnet' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--no-dns-nameservers'])
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--dns-nameserver=8.8.8.8'])
           provider.dns_nameservers = '8.8.8.8'
           provider.flush
@@ -235,16 +235,16 @@ name="net1"')
 
     describe '#instances' do
       it 'lists subnets' do
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('subnet', 'list', '--quiet', '--format', 'csv', [])
-          .returns('"ID","Name","Network","Subnet"
+          .and_return('"ID","Name","Network","Subnet"
 "dd5e0ef1-2c88-4b0b-ba08-7df65be87963","subnet1","076520cc-b783-4cf5-a4a9-4cb5a5e93a9b","10.0.0.0/24",
 "0da7a631-0f8f-4e51-8b1c-7a29d0d4f7b5","subnet2","34e8f42b-89db-4a5b-92db-76ca7073414d","10.0.1.0/24",
 ')
 
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('subnet', 'show', '--format', 'shell', 'dd5e0ef1-2c88-4b0b-ba08-7df65be87963')
-          .returns('allocation_pools="[{\'start\': \'10.0.0.2\', \'end\': \'10.0.0.254\'}]"
+          .and_return('allocation_pools="[{\'start\': \'10.0.0.2\', \'end\': \'10.0.0.254\'}]"
 cidr="10.0.0.0/24"
 description=""
 dns_nameservers="[]"
@@ -258,13 +258,13 @@ ipv6_ra_mode="None"
 name="subnet1"
 network_id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('network', 'show', '--format', 'shell', ['076520cc-b783-4cf5-a4a9-4cb5a5e93a9b'])
-          .returns('name="net1"')
+          .and_return('name="net1"')
 
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('subnet', 'show', '--format', 'shell', '0da7a631-0f8f-4e51-8b1c-7a29d0d4f7b5')
-          .returns('allocation_pools="[{\'start\': \'10.0.1.2\', \'end\': \'10.0.1.254\'}]"
+          .and_return('allocation_pools="[{\'start\': \'10.0.1.2\', \'end\': \'10.0.1.254\'}]"
 cidr="10.0.1.0/24"
 description=""
 dns_nameservers="[]"
@@ -278,9 +278,9 @@ ipv6_ra_mode="None"
 name="subnet2"
 network_id="34e8f42b-89db-4a5b-92db-76ca7073414d"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('network', 'show', '--format', 'shell', ['34e8f42b-89db-4a5b-92db-76ca7073414d'])
-          .returns('name="net2"')
+          .and_return('name="net2"')
 
         instances = provider_class.instances
         expect(instances.length).to eq(2)

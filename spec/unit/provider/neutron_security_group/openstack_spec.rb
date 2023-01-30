@@ -39,12 +39,12 @@ describe provider_class do
 
     describe '#create' do
       it 'creates security group' do
-        provider.class.stubs(:openstack)
-                      .with('security group', 'list', ['--all'])
-                      .returns('"ID", "Name", "Description", "Project"')
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
+            .with('security group', 'list', ['--all'])
+                .and_return('"ID", "Name", "Description", "Project"')
+        allow(provider.class).to receive(:openstack)
             .with('security group', 'create', 'shell', ['example', 'description', 'test', 'project', '1a2b3c', 'project_domain', 'Default'])
-                .returns('created_at="2017-03-15T09:32:03Z"
+                .and_return('created_at="2017-03-15T09:32:03Z"
 description="test"
 headers=""
 id="593db854-a47d-411e-a894-66bf90959768"
@@ -60,7 +60,7 @@ updated_at="2017-03-15T09:32:03Z"')
 
     describe '#destroy' do
       it 'removes security group' do
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('security group', 'delete', '593db854-a47d-411e-a894-66bf90959768')
         provider.instance_variable_set(:@property_hash, sec_group_attrs)
         provider.destroy

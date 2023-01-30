@@ -41,10 +41,10 @@ describe provider_class do
     describe '#create' do
       context 'with defaults' do
         it 'creates port' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('port', 'create', '--format', 'shell',
                   ['port1', '--network=net1'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 allowed_address_pairs="[]"
 binding_host_id=""
 binding_profile="{}"
@@ -58,15 +58,15 @@ network_id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 security_groups="f1f0c3a3-9f2c-46b9-b2a5-b97d9a87bd7e"
 status="ACTIVE"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'show', '--format', 'shell',
                   ['076520cc-b783-4cf5-a4a9-4cb5a5e93a9b'])
-            .returns('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
+            .and_return('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 name="net1"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'show', '--format', 'shell',
                   ['dd5e0ef1-2c88-4b0b-ba08-7df65be87963'])
-            .returns('id="dd5e0ef1-2c88-4b0b-ba08-7df65be87963"
+            .and_return('id="dd5e0ef1-2c88-4b0b-ba08-7df65be87963"
 name="subnet1"')
           provider.create
           expect(provider.exists?).to be_truthy
@@ -89,10 +89,10 @@ name="subnet1"')
         end
 
         it 'creates port' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('port', 'create', '--format', 'shell',
                   ['port1', '--network=net1', '--disable'])
-            .returns('admin_state_up="False"
+            .and_return('admin_state_up="False"
 allowed_address_pairs="[]"
 binding_host_id=""
 binding_profile="{}"
@@ -106,15 +106,15 @@ network_id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 security_groups="f1f0c3a3-9f2c-46b9-b2a5-b97d9a87bd7e"
 status="ACTIVE"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'show', '--format', 'shell',
                   ['076520cc-b783-4cf5-a4a9-4cb5a5e93a9b'])
-            .returns('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
+            .and_return('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 name="net1"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'show', '--format', 'shell',
                   ['dd5e0ef1-2c88-4b0b-ba08-7df65be87963'])
-            .returns('id="dd5e0ef1-2c88-4b0b-ba08-7df65be87963"
+            .and_return('id="dd5e0ef1-2c88-4b0b-ba08-7df65be87963"
 name="subnet1"')
           provider.create
           expect(provider.exists?).to be_truthy
@@ -137,11 +137,11 @@ name="subnet1"')
         end
 
         it 'creates port' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('port', 'create', '--format', 'shell',
                   ['port1', '--network=net1',
                    '--fixed-ip subnet=subnet1'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 allowed_address_pairs="[]"
 binding_host_id=""
 binding_profile="{}"
@@ -155,15 +155,15 @@ network_id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 security_groups="f1f0c3a3-9f2c-46b9-b2a5-b97d9a87bd7e"
 status="ACTIVE"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'show', '--format', 'shell',
                   ['076520cc-b783-4cf5-a4a9-4cb5a5e93a9b'])
-            .returns('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
+            .and_return('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 name="net1"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'show', '--format', 'shell',
                   ['dd5e0ef1-2c88-4b0b-ba08-7df65be87963'])
-            .returns('id="dd5e0ef1-2c88-4b0b-ba08-7df65be87963"
+            .and_return('id="dd5e0ef1-2c88-4b0b-ba08-7df65be87963"
 name="subnet1"')
           provider.create
           expect(provider.exists?).to be_truthy
@@ -187,11 +187,11 @@ name="subnet1"')
         end
 
         it 'creates port' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('port', 'create', '--format', 'shell',
                   ['port1', '--network=net1', '--host=myhost',
                    '--binding-profile key1=val1'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 allowed_address_pairs="[]"
 binding_host_id="myhost"
 binding_profile="{\'key1\': \'val1\'}"
@@ -205,15 +205,15 @@ network_id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 security_groups="f1f0c3a3-9f2c-46b9-b2a5-b97d9a87bd7e"
 status="ACTIVE"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'show', '--format', 'shell',
                   ['076520cc-b783-4cf5-a4a9-4cb5a5e93a9b'])
-            .returns('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
+            .and_return('id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 name="net1"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('subnet', 'show', '--format', 'shell',
                   ['dd5e0ef1-2c88-4b0b-ba08-7df65be87963'])
-            .returns('id="dd5e0ef1-2c88-4b0b-ba08-7df65be87963"
+            .and_return('id="dd5e0ef1-2c88-4b0b-ba08-7df65be87963"
 name="subnet1"')
           provider.create
           expect(provider.exists?).to be_truthy
@@ -228,7 +228,7 @@ name="subnet1"')
 
     describe '#destroy' do
       it 'removes port' do
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('port', 'delete', 'port1')
         provider.destroy
         expect(provider.exists?).to be_falsey
@@ -238,12 +238,12 @@ name="subnet1"')
     describe '#flush' do
       context 'admin_state_up' do
         it 'updates port' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('port', 'set', ['port1', '--disable'])
           provider.admin_state_up = 'False'
           provider.flush
 
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('port', 'set', ['port1', '--enable'])
           provider.admin_state_up = 'True'
           provider.flush
@@ -253,16 +253,16 @@ name="subnet1"')
 
     describe '#list' do
       it 'lists ports' do
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('port', 'list', '--quiet', '--format', 'csv', [])
-          .returns('"ID","Name","MAC Address","Fixed IP Addresses","Status"
+          .and_return('"ID","Name","MAC Address","Fixed IP Addresses","Status"
 "5222573b-314d-45f9-b6bd-299288ba667a","port1","fa:16:3e:45:3c:10","[{\'subnet_id\': \'dd5e0ef1-2c88-4b0b-ba08-7df65be87963\', \'ip_address\': \'10.0.0.2\'}]","ACTIVE"
 "c880affb-b15e-4632-b5e7-3adba6e3ab35","port2","fa:16:3e:45:3c:11","[{\'subnet_id\': \'0da7a631-0f8f-4e51-8b1c-7a29d0d4f7b5\', \'ip_address\': \'10.0.1.2\'}]","DOWN"
 ')
 
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('port', 'show', '--format', 'shell', '5222573b-314d-45f9-b6bd-299288ba667a')
-          .returns('admin_state_up="True"
+          .and_return('admin_state_up="True"
 allowed_address_pairs="[]"
 binding_host_id=""
 binding_profile="{}"
@@ -276,16 +276,16 @@ network_id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 security_groups="f1f0c3a3-9f2c-46b9-b2a5-b97d9a87bd7e"
 status="ACTIVE"')
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('network', 'show', '--format', 'shell', ['076520cc-b783-4cf5-a4a9-4cb5a5e93a9b'])
-          .returns('name="net1"')
-        provider_class.expects(:openstack)
+          .and_return('name="net1"')
+        expect(provider_class).to receive(:openstack)
           .with('subnet', 'show', '--format', 'shell', ['dd5e0ef1-2c88-4b0b-ba08-7df65be87963'])
-          .returns('name="subnet1"')
+          .and_return('name="subnet1"')
 
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('port', 'show', '--format', 'shell', 'c880affb-b15e-4632-b5e7-3adba6e3ab35')
-          .returns('admin_state_up="False"
+          .and_return('admin_state_up="False"
 allowed_address_pairs="[]"
 binding_host_id=""
 binding_profile="{}"
@@ -299,12 +299,12 @@ network_id="34e8f42b-89db-4a5b-92db-76ca7073414d"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 security_groups="f1f0c3a3-9f2c-46b9-b2a5-b97d9a87bd7e"
 status="DOWN"')
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('network', 'show', '--format', 'shell', ['34e8f42b-89db-4a5b-92db-76ca7073414d'])
-          .returns('name="net2"')
-        provider_class.expects(:openstack)
+          .and_return('name="net2"')
+        expect(provider_class).to receive(:openstack)
           .with('subnet', 'show', '--format', 'shell', ['0da7a631-0f8f-4e51-8b1c-7a29d0d4f7b5'])
-          .returns('name="subnet2"')
+          .and_return('name="subnet2"')
 
         instances = provider_class.instances
         expect(instances.length).to eq(2)

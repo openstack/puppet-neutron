@@ -36,7 +36,7 @@ describe Puppet::Provider::Neutron do
 
     it 'should fail if config is empty' do
       conf = {}
-      klass.expects(:neutron_conf).returns(conf)
+      expect(klass).to receive(:neutron_conf).and_return(conf)
       expect do
         klass.neutron_credentials
       end.to raise_error(Puppet::Error, credential_error)
@@ -44,7 +44,7 @@ describe Puppet::Provider::Neutron do
 
     it 'should fail if config does not have keystone_authtoken section.' do
       conf = {'foo' => 'bar'}
-      klass.expects(:neutron_conf).returns(conf)
+      expect(klass).to receive(:neutron_conf).and_return(conf)
       expect do
         klass.neutron_credentials
       end.to raise_error(Puppet::Error, credential_error)
@@ -52,7 +52,7 @@ describe Puppet::Provider::Neutron do
 
     it 'should fail if config does not contain all auth params' do
       conf = {'keystone_authtoken' => {'invalid_value' => 'foo'}}
-      klass.expects(:neutron_conf).returns(conf)
+      expect(klass).to receive(:neutron_conf).and_return(conf)
       expect do
        klass.neutron_credentials
       end.to raise_error(Puppet::Error, credential_error)

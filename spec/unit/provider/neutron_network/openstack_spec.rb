@@ -40,10 +40,10 @@ describe provider_class do
     describe '#create' do
       context 'with defaults' do
         it 'creates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'create', '--format', 'shell',
                   ['net1'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
@@ -70,10 +70,10 @@ mtu="1500"')
         end
 
         it 'creates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'create', '--format', 'shell',
                   ['net1', '--disable'])
-            .returns('admin_state_up="False"
+            .and_return('admin_state_up="False"
 availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
@@ -96,10 +96,10 @@ mtu="1500"')
         end
 
         it 'creates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'create', '--format', 'shell',
                   ['net1', '--share'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
@@ -122,10 +122,10 @@ mtu="1500"')
         end
 
         it 'creates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'create', '--format', 'shell',
                   ['net1', '--project=openstack'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
@@ -149,12 +149,12 @@ mtu="1500"')
         end
 
         it 'creates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'create', '--format', 'shell',
                   ['net1', '--provider-network-type=vlan',
                    '--provider-physical-network=datacentre',
                    '--provider-segmentation-id=10'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
@@ -182,10 +182,10 @@ mtu="1500"')
         end
 
         it 'creates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'create', '--format', 'shell',
                   ['net1', '--external'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
@@ -207,10 +207,10 @@ mtu="1500"')
         end
 
         it 'creates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'create', '--format', 'shell',
                   ['net1', '--mtu=9000'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
@@ -226,7 +226,7 @@ mtu="9000"')
 
     describe '#destroy' do
       it 'removes network' do
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('network', 'delete', 'net1')
         provider.destroy
         expect(provider.exists?).to be_falsey
@@ -236,12 +236,12 @@ mtu="9000"')
     describe '#flush' do
       context '.admin_state_up' do
         it 'updates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--disable'])
           provider.admin_state_up = 'False'
           provider.flush
 
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--enable'])
           provider.admin_state_up = 'True'
           provider.flush
@@ -250,12 +250,12 @@ mtu="9000"')
 
       context '.shared' do
         it 'updates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--share'])
           provider.shared = 'True'
           provider.flush
 
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--no-share'])
           provider.shared = 'False'
           provider.flush
@@ -264,12 +264,12 @@ mtu="9000"')
 
       context '.router_external' do
         it 'updates network' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--external'])
           provider.router_external = 'True'
           provider.flush
 
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--internal'])
           provider.router_external = 'False'
           provider.flush
@@ -278,7 +278,7 @@ mtu="9000"')
 
       context '.mtu' do
         it 'updates mtu' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--mtu=1490'])
           provider.mtu = 1490
           provider.flush
@@ -288,26 +288,26 @@ mtu="9000"')
 
     describe '#instances' do
       it 'lists networks' do
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('network', 'list', '--quiet', '--format', 'csv', [])
-          .returns('"ID","Name","Subnets"
+          .and_return('"ID","Name","Subnets"
 "076520cc-b783-4cf5-a4a9-4cb5a5e93a9b","net1","[\'dd5e0ef1-2c88-4b0b-ba08-7df65be87963\']",
 "34e8f42b-89db-4a5b-92db-76ca7073414d","net2","[\'0da7a631-0f8f-4e51-8b1c-7a29d0d4f7b5\']",
 ')
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('network', 'show', '--format', 'shell',
                 '076520cc-b783-4cf5-a4a9-4cb5a5e93a9b')
-          .returns('admin_state_up="True"
+          .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 router_external="False"
 shared="False"
 mtu="1500"')
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('network', 'show', '--format', 'shell',
                 '34e8f42b-89db-4a5b-92db-76ca7073414d')
-          .returns('admin_state_up="False"
+          .and_return('admin_state_up="False"
 availability_zone_hints="[]"
 id="34e8f42b-89db-4a5b-92db-76ca7073414d"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"

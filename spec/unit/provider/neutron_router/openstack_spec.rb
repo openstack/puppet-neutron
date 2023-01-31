@@ -40,10 +40,10 @@ describe provider_class do
     describe '#create' do
       context 'with defaults' do
         it 'creates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'create', '--format', 'shell',
                   ['router1'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 distributed="False"
 external_gateway_info="None"
@@ -70,10 +70,10 @@ status="ACTIVE"')
           }
         end
         it 'creates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'create', '--format', 'shell',
                   ['router1', '--disable'])
-            .returns('admin_state_up="False"
+            .and_return('admin_state_up="False"
 availability_zone_hints="[]"
 distributed="False"
 external_gateway_info="None"
@@ -97,10 +97,10 @@ status="ACTIVE"')
           }
         end
         it 'creates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'create', '--format', 'shell',
                   ['router1', '--centralized'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 distributed="False"
 external_gateway_info="None"
@@ -124,10 +124,10 @@ status="ACTIVE"')
           }
         end
         it 'creates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'create', '--format', 'shell',
                   ['router1', '--distributed'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 distributed="True"
 external_gateway_info="None"
@@ -151,10 +151,10 @@ status="ACTIVE"')
           }
         end
         it 'creates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'create', '--format', 'shell',
                   ['router1', '--ha'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 distributed="False"
 external_gateway_info="None"
@@ -178,10 +178,10 @@ status="ACTIVE"')
           }
         end
         it 'creates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'create', '--format', 'shell',
                   ['router1', '--no-ha'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 distributed="False"
 external_gateway_info="None"
@@ -205,10 +205,10 @@ status="ACTIVE"')
           }
         end
         it 'creates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'create', '--format', 'shell',
                   ['router1'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 distributed="False"
 external_gateway_info="None"
@@ -217,12 +217,12 @@ id="d73f453a-77ca-4843-977a-3af0fda8dfcb"
 name="router1"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="ACTIVE"')
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--external-gateway=net1'])
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'show', '--format', 'shell',
                   ['router1'])
-            .returns('admin_state_up="True"
+            .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 distributed="False"
 external_gateway_info="{\'network_id\': \'076520cc-b783-4cf5-a4a9-4cb5a5e93a9b\'}"
@@ -239,7 +239,7 @@ status="ACTIVE"')
 
     describe '#destroy' do
       it 'removes router' do
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('router', 'delete', 'router1')
         provider.destroy
         expect(provider.exists?).to be_falsey
@@ -249,11 +249,11 @@ status="ACTIVE"')
     describe '#flush' do
       context '.admin_state_up' do
         it 'updates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--disable'])
           provider.admin_state_up = 'False'
           provider.flush
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--enable'])
           provider.admin_state_up = 'True'
           provider.flush
@@ -261,11 +261,11 @@ status="ACTIVE"')
       end
       context '.distributed' do
         it 'updates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--distributed'])
           provider.distributed = 'True'
           provider.flush
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--centralized'])
           provider.distributed = 'False'
           provider.flush
@@ -273,11 +273,11 @@ status="ACTIVE"')
       end
       context '.ha' do
         it 'updates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--ha'])
           provider.ha = 'True'
           provider.flush
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--no-ha'])
           provider.ha = 'False'
           provider.flush
@@ -285,11 +285,11 @@ status="ACTIVE"')
       end
       context '.gateway_network_name' do
         it 'updates router' do
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--external-gateway=net1'])
           provider.gateway_network_name = 'net1'
           provider.flush
-          provider_class.expects(:openstack)
+          expect(provider_class).to receive(:openstack)
             .with('router', 'unset', ['router1', '--external-gateway'])
           provider.gateway_network_name = ''
           provider.flush
@@ -299,15 +299,15 @@ status="ACTIVE"')
 
     describe '#instances' do
       it 'lists router' do
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('router', 'list', '--quiet', '--format', 'csv', [])
-          .returns('"ID","Name","Status","State","Project","Distributed","HA"
+          .and_return('"ID","Name","Status","State","Project","Distributed","HA"
 "d73f453a-77ca-4843-977a-3af0fda8dfcb","router1","ACTIVE","True","60f9544eb94c42a6b7e8e98c2be981b1",True,False
 "c3e93a5b-45ee-4029-b3a3-3331cb3e3f2a","router2","DOWN","False","60f9544eb94c42a6b7e8e98c2be981b1",False,True
 ')
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('router', 'show', '--format', 'shell', 'd73f453a-77ca-4843-977a-3af0fda8dfcb')
-          .returns('admin_state_up="True"
+          .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 distributed="False"
 external_gateway_info="None"
@@ -316,9 +316,9 @@ id="d73f453a-77ca-4843-977a-3af0fda8dfcb"
 name="router1"
 project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="ACTIVE"')
-        provider_class.expects(:openstack)
+        expect(provider_class).to receive(:openstack)
           .with('router', 'show', '--format', 'shell', 'c3e93a5b-45ee-4029-b3a3-3331cb3e3f2a')
-          .returns('admin_state_up="False"
+          .and_return('admin_state_up="False"
 availability_zone_hints="[]"
 distributed="True"
 external_gateway_info="None"

@@ -21,7 +21,7 @@ describe provider_class do
   describe 'when retrieving bridge ip addresses' do
 
     it 'should return an empty array for no matches' do
-      provider.expects(:ip).returns('')
+      expect(provider).to receive(:ip).and_return('')
       expect(provider.bridge_ip_addresses).to eql []
     end
 
@@ -33,7 +33,7 @@ describe provider_class do
     inet6 fe80::d095:15ff:fe80:b54f/64 scope link
        valid_lft forever preferred_lft forever
 EOT
-      provider.expects(:ip).returns(output)
+      expect(provider).to receive(:ip).and_return(output)
       expect(provider.bridge_ip_addresses).to eql ['172.24.4.225/28']
     end
 
@@ -42,8 +42,8 @@ EOT
   describe 'when checking if the l3 bridge exists' do
 
     it 'should return true if the gateway ip is present' do
-      provider.expects(:bridge_ip_addresses).returns(['a'])
-      provider.expects(:gateway_ip).returns('a')
+      expect(provider).to receive(:bridge_ip_addresses).and_return(['a'])
+      expect(provider).to receive(:gateway_ip).and_return('a')
       expect(provider.exists?).to eql true
     end
 

@@ -156,6 +156,7 @@ class neutron::agents::ml2::sriov (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_agent_sriov_numvfs<||> ~> Service['neutron-sriov-nic-agent-service']
   }
 
   if ($resource_provider_bandwidths != []) {

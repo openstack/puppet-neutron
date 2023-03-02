@@ -533,7 +533,7 @@ describe 'neutron::agents::ml2::ovs' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :ovs_agent_package => 'neutron-openvswitch-agent',
             :ovs_agent_service => 'neutron-openvswitch-agent' }
@@ -546,7 +546,7 @@ describe 'neutron::agents::ml2::ovs' do
       end
 
       it_behaves_like 'neutron plugin ovs agent with ml2 plugin'
-      it_behaves_like "neutron::agents::ml2::ovs on #{facts[:osfamily]}"
+      it_behaves_like "neutron::agents::ml2::ovs on #{facts[:os]['family']}"
     end
   end
 end

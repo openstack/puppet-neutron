@@ -19,7 +19,7 @@
 # [*polling_interval*]
 #   (optional) The number of seconds the agent will wait between
 #   polling for local device changes.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*physical_interface_mappings*]
 #   (optional) List of <physical_network>:<physical_interface>
@@ -35,7 +35,7 @@ class neutron::agents::ml2::macvtap (
   $package_ensure              = 'present',
   $enabled                     = true,
   $manage_service              = true,
-  $polling_interval            = $::os_service_default,
+  $polling_interval            = $facts['os_service_default'],
   $physical_interface_mappings = [],
   $purge_config                = false,
 ) {

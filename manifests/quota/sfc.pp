@@ -6,30 +6,30 @@
 #
 # [*quota_port_chain*]
 #  (Optional) Maximum number of port chain per tenant.
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 # [*quota_port_pair_group*]
 #  (Optional) Maximum number of port pair group per tenant.
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 # [*quota_port_pair*]
 #  (Optional) Maximum number of port pair per tenant.
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 # [*quota_service_graphs*]
 #  (Optional) Maximum number of Service Graphs per tenant.
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 # [*quota_flow_classifier*]
 #  (Optional) Maximum number of Flow Classifiers per tenant.
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 class neutron::quota::sfc (
-  $quota_port_chain      = $::os_service_default,
-  $quota_port_pair_group = $::os_service_default,
-  $quota_port_pair       = $::os_service_default,
-  $quota_service_graphs  = $::os_service_default,
-  $quota_flow_classifier = $::os_service_default
+  $quota_port_chain      = $facts['os_service_default'],
+  $quota_port_pair_group = $facts['os_service_default'],
+  $quota_port_pair       = $facts['os_service_default'],
+  $quota_service_graphs  = $facts['os_service_default'],
+  $quota_flow_classifier = $facts['os_service_default']
 ) {
 
   include neutron::deps

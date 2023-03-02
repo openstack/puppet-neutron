@@ -106,7 +106,7 @@ describe 'neutron::agents::metadata' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           {
             :metadata_agent_package => 'neutron-metadata-agent',
@@ -122,7 +122,7 @@ describe 'neutron::agents::metadata' do
       it_behaves_like 'neutron metadata agent'
       it_behaves_like 'neutron metadata agent with auth_ca_cert set'
 
-      if facts[:osfamily] == 'Debian'
+      if facts[:os]['family'] == 'Debian'
         it_behaves_like 'neutron::agents::metadata on Debian'
       end
     end

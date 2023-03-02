@@ -23,15 +23,15 @@
 #
 # [*my_as*]
 #   (required) Private Autonomous System number
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*api_host*]
 #   (optional) BGP component API host
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*api_port*]
 #   (optional) BGP component API port
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dataplane_driver_ipvpn*]
 #   IP VPN dataplane driver class
@@ -43,7 +43,7 @@
 #
 # [*enable_rtc*]
 #   Enable Route Target Constraint
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*manage_service*]
 #   (optional) Whether to start/stop the service
@@ -51,11 +51,11 @@
 #
 # [*mpls_interface*]
 #   MPLS outgoing interface for Linux and OVS drivers
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovs_bridge*]
 #   OVS bridge to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*package_ensure*]
 #   (optional) The state of the package
@@ -63,7 +63,7 @@
 #
 # [*peers*]
 #   List of peers' IPs to establish p2p connections
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*proxy_arp*]
 #   For OVS driver control if VRF will reply ARP messages
@@ -76,23 +76,23 @@
 #
 # [*local_address*]
 #   (required) Local IP of the server to carry BGP traffic
-#   Defaults to $::ipaddress
+#   Defaults to $facts['networking']['ip']
 #
 class neutron::agents::bagpipe (
   $my_as,
-  $api_host                = $::os_service_default,
-  $api_port                = $::os_service_default,
+  $api_host                = $facts['os_service_default'],
+  $api_port                = $facts['os_service_default'],
   $dataplane_driver_ipvpn  = 'ovs',
   $enabled                 = true,
-  $enable_rtc              = $::os_service_default,
+  $enable_rtc              = $facts['os_service_default'],
   $manage_service          = true,
-  $mpls_interface          = $::os_service_default,
-  $ovs_bridge              = $::os_service_default,
+  $mpls_interface          = $facts['os_service_default'],
+  $ovs_bridge              = $facts['os_service_default'],
   $package_ensure          = 'present',
-  $peers                   = $::os_service_default,
+  $peers                   = $facts['os_service_default'],
   $proxy_arp               = false,
   $purge_config            = false,
-  $local_address           = $::ipaddress,
+  $local_address           = $facts['networking']['ip'],
 ) {
 
   include neutron::deps

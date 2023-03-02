@@ -21,22 +21,22 @@
 #   Debug. Defaults to false.
 #
 # [*auth_ca_cert*]
-#   CA cert to check against with for ssl keystone. (Defaults to $::os_service_default)
+#   CA cert to check against with for ssl keystone. (Defaults to $facts['os_service_default'])
 #
 # [*nova_client_cert*]
-#   Client certificate for nova metadata api server. (Defaults to $::os_service_default)
+#   Client certificate for nova metadata api server. (Defaults to $facts['os_service_default'])
 #
 # [*nova_client_priv_key*]
-#   Private key of client certificate. (Defaults to $::os_service_default)
+#   Private key of client certificate. (Defaults to $facts['os_service_default'])
 #
 # [*metadata_host*]
-#   The hostname of the metadata service. Defaults to $::os_service_default.
+#   The hostname of the metadata service. Defaults to $facts['os_service_default'].
 #
 # [*metadata_port*]
-#   The TCP port of the metadata service. Defaults to $::os_service_default.
+#   The TCP port of the metadata service. Defaults to $facts['os_service_default'].
 #
 # [*metadata_protocol*]
-#   The protocol to use for requests to Nova metadata server. Defaults to $::os_service_default.
+#   The protocol to use for requests to Nova metadata server. Defaults to $facts['os_service_default'].
 #
 # [*metadata_workers*]
 #   (optional) Number of separate worker processes to spawn.  Greater than 0
@@ -46,11 +46,11 @@
 #
 # [*metadata_backlog*]
 #   (optional) Number of backlog requests to configure the metadata server socket with.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_insecure*]
 #   (optional) Allow to perform insecure SSL (https) requests to nova metadata.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_connection*]
 #   (optional) The URI used to connect to the local OVSDB server.
@@ -63,34 +63,34 @@
 #
 # [*ovn_sb_connection*]
 #   (optional) The connection string for the OVN_Southbound OVSDB
-#   Defaults to '$::os_service_default'
+#   Defaults to '$facts['os_service_default']'
 #
 # [*ovn_sb_private_key*]
 #   (optional) TThe PEM file with private key for SSL connection to OVN-SB-DB
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_sb_certificate*]
 #   (optional) The PEM file with certificate that certifies the
 #   private key specified in ovn_sb_private_key
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_sb_ca_cert*]
 #   (optional) TThe PEM file with CA certificate that OVN should use to
 #   verify certificates presented to it by SSL peers
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_connection_timeout*]
 #   (optional) Timeout in seconds for the OVSDB connection transaction
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_retry_max_interval*]
 #   (optional) Max interval in seconds between each retry to get the OVN NB
 #   and SB IDLs.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ovsdb_probe_interval*]
 #   (optional) The probe interval for the OVSDB session in milliseconds.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*root_helper*]
 #  (optional) Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
@@ -100,7 +100,7 @@
 #
 # [*root_helper_daemon*]
 #  (optional) Root helper daemon application to use when possible.
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 # [*state_path*]
 #   (optional) Where to store state files. This directory must be writable
@@ -118,26 +118,26 @@ class neutron::agents::ovn_metadata (
   $enabled                   = true,
   $manage_service            = true,
   $debug                     = false,
-  $auth_ca_cert              = $::os_service_default,
-  $metadata_host             = $::os_service_default,
-  $metadata_port             = $::os_service_default,
-  $metadata_protocol         = $::os_service_default,
+  $auth_ca_cert              = $facts['os_service_default'],
+  $metadata_host             = $facts['os_service_default'],
+  $metadata_port             = $facts['os_service_default'],
+  $metadata_protocol         = $facts['os_service_default'],
   $metadata_workers          = 2,
-  $metadata_backlog          = $::os_service_default,
-  $metadata_insecure         = $::os_service_default,
-  $nova_client_cert          = $::os_service_default,
-  $nova_client_priv_key      = $::os_service_default,
+  $metadata_backlog          = $facts['os_service_default'],
+  $metadata_insecure         = $facts['os_service_default'],
+  $nova_client_cert          = $facts['os_service_default'],
+  $nova_client_priv_key      = $facts['os_service_default'],
   $ovsdb_connection          = 'tcp:127.0.0.1:6640',
   $ovs_manager               = 'ptcp:6640:127.0.0.1',
-  $ovn_sb_connection         = $::os_service_default,
-  $ovn_sb_private_key        = $::os_service_default,
-  $ovn_sb_certificate        = $::os_service_default,
-  $ovn_sb_ca_cert            = $::os_service_default,
-  $ovsdb_connection_timeout  = $::os_service_default,
-  $ovsdb_retry_max_interval  = $::os_service_default,
-  $ovsdb_probe_interval      = $::os_service_default,
+  $ovn_sb_connection         = $facts['os_service_default'],
+  $ovn_sb_private_key        = $facts['os_service_default'],
+  $ovn_sb_certificate        = $facts['os_service_default'],
+  $ovn_sb_ca_cert            = $facts['os_service_default'],
+  $ovsdb_connection_timeout  = $facts['os_service_default'],
+  $ovsdb_retry_max_interval  = $facts['os_service_default'],
+  $ovsdb_probe_interval      = $facts['os_service_default'],
   $root_helper               = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $root_helper_daemon        = $::os_service_default,
+  $root_helper_daemon        = $facts['os_service_default'],
   $state_path                = '/var/lib/neutron',
   $purge_config              = false,
   ) {

@@ -191,7 +191,7 @@ describe 'neutron::agents::ml2::sriov' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           {
             :sriov_nic_agent_package => 'neutron-sriov-agent',

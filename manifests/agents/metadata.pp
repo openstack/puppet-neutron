@@ -18,55 +18,55 @@
 #   Defaults to true
 #
 # [*debug*]
-#   Debug. Defaults to $::os_service_default.
+#   Debug. Defaults to $facts['os_service_default'].
 #
 # [*auth_ca_cert*]
-#   CA cert to check against with for ssl keystone. (Defaults to $::os_service_default)
+#   CA cert to check against with for ssl keystone. (Defaults to $facts['os_service_default'])
 #
 # [*nova_client_cert*]
-#   Client certificate for nova metadata api server. (Defaults to $::os_service_default)
+#   Client certificate for nova metadata api server. (Defaults to $facts['os_service_default'])
 #
 # [*nova_client_priv_key*]
-#   Private key of client certificate. (Defaults to $::os_service_default)
+#   Private key of client certificate. (Defaults to $facts['os_service_default'])
 #
 # [*metadata_host*]
-#   The hostname of the metadata service. Defaults to $::os_service_default.
+#   The hostname of the metadata service. Defaults to $facts['os_service_default'].
 #
 # [*metadata_port*]
-#   The TCP port of the metadata service. Defaults to $::os_service_default.
+#   The TCP port of the metadata service. Defaults to $facts['os_service_default'].
 #
 # [*metadata_protocol*]
-#   The protocol to use for requests to Nova metadata server. Defaults to $::os_service_default.
+#   The protocol to use for requests to Nova metadata server. Defaults to $facts['os_service_default'].
 #
 # [*metadata_workers*]
 #   (optional) Number of separate worker processes to spawn.  Greater than 0
 #   launches that number of child processes as workers.  The parent process
 #   manages them.
-#   Defaults to: $::os_workers
+#   Defaults to: $facts['os_workers']
 #
 # [*metadata_backlog*]
 #   (optional) Number of backlog requests to configure the metadata server socket with.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_memory_cache_ttl*]
 #   (optional) Specifies time in seconds a metadata cache entry is valid in
 #   memory caching backend.
 #   Set to 0 will cause cache entries to never expire.
-#   Set to $::os_service_default or false to disable cache.
+#   Set to $facts['os_service_default'] or false to disable cache.
 #
 # [*metadata_insecure*]
 #   (optional) Allow to perform insecure SSL (https) requests to nova metadata.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*report_interval*]
 #   (optional) Set the agent report interval. By default the global report
 #   interval in neutron.conf ([agent]/report_interval) is used. This parameter
 #   can be used to override the reporting interval for the sriov-agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rpc_response_max_timeout*]
 #   (Optional) Maximum seconds to wait for a response from an RPC call
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -78,19 +78,19 @@ class neutron::agents::metadata (
   $package_ensure            = 'present',
   $enabled                   = true,
   $manage_service            = true,
-  $debug                     = $::os_service_default,
-  $auth_ca_cert              = $::os_service_default,
-  $metadata_host             = $::os_service_default,
-  $metadata_port             = $::os_service_default,
-  $metadata_protocol         = $::os_service_default,
-  $metadata_workers          = $::os_workers,
-  $metadata_backlog          = $::os_service_default,
-  $metadata_memory_cache_ttl = $::os_service_default,
-  $metadata_insecure         = $::os_service_default,
-  $nova_client_cert          = $::os_service_default,
-  $nova_client_priv_key      = $::os_service_default,
-  $report_interval           = $::os_service_default,
-  $rpc_response_max_timeout  = $::os_service_default,
+  $debug                     = $facts['os_service_default'],
+  $auth_ca_cert              = $facts['os_service_default'],
+  $metadata_host             = $facts['os_service_default'],
+  $metadata_port             = $facts['os_service_default'],
+  $metadata_protocol         = $facts['os_service_default'],
+  $metadata_workers          = $facts['os_workers'],
+  $metadata_backlog          = $facts['os_service_default'],
+  $metadata_memory_cache_ttl = $facts['os_service_default'],
+  $metadata_insecure         = $facts['os_service_default'],
+  $nova_client_cert          = $facts['os_service_default'],
+  $nova_client_priv_key      = $facts['os_service_default'],
+  $report_interval           = $facts['os_service_default'],
+  $rpc_response_max_timeout  = $facts['os_service_default'],
   $purge_config              = false,
   ) {
 

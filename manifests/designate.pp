@@ -33,7 +33,7 @@
 #
 # [*system_scope*]
 #   (optional) Scope for system operations
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*auth_url*]
 #   (optional) Authorization URI for connection to designate in admin context.
@@ -44,27 +44,27 @@
 # [*cafile*]
 #   (optional) A PEM encoded Certificate Authority to use when verifying HTTPs
 #   connections.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*certfile*]
 #   (optional) Required if identity server requires client certificate
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*allow_reverse_dns_lookup*]
 #   (optional) Enable or not the creation of reverse lookup (PTR) records.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ipv4_ptr_zone_prefix_size*]
 #   (optional) Enable or not the creation of reverse lookup (PTR) records.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ipv6_ptr_zone_prefix_size*]
 #   (optional) Enable or not the creation of reverse lookup (PTR) records.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ptr_zone_email*]
 #   (optional) The email address to be used when creating PTR zones.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class neutron::designate (
   $password,
@@ -74,14 +74,14 @@ class neutron::designate (
   $user_domain_name          = 'Default',
   $project_name              = 'services',
   $project_domain_name       = 'Default',
-  $system_scope              = $::os_service_default,
+  $system_scope              = $facts['os_service_default'],
   $auth_url                  = 'http://127.0.0.1:5000',
-  $cafile                    = $::os_service_default,
-  $certfile                  = $::os_service_default,
-  $allow_reverse_dns_lookup  = $::os_service_default,
-  $ipv4_ptr_zone_prefix_size = $::os_service_default,
-  $ipv6_ptr_zone_prefix_size = $::os_service_default,
-  $ptr_zone_email            = $::os_service_default,
+  $cafile                    = $facts['os_service_default'],
+  $certfile                  = $facts['os_service_default'],
+  $allow_reverse_dns_lookup  = $facts['os_service_default'],
+  $ipv4_ptr_zone_prefix_size = $facts['os_service_default'],
+  $ipv6_ptr_zone_prefix_size = $facts['os_service_default'],
+  $ptr_zone_email            = $facts['os_service_default'],
 ) {
   include neutron::deps
   include neutron::params
@@ -90,8 +90,8 @@ class neutron::designate (
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_name_real = $::os_service_default
-    $project_domain_name_real = $::os_service_default
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
 
   neutron_config {

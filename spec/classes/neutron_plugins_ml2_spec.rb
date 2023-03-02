@@ -333,9 +333,9 @@ describe 'neutron::plugins::ml2' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
-          if facts[:operatingsystem] == 'Ubuntu'
+          if facts[:os]['name'] == 'Ubuntu'
             {
              :ml2_server_package => 'neutron-plugin-ml2'
             }
@@ -351,10 +351,10 @@ describe 'neutron::plugins::ml2' do
 
       it_behaves_like 'neutron plugin ml2'
 
-      if facts[:osfamily] == 'Debian'
-        it_behaves_like "neutron plugin ml2 on #{facts[:operatingsystem]}"
+      if facts[:os]['family'] == 'Debian'
+        it_behaves_like "neutron plugin ml2 on #{facts[:os]['name']}"
       else
-        it_behaves_like "neutron plugin ml2 on #{facts[:osfamily]}"
+        it_behaves_like "neutron plugin ml2 on #{facts[:os]['family']}"
       end
     end
   end

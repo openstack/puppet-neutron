@@ -31,34 +31,34 @@
 # [*secondary_l3_host*]
 #   (optional) The Arist EOS IP address for second switch MLAGed
 #   with the first one. Only required if $mlag_config is set to true.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*mlag_config*]
 #   (optional) Indicates that the switch is in MLAG mode.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*l3_sync_interval*]
 #   (optional) Sync interval in seconds between l3 service plugin and
 #   the EOS.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*conn_timeout*]
 #   (optional) Connection timeout interval in seconds.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*use_vrf*]
 #   (optional) If it should create a router in VRF.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class neutron::plugins::ml2::arista::l3(
   $primary_l3_host,
   $primary_l3_host_username,
   $primary_l3_host_password,
-  $secondary_l3_host        = $::os_service_default,
-  $mlag_config              = $::os_service_default,
-  $l3_sync_interval         = $::os_service_default,
-  $conn_timeout             = $::os_service_default,
-  $use_vrf                  = $::os_service_default,
+  $secondary_l3_host        = $facts['os_service_default'],
+  $mlag_config              = $facts['os_service_default'],
+  $l3_sync_interval         = $facts['os_service_default'],
+  $conn_timeout             = $facts['os_service_default'],
+  $use_vrf                  = $facts['os_service_default'],
 ) {
 
   include neutron::deps

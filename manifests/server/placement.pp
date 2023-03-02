@@ -34,7 +34,7 @@
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*user_domain_name*]
 #   (Optional) Name of domain for $username
@@ -53,24 +53,24 @@
 # [*region_name*]
 #   (optional) Name of region to use. Useful if keystone manages more than
 #   one region.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*endpoint_type*]
 #   (optional) The type endpoint to use when looking up in
 #   the keystone catalog.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class neutron::server::placement (
   $password,
   $auth_type           = 'password',
   $project_domain_name = 'Default',
   $project_name        = 'services',
-  $system_scope        = $::os_service_default,
+  $system_scope        = $facts['os_service_default'],
   $user_domain_name    = 'Default',
   $username            = 'placement',
   $auth_url            = 'http://127.0.0.1:5000',
-  $region_name         = $::os_service_default,
-  $endpoint_type       = $::os_service_default,
+  $region_name         = $facts['os_service_default'],
+  $endpoint_type       = $facts['os_service_default'],
 ) {
 
   include neutron::deps
@@ -79,8 +79,8 @@ class neutron::server::placement (
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_name_real = $::os_service_default
-    $project_domain_name_real = $::os_service_default
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
 
   neutron_config {

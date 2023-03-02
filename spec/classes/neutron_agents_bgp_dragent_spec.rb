@@ -38,7 +38,7 @@ describe 'neutron::agents::bgp_dragent' do
       it { should contain_resources('neutron_bgp_dragent_config').with_purge(default_params[:purge_config]) }
 
       it { should contain_neutron_bgp_dragent_config('bgp/bgp_speaker_driver').with_value(default_params[:bgp_speaker_driver]) }
-      it { should contain_neutron_bgp_dragent_config('bgp/bgp_router_id').with_value(facts[:ipaddress]) }
+      it { should contain_neutron_bgp_dragent_config('bgp/bgp_router_id').with_value(facts[:networking]['ip']) }
     end
 
     context 'with overridden params' do
@@ -225,11 +225,11 @@ describe 'neutron::agents::bgp_dragent' do
   }).each do |os,facts|
     context "on #{os}" do
       let (:facts) do
-        facts.merge(OSDefaults.get_facts({:ipaddress => '1.2.3.4'}))
+        facts.merge(OSDefaults.get_facts())
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'RedHat'
           {
             :dynamic_routing_package => false,
@@ -247,11 +247,11 @@ describe 'neutron::agents::bgp_dragent' do
 
       it_behaves_like 'neutron::agents::bgp_dragent'
 
-      case facts[:osfamily]
+      case facts[:os]['family']
       when 'RedHat'
         it_behaves_like 'neutron::agents::bgp_dragent on RedHat'
       when 'Debian'
-        it_behaves_like "neutron::agents::bgp_dragent on #{facts[:operatingsystem]}"
+        it_behaves_like "neutron::agents::bgp_dragent on #{facts[:os]['name']}"
       end
     end
   end

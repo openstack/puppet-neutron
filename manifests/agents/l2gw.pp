@@ -19,12 +19,12 @@
 #
 # [*debug*]
 #   (optional) Print debug info in logs
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_hosts*]
 #   (optional) OVSDB server tuples in the format
 #   Example: ovsdb_hosts = 'ovsdb1:16.95.16.1:6632,ovsdb2:16.95.16.2:6632'
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*enable_manager*]
 #   (optional) connection can be initiated by the ovsdb server.
@@ -37,28 +37,28 @@
 # [*l2_gw_agent_priv_key_base_path*]
 #   (optional) Base path to private key file(s).
 #   Example: l2_gw_agent_priv_key_base_path = '/home/someuser/keys'
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*l2_gw_agent_cert_base_path*]
 #   (optional) Base path to cert file(s).
 #   Example: l2_gw_agent_cert_base_path = '/home/someuser/certs'
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*l2_gw_agent_ca_cert_base_path*]
 #   (optional) Base path to ca cert file(s).
 #   Example: l2_gw_agent_ca_cert_base_path = '/home/someuser/ca_certs'
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*periodic_interval*]
 #   (optional) The L2 gateway agent checks connection state with the OVSDB
 #   servers. The interval is number of seconds between attempts.
 #   Example: periodic_interval = 20
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*max_connection_retries*]
 #   (optional) The L2 gateway agent retries to connect to the OVSDB server
 #   Example: max_connection_retries = 10
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*socket_timeout*]
 #   (optional) socket timeout
@@ -73,15 +73,15 @@ class neutron::agents::l2gw (
   $package_ensure                   = 'present',
   $enabled                          = true,
   $manage_service                   = true,
-  $debug                            = $::os_service_default,
-  $ovsdb_hosts                      = $::os_service_default,
+  $debug                            = $facts['os_service_default'],
+  $ovsdb_hosts                      = $facts['os_service_default'],
   $enable_manager                   = false,
   $manager_table_listening_port     = '6632',
-  $l2_gw_agent_priv_key_base_path   = $::os_service_default,
-  $l2_gw_agent_cert_base_path       = $::os_service_default,
-  $l2_gw_agent_ca_cert_base_path    = $::os_service_default,
-  $periodic_interval                = $::os_service_default,
-  $max_connection_retries           = $::os_service_default,
+  $l2_gw_agent_priv_key_base_path   = $facts['os_service_default'],
+  $l2_gw_agent_cert_base_path       = $facts['os_service_default'],
+  $l2_gw_agent_ca_cert_base_path    = $facts['os_service_default'],
+  $periodic_interval                = $facts['os_service_default'],
+  $max_connection_retries           = $facts['os_service_default'],
   $socket_timeout                   = '30',
   $purge_config                     = false,
 ) {

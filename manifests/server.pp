@@ -63,39 +63,39 @@
 #   (Optional) Number of separate worker processes to spawn.  Greater than 0
 #   launches that number of child processes as workers.  The parent process
 #   manages them.
-#   Defaults to: $::os_workers
+#   Defaults to: $facts['os_workers']
 #
 # [*rpc_workers*]
 #   (Optional) Number of separate worker processes to spawn.  Greater than 0
 #   launches that number of child processes as workers.  The parent process
 #   manages them.
-#   Defaults to: $::os_workers
+#   Defaults to: $facts['os_workers']
 #
 # [*rpc_state_report_workers*]
 #   (Optional) Number of RPC worker process dedicated to state reports queue.
-#   Defaults to: $::os_service_default.
+#   Defaults to: $facts['os_service_default'].
 #
 # [*rpc_response_max_timeout*]
 #   (Optional) Maximum seconds to wait for a response from an RPC call
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*agent_down_time*]
 #   (Optional) Seconds to regard the agent as down; should be at least twice
 #   report_interval, to be sure the agent is down for good.
 #   agent_down_time is a config for neutron-server, set by class neutron::server
 #   report_interval is a config for neutron agents, set by class neutron
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*enable_new_agents*]
 #   (Optional) Agent starts with admin_state_up=False when enable_new_agents=False. In the
 #   case, user's resources will not be scheduled automatically to the agent until
 #   admin changes admin_state_up to True.
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*network_scheduler_driver*]
 #   (Optional) The scheduler used when scheduling networks
 #   neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler to use availability zone hints scheduling.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 #   Example:
 #
@@ -114,16 +114,16 @@
 #   (Optional) Setting the "router_distributed" flag to "True" will default to the creation
 #   of distributed tenant routers.
 #   Also can be the type of the router on the create request (admin-only attribute).
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*enable_dvr*]
 #   (Optional) Setting the "enable_dvr" flag to "False" will disable "dvr" API extension exposure.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dhcp_load_type*]
 #   (Optional) The resource type whose load is being reported by the agent.
 #   The expected values are either 'networks', 'subnets', 'ports'.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 #   Example:
 #
@@ -134,7 +134,7 @@
 # [*default_availability_zones*]
 #   (Optional) A list of availability zones that are picked when availability zone is not specified
 #   The expected input is an array when specified.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 #   Example:
 #
@@ -145,12 +145,12 @@
 # [*allow_automatic_l3agent_failover*]
 #   (Optional) Allow automatic rescheduling of routers from dead L3 agents with
 #   admin_state_up set to True to alive agents.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*allow_automatic_dhcp_failover*]
 #   (Optional) Allow automatic rescheduling of dhcp from dead dhcp agents with
 #   admin_state_up set to True to alive agents.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*l3_ha*]
 #   (Optional) Enable high availability for virtual routers.
@@ -162,21 +162,21 @@
 #
 # [*l3_ha_net_cidr*]
 #   (Optional) CIDR of the administrative network if HA mode is enabled.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*l3_ha_network_type*]
 #   (Optional) The network type to use when creating the HA network for an HA
 #   router.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*l3_ha_network_physical_name*]
 #   (Optional) The physical network name with which the HA network can be
 #   created.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*network_auto_schedule*]
 #   (Optional) Allow auto scheduling networks to DHCP agent
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ensure_vpnaas_package*]
 #   (Optional) Ensures installation of VPNaaS package before starting API service.
@@ -196,7 +196,7 @@
 #
 # [*service_providers*]
 #   (Optional) (Array) Configures the service providers for neutron server.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 #   Example:
 #
@@ -213,15 +213,15 @@
 # [*enable_proxy_headers_parsing*]
 #   (Optional) Enable paste middleware to handle SSL requests through
 #   HTTPProxyToWSGI middleware.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*max_request_body_size*]
 #   (Optional) Set max request body size
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ovs_integration_bridge*]
 #   (Optional) Name of Open vSwitch bridge to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*igmp_snooping_enable*]
 #   (Optional) Enable IGMP snooping for integration bridge. If this
@@ -233,7 +233,7 @@
 #   The switch will send unregistered multicast packets only to ports
 #   connected to multicast routers. This option is used by the ML2/OVN
 #   mechanism driver for Neutron.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class neutron::server (
   $package_ensure                   = 'present',
@@ -246,35 +246,35 @@ class neutron::server (
   $rpc_package_name                 = $::neutron::params::rpc_package_name,
   $rpc_service_name                 = $::neutron::params::rpc_service_name,
   $sync_db                          = false,
-  $api_workers                      = $::os_workers,
-  $rpc_workers                      = $::os_workers,
-  $rpc_state_report_workers         = $::os_service_default,
-  $rpc_response_max_timeout         = $::os_service_default,
-  $agent_down_time                  = $::os_service_default,
-  $enable_new_agents                = $::os_service_default,
+  $api_workers                      = $facts['os_workers'],
+  $rpc_workers                      = $facts['os_workers'],
+  $rpc_state_report_workers         = $facts['os_service_default'],
+  $rpc_response_max_timeout         = $facts['os_service_default'],
+  $agent_down_time                  = $facts['os_service_default'],
+  $enable_new_agents                = $facts['os_service_default'],
   $router_scheduler_driver          = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
-  $router_distributed               = $::os_service_default,
-  $enable_dvr                       = $::os_service_default,
-  $network_scheduler_driver         = $::os_service_default,
-  $dhcp_load_type                   = $::os_service_default,
-  $default_availability_zones       = $::os_service_default,
-  $allow_automatic_l3agent_failover = $::os_service_default,
-  $allow_automatic_dhcp_failover    = $::os_service_default,
+  $router_distributed               = $facts['os_service_default'],
+  $enable_dvr                       = $facts['os_service_default'],
+  $network_scheduler_driver         = $facts['os_service_default'],
+  $dhcp_load_type                   = $facts['os_service_default'],
+  $default_availability_zones       = $facts['os_service_default'],
+  $allow_automatic_l3agent_failover = $facts['os_service_default'],
+  $allow_automatic_dhcp_failover    = $facts['os_service_default'],
   $l3_ha                            = false,
   $max_l3_agents_per_router         = 3,
-  $l3_ha_net_cidr                   = $::os_service_default,
-  $l3_ha_network_type               = $::os_service_default,
-  $l3_ha_network_physical_name      = $::os_service_default,
-  $network_auto_schedule            = $::os_service_default,
+  $l3_ha_net_cidr                   = $facts['os_service_default'],
+  $l3_ha_network_type               = $facts['os_service_default'],
+  $l3_ha_network_physical_name      = $facts['os_service_default'],
+  $network_auto_schedule            = $facts['os_service_default'],
   $ensure_vpnaas_package            = false,
   $ensure_dr_package                = false,
   $vpnaas_agent_package             = false,
-  $service_providers                = $::os_service_default,
+  $service_providers                = $facts['os_service_default'],
   $auth_strategy                    = 'keystone',
-  $enable_proxy_headers_parsing     = $::os_service_default,
-  $max_request_body_size            = $::os_service_default,
-  $ovs_integration_bridge           = $::os_service_default,
-  $igmp_snooping_enable             = $::os_service_default,
+  $enable_proxy_headers_parsing     = $facts['os_service_default'],
+  $max_request_body_size            = $facts['os_service_default'],
+  $ovs_integration_bridge           = $facts['os_service_default'],
+  $igmp_snooping_enable             = $facts['os_service_default'],
 ) inherits neutron::params {
 
   include neutron::deps

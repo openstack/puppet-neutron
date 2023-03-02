@@ -81,8 +81,7 @@ describe 'neutron::plugins::ml2::arista::l3' do
 
     context "on #{os}" do
       let(:facts) do
-        facts.merge!(OSDefaults.get_facts({
-        }))
+        facts.merge!(OSDefaults.get_facts())
       end
 
       it_behaves_like 'neutron plugin ml2 arista l3_arista'

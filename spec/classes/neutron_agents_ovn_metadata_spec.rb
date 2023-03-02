@@ -112,7 +112,7 @@ describe 'neutron::agents::ovn_metadata' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :ovn_metadata_agent_package => 'neutron-ovn-metadata-agent',
             :ovn_metadata_agent_service => 'neutron-ovn-metadata-agent' }

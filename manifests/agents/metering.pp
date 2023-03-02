@@ -32,7 +32,7 @@
 #   Defaults to true
 #
 # [*debug*]
-#   (optional) Show debugging output in log. Defaults to $::os_service_default.
+#   (optional) Show debugging output in log. Defaults to $facts['os_service_default'].
 #
 # [*interface_driver*]
 #   (optional) The driver used to manage the virtual interface.
@@ -52,13 +52,13 @@
 #
 # [*rpc_response_max_timeout*]
 #   (Optional) Maximum seconds to wait for a response from an RPC call
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*agent_report_interval*]
 #   (optional) Set the agent report interval. By default the global report
 #   interval in neutron.conf ([agent]/report_interval) is used. This parameter
 #   can be used to override the reporting interval for the metering-agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -69,13 +69,13 @@ class neutron::agents::metering (
   $package_ensure           = present,
   $enabled                  = true,
   $manage_service           = true,
-  $debug                    = $::os_service_default,
+  $debug                    = $facts['os_service_default'],
   $interface_driver         = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $driver                   = 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
-  $measure_interval         = $::os_service_default,
-  $report_interval          = $::os_service_default,
-  $rpc_response_max_timeout = $::os_service_default,
-  $agent_report_interval    = $::os_service_default,
+  $measure_interval         = $facts['os_service_default'],
+  $report_interval          = $facts['os_service_default'],
+  $rpc_response_max_timeout = $facts['os_service_default'],
+  $agent_report_interval    = $facts['os_service_default'],
   $purge_config             = false,
 ) {
 

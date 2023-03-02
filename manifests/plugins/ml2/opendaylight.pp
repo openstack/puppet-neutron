@@ -12,39 +12,39 @@
 #
 # [*odl_username*]
 # (optional) The opendaylight controller username
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 # Example: 'admin'
 #
 # [*odl_password*]
 # (optional) The opendaylight controller password
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 # Example: 'admin'
 #
 # [*odl_url*]
 # (optional) The opendaylight controller neutron URL
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 # Example: 'http://127.0.0.1:8080/controller/nb/v2/neutron'
 #
 # [*port_binding_controller*]
 # (optional) Name of the controller to be used for port binding.
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 #
 # [*odl_hostconf_uri*]
 # (optional) Path for ODL host configuration REST interface.
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 #
 # [*odl_features*]
 # (optional) List of ODL features to enable
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 #
 class neutron::plugins::ml2::opendaylight (
   $package_ensure            = 'present',
-  $odl_username              = $::os_service_default,
-  $odl_password              = $::os_service_default,
-  $odl_url                   = $::os_service_default,
-  $port_binding_controller   = $::os_service_default,
-  $odl_hostconf_uri          = $::os_service_default,
-  $odl_features              = $::os_service_default,
+  $odl_username              = $facts['os_service_default'],
+  $odl_password              = $facts['os_service_default'],
+  $odl_url                   = $facts['os_service_default'],
+  $port_binding_controller   = $facts['os_service_default'],
+  $odl_hostconf_uri          = $facts['os_service_default'],
+  $odl_features              = $facts['os_service_default'],
 ) {
 
   include neutron::deps

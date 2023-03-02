@@ -32,19 +32,19 @@
 #   (optional) Region name that is assigned to the OpenStack controller.
 #   This setting must be set if multiple regions are using the same Arista
 #   hardware.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*sync_interval*]
 #   (optional) Sync interval in seconds between neutron plugin and EOS.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*use_fqdn*]
 #   (optional) Defines if hostnames are sent to Arista EOS as FQDNS
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*conn_timeout*]
 #   (optional) Connection timeout interval in seconds.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*package_ensure*]
 #   (optional) The intended state of the python-networking-baremetal
@@ -56,10 +56,10 @@ class neutron::plugins::ml2::arista(
   $eapi_host,
   $eapi_username,
   $eapi_password,
-  $region_name    = $::os_service_default,
-  $sync_interval  = $::os_service_default,
-  $conn_timeout   = $::os_service_default,
-  $use_fqdn       = $::os_service_default,
+  $region_name    = $facts['os_service_default'],
+  $sync_interval  = $facts['os_service_default'],
+  $conn_timeout   = $facts['os_service_default'],
+  $use_fqdn       = $facts['os_service_default'],
   $package_ensure = 'present'
 ) {
 

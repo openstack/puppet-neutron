@@ -27,11 +27,11 @@
 #
 # [*sfc_driver*]
 #   (optional) SFC driver to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*fc_driver*]
 #   (optional) Flow classifier driver to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*sync_db*]
 #   Whether 'sfc-db-sync' should run to create and/or synchronize the
@@ -44,8 +44,8 @@
 #
 class neutron::services::sfc (
   $package_ensure    = 'present',
-  $sfc_driver        = $::os_service_default,
-  $fc_driver         = $::os_service_default,
+  $sfc_driver        = $facts['os_service_default'],
+  $fc_driver         = $facts['os_service_default'],
   $sync_db           = false,
   $purge_config      = false,
 ) {

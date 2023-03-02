@@ -23,19 +23,19 @@
 #
 # [*bagpipe_bgp_port*]
 #   BGP component API port
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*mpls_bridge*]
 #   OVS bridge to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*package_ensure*]
 #   (optional) The state of the package
 #   Defaults to present
 #
 class neutron::plugins::ml2::bagpipe (
-  $bagpipe_bgp_port        = $::os_service_default,
-  $mpls_bridge             = $::os_service_default,
+  $bagpipe_bgp_port        = $facts['os_service_default'],
+  $mpls_bridge             = $facts['os_service_default'],
   $package_ensure          = 'present',
 ) {
 

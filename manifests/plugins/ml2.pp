@@ -32,7 +32,7 @@
 # [*extension_drivers*]
 #   (optional) Ordered list of extension driver entrypoints to be loaded
 #   from the neutron.ml2.extension_drivers namespace.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*tenant_network_types*]
 #   (optional) Ordered list of network_types to allocate as tenant networks.
@@ -91,7 +91,7 @@
 # [*enable_security_group*]
 #   (optional) Controls if neutron security group is enabled or not.
 #   It should be false when you use nova security group.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*package_ensure*]
 #   (optional) Ensure state for package.
@@ -100,7 +100,7 @@
 # [*physical_network_mtus*]
 #   (optional) For L2 mechanism drivers, per-physical network MTU setting.
 #   Should be an array with 'physnetX1:9000'.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*path_mtu*]
 #   (optional) For L3 mechanism drivers, determines the maximum permissible
@@ -116,16 +116,16 @@
 # [*max_header_size*]
 #   (optional) Geneve encapsulation header size is dynamic, this value is used to calculate
 #   the maximum MTU for the driver.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*overlay_ip_version*]
 #   (optional) Configures the IP version used for all overlay network endpoints. Valid values
 #   are 4 and 6.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class neutron::plugins::ml2 (
   $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
-  $extension_drivers         = $::os_service_default,
+  $extension_drivers         = $facts['os_service_default'],
   $tenant_network_types      = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
   $mechanism_drivers         = ['openvswitch'],
   $flat_networks             = '*',
@@ -133,13 +133,13 @@ class neutron::plugins::ml2 (
   $tunnel_id_ranges          = '20:100',
   $vxlan_group               = '224.0.0.1',
   $vni_ranges                = '10:100',
-  $enable_security_group     = $::os_service_default,
+  $enable_security_group     = $facts['os_service_default'],
   $package_ensure            = 'present',
-  $physical_network_mtus     = $::os_service_default,
+  $physical_network_mtus     = $facts['os_service_default'],
   $path_mtu                  = 0,
   $purge_config              = false,
-  $max_header_size           = $::os_service_default,
-  $overlay_ip_version        = $::os_service_default,
+  $max_header_size           = $facts['os_service_default'],
+  $overlay_ip_version        = $facts['os_service_default'],
 ) {
 
   include neutron::deps
@@ -155,7 +155,7 @@ class neutron::plugins::ml2 (
   }
   # lint:endignore
 
-  if $::osfamily == 'Debian' {
+  if $facts['os']['family'] == 'Debian' {
     file {'/etc/default/neutron-server':
       ensure => present,
       owner  => 'root',
@@ -164,7 +164,7 @@ class neutron::plugins::ml2 (
       tag    => 'neutron-config-file',
     }
   }
-  if $::operatingsystem == 'Ubuntu' {
+  if $facts['os']['name'] == 'Ubuntu' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
       path  => '/etc/default/neutron-server',
       match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',

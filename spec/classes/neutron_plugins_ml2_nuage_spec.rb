@@ -100,7 +100,7 @@ describe 'neutron::plugins::ml2::nuage' do
       end
 
       it_behaves_like 'neutron plugin ml2 nuage'
-      it_behaves_like "neutron plugin ml2 nuage on #{facts[:osfamily]}"
+      it_behaves_like "neutron plugin ml2 nuage on #{facts[:os]['family']}"
     end
   end
 end

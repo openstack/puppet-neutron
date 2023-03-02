@@ -15,11 +15,11 @@
 #
 # [*bind_host*]
 #   (optional) The IP/interface to bind to
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*bind_port*]
 #   (optional) The port to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*core_plugin*]
 #   (optional) Neutron plugin provider
@@ -29,7 +29,7 @@
 #   (optional) Advanced service modules.
 #   Could be an array that can have these elements:
 #   router, firewall, vpnaas, metering, qos
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*auth_strategy*]
 #   (optional) How to authenticate
@@ -37,41 +37,41 @@
 #
 # [*base_mac*]
 #   (optional) The MAC address pattern to use.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dhcp_lease_duration*]
 #   (optional) DHCP lease
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*host*]
 #   (optional) Hostname to be used by the server, agents and services.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dns_domain*]
 #   (optional) Domain to use for building the hostnames
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dhcp_agents_per_network*]
 #   (optional) Number of DHCP agents scheduled to host a network.
 #   This enables redundant DHCP agents for configured networks.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*global_physnet_mtu*]
 #   (optional) The MTU size for the interfaces managed by neutron
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dhcp_agent_notification*]
 #   (optional) Allow sending resource operation notification to DHCP agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*allow_bulk*]
 #   (optional) Enable bulk crud operations
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*api_extensions_path*]
 #   (optional) Specify additional paths for API extensions that the
 #   module in use needs to load.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*root_helper*]
 #  (optional) Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
@@ -81,36 +81,36 @@
 #
 # [*root_helper_daemon*]
 #  (optional) Root helper daemon application to use when possible.
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 # [*report_interval*]
 #   (optional) Seconds between nodes reporting state to server; should be less than
 #   agent_down_time, best if it is half or less than agent_down_time.
 #   agent_down_time is a config for neutron-server, set by class neutron::server
 #   report_interval is a config for neutron agents, set by class neutron
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*control_exchange*]
 #   (optional) What RPC queue/exchange to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*executor_thread_pool_size*]
 #   (optional) Size of executor thread pool when executor is threading or eventlet.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*default_transport_url*]
 #    (optional) A URL representing the messaging driver to use and its full
 #    configuration. Transport URLs take the form:
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
-#    Defaults to $::os_service_default
+#    Defaults to $facts['os_service_default']
 #
 # [*rpc_response_timeout*]
 #   (optional) Seconds to wait for a response from a call
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rabbit_ha_queues*]
 #   (Optional) Use HA queues in RabbitMQ.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rabbit_heartbeat_timeout_threshold*]
 #   (optional) Number of seconds after which the RabbitMQ broker is considered
@@ -118,14 +118,14 @@
 #   Heartbeating helps to ensure the TCP connection to RabbitMQ isn't silently
 #   closed, resulting in missed or lost messages from the queue.
 #   (Requires kombu >= 3.0.7 and amqp >= 1.4.0)
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rabbit_heartbeat_rate*]
 #   (optional) How often during the rabbit_heartbeat_timeout_threshold period to
 #   check the heartbeat on RabbitMQ connection.  (i.e. rabbit_heartbeat_rate=2
 #   when rabbit_heartbeat_timeout_threshold=60, the heartbeat will be checked
 #   every 30 seconds.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rabbit_heartbeat_in_pthread*]
 #   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
@@ -135,145 +135,145 @@
 #   example if the parent process have monkey patched the
 #   stdlib by using eventlet/greenlet then the heartbeat
 #   will be run through a green thread.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rabbit_use_ssl*]
 #   (optional) Connect over SSL for RabbitMQ
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rabbit_transient_queues_ttl*]
 #   (optional) Positive integer representing duration in seconds for queue
 #   TTL (x-expires). Queues which are unused for the duration of the TTL are
 #   automatically deleted. The parameter affects only reply and fanout queues.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*amqp_durable_queues*]
 #   (optional) Define queues as "durable" to rabbitmq.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*kombu_ssl_ca_certs*]
 #   (optional) SSL certification authority file (valid only if SSL enabled).
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*kombu_ssl_certfile*]
 #   (optional) SSL cert file (valid only if SSL enabled).
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*kombu_ssl_keyfile*]
 #   (optional) SSL key file (valid only if SSL enabled).
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*kombu_ssl_version*]
 #   (optional) SSL version to use (valid only if SSL enabled).
 #   Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
 #   available on some distributions.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*kombu_reconnect_delay*]
 #   (optional) The amount of time to wait before attempting to reconnect
 #   to MQ provider. This is used in some cases where you may need to wait
 #   for the provider to properly promote the master before attempting to
 #   reconnect. See https://review.opendev.org/#/c/76686
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*kombu_missing_consumer_retry_timeout*]
 #   (Optional) How long to wait a missing client before abandoning to send it
 #   its replies. This value should not be longer than rpc_response_timeout.
 #   (integer value)
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*kombu_failover_strategy*]
 #   (Optional) Determines how the next RabbitMQ node is chosen in case the one
 #   we are currently connected to becomes unavailable. Takes effect only if
 #   more than one RabbitMQ node is provided in config. (string value)
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*kombu_compression*]
 #   (optional) Possible values are: gzip, bz2. If not set compression will not
 #   be used. This option may not be available in future versions. EXPERIMENTAL.
 #   (string value)
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*amqp_server_request_prefix*]
 #   (Optional) Address prefix used when sending to a specific server
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_broadcast_prefix*]
 #   (Optional) address prefix used when broadcasting to all servers
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_group_request_prefix*]
 #   (Optional) address prefix when sending to any server in group
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_container_name*]
 #   (Optional) Name for the AMQP container
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_idle_timeout*]
 #   (Optional) Timeout for inactive connections
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_trace*]
 #   (Optional) Debug: dump AMQP frames to stdout
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_ssl_ca_file*]
 #   (Optional) CA certificate PEM file to verify server certificate
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_ssl_cert_file*]
 #   (Optional) Identifying certificate PEM file to present to clients
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_ssl_key_file*]
 #   (Optional) Private key PEM file used to sign cert_file certificate
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_ssl_key_password*]
 #   (Optional) Password for decrypting ssl_key_file (if encrypted)
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_sasl_mechanisms*]
 #   (Optional) Space separated list of acceptable SASL mechanisms
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_sasl_config_dir*]
 #   (Optional) Path to directory that contains the SASL configuration
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_sasl_config_name*]
 #   (Optional) Name of configuration file (without .conf suffix)
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_username*]
 #   (Optional) User name for message broker authentication
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_password*]
 #   (Optional) Password for message broker authentication
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*use_ssl*]
 #   (optional) Enable SSL on the API server
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*cert_file*]
 #   (optional) certificate file to use when starting api server securely
-#   defaults to $::os_service_default
+#   defaults to $facts['os_service_default']
 #
 # [*key_file*]
 #   (optional) Private key file to use when starting API server securely
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ca_file*]
 #   (optional) CA certificate file to use to verify connecting clients
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*state_path*]
 #   (optional) Where to store state files. This directory must be writable
 #   by the user executing the agent
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*lock_path*]
 #   (optional) Where to store lock files. This directory must be writeable
@@ -288,93 +288,93 @@
 # [*notification_driver*]
 #   (optional) Driver or drivers to handle sending notifications.
 #   Value can be a string or a list.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*notification_topics*]
 #   (optional) AMQP topic used for OpenStack notifications
-#   Defaults to ::os_service_default
+#   Defaults to facts['os_service_default']
 #
 # [*notification_transport_url*]
 #   (optional) A URL representing the messaging driver to use for
 #   notifications and its full configuration. Transport URLs
 #   take the form:
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*max_allowed_address_pair*]
 #   (optional) Maximum number of allowed address pairs per port
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*vlan_transparent*]
 #   (optional) Allow plugins that support it to create VLAN transparent networks
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class neutron (
   $enabled                              = true,
   $package_ensure                       = 'present',
-  $bind_host                            = $::os_service_default,
-  $bind_port                            = $::os_service_default,
+  $bind_host                            = $facts['os_service_default'],
+  $bind_port                            = $facts['os_service_default'],
   $core_plugin                          = 'ml2',
-  $service_plugins                      = $::os_service_default,
+  $service_plugins                      = $facts['os_service_default'],
   $auth_strategy                        = 'keystone',
-  $base_mac                             = $::os_service_default,
-  $dhcp_lease_duration                  = $::os_service_default,
-  $host                                 = $::os_service_default,
-  $dns_domain                           = $::os_service_default,
-  $dhcp_agents_per_network              = $::os_service_default,
-  $global_physnet_mtu                   = $::os_service_default,
-  $dhcp_agent_notification              = $::os_service_default,
-  $allow_bulk                           = $::os_service_default,
-  $api_extensions_path                  = $::os_service_default,
+  $base_mac                             = $facts['os_service_default'],
+  $dhcp_lease_duration                  = $facts['os_service_default'],
+  $host                                 = $facts['os_service_default'],
+  $dns_domain                           = $facts['os_service_default'],
+  $dhcp_agents_per_network              = $facts['os_service_default'],
+  $global_physnet_mtu                   = $facts['os_service_default'],
+  $dhcp_agent_notification              = $facts['os_service_default'],
+  $allow_bulk                           = $facts['os_service_default'],
+  $api_extensions_path                  = $facts['os_service_default'],
   $root_helper                          = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $root_helper_daemon                   = $::os_service_default,
-  $report_interval                      = $::os_service_default,
-  $control_exchange                     = $::os_service_default,
-  $executor_thread_pool_size            = $::os_service_default,
-  $default_transport_url                = $::os_service_default,
-  $rpc_response_timeout                 = $::os_service_default,
-  $rabbit_ha_queues                     = $::os_service_default,
-  $rabbit_heartbeat_timeout_threshold   = $::os_service_default,
-  $rabbit_heartbeat_rate                = $::os_service_default,
-  $rabbit_heartbeat_in_pthread          = $::os_service_default,
-  $rabbit_use_ssl                       = $::os_service_default,
-  $rabbit_transient_queues_ttl          = $::os_service_default,
-  $amqp_durable_queues                  = $::os_service_default,
-  $kombu_ssl_ca_certs                   = $::os_service_default,
-  $kombu_ssl_certfile                   = $::os_service_default,
-  $kombu_ssl_keyfile                    = $::os_service_default,
-  $kombu_ssl_version                    = $::os_service_default,
-  $kombu_reconnect_delay                = $::os_service_default,
-  $kombu_missing_consumer_retry_timeout = $::os_service_default,
-  $kombu_failover_strategy              = $::os_service_default,
-  $kombu_compression                    = $::os_service_default,
-  $amqp_server_request_prefix           = $::os_service_default,
-  $amqp_broadcast_prefix                = $::os_service_default,
-  $amqp_group_request_prefix            = $::os_service_default,
-  $amqp_container_name                  = $::os_service_default,
-  $amqp_idle_timeout                    = $::os_service_default,
-  $amqp_trace                           = $::os_service_default,
-  $amqp_ssl_ca_file                     = $::os_service_default,
-  $amqp_ssl_cert_file                   = $::os_service_default,
-  $amqp_ssl_key_file                    = $::os_service_default,
-  $amqp_ssl_key_password                = $::os_service_default,
-  $amqp_sasl_mechanisms                 = $::os_service_default,
-  $amqp_sasl_config_dir                 = $::os_service_default,
-  $amqp_sasl_config_name                = $::os_service_default,
-  $amqp_username                        = $::os_service_default,
-  $amqp_password                        = $::os_service_default,
-  $use_ssl                              = $::os_service_default,
-  $cert_file                            = $::os_service_default,
-  $key_file                             = $::os_service_default,
-  $ca_file                              = $::os_service_default,
-  $state_path                           = $::os_service_default,
+  $root_helper_daemon                   = $facts['os_service_default'],
+  $report_interval                      = $facts['os_service_default'],
+  $control_exchange                     = $facts['os_service_default'],
+  $executor_thread_pool_size            = $facts['os_service_default'],
+  $default_transport_url                = $facts['os_service_default'],
+  $rpc_response_timeout                 = $facts['os_service_default'],
+  $rabbit_ha_queues                     = $facts['os_service_default'],
+  $rabbit_heartbeat_timeout_threshold   = $facts['os_service_default'],
+  $rabbit_heartbeat_rate                = $facts['os_service_default'],
+  $rabbit_heartbeat_in_pthread          = $facts['os_service_default'],
+  $rabbit_use_ssl                       = $facts['os_service_default'],
+  $rabbit_transient_queues_ttl          = $facts['os_service_default'],
+  $amqp_durable_queues                  = $facts['os_service_default'],
+  $kombu_ssl_ca_certs                   = $facts['os_service_default'],
+  $kombu_ssl_certfile                   = $facts['os_service_default'],
+  $kombu_ssl_keyfile                    = $facts['os_service_default'],
+  $kombu_ssl_version                    = $facts['os_service_default'],
+  $kombu_reconnect_delay                = $facts['os_service_default'],
+  $kombu_missing_consumer_retry_timeout = $facts['os_service_default'],
+  $kombu_failover_strategy              = $facts['os_service_default'],
+  $kombu_compression                    = $facts['os_service_default'],
+  $amqp_server_request_prefix           = $facts['os_service_default'],
+  $amqp_broadcast_prefix                = $facts['os_service_default'],
+  $amqp_group_request_prefix            = $facts['os_service_default'],
+  $amqp_container_name                  = $facts['os_service_default'],
+  $amqp_idle_timeout                    = $facts['os_service_default'],
+  $amqp_trace                           = $facts['os_service_default'],
+  $amqp_ssl_ca_file                     = $facts['os_service_default'],
+  $amqp_ssl_cert_file                   = $facts['os_service_default'],
+  $amqp_ssl_key_file                    = $facts['os_service_default'],
+  $amqp_ssl_key_password                = $facts['os_service_default'],
+  $amqp_sasl_mechanisms                 = $facts['os_service_default'],
+  $amqp_sasl_config_dir                 = $facts['os_service_default'],
+  $amqp_sasl_config_name                = $facts['os_service_default'],
+  $amqp_username                        = $facts['os_service_default'],
+  $amqp_password                        = $facts['os_service_default'],
+  $use_ssl                              = $facts['os_service_default'],
+  $cert_file                            = $facts['os_service_default'],
+  $key_file                             = $facts['os_service_default'],
+  $ca_file                              = $facts['os_service_default'],
+  $state_path                           = $facts['os_service_default'],
   $lock_path                            = '$state_path/lock',
   $purge_config                         = false,
-  $notification_driver                  = $::os_service_default,
-  $notification_topics                  = $::os_service_default,
-  $notification_transport_url           = $::os_service_default,
-  $max_allowed_address_pair             = $::os_service_default,
-  $vlan_transparent                     = $::os_service_default,
+  $notification_driver                  = $facts['os_service_default'],
+  $notification_topics                  = $facts['os_service_default'],
+  $notification_transport_url           = $facts['os_service_default'],
+  $max_allowed_address_pair             = $facts['os_service_default'],
+  $vlan_transparent                     = $facts['os_service_default'],
 ) {
 
   include neutron::deps

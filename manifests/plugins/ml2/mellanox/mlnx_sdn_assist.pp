@@ -6,17 +6,17 @@
 #
 # [*sdn_token*]
 # (optional) The Mellanox controller token
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 # Example: 'abcdef'
 #
 # [*sdn_url*]
 # (optional) The Mellanox controller neutron URL
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 # Example: 'http://127.0.0.1/ufmRestV3/'
 #
 # [*sdn_domain*]
 # (optional) The Mellanox controller domain
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 # Example: 'cloudx'
 #
 # [*sync_enabled*]
@@ -37,9 +37,9 @@
 # Defaults to []
 #
 class neutron::plugins::ml2::mellanox::mlnx_sdn_assist (
-  $sdn_token                  = $::os_service_default,
-  $sdn_url                    = $::os_service_default,
-  $sdn_domain                 = $::os_service_default,
+  $sdn_token                  = $facts['os_service_default'],
+  $sdn_url                    = $facts['os_service_default'],
+  $sdn_domain                 = $facts['os_service_default'],
   $sync_enabled               = true,
   $bind_normal_ports          = false,
   $bind_normal_ports_physnets = [],

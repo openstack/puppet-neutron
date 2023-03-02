@@ -35,7 +35,7 @@ describe 'neutron::plugins::ml2::mellanox' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           {
             :mlnx_plugin_package => 'python3-networking-mlnx',

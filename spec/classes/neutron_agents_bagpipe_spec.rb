@@ -110,7 +110,7 @@ describe 'neutron::agents::bagpipe' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'RedHat'
           { :bagpipe_bgp_package => 'openstack-bagpipe-bgp' }
         when 'Debian'

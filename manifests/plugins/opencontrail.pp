@@ -4,15 +4,15 @@
 #
 # [*api_server_ip*]
 #   (Optional) IP address of the API Server
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*api_server_port*]
 #   (Optional) Port of the API Server.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*contrail_extensions*]
 #   (Optional) Array of OpenContrail extensions to be supported
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #   Example:
 #
 #     class {'neutron::plugins::opencontrail' :
@@ -21,11 +21,11 @@
 #
 # [*timeout*]
 #   (Optional) VNC API Server request timeout in seconds.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*connection_timeout*]
 #   (Optional) VNC API Server connection timeout in seconds.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*package_ensure*]
 #   (Optional) Ensure state for package.
@@ -37,11 +37,11 @@
 #   Defaults to false.
 #
 class neutron::plugins::opencontrail (
-  $api_server_ip       = $::os_service_default,
-  $api_server_port     = $::os_service_default,
-  $contrail_extensions = $::os_service_default,
-  $timeout             = $::os_service_default,
-  $connection_timeout  = $::os_service_default,
+  $api_server_ip       = $facts['os_service_default'],
+  $api_server_port     = $facts['os_service_default'],
+  $contrail_extensions = $facts['os_service_default'],
+  $timeout             = $facts['os_service_default'],
+  $connection_timeout  = $facts['os_service_default'],
   $package_ensure      = 'present',
   $purge_config        = false,
 ) {
@@ -64,7 +64,7 @@ class neutron::plugins::opencontrail (
     mode   => '0640'}
   )
 
-  if $::osfamily == 'Debian' {
+  if $facts['os']['family'] == 'Debian' {
     file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
       path  => '/etc/default/neutron-server',
       match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
@@ -73,7 +73,7 @@ class neutron::plugins::opencontrail (
     }
   }
 
-  if $::osfamily == 'Redhat' {
+  if $facts['os']['family'] == 'Redhat' {
     file { '/etc/neutron/plugin.ini':
       ensure  => link,
       target  => $::neutron::params::opencontrail_config_file,

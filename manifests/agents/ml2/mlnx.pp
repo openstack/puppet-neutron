@@ -26,24 +26,24 @@
 #   All physical networks listed in network_vlan_ranges
 #   on the server should have mappings to appropriate
 #   interfaces on each agent.
-#   Value should be of type array, Defaults to $::os_service_default
+#   Value should be of type array, Defaults to $facts['os_service_default']
 #
 # [*polling_interval*]
 #   (optional) The number of seconds the agent will wait between
 #   polling for local device changes.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*multi_interface_driver_mappings*]
 #   (optional) A per physnet interface driver mapping used by
 #   multidriver interface driver to manage the virtual
 #   interface per physnet. a virtual network e.g vxlan
 #   will map to the 'nil' physnet.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ipoib_physical_interface*]
 #   (optional) Name of the IPoIB root device to use with
 #   ipoib interface driver.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*enable_multi_interface_driver_cache_maintenance*]
 #   (optional) Enable periodic job to perform maintenance to the
@@ -57,10 +57,10 @@ class neutron::agents::ml2::mlnx (
   $enabled                    = true,
   $manage_service             = true,
   $manage_package             = true,
-  $physical_interface_mappings                     = $::os_service_default,
-  $polling_interval                                = $::os_service_default,
-  $multi_interface_driver_mappings                 = $::os_service_default,
-  $ipoib_physical_interface                        = $::os_service_default,
+  $physical_interface_mappings                     = $facts['os_service_default'],
+  $polling_interval                                = $facts['os_service_default'],
+  $multi_interface_driver_mappings                 = $facts['os_service_default'],
+  $ipoib_physical_interface                        = $facts['os_service_default'],
   $enable_multi_interface_driver_cache_maintenance = false,
 ) {
 
@@ -74,15 +74,15 @@ class neutron::agents::ml2::mlnx (
   $mlnx_plugin_package = $::neutron::params::mlnx_plugin_package
 
   neutron_mlnx_agent_config {
-    'eswitch/physical_interface_mappings': value => pick(join(any2array($physical_interface_mappings), ','), $::os_service_default);
+    'eswitch/physical_interface_mappings': value => pick(join(any2array($physical_interface_mappings), ','), $facts['os_service_default']);
     'agent/polling_interval'             : value => $polling_interval;
   }
 
   eswitchd_config {
-    'DAEMON/fabrics': value => pick(join(any2array($physical_interface_mappings), ','), $::os_service_default);
+    'DAEMON/fabrics': value => pick(join(any2array($physical_interface_mappings), ','), $facts['os_service_default']);
   }
 
-  $mappings_array = pick(join(any2array($multi_interface_driver_mappings), ','), $::os_service_default);
+  $mappings_array = pick(join(any2array($multi_interface_driver_mappings), ','), $facts['os_service_default']);
 
   neutron_dhcp_agent_config {
     'DEFAULT/multi_interface_driver_mappings'                 : value => $mappings_array;

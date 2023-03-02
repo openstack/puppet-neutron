@@ -184,7 +184,7 @@ describe 'neutron::agents::l3' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           {
             :l3_agent_package => 'neutron-l3-agent',

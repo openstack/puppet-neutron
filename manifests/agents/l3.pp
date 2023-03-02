@@ -20,7 +20,7 @@
 #
 # [*debug*]
 #   (optional) Print debug info in logs
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*interface_driver*]
 #   (optional) The driver used to manage the virtual interface.
@@ -28,23 +28,23 @@
 #
 # [*handle_internal_only_routers*]
 #   (optional) L3 Agent will handle non-external routers
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_port*]
 #   (optional) The port of the metadata server
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*periodic_interval*]
 #   (optional) seconds between re-sync routers' data if needed
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*periodic_fuzzy_delay*]
 #   (optional) seconds to start to sync routers' data after starting agent
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*enable_metadata_proxy*]
 #   (optional) can be set to False if the Nova metadata server is not available
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ha_enabled*]
 #   (optional) Enabled or not HA for L3 agent.
@@ -56,7 +56,7 @@
 #
 # [*ha_vrrp_auth_password*]
 #   (optional) VRRP authentication password. Required if ha_enabled = true.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ha_vrrp_advert_int*]
 #   (optional) The advertisement interval in seconds.
@@ -77,21 +77,21 @@
 # [*availability_zone*]
 #   (optional) The availability zone of the agent.
 #   Neutron will only schedule routers on the agent based on availability zone
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*extensions*]
 #   (optional) List of the L3 agent extensions to enable.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*report_interval*]
 #   (optional) Set the agent report interval. By default the global report
 #   interval in neutron.conf ([agent]/report_interval) is used. This parameter
 #   can be used to override the reporting interval for l3-agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rpc_response_max_timeout*]
 #   (Optional) Maximum seconds to wait for a response from an RPC call
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*radvd_user*]
 #   (optional) The username passed to radvd, used to drop root privileges and
@@ -99,55 +99,55 @@
 #   If no user specified, the user executing the L3 agent will be passed. If
 #   "root" specified, because radvd is spawned as root, no "username" parameter
 #   will be passed.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovs_integration_bridge*]
 #   (optional) Name of Open vSwitch bridge to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*network_log_rate_limit*]
 #   (Optional) Maximum packets logging per second.
 #   Used by logging service plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #   Minimum possible value is 100.
 #
 # [*network_log_burst_limit*]
 #   (Optional) Maximum number of packets per rate_limit.
 #   Used by logging service plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #   Minimum possible value is 25.
 #
 # [*network_log_local_output_log_base*]
 #   (Optional) Output logfile path on agent side, default syslog file.
 #   Used by logging service plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class neutron::agents::l3 (
   $package_ensure                    = 'present',
   $enabled                           = true,
   $manage_service                    = true,
-  $debug                             = $::os_service_default,
+  $debug                             = $facts['os_service_default'],
   $interface_driver                  = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $handle_internal_only_routers      = $::os_service_default,
-  $metadata_port                     = $::os_service_default,
-  $periodic_interval                 = $::os_service_default,
-  $periodic_fuzzy_delay              = $::os_service_default,
-  $enable_metadata_proxy             = $::os_service_default,
+  $handle_internal_only_routers      = $facts['os_service_default'],
+  $metadata_port                     = $facts['os_service_default'],
+  $periodic_interval                 = $facts['os_service_default'],
+  $periodic_fuzzy_delay              = $facts['os_service_default'],
+  $enable_metadata_proxy             = $facts['os_service_default'],
   $ha_enabled                        = false,
   $ha_vrrp_auth_type                 = 'PASS',
-  $ha_vrrp_auth_password             = $::os_service_default,
+  $ha_vrrp_auth_password             = $facts['os_service_default'],
   $ha_vrrp_advert_int                = '3',
   $agent_mode                        = 'legacy',
   $purge_config                      = false,
-  $availability_zone                 = $::os_service_default,
-  $extensions                        = $::os_service_default,
-  $report_interval                   = $::os_service_default,
-  $rpc_response_max_timeout          = $::os_service_default,
-  $radvd_user                        = $::os_service_default,
-  $ovs_integration_bridge            = $::os_service_default,
-  $network_log_rate_limit            = $::os_service_default,
-  $network_log_burst_limit           = $::os_service_default,
-  $network_log_local_output_log_base = $::os_service_default,
+  $availability_zone                 = $facts['os_service_default'],
+  $extensions                        = $facts['os_service_default'],
+  $report_interval                   = $facts['os_service_default'],
+  $rpc_response_max_timeout          = $facts['os_service_default'],
+  $radvd_user                        = $facts['os_service_default'],
+  $ovs_integration_bridge            = $facts['os_service_default'],
+  $network_log_rate_limit            = $facts['os_service_default'],
+  $network_log_burst_limit           = $facts['os_service_default'],
+  $network_log_local_output_log_base = $facts['os_service_default'],
 ) {
 
   include neutron::deps

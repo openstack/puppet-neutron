@@ -127,7 +127,7 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :networking_baremetal_agent_package => 'ironic-neutron-agent',
             :networking_baremetal_agent_service => 'ironic-neutron-agent' }

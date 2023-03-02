@@ -395,9 +395,9 @@ describe 'neutron::server' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
-          if facts[:operatingsystem] == 'Ubuntu'
+          if facts[:os]['name'] == 'Ubuntu'
             {
               :server_package   => 'neutron-server',
               :server_service   => 'neutron-server',
@@ -419,7 +419,7 @@ describe 'neutron::server' do
 
       it_behaves_like 'a neutron server'
       it_behaves_like 'a neutron server without database synchronization'
-      it_behaves_like "neutron server dynamic routing on #{facts[:osfamily]}"
+      it_behaves_like "neutron server dynamic routing on #{facts[:os]['family']}"
     end
   end
 end

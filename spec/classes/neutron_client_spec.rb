@@ -25,7 +25,7 @@ describe 'neutron::client' do
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :client_package => 'python3-neutronclient' }
         when 'RedHat'

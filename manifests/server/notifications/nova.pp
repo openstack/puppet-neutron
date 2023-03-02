@@ -21,12 +21,12 @@
 #
 # [*notify_nova_on_port_status_changes*]
 #   (optional) Send notification to nova when port status is active.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*notify_nova_on_port_data_changes*]
 #   (optional) Send notifications to nova when port data (fixed_ips/floatingips)
 #   change so nova can update its cache.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*auth_type*]
 #   (optional) An authentication type to use with an OpenStack Identity server.
@@ -51,7 +51,7 @@
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*auth_url*]
 #   (optional) Authorization URL for connection to nova in admin context.
@@ -62,12 +62,12 @@
 # [*region_name*]
 #   (optional) Name of nova region to use. Useful if keystone manages more than
 #   one region.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*endpoint_type*]
 #   (optional) The type of nova endpoint to use when looking up in
 #   the keystone catalog.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # DEPRECATED PARAMETERS
 #
@@ -75,21 +75,21 @@
 #   (optional) When this option is enabled, during the live migration, the OVS
 #   agent will only send the "vif-plugged-event" when the destination host
 #   interface is bound.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class neutron::server::notifications::nova (
   $password,
-  $notify_nova_on_port_status_changes = $::os_service_default,
-  $notify_nova_on_port_data_changes   = $::os_service_default,
+  $notify_nova_on_port_status_changes = $facts['os_service_default'],
+  $notify_nova_on_port_data_changes   = $facts['os_service_default'],
   $auth_type                          = 'password',
   $user_domain_name                   = 'Default',
   $username                           = 'nova',
   $project_domain_name                = 'Default',
   $project_name                       = 'services',
-  $system_scope                       = $::os_service_default,
+  $system_scope                       = $facts['os_service_default'],
   $auth_url                           = 'http://127.0.0.1:5000',
-  $region_name                        = $::os_service_default,
-  $endpoint_type                      = $::os_service_default,
+  $region_name                        = $facts['os_service_default'],
+  $endpoint_type                      = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $live_migration_events              = undef,
 ) {
@@ -105,8 +105,8 @@ and will be removed in a future release')
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_name_real = $::os_service_default
-    $project_domain_name_real = $::os_service_default
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
 
   neutron_config {
@@ -123,7 +123,7 @@ and will be removed in a future release')
   }
 
   neutron_config {
-    'nova/live_migration_events':                 value => pick($live_migration_events, $::os_service_default);
+    'nova/live_migration_events':                 value => pick($live_migration_events, $facts['os_service_default']);
     'DEFAULT/notify_nova_on_port_status_changes': value => $notify_nova_on_port_status_changes;
     'DEFAULT/notify_nova_on_port_data_changes':   value => $notify_nova_on_port_data_changes;
   }

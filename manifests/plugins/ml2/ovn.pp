@@ -12,31 +12,31 @@
 #
 # [*ovn_nb_private_key*]
 #   (optional) The PEM file with private key for SSL connection to OVN-NB-DB
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_nb_certificate*]
 #   (optional) The PEM file with certificate that certifies the private
 #   key specified in ovn_nb_private_key
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_nb_ca_cert*]
 #   (optional) The PEM file with CA certificate that OVN should use to
 #   verify certificates presented to it by SSL peers
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_sb_private_key*]
 #   (optional) The PEM file with private key for SSL connection to OVN-SB-DB
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_sb_certificate*]
 #   (optional) The PEM file with certificate that certifies the
 #   private key specified in ovn_sb_private_key
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_sb_ca_cert*]
 #   (optional) The PEM file with CA certificate that OVN should use to
 #   verify certificates presented to it by SSL peers
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*package_ensure*]
 #   (optional) The intended state of the python-networking-odl
@@ -46,16 +46,16 @@
 #
 # [*ovsdb_connection_timeout*]
 #   (optional) Timeout in seconds for the OVSDB connection transaction
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_retry_max_interval*]
 #   (optional) Max interval in seconds between each retry to get the OVN NB
 #   and SB IDLs.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_probe_interval*]
 #   (optional) The probe interval for the OVSDB session in milliseconds.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*neutron_sync_mode*]
 #   (optional) The synchronization mode of OVN with Neutron DB.
@@ -67,33 +67,33 @@
 #   repair - during neutron-server startup, automatically create resources
 #            found in Neutron but not in OVN. Also remove resources from OVN
 #            that are no longer in Neutron.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_metadata_enabled*]
 #   (optional) Whether to enable metadata service in OVN.
 #   Type: boolean
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dvr_enabled*]
 #   (optional) Whether to enable DVR.
 #   Type: boolean
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*disable_ovn_dhcp_for_baremetal_ports*]
 #   (optional) Whether to disable built-in DHCP for baremetal ports.
 #   Type: boolean
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dns_servers*]
 #   (optional) List of dns servers which will be as forwarders
 #              if a subnet's dns_nameservers is empty.
 #   Type: List
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*vhostuser_socket_dir*]
 #   (optional) The vhost-user socket directory for OVS
 #   Type: String
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_emit_need_to_frag*]
 #   (optional) Configure OVN to emit "need to frag" packets in case
@@ -103,54 +103,54 @@
 #              ovs-appctl -t ovs-vswitchd dpif/show-dp-features br-int |
 #              grep "Check pkt length action".
 #   Type: boolean
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*network_log_rate_limit*]
 #   (Optional) Maximum packets logging per second.
 #   Used by logging service plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #   Minimum possible value is 100.
 #
 # [*network_log_burst_limit*]
 #   (Optional) Maximum number of packets per rate_limit.
 #   Used by logging service plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #   Minimum possible value is 25.
 #
 # [*network_log_local_output_log_base*]
 #   (Optional) Output logfile path on agent side, default syslog file.
 #   Used by logging service plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class neutron::plugins::ml2::ovn(
-  $ovn_nb_connection                    = $::os_service_default,
-  $ovn_sb_connection                    = $::os_service_default,
-  $ovn_nb_private_key                   = $::os_service_default,
-  $ovn_nb_certificate                   = $::os_service_default,
-  $ovn_nb_ca_cert                       = $::os_service_default,
-  $ovn_sb_private_key                   = $::os_service_default,
-  $ovn_sb_certificate                   = $::os_service_default,
-  $ovn_sb_ca_cert                       = $::os_service_default,
+  $ovn_nb_connection                    = $facts['os_service_default'],
+  $ovn_sb_connection                    = $facts['os_service_default'],
+  $ovn_nb_private_key                   = $facts['os_service_default'],
+  $ovn_nb_certificate                   = $facts['os_service_default'],
+  $ovn_nb_ca_cert                       = $facts['os_service_default'],
+  $ovn_sb_private_key                   = $facts['os_service_default'],
+  $ovn_sb_certificate                   = $facts['os_service_default'],
+  $ovn_sb_ca_cert                       = $facts['os_service_default'],
   $package_ensure                       = 'present',
-  $ovsdb_connection_timeout             = $::os_service_default,
-  $ovsdb_retry_max_interval             = $::os_service_default,
-  $ovsdb_probe_interval                 = $::os_service_default,
-  $neutron_sync_mode                    = $::os_service_default,
-  $ovn_metadata_enabled                 = $::os_service_default,
-  $dvr_enabled                          = $::os_service_default,
-  $disable_ovn_dhcp_for_baremetal_ports = $::os_service_default,
-  $dns_servers                          = $::os_service_default,
-  $vhostuser_socket_dir                 = $::os_service_default,
-  $ovn_emit_need_to_frag                = $::os_service_default,
-  $network_log_rate_limit               = $::os_service_default,
-  $network_log_burst_limit              = $::os_service_default,
-  $network_log_local_output_log_base    = $::os_service_default,
+  $ovsdb_connection_timeout             = $facts['os_service_default'],
+  $ovsdb_retry_max_interval             = $facts['os_service_default'],
+  $ovsdb_probe_interval                 = $facts['os_service_default'],
+  $neutron_sync_mode                    = $facts['os_service_default'],
+  $ovn_metadata_enabled                 = $facts['os_service_default'],
+  $dvr_enabled                          = $facts['os_service_default'],
+  $disable_ovn_dhcp_for_baremetal_ports = $facts['os_service_default'],
+  $dns_servers                          = $facts['os_service_default'],
+  $vhostuser_socket_dir                 = $facts['os_service_default'],
+  $ovn_emit_need_to_frag                = $facts['os_service_default'],
+  $network_log_rate_limit               = $facts['os_service_default'],
+  $network_log_burst_limit              = $facts['os_service_default'],
+  $network_log_local_output_log_base    = $facts['os_service_default'],
 ) {
 
   include neutron::deps
   require neutron::plugins::ml2
 
-  if ! ( $neutron_sync_mode in ['off', 'log', 'repair', $::os_service_default] ) {
+  if ! ( $neutron_sync_mode in ['off', 'log', 'repair', $facts['os_service_default']] ) {
     fail( 'Invalid value for neutron_sync_mode parameter' )
   }
 

@@ -234,7 +234,7 @@ describe 'neutron::agents::dhcp' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           {
             :dhcp_agent_package    => 'neutron-dhcp-agent',
@@ -249,7 +249,7 @@ describe 'neutron::agents::dhcp' do
 
       it_behaves_like 'neutron::agents::dhcp'
 
-      if facts[:osfamily] == 'Debian'
+      if facts[:os]['family'] == 'Debian'
         it_behaves_like 'neutron::agents::dhcp on Debian'
       end
     end

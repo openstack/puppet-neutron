@@ -39,7 +39,7 @@
 #
 # [*bgp_router_id*]
 #   (Optional) The BGP router ID.
-#   Defaults to $::ipaddress
+#   Defaults to $facts['networking']['ip']
 #
 # [*purge_config*]
 #   (Optional) Whether to set only the specified config options in the BGP dragent config.
@@ -50,7 +50,7 @@ class neutron::agents::bgp_dragent(
   $enabled            = true,
   $manage_service     = true,
   $bgp_speaker_driver = 'neutron_dynamic_routing.services.bgp.agent.driver.os_ken.driver.OsKenBgpDriver',
-  $bgp_router_id      = $::ipaddress,
+  $bgp_router_id      = $facts['networking']['ip'],
   $purge_config       = false,
 ) {
 

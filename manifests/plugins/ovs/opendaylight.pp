@@ -150,7 +150,7 @@ class neutron::plugins::ovs::opendaylight (
     $rest_data = @("END":json/L)
       {\
         "aaa-cert-rpc:input": {\
-        "aaa-cert-rpc:node-alias": "${::hostname}",\
+        "aaa-cert-rpc:node-alias": "${facts['networking']['hostname']}",\
         "aaa-cert-rpc:node-cert": "${cert_data}"\
         }\
       }
@@ -161,7 +161,7 @@ class neutron::plugins::ovs::opendaylight (
     $rest_get_data = @("END":json/L)
       {\
         "aaa-cert-rpc:input": {\
-        "aaa-cert-rpc:node-alias": "${::hostname}"\
+        "aaa-cert-rpc:node-alias": "${facts['networking']['hostname']}"\
         }\
       }
       |-END
@@ -252,7 +252,7 @@ class neutron::plugins::ovs::opendaylight (
           "vnic_type": "normal",\
           "vif_type": "vhostuser",\
           "vif_details": {\
-            "uuid": "${::ovs_uuid}",\
+            "uuid": "${facts['ovs_uuid']}",\
             "has_datapath_type_netdev": true,\
             "port_prefix": "vhu",\
             "vhostuser_socket_dir": "${vhostuser_socket_dir}",\

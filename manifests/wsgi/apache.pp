@@ -24,7 +24,7 @@
 #
 #   [*servername*]
 #     The servername for the virtualhost.
-#     Optional. Defaults to $::fqdn
+#     Optional. Defaults to $facts['networking']['fqdn']
 #
 #   [*port*]
 #     The port.
@@ -44,7 +44,7 @@
 #
 #   [*workers*]
 #     Number of WSGI workers to spawn.
-#     Optional. Defaults to $::os_workers
+#     Optional. Defaults to $facts['os_workers']
 #
 #   [*priority*]
 #     (optional) The priority for the vhost.
@@ -123,12 +123,12 @@
 #   class { 'neutron::wsgi::apache': }
 #
 class neutron::wsgi::apache (
-  $servername                  = $::fqdn,
+  $servername                  = $facts['networking']['fqdn'],
   $port                        = 9696,
   $bind_host                   = undef,
   $path                        = '/',
   $ssl                         = false,
-  $workers                     = $::os_workers,
+  $workers                     = $facts['os_workers'],
   $ssl_cert                    = undef,
   $ssl_key                     = undef,
   $ssl_chain                   = undef,

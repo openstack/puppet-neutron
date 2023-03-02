@@ -19,15 +19,15 @@
 # [*send_events_interval*]
 #   (optional) Number of seconds between sending events to nova if there are
 #   any events to send.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*http_retries*]
 #   (optional) Number of novaclient/ironicclient retries on failed http calls.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class neutron::server::notifications (
-  $send_events_interval               = $::os_service_default,
-  $http_retries                       = $::os_service_default,
+  $send_events_interval               = $facts['os_service_default'],
+  $http_retries                       = $facts['os_service_default'],
 ) {
 
   include neutron::deps

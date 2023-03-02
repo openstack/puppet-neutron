@@ -100,7 +100,7 @@ describe 'neutron::services::l2gw' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :l2gw_agent_package_name => 'python3-networking-l2gw' }
         when 'RedHat'

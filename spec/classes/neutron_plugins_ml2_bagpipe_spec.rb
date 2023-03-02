@@ -41,7 +41,7 @@ describe 'neutron::plugins::ml2::bagpipe' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :bagpipe_package_name => 'python3-networking-bagpipe' }
         when 'RedHat'

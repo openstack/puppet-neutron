@@ -84,7 +84,7 @@ describe 'neutron::services::bgpvpn' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :bgpvpn_package_name => 'python3-networking-bgpvpn' }
         when 'RedHat'

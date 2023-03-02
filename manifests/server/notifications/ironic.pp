@@ -42,7 +42,7 @@
 #
 # [*system_scope*]
 #   (optional) Scope for system operations
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*auth_url*]
 #   (optional) Authorization URL for connection to ironic in admin context.
@@ -53,16 +53,16 @@
 # [*region_name*]
 #   (optional) Name of ironic region to use. Useful if keystone manages more than
 #   one region.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*valid_interfaces*]
 #   (optional) Interface names used for getting the keystone endpoint for
 #   the ironic API. Comma separated if multiple.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*enable_notifications*]
 #   (optional) Send notification events to ironic
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class neutron::server::notifications::ironic (
   $password,
@@ -71,11 +71,11 @@ class neutron::server::notifications::ironic (
   $user_domain_name     = 'Default',
   $project_domain_name  = 'Default',
   $project_name         = 'services',
-  $system_scope         = $::os_service_default,
+  $system_scope         = $facts['os_service_default'],
   $auth_url             = 'http://127.0.0.1:5000',
-  $region_name          = $::os_service_default,
-  $valid_interfaces     = $::os_service_default,
-  $enable_notifications = $::os_service_default,
+  $region_name          = $facts['os_service_default'],
+  $valid_interfaces     = $facts['os_service_default'],
+  $enable_notifications = $facts['os_service_default'],
 ) {
 
   include neutron::deps
@@ -84,8 +84,8 @@ class neutron::server::notifications::ironic (
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_name_real = $::os_service_default
-    $project_domain_name_real = $::os_service_default
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
 
   neutron_config {

@@ -124,7 +124,7 @@ describe 'neutron::agents::metering' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           {
             :metering_agent_package => 'neutron-metering-agent',
@@ -140,7 +140,7 @@ describe 'neutron::agents::metering' do
 
       it_behaves_like 'neutron metering agent'
 
-      if facts[:osfamily] == 'Debian'
+      if facts[:os]['family'] == 'Debian'
         it_behaves_like 'neutron metering agent on Debian'
       end
     end

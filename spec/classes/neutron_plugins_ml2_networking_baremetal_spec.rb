@@ -37,7 +37,7 @@ describe 'neutron::plugins::ml2::networking_baremetal' do
         facts.merge!(OSDefaults.get_facts())
       end
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :networking_baremetal_package => 'python3-ironic-neutron-agent'}
         when 'RedHat'

@@ -99,7 +99,7 @@ describe 'neutron::agents::l2gw' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'RedHat'
           { :l2gw_agent_package_name => 'openstack-neutron-l2gw-agent' }
         when 'Debian'

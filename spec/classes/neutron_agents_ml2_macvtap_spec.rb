@@ -76,7 +76,7 @@ describe 'neutron::agents::ml2::macvtap' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           {
             :macvtap_agent_package => 'neutron-macvtap-agent',

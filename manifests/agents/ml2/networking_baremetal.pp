@@ -22,19 +22,19 @@
 # [*cafile*]
 #   (optional) PEM encoded Certificate Authority to use when verifying HTTPs
 #   connections.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*certfile*]
 #   (optional) PEM encoded client certificate cert file
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*keyfile*]
 #   (optional) PEM encoded client certificate key file
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*insecure*]
 #   (optional) Verify HTTPS connections. (boolean)
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*auth_type*]
 #   (optional) An authentication type to use with an OpenStack Identity server.
@@ -49,7 +49,7 @@
 #
 # [*endpoint_override*]
 #   (optional) The ironic endpoint URL for requests
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*user_domain_name*]
 #   (Optional) Name of domain for $username
@@ -69,24 +69,24 @@
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*region_name*]
 #   (optional) Name of region to use. Useful if keystone manages more than one
 #   region.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*status_code_retry_delay*]
 #   (optional) Interval between retries in case of conflict error (HTTP 409).
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*status_code_retries*]
 #   (optional) Maximum number of retries in case of conflict error (HTTP 409).
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*valid_interfaces*]
 #   (Optional) List of interfaces, in order of preference for endpoint URL.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options in the
@@ -98,31 +98,31 @@
 #   interval in neutron.conf ([agent]/report_interval) is used. This parameter
 #   can be used to override the reporting interval for the
 #   ironic-neutron-agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class neutron::agents::ml2::networking_baremetal (
   $password,
   $enabled                 = true,
   $manage_service          = true,
   $package_ensure          = 'present',
-  $endpoint_override       = $::os_service_default,
-  $cafile                  = $::os_service_default,
-  $certfile                = $::os_service_default,
-  $keyfile                 = $::os_service_default,
-  $insecure                = $::os_service_default,
+  $endpoint_override       = $facts['os_service_default'],
+  $cafile                  = $facts['os_service_default'],
+  $certfile                = $facts['os_service_default'],
+  $keyfile                 = $facts['os_service_default'],
+  $insecure                = $facts['os_service_default'],
   $auth_type               = 'password',
   $auth_url                = 'http://127.0.0.1:5000',
   $user_domain_name        = 'Default',
   $username                = 'ironic',
   $project_domain_name     = 'Default',
   $project_name            = 'services',
-  $system_scope            = $::os_service_default,
-  $region_name             = $::os_service_default,
-  $status_code_retry_delay = $::os_service_default,
-  $status_code_retries     = $::os_service_default,
-  $valid_interfaces        = $::os_service_default,
+  $system_scope            = $facts['os_service_default'],
+  $region_name             = $facts['os_service_default'],
+  $status_code_retry_delay = $facts['os_service_default'],
+  $status_code_retries     = $facts['os_service_default'],
+  $valid_interfaces        = $facts['os_service_default'],
   $purge_config            = false,
-  $report_interval         = $::os_service_default,
+  $report_interval         = $facts['os_service_default'],
 ) {
 
   include neutron::deps
@@ -136,8 +136,8 @@ class neutron::agents::ml2::networking_baremetal (
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_name_real = $::os_service_default
-    $project_domain_name_real = $::os_service_default
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
 
   ironic_neutron_agent_config {

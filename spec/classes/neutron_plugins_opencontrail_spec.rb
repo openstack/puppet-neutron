@@ -70,7 +70,7 @@ describe 'neutron::plugins::opencontrail' do
       end
 
       it_behaves_like 'neutron::plugins::contrail'
-      it_behaves_like "neutron::plugins::opencontrail on #{facts[:osfamily]}"
+      it_behaves_like "neutron::plugins::opencontrail on #{facts[:os]['family']}"
     end
   end
 end

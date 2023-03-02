@@ -4,29 +4,29 @@
 #
 # [*default_interface_name*]
 #   (optional) default interface name of the l2 gateway
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #   Example: FortyGigE1/0/1
 #
 # [*default_device_name*]
 #   (optional) default device name of the l2 gateway
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #   Example: Switch1
 #
 # [*quota_l2_gateway*]
 #   (optional) quota of the l2 gateway
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #   Example: 10
 #
 # [*periodic_monitoring_interval*]
 #   (optional) The periodic interval at which the plugin
 #   checks for the monitoring L2 gateway agent
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #   Example: 5
 #
 # [*service_providers*]
 #   (optional) Array of allowed service types includes L2GW
 #   Must be in form: <service_type>:<name>:<driver>[:default]
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*sync_db*]
 #   Whether 'l2gw-db-sync' should run to create and/or synchronize the
@@ -43,11 +43,11 @@
 #   Defaults to false.
 #
 class neutron::services::l2gw (
-  $default_interface_name       = $::os_service_default,
-  $default_device_name          = $::os_service_default,
-  $quota_l2_gateway             = $::os_service_default,
-  $periodic_monitoring_interval = $::os_service_default,
-  $service_providers            = $::os_service_default,
+  $default_interface_name       = $facts['os_service_default'],
+  $default_device_name          = $facts['os_service_default'],
+  $quota_l2_gateway             = $facts['os_service_default'],
+  $periodic_monitoring_interval = $facts['os_service_default'],
+  $service_providers            = $facts['os_service_default'],
   $sync_db                      = false,
   $package_ensure               = 'present',
   $purge_config                 = false,

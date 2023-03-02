@@ -125,7 +125,7 @@ describe 'neutron::agents::vpnaas' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           {
             :openswan_package     => 'strongswan',
@@ -140,9 +140,9 @@ describe 'neutron::agents::vpnaas' do
         end
       end
 
-      it_behaves_like "neutron::agents::vpnaas on #{facts[:osfamily]}"
+      it_behaves_like "neutron::agents::vpnaas on #{facts[:os]['family']}"
 
-      if facts[:osfamily] == 'RedHat'
+      if facts[:os]['family'] == 'RedHat'
         it_behaves_like 'neutron vpnaas agent'
       end
     end

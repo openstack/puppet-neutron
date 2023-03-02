@@ -38,11 +38,11 @@
 #   All physical networks listed in network_vlan_ranges
 #   on the server should have mappings to appropriate
 #   interfaces on each agent.
-#   Value should be of type array, Defaults to $::os_service_default
+#   Value should be of type array, Defaults to $facts['os_service_default']
 #
 # [*rpc_response_max_timeout*]
 #   (Optional) Maximum seconds to wait for a response from an RPC call
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*polling_interval*]
 #   (optional) The number of seconds the agent will wait between
@@ -53,7 +53,7 @@
 #   (optional) Set the agent report interval. By default the global report
 #   interval in neutron.conf ([agent]/report_interval) is used. This parameter
 #   can be used to override the reporting interval for the sriov-agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*exclude_devices*]
 #   (optional) Array of <network_device>:<excluded_devices> mapping
@@ -61,11 +61,11 @@
 #   that should not be used for virtual networking. excluded_devices is a
 #   semicolon separated list of virtual functions to exclude from network_device.
 #   The network_device in the mapping should appear in the physical_device_mappings list.
-#   Value should be of type array, Defaults to $::os_service_default
+#   Value should be of type array, Defaults to $facts['os_service_default']
 #
 # [*extensions*]
 #   (optional) Extensions list to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -77,7 +77,7 @@
 #   VFs to be exposed per physical interface.
 #   For example, to configure two interface with number of VFs, specify
 #   it as ["eth1:4", "eth2:10"]
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*resource_provider_bandwidths*]
 #   (optional) List of <network_device>:<egress_bw>:<ingress_bw>
@@ -90,7 +90,7 @@
 # [*resource_provider_default_hypervisor*]
 #   (optional) The default hypervisor name used to locate the parent of
 #   the resource provider.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*resource_provider_inventory_defaults*]
 #   (optional) Key:value pairs to specify defaults used while reporting packet
@@ -101,17 +101,17 @@ class neutron::agents::ml2::sriov (
   $package_ensure                       = 'present',
   $enabled                              = true,
   $manage_service                       = true,
-  $physical_device_mappings             = $::os_service_default,
-  $rpc_response_max_timeout             = $::os_service_default,
+  $physical_device_mappings             = $facts['os_service_default'],
+  $rpc_response_max_timeout             = $facts['os_service_default'],
   $polling_interval                     = 2,
-  $report_interval                      = $::os_service_default,
-  $exclude_devices                      = $::os_service_default,
-  $extensions                           = $::os_service_default,
+  $report_interval                      = $facts['os_service_default'],
+  $exclude_devices                      = $facts['os_service_default'],
+  $extensions                           = $facts['os_service_default'],
   $purge_config                         = false,
-  $number_of_vfs                        = $::os_service_default,
+  $number_of_vfs                        = $facts['os_service_default'],
   $resource_provider_bandwidths         = [],
   $resource_provider_hypervisors        = [],
-  $resource_provider_default_hypervisor = $::os_service_default,
+  $resource_provider_default_hypervisor = $facts['os_service_default'],
   $resource_provider_inventory_defaults = {},
 ) {
 
@@ -123,8 +123,8 @@ class neutron::agents::ml2::sriov (
   }
 
   neutron_sriov_agent_config {
-    'sriov_nic/exclude_devices':          value => pick(join(any2array($exclude_devices), ','), $::os_service_default);
-    'sriov_nic/physical_device_mappings': value => pick(join(any2array($physical_device_mappings), ','), $::os_service_default);
+    'sriov_nic/exclude_devices':          value => pick(join(any2array($exclude_devices), ','), $facts['os_service_default']);
+    'sriov_nic/physical_device_mappings': value => pick(join(any2array($physical_device_mappings), ','), $facts['os_service_default']);
     'agent/extensions':                   value => join(any2array($extensions), ',');
     'DEFAULT/rpc_response_max_timeout':   value => $rpc_response_max_timeout;
     'agent/polling_interval':             value => $polling_interval;
@@ -162,17 +162,17 @@ class neutron::agents::ml2::sriov (
   if ($resource_provider_bandwidths != []) {
     $resource_provider_bandwidths_real = join(any2array($resource_provider_bandwidths), ',')
   } else {
-    $resource_provider_bandwidths_real = $::os_service_default
+    $resource_provider_bandwidths_real = $facts['os_service_default']
   }
 
   if ($resource_provider_hypervisors != []) {
     $resource_provider_hypervisors_real = join(any2array($resource_provider_hypervisors), ',')
   } else {
-    $resource_provider_hypervisors_real = $::os_service_default
+    $resource_provider_hypervisors_real = $facts['os_service_default']
   }
 
   if empty($resource_provider_inventory_defaults) {
-    $resource_provider_inventory_defaults_real = $::os_service_default
+    $resource_provider_inventory_defaults_real = $facts['os_service_default']
   } else {
     if ($resource_provider_inventory_defaults =~ Hash){
       $resource_provider_inventory_defaults_real = join(join_keys_to_values($resource_provider_inventory_defaults, ':'), ',')

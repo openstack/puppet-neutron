@@ -32,7 +32,7 @@
 #   Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*ipsec_status_check_interval*]
-#   (optional) Status check interval. Defaults to $::os_service_default.
+#   (optional) Status check interval. Defaults to $facts['os_service_default'].
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -43,7 +43,7 @@ class neutron::agents::vpnaas (
   $package_ensure              = present,
   $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $ipsec_status_check_interval = $::os_service_default,
+  $ipsec_status_check_interval = $facts['os_service_default'],
   $purge_config                = false,
 ) {
 
@@ -60,8 +60,8 @@ class neutron::agents::vpnaas (
       }
     }
     /\.LibreSwan/: {
-      if($::osfamily != 'Redhat') {
-        fail("LibreSwan is not supported on osfamily ${::osfamily}")
+      if($facts['os']['family'] != 'Redhat') {
+        fail("LibreSwan is not supported on osfamily ${facts['os']['family']}")
       } else {
         Package['libreswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
         package { 'libreswan':

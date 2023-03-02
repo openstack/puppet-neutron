@@ -6,61 +6,61 @@
 #
 # [*default_quota*]
 #   (optional) Default number of resources allowed per tenant,
-#   minus for unlimited. Defaults to $::os_service_default.
+#   minus for unlimited. Defaults to $facts['os_service_default'].
 #
 # [*quota_network*]
 #   (optional) Number of networks allowed per tenant, and minus means unlimited.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*quota_subnet*]
 #   (optional) Number of subnets allowed per tenant, and minus means unlimited.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*quota_port*]
 #   (optional) Number of ports allowed per tenant, and minus means unlimited.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*quota_router*]
 #   (optional) Number of routers allowed per tenant, and minus means unlimited.
-#   Requires L3 extension. Defaults to $::os_service_default.
+#   Requires L3 extension. Defaults to $facts['os_service_default'].
 #
 # [*quota_floatingip*]
 #   (optional) Number of floating IPs allowed per tenant,
-#   and minus means unlimited. Requires L3 extension. Defaults to $::os_service_default.
+#   and minus means unlimited. Requires L3 extension. Defaults to $facts['os_service_default'].
 #
 # [*quota_security_group*]
 #   (optional) Number of security groups allowed per tenant,
 #   and minus means unlimited. Requires securitygroup extension.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*quota_security_group_rule*]
 #   (optional) Number of security rules allowed per tenant,
 #   and minus means unlimited. Requires securitygroup extension.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*quota_driver*]
 #   (optional) Default driver to use for quota checks.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*quota_rbac_policy*]
 #   (optional) Number of rbac policies allowed per tenant.
 #   A negative value means unlimited.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class neutron::quota (
-  $default_quota             = $::os_service_default,
-  $quota_network             = $::os_service_default,
-  $quota_subnet              = $::os_service_default,
-  $quota_port                = $::os_service_default,
+  $default_quota             = $facts['os_service_default'],
+  $quota_network             = $facts['os_service_default'],
+  $quota_subnet              = $facts['os_service_default'],
+  $quota_port                = $facts['os_service_default'],
   # l3 extension
-  $quota_router              = $::os_service_default,
-  $quota_floatingip          = $::os_service_default,
+  $quota_router              = $facts['os_service_default'],
+  $quota_floatingip          = $facts['os_service_default'],
   # securitygroup extension
-  $quota_security_group      = $::os_service_default,
-  $quota_security_group_rule = $::os_service_default,
-  $quota_driver              = $::os_service_default,
+  $quota_security_group      = $facts['os_service_default'],
+  $quota_security_group_rule = $facts['os_service_default'],
+  $quota_driver              = $facts['os_service_default'],
   # rbac extension
-  $quota_rbac_policy         = $::os_service_default,
+  $quota_rbac_policy         = $facts['os_service_default'],
 ) {
 
   include neutron::deps

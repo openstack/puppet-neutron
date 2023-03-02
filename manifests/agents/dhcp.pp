@@ -15,7 +15,7 @@
 #   Defaults to true
 #
 # [*debug*]
-#   (optional) Show debugging output in log. Defaults to $::os_service_default.
+#   (optional) Show debugging output in log. Defaults to $facts['os_service_default'].
 #
 # [*state_path*]
 #   (optional) Where to store dnsmasq state files. This directory must be
@@ -25,14 +25,14 @@
 #   (optional) The DHCP agent will resync its state with Neutron to recover
 #   from any transient notification or rpc errors. The interval is number of
 #   seconds between attempts.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*interface_driver*]
 #   (optional) The driver used to manage the virtual interface.
 #   Defaults to 'neutron.agent.linux.interface.OVSInterfaceDriver'.
 #
 # [*dhcp_driver*]
-#   (optional) Defaults to $::os_service_default.
+#   (optional) Defaults to $facts['os_service_default'].
 #
 # [*root_helper*]
 #   (optional) Defaults to 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf'.
@@ -41,29 +41,29 @@
 #
 # [*dnsmasq_config_file*]
 #   (optional) Override the default dnsmasq settings with this file.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dnsmasq_dns_servers*]
 #   (optional) List of servers to use as dnsmasq forwarders.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*dnsmasq_base_log_dir*]
 #   (optional) base log dir for dnsmasq logging.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*dnsmasq_local_resolv*]
 #   (optional) Enables the dnsmasq service to provide name resolution for instances
 #   via DNS resolvers on the host running the DHCP agent.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*dnsmasq_lease_max*]
 #   (optional) Limit number of leases to prevent a denial-of-service.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*dnsmasq_enable_addr6_list*]
 #   (optional) Enable dhcp-host entry with list of addresses when port has
 #   multiple IPv6 addresses in the same subnet.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*enable_isolated_metadata*]
 #   (optional) enable metadata support on isolated networks.
@@ -82,7 +82,7 @@
 #
 # [*dhcp_broadcast_reply*]
 #  (optional) Use broadcast in DHCP replies
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -92,67 +92,67 @@
 # [*availability_zone*]
 #   (optional) The availability zone of the agent.
 #   Neutron will only schedule dhcp on the agent based on availability zone
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovs_integration_bridge*]
 #   (optional) Name of Open vSwitch bridge to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_connection*]
 # (optional) The URI used to connect to the local OVSDB server
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 #
 # [*ovsdb_agent_ssl_key_file*]
 # (optional) The SSL key file to use for Neutron agents to connect to OVSDB
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 #
 # [*ovsdb_agent_ssl_cert_file*]
 # (optional) The SSL cert file to use for Neutron agents to connect to OVSDB
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 #
 # [*ovsdb_agent_ssl_ca_file*]
 # (optional) The SSL CA cert file to use for Neutron agents to connect to OVSDB
-# Defaults to $::os_service_default
+# Defaults to $facts['os_service_default']
 #
 # [*report_interval*]
 #   (optional) Set the agent report interval. By default the global report
 #   interval in neutron.conf ([agent]/report_interval) is used. This parameter
 #   can be used to override the reporting interval for the dhcp-agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rpc_response_max_timeout*]
 #   (Optional) Maximum seconds to wait for a response from an RPC call
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 class neutron::agents::dhcp (
   $package_ensure            = present,
   $enabled                   = true,
   $manage_service            = true,
-  $debug                     = $::os_service_default,
+  $debug                     = $facts['os_service_default'],
   $state_path                = '/var/lib/neutron',
-  $resync_interval           = $::os_service_default,
+  $resync_interval           = $facts['os_service_default'],
   $interface_driver          = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_driver               = $::os_service_default,
+  $dhcp_driver               = $facts['os_service_default'],
   $root_helper               = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $dnsmasq_config_file       = $::os_service_default,
-  $dnsmasq_dns_servers       = $::os_service_default,
-  $dnsmasq_base_log_dir      = $::os_service_default,
-  $dnsmasq_local_resolv      = $::os_service_default,
-  $dnsmasq_lease_max         = $::os_service_default,
-  $dnsmasq_enable_addr6_list = $::os_service_default,
+  $dnsmasq_config_file       = $facts['os_service_default'],
+  $dnsmasq_dns_servers       = $facts['os_service_default'],
+  $dnsmasq_base_log_dir      = $facts['os_service_default'],
+  $dnsmasq_local_resolv      = $facts['os_service_default'],
+  $dnsmasq_lease_max         = $facts['os_service_default'],
+  $dnsmasq_enable_addr6_list = $facts['os_service_default'],
   $enable_isolated_metadata  = false,
   $enable_force_metadata     = false,
   $enable_metadata_network   = false,
-  $dhcp_broadcast_reply      = $::os_service_default,
+  $dhcp_broadcast_reply      = $facts['os_service_default'],
   $purge_config              = false,
-  $availability_zone         = $::os_service_default,
-  $ovs_integration_bridge    = $::os_service_default,
-  $ovsdb_connection          = $::os_service_default,
-  $ovsdb_agent_ssl_key_file  = $::os_service_default,
-  $ovsdb_agent_ssl_cert_file = $::os_service_default,
-  $ovsdb_agent_ssl_ca_file   = $::os_service_default,
-  $report_interval           = $::os_service_default,
-  $rpc_response_max_timeout  = $::os_service_default,
+  $availability_zone         = $facts['os_service_default'],
+  $ovs_integration_bridge    = $facts['os_service_default'],
+  $ovsdb_connection          = $facts['os_service_default'],
+  $ovsdb_agent_ssl_key_file  = $facts['os_service_default'],
+  $ovsdb_agent_ssl_cert_file = $facts['os_service_default'],
+  $ovsdb_agent_ssl_ca_file   = $facts['os_service_default'],
+  $report_interval           = $facts['os_service_default'],
+  $rpc_response_max_timeout  = $facts['os_service_default'],
 ) {
 
   include neutron::deps

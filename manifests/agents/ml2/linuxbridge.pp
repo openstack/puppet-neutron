@@ -47,7 +47,7 @@
 #
 # [*rpc_response_max_timeout*]
 #   (Optional) Maximum seconds to wait for a response from an RPC call
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*l2_population*]
 #   (optional) Extension to use alongside ml2 plugin's l2population
@@ -78,12 +78,12 @@ class neutron::agents::ml2::linuxbridge (
   $manage_service              = true,
   $tunnel_types                = [],
   $local_ip                    = false,
-  $vxlan_group                 = $::os_service_default,
-  $vxlan_ttl                   = $::os_service_default,
-  $vxlan_tos                   = $::os_service_default,
-  $polling_interval            = $::os_service_default,
-  $rpc_response_max_timeout    = $::os_service_default,
-  $l2_population               = $::os_service_default,
+  $vxlan_group                 = $facts['os_service_default'],
+  $vxlan_ttl                   = $facts['os_service_default'],
+  $vxlan_tos                   = $facts['os_service_default'],
+  $polling_interval            = $facts['os_service_default'],
+  $rpc_response_max_timeout    = $facts['os_service_default'],
+  $l2_population               = $facts['os_service_default'],
   $physical_interface_mappings = [],
   $bridge_mappings             = [],
   $firewall_driver             = 'iptables',

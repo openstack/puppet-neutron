@@ -44,25 +44,25 @@
 #
 # [*ovsdb_timeout*]
 #   (Optional) The timeout in seconds for OVSDB commands.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*of_connect_timeout*]
 #   (Optional) Timeout in seconds to wait for the local switch
 #   connecting to the controller.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*of_request_timeout*]
 #   (Optional) Timeout in seconds to wait for a single OpenFlow request.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*of_inactivity_probe*]
 #   (Optional) The inactivity_probe interval in second for the local switch
 #   connection to the controller. A value of 0 disables inactivity probes.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*integration_bridge*]
 #   (optional) Integration bridge in OVS
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*tunnel_types*]
 #   (optional) List of types of tunnels to use when utilizing tunnels,
@@ -76,36 +76,36 @@
 #
 # [*tunnel_bridge*]
 #   (optional) Bridge used to transport tunnels
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*vxlan_udp_port*]
 #   (optional) The UDP port to use for VXLAN tunnels.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*polling_interval*]
 #   (optional) The number of seconds the agent will wait between
 #   polling for local device changes.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*report_interval*]
 #   (optional) Set the agent report interval. By default the global report
 #   interval in neutron.conf ([agent]/report_interval) is used. This parameter
 #   can be used to override the reporting interval for the openvswitch-agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*rpc_response_max_timeout*]
 #   (Optional) Maximum seconds to wait for a response from an RPC call
-#   Defaults to: $::os_service_default
+#   Defaults to: $facts['os_service_default']
 #
 # [*l2_population*]
 #   (optional) Extension to use alongside ml2 plugin's l2population
 #   mechanism driver.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*arp_responder*]
 #   (optional) Enable or not the ARP responder.
 #   Recommended when using l2 population mechanism driver.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*firewall_driver*]
 #   (optional) Firewall driver for realizing neutron security group function.
@@ -114,12 +114,12 @@
 # [*enable_distributed_routing*]
 #   (optional) Set to True on L2 agents to enable support
 #   for distributed virtual routing.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*drop_flows_on_start*]
 #   (optional) Set to True to drop all flows during agent start for a clean
 #   flow tables resetting
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*manage_vswitch*]
 #   (optional) This boolean is used to indicate if this class should manage the
@@ -131,23 +131,23 @@
 #
 # [*extensions*]
 #   (optional) Extensions list to use
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*int_peer_patch_port*]
 #   (optional) Peer patch port in integration bridge for tunnel bridge
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*tun_peer_patch_port*]
 #   (optional) Peer patch port in tunnel bridge for integration bridge
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*datapath_type*]
 #   (optional) Datapath type for ovs bridges
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*vhostuser_socket_dir*]
 #   (optional) The vhost-user socket directory for OVS
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -161,27 +161,27 @@
 # [*enable_security_group*]
 #   (optional) Controls whether the agent supports security
 #   groups or not.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*permitted_ethertypes*]
 #   (optional) List of additional ethernet types to be configured
 #   on the firewall.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*minimize_polling*]
 #  (optional) Minimize polling by monitoring ovsdb for interface
 #  changes. (boolean value)
-#  Defaults to $::os_service_default
+#  Defaults to $facts['os_service_default']
 #
 # [*tunnel_csum*]
 #  (optional) Set or un-set the tunnel header checksum  on
 #  outgoing IP packet carrying GRE/VXLAN tunnel.
-#  Defaults to $::os_service_default
+#  Defaults to $facts['os_service_default']
 #
 # [*bridge_mac_table_size*]
 #   (optional) The maximum number of MAC addresses to learn on a bridge managed
 #   by the Neutron OVS agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*igmp_snooping_enable*]
 #   (Optional) Enable IGMP snooping for integration bridge. If this
@@ -193,7 +193,7 @@
 #   The switch will send unregistered multicast packets only to ports
 #   connected to multicast routers. This option is used by the ML2/OVS
 #   mechanism driver for Neutron.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*resource_provider_bandwidths*]
 #   (optional) List of <bridge>:<egress_bw>:<ingress_bw>
@@ -216,7 +216,7 @@
 # [*resource_provider_default_hypervisor*]
 #   (optional) The default hypervisor name used to locate the parent of
 #   the resource provider.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*resource_provider_inventory_defaults*]
 #   (optional) Key:value pairs to specify defaults used while reporting packet
@@ -232,76 +232,76 @@
 #  (optional) When set to True, the accepted egress unicast traffic will not
 #  use action NORMAL. The accepted egress packets will be taken care of in the
 #  final egress tables direct output flows for unicast traffic. (boolean value)
-#  Defaults to $::os_service_default
+#  Defaults to $facts['os_service_default']
 #
 # [*network_log_rate_limit*]
 #   (Optional) Maximum packets logging per second.
 #   Used by logging service plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #   Minimum possible value is 100.
 #
 # [*network_log_burst_limit*]
 #   (Optional) Maximum number of packets per rate_limit.
 #   Used by logging service plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #   Minimum possible value is 25.
 #
 # [*network_log_local_output_log_base*]
 #   (Optional) Output logfile path on agent side, default syslog file.
 #   Used by logging service plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class neutron::agents::ml2::ovs (
   $package_ensure                       = 'present',
   $enabled                              = true,
   $manage_service                       = true,
-  $extensions                           = $::os_service_default,
+  $extensions                           = $facts['os_service_default'],
   $bridge_uplinks                       = [],
   $bridge_mappings                      = [],
-  $ovsdb_timeout                        = $::os_service_default,
-  $of_connect_timeout                   = $::os_service_default,
-  $of_request_timeout                   = $::os_service_default,
-  $of_inactivity_probe                  = $::os_service_default,
-  $integration_bridge                   = $::os_service_default,
+  $ovsdb_timeout                        = $facts['os_service_default'],
+  $of_connect_timeout                   = $facts['os_service_default'],
+  $of_request_timeout                   = $facts['os_service_default'],
+  $of_inactivity_probe                  = $facts['os_service_default'],
+  $integration_bridge                   = $facts['os_service_default'],
   $tunnel_types                         = [],
   $local_ip                             = false,
-  $tunnel_bridge                        = $::os_service_default,
-  $vxlan_udp_port                       = $::os_service_default,
-  $polling_interval                     = $::os_service_default,
-  $report_interval                      = $::os_service_default,
-  $rpc_response_max_timeout             = $::os_service_default,
-  $l2_population                        = $::os_service_default,
-  $arp_responder                        = $::os_service_default,
+  $tunnel_bridge                        = $facts['os_service_default'],
+  $vxlan_udp_port                       = $facts['os_service_default'],
+  $polling_interval                     = $facts['os_service_default'],
+  $report_interval                      = $facts['os_service_default'],
+  $rpc_response_max_timeout             = $facts['os_service_default'],
+  $l2_population                        = $facts['os_service_default'],
+  $arp_responder                        = $facts['os_service_default'],
   $firewall_driver                      = 'iptables_hybrid',
-  $enable_distributed_routing           = $::os_service_default,
-  $drop_flows_on_start                  = $::os_service_default,
+  $enable_distributed_routing           = $facts['os_service_default'],
+  $drop_flows_on_start                  = $facts['os_service_default'],
   $manage_vswitch                       = true,
-  $int_peer_patch_port                  = $::os_service_default,
-  $tun_peer_patch_port                  = $::os_service_default,
-  $datapath_type                        = $::os_service_default,
-  $vhostuser_socket_dir                 = $::os_service_default,
+  $int_peer_patch_port                  = $facts['os_service_default'],
+  $tun_peer_patch_port                  = $facts['os_service_default'],
+  $datapath_type                        = $facts['os_service_default'],
+  $vhostuser_socket_dir                 = $facts['os_service_default'],
   $purge_config                         = false,
   $enable_dpdk                          = false,
-  $enable_security_group                = $::os_service_default,
-  $permitted_ethertypes                 = $::os_service_default,
-  $minimize_polling                     = $::os_service_default,
-  $tunnel_csum                          = $::os_service_default,
-  $bridge_mac_table_size                = $::os_service_default,
-  $igmp_snooping_enable                 = $::os_service_default,
+  $enable_security_group                = $facts['os_service_default'],
+  $permitted_ethertypes                 = $facts['os_service_default'],
+  $minimize_polling                     = $facts['os_service_default'],
+  $tunnel_csum                          = $facts['os_service_default'],
+  $bridge_mac_table_size                = $facts['os_service_default'],
+  $igmp_snooping_enable                 = $facts['os_service_default'],
   $resource_provider_bandwidths         = [],
   $resource_provider_packet_processing_without_direction
                                         = [],
   $resource_provider_packet_processing_with_direction
                                         = [],
   $resource_provider_hypervisors        = [],
-  $resource_provider_default_hypervisor = $::os_service_default,
+  $resource_provider_default_hypervisor = $facts['os_service_default'],
   $resource_provider_inventory_defaults = {},
   $resource_provider_packet_processing_inventory_defaults
                                         = {},
-  $explicitly_egress_direct             = $::os_service_default,
-  $network_log_rate_limit               = $::os_service_default,
-  $network_log_burst_limit              = $::os_service_default,
-  $network_log_local_output_log_base    = $::os_service_default,
+  $explicitly_egress_direct             = $facts['os_service_default'],
+  $network_log_rate_limit               = $facts['os_service_default'],
+  $network_log_burst_limit              = $facts['os_service_default'],
+  $network_log_local_output_log_base    = $facts['os_service_default'],
 ) {
 
   include neutron::deps
@@ -389,31 +389,31 @@ class neutron::agents::ml2::ovs (
   if ($resource_provider_bandwidths != []) {
     $resource_provider_bandwidths_real = join(any2array($resource_provider_bandwidths), ',')
   } else {
-    $resource_provider_bandwidths_real = $::os_service_default
+    $resource_provider_bandwidths_real = $facts['os_service_default']
   }
 
   if ($resource_provider_hypervisors != []){
     $resource_provider_hypervisors_real = join(any2array($resource_provider_hypervisors), ',')
   } else {
-    $resource_provider_hypervisors_real = $::os_service_default
+    $resource_provider_hypervisors_real = $facts['os_service_default']
   }
 
   if ($resource_provider_packet_processing_without_direction != []){
     $resource_provider_packet_processing_without_direction_real =
       join(any2array($resource_provider_packet_processing_without_direction), ',')
   } else {
-    $resource_provider_packet_processing_without_direction_real = $::os_service_default
+    $resource_provider_packet_processing_without_direction_real = $facts['os_service_default']
   }
 
   if ($resource_provider_packet_processing_with_direction != []){
     $resource_provider_packet_processing_with_direction_real =
       join(any2array($resource_provider_packet_processing_with_direction), ',')
   } else {
-    $resource_provider_packet_processing_with_direction_real = $::os_service_default
+    $resource_provider_packet_processing_with_direction_real = $facts['os_service_default']
   }
 
   if empty($resource_provider_inventory_defaults) {
-    $resource_provider_inventory_defaults_real = $::os_service_default
+    $resource_provider_inventory_defaults_real = $facts['os_service_default']
   } else {
     if ($resource_provider_inventory_defaults =~ Hash){
       $resource_provider_inventory_defaults_real =
@@ -425,7 +425,7 @@ class neutron::agents::ml2::ovs (
   }
 
   if empty($resource_provider_packet_processing_inventory_defaults) {
-    $resource_provider_packet_processing_inventory_defaults_real = $::os_service_default
+    $resource_provider_packet_processing_inventory_defaults_real = $facts['os_service_default']
   } else {
     if ($resource_provider_packet_processing_inventory_defaults =~ Hash){
       $resource_provider_packet_processing_inventory_defaults_real =
@@ -540,7 +540,7 @@ class neutron::agents::ml2::ovs (
       tag    => ['neutron-service', 'neutron-db-sync-service'],
     }
 
-    if ($::osfamily == 'Redhat') {
+    if ($facts['os']['family'] == 'Redhat') {
       # NOTE(tkajinam): The service should not be started in a running system.
       #                 DO NOT define ensure so the service status is not
       #                 changed.

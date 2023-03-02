@@ -65,20 +65,24 @@ class neutron::plugins::ml2::nuage (
     tag    => 'neutron-config-file',
   }
 
-  if $::osfamily == 'Debian' {
-    file_line { 'neutron-server-DAEMON_ARGS':
-      path => '/etc/default/neutron-server',
-      line => 'DAEMON_ARGS="$DAEMON_ARGS --config-file /etc/neutron/plugins/nuage/plugin.ini"',
-      tag  => 'neutron-file-line'
+  case $facts['os']['family'] {
+    'Debian': {
+      file_line { 'neutron-server-DAEMON_ARGS':
+        path => '/etc/default/neutron-server',
+        line => 'DAEMON_ARGS="$DAEMON_ARGS --config-file /etc/neutron/plugins/nuage/plugin.ini"',
+        tag  => 'neutron-file-line'
+      }
     }
-  }
-
-  if $::osfamily == 'Redhat' {
-    file { '/etc/neutron/conf.d/neutron-server/nuage_plugin.conf':
-      ensure  => link,
-      require => File['/etc/neutron/plugins/nuage/plugin.ini'],
-      target  => $::neutron::params::nuage_config_file,
-      tag     => 'neutron-config-file',
+    'Redhat': {
+      file { '/etc/neutron/conf.d/neutron-server/nuage_plugin.conf':
+        ensure  => link,
+        require => File['/etc/neutron/plugins/nuage/plugin.ini'],
+        target  => $::neutron::params::nuage_config_file,
+        tag     => 'neutron-config-file',
+      }
+    }
+    default : {
+      fail("Unsupported osfamily: ${facts['os']['family']}")
     }
   }
 

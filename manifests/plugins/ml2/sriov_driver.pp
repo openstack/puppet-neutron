@@ -29,7 +29,7 @@ class neutron::plugins::ml2::sriov_driver (
     }
   } else {
     neutron_plugin_ml2 {
-      'sriov_driver/vnic_type_prohibit_list': value => $::os_service_default;
+      'sriov_driver/vnic_type_prohibit_list': value => $facts['os_service_default'];
     }
   }
 }

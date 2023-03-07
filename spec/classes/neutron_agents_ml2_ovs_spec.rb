@@ -50,6 +50,8 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('ovs/datapath_type').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/vhostuser_socket_dir').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/ovsdb_timeout').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/of_listen_address').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/of_listen_port').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/of_connect_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/of_request_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/of_inactivity_probe').with_value('<SERVICE DEFAULT>')
@@ -271,10 +273,29 @@ describe 'neutron::agents::ml2::ovs' do
       end
     end
 
+    context 'when setting of_listen_address and of_listen_port' do
+      before :each do
+        params.merge!(
+          :of_listen_address => '127.0.0.1',
+          :of_listen_port    => 6633,
+        )
+      end
+
+      it 'configures of_listen_address' do
+        should contain_neutron_agent_ovs('ovs/of_listen_address').with_value(params[:of_listen_address])
+      end
+
+      it 'configures of_listen_port' do
+        should contain_neutron_agent_ovs('ovs/of_listen_port').with_value(params[:of_listen_port])
+      end
+    end
+
     context 'when setting of_connect_timeout and of_request_timeout' do
       before :each do
-        params.merge!( :of_connect_timeout => 30,
-                       :of_request_timeout => 20 )
+        params.merge!(
+          :of_connect_timeout => 30,
+          :of_request_timeout => 20
+        )
       end
 
       it 'configures of_connect_timeout' do

@@ -46,6 +46,14 @@
 #   (Optional) The timeout in seconds for OVSDB commands.
 #   Defaults to $facts['os_service_default']
 #
+# [*of_listen_address*]
+#   (Optional) Address to listen on for OpenFlow connections.
+#   Defaults to $facts['os_service_default']
+#
+# [*of_listen_port*]
+#   (Optional) Port to listen on for OpenFlow connections.
+#   Defaults to $facts['os_service_default']
+#
 # [*of_connect_timeout*]
 #   (Optional) Timeout in seconds to wait for the local switch
 #   connecting to the controller.
@@ -259,6 +267,8 @@ class neutron::agents::ml2::ovs (
   $bridge_uplinks                       = [],
   $bridge_mappings                      = [],
   $ovsdb_timeout                        = $facts['os_service_default'],
+  $of_listen_address                    = $facts['os_service_default'],
+  $of_listen_port                       = $facts['os_service_default'],
   $of_connect_timeout                   = $facts['os_service_default'],
   $of_request_timeout                   = $facts['os_service_default'],
   $of_inactivity_probe                  = $facts['os_service_default'],
@@ -466,6 +476,8 @@ class neutron::agents::ml2::ovs (
     'agent/tunnel_csum':                    value => $tunnel_csum;
     'agent/explicitly_egress_direct':       value => $explicitly_egress_direct;
     'ovs/ovsdb_timeout':                    value => $ovsdb_timeout;
+    'ovs/of_listen_address':                value => $of_listen_address;
+    'ovs/of_listen_port':                   value => $of_listen_port;
     'ovs/of_connect_timeout':               value => $of_connect_timeout;
     'ovs/of_request_timeout':               value => $of_request_timeout;
     'ovs/of_inactivity_probe':              value => $of_inactivity_probe;

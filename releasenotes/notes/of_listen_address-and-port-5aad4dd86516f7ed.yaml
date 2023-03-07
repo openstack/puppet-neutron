@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::agents::ml2::ovs`` class now supports
+    the ``of_listen_address`` parameter and the ``of_listen_port`` parameter.

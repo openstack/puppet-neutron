@@ -74,14 +74,6 @@ Puppet::Type.newtype(:neutron_port) do
     desc 'A uuid identifying the project which will own the port.'
   end
 
-  newparam(:tenant_name) do
-    desc 'The name of the tenant which will own the port.(DEPRECATED)'
-  end
-
-  newproperty(:tenant_id) do
-    desc 'A uuid identifying the tenant which will own the port.(DEPRECATED)'
-  end
-
   newproperty(:binding_host_id) do
     desc 'A uuid identifying the host where we will bind the port.'
   end
@@ -101,11 +93,7 @@ Puppet::Type.newtype(:neutron_port) do
   end
 
   autorequire(:keystone_tenant) do
-    if self[:tenant_name]
-      [self[:tenant_name]]
-    else
-      [self[:project_name]] if self[:project_name]
-    end
+    [self[:project_name]] if self[:project_name]
   end
 
   autorequire(:neutron_network) do
@@ -117,16 +105,7 @@ Puppet::Type.newtype(:neutron_port) do
   end
 
   validate do
-    if self[:tenant_id]
-      warning('The tenant_id property is deprecated. Use project_id.')
-    end
-    if self[:tenant_name]
-      warning('The tenant_name property is deprecated. Use project_name.')
-    end
-
-    project_id = self[:tenant_id] or self[:project_id]
-    project_name = self[:tenant_name] or self[:project_name]
-    if project_id && project_name
+    if self[:project_id] && self[:project_name]
       raise(Puppet::Error, <<-EOT
 Please provide a value for only one of project_name and project_id.
 EOT

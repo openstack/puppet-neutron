@@ -42,7 +42,6 @@ Puppet::Type.type(:neutron_network).provide(
         :provider_segmentation_id  => network[:provider_segmentation_id],
         :router_external           => network[:router_external],
         :shared                    => network[:shared],
-        :tenant_id                 => network[:project_id],
         :project_id                => network[:project_id],
         :availability_zone_hint    => parse_availability_zone_hint(network[:availability_zone_hints]),
         :mtu                       => network[:mtu],
@@ -80,11 +79,7 @@ Puppet::Type.type(:neutron_network).provide(
       opts << '--disable'
     end
 
-    if @resource[:tenant_name]
-      opts << "--project=#{@resource[:tenant_name]}"
-    elsif @resource[:tenant_id]
-      opts << "--project=#{@resource[:tenant_id]}"
-    elsif @resource[:project_name]
+    if @resource[:project_name]
       opts << "--project=#{@resource[:project_name]}"
     elsif @resource[:project_id]
       opts << "--project=#{@resource[:project_id]}"
@@ -130,7 +125,6 @@ Puppet::Type.type(:neutron_network).provide(
       :provider_segmentation_id  => network[:provider_segmentation_id],
       :router_external           => network[:router_external],
       :shared                    => network[:shared],
-      :tenant_id                 => network[:project_id],
       :project_id                => network[:project_id],
       :availability_zone_hint    => self.class.parse_availability_zone_hint(network[:availability_zone_hints]),
       :mtu                       => network[:mtu],
@@ -202,8 +196,6 @@ Puppet::Type.type(:neutron_network).provide(
     :provider_network_type,
     :provider_physical_network,
     :provider_segmentation_id,
-    :tenant_id,
-    :tenant_name,
     :project_id,
     :project_name,
   ].each do |attr|

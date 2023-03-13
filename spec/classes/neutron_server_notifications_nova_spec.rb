@@ -36,7 +36,6 @@ describe 'neutron::server::notifications::nova' do
       should contain_neutron_config('nova/auth_url').with_value('http://127.0.0.1:5000')
       should contain_neutron_config('nova/region_name').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('nova/endpoint_type').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('nova/live_migration_events').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -52,7 +51,6 @@ describe 'neutron::server::notifications::nova' do
           :auth_url                           => 'http://keystone:5000/v3',
           :region_name                        => 'MyRegion',
           :endpoint_type                      => 'internal',
-          :live_migration_events              => true,
         )
       end
 
@@ -69,7 +67,6 @@ describe 'neutron::server::notifications::nova' do
         should contain_neutron_config('nova/auth_url').with_value('http://keystone:5000/v3')
         should contain_neutron_config('nova/region_name').with_value('MyRegion')
         should contain_neutron_config('nova/endpoint_type').with_value('internal')
-        should contain_neutron_config('nova/live_migration_events').with_value(true)
       end
     end
 

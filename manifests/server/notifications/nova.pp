@@ -69,14 +69,6 @@
 #   the keystone catalog.
 #   Defaults to $facts['os_service_default']
 #
-# DEPRECATED PARAMETERS
-#
-# [*live_migration_events*]
-#   (optional) When this option is enabled, during the live migration, the OVS
-#   agent will only send the "vif-plugged-event" when the destination host
-#   interface is bound.
-#   Defaults to $facts['os_service_default']
-#
 class neutron::server::notifications::nova (
   $password,
   $notify_nova_on_port_status_changes = $facts['os_service_default'],
@@ -90,16 +82,9 @@ class neutron::server::notifications::nova (
   $auth_url                           = 'http://127.0.0.1:5000',
   $region_name                        = $facts['os_service_default'],
   $endpoint_type                      = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  $live_migration_events              = undef,
 ) {
 
   include neutron::deps
-
-  if $live_migration_events != undef {
-    warning('The live_migration_events parameter is deprecated \
-and will be removed in a future release')
-  }
 
   if is_service_default($system_scope) {
     $project_name_real = $project_name
@@ -123,7 +108,6 @@ and will be removed in a future release')
   }
 
   neutron_config {
-    'nova/live_migration_events':                 value => pick($live_migration_events, $facts['os_service_default']);
     'DEFAULT/notify_nova_on_port_status_changes': value => $notify_nova_on_port_status_changes;
     'DEFAULT/notify_nova_on_port_data_changes':   value => $notify_nova_on_port_data_changes;
   }

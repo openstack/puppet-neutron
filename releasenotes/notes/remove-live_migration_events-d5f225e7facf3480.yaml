@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``neutron::server::notifications::nova::live_migration_events``
+    parameter has been removed.

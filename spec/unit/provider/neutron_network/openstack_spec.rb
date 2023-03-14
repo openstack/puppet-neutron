@@ -53,7 +53,7 @@ mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
           expect(provider.admin_state_up).to eq('True')
-          expect(provider.tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
+          expect(provider.project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
           expect(provider.router_external).to eq('False')
           expect(provider.shared).to eq('False')
           expect(provider.mtu).to eq('1500')
@@ -112,12 +112,12 @@ mtu="1500"')
         end
       end
 
-      context 'with tenant_name' do
+      context 'with project_name' do
         let :net_attrs do
           {
-            :name        => net_name,
-            :ensure      => 'present',
-            :tenant_name => 'openstack',
+            :name         => net_name,
+            :ensure       => 'present',
+            :project_name => 'openstack',
           }
         end
 
@@ -322,14 +322,14 @@ mtu="9000"')
         expect(instances[0].name).to eq('net1')
         expect(instances[0].admin_state_up).to eq('True')
         expect(instances[0].router_external).to eq('False')
-        expect(instances[0].tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
+        expect(instances[0].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
         expect(instances[0].shared).to eq('False')
         expect(instances[0].mtu).to eq('1500')
 
         expect(instances[1].id).to eq('34e8f42b-89db-4a5b-92db-76ca7073414d')
         expect(instances[1].name).to eq('net2')
         expect(instances[1].admin_state_up).to eq('False')
-        expect(instances[1].tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
+        expect(instances[1].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
         expect(instances[1].router_external).to eq('True')
         expect(instances[1].shared).to eq('True')
         expect(instances[1].mtu).to eq('9000')

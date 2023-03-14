@@ -38,7 +38,6 @@ Puppet::Type.type(:neutron_port).provide(
         :name            => port[:name],
         :id              => port[:id],
         :status          => port[:status],
-        :tenant_id       => port[:project_id],
         :project_id      => port[:project_id],
         :network_id      => port[:network_id],
         :network_name    => get_network_name(port[:network_id]),
@@ -96,11 +95,7 @@ Puppet::Type.type(:neutron_port).provide(
       end
     end
 
-    if @resource[:tenant_name]
-      opts << "--project=#{@resource[:tenant_name]}"
-    elsif @resource[:tenant_id]
-      opts << "--project=#{@resource[:tenant_id]}"
-    elsif @resource[:project_name]
+    if @resource[:project_name]
       opts << "--project=#{@resource[:project_name]}"
     elsif @resource[:project_id]
       opts << "--project=#{@resource[:project_id]}"
@@ -122,7 +117,6 @@ Puppet::Type.type(:neutron_port).provide(
       :name            => port[:name],
       :id              => port[:id],
       :status          => port[:status],
-      :tenant_id       => port[:project_id],
       :project_id      => port[:project_id],
       :network_id      => port[:network_id],
       :network_name    => self.class.get_network_name(port[:network_id]),
@@ -217,8 +211,6 @@ Puppet::Type.type(:neutron_port).provide(
     :ip_address,
     :project_id,
     :project_name,
-    :tenant_id,
-    :tenant_name,
   ].each do |attr|
     define_method(attr.to_s + "=") do |value|
       fail("Property #{attr.to_s} does not support being updated")

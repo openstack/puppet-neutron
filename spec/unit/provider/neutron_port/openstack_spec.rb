@@ -317,7 +317,7 @@ status="DOWN"')
         expect(instances[0].subnet_name).to eq('subnet1')
         expect(instances[0].status).to eq('ACTIVE')
         expect(instances[0].admin_state_up).to eq('True')
-        expect(instances[0].tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
+        expect(instances[0].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
 
         expect(instances[1].id).to eq('c880affb-b15e-4632-b5e7-3adba6e3ab35')
         expect(instances[1].name).to eq('port2')
@@ -327,7 +327,7 @@ status="DOWN"')
         expect(instances[1].subnet_name).to eq('subnet2')
         expect(instances[1].status).to eq('DOWN')
         expect(instances[1].admin_state_up).to eq('False')
-        expect(instances[0].tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
+        expect(instances[0].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
       end
     end
   end

@@ -40,14 +40,6 @@ Puppet::Type.newtype(:neutron_network) do
     desc 'A uuid identifying the project which will own the network.'
   end
 
-  newparam(:tenant_name) do
-    desc 'The name of the tenant which will own the network.(DEPRECATED)'
-  end
-
-  newproperty(:tenant_id) do
-    desc 'A uuid identifying the tenant which will own the network.(DEPRECATED)'
-  end
-
   newproperty(:provider_network_type) do
     desc 'The physical mechanism by which the virtual network is realized.'
     newvalues(:flat, :vlan, :local, :gre, :l3_ext, :vxlan)
@@ -95,11 +87,7 @@ Puppet::Type.newtype(:neutron_network) do
   end
 
   autorequire(:keystone_tenant) do
-    if self[:tenant_name]
-      [self[:tenant_name]]
-    else
-      [self[:project_name]] if self[:project_name]
-    end
+    [self[:project_name]] if self[:project_name]
   end
 
   validate do
@@ -107,16 +95,7 @@ Puppet::Type.newtype(:neutron_network) do
       return
     end
 
-    if self[:tenant_id]
-      warning('The tenant_id property is deprecated. Use project_id.')
-    end
-    if self[:tenant_name]
-      warning('The tenant_name property is deprecated. Use project_name.')
-    end
-
-    project_id = self[:tenant_id] or self[:project_id]
-    project_name = self[:tenant_name] or self[:project_name]
-    if project_id && project_name
+    if self[:project_id] && self[:project_name]
       raise(Puppet::Error, <<-EOT
 Please provide a value for only one of project_name and project_id.
 EOT

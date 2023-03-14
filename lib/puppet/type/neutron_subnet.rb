@@ -88,24 +88,12 @@ Puppet::Type.newtype(:neutron_subnet) do
     desc 'A uuid identifying the project which will own the subnet.'
   end
 
-  newparam(:tenant_name) do
-    desc 'The name of the tenant which will own the subnet.(DEPRECATED)'
-  end
-
-  newproperty(:tenant_id) do
-    desc 'A uuid identifying the tenant which will own the subnet.(DEPRECATED)'
-  end
-
   autorequire(:anchor) do
     ['neutron::service::end']
   end
 
   autorequire(:keystone_tenant) do
-    if self[:tenant_name]
-      [self[:tenant_name]]
-    else
-      [self[:project_name]] if self[:project_name]
-    end
+    [self[:project_name]] if self[:project_name]
   end
 
   autorequire(:neutron_network) do
@@ -135,16 +123,7 @@ EOT
             )
     end
 
-    if self[:tenant_id]
-      warning('The tenant_id property is deprecated. Use project_id.')
-    end
-    if self[:tenant_name]
-      warning('The tenant_name property is deprecated. Use project_name.')
-    end
-
-    project_id = self[:tenant_id] or self[:project_id]
-    project_name = self[:tenant_name] or self[:project_name]
-    if project_id && project_name
+    if self[:project_id] && self[:project_name]
       raise(Puppet::Error, <<-EOT
 Please provide a value for only one of project_name and project_id.
 EOT

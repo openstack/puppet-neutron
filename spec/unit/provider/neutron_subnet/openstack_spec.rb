@@ -294,7 +294,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
         expect(instances[0].gateway_ip).to eq('10.0.0.1')
         expect(instances[0].allocation_pools).to eq(['start=10.0.0.2,end=10.0.0.254'])
         expect(instances[0].enable_dhcp).to eq('True')
-        expect(instances[0].tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
+        expect(instances[0].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
 
         expect(instances[1].id).to eq('0da7a631-0f8f-4e51-8b1c-7a29d0d4f7b5')
         expect(instances[1].name).to eq('subnet2')
@@ -305,7 +305,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
         expect(instances[1].cidr).to eq('10.0.1.0/24')
         expect(instances[1].allocation_pools).to eq(['start=10.0.1.2,end=10.0.1.254'])
         expect(instances[1].enable_dhcp).to eq('False')
-        expect(instances[1].tenant_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
+        expect(instances[1].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
       end
     end
   end

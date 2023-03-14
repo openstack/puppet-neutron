@@ -1,0 +1,11 @@
+---
+upgrade:
+  - |
+    The ``tenant_name`` property and the ``tenant_id`` property of the resource
+    types below have been removed.
+
+    - ``neutron_network``
+    - ``neutron_subnet``
+    - ``neutron_port``
+    - ``neutron_router``
+

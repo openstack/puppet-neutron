@@ -21,28 +21,34 @@
 #   Debug. Defaults to false.
 #
 # [*auth_ca_cert*]
-#   CA cert to check against with for ssl keystone. (Defaults to $facts['os_service_default'])
+#   CA cert to check against with for ssl keystone.
+#   Defaults to $facts['os_service_default'].
 #
 # [*nova_client_cert*]
-#   Client certificate for nova metadata api server. (Defaults to $facts['os_service_default'])
+#   Client certificate for nova metadata api server.
+#   Defaults to $facts['os_service_default'].
 #
 # [*nova_client_priv_key*]
-#   Private key of client certificate. (Defaults to $facts['os_service_default'])
+#   Private key of client certificate.
+#   Defaults to $facts['os_service_default'].
 #
 # [*metadata_host*]
-#   The hostname of the metadata service. Defaults to $facts['os_service_default'].
+#   The hostname of the metadata service.
+#   Defaults to $facts['os_service_default'].
 #
 # [*metadata_port*]
-#   The TCP port of the metadata service. Defaults to $facts['os_service_default'].
+#   The TCP port of the metadata service.
+#   Defaults to $facts['os_service_default'].
 #
 # [*metadata_protocol*]
-#   The protocol to use for requests to Nova metadata server. Defaults to $facts['os_service_default'].
+#   The protocol to use for requests to Nova metadata server.
+#   Defaults to $facts['os_service_default'].
 #
 # [*metadata_workers*]
 #   (optional) Number of separate worker processes to spawn.  Greater than 0
 #   launches that number of child processes as workers.  The parent process
 #   manages them.
-#   Defaults to: 2
+#   Defaults to: $facts['os_service_defaut']
 #
 # [*metadata_backlog*]
 #   (optional) Number of backlog requests to configure the metadata server socket with.
@@ -122,7 +128,7 @@ class neutron::agents::ovn_metadata (
   $metadata_host             = $facts['os_service_default'],
   $metadata_port             = $facts['os_service_default'],
   $metadata_protocol         = $facts['os_service_default'],
-  $metadata_workers          = 2,
+  $metadata_workers          = $facts['os_service_default'],
   $metadata_backlog          = $facts['os_service_default'],
   $metadata_insecure         = $facts['os_service_default'],
   $nova_client_cert          = $facts['os_service_default'],

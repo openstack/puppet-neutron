@@ -158,9 +158,11 @@ class neutron::agents::dhcp (
   include neutron::deps
   include neutron::params
 
-  validate_legacy('Boolean', 'validate_bool', $enable_isolated_metadata)
-  validate_legacy('Boolean', 'validate_bool', $enable_force_metadata)
-  validate_legacy('Boolean', 'validate_bool', $enable_metadata_network)
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $enable_isolated_metadata)
+  validate_legacy(Boolean, 'validate_bool', $enable_force_metadata)
+  validate_legacy(Boolean, 'validate_bool', $enable_metadata_network)
 
   if (! ($enable_isolated_metadata or $enable_force_metadata)) and $enable_metadata_network {
     fail('enable_metadata_network to true requires enable_isolated_metadata or enable_force_metadata also enabled.')

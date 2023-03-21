@@ -64,6 +64,10 @@ class neutron::agents::ml2::mlnx (
   $enable_multi_interface_driver_cache_maintenance = false,
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $manage_package)
+
   include neutron::deps
   include neutron::params
 

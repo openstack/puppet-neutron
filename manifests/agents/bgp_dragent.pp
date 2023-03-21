@@ -54,6 +54,9 @@ class neutron::agents::bgp_dragent(
   $purge_config       = false,
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+
   include neutron::deps
   include neutron::params
 

@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The `neutron::enabled`` parameter has been deprecated. This parameter has
+    been unused and has had no effect.

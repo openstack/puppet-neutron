@@ -277,6 +277,12 @@ class neutron::server (
   $igmp_snooping_enable             = $facts['os_service_default'],
 ) inherits neutron::params {
 
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $sync_db)
+  validate_legacy(Boolean, 'validate_bool', $ensure_vpnaas_package)
+  validate_legacy(Boolean, 'validate_bool', $ensure_dr_package)
+
   include neutron::deps
   include neutron::db
   include neutron::policy

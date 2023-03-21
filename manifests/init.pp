@@ -5,10 +5,6 @@
 #
 # === Parameters:
 #
-# [*enabled*]
-#   (required) Whether or not to enable the neutron service
-#   true/false
-#
 # [*package_ensure*]
 #   (optional) The state of the package
 #   Defaults to 'present'
@@ -309,8 +305,12 @@
 #   (optional) Allow plugins that support it to create VLAN transparent networks
 #   Defaults to $facts['os_service_default']
 #
+# DEPRECATED PARAMETERS
+#
+# [*enabled*]
+#   (required) Whether or not to enable the neutron service
+#
 class neutron (
-  $enabled                              = true,
   $package_ensure                       = 'present',
   $bind_host                            = $facts['os_service_default'],
   $bind_port                            = $facts['os_service_default'],
@@ -375,10 +375,16 @@ class neutron (
   $notification_transport_url           = $facts['os_service_default'],
   $max_allowed_address_pair             = $facts['os_service_default'],
   $vlan_transparent                     = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  $enabled                              = undef,
 ) {
 
   include neutron::deps
   include neutron::params
+
+  if $enabled != undef {
+    warning('The neutron::enabled parameter has been deprecated and has no effect')
+  }
 
   if ! is_service_default($use_ssl) and ($use_ssl) {
     if is_service_default($cert_file) {

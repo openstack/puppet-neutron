@@ -314,6 +314,11 @@ class neutron::agents::ml2::ovs (
   $network_log_local_output_log_base    = $facts['os_service_default'],
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $manage_vswitch)
+  validate_legacy(Boolean, 'validate_bool', $enable_dpdk)
+
   include neutron::deps
   include neutron::params
 

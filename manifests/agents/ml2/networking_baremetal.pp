@@ -125,6 +125,9 @@ class neutron::agents::ml2::networking_baremetal (
   $report_interval         = $facts['os_service_default'],
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+
   include neutron::deps
   include neutron::params
 

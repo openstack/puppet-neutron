@@ -19,8 +19,6 @@ describe 'neutron::server' do
       :auth_strategy            => 'keystone',
       :sync_db                  => false,
       :router_scheduler_driver  => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
-      :l3_ha                    => false,
-      :max_l3_agents_per_router => 3,
     }
   end
 
@@ -131,7 +129,10 @@ describe 'neutron::server' do
 
     context 'with HA routers enabled' do
       before :each do
-        params.merge!(:l3_ha => true)
+        params.merge!(
+          :l3_ha                    => true,
+          :max_l3_agents_per_router => 3,
+        )
       end
 
       it 'should enable HA routers' do
@@ -150,7 +151,7 @@ describe 'neutron::server' do
 
       it 'should disable HA routers' do
         should contain_neutron_config('DEFAULT/l3_ha').with_value(false)
-        should contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value(3)
+        should contain_neutron_config('DEFAULT/max_l3_agents_per_router').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('DEFAULT/l3_ha_net_cidr').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('DEFAULT/l3_ha_network_type').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('DEFAULT/l3_ha_network_physical_name').with_value('<SERVICE DEFAULT>')

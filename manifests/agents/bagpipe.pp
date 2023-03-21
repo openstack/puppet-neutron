@@ -95,6 +95,9 @@ class neutron::agents::bagpipe (
   $local_address           = $facts['networking']['ip'],
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+
   include neutron::deps
   include neutron::params
 

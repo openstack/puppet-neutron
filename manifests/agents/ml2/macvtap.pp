@@ -41,6 +41,8 @@ class neutron::agents::ml2::macvtap (
 ) {
 
   validate_legacy(Array, 'validate_array', $physical_interface_mappings)
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

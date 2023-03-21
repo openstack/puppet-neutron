@@ -114,6 +114,11 @@ class neutron::plugins::ovs::opendaylight (
   $enable_ipv6           = false,
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $enable_tls)
+  validate_legacy(Boolean, 'validate_bool', $enable_hw_offload)
+  validate_legacy(Boolean, 'validate_bool', $enable_dpdk)
+  validate_legacy(Boolean, 'validate_bool', $enable_ipv6)
+
   include neutron::deps
 
   # Handle the case where ODL controller is also on this host

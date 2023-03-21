@@ -150,6 +150,10 @@ class neutron::agents::l3 (
   $network_log_local_output_log_base = $facts['os_service_default'],
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $ha_enabled)
+
   include neutron::deps
   include neutron::params
 

@@ -44,6 +44,8 @@ class neutron::services::bgpvpn (
   $purge_config      = false,
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $sync_db)
+
   include neutron::deps
   include neutron::params
 

@@ -92,7 +92,10 @@ class neutron::agents::metadata (
   $report_interval           = $facts['os_service_default'],
   $rpc_response_max_timeout  = $facts['os_service_default'],
   $purge_config              = false,
-  ) {
+) {
+
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

@@ -140,7 +140,10 @@ class neutron::agents::ovn_metadata (
   $root_helper_daemon        = $facts['os_service_default'],
   $state_path                = '/var/lib/neutron',
   $purge_config              = false,
-  ) {
+) {
+
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

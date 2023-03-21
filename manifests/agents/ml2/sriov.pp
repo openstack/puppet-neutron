@@ -115,6 +115,9 @@ class neutron::agents::ml2::sriov (
   $resource_provider_inventory_defaults = {},
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+
   include neutron::deps
   include neutron::params
 

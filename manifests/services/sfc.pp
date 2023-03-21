@@ -50,6 +50,8 @@ class neutron::services::sfc (
   $purge_config      = false,
 ) {
 
+  validate_legacy(Boolean, 'validate_bool', $sync_db)
+
   include neutron::deps
   include neutron::params
 
@@ -60,8 +62,8 @@ class neutron::services::sfc (
   })
 
   neutron_sfc_service_config {
-      'sfc/drivers':              value => $sfc_driver;
-      'flowclassifier/drivers':   value => $fc_driver;
+    'sfc/drivers':            value => $sfc_driver;
+    'flowclassifier/drivers': value => $fc_driver;
   }
 
   resources { 'neutron_sfc_service_config':

@@ -208,9 +208,8 @@ class neutron::agents::ovn_metadata (
 
   # Set OVS manager so that metadata agent can connect to Open vSwitch
   exec { 'Set OVS Manager':
-    command => "ovs-vsctl --timeout=5 --id=@manager -- create Manager target=\\\"${ovs_manager}\\\" \
-               -- add Open_vSwitch . manager_options @manager",
-    unless  => "ovs-vsctl show | grep \"${ovs_manager}\"",
+    command => "ovs-vsctl set-manager ${ovs_manager}",
+    unless  => "ovs-vsctl get-manager | grep \"${ovs_manager}\"",
     path    => '/usr/sbin:/usr/bin:/sbin:/bin',
   }
 

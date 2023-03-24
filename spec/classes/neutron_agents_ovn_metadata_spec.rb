@@ -7,14 +7,7 @@ describe 'neutron::agents::ovn_metadata' do
 
   let :params do
     {
-      :package_ensure   => 'present',
-      :debug            => false,
-      :enabled          => true,
-      :shared_secret    => 'metadata-secret',
-      :purge_config     => false,
-      :ovsdb_connection => 'tcp:127.0.0.1:6640',
-      :root_helper      => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-      :state_path       => '/var/lib/neutron/',
+      :shared_secret => 'metadata-secret',
     }
   end
 
@@ -24,7 +17,7 @@ describe 'neutron::agents::ovn_metadata' do
     it 'configures ovn metadata agent service' do
       should contain_service('ovn-metadata').with(
         :name    => platform_params[:ovn_metadata_agent_service],
-        :enable  => params[:enabled],
+        :enable  => true,
         :ensure  => 'running',
         :tag     => 'neutron-service',
       )
@@ -49,7 +42,7 @@ describe 'neutron::agents::ovn_metadata' do
     end
 
     it 'configures ovn_metadata_agent.ini' do
-      should contain_ovn_metadata_agent_config('DEFAULT/debug').with(:value => params[:debug])
+      should contain_ovn_metadata_agent_config('DEFAULT/debug').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/auth_ca_cert').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/nova_client_cert').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/nova_client_priv_key').with(:value => '<SERVICE DEFAULT>')
@@ -59,12 +52,12 @@ describe 'neutron::agents::ovn_metadata' do
       should contain_ovn_metadata_agent_config('DEFAULT/metadata_workers').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/nova_metadata_insecure').with(:value => '<SERVICE DEFAULT>')
-      should contain_ovn_metadata_agent_config('DEFAULT/state_path').with(:value => params[:state_path])
+      should contain_ovn_metadata_agent_config('DEFAULT/state_path').with(:value => '/var/lib/neutron')
       should contain_ovn_metadata_agent_config('DEFAULT/metadata_proxy_shared_secret').with(:value => params[:shared_secret])
-      should contain_ovn_metadata_agent_config('agent/root_helper').with(:value => params[:root_helper])
+      should contain_ovn_metadata_agent_config('agent/root_helper').with(:value => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       should contain_ovn_metadata_agent_config('agent/root_helper_daemon').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('ovs/ovsdb_connection_timeout').with(:value => '<SERVICE DEFAULT>')
-      should contain_ovn_metadata_agent_config('ovs/ovsdb_connection').with(:value => params[:ovsdb_connection])
+      should contain_ovn_metadata_agent_config('ovs/ovsdb_connection').with(:value => 'tcp:127.0.0.1:6640')
       should contain_ovn_metadata_agent_config('ovn/ovn_sb_connection').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('ovn/ovsdb_retry_max_interval').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('ovn/ovsdb_probe_interval').with(:value => '<SERVICE DEFAULT>')
@@ -72,7 +65,7 @@ describe 'neutron::agents::ovn_metadata' do
 
     it 'installs ovn metadata agent package' do
       should contain_package('ovn-metadata').with(
-        :ensure => params[:package_ensure],
+        :ensure => 'present',
         :name   => platform_params[:ovn_metadata_agent_package],
         :tag    => ['openstack', 'neutron-package'],
       )

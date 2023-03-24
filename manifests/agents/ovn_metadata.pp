@@ -18,7 +18,7 @@
 #   Defaults to true
 #
 # [*debug*]
-#   Debug. Defaults to false.
+#   Debug. Defaults to $facts['os_service_default'].
 #
 # [*auth_ca_cert*]
 #   CA cert to check against with for ssl keystone.
@@ -123,7 +123,7 @@ class neutron::agents::ovn_metadata (
   $package_ensure            = 'present',
   $enabled                   = true,
   $manage_service            = true,
-  $debug                     = false,
+  $debug                     = $facts['os_service_default'],
   $auth_ca_cert              = $facts['os_service_default'],
   $metadata_host             = $facts['os_service_default'],
   $metadata_port             = $facts['os_service_default'],

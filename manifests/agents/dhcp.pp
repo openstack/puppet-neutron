@@ -15,7 +15,8 @@
 #   Defaults to true
 #
 # [*debug*]
-#   (optional) Show debugging output in log. Defaults to $facts['os_service_default'].
+#   (optional) Show debugging output in log.
+#   Defaults to $facts['os_service_default'].
 #
 # [*state_path*]
 #   (optional) Where to store dnsmasq state files. This directory must be
@@ -81,8 +82,8 @@
 #   Defaults to false.
 #
 # [*dhcp_broadcast_reply*]
-#  (optional) Use broadcast in DHCP replies
-#  Defaults to $facts['os_service_default'].
+#   (optional) Use broadcast in DHCP replies
+#   Defaults to $facts['os_service_default'].
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -99,20 +100,20 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_connection*]
-# (optional) The URI used to connect to the local OVSDB server
-# Defaults to $facts['os_service_default']
+#   (optional) The URI used to connect to the local OVSDB server
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_agent_ssl_key_file*]
-# (optional) The SSL key file to use for Neutron agents to connect to OVSDB
-# Defaults to $facts['os_service_default']
+#   (optional) The SSL key file to use for Neutron agents to connect to OVSDB
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_agent_ssl_cert_file*]
-# (optional) The SSL cert file to use for Neutron agents to connect to OVSDB
-# Defaults to $facts['os_service_default']
+#   (optional) The SSL cert file to use for Neutron agents to connect to OVSDB
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_agent_ssl_ca_file*]
-# (optional) The SSL CA cert file to use for Neutron agents to connect to OVSDB
-# Defaults to $facts['os_service_default']
+#   (optional) The SSL CA cert file to use for Neutron agents to connect to OVSDB
+#   Defaults to $facts['os_service_default']
 #
 # [*report_interval*]
 #   (optional) Set the agent report interval. By default the global report
@@ -122,7 +123,7 @@
 #
 # [*rpc_response_max_timeout*]
 #   (Optional) Maximum seconds to wait for a response from an RPC call
-#   Defaults to: $facts['os_service_default']
+#   Defaults to $facts['os_service_default']
 #
 class neutron::agents::dhcp (
   $package_ensure            = present,

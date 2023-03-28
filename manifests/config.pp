@@ -33,6 +33,9 @@
 # [*sriov_agent_config*]
 #   (optional) Manage configuration of sriov_agent.ini
 #
+# [*ovn_agent_config*]
+#   (optional) Manage configuration of ovn_agent.ini
+#
 # [*macvtap_agent_config*]
 #   (optional) Manage configuration of macvtap_agent.ini
 #
@@ -93,6 +96,7 @@ class neutron::config (
   $server_config                 = {},
   $api_paste_ini                 = {},
   $ovs_agent_config              = {},
+  $ovn_agent_config              = {},
   $sriov_agent_config            = {},
   $macvtap_agent_config          = {},
   $bgpvpn_bagpipe_config         = {},
@@ -126,6 +130,7 @@ class neutron::config (
   validate_legacy(Hash, 'validate_hash', $server_config)
   validate_legacy(Hash, 'validate_hash', $api_paste_ini)
   validate_legacy(Hash, 'validate_hash', $ovs_agent_config)
+  validate_legacy(Hash, 'validate_hash', $ovn_agent_config)
   validate_legacy(Hash, 'validate_hash', $sriov_agent_config)
   validate_legacy(Hash, 'validate_hash', $linuxbridge_agent_config_real)
   validate_legacy(Hash, 'validate_hash', $macvtap_agent_config)
@@ -148,6 +153,7 @@ class neutron::config (
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_paste_ini', $api_paste_ini)
   create_resources('neutron_agent_ovs', $ovs_agent_config)
+  create_resources('neutron_agent_ovn', $ovn_agent_config)
   create_resources('neutron_sriov_agent_config', $sriov_agent_config)
   create_resources('neutron_agent_linuxbridge', $linuxbridge_agent_config_real)
   create_resources('neutron_agent_macvtap', $macvtap_agent_config)

@@ -57,6 +57,7 @@ describe 'neutron::config' do
   shared_examples 'neutron_agent_config' do
     let :params do
       { :ovs_agent_config         => config_hash,
+        :ovn_agent_config         => config_hash,
         :sriov_agent_config       => config_hash,
         :linuxbridge_agent_config => config_hash,
         :macvtap_agent_config     => config_hash,
@@ -74,6 +75,12 @@ describe 'neutron::config' do
       should contain_neutron_agent_ovs('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_agent_ovs('DEFAULT/bar').with_value('barValue')
       should contain_neutron_agent_ovs('DEFAULT/baz').with_ensure('absent')
+    end
+
+    it 'configures arbitrary neutron_agent_ovn configurations' do
+      should contain_neutron_agent_ovn('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_agent_ovn('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_agent_ovn('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_sriov_agent_config configurations' do

@@ -13,6 +13,9 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
+                     '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
+                     '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
+                     '/etc/neutron/plugins/ml2/ovn_agent.ini',
                      '/etc/neutron/plugins/ml2/sriov_agent.ini',
                      '/etc/neutron/neutron_ovn_metadata_agent.ini']
 
@@ -31,6 +34,7 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_plugin_opencontrail <||>
   File <||> -> Neutron_agent_linuxbridge <||>
   File <||> -> Neutron_agent_ovs <||>
+  File <||> -> Neutron_agent_ovn <||>
   File <||> -> Neutron_sriov_agent_config <||>
   File <||> -> Neutron_l2gw_agent_config <||>
   File <||> -> Ovn_metadata_agent_config <||>
@@ -52,6 +56,9 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
+                     '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
+                     '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
+                     '/etc/neutron/plugins/ml2/ovn_agent.ini',
                      '/etc/neutron/plugins/ml2/sriov_agent.ini',
                      '/etc/neutron/neutron_ovn_metadata_agent.ini']
 
@@ -260,6 +267,24 @@ describe 'basic neutron_config resource' do
     ensure_absent_val => 'toto',
   }
 
+  neutron_agent_ovn { 'DEFAULT/thisshouldexist' :
+    value => 'foo',
+  }
+
+  neutron_agent_ovn { 'DEFAULT/thisshouldnotexist' :
+    value => '<SERVICE DEFAULT>',
+  }
+
+  neutron_agent_ovn { 'DEFAULT/thisshouldexist2' :
+    value             => '<SERVICE DEFAULT>',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_agent_ovn { 'DEFAULT/thisshouldnotexist2' :
+    value             => 'toto',
+    ensure_absent_val => 'toto',
+  }
+
   neutron_sriov_agent_config { 'DEFAULT/thisshouldexist' :
     value => 'foo',
   }
@@ -345,6 +370,7 @@ describe 'basic neutron_config resource' do
                     'neutron_plugin_opencontrail',
                     'neutron_agent_linuxbridge',
                     'neutron_agent_ovs',
+                    'neutron_agent_ovn',
                     'neutron_sriov_agent_config',
                     'neutron_l2gw_service_config',
                     'neutron_l2gw_agent_config',

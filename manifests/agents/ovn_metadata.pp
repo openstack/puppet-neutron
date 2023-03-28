@@ -207,11 +207,13 @@ class neutron::agents::ovn_metadata (
   }
 
   # Set OVS manager so that metadata agent can connect to Open vSwitch
-  exec { 'Set OVS Manager':
-    command => "ovs-vsctl set-manager ${ovs_manager}",
-    unless  => "ovs-vsctl get-manager | grep \"${ovs_manager}\"",
-    path    => '/usr/sbin:/usr/bin:/sbin:/bin',
-  }
+  # NOTE(tkajinam): We use ensure_resource to avoid conflict with
+  #                 neutron::agents::ml2::ovn
+  ensure_resource('exec', 'Set OVS Manager', {
+    'command' => "ovs-vsctl set-manager ${ovs_manager}",
+    'unless'  => "ovs-vsctl get-manager | grep \"${ovs_manager}\"",
+    'path'    => '/usr/sbin:/usr/bin:/sbin:/bin',
+  })
 
   Package<| title == 'ovn-metadata' |> -> Exec['Set OVS Manager']
 }

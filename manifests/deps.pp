@@ -36,6 +36,7 @@ class neutron::deps {
   Anchor['neutron::config::begin'] -> Neutron_agent_linuxbridge<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_agent_macvtap<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_agent_ovs<||> ~> Anchor['neutron::config::end']
+  Anchor['neutron::config::begin'] -> Neutron_agent_ovn<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_api_paste_ini<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_bgpvpn_bagpipe_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_bgpvpn_service_config<||> ~> Anchor['neutron::config::end']

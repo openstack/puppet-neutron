@@ -53,7 +53,7 @@ class neutron::params {
       $l2gw_package                       = 'python3-networking-l2gw'
       $ovn_metadata_agent_package         = 'openstack-neutron-ovn-metadata-agent'
       $ovn_agent_package                  = 'openstack-neutron-ovn-agent'
-      $dynamic_routing_package            = false
+      $dynamic_routing_package            = 'python3-neutron-dynamic-routing'
       $bgp_dragent_package                = 'openstack-neutron-bgp-dragent'
       $openswan_package                   = 'libreswan'
       $libreswan_package                  = 'libreswan'

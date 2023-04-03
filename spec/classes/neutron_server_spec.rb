@@ -22,7 +22,7 @@ describe 'neutron::server' do
     }
   end
 
-  shared_examples 'a neutron server' do
+  shared_examples 'neutron::server' do
     let :p do
       default_params.merge(params)
     end
@@ -339,51 +339,46 @@ describe 'neutron::server' do
       end
     end
 
-  end
+    context 'with VPNaaS package installation' do
+      before do
+        params.merge!(
+          :ensure_vpnaas_package => true,
+        )
+      end
 
-  shared_examples 'VPNaaS package installation' do
-    before do
-      params.merge!(
-        :ensure_vpnaas_package => true,
-      )
+      it 'should install VPNaaS package' do
+        should contain_package('neutron-vpnaas-agent').with(
+          :ensure => 'installed',
+          :name   => platform_params[:vpnaas_agent_package],
+          :tag    => ['openstack', 'neutron-package'],
+        )
+      end
     end
 
-    it 'should install *aaS packages' do
-      should contain_package('neutron-vpnaas-agent')
-    end
-  end
+    context 'with Dynamic routing package installation' do
+      before do
+        params.merge!( :ensure_dr_package => true )
+      end
 
-  shared_examples 'neutron server dynamic routing on Debian' do
-    before do
-      params.merge!( :ensure_dr_package => true )
-    end
-
-    it 'should install dynamic routing package' do
-      should contain_package('neutron-dynamic-routing')
-      should_not contain_package('neutron-bgp-dragent')
-    end
-  end
-
-  shared_examples 'neutron server dynamic routing on RedHat' do
-    before do
-      params.merge!( :ensure_dr_package => true )
+      it 'should install dynamic routing package' do
+        should contain_package('neutron-dynamic-routing').with(
+          :ensure => 'installed',
+          :name   => platform_params[:dynamic_routing_package],
+          :tag    => ['openstack', 'neutron-package'],
+        )
+      end
     end
 
-    it 'should install bgp dragent package' do
-      should_not contain_package('neutron-dynamic-routing')
-      should contain_package('neutron-bgp-dragent')
-    end
-  end
+    context 'without database synchronization' do
+      before do
+        params.merge!(
+          :sync_db => true
+        )
+      end
 
-  shared_examples 'a neutron server without database synchronization' do
-    before do
-      params.merge!(
-        :sync_db => true
-      )
-    end
-
-    it 'includes neutron::db::sync' do
-      should contain_class('neutron::db::sync')
+      it 'includes neutron::db::sync' do
+        should contain_class('neutron::db::sync')
+      end
     end
   end
 
@@ -400,27 +395,31 @@ describe 'neutron::server' do
         when 'Debian'
           if facts[:os]['name'] == 'Ubuntu'
             {
-              :server_package   => 'neutron-server',
-              :server_service   => 'neutron-server',
-              :rpc_service_name => 'neutron-rpc-server',
+              :server_package          => 'neutron-server',
+              :server_service          => 'neutron-server',
+              :rpc_service_name        => 'neutron-rpc-server',
+              :dynamic_routing_package => 'python3-neutron-dynamic-routing',
+              :vpnaas_agent_package    => 'python3-neutron-vpnaas',
             }
           else
             {
-              :api_service_name => 'neutron-api',
-              :rpc_service_name => 'neutron-rpc-server',
+              :api_service_name        => 'neutron-api',
+              :rpc_service_name        => 'neutron-rpc-server',
+              :dynamic_routing_package => 'python3-neutron-dynamic-routing',
+              :vpnaas_agent_package    => 'python3-neutron-vpnaas',
             }
           end
         when 'RedHat'
           {
-            :server_service   => 'neutron-server',
-            :rpc_service_name => 'neutron-rpc-server',
+            :server_service          => 'neutron-server',
+            :rpc_service_name        => 'neutron-rpc-server',
+            :dynamic_routing_package => 'python3-neutron-dynamic-routing',
+            :vpnaas_agent_package    => 'openstack-neutron-vpnaas',
           }
         end
       end
 
-      it_behaves_like 'a neutron server'
-      it_behaves_like 'a neutron server without database synchronization'
-      it_behaves_like "neutron server dynamic routing on #{facts[:os]['family']}"
+      it_behaves_like 'neutron::server'
     end
   end
 end

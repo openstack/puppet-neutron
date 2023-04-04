@@ -17,29 +17,33 @@
 require 'spec_helper'
 
 describe 'neutron::services::sfc' do
-  let :default_params do
-    { :package_ensure => 'present',
-      :sfc_driver     => '<SERVICE DEFAULT>',
-      :fc_driver     => '<SERVICE DEFAULT>',
-      :sync_db        => true,
-    }
-  end
-
   shared_examples 'neutron sfc service plugin' do
-
     context 'with default params' do
-      let :params do
-        default_params
-      end
-
       it 'installs sfc package' do
         should contain_package(platform_params[:sfc_package_name]).with(
-          :ensure => params[:package_ensure],
+          :ensure => 'present',
           :name   => platform_params[:sfc_package_name],
         )
       end
 
-      it 'runs neutron-db-sync' do
+      it 'configures networking-sfc.conf' do
+        should contain_neutron_sfc_service_config('sfc/drivers').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_sfc_service_config('flowclassifier/drivers').with_value('<SERVICE DEFAULT>')
+      end
+
+      it 'does not run neutron-db-manage' do
+        should_not contain_exec('sfc-db-sync')
+      end
+    end
+
+    context 'with db sync enabled' do
+      let :params do
+        {
+          :sync_db => true
+        }
+      end
+
+      it 'runs neutron-db-manage' do
         should contain_exec('sfc-db-sync').with(
           :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-sfc upgrade head',
           :path        => '/usr/bin',
@@ -56,20 +60,15 @@ describe 'neutron::services::sfc' do
 
     context 'with sfc and classifier drivers' do
       let :params do
-        default_params.merge(
-          { :sfc_driver => 'odl_v2',
-            :fc_driver  => 'odl_v2'
-          }
-        )
+        {
+          :sfc_driver => 'odl_v2',
+          :fc_driver  => 'odl_v2'
+        }
       end
 
       it 'configures networking-sfc.conf' do
-        should contain_neutron_sfc_service_config(
-          'sfc/drivers'
-        ).with_value('odl_v2')
-        should contain_neutron_sfc_service_config(
-          'flowclassifier/drivers'
-        ).with_value('odl_v2')
+        should contain_neutron_sfc_service_config('sfc/drivers').with_value('odl_v2')
+        should contain_neutron_sfc_service_config('flowclassifier/drivers').with_value('odl_v2')
       end
     end
   end

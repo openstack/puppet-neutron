@@ -29,7 +29,7 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*sync_db*]
-#   Whether 'l2gw-db-sync' should run to create and/or synchronize the
+#   Whether 'neutron-db-manage' should run to create and/or synchronize the
 #   database with networking-l2gw specific tables.
 #   Default to false
 #
@@ -73,17 +73,18 @@ class neutron::services::l2gw (
   }
 
   neutron_l2gw_service_config {
-      'DEFAULT/default_interface_name':               value => $default_interface_name;
-      'DEFAULT/default_device_name':                  value => $default_device_name;
-      'DEFAULT/quota_l2_gateway':                     value => $quota_l2_gateway;
-      'DEFAULT/periodic_monitoring_interval':         value => $periodic_monitoring_interval;
-      'service_providers/service_provider':           value => $service_providers;
+    'DEFAULT/default_interface_name':       value => $default_interface_name;
+    'DEFAULT/default_device_name':          value => $default_device_name;
+    'DEFAULT/quota_l2_gateway':             value => $quota_l2_gateway;
+    'DEFAULT/periodic_monitoring_interval': value => $periodic_monitoring_interval;
+    'service_providers/service_provider':   value => $service_providers;
   }
 
   if $sync_db {
     exec { 'l2gw-db-sync':
       command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-l2gw upgrade head',
       path        => '/usr/bin',
+      user        => $::neutron::params::user,
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],

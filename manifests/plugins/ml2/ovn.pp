@@ -105,6 +105,14 @@
 #   Type: boolean
 #   Defaults to $facts['os_service_default']
 #
+# [*localnet_learn_fdb*]
+#   (optional) If enabled it will allow localnet ports to learn MAC addresses
+#              and store them in FDB SB table. This avoids flooding for
+#              traffic towards unknown IPs when port security is disable.
+#              It requires OVN 22.09 or newer.
+#   Type: boolean
+#   Defaults to $facts['os_service_default']
+#
 # [*network_log_rate_limit*]
 #   (Optional) Maximum packets logging per second.
 #   Used by logging service plugin.
@@ -142,6 +150,7 @@ class neutron::plugins::ml2::ovn(
   $dns_servers                          = $facts['os_service_default'],
   $vhostuser_socket_dir                 = $facts['os_service_default'],
   $ovn_emit_need_to_frag                = $facts['os_service_default'],
+  $localnet_learn_fdb                   = $facts['os_service_default'],
   $network_log_rate_limit               = $facts['os_service_default'],
   $network_log_burst_limit              = $facts['os_service_default'],
   $network_log_local_output_log_base    = $facts['os_service_default'],
@@ -173,6 +182,7 @@ class neutron::plugins::ml2::ovn(
     'ovn/dns_servers'                         : value => join(any2array($dns_servers), ',');
     'ovn/vhost_sock_dir'                      : value => $vhostuser_socket_dir;
     'ovn/ovn_emit_need_to_frag'               : value => $ovn_emit_need_to_frag;
+    'ovn/localnet_learn_fdb'                  : value => $localnet_learn_fdb;
     'network_log/rate_limit'                  : value => $network_log_rate_limit;
     'network_log/burst_limit'                 : value => $network_log_burst_limit;
     'network_log/local_output_log_base'       : value => $network_log_local_output_log_base;

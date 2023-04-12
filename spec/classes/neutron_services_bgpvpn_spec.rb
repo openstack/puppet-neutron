@@ -17,37 +17,13 @@
 require 'spec_helper'
 
 describe 'neutron::services::bgpvpn' do
-  let :default_params do
-    {
-      :package_ensure    => 'present',
-      :service_providers => '<SERVICE DEFAULT>',
-      :sync_db           => true,
-    }
-  end
 
   shared_examples 'neutron bgpvpn service plugin' do
     context 'with default params' do
-      let :params do
-        default_params
-      end
-
       it 'installs bgpvpn package' do
         should contain_package(platform_params[:bgpvpn_package_name]).with(
-          :ensure => params[:package_ensure],
+          :ensure => 'present',
           :name   => platform_params[:bgpvpn_package_name],
-        )
-      end
-
-      it 'runs neutron-db-sync' do
-        should contain_exec('bgpvpn-db-sync').with(
-          :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-bgpvpn upgrade head',
-          :path        => '/usr/bin',
-          :subscribe   => ['Anchor[neutron::install::end]',
-                           'Anchor[neutron::config::end]',
-                           'Anchor[neutron::dbsync::begin]'
-                           ],
-          :notify      => 'Anchor[neutron::dbsync::end]',
-          :refreshonly => 'true',
         )
       end
 
@@ -58,13 +34,39 @@ describe 'neutron::services::bgpvpn' do
           'BGPVPN:Dummy:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default'
         )
       end
+
+      it 'does not run neutron-db-manage' do
+        should_not contain_exec('bgpvpn-db-sync')
+      end
+    end
+
+    context 'with db sync enabled' do
+      let :params do
+        {
+          :sync_db => true
+        }
+      end
+
+      it 'runs neutron-db-manage' do
+        should contain_exec('bgpvpn-db-sync').with(
+          :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-bgpvpn upgrade head',
+          :path        => '/usr/bin',
+          :user        => 'neutron',
+          :subscribe   => ['Anchor[neutron::install::end]',
+                           'Anchor[neutron::config::end]',
+                           'Anchor[neutron::dbsync::begin]'
+                           ],
+          :notify      => 'Anchor[neutron::dbsync::end]',
+          :refreshonly => 'true',
+        )
+      end
     end
 
     context 'with multiple service providers' do
       let :params do
-        default_params.merge(
-          { :service_providers => ['provider1', 'provider2'] }
-        )
+        {
+          :service_providers => ['provider1', 'provider2']
+        }
       end
 
       it 'configures networking_bgpvpn.conf' do

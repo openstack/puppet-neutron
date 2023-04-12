@@ -29,7 +29,7 @@
 #   Array of allowed service types
 #
 # [*sync_db*]
-#   Whether 'bgpvpn-db-sync' should run to create and/or synchronize the
+#   Whether 'neutron-db-manage' should run to create and/or synchronize the
 #   database with networking-bgpvpn specific tables. Default to false
 #
 # [*purge_config*]
@@ -76,6 +76,7 @@ class neutron::services::bgpvpn (
     exec { 'bgpvpn-db-sync':
       command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-bgpvpn upgrade head',
       path        => '/usr/bin',
+      user        => $::neutron::params::user,
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],

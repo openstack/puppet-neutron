@@ -17,28 +17,40 @@
 require 'spec_helper'
 
 describe 'neutron::services::l2gw' do
-  let :pre_condition do
-    "class { 'neutron::keystone::authtoken':
-      password => 'passw0rd',
-     }
-     class { 'neutron::server': }
-     class { 'neutron': }"
-  end
-
-  let :default_params do
-    { :package_ensure               => 'present',
-      :purge_config                 => false,
-    }
-  end
-
-  let :params do
-    { :default_interface_name       => 'foo'}
-  end
-
   shared_examples 'neutron l2gw service plugin' do
     context 'with default params' do
       let :p do
         default_params.merge(params)
+      end
+
+      it 'should contain python-networking-l2gw package' do
+        should contain_package('python-networking-l2gw').with(
+          :ensure => 'present',
+          :name   => platform_params[:l2gw_package_name],
+          :tag    => ['openstack', 'neutron-package'],
+        )
+      end
+
+      it 'configures l2gw_plugin.ini' do
+        should contain_neutron_l2gw_service_config('service_providers/service_provider').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_l2gw_service_config('DEFAULT/default_interface_name').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_l2gw_service_config('DEFAULT/default_device_name').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_l2gw_service_config('DEFAULT/quota_l2_gateway').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_l2gw_service_config('DEFAULT/periodic_monitoring_interval').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_l2gw_service_config('service_providers/service_provider').with_value('<SERVICE DEFAULT>')
+      end
+
+      it 'does not run neutron-db-manage' do
+        should_not contain_exec('l2gw-db-sync')
+      end
+    end
+
+    context 'with parameters' do
+      let :params do
+        {
+          :purge_config           => false,
+          :default_interface_name => 'foo',
+        }
       end
 
       it 'passes purge to resource' do
@@ -47,39 +59,23 @@ describe 'neutron::services::l2gw' do
         })
       end
 
-      it 'should contain python-networking-l2gw package' do
-          should contain_package('python-networking-l2gw').with({ :ensure => 'present' })
-      end
-
-      it 'services_provider with default parameter' do
-        should contain_neutron_l2gw_service_config('service_providers/service_provider').with_value('<SERVICE DEFAULT>')
-      end
-
       it 'configures l2gw_plugin.ini' do
-        should contain_neutron_l2gw_service_config('DEFAULT/default_interface_name').with_value(p[:default_interface_name])
-        should contain_neutron_l2gw_service_config('DEFAULT/default_device_name').with_value('<SERVICE DEFAULT>')
-        should contain_neutron_l2gw_service_config('DEFAULT/quota_l2_gateway').with_value('<SERVICE DEFAULT>')
-        should contain_neutron_l2gw_service_config('DEFAULT/periodic_monitoring_interval').with_value('<SERVICE DEFAULT>')
-        should contain_neutron_l2gw_service_config('service_providers/service_provider').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_l2gw_service_config('DEFAULT/default_interface_name').with_value('foo')
       end
     end
 
-    context 'with multiple service providers' do
-      before :each do
-        params.merge!( :service_providers => ['provider1', 'provider2'],
-                       :sync_db           => true )
+    context 'with db sync enabled' do
+      let :params do
+        {
+          :sync_db => true
+        }
       end
 
-      it 'configures multiple service providers in l2gw_plugin.ini' do
-        should contain_neutron_l2gw_service_config(
-          'service_providers/service_provider'
-        ).with_value(['provider1', 'provider2'])
-      end
-
-      it 'runs neutron-db-sync' do
+      it 'runs neutron-db-manage' do
         should contain_exec('l2gw-db-sync').with(
           :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-l2gw upgrade head',
           :path        => '/usr/bin',
+          :user        => 'neutron',
           :subscribe   => ['Anchor[neutron::install::end]',
                            'Anchor[neutron::config::end]',
                            'Anchor[neutron::dbsync::begin]'
@@ -87,6 +83,20 @@ describe 'neutron::services::l2gw' do
           :notify      => 'Anchor[neutron::dbsync::end]',
           :refreshonly => 'true',
         )
+      end
+    end
+
+    context 'with multiple service providers' do
+      let :params do
+        {
+          :service_providers => ['provider1', 'provider2']
+        }
+      end
+
+      it 'configures multiple service providers in l2gw_plugin.ini' do
+        should contain_neutron_l2gw_service_config(
+          'service_providers/service_provider'
+        ).with_value(['provider1', 'provider2'])
       end
     end
   end
@@ -102,9 +112,9 @@ describe 'neutron::services::l2gw' do
       let (:platform_params) do
         case facts[:os]['family']
         when 'Debian'
-          { :l2gw_agent_package_name => 'python3-networking-l2gw' }
+          { :l2gw_package_name => 'python3-networking-l2gw' }
         when 'RedHat'
-          { :l2gw_agent_package_name => 'python3-networking-l2gw' }
+          { :l2gw_package_name => 'python3-networking-l2gw' }
         end
       end
 

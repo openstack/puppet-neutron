@@ -69,20 +69,10 @@ class neutron::agents::bgp_dragent(
     'bgp/bgp_router_id':      value => $bgp_router_id;
   }
 
-  if $::neutron::params::dynamic_routing_package {
-    ensure_packages('neutron-dynamic-routing', {
-      ensure => $package_ensure,
-      name   => $::neutron::params::dynamic_routing_package,
-      tag    => ['openstack', 'neutron-package'],
-    })
-  }
-
-  if $::neutron::params::bgp_dragent_package {
-    ensure_packages('neutron-bgp-dragent', {
-      ensure => $package_ensure,
-      name   => $::neutron::params::bgp_dragent_package,
-      tag    => ['openstack', 'neutron-package'],
-    })
+  package { 'neutron-bgp-dragent':
+    ensure => $package_ensure,
+    name   => $::neutron::params::bgp_dragent_package,
+    tag    => ['openstack', 'neutron-package'],
   }
 
   if $manage_service {

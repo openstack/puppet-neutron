@@ -301,7 +301,7 @@ class neutron::server (
   }
 
   if $ensure_vpnaas_package {
-    ensure_resource( 'package', 'neutron-vpnaas-agent', {
+    ensure_packages( 'neutron-vpnaas-agent', {
       'ensure' => $package_ensure,
       'name'   => $::neutron::params::vpnaas_agent_package,
       'tag'    => ['openstack', 'neutron-package'],
@@ -309,22 +309,11 @@ class neutron::server (
   }
 
   if $ensure_dr_package {
-    if $::neutron::params::dynamic_routing_package {
-      ensure_packages('neutron-dynamic-routing', {
-        ensure => $package_ensure,
-        name   => $::neutron::params::dynamic_routing_package,
-        tag    => ['openstack', 'neutron-package'],
-      })
-    } elsif $::neutron::params::bgp_dragent_package {
-      # RedHat package doesn't ship dynamic-routing package separately
-      # so we install the agent, it's fine because RedHat based doesn't
-      # start services automatically like Debian based.
-      ensure_packages('neutron-bgp-dragent', {
-        ensure => $package_ensure,
-        name   => $::neutron::params::bgp_dragent_package,
-        tag    => ['openstack', 'neutron-package'],
-      })
-    }
+    ensure_packages('neutron-dynamic-routing', {
+      ensure => $package_ensure,
+      name   => $::neutron::params::dynamic_routing_package,
+      tag    => ['openstack', 'neutron-package'],
+    })
   }
 
   if $sync_db {

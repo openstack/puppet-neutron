@@ -1,0 +1,6 @@
+---
+features:
+   - |
+     Added support for the `[ovn] localnet_learn_fdb` parameter of ovn
+     mechanism driver. See https://bugs.launchpad.net/neutron/+bug/2012069
+     and the linked neutron change for further details.

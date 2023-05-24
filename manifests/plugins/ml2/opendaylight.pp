@@ -1,4 +1,5 @@
 #
+# DEPRECATED !!
 # Install the OpenDaylight and generate config file
 # from parameters in the other classes.
 #
@@ -50,6 +51,8 @@ class neutron::plugins::ml2::opendaylight (
   include neutron::deps
   include neutron::params
   require neutron::plugins::ml2
+
+  warning('Support for networking-odl has been deprecated.')
 
   package { 'python-networking-odl':
     ensure => $package_ensure,

@@ -1,4 +1,5 @@
 #
+# DEPRECATED !!
 # Configure OVS to use OpenDaylight
 #
 # === Parameters
@@ -120,6 +121,8 @@ class neutron::plugins::ovs::opendaylight (
   validate_legacy(Boolean, 'validate_bool', $enable_ipv6)
 
   include neutron::deps
+
+  warning('Support for networking-odl has been deprecated.')
 
   # Handle the case where ODL controller is also on this host
   Service<| title == 'opendaylight' |> -> Exec <| title == 'Wait for NetVirt OVSDB to come up' |>

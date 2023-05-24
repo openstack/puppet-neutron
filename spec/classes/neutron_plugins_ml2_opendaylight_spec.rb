@@ -36,8 +36,9 @@ describe 'neutron::plugins::ml2::opendaylight' do
     it 'should have' do
       should contain_package('python-networking-odl').with(
         :ensure => params[:package_ensure],
+        :name   => 'python3-networking-odl',
         :tag    => ['openstack', 'neutron-plugin-ml2-package']
-        )
+      )
     end
 
     it 'configures ml2_odl settings' do

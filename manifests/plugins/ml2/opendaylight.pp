@@ -48,14 +48,14 @@ class neutron::plugins::ml2::opendaylight (
 ) {
 
   include neutron::deps
+  include neutron::params
   require neutron::plugins::ml2
 
-  ensure_resource('package', 'python-networking-odl',
-    {
-      ensure => $package_ensure,
-      tag    => ['openstack', 'neutron-plugin-ml2-package']
-    }
-  )
+  package { 'python-networking-odl':
+    ensure => $package_ensure,
+    name   => $::neutron::params::odl_plugin_package,
+    tag    => ['openstack', 'neutron-plugin-ml2-package']
+  }
 
   neutron_plugin_ml2 {
     'ml2_odl/username':                value => $odl_username;

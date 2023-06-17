@@ -20,9 +20,8 @@
 #  Defaults to []
 #
 class neutron::plugins::ml2::sriov_driver (
-  $vnic_type_prohibit_list = [],
+  Array $vnic_type_prohibit_list = [],
 ){
-  validate_legacy(Array, 'validate_array', $vnic_type_prohibit_list)
   if !empty($vnic_type_prohibit_list) {
     neutron_plugin_ml2 {
       'sriov_driver/vnic_type_prohibit_list': value => join(any2array($vnic_type_prohibit_list), ',');

@@ -46,16 +46,13 @@
 #   Defaults to false
 #
 class neutron::agents::bgp_dragent(
-  $package_ensure     = 'present',
-  $enabled            = true,
-  $manage_service     = true,
-  $bgp_speaker_driver = 'neutron_dynamic_routing.services.bgp.agent.driver.os_ken.driver.OsKenBgpDriver',
-  $bgp_router_id      = $facts['networking']['ip'],
-  $purge_config       = false,
+  $package_ensure         = 'present',
+  Boolean $enabled        = true,
+  Boolean $manage_service = true,
+  $bgp_speaker_driver     = 'neutron_dynamic_routing.services.bgp.agent.driver.os_ken.driver.OsKenBgpDriver',
+  $bgp_router_id          = $facts['networking']['ip'],
+  $purge_config           = false,
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

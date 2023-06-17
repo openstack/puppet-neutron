@@ -32,17 +32,13 @@
 #   Defaults to false.
 #
 class neutron::agents::ml2::macvtap (
-  $package_ensure              = 'present',
-  $enabled                     = true,
-  $manage_service              = true,
-  $polling_interval            = $facts['os_service_default'],
-  $physical_interface_mappings = [],
-  $purge_config                = false,
+  $package_ensure                      = 'present',
+  Boolean $enabled                     = true,
+  Boolean $manage_service              = true,
+  $polling_interval                    = $facts['os_service_default'],
+  Array   $physical_interface_mappings = [],
+  $purge_config                        = false,
 ) {
-
-  validate_legacy(Array, 'validate_array', $physical_interface_mappings)
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

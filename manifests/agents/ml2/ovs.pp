@@ -261,8 +261,8 @@
 #
 class neutron::agents::ml2::ovs (
   $package_ensure                       = 'present',
-  $enabled                              = true,
-  $manage_service                       = true,
+  Boolean $enabled                      = true,
+  Boolean $manage_service               = true,
   $extensions                           = $facts['os_service_default'],
   $bridge_uplinks                       = [],
   $bridge_mappings                      = [],
@@ -273,7 +273,7 @@ class neutron::agents::ml2::ovs (
   $of_request_timeout                   = $facts['os_service_default'],
   $of_inactivity_probe                  = $facts['os_service_default'],
   $integration_bridge                   = $facts['os_service_default'],
-  $tunnel_types                         = [],
+  Array $tunnel_types                   = [],
   $local_ip                             = false,
   $tunnel_bridge                        = $facts['os_service_default'],
   $vxlan_udp_port                       = $facts['os_service_default'],
@@ -285,13 +285,13 @@ class neutron::agents::ml2::ovs (
   $firewall_driver                      = 'iptables_hybrid',
   $enable_distributed_routing           = $facts['os_service_default'],
   $drop_flows_on_start                  = $facts['os_service_default'],
-  $manage_vswitch                       = true,
+  Boolean $manage_vswitch               = true,
   $int_peer_patch_port                  = $facts['os_service_default'],
   $tun_peer_patch_port                  = $facts['os_service_default'],
   $datapath_type                        = $facts['os_service_default'],
   $vhostuser_socket_dir                 = $facts['os_service_default'],
   $purge_config                         = false,
-  $enable_dpdk                          = false,
+  Boolean $enable_dpdk                  = false,
   $enable_security_group                = $facts['os_service_default'],
   $permitted_ethertypes                 = $facts['os_service_default'],
   $minimize_polling                     = $facts['os_service_default'],
@@ -313,11 +313,6 @@ class neutron::agents::ml2::ovs (
   $network_log_burst_limit              = $facts['os_service_default'],
   $network_log_local_output_log_base    = $facts['os_service_default'],
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $manage_vswitch)
-  validate_legacy(Boolean, 'validate_bool', $enable_dpdk)
 
   include neutron::deps
   include neutron::params
@@ -342,7 +337,6 @@ class neutron::agents::ml2::ovs (
     }
   }
 
-  validate_legacy(Array, 'validate_array', $tunnel_types)
   if size($tunnel_types) > 0 {
     $enable_tunneling = true
   } else {

@@ -93,29 +93,29 @@
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class neutron::config (
-  $server_config                 = {},
-  $api_paste_ini                 = {},
-  $ovs_agent_config              = {},
-  $ovn_agent_config              = {},
-  $sriov_agent_config            = {},
-  $macvtap_agent_config          = {},
-  $bgpvpn_bagpipe_config         = {},
-  $bgpvpn_service_config         = {},
-  $l2gw_agent_config             = {},
-  $l2gw_service_config           = {},
-  $sfc_service_config            = {},
-  $l3_agent_config               = {},
-  $dhcp_agent_config             = {},
-  $metadata_agent_config         = {},
-  $ovn_metadata_agent_config     = {},
-  $metering_agent_config         = {},
-  $vpnaas_agent_config           = {},
-  $bgp_dragent_config            = {},
-  $plugin_opencontrail_config    = {},
-  $plugin_nuage_config           = {},
-  $plugin_ml2_config             = {},
+  Hash $server_config                 = {},
+  Hash $api_paste_ini                 = {},
+  Hash $ovs_agent_config              = {},
+  Hash $ovn_agent_config              = {},
+  Hash $sriov_agent_config            = {},
+  Hash $macvtap_agent_config          = {},
+  Hash $bgpvpn_bagpipe_config         = {},
+  Hash $bgpvpn_service_config         = {},
+  Hash $l2gw_agent_config             = {},
+  Hash $l2gw_service_config           = {},
+  Hash $sfc_service_config            = {},
+  Hash $l3_agent_config               = {},
+  Hash $dhcp_agent_config             = {},
+  Hash $metadata_agent_config         = {},
+  Hash $ovn_metadata_agent_config     = {},
+  Hash $metering_agent_config         = {},
+  Hash $vpnaas_agent_config           = {},
+  Hash $bgp_dragent_config            = {},
+  Hash $plugin_opencontrail_config    = {},
+  Hash $plugin_nuage_config           = {},
+  Hash $plugin_ml2_config             = {},
   # DEPRECATED PARAMETERS
-  $linuxbridge_agent_config      = undef,
+  Optional[Hash] $linuxbridge_agent_config      = undef,
 ) {
 
   include neutron::deps
@@ -126,29 +126,6 @@ class neutron::config (
   } else {
     $linuxbridge_agent_config_real = {}
   }
-
-  validate_legacy(Hash, 'validate_hash', $server_config)
-  validate_legacy(Hash, 'validate_hash', $api_paste_ini)
-  validate_legacy(Hash, 'validate_hash', $ovs_agent_config)
-  validate_legacy(Hash, 'validate_hash', $ovn_agent_config)
-  validate_legacy(Hash, 'validate_hash', $sriov_agent_config)
-  validate_legacy(Hash, 'validate_hash', $linuxbridge_agent_config_real)
-  validate_legacy(Hash, 'validate_hash', $macvtap_agent_config)
-  validate_legacy(Hash, 'validate_hash', $bgpvpn_bagpipe_config)
-  validate_legacy(Hash, 'validate_hash', $bgpvpn_service_config)
-  validate_legacy(Hash, 'validate_hash', $l2gw_agent_config)
-  validate_legacy(Hash, 'validate_hash', $l2gw_service_config)
-  validate_legacy(Hash, 'validate_hash', $sfc_service_config)
-  validate_legacy(Hash, 'validate_hash', $l3_agent_config)
-  validate_legacy(Hash, 'validate_hash', $dhcp_agent_config)
-  validate_legacy(Hash, 'validate_hash', $metadata_agent_config)
-  validate_legacy(Hash, 'validate_hash', $ovn_metadata_agent_config)
-  validate_legacy(Hash, 'validate_hash', $metering_agent_config)
-  validate_legacy(Hash, 'validate_hash', $vpnaas_agent_config)
-  validate_legacy(Hash, 'validate_hash', $bgp_dragent_config)
-  validate_legacy(Hash, 'validate_hash', $plugin_opencontrail_config)
-  validate_legacy(Hash, 'validate_hash', $plugin_nuage_config)
-  validate_legacy(Hash, 'validate_hash', $plugin_ml2_config)
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_paste_ini', $api_paste_ini)

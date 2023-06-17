@@ -99,8 +99,8 @@
 #
 class neutron::agents::ml2::sriov (
   $package_ensure                       = 'present',
-  $enabled                              = true,
-  $manage_service                       = true,
+  Boolean $enabled                      = true,
+  Boolean $manage_service               = true,
   $physical_device_mappings             = $facts['os_service_default'],
   $rpc_response_max_timeout             = $facts['os_service_default'],
   $polling_interval                     = 2,
@@ -114,9 +114,6 @@ class neutron::agents::ml2::sriov (
   $resource_provider_default_hypervisor = $facts['os_service_default'],
   $resource_provider_inventory_defaults = {},
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

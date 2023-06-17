@@ -124,8 +124,8 @@
 #
 class neutron::agents::l3 (
   $package_ensure                    = 'present',
-  $enabled                           = true,
-  $manage_service                    = true,
+  Boolean $enabled                   = true,
+  Boolean $manage_service            = true,
   $debug                             = $facts['os_service_default'],
   $interface_driver                  = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $handle_internal_only_routers      = $facts['os_service_default'],
@@ -133,7 +133,7 @@ class neutron::agents::l3 (
   $periodic_interval                 = $facts['os_service_default'],
   $periodic_fuzzy_delay              = $facts['os_service_default'],
   $enable_metadata_proxy             = $facts['os_service_default'],
-  $ha_enabled                        = false,
+  Boolean $ha_enabled                = false,
   $ha_vrrp_auth_type                 = 'PASS',
   $ha_vrrp_auth_password             = $facts['os_service_default'],
   $ha_vrrp_advert_int                = '3',
@@ -149,10 +149,6 @@ class neutron::agents::l3 (
   $network_log_burst_limit           = $facts['os_service_default'],
   $network_log_local_output_log_base = $facts['os_service_default'],
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $ha_enabled)
 
   include neutron::deps
   include neutron::params

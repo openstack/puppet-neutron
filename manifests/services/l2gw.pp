@@ -48,12 +48,10 @@ class neutron::services::l2gw (
   $quota_l2_gateway             = $facts['os_service_default'],
   $periodic_monitoring_interval = $facts['os_service_default'],
   $service_providers            = $facts['os_service_default'],
-  $sync_db                      = false,
+  Boolean $sync_db              = false,
   $package_ensure               = 'present',
   $purge_config                 = false,
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $sync_db)
 
   include neutron::deps
   include neutron::params

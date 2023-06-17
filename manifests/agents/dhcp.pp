@@ -126,44 +126,38 @@
 #   Defaults to $facts['os_service_default']
 #
 class neutron::agents::dhcp (
-  $package_ensure            = present,
-  $enabled                   = true,
-  $manage_service            = true,
-  $debug                     = $facts['os_service_default'],
-  $state_path                = '/var/lib/neutron',
-  $resync_interval           = $facts['os_service_default'],
-  $interface_driver          = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $dhcp_driver               = $facts['os_service_default'],
-  $root_helper               = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
-  $dnsmasq_config_file       = $facts['os_service_default'],
-  $dnsmasq_dns_servers       = $facts['os_service_default'],
-  $dnsmasq_base_log_dir      = $facts['os_service_default'],
-  $dnsmasq_local_resolv      = $facts['os_service_default'],
-  $dnsmasq_lease_max         = $facts['os_service_default'],
-  $dnsmasq_enable_addr6_list = $facts['os_service_default'],
-  $enable_isolated_metadata  = false,
-  $enable_force_metadata     = false,
-  $enable_metadata_network   = false,
-  $dhcp_broadcast_reply      = $facts['os_service_default'],
-  $purge_config              = false,
-  $availability_zone         = $facts['os_service_default'],
-  $ovs_integration_bridge    = $facts['os_service_default'],
-  $ovsdb_connection          = $facts['os_service_default'],
-  $ovsdb_agent_ssl_key_file  = $facts['os_service_default'],
-  $ovsdb_agent_ssl_cert_file = $facts['os_service_default'],
-  $ovsdb_agent_ssl_ca_file   = $facts['os_service_default'],
-  $report_interval           = $facts['os_service_default'],
-  $rpc_response_max_timeout  = $facts['os_service_default'],
+  $package_ensure                   = present,
+  Boolean $enabled                  = true,
+  Boolean $manage_service           = true,
+  $debug                            = $facts['os_service_default'],
+  $state_path                       = '/var/lib/neutron',
+  $resync_interval                  = $facts['os_service_default'],
+  $interface_driver                 = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $dhcp_driver                      = $facts['os_service_default'],
+  $root_helper                      = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
+  $dnsmasq_config_file              = $facts['os_service_default'],
+  $dnsmasq_dns_servers              = $facts['os_service_default'],
+  $dnsmasq_base_log_dir             = $facts['os_service_default'],
+  $dnsmasq_local_resolv             = $facts['os_service_default'],
+  $dnsmasq_lease_max                = $facts['os_service_default'],
+  $dnsmasq_enable_addr6_list        = $facts['os_service_default'],
+  Boolean $enable_isolated_metadata = false,
+  Boolean $enable_force_metadata    = false,
+  Boolean $enable_metadata_network  = false,
+  $dhcp_broadcast_reply             = $facts['os_service_default'],
+  $purge_config                     = false,
+  $availability_zone                = $facts['os_service_default'],
+  $ovs_integration_bridge           = $facts['os_service_default'],
+  $ovsdb_connection                 = $facts['os_service_default'],
+  $ovsdb_agent_ssl_key_file         = $facts['os_service_default'],
+  $ovsdb_agent_ssl_cert_file        = $facts['os_service_default'],
+  $ovsdb_agent_ssl_ca_file          = $facts['os_service_default'],
+  $report_interval                  = $facts['os_service_default'],
+  $rpc_response_max_timeout         = $facts['os_service_default'],
 ) {
 
   include neutron::deps
   include neutron::params
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $enable_isolated_metadata)
-  validate_legacy(Boolean, 'validate_bool', $enable_force_metadata)
-  validate_legacy(Boolean, 'validate_bool', $enable_metadata_network)
 
   if (! ($enable_isolated_metadata or $enable_force_metadata)) and $enable_metadata_network {
     fail('enable_metadata_network to true requires enable_isolated_metadata or enable_force_metadata also enabled.')

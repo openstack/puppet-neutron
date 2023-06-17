@@ -83,9 +83,9 @@ class neutron::agents::bagpipe (
   $api_host                = $facts['os_service_default'],
   $api_port                = $facts['os_service_default'],
   $dataplane_driver_ipvpn  = 'ovs',
-  $enabled                 = true,
+  Boolean $enabled         = true,
   $enable_rtc              = $facts['os_service_default'],
-  $manage_service          = true,
+  Boolean $manage_service  = true,
   $mpls_interface          = $facts['os_service_default'],
   $ovs_bridge              = $facts['os_service_default'],
   $package_ensure          = 'present',
@@ -94,9 +94,6 @@ class neutron::agents::bagpipe (
   $purge_config            = false,
   $local_address           = $facts['networking']['ip'],
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

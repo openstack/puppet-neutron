@@ -121,8 +121,8 @@
 class neutron::agents::ovn_metadata (
   $shared_secret,
   $package_ensure            = 'present',
-  $enabled                   = true,
-  $manage_service            = true,
+  Boolean $enabled           = true,
+  Boolean $manage_service    = true,
   $debug                     = $facts['os_service_default'],
   $auth_ca_cert              = $facts['os_service_default'],
   $metadata_host             = $facts['os_service_default'],
@@ -147,9 +147,6 @@ class neutron::agents::ovn_metadata (
   $state_path                = '/var/lib/neutron',
   $purge_config              = false,
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

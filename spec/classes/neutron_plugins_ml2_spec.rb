@@ -38,7 +38,6 @@ describe 'neutron::plugins::ml2' do
       :vxlan_group           => '224.0.0.1',
       :vni_ranges            => '10:100',
       :path_mtu              => '0',
-      :physical_network_mtus => '',
       :package_ensure        => 'present',
       :purge_config          => false,
     }
@@ -71,7 +70,7 @@ describe 'neutron::plugins::ml2' do
       should contain_neutron_plugin_ml2('ml2/mechanism_drivers').with_value(p[:mechanism_drivers].join(','))
       should contain_neutron_plugin_ml2('ml2/extension_drivers').with_value('<SERVICE DEFAULT>')
       should contain_neutron_plugin_ml2('ml2/path_mtu').with_value(p[:path_mtu])
-      should contain_neutron_plugin_ml2('ml2/physical_network_mtus').with_ensure('absent')
+      should contain_neutron_plugin_ml2('ml2/physical_network_mtus').with_value('<SERVICE DEFAULT>')
       should contain_neutron_plugin_ml2('ml2/overlay_ip_version').with_value('<SERVICE DEFAULT>')
       should contain_neutron_plugin_ml2('securitygroup/enable_security_group').with_value('<SERVICE DEFAULT>')
     end

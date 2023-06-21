@@ -204,6 +204,7 @@ class neutron::plugins::ml2 (
   }
 
   neutron_plugin_ml2 {
+    'ml2/physical_network_mtus':            value => join(any2array($physical_network_mtus), ',');
     'ml2/type_drivers':                     value => join(any2array($type_drivers), ',');
     'ml2/tenant_network_types':             value => join(any2array($tenant_network_types), ',');
     'ml2/mechanism_drivers':                value => join(any2array($mechanism_drivers), ',');
@@ -211,16 +212,5 @@ class neutron::plugins::ml2 (
     'ml2/extension_drivers':                value => join(any2array($extension_drivers), ',');
     'ml2/overlay_ip_version':               value => $overlay_ip_version;
     'securitygroup/enable_security_group':  value => $enable_security_group;
-  }
-
-  if is_service_default($physical_network_mtus) {
-    neutron_plugin_ml2 {
-      'ml2/physical_network_mtus': ensure => absent;
-    }
-  } else {
-    validate_legacy(Array, 'validate_array', $physical_network_mtus)
-    neutron_plugin_ml2 {
-      'ml2/physical_network_mtus': value => join($physical_network_mtus, ',');
-    }
   }
 }

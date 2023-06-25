@@ -62,7 +62,7 @@ class neutron::deps {
 
   # policy config should occur in the config block also.
   Anchor['neutron::config::begin']
-  -> Openstacklib::Policy<||>
+  -> Openstacklib::Policy<| tag == 'neutron' |>
   ~> Anchor['neutron::config::end']
 
   # Support packages need to be installed in the install phase, but we don't

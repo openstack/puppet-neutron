@@ -62,6 +62,7 @@ class neutron::policy (
     file_group   => $::neutron::params::group,
     file_format  => 'yaml',
     purge_config => $purge_config,
+    tag          => 'neutron',
   }
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })

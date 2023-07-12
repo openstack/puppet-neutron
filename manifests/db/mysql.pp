@@ -31,7 +31,7 @@
 #   Defaults to 'utf8_general_ci'
 #
 class neutron::db::mysql (
-  $password,
+  String[1] $password,
   $dbname        = 'neutron',
   $user          = 'neutron',
   $host          = '127.0.0.1',
@@ -41,8 +41,6 @@ class neutron::db::mysql (
 ) {
 
   include neutron::deps
-
-  validate_legacy(String, 'validate_string', $password)
 
   ::openstacklib::db::mysql { 'neutron':
     user          => $user,

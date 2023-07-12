@@ -102,8 +102,8 @@
 #
 class neutron::agents::ml2::networking_baremetal (
   $password,
-  $enabled                 = true,
-  $manage_service          = true,
+  Boolean $enabled         = true,
+  Boolean $manage_service  = true,
   $package_ensure          = 'present',
   $endpoint_override       = $facts['os_service_default'],
   $cafile                  = $facts['os_service_default'],
@@ -124,9 +124,6 @@ class neutron::agents::ml2::networking_baremetal (
   $purge_config            = false,
   $report_interval         = $facts['os_service_default'],
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

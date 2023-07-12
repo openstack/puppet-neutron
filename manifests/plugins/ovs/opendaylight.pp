@@ -96,29 +96,24 @@ class neutron::plugins::ovs::opendaylight (
   $tunnel_ip,
   $odl_username,
   $odl_password,
-  $odl_check_url         = 'http://127.0.0.1:8080/restconf/operational/network-topology:network-topology/topology/netvirt:1',
-  $odl_ovsdb_iface       = 'tcp:127.0.0.1:6640',
-  $ovsdb_server_iface    = 'ptcp:6639:127.0.0.1',
-  $provider_mappings     = [],
-  $retry_interval        = 60,
-  $retry_count           = 20,
-  $host_id               = $fqdn,
-  $allowed_network_types = ['local', 'flat', 'vlan', 'vxlan', 'gre'],
-  $enable_dpdk           = false,
-  $vhostuser_socket_dir  = '/var/run/openvswitch',
-  $vhostuser_mode        = 'server',
-  $enable_hw_offload     = false,
-  $enable_tls            = false,
-  $tls_key_file          = undef,
-  $tls_cert_file         = undef,
-  $tls_ca_cert_file      = undef,
-  $enable_ipv6           = false,
+  $odl_check_url             = 'http://127.0.0.1:8080/restconf/operational/network-topology:network-topology/topology/netvirt:1',
+  $odl_ovsdb_iface           = 'tcp:127.0.0.1:6640',
+  $ovsdb_server_iface        = 'ptcp:6639:127.0.0.1',
+  $provider_mappings         = [],
+  $retry_interval            = 60,
+  $retry_count               = 20,
+  $host_id                   = $fqdn,
+  $allowed_network_types     = ['local', 'flat', 'vlan', 'vxlan', 'gre'],
+  Boolean $enable_dpdk       = false,
+  $vhostuser_socket_dir      = '/var/run/openvswitch',
+  $vhostuser_mode            = 'server',
+  Boolean $enable_hw_offload = false,
+  Boolean $enable_tls        = false,
+  $tls_key_file              = undef,
+  $tls_cert_file             = undef,
+  $tls_ca_cert_file          = undef,
+  Boolean $enable_ipv6       = false,
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $enable_tls)
-  validate_legacy(Boolean, 'validate_bool', $enable_hw_offload)
-  validate_legacy(Boolean, 'validate_bool', $enable_dpdk)
-  validate_legacy(Boolean, 'validate_bool', $enable_ipv6)
 
   include neutron::deps
 

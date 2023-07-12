@@ -71,8 +71,8 @@
 #
 class neutron::agents::l2gw (
   $package_ensure                   = 'present',
-  $enabled                          = true,
-  $manage_service                   = true,
+  Boolean $enabled                  = true,
+  Boolean $manage_service           = true,
   $debug                            = $facts['os_service_default'],
   $ovsdb_hosts                      = $facts['os_service_default'],
   $enable_manager                   = false,
@@ -85,9 +85,6 @@ class neutron::agents::l2gw (
   $socket_timeout                   = '30',
   $purge_config                     = false,
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

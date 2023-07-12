@@ -73,28 +73,22 @@
 #   Defaults to false.
 #
 class neutron::agents::ml2::linuxbridge (
-  $package_ensure              = 'present',
-  $enabled                     = true,
-  $manage_service              = true,
-  $tunnel_types                = [],
-  $local_ip                    = false,
-  $vxlan_group                 = $facts['os_service_default'],
-  $vxlan_ttl                   = $facts['os_service_default'],
-  $vxlan_tos                   = $facts['os_service_default'],
-  $polling_interval            = $facts['os_service_default'],
-  $rpc_response_max_timeout    = $facts['os_service_default'],
-  $l2_population               = $facts['os_service_default'],
-  $physical_interface_mappings = [],
-  $bridge_mappings             = [],
-  $firewall_driver             = 'iptables',
-  $purge_config                = false,
+  $package_ensure                    = 'present',
+  Boolean $enabled                   = true,
+  Boolean $manage_service            = true,
+  Array $tunnel_types                = [],
+  $local_ip                          = false,
+  $vxlan_group                       = $facts['os_service_default'],
+  $vxlan_ttl                         = $facts['os_service_default'],
+  $vxlan_tos                         = $facts['os_service_default'],
+  $polling_interval                  = $facts['os_service_default'],
+  $rpc_response_max_timeout          = $facts['os_service_default'],
+  $l2_population                     = $facts['os_service_default'],
+  Array $physical_interface_mappings = [],
+  Array $bridge_mappings             = [],
+  $firewall_driver                   = 'iptables',
+  $purge_config                      = false,
 ) {
-
-  validate_legacy(Array, 'validate_array', $tunnel_types)
-  validate_legacy(Array, 'validate_array', $physical_interface_mappings)
-  validate_legacy(Array, 'validate_array', $bridge_mappings)
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

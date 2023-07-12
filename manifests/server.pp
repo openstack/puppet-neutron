@@ -237,15 +237,15 @@
 #
 class neutron::server (
   $package_ensure                   = 'present',
-  $enabled                          = true,
-  $manage_service                   = true,
+  Boolean $enabled                  = true,
+  Boolean $manage_service           = true,
   $service_name                     = $::neutron::params::server_service,
   $server_package                   = $::neutron::params::server_package,
   $api_package_name                 = $::neutron::params::api_package_name,
   $api_service_name                 = $::neutron::params::api_service_name,
   $rpc_package_name                 = $::neutron::params::rpc_package_name,
   $rpc_service_name                 = $::neutron::params::rpc_service_name,
-  $sync_db                          = false,
+  Boolean $sync_db                  = false,
   $api_workers                      = $facts['os_workers'],
   $rpc_workers                      = $facts['os_workers'],
   $rpc_state_report_workers         = $facts['os_service_default'],
@@ -266,8 +266,8 @@ class neutron::server (
   $l3_ha_network_type               = $facts['os_service_default'],
   $l3_ha_network_physical_name      = $facts['os_service_default'],
   $network_auto_schedule            = $facts['os_service_default'],
-  $ensure_vpnaas_package            = false,
-  $ensure_dr_package                = false,
+  Boolean $ensure_vpnaas_package    = false,
+  Boolean $ensure_dr_package        = false,
   $vpnaas_agent_package             = false,
   $service_providers                = $facts['os_service_default'],
   $auth_strategy                    = 'keystone',
@@ -276,12 +276,6 @@ class neutron::server (
   $ovs_integration_bridge           = $facts['os_service_default'],
   $igmp_snooping_enable             = $facts['os_service_default'],
 ) inherits neutron::params {
-
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $sync_db)
-  validate_legacy(Boolean, 'validate_bool', $ensure_vpnaas_package)
-  validate_legacy(Boolean, 'validate_bool', $ensure_dr_package)
 
   include neutron::deps
   include neutron::db

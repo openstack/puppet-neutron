@@ -76,8 +76,8 @@
 class neutron::agents::metadata (
   $shared_secret,
   $package_ensure            = 'present',
-  $enabled                   = true,
-  $manage_service            = true,
+  Boolean $enabled           = true,
+  Boolean $manage_service    = true,
   $debug                     = $facts['os_service_default'],
   $auth_ca_cert              = $facts['os_service_default'],
   $metadata_host             = $facts['os_service_default'],
@@ -93,9 +93,6 @@ class neutron::agents::metadata (
   $rpc_response_max_timeout  = $facts['os_service_default'],
   $purge_config              = false,
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

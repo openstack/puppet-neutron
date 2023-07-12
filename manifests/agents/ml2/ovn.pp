@@ -102,8 +102,8 @@
 #
 class neutron::agents::ml2::ovn (
   $package_ensure           = 'present',
-  $enabled                  = true,
-  $manage_service           = true,
+  Boolean $enabled          = true,
+  Boolean $manage_service   = true,
   $debug                    = $facts['os_service_default'],
   $ovsdb_connection         = 'tcp:127.0.0.1:6640',
   $ovs_manager              = 'ptcp:6640:127.0.0.1',
@@ -124,9 +124,6 @@ class neutron::agents::ml2::ovn (
   $state_path               = '/var/lib/neutron',
   $purge_config             = false,
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   include neutron::deps
   include neutron::params

@@ -46,11 +46,9 @@ class neutron::services::sfc (
   $package_ensure    = 'present',
   $sfc_driver        = $facts['os_service_default'],
   $fc_driver         = $facts['os_service_default'],
-  $sync_db           = false,
+  Boolean $sync_db   = false,
   $purge_config      = false,
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $sync_db)
 
   include neutron::deps
   include neutron::params

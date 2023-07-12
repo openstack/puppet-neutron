@@ -53,20 +53,16 @@
 #   Defaults to false
 #
 class neutron::agents::ml2::mlnx (
-  $package_ensure             = 'present',
-  $enabled                    = true,
-  $manage_service             = true,
-  $manage_package             = true,
+  $package_ensure                                  = 'present',
+  Boolean $enabled                                 = true,
+  Boolean $manage_service                          = true,
+  Boolean $manage_package                          = true,
   $physical_interface_mappings                     = $facts['os_service_default'],
   $polling_interval                                = $facts['os_service_default'],
   $multi_interface_driver_mappings                 = $facts['os_service_default'],
   $ipoib_physical_interface                        = $facts['os_service_default'],
   $enable_multi_interface_driver_cache_maintenance = false,
 ) {
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $manage_package)
 
   include neutron::deps
   include neutron::params

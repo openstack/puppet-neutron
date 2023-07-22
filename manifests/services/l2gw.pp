@@ -50,7 +50,7 @@ class neutron::services::l2gw (
   $service_providers            = $facts['os_service_default'],
   Boolean $sync_db              = false,
   $package_ensure               = 'present',
-  $purge_config                 = false,
+  Boolean $purge_config         = false,
 ) {
 
   include neutron::deps

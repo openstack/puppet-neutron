@@ -121,7 +121,7 @@ class neutron::agents::ml2::networking_baremetal (
   $status_code_retry_delay = $facts['os_service_default'],
   $status_code_retries     = $facts['os_service_default'],
   $valid_interfaces        = $facts['os_service_default'],
-  $purge_config            = false,
+  Boolean $purge_config    = false,
   $report_interval         = $facts['os_service_default'],
 ) {
 

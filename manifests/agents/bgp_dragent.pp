@@ -51,7 +51,7 @@ class neutron::agents::bgp_dragent(
   Boolean $manage_service = true,
   $bgp_speaker_driver     = 'neutron_dynamic_routing.services.bgp.agent.driver.os_ken.driver.OsKenBgpDriver',
   $bgp_router_id          = $facts['networking']['ip'],
-  $purge_config           = false,
+  Boolean $purge_config   = false,
 ) {
 
   include neutron::deps

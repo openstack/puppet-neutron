@@ -122,7 +122,7 @@ class neutron::agents::ml2::ovn (
   $root_helper              = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $root_helper_daemon       = $facts['os_service_default'],
   $state_path               = '/var/lib/neutron',
-  $purge_config             = false,
+  Boolean $purge_config     = false,
 ) {
 
   include neutron::deps

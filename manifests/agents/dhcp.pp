@@ -145,7 +145,7 @@ class neutron::agents::dhcp (
   Boolean $enable_force_metadata    = false,
   Boolean $enable_metadata_network  = false,
   $dhcp_broadcast_reply             = $facts['os_service_default'],
-  $purge_config                     = false,
+  Boolean $purge_config             = false,
   $availability_zone                = $facts['os_service_default'],
   $ovs_integration_bridge           = $facts['os_service_default'],
   $ovsdb_connection                 = $facts['os_service_default'],

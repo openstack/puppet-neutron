@@ -87,7 +87,7 @@ class neutron::agents::ml2::linuxbridge (
   Array $physical_interface_mappings = [],
   Array $bridge_mappings             = [],
   $firewall_driver                   = 'iptables',
-  $purge_config                      = false,
+  Boolean $purge_config              = false,
 ) {
 
   include neutron::deps

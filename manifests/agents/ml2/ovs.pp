@@ -290,7 +290,7 @@ class neutron::agents::ml2::ovs (
   $tun_peer_patch_port                  = $facts['os_service_default'],
   $datapath_type                        = $facts['os_service_default'],
   $vhostuser_socket_dir                 = $facts['os_service_default'],
-  $purge_config                         = false,
+  Boolean $purge_config                 = false,
   Boolean $enable_dpdk                  = false,
   $enable_security_group                = $facts['os_service_default'],
   $permitted_ethertypes                 = $facts['os_service_default'],

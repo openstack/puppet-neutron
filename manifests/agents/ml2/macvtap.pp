@@ -37,7 +37,7 @@ class neutron::agents::ml2::macvtap (
   Boolean $manage_service              = true,
   $polling_interval                    = $facts['os_service_default'],
   Array   $physical_interface_mappings = [],
-  $purge_config                        = false,
+  Boolean $purge_config                = false,
 ) {
 
   include neutron::deps

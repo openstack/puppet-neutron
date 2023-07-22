@@ -91,7 +91,7 @@ class neutron::agents::bagpipe (
   $package_ensure          = 'present',
   $peers                   = $facts['os_service_default'],
   $proxy_arp               = false,
-  $purge_config            = false,
+  Boolean $purge_config    = false,
   $local_address           = $facts['networking']['ip'],
 ) {
 

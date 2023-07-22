@@ -107,7 +107,7 @@ class neutron::agents::ml2::sriov (
   $report_interval                      = $facts['os_service_default'],
   $exclude_devices                      = $facts['os_service_default'],
   $extensions                           = $facts['os_service_default'],
-  $purge_config                         = false,
+  Boolean $purge_config                 = false,
   $number_of_vfs                        = $facts['os_service_default'],
   $resource_provider_bandwidths         = [],
   $resource_provider_hypervisors        = [],

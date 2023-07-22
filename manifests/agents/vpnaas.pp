@@ -44,7 +44,7 @@ class neutron::agents::vpnaas (
   $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $ipsec_status_check_interval = $facts['os_service_default'],
-  $purge_config                = false,
+  Boolean $purge_config        = false,
 ) {
 
   include neutron::deps

@@ -53,7 +53,7 @@ class neutron::plugins::ml2::nuage (
   $nuage_cms_id,
   $nuage_auth_resource        = '/me',
   $nuage_server_ssl           = true,
-  $purge_config               = false,
+  Boolean $purge_config       = false,
   $nuage_default_allow_non_ip = false,
 ) {
 

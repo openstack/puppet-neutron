@@ -83,7 +83,7 @@ class neutron::agents::l2gw (
   $periodic_interval                = $facts['os_service_default'],
   $max_connection_retries           = $facts['os_service_default'],
   $socket_timeout                   = '30',
-  $purge_config                     = false,
+  Boolean $purge_config             = false,
 ) {
 
   include neutron::deps

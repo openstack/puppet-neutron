@@ -137,7 +137,7 @@ class neutron::plugins::ml2 (
   $package_ensure            = 'present',
   $physical_network_mtus     = $facts['os_service_default'],
   $path_mtu                  = 0,
-  $purge_config              = false,
+  Boolean $purge_config      = false,
   $max_header_size           = $facts['os_service_default'],
   $overlay_ip_version        = $facts['os_service_default'],
 ) {

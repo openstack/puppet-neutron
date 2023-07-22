@@ -138,7 +138,7 @@ class neutron::agents::l3 (
   $ha_vrrp_auth_password             = $facts['os_service_default'],
   $ha_vrrp_advert_int                = '3',
   $agent_mode                        = 'legacy',
-  $purge_config                      = false,
+  Boolean $purge_config              = false,
   $availability_zone                 = $facts['os_service_default'],
   $extensions                        = $facts['os_service_default'],
   $report_interval                   = $facts['os_service_default'],

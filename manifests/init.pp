@@ -369,7 +369,7 @@ class neutron (
   $ca_file                              = $facts['os_service_default'],
   $state_path                           = $facts['os_service_default'],
   $lock_path                            = '$state_path/lock',
-  $purge_config                         = false,
+  Boolean $purge_config                 = false,
   $notification_driver                  = $facts['os_service_default'],
   $notification_topics                  = $facts['os_service_default'],
   $notification_transport_url           = $facts['os_service_default'],

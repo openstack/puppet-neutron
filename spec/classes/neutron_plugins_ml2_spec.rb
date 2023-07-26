@@ -278,52 +278,6 @@ describe 'neutron::plugins::ml2' do
     end
   end
 
-  shared_examples 'neutron plugin ml2 on Debian' do
-    context 'on Ubuntu operating systems' do
-      it 'configures /etc/default/neutron-server' do
-        should contain_file('/etc/default/neutron-server').with(
-          :ensure => 'present',
-          :owner  => 'root',
-          :group  => 'root',
-          :mode   => '0644',
-          :tag    => 'neutron-config-file',
-        )
-        should_not contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG')
-      end
-    end
-  end
-
-  shared_examples 'neutron plugin ml2 on Ubuntu' do
-    context 'on Ubuntu operating systems' do
-      it 'configures /etc/default/neutron-server' do
-        should contain_file('/etc/default/neutron-server').with(
-          :ensure => 'present',
-          :owner  => 'root',
-          :group  => 'root',
-          :mode   => '0644',
-          :tag    => 'neutron-config-file',
-        )
-        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').with(
-          :path    => '/etc/default/neutron-server',
-          :match   => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-          :line    => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugin.ini',
-          :tag     => 'neutron-file-line',
-        )
-        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_requires('Anchor[neutron::config::begin]')
-        should contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG').that_notifies('Anchor[neutron::config::end]')
-      end
-    end
-  end
-
-  shared_examples 'neutron plugin ml2 on RedHat' do
-    context 'on Ubuntu operating systems' do
-      it 'should not configure /etc/default/neutron-server' do
-        should_not contain_file('/etc/default/neutron-server')
-        should_not contain_file_line('/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG')
-      end
-    end
-  end
-
   on_supported_os({
     :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -350,12 +304,6 @@ describe 'neutron::plugins::ml2' do
       end
 
       it_behaves_like 'neutron plugin ml2'
-
-      if facts[:os]['family'] == 'Debian'
-        it_behaves_like "neutron plugin ml2 on #{facts[:os]['name']}"
-      else
-        it_behaves_like "neutron plugin ml2 on #{facts[:os]['family']}"
-      end
     end
   end
 end

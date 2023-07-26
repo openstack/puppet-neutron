@@ -179,6 +179,7 @@ class neutron::agents::ml2::networking_baremetal (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Ironic_neutron_agent_config<||> ~> Service['ironic-neutron-agent-service']
   }
 
 }

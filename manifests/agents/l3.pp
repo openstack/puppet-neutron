@@ -211,5 +211,6 @@ class neutron::agents::l3 (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_l3_agent_config<||> ~> Service['neutron-l3']
   }
 }

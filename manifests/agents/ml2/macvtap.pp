@@ -81,5 +81,6 @@ class neutron::agents::ml2::macvtap (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_agent_macvtap<||> ~> Service['neutron-plugin-macvtap-agent']
   }
 }

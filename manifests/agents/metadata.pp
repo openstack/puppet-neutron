@@ -147,5 +147,6 @@ class neutron::agents::metadata (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_metadata_agent_config<||> ~> Service['neutron-metadata']
   }
 }

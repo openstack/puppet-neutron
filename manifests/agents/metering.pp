@@ -119,5 +119,6 @@ class neutron::agents::metering (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_metering_agent_config<||> ~> Service['neutron-metering-service']
   }
 }

@@ -84,5 +84,6 @@ class neutron::agents::bgp_dragent(
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_bgp_dragent_config<||> ~> Service['neutron-bgp-dragent']
   }
 }

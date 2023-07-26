@@ -126,5 +126,6 @@ class neutron::agents::l2gw (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_l2gw_agent_config<||> ~> Service['neutron-l2gw-agent']
   }
 }

@@ -156,6 +156,7 @@ class neutron::agents::ml2::sriov (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_sriov_agent_config<||> ~> Service['neutron-sriov-nic-agent-service']
     Neutron_agent_sriov_numvfs<||> ~> Service['neutron-sriov-nic-agent-service']
   }
 

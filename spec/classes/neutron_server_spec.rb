@@ -52,7 +52,7 @@ describe 'neutron::server' do
           :name    => platform_params[:server_service],
           :enable  => true,
           :ensure  => 'running',
-          :tag     => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
+          :tag     => ['neutron-service', 'neutron-server-eventlet'],
         )
         should contain_service('neutron-server').that_subscribes_to('Anchor[neutron::service::begin]')
         should contain_service('neutron-server').that_notifies('Anchor[neutron::service::end]')
@@ -61,7 +61,7 @@ describe 'neutron::server' do
           :name    => platform_params[:api_service_name],
           :enable  => true,
           :ensure  => 'running',
-          :tag     => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
+          :tag     => ['neutron-service', 'neutron-server-eventlet'],
         )
         should contain_service('neutron-api').that_subscribes_to('Anchor[neutron::service::begin]')
         should contain_service('neutron-api').that_notifies('Anchor[neutron::service::end]')
@@ -70,7 +70,7 @@ describe 'neutron::server' do
           :name    => platform_params[:rpc_service_name],
           :enable  => true,
           :ensure  => 'running',
-          :tag     => ['neutron-service', 'neutron-db-sync-service'],
+          :tag     => ['neutron-service'],
         )
         should contain_service('neutron-rpc-server').that_subscribes_to('Anchor[neutron::service::begin]')
         should contain_service('neutron-rpc-server').that_notifies('Anchor[neutron::service::end]')
@@ -301,7 +301,7 @@ describe 'neutron::server' do
           :ensure => 'running',
           :name   => 'neutron-rpc-server',
           :enable => true,
-          :tag    => ['neutron-service', 'neutron-db-sync-service'],
+          :tag    => ['neutron-service'],
         )
       end
     end
@@ -316,7 +316,7 @@ describe 'neutron::server' do
           :name    => 'foobar',
           :enable  => true,
           :ensure  => 'running',
-          :tag     => ['neutron-service', 'neutron-db-sync-service'],
+          :tag     => ['neutron-service'],
         )
       end
     end

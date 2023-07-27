@@ -155,24 +155,6 @@ class neutron::plugins::ml2 (
   }
   # lint:endignore
 
-  if $facts['os']['family'] == 'Debian' {
-    file {'/etc/default/neutron-server':
-      ensure => present,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-      tag    => 'neutron-config-file',
-    }
-  }
-  if $facts['os']['name'] == 'Ubuntu' {
-    file_line { '/etc/default/neutron-server:NEUTRON_PLUGIN_CONFIG':
-      path  => '/etc/default/neutron-server',
-      match => '^NEUTRON_PLUGIN_CONFIG=(.*)$',
-      line  => 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugin.ini',
-      tag   => 'neutron-file-line'
-    }
-  }
-
   # In RH, the link is used to start Neutron process but in Debian, it's used only
   # to manage database synchronization.
   file {'/etc/neutron/plugin.ini':

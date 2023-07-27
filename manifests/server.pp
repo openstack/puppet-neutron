@@ -281,10 +281,6 @@ class neutron::server (
   include neutron::db
   include neutron::policy
 
-  if !is_service_default($default_availability_zones) {
-    validate_legacy(Array, 'validate_array', $default_availability_zones)
-  }
-
   if !is_service_default($dhcp_load_type) {
     validate_legacy(Enum['networks', 'subnets', 'ports'], 'validate_re', $dhcp_load_type,
       [['^networks$', '^subnets$', '^ports$']])

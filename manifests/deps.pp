@@ -83,12 +83,6 @@ class neutron::deps {
   -> Package<| tag == 'neutron-plugin-ml2-package'|>
   ~> Anchor['neutron::config::end']
 
-  Anchor['neutron::service::end'] -> Neutron_l3_ovs_bridge<||>
-  Anchor['neutron::service::end'] -> Neutron_network<||>
-  Anchor['neutron::service::end'] -> Neutron_port<||>
-  Anchor['neutron::service::end'] -> Neutron_router<||>
-  Anchor['neutron::service::end'] -> Neutron_subnet<||>
-
   # all cache settings should be applied and all packages should be installed
   # before service startup
   Oslo::Cache<||> -> Anchor['neutron::service::begin']

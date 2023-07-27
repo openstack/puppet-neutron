@@ -168,13 +168,6 @@ describe 'neutron::agents::l3' do
     end
   end
 
-  shared_examples 'neutron::agents::l3 on Debian' do
-    it 'configures neutron-l3 package subscription' do
-      should contain_service('neutron-l3').that_subscribes_to('Anchor[neutron::service::begin]')
-      should contain_service('neutron-l3').that_notifies('Anchor[neutron::service::end]')
-    end
-  end
-
   on_supported_os({
     :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|

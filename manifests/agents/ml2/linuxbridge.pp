@@ -169,5 +169,6 @@ class neutron::agents::ml2::linuxbridge (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_agent_linuxbridge<||> ~> Service['neutron-plugin-linuxbridge-agent']
   }
 }

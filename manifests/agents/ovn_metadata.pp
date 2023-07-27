@@ -200,6 +200,7 @@ class neutron::agents::ovn_metadata (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Ovn_metadata_agent_config<||> ~> Service['ovn-metadata']
     Exec['Set OVS Manager'] -> Service['ovn-metadata']
   }
 

@@ -238,5 +238,6 @@ class neutron::agents::dhcp (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_dhcp_agent_config<||> ~> Service['neutron-dhcp-service']
   }
 }

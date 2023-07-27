@@ -135,5 +135,6 @@ class neutron::agents::bagpipe (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_bgpvpn_bagpipe_config<||> ~> Service['bagpipe-bgp']
   }
 }

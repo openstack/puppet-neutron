@@ -170,6 +170,7 @@ class neutron::agents::ml2::ovn (
       enable => $enabled,
       tag    => 'neutron-service',
     }
+    Neutron_agent_ovn<||> ~> Service['neutron-ovn-agent']
     Exec['Set OVS Manager'] -> Service['neutron-ovn-agent']
   }
 

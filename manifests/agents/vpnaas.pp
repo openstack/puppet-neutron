@@ -80,6 +80,10 @@ class neutron::agents::vpnaas (
     purge => $purge_config,
   }
 
+  # neutron-vpnaas-agent is not an independent service but is integrated into
+  # l3 agent.
+  Neutron_vpnaas_agent_config<||> ~> Service<| title == 'neutron-l3' |>
+
   # The VPNaaS agent loads both neutron.conf and its own file.
   # This only lists config specific to the agent.  neutron.conf supplies
   # the rest.

@@ -103,7 +103,7 @@ describe 'neutron::agents::ml2::ovs' do
         :name    => platform_params[:ovs_agent_service],
         :enable  => true,
         :ensure  => 'running',
-        :tag     => ['neutron-service', 'neutron-db-sync-service'],
+        :tag     => ['neutron-service'],
       )
       should contain_service('neutron-ovs-agent-service').that_subscribes_to('Anchor[neutron::service::begin]')
       should contain_service('neutron-ovs-agent-service').that_notifies('Anchor[neutron::service::end]')

@@ -548,7 +548,7 @@ class neutron::agents::ml2::ovs (
       ensure => $service_ensure,
       name   => $::neutron::params::ovs_agent_service,
       enable => $enabled,
-      tag    => ['neutron-service', 'neutron-db-sync-service'],
+      tag    => ['neutron-service'],
     }
 
     if ($facts['os']['family'] == 'Redhat') {

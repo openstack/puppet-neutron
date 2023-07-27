@@ -387,7 +387,7 @@ class neutron::server (
           enable     => $enabled,
           hasstatus  => true,
           hasrestart => true,
-          tag        => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
+          tag        => ['neutron-service', 'neutron-server-eventlet'],
         }
       } elsif $service_name == 'httpd' {
         fail('Use api_service_name and rpc_service_name to run api service by httpd')
@@ -400,7 +400,7 @@ class neutron::server (
           enable     => $enabled,
           hasstatus  => true,
           hasrestart => true,
-          tag        => ['neutron-service', 'neutron-db-sync-service'],
+          tag        => ['neutron-service'],
         }
       }
     } else {
@@ -445,7 +445,7 @@ class neutron::server (
             enable     => $enabled,
             hasstatus  => true,
             hasrestart => true,
-            tag        => ['neutron-service', 'neutron-db-sync-service', 'neutron-server-eventlet'],
+            tag        => ['neutron-service', 'neutron-server-eventlet'],
           }
 
           if $::neutron::params::server_service {
@@ -461,7 +461,7 @@ class neutron::server (
           enable     => $enabled,
           hasstatus  => true,
           hasrestart => true,
-          tag        => ['neutron-service', 'neutron-db-sync-service'],
+          tag        => ['neutron-service'],
         }
 
         if $::neutron::params::server_service {

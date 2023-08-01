@@ -49,7 +49,10 @@ class neutron::plugins::opencontrail (
   include neutron::deps
   include neutron::params
 
-  validate_legacy(Array, 'validate_array', $contrail_extensions)
+  $contrail_extensions_real = $contrail_extensions ? {
+    Hash    => join(join_keys_to_values($contrail_extensions, ':'), ','),
+    default => join(any2array($contrail_extensions), ','),
+  }
 
   package { 'neutron-plugin-contrail':
     ensure => $package_ensure,
@@ -89,7 +92,7 @@ class neutron::plugins::opencontrail (
   neutron_plugin_opencontrail {
     'APISERVER/api_server_ip':       value => $api_server_ip;
     'APISERVER/api_server_port':     value => $api_server_port;
-    'APISERVER/contrail_extensions': value => join($contrail_extensions, ',');
+    'APISERVER/contrail_extensions': value => $contrail_extensions_real;
     'APISERVER/timeout':             value => $timeout;
     'APISERVER/connection_timeout':  value => $connection_timeout;
   }

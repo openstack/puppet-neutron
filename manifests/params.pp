@@ -38,8 +38,8 @@ class neutron::params {
       $server_package                     = false
       $api_package_name                   = false
       $api_service_name                   = false
-      $rpc_package_name                   = false
-      $rpc_service_name                   = false
+      $rpc_package_name                   = 'openstack-neutron-rpc-server'
+      $rpc_service_name                   = 'neutron-rpc-server.service'
       $ml2_server_package                 = 'openstack-neutron-ml2'
       $ovs_agent_package                  = 'openstack-neutron-openvswitch'
       $ovs_cleanup_service                = 'neutron-ovs-cleanup'

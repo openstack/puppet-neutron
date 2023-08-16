@@ -9,7 +9,6 @@ describe 'neutron::wsgi::apache' do
         :group                       => 'neutron',
         :path                        => '/',
         :priority                    => 10,
-        :setenv                      => [],
         :servername                  => 'foo.example.com',
         :ssl                         => false,
         :threads                     => 1,

@@ -50,10 +50,6 @@
 #     (optional) The priority for the vhost.
 #     Defaults to 10
 #
-#   [*setenv*]
-#     (optional) Set environment variables for the vhost.
-#     Defaults to []
-#
 #   [*threads*]
 #     (optional) The number of threads for the vhost.
 #     Defaults to 1
@@ -143,7 +139,6 @@ class neutron::wsgi::apache (
   $wsgi_process_display_name   = undef,
   $threads                     = 1,
   $priority                    = 10,
-  $setenv                      = [],
   $access_log_file             = undef,
   $access_log_pipe             = undef,
   $access_log_syslog           = undef,
@@ -167,7 +162,6 @@ class neutron::wsgi::apache (
     group                       => $::neutron::params::group,
     path                        => $path,
     priority                    => $priority,
-    setenv                      => $setenv,
     servername                  => $servername,
     ssl                         => $ssl,
     ssl_ca                      => $ssl_ca,

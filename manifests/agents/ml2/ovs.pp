@@ -357,7 +357,7 @@ class neutron::agents::ml2::ovs (
     purge => $purge_config,
   }
 
-  if ($bridge_mappings != []) {
+  if !empty($bridge_mappings) {
     # bridge_mappings are used to describe external networks that are
     # *directly* attached to this machine.
     # (This has nothing to do with VM-VM comms over neutron virtual networks.)
@@ -390,6 +390,10 @@ class neutron::agents::ml2::ovs (
       }
     }
   } else {
+    if !empty($bridge_uplinks) {
+      warning('The bridge_uplinks parameter is ignored because no bridge mapping is given.')
+    }
+
     neutron_agent_ovs {
       'ovs/bridge_mappings': ensure => absent
     }

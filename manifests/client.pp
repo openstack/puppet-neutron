@@ -15,6 +15,9 @@ class neutron::client (
   include neutron::deps
   include neutron::params
 
+  warning("The neutron::client class has been deprecated and will be removed \
+in a future release.")
+
   package { 'python-neutronclient':
     ensure => $package_ensure,
     name   => $::neutron::params::client_package,

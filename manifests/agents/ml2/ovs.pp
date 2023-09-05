@@ -80,7 +80,7 @@
 # [*local_ip*]
 #   (optional) Local IP address of VXLAN/GRE tunnel endpoints.
 #   Required when enabling tunneling
-#   Defaults to false
+#   Defaults to undef
 #
 # [*tunnel_bridge*]
 #   (optional) Bridge used to transport tunnels
@@ -274,7 +274,7 @@ class neutron::agents::ml2::ovs (
   $of_inactivity_probe                  = $facts['os_service_default'],
   $integration_bridge                   = $facts['os_service_default'],
   Array $tunnel_types                   = [],
-  $local_ip                             = false,
+  $local_ip                             = undef,
   $tunnel_bridge                        = $facts['os_service_default'],
   $vxlan_udp_port                       = $facts['os_service_default'],
   $polling_interval                     = $facts['os_service_default'],

@@ -1,4 +1,5 @@
 #
+# DEPRECATED !!
 # Configure the Nuage plugin for neutron.
 #
 # === Parameters
@@ -59,6 +60,8 @@ class neutron::plugins::ml2::nuage (
 
   include neutron::deps
   include neutron::params
+
+  warning('Support for ml2 Nuage plugin has been deprecated.')
 
   file { '/etc/neutron/plugins/nuage':
     ensure => directory,

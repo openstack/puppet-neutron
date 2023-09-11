@@ -3,7 +3,7 @@ Puppet::Type.newtype(:neutron_plugin_nuage) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage for nuage/plugin.ini'
+    desc 'Section/setting name to manage for nuage/plugin.ini (DEPRECATED)'
     newvalues(/\S+\/\S+/)
   end
 

@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The ``neutron`` class now supports options for quorum queues in RabbitMQ.

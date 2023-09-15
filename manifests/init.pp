@@ -133,6 +133,24 @@
 #   will be run through a green thread.
 #   Defaults to $facts['os_service_default']
 #
+# [*rabbit_quorum_queue*]
+#   (Optional) Use quorum queues in RabbitMQ.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_delivery_limit*]
+#   (Optional) Each time a message is rdelivered to a consumer, a counter is
+#   incremented. Once the redelivery count exceeds the delivery limit
+#   the message gets dropped or dead-lettered.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_max_memory_length*]
+#   (Optional) Limit the number of messages in the quorum queue.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_max_memory_bytes*]
+#   (Optional) Limit the number of memory bytes used by the quorum queue.
+#   Defaults to $facts['os_service_default']
+#
 # [*rabbit_use_ssl*]
 #   (optional) Connect over SSL for RabbitMQ
 #   Defaults to $facts['os_service_default']
@@ -337,6 +355,10 @@ class neutron (
   $rabbit_heartbeat_timeout_threshold   = $facts['os_service_default'],
   $rabbit_heartbeat_rate                = $facts['os_service_default'],
   $rabbit_heartbeat_in_pthread          = $facts['os_service_default'],
+  $rabbit_quorum_queue                  = $facts['os_service_default'],
+  $rabbit_quorum_delivery_limit         = $facts['os_service_default'],
+  $rabbit_quorum_max_memory_length      = $facts['os_service_default'],
+  $rabbit_quorum_max_memory_bytes       = $facts['os_service_default'],
   $rabbit_use_ssl                       = $facts['os_service_default'],
   $rabbit_transient_queues_ttl          = $facts['os_service_default'],
   $amqp_durable_queues                  = $facts['os_service_default'],
@@ -468,6 +490,10 @@ class neutron (
     amqp_durable_queues                  => $amqp_durable_queues,
     rabbit_ha_queues                     => $rabbit_ha_queues,
     kombu_ssl_version                    => $kombu_ssl_version,
+    rabbit_quorum_queue                  => $rabbit_quorum_queue,
+    rabbit_quorum_delivery_limit         => $rabbit_quorum_delivery_limit,
+    rabbit_quorum_max_memory_length      => $rabbit_quorum_max_memory_length,
+    rabbit_quorum_max_memory_bytes       => $rabbit_quorum_max_memory_bytes,
   }
 
   oslo::messaging::amqp { 'neutron_config':

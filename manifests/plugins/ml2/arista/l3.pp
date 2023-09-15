@@ -64,12 +64,14 @@ class neutron::plugins::ml2::arista::l3(
   include neutron::deps
   require neutron::plugins::ml2
 
-  if !is_service_default($mlag_config) {
-    validate_legacy(Boolean, 'validate_bool', $mlag_config)
-    if $mlag_config and is_service_default($secondary_l3_host) {
-      fail('Must set secondary_l3_host when mlag_config is true.')
-    }
-  }
+  # TODO(tkajinam): Reconsider how we implement this. We probably should allow
+  #                 more flexible values like 'on' supported by oslo.config.
+  # if !is_service_default($mlag_config) {
+  #   validate_legacy(Boolean, 'validate_bool', $mlag_config)
+  #   if $mlag_config and is_service_default($secondary_l3_host) {
+  #     fail('Must set secondary_l3_host when mlag_config is true.')
+  #   }
+  # }
 
   neutron_plugin_ml2 {
     'l3_arista/primary_l3_host'         : value => $primary_l3_host;

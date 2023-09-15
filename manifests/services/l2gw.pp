@@ -56,10 +56,6 @@ class neutron::services::l2gw (
   include neutron::deps
   include neutron::params
 
-  if !is_service_default($service_providers) {
-    validate_legacy(Array, 'validate_array', $service_providers)
-  }
-
   ensure_resource( 'package', 'python-networking-l2gw', {
     'ensure' => $package_ensure,
     'name'   => $::neutron::params::l2gw_package,

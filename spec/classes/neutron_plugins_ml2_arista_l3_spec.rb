@@ -61,18 +61,6 @@ describe 'neutron::plugins::ml2::arista::l3' do
       should contain_neutron_plugin_ml2('l3_arista/conn_timeout').with_value(p[:conn_timeout])
       should contain_neutron_plugin_ml2('l3_arista/use_vrf').with_value(p[:use_vrf])
     end
-
-    context 'with mlag enabled but secondary l3 host missing' do
-      before :each do
-        params.merge!({
-          :mlag_config => true
-        })
-      end
-
-      it 'should fail' do
-        should raise_error(Puppet::Error, /Must set secondary_l3_host when mlag_config is true./)
-      end
-    end
   end
 
   on_supported_os({

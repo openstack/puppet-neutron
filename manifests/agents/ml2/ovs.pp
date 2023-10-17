@@ -371,6 +371,7 @@ class neutron::agents::ml2::ovs (
     # mappings and uplinks; they're what the OVS switches will get named.)
 
     $bridge_mappings_real = $bridge_mappings ? {
+      Hash    => join_keys_to_values($bridge_mappings, ':'),
       String  => $bridge_mappings.split(',').strip(),
       default => $bridge_mappings,
     }

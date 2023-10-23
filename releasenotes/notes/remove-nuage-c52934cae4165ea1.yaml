@@ -1,0 +1,9 @@
+---
+upgrade:
+  - |
+    Support for the nuage ml2 plugin has been removed.
+
+deprecations:
+  - |
+    The ``neutron::config::plugin_nuage_config`` parameter has been deprecated
+    and has no effect now.

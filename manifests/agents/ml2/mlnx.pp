@@ -1,6 +1,7 @@
 #
 # == Class: neutron::agents::ml2::mlnx
 #
+# DEPRECATED !
 # Setups MLNX neutron agent when using ML2 plugin
 #
 # === Parameters
@@ -63,6 +64,7 @@ class neutron::agents::ml2::mlnx (
   $ipoib_physical_interface                        = $facts['os_service_default'],
   $enable_multi_interface_driver_cache_maintenance = false,
 ) {
+  warning('Support for networking-mlnx has been deprecated')
 
   include neutron::deps
   include neutron::params

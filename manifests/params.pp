@@ -29,7 +29,6 @@ class neutron::params {
   $user                        = 'neutron'
   $group                       = 'neutron'
   $arista_plugin_package       = 'python3-networking-arista'
-  $odl_plugin_package          = 'python3-networking-odl'
 
   case $facts['os']['family'] {
     'RedHat': {

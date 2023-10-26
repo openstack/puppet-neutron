@@ -78,9 +78,6 @@
 # [*plugin_opencontrail_config*]
 #   (optional) Manage configuration of plugins/opencontrail/ContrailPlugin.ini
 #
-# [*plugin_nuage_config*]
-#   (optional) Manage configuration of plugins/nuage/plugin.ini
-#
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
@@ -88,6 +85,9 @@
 #
 # [*linuxbridge_agent_config*]
 #   (optional) Manage configuration of linuxbridge_agent.ini
+#
+# [*plugin_nuage_config*]
+#   (optional) Manage configuration of plugins/nuage/plugin.ini
 #
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
@@ -112,10 +112,10 @@ class neutron::config (
   Hash $vpnaas_agent_config           = {},
   Hash $bgp_dragent_config            = {},
   Hash $plugin_opencontrail_config    = {},
-  Hash $plugin_nuage_config           = {},
   Hash $plugin_ml2_config             = {},
   # DEPRECATED PARAMETERS
-  Optional[Hash] $linuxbridge_agent_config      = undef,
+  Optional[Hash] $linuxbridge_agent_config = undef,
+  Optional[Hash] $plugin_nuage_config      = undef,
 ) {
 
   include neutron::deps
@@ -125,6 +125,10 @@ class neutron::config (
     $linuxbridge_agent_config_real = $linuxbridge_agent_config
   } else {
     $linuxbridge_agent_config_real = {}
+  }
+
+  if $plugin_nuage_config != undef {
+    warning('The plugin_nuage_config parameter is deprecated and has no effect.')
   }
 
   create_resources('neutron_config', $server_config)
@@ -147,6 +151,5 @@ class neutron::config (
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
-  create_resources('neutron_plugin_nuage', $plugin_nuage_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
 }

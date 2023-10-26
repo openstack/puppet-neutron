@@ -12,7 +12,6 @@ class neutron::params {
   $macvtap_agent_service       = 'neutron-macvtap-agent'
   $opencontrail_plugin_package = 'neutron-plugin-contrail'
   $opencontrail_config_file    = '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
-  $nuage_config_file           = '/etc/neutron/plugins/nuage/plugin.ini'
   $dhcp_agent_service          = 'neutron-dhcp-agent'
   $metering_agent_service      = 'neutron-metering-agent'
   $l3_agent_service            = 'neutron-l3-agent'

@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for networking-odl has been removed.

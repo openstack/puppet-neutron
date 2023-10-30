@@ -21,7 +21,7 @@ in a future release.")
   package { 'python-neutronclient':
     ensure => $package_ensure,
     name   => $::neutron::params::client_package,
-    tag    => ['neutron-support-package', 'openstack'],
+    tag    => 'openstack',
   }
 
   include openstacklib::openstackclient

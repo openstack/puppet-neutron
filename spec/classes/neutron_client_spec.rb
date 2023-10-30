@@ -9,7 +9,7 @@ describe 'neutron::client' do
       should contain_package('python-neutronclient').with(
         :ensure => 'present',
         :name   => platform_params[:client_package],
-        :tag    => ['neutron-support-package', 'openstack']
+        :tag    => 'openstack',
       )
     end
 

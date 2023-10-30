@@ -25,7 +25,8 @@
 #   (optional) Ensure state for package. Defaults to 'present'.
 #
 # [*vpn_device_driver*]
-#   (optional) Defaults to 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver'.
+#   (optional) The vpn device drivers Neutron will us.
+#   Defaults to 'neutron_vpnaas.services.vpn.device_drivers.ipsec.OpenSwanDriver'.
 #
 # [*interface_driver*]
 #   (optional) The driver used to manage the virtual interface.
@@ -41,7 +42,7 @@
 #
 class neutron::agents::vpnaas (
   $package_ensure              = present,
-  $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
+  $vpn_device_driver           = 'neutron_vpnaas.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $ipsec_status_check_interval = $facts['os_service_default'],
   Boolean $purge_config        = false,

@@ -32,7 +32,7 @@ describe 'neutron::agents::vpnaas' do
   let :default_params do
     {
       :package_ensure    => 'present',
-      :vpn_device_driver => 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
+      :vpn_device_driver => 'neutron_vpnaas.services.vpn.device_drivers.ipsec.OpenSwanDriver',
       :interface_driver  => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :purge_config      => false,
     }

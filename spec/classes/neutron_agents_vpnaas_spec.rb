@@ -48,14 +48,6 @@ describe 'neutron::agents::vpnaas' do
           :tag    => ['openstack', 'neutron-package'],
         )
       end
-
-      it 'installs openswan packages' do
-        should contain_package('openswan').with(
-          :ensure => 'present',
-          :name   => platform_params[:openswan_package],
-          :tag    => ['openstack', 'neutron-support-package'],
-        )
-      end
     end
 
     context 'with libreswan vpnaas driver' do
@@ -113,14 +105,12 @@ describe 'neutron::agents::vpnaas' do
         case facts[:os]['family']
         when 'Debian'
           {
-            :openswan_package     => 'strongswan',
             :libreswan_package    => 'libreswan',
             :strongswan_package   => 'strongswan',
             :vpnaas_agent_package => 'python3-neutron-vpnaas'
           }
         when 'RedHat'
           {
-            :openswan_package     => 'libreswan',
             :libreswan_package    => 'libreswan',
             :strongswan_package   => 'strongswan',
             :vpnaas_agent_package => 'openstack-neutron-vpnaas'

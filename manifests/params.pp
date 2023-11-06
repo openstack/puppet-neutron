@@ -54,7 +54,6 @@ class neutron::params {
       $ovn_agent_package                  = 'openstack-neutron-ovn-agent'
       $dynamic_routing_package            = 'python3-neutron-dynamic-routing'
       $bgp_dragent_package                = 'openstack-neutron-bgp-dragent'
-      $openswan_package                   = 'libreswan'
       $libreswan_package                  = 'libreswan'
       $strongswan_package                 = 'strongswan'
       $metadata_agent_package             = false
@@ -101,7 +100,6 @@ class neutron::params {
       $dhcp_agent_package                 = 'neutron-dhcp-agent'
       $metering_agent_package             = 'neutron-metering-agent'
       $vpnaas_agent_package               = 'python3-neutron-vpnaas'
-      $openswan_package                   = 'strongswan'
       $libreswan_package                  = 'libreswan'
       $strongswan_package                 = 'strongswan'
       $metadata_agent_package             = 'neutron-metadata-agent'

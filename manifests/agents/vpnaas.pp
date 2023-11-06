@@ -57,19 +57,23 @@ class neutron::agents::vpnaas (
       package { 'openswan':
         ensure => present,
         name   => $::neutron::params::openswan_package,
-        tag    => ['neutron-support-package', 'openstack'],
+        tag    => ['openstack', 'neutron-support-package'],
       }
     }
     /\.LibreSwan/: {
-      if($facts['os']['family'] != 'Redhat') {
-        fail("LibreSwan is not supported on osfamily ${facts['os']['family']}")
-      } else {
-        Package['libreswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
-        package { 'libreswan':
-          ensure => present,
-          name   => $::neutron::params::libreswan_package,
-          tag    => ['neutron-support-package', 'openstack'],
-        }
+      Package['libreswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
+      package { 'libreswan':
+        ensure => present,
+        name   => $::neutron::params::libreswan_package,
+        tag    => ['openstack', 'neutron-support-package'],
+      }
+    }
+    /\.StrongSwan/: {
+      Package['strongswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
+      package { 'strongswan':
+        ensure => present,
+        name   => $::neutron::params::strongswan_package,
+        tag    => ['openstack', 'neutron-support-package'],
       }
     }
     default: {

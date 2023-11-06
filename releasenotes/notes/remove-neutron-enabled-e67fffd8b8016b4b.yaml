@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``neutron::enabled`` parameter has been removed.

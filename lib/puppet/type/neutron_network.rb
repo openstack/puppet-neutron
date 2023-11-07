@@ -42,7 +42,7 @@ Puppet::Type.newtype(:neutron_network) do
 
   newproperty(:provider_network_type) do
     desc 'The physical mechanism by which the virtual network is realized.'
-    newvalues(:flat, :vlan, :local, :gre, :l3_ext, :vxlan)
+    newvalues(:flat, :vlan, :local, :gre, :l3_ext, :vxlan, :geneve)
   end
 
   newproperty(:provider_physical_network) do

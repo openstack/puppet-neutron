@@ -26,6 +26,7 @@ describe 'neutron::wsgi::apache' do
         :access_log_pipe             => nil,
         :access_log_syslog           => nil,
         :access_log_format           => nil,
+        :access_log_env_var          => nil,
         :error_log_file              => nil,
         :error_log_pipe              => nil,
         :error_log_syslog            => nil,
@@ -76,16 +77,18 @@ describe 'neutron::wsgi::apache' do
     context 'with custom access logging' do
       let :params do
         {
-          :access_log_format => 'foo',
-          :access_log_syslog => 'syslog:local0',
-          :error_log_syslog  => 'syslog:local1',
+          :access_log_format  => 'foo',
+          :access_log_syslog  => 'syslog:local0',
+          :error_log_syslog   => 'syslog:local1',
+          :access_log_env_var => '!dontlog',
         }
       end
 
       it { should contain_openstacklib__wsgi__apache('neutron_wsgi').with(
-        :access_log_format => params[:access_log_format],
-        :access_log_syslog => params[:access_log_syslog],
-        :error_log_syslog  => params[:error_log_syslog],
+        :access_log_format  => params[:access_log_format],
+        :access_log_syslog  => params[:access_log_syslog],
+        :error_log_syslog   => params[:error_log_syslog],
+        :access_log_env_var => params[:access_log_env_var],
       )}
     end
 

@@ -47,16 +47,16 @@
 #     Optional. Defaults to $facts['os_workers']
 #
 #   [*priority*]
-#     (optional) The priority for the vhost.
-#     Defaults to 10
+#     The priority for the vhost.
+#     Optional. Defaults to 10
 #
 #   [*threads*]
-#     (optional) The number of threads for the vhost.
-#     Defaults to 1
+#     The number of threads for the vhost.
+#     Optional. Defaults to 1
 #
 #   [*wsgi_process_display_name*]
-#     (optional) Name of the WSGI process display-name.
-#     Defaults to undef
+#     Name of the WSGI process display-name.
+#     Optional. Defaults to undef
 #
 #   [*ssl_cert*]
 #   [*ssl_key*]
@@ -84,6 +84,11 @@
 #     The log format for the virtualhost.
 #     Optional. Defaults to undef.
 #
+#   [*access_log_env_var*]
+#     Specifies that only requests with particular
+#     environment variables be logged.
+#     Optional. Defaults to undef
+#
 #   [*error_log_file*]
 #     The error log file name for the virtualhost.
 #     Optional. Defaults to undef.
@@ -97,20 +102,20 @@
 #     Optional. Defaults to undef.
 #
 #   [*custom_wsgi_process_options*]
-#     (optional) gives you the opportunity to add custom process options or to
+#     Gives you the opportunity to add custom process options or to
 #     overwrite the default options for the WSGI main process.
 #     eg. to use a virtual python environment for the WSGI process
 #     you could set it to:
 #     { python-path => '/my/python/virtualenv' }
-#     Defaults to {}
+#     Optional. Defaults to {}
 #
 #   [*headers*]
-#     (optional) Headers for the vhost.
-#     Defaults to undef
+#     Headers for the vhost.
+#     Optional. Defaults to undef
 #
 #   [*request_headers*]
-#     (optional) Modifies collected request headers in various ways.
-#     Defaults to undef
+#     Modifies collected request headers in various ways.
+#     Optional. Defaults to undef
 #
 # == Dependencies
 #
@@ -143,6 +148,7 @@ class neutron::wsgi::apache (
   $access_log_pipe             = undef,
   $access_log_syslog           = undef,
   $access_log_format           = undef,
+  $access_log_env_var          = undef,
   $error_log_file              = undef,
   $error_log_pipe              = undef,
   $error_log_syslog            = undef,
@@ -187,6 +193,7 @@ class neutron::wsgi::apache (
     access_log_pipe             => $access_log_pipe,
     access_log_syslog           => $access_log_syslog,
     access_log_format           => $access_log_format,
+    access_log_env_var          => $access_log_env_var,
     error_log_file              => $error_log_file,
     error_log_pipe              => $error_log_pipe,
     error_log_syslog            => $error_log_syslog,

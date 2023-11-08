@@ -56,6 +56,7 @@ class neutron::params {
       $bgp_dragent_package                = 'openstack-neutron-bgp-dragent'
       $openswan_package                   = 'libreswan'
       $libreswan_package                  = 'libreswan'
+      $strongswan_package                 = 'strongswan'
       $metadata_agent_package             = false
       $l3_agent_package                   = false
       $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
@@ -101,7 +102,8 @@ class neutron::params {
       $metering_agent_package             = 'neutron-metering-agent'
       $vpnaas_agent_package               = 'python3-neutron-vpnaas'
       $openswan_package                   = 'strongswan'
-      $libreswan_package                  = false
+      $libreswan_package                  = 'libreswan'
+      $strongswan_package                 = 'strongswan'
       $metadata_agent_package             = 'neutron-metadata-agent'
       $l3_agent_package                   = 'neutron-l3-agent'
       $l2gw_agent_package                 = 'neutron-l2gateway-agent'

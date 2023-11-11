@@ -19,9 +19,6 @@ class neutron::params {
   $ovn_metadata_agent_service  = 'neutron-ovn-metadata-agent'
   $ovn_agent_service           = 'neutron-ovn-agent'
   $bgp_dragent_service         = 'neutron-bgp-dragent'
-  $bagpipe_bgp_package         = 'openstack-bagpipe-bgp'
-  $bgpvpn_bagpipe_package      = 'python3-networking-bagpipe'
-  $bgpvpn_bagpipe_service      = 'bagpipe-bgp'
   $bgpvpn_plugin_package       = 'python3-networking-bgpvpn'
   $l2gw_agent_service          = 'neutron-l2gw-agent'
   $sfc_package                 = 'python3-networking-sfc'
@@ -54,6 +51,9 @@ class neutron::params {
       $ovn_agent_package                  = 'openstack-neutron-ovn-agent'
       $dynamic_routing_package            = 'python3-neutron-dynamic-routing'
       $bgp_dragent_package                = 'openstack-neutron-bgp-dragent'
+      $bagpipe_bgp_package                = 'openstack-bagpipe-bgp'
+      $bagpipe_bgp_service                = 'bagpipe-bgp'
+      $bgpvpn_bagpipe_package             = 'python3-networking-bagpipe'
       $libreswan_package                  = 'libreswan'
       $strongswan_package                 = 'strongswan'
       $metadata_agent_package             = false
@@ -79,20 +79,22 @@ class neutron::params {
         $api_service_name                 = 'neutron-api'
         $rpc_package_name                 = 'neutron-rpc-server'
         $rpc_service_name                 = 'neutron-rpc-server'
-        $dynamic_routing_package          = 'python3-neutron-dynamic-routing'
       } else {
-        $ml2_server_package = 'neutron-plugin-ml2'
+        $ml2_server_package               = 'neutron-plugin-ml2'
         $server_service                   = 'neutron-server'
         $server_package                   = 'neutron-server'
         $api_package_name                 = false
         $api_service_name                 = false
         $rpc_package_name                 = false
         $rpc_service_name                 = false
-        $dynamic_routing_package          = 'python3-neutron-dynamic-routing'
       }
+      $dynamic_routing_package            = 'python3-neutron-dynamic-routing'
       $bgp_dragent_package                = 'neutron-bgp-dragent'
+      $bagpipe_bgp_package                = undef
+      $bagpipe_bgp_service                = undef
+      $bgpvpn_bagpipe_package             = 'python3-networking-bagpipe'
       $ovs_agent_package                  = 'neutron-openvswitch-agent'
-      $ovs_cleanup_service                = false
+      $ovs_cleanup_service                = undef
       $linuxbridge_agent_package          = 'neutron-linuxbridge-agent'
       $sriov_nic_agent_service            = 'neutron-sriov-agent'
       $sriov_nic_agent_package            = 'neutron-sriov-agent'

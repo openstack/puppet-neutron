@@ -98,6 +98,10 @@ class neutron::agents::bagpipe (
   include neutron::deps
   include neutron::params
 
+  if $facts['os']['family'] != 'RedHat' {
+    fail('BaGPipe agent is currently supported in RedHat OS family')
+  }
+
   resources { 'neutron_bgpvpn_bagpipe_config':
     purge => $purge_config,
   }
@@ -115,12 +119,10 @@ class neutron::agents::bagpipe (
     'dataplane_driver_ipvpn/mpls_interface':   value => $mpls_interface;
   }
 
-  if $::neutron::params::bagpipe_bgp_package {
-    package { 'openstack-bagpipe-bgp':
-      ensure => $package_ensure,
-      name   => $::neutron::params::bagpipe_bgp_package,
-      tag    => ['openstack', 'neutron-package'],
-    }
+  package { 'bagpipe-bgp':
+    ensure => $package_ensure,
+    name   => $::neutron::params::bagpipe_bgp_package,
+    tag    => ['openstack', 'neutron-plugin-ml2-package']
   }
 
   if $manage_service {
@@ -131,7 +133,7 @@ class neutron::agents::bagpipe (
     }
     service { 'bagpipe-bgp':
       ensure => $service_ensure,
-      name   => $::neutron::params::bgpvpn_bagpipe_service,
+      name   => $::neutron::params::bagpipe_bgp_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

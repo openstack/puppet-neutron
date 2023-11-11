@@ -52,7 +52,7 @@ describe 'neutron::agents::bagpipe' do
     end
 
     it 'installs bgpvpn bagpipe package' do
-      should contain_package('openstack-bagpipe-bgp').with(
+      should contain_package('bagpipe-bgp').with(
         :ensure => p[:package_ensure],
         :name   => platform_params[:bagpipe_bgp_package],
       )
@@ -72,7 +72,10 @@ describe 'neutron::agents::bagpipe' do
     end
 
     it 'bagpipe service running' do
-      should contain_service('bagpipe-bgp').with_ensure('running')
+      should contain_service('bagpipe-bgp').with(
+        :ensure => 'running',
+        :name   => platform_params[:bagpipe_bgp_service]
+      )
     end
 
     context 'with multiple peers' do
@@ -112,13 +115,16 @@ describe 'neutron::agents::bagpipe' do
       let (:platform_params) do
         case facts[:os]['family']
         when 'RedHat'
-          { :bagpipe_bgp_package => 'openstack-bagpipe-bgp' }
+          { :bagpipe_bgp_package => 'openstack-bagpipe-bgp',
+            :bagpipe_bgp_service => 'bagpipe-bgp' }
         when 'Debian'
-          { :bagpipe_bgp_package => 'openstack-bagpipe-bgp' }
+          {}
         end
       end
 
-      it_behaves_like 'neutron bgpvpn bagpipe agent'
+      if facts[:os]['family'] == 'RedHat'
+        it_behaves_like 'neutron bgpvpn bagpipe agent'
+      end
     end
   end
 end

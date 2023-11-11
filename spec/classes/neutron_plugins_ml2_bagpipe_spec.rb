@@ -1,34 +1,24 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::bagpipe' do
-  let :default_params do
-    {
-      :bagpipe_bgp_port        => '<SERVICE DEFAULT>',
-      :mpls_bridge             => '<SERVICE DEFAULT>',
-      :package_ensure          => 'present',
-    }
-  end
 
   let :params do
     {}
   end
 
   shared_examples 'neutron plugin bagpipe ml2' do
-    before do
-      params.merge!(default_params)
-    end
 
     it 'should have' do
       should contain_package('python-networking-bagpipe').with(
+        :ensure => 'present',
         :name   => platform_params[:bagpipe_package_name],
-        :ensure => params[:package_ensure],
         :tag    => ['openstack', 'neutron-plugin-ml2-package']
         )
     end
 
     it 'configures bagpipe settings' do
-      should contain_neutron_plugin_ml2('bagpipe/bagpipe_bgp_port').with_value(params[:bagpipe_bgp_port])
-      should contain_neutron_plugin_ml2('bagpipe/mpls_bridge').with_value(params[:mpls_bridge])
+      should contain_neutron_plugin_ml2('bagpipe/bagpipe_bgp_port').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_plugin_ml2('bagpipe/mpls_bridge').with_value('<SERVICE DEFAULT>')
     end
   end
 

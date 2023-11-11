@@ -71,7 +71,16 @@ class neutron::services::l2gw (
     'DEFAULT/default_device_name':          value => $default_device_name;
     'DEFAULT/quota_l2_gateway':             value => $quota_l2_gateway;
     'DEFAULT/periodic_monitoring_interval': value => $periodic_monitoring_interval;
-    'service_providers/service_provider':   value => $service_providers;
+  }
+
+  if is_service_default($service_providers) {
+    $service_providers_real = 'L2GW:l2gw:networking_l2gw.services.l2gateway.service_drivers.rpc_l2gw.L2gwRpcDriver:default'
+  } else {
+    $service_providers_real = $service_providers
+  }
+
+  neutron_l2gw_service_config {
+    'service_providers/service_provider': value => $service_providers_real;
   }
 
   if $sync_db {

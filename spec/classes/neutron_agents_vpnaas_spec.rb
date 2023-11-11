@@ -43,7 +43,7 @@ describe 'neutron::agents::vpnaas' do
 
       it 'installs neutron vpnaas agent package' do
         should contain_package('neutron-vpnaas-agent').with(
-          :ensure => 'present',
+          :ensure => 'installed',
           :name   => platform_params[:vpnaas_agent_package],
           :tag    => ['openstack', 'neutron-package'],
         )

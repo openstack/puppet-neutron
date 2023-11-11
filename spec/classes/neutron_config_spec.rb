@@ -66,6 +66,7 @@ describe 'neutron::config' do
         :metadata_agent_config    => config_hash,
         :metering_agent_config    => config_hash,
         :vpnaas_agent_config      => config_hash,
+        :vpnaas_service_config    => config_hash,
         :l2gw_agent_config        => config_hash,
         :bgp_dragent_config       => config_hash,
       }
@@ -129,6 +130,12 @@ describe 'neutron::config' do
       should contain_neutron_vpnaas_agent_config('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_vpnaas_agent_config('DEFAULT/bar').with_value('barValue')
       should contain_neutron_vpnaas_agent_config('DEFAULT/baz').with_ensure('absent')
+    end
+
+    it 'configures arbitrary vpnaas_service_config configurations' do
+      should contain_neutron_vpnaas_service_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_vpnaas_service_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_vpnaas_service_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary l2gw_agent_config configurations' do

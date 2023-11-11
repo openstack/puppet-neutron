@@ -47,12 +47,11 @@ class neutron::services::bgpvpn (
   include neutron::deps
   include neutron::params
 
-  #This package just include the service API
-  ensure_resource( 'package', $::neutron::params::bgpvpn_plugin_package, {
+  package { 'python-networking-bgpvpn':
     ensure => $package_ensure,
     name   => $::neutron::params::bgpvpn_plugin_package,
     tag    => ['openstack', 'neutron-package'],
-  })
+  }
 
   if is_service_default($service_providers) {
     # NOTE(tkajinam): bgpvpn requires the additional 'default' value.
@@ -70,7 +69,6 @@ class neutron::services::bgpvpn (
   }
 
   if $sync_db {
-    Package<| title == $::neutron::params::bgpvpn_plugin_package |> ~> Exec['bgpvpn-db-sync']
     exec { 'bgpvpn-db-sync':
       command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-bgpvpn upgrade head',
       path        => '/usr/bin',

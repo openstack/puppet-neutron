@@ -178,11 +178,6 @@
 #   (Optional) Allow auto scheduling networks to DHCP agent
 #   Defaults to $facts['os_service_default'].
 #
-# [*ensure_vpnaas_package*]
-#   (Optional) Ensures installation of VPNaaS package before starting API service.
-#   Set to true to ensure installation of the package that is required to start neutron service if service_plugin is enabled.
-#   Defaults to false.
-#
 # [*ensure_dr_package*]
 #   (Optional) Ensures installation of Neutron Dynamic Routing package before starting API service.
 #   Set to true to ensure installation of the package that is required to start neutron service if bgp service_plugin is enabled.
@@ -235,6 +230,14 @@
 #   mechanism driver for Neutron.
 #   Defaults to $facts['os_service_default']
 #
+# DEPRECATED PARAMETERS
+#
+# [*ensure_vpnaas_package*]
+#   (Optional) Ensures installation of VPNaaS package before starting API
+#   service. Set to true to ensure installation of the package that is required
+#   to start neutron service if service_plugin is enabled.
+#   Defaults to false.
+#
 class neutron::server (
   $package_ensure                   = 'present',
   Boolean $enabled                  = true,
@@ -266,7 +269,6 @@ class neutron::server (
   $l3_ha_network_type               = $facts['os_service_default'],
   $l3_ha_network_physical_name      = $facts['os_service_default'],
   $network_auto_schedule            = $facts['os_service_default'],
-  Boolean $ensure_vpnaas_package    = false,
   Boolean $ensure_dr_package        = false,
   $vpnaas_agent_package             = false,
   $service_providers                = $facts['os_service_default'],
@@ -275,6 +277,8 @@ class neutron::server (
   $max_request_body_size            = $facts['os_service_default'],
   $ovs_integration_bridge           = $facts['os_service_default'],
   $igmp_snooping_enable             = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  Boolean $ensure_vpnaas_package    = false,
 ) inherits neutron::params {
 
   include neutron::deps
@@ -288,6 +292,8 @@ class neutron::server (
   }
 
   if $ensure_vpnaas_package {
+    warning("The ensure_vpnaas_package parameter has been deprecated. Use \
+the neutron::services::vpnaas class.")
     ensure_packages( 'neutron-vpnaas-agent', {
       'ensure' => $package_ensure,
       'name'   => $::neutron::params::vpnaas_agent_package,

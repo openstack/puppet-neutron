@@ -12,6 +12,7 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/l2gateway_agent.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
+                     '/etc/neutron/neutron_vpnaas.conf',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
                      '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
                      '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
@@ -55,6 +56,7 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/l2gateway_agent.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
+                     '/etc/neutron/neutron_vpnaas.conf',
                      '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
                      '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
                      '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
@@ -209,6 +211,24 @@ describe 'basic neutron_config resource' do
   }
 
   neutron_vpnaas_agent_config { 'DEFAULT/thisshouldnotexist2' :
+    value             => 'toto',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_vpnaas_service_config { 'DEFAULT/thisshouldexist' :
+    value => 'foo',
+  }
+
+  neutron_vpnaas_service_config { 'DEFAULT/thisshouldnotexist' :
+    value => '<SERVICE DEFAULT>',
+  }
+
+  neutron_vpnaas_service_config { 'DEFAULT/thisshouldexist2' :
+    value             => '<SERVICE DEFAULT>',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_vpnaas_service_config { 'DEFAULT/thisshouldnotexist2' :
     value             => 'toto',
     ensure_absent_val => 'toto',
   }

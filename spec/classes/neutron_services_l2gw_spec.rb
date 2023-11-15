@@ -32,12 +32,13 @@ describe 'neutron::services::l2gw' do
       end
 
       it 'configures l2gw_plugin.ini' do
-        should contain_neutron_l2gw_service_config('service_providers/service_provider').with_value('<SERVICE DEFAULT>')
         should contain_neutron_l2gw_service_config('DEFAULT/default_interface_name').with_value('<SERVICE DEFAULT>')
         should contain_neutron_l2gw_service_config('DEFAULT/default_device_name').with_value('<SERVICE DEFAULT>')
         should contain_neutron_l2gw_service_config('DEFAULT/quota_l2_gateway').with_value('<SERVICE DEFAULT>')
         should contain_neutron_l2gw_service_config('DEFAULT/periodic_monitoring_interval').with_value('<SERVICE DEFAULT>')
-        should contain_neutron_l2gw_service_config('service_providers/service_provider').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_l2gw_service_config('service_providers/service_provider').with_value(
+          'L2GW:l2gw:networking_l2gw.services.l2gateway.service_drivers.rpc_l2gw.L2gwRpcDriver:default'
+        )
       end
 
       it 'does not run neutron-db-manage' do

@@ -94,11 +94,9 @@ openswan package in distributions")
     'DEFAULT/interface_driver':          value => $interface_driver;
   }
 
-  if $::neutron::params::vpnaas_agent_package {
-    ensure_resource( 'package', 'neutron-vpnaas-agent', {
-      'ensure' => $package_ensure,
-      'name'   => $::neutron::params::vpnaas_agent_package,
-      'tag'    => ['openstack', 'neutron-package'],
-    })
-  }
+  ensure_packages( 'neutron-vpnaas-agent', {
+    'ensure' => $package_ensure,
+    'name'   => $::neutron::params::vpnaas_agent_package,
+    'tag'    => ['openstack', 'neutron-package'],
+  })
 }

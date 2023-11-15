@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The new ``neutron::services::vpnaas`` class has been added. This class
+    installs and manages neutron VPNaaS service plugin.
+
+  - |
+    The new ``neutron::config::neutron_vpnaas_service_config`` parameter has
+    been added. This parameter can be used to inject arbitrary configurations
+    for neutron VPNaaS service plugin.

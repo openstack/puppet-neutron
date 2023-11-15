@@ -72,6 +72,9 @@
 # [*vpnaas_agent_config*]
 #   (optional) Manage configuration of vpn_agent.ini
 #
+# [*vpnaas_service_config*]
+#   (optional) Manage configuration of neutron_vpnaas.conf
+#
 # [*bgp_dragent_config*]
 #   (optional) Manage configuration of bgp_dragent.ini
 #
@@ -110,6 +113,7 @@ class neutron::config (
   Hash $ovn_metadata_agent_config     = {},
   Hash $metering_agent_config         = {},
   Hash $vpnaas_agent_config           = {},
+  Hash $vpnaas_service_config         = {},
   Hash $bgp_dragent_config            = {},
   Hash $plugin_opencontrail_config    = {},
   Hash $plugin_ml2_config             = {},
@@ -149,6 +153,7 @@ class neutron::config (
   create_resources('ovn_metadata_agent_config', $ovn_metadata_agent_config)
   create_resources('neutron_metering_agent_config', $metering_agent_config)
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)
+  create_resources('neutron_vpnaas_service_config', $vpnaas_service_config)
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
   create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)

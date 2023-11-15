@@ -56,11 +56,11 @@ class neutron::services::l2gw (
   include neutron::deps
   include neutron::params
 
-  ensure_resource( 'package', 'python-networking-l2gw', {
-    'ensure' => $package_ensure,
-    'name'   => $::neutron::params::l2gw_package,
-    'tag'    => ['openstack', 'neutron-package'],
-  })
+  package { 'python-networking-l2gw':
+    ensure => $package_ensure,
+    name   => $::neutron::params::l2gw_package,
+    tag    => ['openstack', 'neutron-package'],
+  }
 
   resources { 'neutron_l2gw_service_config':
     purge => $purge_config,

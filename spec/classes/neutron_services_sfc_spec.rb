@@ -20,7 +20,7 @@ describe 'neutron::services::sfc' do
   shared_examples 'neutron sfc service plugin' do
     context 'with default params' do
       it 'installs sfc package' do
-        should contain_package(platform_params[:sfc_package_name]).with(
+        should contain_package('python-networking-sfc').with(
           :ensure => 'present',
           :name   => platform_params[:sfc_package_name],
         )

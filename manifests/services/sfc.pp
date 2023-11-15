@@ -53,11 +53,11 @@ class neutron::services::sfc (
   include neutron::deps
   include neutron::params
 
-  ensure_resource( 'package', $::neutron::params::sfc_package, {
+  package { 'python-networking-sfc':
     ensure => $package_ensure,
     name   => $::neutron::params::sfc_package,
     tag    => ['openstack', 'neutron-package'],
-  })
+  }
 
   neutron_sfc_service_config {
     'sfc/drivers':            value => $sfc_driver;
@@ -69,7 +69,6 @@ class neutron::services::sfc (
   }
 
   if $sync_db {
-    Package<| title == $::neutron::params::sfc_package |> ~> Exec['sfc-db-sync']
     exec { 'sfc-db-sync':
       command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-sfc upgrade head',
       path        => '/usr/bin',

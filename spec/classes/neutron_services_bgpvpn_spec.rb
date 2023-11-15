@@ -21,7 +21,7 @@ describe 'neutron::services::bgpvpn' do
   shared_examples 'neutron bgpvpn service plugin' do
     context 'with default params' do
       it 'installs bgpvpn package' do
-        should contain_package(platform_params[:bgpvpn_package_name]).with(
+        should contain_package('python-networking-bgpvpn').with(
           :ensure => 'present',
           :name   => platform_params[:bgpvpn_package_name],
         )

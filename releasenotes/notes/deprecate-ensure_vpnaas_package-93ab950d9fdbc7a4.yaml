@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::server::ensure_vpnaas_package`` parameter has been
+    deprecated, in favor of the new ``neutron::services::vpnaas`` class.

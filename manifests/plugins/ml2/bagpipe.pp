@@ -48,11 +48,9 @@ class neutron::plugins::ml2::bagpipe (
     'bagpipe/mpls_bridge':            value => $mpls_bridge;
   }
 
-  if $::neutron::params::bgpvpn_bagpipe_package {
-    package { 'python-networking-bagpipe':
-      ensure => $package_ensure,
-      name   => $::neutron::params::bgpvpn_bagpipe_package,
-      tag    => ['openstack', 'neutron-plugin-ml2-package']
-    }
+  package { 'python-networking-bagpipe':
+    ensure => $package_ensure,
+    name   => $::neutron::params::bgpvpn_bagpipe_package,
+    tag    => ['openstack', 'neutron-plugin-ml2-package']
   }
 }

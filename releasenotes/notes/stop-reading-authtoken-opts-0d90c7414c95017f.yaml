@@ -1,0 +1,12 @@
+---
+upgrade:
+  - |
+    The following resource types no longer attempts to load user credentials
+    from the ``[keystone_authtoken]`` section in ``neutron.conf``.
+
+    - ``neutron_network``
+    - ``neutron_subnet``
+    - ``neutron_port``
+    - ``neutron_router``
+    - ``neutron_router_interface``
+    - ``neutron_security_group``

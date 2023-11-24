@@ -75,9 +75,6 @@
 # [*bgp_dragent_config*]
 #   (optional) Manage configuration of bgp_dragent.ini
 #
-# [*plugin_opencontrail_config*]
-#   (optional) Manage configuration of plugins/opencontrail/ContrailPlugin.ini
-#
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
@@ -88,6 +85,9 @@
 #
 # [*plugin_nuage_config*]
 #   (optional) Manage configuration of plugins/nuage/plugin.ini
+#
+# [*plugin_opencontrail_config*]
+#   (optional) Manage configuration of plugins/opencontrail/ContrailPlugin.ini
 #
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
@@ -111,11 +111,11 @@ class neutron::config (
   Hash $metering_agent_config         = {},
   Hash $vpnaas_agent_config           = {},
   Hash $bgp_dragent_config            = {},
-  Hash $plugin_opencontrail_config    = {},
   Hash $plugin_ml2_config             = {},
   # DEPRECATED PARAMETERS
-  Optional[Hash] $linuxbridge_agent_config = undef,
-  Optional[Hash] $plugin_nuage_config      = undef,
+  Optional[Hash] $linuxbridge_agent_config   = undef,
+  Optional[Hash] $plugin_nuage_config        = undef,
+  Optional[Hash] $plugin_opencontrail_config = undef,
 ) {
 
   include neutron::deps
@@ -129,6 +129,13 @@ class neutron::config (
 
   if $plugin_nuage_config != undef {
     warning('The plugin_nuage_config parameter is deprecated and has no effect.')
+  }
+
+  if $plugin_opencontrail_config != undef {
+    warning('The plugin_opencontrail_config parameter is deprecated.')
+    $plugin_opencontrail_config_real = $plugin_opencontrail_config
+  } else {
+    $plugin_opencontrail_config_real = {}
   }
 
   create_resources('neutron_config', $server_config)
@@ -150,6 +157,6 @@ class neutron::config (
   create_resources('neutron_metering_agent_config', $metering_agent_config)
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
-  create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config)
+  create_resources('neutron_plugin_opencontrail', $plugin_opencontrail_config_real)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
 }

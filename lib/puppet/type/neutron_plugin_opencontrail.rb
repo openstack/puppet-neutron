@@ -3,7 +3,7 @@ Puppet::Type.newtype(:neutron_plugin_opencontrail) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from ContrailPlugin.ini'
+    desc 'Section/setting name to manage from ContrailPlugin.ini (DEPRECATED)'
     newvalues(/\S+\/\S+/)
   end
 

@@ -106,7 +106,7 @@
 #   (optional) For L3 mechanism drivers, determines the maximum permissible
 #   size of an unfragmented packet travelling from and to addresses where
 #   encapsulated traffic is sent.
-#   Defaults to 0.
+#   Defaults to $facts['os_service_default'].
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -136,7 +136,7 @@ class neutron::plugins::ml2 (
   $enable_security_group     = $facts['os_service_default'],
   $package_ensure            = 'present',
   $physical_network_mtus     = $facts['os_service_default'],
-  $path_mtu                  = 0,
+  $path_mtu                  = $facts['os_service_default'],
   Boolean $purge_config      = false,
   $max_header_size           = $facts['os_service_default'],
   $overlay_ip_version        = $facts['os_service_default'],

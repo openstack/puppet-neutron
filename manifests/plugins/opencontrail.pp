@@ -1,3 +1,4 @@
+# DEPRECATED !!!
 # This class installs and configures Opencontrail Neutron Plugin.
 #
 # === Parameters
@@ -48,6 +49,8 @@ class neutron::plugins::opencontrail (
 
   include neutron::deps
   include neutron::params
+
+  warning('Support for contrail plugin has been deprecated.')
 
   $contrail_extensions_real = $contrail_extensions ? {
     Hash    => join(join_keys_to_values($contrail_extensions, ':'), ','),

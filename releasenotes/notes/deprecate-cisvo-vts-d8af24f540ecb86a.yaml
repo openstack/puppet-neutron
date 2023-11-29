@@ -1,0 +1,4 @@
+---
+deprecations:
+  - |
+    Support for Cisco VTS mechanism driver has been deprecated.

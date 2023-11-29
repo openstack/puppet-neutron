@@ -1,5 +1,6 @@
-# == Define: neutron::plugins::ml2::cisco::vts
+# == Class: neutron::plugins::ml2::cisco::vts
 #
+# DEPRECATED !!
 # Install the Cisco VTS driver and generate the ML2 config file
 # from parameters in the other classes.
 #
@@ -55,6 +56,8 @@ class neutron::plugins::ml2::cisco::vts (
 
   include neutron::deps
   require neutron::plugins::ml2
+
+  warning('Support for Cisco VTS mechanism driver has been deprecated')
 
   ensure_resource('package', 'python-cisco-controller',
     {

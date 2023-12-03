@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following three classes have been added, to support configuration of
+    ``[metadata_rate_limiting]`` options.
+
+    - ``neutron::agents::dhcp::metadata_rate_limiting``
+    - ``neutron::agents::l3::metadata_rate_limiting``
+    - ``neutron::agents::ovn_metadata::metadata_rate_limiting``

@@ -30,9 +30,9 @@ class neutron::params {
     'RedHat': {
       $package_name                       = 'openstack-neutron'
       $server_service                     = 'neutron-server'
-      $server_package                     = false
-      $api_package_name                   = false
-      $api_service_name                   = false
+      $server_package                     = undef
+      $api_package_name                   = undef
+      $api_service_name                   = undef
       $rpc_package_name                   = 'openstack-neutron-rpc-server'
       $rpc_service_name                   = 'neutron-rpc-server.service'
       $ml2_server_package                 = 'openstack-neutron-ml2'
@@ -42,7 +42,7 @@ class neutron::params {
       $sriov_nic_agent_service            = 'neutron-sriov-nic-agent'
       $sriov_nic_agent_package            = 'openstack-neutron-sriov-nic-agent'
       $macvtap_agent_package              = 'openstack-neutron-macvtap-agent'
-      $dhcp_agent_package                 = false
+      $dhcp_agent_package                 = undef
       $metering_agent_package             = 'openstack-neutron-metering-agent'
       $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
       $l2gw_agent_package                 = 'openstack-neutron-l2gw-agent'
@@ -56,8 +56,8 @@ class neutron::params {
       $bgpvpn_bagpipe_package             = 'python3-networking-bagpipe'
       $libreswan_package                  = 'libreswan'
       $strongswan_package                 = 'strongswan'
-      $metadata_agent_package             = false
-      $l3_agent_package                   = false
+      $metadata_agent_package             = undef
+      $l3_agent_package                   = undef
       $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
       $neutron_wsgi_script_source         = '/usr/bin/neutron-api'
       $networking_baremetal_package       = 'python3-networking-baremetal'
@@ -65,16 +65,16 @@ class neutron::params {
       $networking_baremetal_agent_service = 'ironic-neutron-agent'
       $mlnx_agent_package                 = 'python3-networking-mlnx'
       $mlnx_plugin_package                = 'python3-networking-mlnx'
-      $eswitchd_package                   = false
+      $eswitchd_package                   = undef
       $mlnx_agent_service                 = 'neutron-mlnx-agent'
       $eswitchd_service                   = 'eswitchd'
     }
     'Debian': {
       $package_name                       = 'neutron-common'
       if $facts['os']['name'] == 'Debian' {
-        $ml2_server_package               = false
-        $server_service                   = false
-        $server_package                   = false
+        $ml2_server_package               = undef
+        $server_service                   = undef
+        $server_package                   = undef
         $api_package_name                 = 'neutron-api'
         $api_service_name                 = 'neutron-api'
         $rpc_package_name                 = 'neutron-rpc-server'
@@ -83,10 +83,10 @@ class neutron::params {
         $ml2_server_package               = 'neutron-plugin-ml2'
         $server_service                   = 'neutron-server'
         $server_package                   = 'neutron-server'
-        $api_package_name                 = false
-        $api_service_name                 = false
-        $rpc_package_name                 = false
-        $rpc_service_name                 = false
+        $api_package_name                 = undef
+        $api_service_name                 = undef
+        $rpc_package_name                 = undef
+        $rpc_service_name                 = undef
       }
       $dynamic_routing_package            = 'python3-neutron-dynamic-routing'
       $bgp_dragent_package                = 'neutron-bgp-dragent'

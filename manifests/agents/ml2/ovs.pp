@@ -22,24 +22,24 @@
 # === Parameters
 #
 # [*package_ensure*]
-#   (optional) The state of the package
+#   (Optional) The state of the package
 #   Defaults to 'present'
 #
 # [*enabled*]
-#   (required) Whether or not to enable the OVS Agent
+#   (Optional) Whether or not to enable the OVS Agent
 #   Defaults to true
 #
 # [*manage_service*]
-#   (optional) Whether to start/stop the service
+#   (Optional) Whether to start/stop the service
 #   Defaults to true
 #
 # [*bridge_uplinks*]
-#   (optional) List of interfaces to connect to the bridge when doing
+#   (Optional) List of interfaces to connect to the bridge when doing
 #   bridge mapping.
 #   Defaults to empty list
 #
 # [*bridge_mappings*]
-#   (optional) List of <physical_network>:<bridge>
+#   (Optional) List of <physical_network>:<bridge>
 #   Defaults to empty list
 #
 # [*ovsdb_timeout*]
@@ -69,34 +69,34 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*integration_bridge*]
-#   (optional) Integration bridge in OVS
+#   (Optional) Integration bridge in OVS
 #   Defaults to $facts['os_service_default']
 #
 # [*tunnel_types*]
-#   (optional) List of types of tunnels to use when utilizing tunnels,
+#   (Optional) List of types of tunnels to use when utilizing tunnels,
 #   either 'gre' or 'vxlan'.
 #   Defaults to empty list
 #
 # [*local_ip*]
-#   (optional) Local IP address of VXLAN/GRE tunnel endpoints.
+#   (Optional) Local IP address of VXLAN/GRE tunnel endpoints.
 #   Required when enabling tunneling
 #   Defaults to undef
 #
 # [*tunnel_bridge*]
-#   (optional) Bridge used to transport tunnels
+#   (Optional) Bridge used to transport tunnels
 #   Defaults to $facts['os_service_default']
 #
 # [*vxlan_udp_port*]
-#   (optional) The UDP port to use for VXLAN tunnels.
+#   (Optional) The UDP port to use for VXLAN tunnels.
 #   Defaults to $facts['os_service_default']
 #
 # [*polling_interval*]
-#   (optional) The number of seconds the agent will wait between
+#   (Optional) The number of seconds the agent will wait between
 #   polling for local device changes.
 #   Defaults to $facts['os_service_default']
 #
 # [*report_interval*]
-#   (optional) Set the agent report interval. By default the global report
+#   (Optional) Set the agent report interval. By default the global report
 #   interval in neutron.conf ([agent]/report_interval) is used. This parameter
 #   can be used to override the reporting interval for the openvswitch-agent.
 #   Defaults to $facts['os_service_default']
@@ -106,31 +106,31 @@
 #   Defaults to: $facts['os_service_default']
 #
 # [*l2_population*]
-#   (optional) Extension to use alongside ml2 plugin's l2population
+#   (Optional) Extension to use alongside ml2 plugin's l2population
 #   mechanism driver.
 #   Defaults to $facts['os_service_default']
 #
 # [*arp_responder*]
-#   (optional) Enable or not the ARP responder.
+#   (Optional) Enable or not the ARP responder.
 #   Recommended when using l2 population mechanism driver.
 #   Defaults to $facts['os_service_default']
 #
 # [*firewall_driver*]
-#   (optional) Firewall driver for realizing neutron security group function.
+#   (Optional) Firewall driver for realizing neutron security group function.
 #   Defaults to 'iptables_hybrid'.
 #
 # [*enable_distributed_routing*]
-#   (optional) Set to True on L2 agents to enable support
+#   (Optional) Set to True on L2 agents to enable support
 #   for distributed virtual routing.
 #   Defaults to $facts['os_service_default']
 #
 # [*drop_flows_on_start*]
-#   (optional) Set to True to drop all flows during agent start for a clean
+#   (Optional) Set to True to drop all flows during agent start for a clean
 #   flow tables resetting
 #   Defaults to $facts['os_service_default']
 #
 # [*manage_vswitch*]
-#   (optional) This boolean is used to indicate if this class should manage the
+#   (Optional) This boolean is used to indicate if this class should manage the
 #   vswitch software installation and the ovs bridges/ports from the
 #   $bridge_mappings parameter. If manage_vswitch is set to true, then we will
 #   require the vswitch::ovs and configure the ovs bridges/ports using the
@@ -138,56 +138,56 @@
 #   Defaults to true
 #
 # [*extensions*]
-#   (optional) Extensions list to use
+#   (Optional) Extensions list to use
 #   Defaults to $facts['os_service_default']
 #
 # [*int_peer_patch_port*]
-#   (optional) Peer patch port in integration bridge for tunnel bridge
+#   (Optional) Peer patch port in integration bridge for tunnel bridge
 #   Defaults to $facts['os_service_default']
 #
 # [*tun_peer_patch_port*]
-#   (optional) Peer patch port in tunnel bridge for integration bridge
+#   (Optional) Peer patch port in tunnel bridge for integration bridge
 #   Defaults to $facts['os_service_default']
 #
 # [*datapath_type*]
-#   (optional) Datapath type for ovs bridges
+#   (Optional) Datapath type for ovs bridges
 #   Defaults to $facts['os_service_default']
 #
 # [*vhostuser_socket_dir*]
-#   (optional) The vhost-user socket directory for OVS
+#   (Optional) The vhost-user socket directory for OVS
 #   Defaults to $facts['os_service_default']
 #
 # [*purge_config*]
-#   (optional) Whether to set only the specified config options
+#   (Optional) Whether to set only the specified config options
 #   in the ovs config.
 #   Defaults to false.
 #
 # [*enable_dpdk*]
-#   (optional) Enable or not DPDK with OVS
+#   (Optional) Enable or not DPDK with OVS
 #   Defaults to false.
 #
 # [*enable_security_group*]
-#   (optional) Controls whether the agent supports security
+#   (Optional) Controls whether the agent supports security
 #   groups or not.
 #   Defaults to $facts['os_service_default']
 #
 # [*permitted_ethertypes*]
-#   (optional) List of additional ethernet types to be configured
+#   (Optional) List of additional ethernet types to be configured
 #   on the firewall.
 #   Defaults to $facts['os_service_default']
 #
 # [*minimize_polling*]
-#  (optional) Minimize polling by monitoring ovsdb for interface
-#  changes. (boolean value)
-#  Defaults to $facts['os_service_default']
+#   (Optional) Minimize polling by monitoring ovsdb for interface
+#   changes. (boolean value)
+#   Defaults to $facts['os_service_default']
 #
 # [*tunnel_csum*]
-#  (optional) Set or un-set the tunnel header checksum  on
-#  outgoing IP packet carrying GRE/VXLAN tunnel.
-#  Defaults to $facts['os_service_default']
+#   (Optional) Set or un-set the tunnel header checksum  on
+#   outgoing IP packet carrying GRE/VXLAN tunnel.
+#   Defaults to $facts['os_service_default']
 #
 # [*bridge_mac_table_size*]
-#   (optional) The maximum number of MAC addresses to learn on a bridge managed
+#   (Optional) The maximum number of MAC addresses to learn on a bridge managed
 #   by the Neutron OVS agent.
 #   Defaults to $facts['os_service_default']
 #
@@ -214,43 +214,43 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*resource_provider_bandwidths*]
-#   (optional) List of <bridge>:<egress_bw>:<ingress_bw>
+#   (Optional) List of <bridge>:<egress_bw>:<ingress_bw>
 #   Defaults to empty list
 #
 # [*resource_provider_hypervisors*]
-#   (optional) List of <bridge>:<hypervisor>
+#   (Optional) List of <bridge>:<hypervisor>
 #   Defaults to empty list
 #
 # [*resource_provider_packet_processing_without_direction*]
-#   (optional) List of <hypervisor>:<packet_rate> tuples, defining the minimum
+#   (Optional) List of <hypervisor>:<packet_rate> tuples, defining the minimum
 #   packet rate the OVS backend can guarantee in kilo (1000) packet per second.
 #   Defaults to empty list
 #
 # [*resource_provider_packet_processing_with_direction*]
-#   (optional) Similar to resource_provider_packet_processing_without_direction
+#   (Optional) Similar to resource_provider_packet_processing_without_direction
 #   but used in case the OVS backend has hardware offload capabilities.
 #   Defaults to empty list
 #
 # [*resource_provider_default_hypervisor*]
-#   (optional) The default hypervisor name used to locate the parent of
+#   (Optional) The default hypervisor name used to locate the parent of
 #   the resource provider.
 #   Defaults to $facts['os_service_default']
 #
 # [*resource_provider_inventory_defaults*]
-#   (optional) Key:value pairs to specify defaults used while reporting packet
+#   (Optional) Key:value pairs to specify defaults used while reporting packet
 #   rate inventories,.
 #   Defaults to empty hash
 #
 # [*resource_provider_packet_processing_inventory_defaults*]
-#   (optional) Key:value pairs to specify defaults used while reporting packet
+#   (Optional) Key:value pairs to specify defaults used while reporting packet
 #   rate inventories,.
 #   Defaults to empty hash
 #
 # [*explicitly_egress_direct*]
-#  (optional) When set to True, the accepted egress unicast traffic will not
-#  use action NORMAL. The accepted egress packets will be taken care of in the
-#  final egress tables direct output flows for unicast traffic. (boolean value)
-#  Defaults to $facts['os_service_default']
+#   (Optional) When set to True, the accepted egress unicast traffic will not
+#   use action NORMAL. The accepted egress packets will be taken care of in the
+#   final egress tables direct output flows for unicast traffic. (boolean value)
+#   Defaults to $facts['os_service_default']
 #
 # [*network_log_rate_limit*]
 #   (Optional) Maximum packets logging per second.

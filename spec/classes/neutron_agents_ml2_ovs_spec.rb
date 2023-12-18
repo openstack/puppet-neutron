@@ -70,6 +70,9 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('agent/vxlan_udp_port').with_ensure('absent')
       should contain_neutron_agent_ovs('ovs/bridge_mac_table_size').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/igmp_flood').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/igmp_flood_reports').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/igmp_flood_unregistered').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/resource_provider_bandwidths').\
         with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('ovs/resource_provider_hypervisors').\
@@ -530,6 +533,22 @@ describe 'neutron::agents::ml2::ovs' do
 
       it 'configure neutron/plugins/ml2/ml2_conf.ini' do
         should contain_neutron_agent_ovs('ovs/igmp_snooping_enable').with_value(true)
+      end
+    end
+
+    context 'with IGMP flood enabled' do
+      before :each do
+        params.merge!({
+          :igmp_flood              => true,
+          :igmp_flood_reports      => true,
+          :igmp_flood_unregistered => true,
+        })
+      end
+
+      it 'configure neutron/plugins/ml2/ml2_conf.ini' do
+        should contain_neutron_agent_ovs('ovs/igmp_flood').with_value(true)
+        should contain_neutron_agent_ovs('ovs/igmp_flood_reports').with_value(true)
+        should contain_neutron_agent_ovs('ovs/igmp_flood_unregistered').with_value(true)
       end
     end
 

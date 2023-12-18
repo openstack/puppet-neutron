@@ -90,6 +90,9 @@ describe 'neutron::server' do
       )
       should contain_neutron_config('ovs/integration_bridge').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('ovs/igmp_flood').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('ovs/igmp_flood_reports').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('ovs/igmp_flood_unregistered').with_value('<SERVICE DEFAULT>')
     end
 
     context 'with manage_service as false' do
@@ -336,6 +339,22 @@ describe 'neutron::server' do
 
       it 'configure neutron.conf' do
         should contain_neutron_config('ovs/igmp_snooping_enable').with_value(true)
+      end
+    end
+
+    context 'with IGMP flood enabled' do
+      before :each do
+        params.merge!({
+          :igmp_flood              => true,
+          :igmp_flood_reports      => true,
+          :igmp_flood_unregistered => true,
+        })
+      end
+
+      it 'configure neutron.conf' do
+        should contain_neutron_config('ovs/igmp_flood').with_value(true)
+        should contain_neutron_config('ovs/igmp_flood_reports').with_value(true)
+        should contain_neutron_config('ovs/igmp_flood_unregistered').with_value(true)
       end
     end
 

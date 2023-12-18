@@ -192,15 +192,25 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*igmp_snooping_enable*]
-#   (Optional) Enable IGMP snooping for integration bridge. If this
-#   option is set to True, support for Internet Group Management
-#   Protocol (IGMP) is enabled in integration bridge.
-#   Setting this option to True will also enable Open vSwitch
-#   mcast-snooping-disable-flood-unregistered flag. This option will
-#   disable flooding of unregistered multicast packets to all ports.
-#   The switch will send unregistered multicast packets only to ports
-#   connected to multicast routers. This option is used by the ML2/OVS
-#   mechanism driver for Neutron.
+#   (Optional) Enable IGMP snooping for integration bridge. If this option is
+#   set to True, support for Internet Group Management Protocol (IGMP) is
+#   enabled in integration bridge.
+#   Defaults to $facts['os_service_default']
+#
+# [*igmp_flood*]
+#   (Optional) Multicast packets (except reports) are unconditionally forwarded
+#   to the ports bridging a local network to a physical network.
+#   Defaults to $facts['os_service_default']
+#
+# [*igmp_flood_reports*]
+#   (Optional) Multicast reports are unconditionally forwarded to the ports
+#   bridging a logical network to a physical network.
+#   Defaults to $facts['os_service_default']
+#
+# [*igmp_flood_unregistered*]
+#   (Optional) This option enables or disables flooding of unregistered
+#   multicast packets to all ports. If False, the switch will send unregistered
+#   multicast packets only to ports connected to multicast routers.
 #   Defaults to $facts['os_service_default']
 #
 # [*resource_provider_bandwidths*]
@@ -298,6 +308,9 @@ class neutron::agents::ml2::ovs (
   $tunnel_csum                          = $facts['os_service_default'],
   $bridge_mac_table_size                = $facts['os_service_default'],
   $igmp_snooping_enable                 = $facts['os_service_default'],
+  $igmp_flood                           = $facts['os_service_default'],
+  $igmp_flood_reports                   = $facts['os_service_default'],
+  $igmp_flood_unregistered              = $facts['os_service_default'],
   $resource_provider_bandwidths         = [],
   $resource_provider_packet_processing_without_direction
                                         = [],
@@ -492,6 +505,9 @@ class neutron::agents::ml2::ovs (
     'securitygroup/permitted_ethertypes':   value => join(any2array($permitted_ethertypes), ',');
     'ovs/bridge_mac_table_size':            value => $bridge_mac_table_size;
     'ovs/igmp_snooping_enable':             value => $igmp_snooping_enable;
+    'ovs/igmp_flood':                       value => $igmp_flood;
+    'ovs/igmp_flood_reports':               value => $igmp_flood_reports;
+    'ovs/igmp_flood_unregistered':          value => $igmp_flood_unregistered;
     'network_log/rate_limit':               value => $network_log_rate_limit;
     'network_log/burst_limit':              value => $network_log_burst_limit;
     'network_log/local_output_log_base':    value => $network_log_local_output_log_base;

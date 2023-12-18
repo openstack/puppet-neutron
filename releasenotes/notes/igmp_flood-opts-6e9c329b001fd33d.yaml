@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The ``neutron::server`` class (for OVN mechansim driver) and
+    the ``neutron::agents::ml2::ovs`` class (for OVS mechanism driver) now
+    supports configuring the following igmp flood options.
+
+    - ``igmp_flood``
+    - ``igmp_flood_reports``
+    - ``igmp_flood_unregistered``

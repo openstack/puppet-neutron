@@ -219,15 +219,25 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*igmp_snooping_enable*]
-#   (Optional) Enable IGMP snooping for integration bridge. If this
-#   option is set to True, support for Internet Group Management
-#   Protocol (IGMP) is enabled in integration bridge.
-#   Setting this option to True will also enable Open vSwitch
-#   mcast-snooping-disable-flood-unregistered flag. This option will
-#   disable flooding of unregistered multicast packets to all ports.
-#   The switch will send unregistered multicast packets only to ports
-#   connected to multicast routers. This option is used by the ML2/OVN
-#   mechanism driver for Neutron.
+#   (Optional) Enable IGMP snooping for integration bridge. If this option is
+#   set to True, support for Internet Group Management Protocol (IGMP) is
+#   enabled in integration bridge.
+#   Defaults to $facts['os_service_default']
+#
+# [*igmp_flood*]
+#   (Optional) Multicast packets (except reports) are unconditionally forwarded
+#   to the ports bridging a local network to a physical network.
+#   Defaults to $facts['os_service_default']
+#
+# [*igmp_flood_reports*]
+#   (Optional) Multicast reports are unconditionally forwarded to the ports
+#   bridging a logical network to a physical network.
+#   Defaults to $facts['os_service_default']
+#
+# [*igmp_flood_unregistered*]
+#   (Optional) This option enables or disables flooding of unregistered
+#   multicast packets to all ports. If False, the switch will send unregistered
+#   multicast packets only to ports connected to multicast routers.
 #   Defaults to $facts['os_service_default']
 #
 # DEPRECATED PARAMETERS
@@ -277,6 +287,9 @@ class neutron::server (
   $max_request_body_size            = $facts['os_service_default'],
   $ovs_integration_bridge           = $facts['os_service_default'],
   $igmp_snooping_enable             = $facts['os_service_default'],
+  $igmp_flood                       = $facts['os_service_default'],
+  $igmp_flood_reports               = $facts['os_service_default'],
+  $igmp_flood_unregistered          = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   Boolean $ensure_vpnaas_package    = false,
 ) inherits neutron::params {
@@ -337,6 +350,9 @@ the neutron::services::vpnaas class.")
     'ovs/integration_bridge':                   value => $ovs_integration_bridge;
     'service_providers/service_provider':       value => $service_providers;
     'ovs/igmp_snooping_enable':                 value => $igmp_snooping_enable;
+    'ovs/igmp_flood':                           value => $igmp_flood;
+    'ovs/igmp_flood_reports':                   value => $igmp_flood_reports;
+    'ovs/igmp_flood_unregistered':              value => $igmp_flood_unregistered;
   }
 
   if $server_package {

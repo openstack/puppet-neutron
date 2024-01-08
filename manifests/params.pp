@@ -7,7 +7,6 @@ class neutron::params {
 
   $client_package              = 'python3-neutronclient'
   $ovs_agent_service           = 'neutron-openvswitch-agent'
-  $destroy_patch_ports_service = 'neutron-destroy-patch-ports'
   $linuxbridge_agent_service   = 'neutron-linuxbridge-agent'
   $macvtap_agent_service       = 'neutron-macvtap-agent'
   $opencontrail_plugin_package = 'neutron-plugin-contrail'
@@ -38,6 +37,7 @@ class neutron::params {
       $ml2_server_package                 = 'openstack-neutron-ml2'
       $ovs_agent_package                  = 'openstack-neutron-openvswitch'
       $ovs_cleanup_service                = 'neutron-ovs-cleanup'
+      $destroy_patch_ports_service        = 'neutron-destroy-patch-ports'
       $linuxbridge_agent_package          = 'openstack-neutron-linuxbridge'
       $sriov_nic_agent_service            = 'neutron-sriov-nic-agent'
       $sriov_nic_agent_package            = 'openstack-neutron-sriov-nic-agent'
@@ -95,6 +95,7 @@ class neutron::params {
       $bgpvpn_bagpipe_package             = 'python3-networking-bagpipe'
       $ovs_agent_package                  = 'neutron-openvswitch-agent'
       $ovs_cleanup_service                = undef
+      $destroy_patch_ports_service        = undef
       $linuxbridge_agent_package          = 'neutron-linuxbridge-agent'
       $sriov_nic_agent_service            = 'neutron-sriov-agent'
       $sriov_nic_agent_package            = 'neutron-sriov-agent'

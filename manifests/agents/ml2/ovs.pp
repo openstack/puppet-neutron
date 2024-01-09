@@ -573,7 +573,7 @@ class neutron::agents::ml2::ovs (
     }
     Neutron_agent_ovs<||> ~> Service['neutron-ovs-agent-service']
 
-    if ($facts['os']['family'] == 'Redhat') {
+    if $::neutron::params::destroy_patch_ports_service {
       # NOTE(tkajinam): The service should not be started in a running system.
       #                 DO NOT define ensure so the service status is not
       #                 changed.

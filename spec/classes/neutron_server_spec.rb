@@ -18,7 +18,6 @@ describe 'neutron::server' do
       :enabled                  => true,
       :auth_strategy            => 'keystone',
       :sync_db                  => false,
-      :router_scheduler_driver  => 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
     }
   end
 
@@ -83,7 +82,8 @@ describe 'neutron::server' do
       should contain_neutron_config('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/agent_down_time').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/enable_new_agents').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value(p[:router_scheduler_driver])
+      should contain_neutron_config('DEFAULT/network_scheduler_driver').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value('<SERVICE DEFAULT>')
       should contain_oslo__middleware('neutron_config').with(
         :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
         :max_request_body_size        => '<SERVICE DEFAULT>',
@@ -230,20 +230,20 @@ describe 'neutron::server' do
 
     context 'with availability zone hints set' do
       before :each do
-        params.merge!( :dhcp_load_type             => 'networks',
-                       :router_scheduler_driver    => 'neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler',
-                       :network_scheduler_driver   => 'neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler',
-                       :default_availability_zones => ['zone1', 'zone2']
-        )
+        params.merge!({
+          :dhcp_load_type             => 'networks',
+          :router_scheduler_driver    => 'neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler',
+          :network_scheduler_driver   => 'neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler',
+          :default_availability_zones => ['zone1', 'zone2']
+        })
       end
 
       it 'should configure neutron server for availability zones' do
         should contain_neutron_config('DEFAULT/default_availability_zones').with_value('zone1,zone2')
-        should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value('neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler')
         should contain_neutron_config('DEFAULT/network_scheduler_driver').with_value('neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler')
+        should contain_neutron_config('DEFAULT/router_scheduler_driver').with_value('neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler')
         should contain_neutron_config('DEFAULT/dhcp_load_type').with_value('networks')
       end
-
     end
 
     context 'with enable_proxy_headers_parsing' do

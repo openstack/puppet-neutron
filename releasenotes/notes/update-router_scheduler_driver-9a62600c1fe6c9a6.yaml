@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    Default value of the ``neutron::server::router_scheduler_driver`` has been
+    updated and now the default driver in neutron (``LeastRoutersScheduler`` at
+    the time of writing) is used by default.

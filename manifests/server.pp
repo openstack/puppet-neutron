@@ -93,22 +93,12 @@
 #   Defaults to: $facts['os_service_default']
 #
 # [*network_scheduler_driver*]
-#   (Optional) The scheduler used when scheduling networks
-#   neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler to use availability zone hints scheduling.
+#   (Optional) The scheduler used when scheduling networks.
 #   Defaults to $facts['os_service_default']
 #
-#   Example:
-#
-#     class { 'neutron':
-#       network_scheduler_driver => 'neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler'
-#     }
-#
 # [*router_scheduler_driver*]
-#   (Optional) Driver to use for scheduling router to a default L3 agent. Could be:
-#   neutron.scheduler.l3_agent_scheduler.ChanceScheduler to schedule a router in a random way
-#   neutron.scheduler.l3_agent_scheduler.LeastRoutersScheduler to allocate on an L3 agent with the least number of routers bound.
-#   neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler to use availability zone hints.
-#   Defaults to: neutron.scheduler.l3_agent_scheduler.ChanceScheduler
+#   (Optional) Driver to use for scheduling router to a default L3 agent.
+#   Defaults to $facts['os_service_default']
 #
 # [*router_distributed*]
 #   (Optional) Setting the "router_distributed" flag to "True" will default to the creation
@@ -265,10 +255,10 @@ class neutron::server (
   $rpc_response_max_timeout         = $facts['os_service_default'],
   $agent_down_time                  = $facts['os_service_default'],
   $enable_new_agents                = $facts['os_service_default'],
-  $router_scheduler_driver          = 'neutron.scheduler.l3_agent_scheduler.ChanceScheduler',
+  $network_scheduler_driver         = $facts['os_service_default'],
+  $router_scheduler_driver          = $facts['os_service_default'],
   $router_distributed               = $facts['os_service_default'],
   $enable_dvr                       = $facts['os_service_default'],
-  $network_scheduler_driver         = $facts['os_service_default'],
   $dhcp_load_type                   = $facts['os_service_default'],
   $default_availability_zones       = $facts['os_service_default'],
   $allow_automatic_l3agent_failover = $facts['os_service_default'],
@@ -338,12 +328,12 @@ the neutron::services::vpnaas class.")
     'DEFAULT/rpc_response_max_timeout':         value => $rpc_response_max_timeout;
     'DEFAULT/agent_down_time':                  value => $agent_down_time;
     'DEFAULT/enable_new_agents':                value => $enable_new_agents;
+    'DEFAULT/network_scheduler_driver':         value => $network_scheduler_driver;
     'DEFAULT/router_scheduler_driver':          value => $router_scheduler_driver;
     'DEFAULT/router_distributed':               value => $router_distributed;
     'DEFAULT/enable_dvr':                       value => $enable_dvr;
     'DEFAULT/allow_automatic_l3agent_failover': value => $allow_automatic_l3agent_failover;
     'DEFAULT/allow_automatic_dhcp_failover':    value => $allow_automatic_dhcp_failover;
-    'DEFAULT/network_scheduler_driver':         value => $network_scheduler_driver;
     'DEFAULT/dhcp_load_type':                   value => $dhcp_load_type;
     'DEFAULT/default_availability_zones':       value => join(any2array($default_availability_zones), ',');
     'DEFAULT/network_auto_schedule':            value => $network_auto_schedule;

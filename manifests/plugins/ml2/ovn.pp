@@ -113,9 +113,25 @@
 #   Type: boolean
 #   Defaults to $facts['os_service_default']
 #
+# [*fdb_age_threshold*]
+#   (optional) The number of seconds to keep FD entries in the OVN DB.
+#   Defaults to $facts['os_service_default']
+#
+# [*mac_binding_age_threshold*]
+#   (optional) The number of seconds to keep MAC_Binding entries in the OVN DB.
+#   Defaults to $facts['os_service_default']
+#
 # [*ignore_lsp_down*]
 #   (optional) Do not install ARP/ND reply flows for logical switch ports
 #   if the port is DOWN.
+#   Defaults to $facts['os_service_default']
+#
+# [*fdb_removal_limit*]
+#   (optional) FDB aging bulk removal limit.
+#   Defaults to $facts['os_service_default']
+#
+# [*mac_binding_removal_limit*]
+#   (optional) MAC binding aging bulk removal limit.
 #   Defaults to $facts['os_service_default']
 #
 # [*network_log_rate_limit*]
@@ -156,7 +172,11 @@ class neutron::plugins::ml2::ovn(
   $vhostuser_socket_dir                 = $facts['os_service_default'],
   $ovn_emit_need_to_frag                = $facts['os_service_default'],
   $localnet_learn_fdb                   = $facts['os_service_default'],
+  $fdb_age_threshold                    = $facts['os_service_default'],
+  $mac_binding_age_threshold            = $facts['os_service_default'],
   $ignore_lsp_down                      = $facts['os_service_default'],
+  $fdb_removal_limit                    = $facts['os_service_default'],
+  $mac_binding_removal_limit            = $facts['os_service_default'],
   $network_log_rate_limit               = $facts['os_service_default'],
   $network_log_burst_limit              = $facts['os_service_default'],
   $network_log_local_output_log_base    = $facts['os_service_default'],
@@ -189,7 +209,11 @@ class neutron::plugins::ml2::ovn(
     'ovn/vhost_sock_dir'                      : value => $vhostuser_socket_dir;
     'ovn/ovn_emit_need_to_frag'               : value => $ovn_emit_need_to_frag;
     'ovn/localnet_learn_fdb'                  : value => $localnet_learn_fdb;
+    'ovn/fdb_age_threshold'                   : value => $fdb_age_threshold;
+    'ovn/mac_binding_age_threshold'           : value => $mac_binding_age_threshold;
     'ovn_nb_global/ignore_lsp_down'           : value => $ignore_lsp_down;
+    'ovn_nb_global/fdb_removal_limit'         : value => $fdb_removal_limit;
+    'ovn_nb_global/mac_binding_removal_limit' : value => $mac_binding_removal_limit;
     'network_log/rate_limit'                  : value => $network_log_rate_limit;
     'network_log/burst_limit'                 : value => $network_log_burst_limit;
     'network_log/local_output_log_base'       : value => $network_log_local_output_log_base;

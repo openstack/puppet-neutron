@@ -29,7 +29,11 @@ describe 'neutron::plugins::ml2::ovn' do
       :vhostuser_socket_dir                 => '<SERVICE DEFAULT>',
       :ovn_emit_need_to_frag                => '<SERVICE DEFAULT>',
       :localnet_learn_fdb                   => '<SERVICE DEFAULT>',
+      :fdb_age_threshold                    => '<SERVICE DEFAULT>',
+      :mac_binding_age_threshold            => '<SERVICE DEFAULT>',
       :ignore_lsp_down                      => '<SERVICE DEFAULT>',
+      :fdb_removal_limit                    => '<SERVICE DEFAULT>',
+      :mac_binding_removal_limit            => '<SERVICE DEFAULT>',
       :network_log_rate_limit               => '<SERVICE DEFAULT>',
       :network_log_burst_limit              => '<SERVICE DEFAULT>',
       :network_log_local_output_log_base    => '<SERVICE DEFAULT>',
@@ -66,7 +70,11 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value(p[:vhostuser_socket_dir])
         should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(p[:ovn_emit_need_to_frag])
         should contain_neutron_plugin_ml2('ovn/localnet_learn_fdb').with_value(p[:localnet_learn_fdb])
+        should contain_neutron_plugin_ml2('ovn/fdb_age_threshold').with_value(p[:fdb_age_threshold])
+        should contain_neutron_plugin_ml2('ovn/mac_binding_age_threshold').with_value(p[:mac_binding_age_threshold])
         should contain_neutron_plugin_ml2('ovn_nb_global/ignore_lsp_down').with_value(p[:ignore_lsp_down])
+        should contain_neutron_plugin_ml2('ovn_nb_global/fdb_removal_limit').with_value(p[:fdb_removal_limit])
+        should contain_neutron_plugin_ml2('ovn_nb_global/mac_binding_removal_limit').with_value(p[:mac_binding_removal_limit])
         should contain_neutron_plugin_ml2('network_log/rate_limit').with_value(p[:network_log_rate_limit])
         should contain_neutron_plugin_ml2('network_log/burst_limit').with_value(p[:network_log_burst_limit])
         should contain_neutron_plugin_ml2('network_log/local_output_log_base').with_value(p[:network_log_local_output_log_base])
@@ -93,7 +101,11 @@ describe 'neutron::plugins::ml2::ovn' do
           :dns_servers                          => '8.8.8.8,10.10.10.10',
           :ovn_emit_need_to_frag                => false,
           :localnet_learn_fdb                   => false,
+          :fdb_age_threshold                    => 10,
+          :mac_binding_age_threshold            => 11,
           :ignore_lsp_down                      => false,
+          :fdb_removal_limit                    => 12,
+          :mac_binding_removal_limit            => 13,
         }
       end
 
@@ -116,7 +128,11 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value(p[:vhostuser_socket_dir])
         should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(p[:ovn_emit_need_to_frag])
         should contain_neutron_plugin_ml2('ovn/localnet_learn_fdb').with_value(p[:localnet_learn_fdb])
+        should contain_neutron_plugin_ml2('ovn/fdb_age_threshold').with_value(p[:fdb_age_threshold])
+        should contain_neutron_plugin_ml2('ovn/mac_binding_age_threshold').with_value(p[:mac_binding_age_threshold])
         should contain_neutron_plugin_ml2('ovn_nb_global/ignore_lsp_down').with_value(p[:ignore_lsp_down])
+        should contain_neutron_plugin_ml2('ovn_nb_global/fdb_removal_limit').with_value(p[:fdb_removal_limit])
+        should contain_neutron_plugin_ml2('ovn_nb_global/mac_binding_removal_limit').with_value(p[:mac_binding_removal_limit])
         should contain_neutron_plugin_ml2('network_log/rate_limit').with_value(p[:network_log_rate_limit])
         should contain_neutron_plugin_ml2('network_log/burst_limit').with_value(p[:network_log_burst_limit])
         should contain_neutron_plugin_ml2('network_log/local_output_log_base').with_value(p[:network_log_local_output_log_base])

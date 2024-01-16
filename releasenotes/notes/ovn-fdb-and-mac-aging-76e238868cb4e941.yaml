@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::plugins::ml2::ovn`` class now supports the options used by
+    FDB aging and MAC_Binding aging.

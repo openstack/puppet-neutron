@@ -113,6 +113,11 @@
 #   Type: boolean
 #   Defaults to $facts['os_service_default']
 #
+# [*ignore_lsp_down*]
+#   (optional) Do not install ARP/ND reply flows for logical switch ports
+#   if the port is DOWN.
+#   Defaults to $facts['os_service_default']
+#
 # [*network_log_rate_limit*]
 #   (Optional) Maximum packets logging per second.
 #   Used by logging service plugin.
@@ -151,6 +156,7 @@ class neutron::plugins::ml2::ovn(
   $vhostuser_socket_dir                 = $facts['os_service_default'],
   $ovn_emit_need_to_frag                = $facts['os_service_default'],
   $localnet_learn_fdb                   = $facts['os_service_default'],
+  $ignore_lsp_down                      = $facts['os_service_default'],
   $network_log_rate_limit               = $facts['os_service_default'],
   $network_log_burst_limit              = $facts['os_service_default'],
   $network_log_local_output_log_base    = $facts['os_service_default'],
@@ -183,6 +189,7 @@ class neutron::plugins::ml2::ovn(
     'ovn/vhost_sock_dir'                      : value => $vhostuser_socket_dir;
     'ovn/ovn_emit_need_to_frag'               : value => $ovn_emit_need_to_frag;
     'ovn/localnet_learn_fdb'                  : value => $localnet_learn_fdb;
+    'ovn_nb_global/ignore_lsp_down'           : value => $ignore_lsp_down;
     'network_log/rate_limit'                  : value => $network_log_rate_limit;
     'network_log/burst_limit'                 : value => $network_log_burst_limit;
     'network_log/local_output_log_base'       : value => $network_log_local_output_log_base;

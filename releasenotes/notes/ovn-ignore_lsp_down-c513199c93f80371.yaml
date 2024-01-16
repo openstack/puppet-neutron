@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::plugins::ml2::ovn::ignore_lsp_down`` parameter has been
+    added.

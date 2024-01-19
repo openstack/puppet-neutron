@@ -7,9 +7,4 @@ Puppet::Type.type(:neutron_config).provide(
     '/etc/neutron/neutron.conf'
   end
 
-  # added for backwards compatibility with older versions of inifile
-  def file_path
-    self.class.file_path
-  end
-
 end

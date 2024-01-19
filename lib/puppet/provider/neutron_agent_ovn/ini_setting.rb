@@ -7,8 +7,4 @@ Puppet::Type.type(:neutron_agent_ovn).provide(
     '/etc/neutron/plugins/ml2/ovn_agent.ini'
   end
 
-  # added for backwards compatibility with older versions of inifile
-  def file_path
-    self.class.file_path
-  end
 end

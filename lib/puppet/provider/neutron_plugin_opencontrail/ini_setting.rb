@@ -7,9 +7,4 @@ Puppet::Type.type(:neutron_plugin_opencontrail).provide(
     '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
   end
 
-  # added for backwards compatibility with older versions of inifile
-  def file_path
-    self.class.file_path
-  end
-
 end

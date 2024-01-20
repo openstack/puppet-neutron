@@ -32,6 +32,7 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_plugin_ml2 <||>
   File <||> -> Neutron_l2gw_service_config <||>
   File <||> -> Neutron_vpnaas_agent_config <||>
+  File <||> -> Neutron_vpnaas_service_config <||>
   File <||> -> Neutron_plugin_opencontrail <||>
   File <||> -> Neutron_agent_linuxbridge <||>
   File <||> -> Neutron_agent_ovs <||>
@@ -387,6 +388,7 @@ describe 'basic neutron_config resource' do
                     'neutron_metering_agent_config',
                     'neutron_plugin_ml2',
                     'neutron_vpnaas_agent_config',
+                    'neutron_vpnaas_service_config',
                     'neutron_plugin_opencontrail',
                     'neutron_agent_linuxbridge',
                     'neutron_agent_ovs',

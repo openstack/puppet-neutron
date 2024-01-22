@@ -7,9 +7,4 @@ Puppet::Type.type(:neutron_bgpvpn_bagpipe_config).provide(
     '/etc/neutron/bagpipe-bgp/bgp.conf'
   end
 
-  # added for backwards compatibility with older versions of inifile
-  def file_path
-    self.class.file_path
-  end
-
 end

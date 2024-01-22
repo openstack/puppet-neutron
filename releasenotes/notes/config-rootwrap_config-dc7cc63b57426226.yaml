@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``neutron::config::rootwrap_config`` parameter has been added.

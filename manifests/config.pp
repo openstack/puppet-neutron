@@ -27,6 +27,9 @@
 # [*api_paste_ini*]
 #   (optional) Manage configuration of api-paste.ini
 #
+# [*rootwrap_config*]
+#   (optional) Allow configuration of rootwrap.conf configurations.
+#
 # [*ovs_agent_config*]
 #   (optional) Manage configuration of openvswitch_agent.ini
 #
@@ -101,6 +104,7 @@
 class neutron::config (
   Hash $server_config                 = {},
   Hash $api_paste_ini                 = {},
+  Hash $rootwrap_config               = {},
   Hash $ovs_agent_config              = {},
   Hash $ovn_agent_config              = {},
   Hash $sriov_agent_config            = {},
@@ -148,6 +152,7 @@ class neutron::config (
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_paste_ini', $api_paste_ini)
+  create_resources('neutron_rootwrap_config', $rootwrap_config)
   create_resources('neutron_agent_ovs', $ovs_agent_config)
   create_resources('neutron_agent_ovn', $ovn_agent_config)
   create_resources('neutron_sriov_agent_config', $sriov_agent_config)

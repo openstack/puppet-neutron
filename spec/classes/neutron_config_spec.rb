@@ -27,10 +27,25 @@ describe 'neutron::config' do
       { :api_paste_ini => config_hash }
     end
 
-    it 'configures arbitrary neutron-api-config configurations' do
+    it 'configures arbitrary neutron-api-paste configurations' do
       should contain_neutron_api_paste_ini('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_api_paste_ini('DEFAULT/bar').with_value('barValue')
       should contain_neutron_api_paste_ini('DEFAULT/baz').with_ensure('absent')
+    end
+  end
+
+
+  shared_examples 'neutron_rootwrap_config' do
+    let :params do
+      { :rootwrap_config => config_hash }
+    end
+
+    it { should contain_class('neutron::deps') }
+
+    it 'configures arbitrary rootwrap configurations' do
+      should contain_neutron_rootwrap_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_rootwrap_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_rootwrap_config('DEFAULT/baz').with_ensure('absent')
     end
   end
 
@@ -191,6 +206,7 @@ describe 'neutron::config' do
 
       it_behaves_like 'neutron_config'
       it_behaves_like 'neutron_api_paste_ini'
+      it_behaves_like 'neutron_rootwrap_config'
       it_behaves_like 'neutron_service_config'
       it_behaves_like 'neutron_agent_config'
       it_behaves_like 'neutron_plugin_config'

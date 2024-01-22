@@ -45,6 +45,9 @@ class neutron::params {
       $dhcp_agent_package                 = undef
       $metering_agent_package             = 'openstack-neutron-metering-agent'
       $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
+      $libreswan_package                  = 'libreswan'
+      $strongswan_package                 = 'strongswan'
+      $taas_package                       = 'python3-tap-as-a-service'
       $l2gw_agent_package                 = 'openstack-neutron-l2gw-agent'
       $l2gw_package                       = 'python3-networking-l2gw'
       $ovn_metadata_agent_package         = 'openstack-neutron-ovn-metadata-agent'
@@ -54,8 +57,6 @@ class neutron::params {
       $bagpipe_bgp_package                = 'openstack-bagpipe-bgp'
       $bagpipe_bgp_service                = 'bagpipe-bgp'
       $bgpvpn_bagpipe_package             = 'python3-networking-bagpipe'
-      $libreswan_package                  = 'libreswan'
-      $strongswan_package                 = 'strongswan'
       $metadata_agent_package             = undef
       $l3_agent_package                   = undef
       $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
@@ -105,6 +106,7 @@ class neutron::params {
       $vpnaas_agent_package               = 'python3-neutron-vpnaas'
       $libreswan_package                  = 'libreswan'
       $strongswan_package                 = 'strongswan'
+      $taas_package                       = 'python3-neutron-taas'
       $metadata_agent_package             = 'neutron-metadata-agent'
       $l3_agent_package                   = 'neutron-l3-agent'
       $l2gw_agent_package                 = 'neutron-l2gateway-agent'

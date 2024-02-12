@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following parameters have been added to
+    the ``neutron::plugins::ml2::ovn`` class.
+
+    - ``dhcp_default_lease_time``
+    - ``ovn_dhcp4_global_options``
+    - ``ovn_dhcp6_global_options``

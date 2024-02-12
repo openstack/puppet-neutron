@@ -95,6 +95,21 @@
 #   Type: String
 #   Defaults to $facts['os_service_default']
 #
+# [*dhcp_default_lease_time*]
+#   (optional) Default lease time (in seconds) to use with OVN's native DHCP
+#   service.
+#   Defaults to $facts['os_service_default']
+#
+# [*ovn_dhcp4_global_options*]
+#   (optional) Global DHCP6 options which will be automatically set on each
+#   subnet upon creation and on all existing subnets when Neutron starts.
+#   Defaults to $facts['os_service_default']
+#
+# [*ovn_dhcp6_global_options*]
+#   (optional) Global DHCP6 options which will be automatically set on each
+#   subnet upon creation and on all existing subnets when Neutron starts.
+#   Defaults to $facts['os_service_default']
+#
 # [*ovn_emit_need_to_frag*]
 #   (optional) Configure OVN to emit "need to frag" packets in case
 #              of MTU mismatch. Before enabling this configuration make
@@ -170,6 +185,9 @@ class neutron::plugins::ml2::ovn(
   $disable_ovn_dhcp_for_baremetal_ports = $facts['os_service_default'],
   $dns_servers                          = $facts['os_service_default'],
   $vhostuser_socket_dir                 = $facts['os_service_default'],
+  $dhcp_default_lease_time              = $facts['os_service_default'],
+  $ovn_dhcp4_global_options             = $facts['os_service_default'],
+  $ovn_dhcp6_global_options             = $facts['os_service_default'],
   $ovn_emit_need_to_frag                = $facts['os_service_default'],
   $localnet_learn_fdb                   = $facts['os_service_default'],
   $fdb_age_threshold                    = $facts['os_service_default'],
@@ -187,6 +205,15 @@ class neutron::plugins::ml2::ovn(
 
   if ! ( $neutron_sync_mode in ['off', 'log', 'repair', $facts['os_service_default']] ) {
     fail( 'Invalid value for neutron_sync_mode parameter' )
+  }
+
+  $ovn_dhcp4_global_options_real = $ovn_dhcp4_global_options ? {
+    Hash    => join(join_keys_to_values($ovn_dhcp4_global_options, ':'), ','),
+    default => join(any2array($ovn_dhcp4_global_options), ',')
+  }
+  $ovn_dhcp6_global_options_real = $ovn_dhcp6_global_options ? {
+    Hash    => join(join_keys_to_values($ovn_dhcp6_global_options, ':'), ','),
+    default => join(any2array($ovn_dhcp6_global_options), ',')
   }
 
   neutron_plugin_ml2 {
@@ -207,6 +234,9 @@ class neutron::plugins::ml2::ovn(
     'ovn/disable_ovn_dhcp_for_baremetal_ports': value => $disable_ovn_dhcp_for_baremetal_ports;
     'ovn/dns_servers'                         : value => join(any2array($dns_servers), ',');
     'ovn/vhost_sock_dir'                      : value => $vhostuser_socket_dir;
+    'ovn/dhcp_default_lease_time'             : value => $dhcp_default_lease_time;
+    'ovn/ovn_dhcp4_global_options'            : value => $ovn_dhcp4_global_options_real;
+    'ovn/ovn_dhcp6_global_options'            : value => $ovn_dhcp6_global_options_real;
     'ovn/ovn_emit_need_to_frag'               : value => $ovn_emit_need_to_frag;
     'ovn/localnet_learn_fdb'                  : value => $localnet_learn_fdb;
     'ovn/fdb_age_threshold'                   : value => $fdb_age_threshold;

@@ -27,6 +27,9 @@ describe 'neutron::plugins::ml2::ovn' do
       :disable_ovn_dhcp_for_baremetal_ports => '<SERVICE DEFAULT>',
       :dns_servers                          => '<SERVICE DEFAULT>',
       :vhostuser_socket_dir                 => '<SERVICE DEFAULT>',
+      :dhcp_default_lease_time              => '<SERVICE DEFAULT>',
+      :ovn_dhcp4_global_options             => '<SERVICE DEFAULT>',
+      :ovn_dhcp6_global_options             => '<SERVICE DEFAULT>',
       :ovn_emit_need_to_frag                => '<SERVICE DEFAULT>',
       :localnet_learn_fdb                   => '<SERVICE DEFAULT>',
       :fdb_age_threshold                    => '<SERVICE DEFAULT>',
@@ -68,6 +71,9 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/disable_ovn_dhcp_for_baremetal_ports').with_value(p[:disable_ovn_dhcp_for_baremetal_ports])
         should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(p[:dns_servers])
         should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value(p[:vhostuser_socket_dir])
+        should contain_neutron_plugin_ml2('ovn/dhcp_default_lease_time').with_value(p[:dhcp_default_lease_time])
+        should contain_neutron_plugin_ml2('ovn/ovn_dhcp4_global_options').with_value(p[:ovn_dhcp4_global_options])
+        should contain_neutron_plugin_ml2('ovn/ovn_dhcp6_global_options').with_value(p[:ovn_dhcp6_global_options])
         should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(p[:ovn_emit_need_to_frag])
         should contain_neutron_plugin_ml2('ovn/localnet_learn_fdb').with_value(p[:localnet_learn_fdb])
         should contain_neutron_plugin_ml2('ovn/fdb_age_threshold').with_value(p[:fdb_age_threshold])
@@ -99,6 +105,10 @@ describe 'neutron::plugins::ml2::ovn' do
           :dvr_enabled                          => false,
           :disable_ovn_dhcp_for_baremetal_ports => false,
           :dns_servers                          => '8.8.8.8,10.10.10.10',
+          :vhostuser_socket_dir                 => '/var/run/openvswitch',
+          :dhcp_default_lease_time              => 43200,
+          :ovn_dhcp4_global_options             => 'ntp_server:1.2.3.4',
+          :ovn_dhcp6_global_options             => 'ntp_server:5.6.7.8',
           :ovn_emit_need_to_frag                => false,
           :localnet_learn_fdb                   => false,
           :fdb_age_threshold                    => 10,
@@ -126,6 +136,9 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/disable_ovn_dhcp_for_baremetal_ports').with_value(p[:disable_ovn_dhcp_for_baremetal_ports])
         should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(p[:dns_servers])
         should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value(p[:vhostuser_socket_dir])
+        should contain_neutron_plugin_ml2('ovn/dhcp_default_lease_time').with_value(p[:dhcp_default_lease_time])
+        should contain_neutron_plugin_ml2('ovn/ovn_dhcp4_global_options').with_value(p[:ovn_dhcp4_global_options])
+        should contain_neutron_plugin_ml2('ovn/ovn_dhcp6_global_options').with_value(p[:ovn_dhcp6_global_options])
         should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(p[:ovn_emit_need_to_frag])
         should contain_neutron_plugin_ml2('ovn/localnet_learn_fdb').with_value(p[:localnet_learn_fdb])
         should contain_neutron_plugin_ml2('ovn/fdb_age_threshold').with_value(p[:fdb_age_threshold])
@@ -154,9 +167,11 @@ describe 'neutron::plugins::ml2::ovn' do
     context 'with parameters set by arrays' do
       let :params do
         {
-          :ovn_nb_connection => ['tcp:192.0.2.11:6641', 'tcp:192.0.2.12:6641'],
-          :ovn_sb_connection => ['tcp:192.0.2.11:6642', 'tcp:192.0.2.12:6642'],
-          :dns_servers       => ['8.8.8.8', '10.10.10.10'],
+          :ovn_nb_connection        => ['tcp:192.0.2.11:6641', 'tcp:192.0.2.12:6641'],
+          :ovn_sb_connection        => ['tcp:192.0.2.11:6642', 'tcp:192.0.2.12:6642'],
+          :dns_servers              => ['8.8.8.8', '10.10.10.10'],
+          :ovn_dhcp4_global_options => ['ntp_server:1.2.3.4', 'wpad:1.2.3.5'],
+          :ovn_dhcp6_global_options => ['ntp_server:5.6.7.8', 'wpad:5.6.7.9'],
         }
       end
 
@@ -164,6 +179,8 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/ovn_nb_connection').with_value(p[:ovn_nb_connection].join(','))
         should contain_neutron_plugin_ml2('ovn/ovn_sb_connection').with_value(p[:ovn_sb_connection].join(','))
         should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(p[:dns_servers].join(','))
+        should contain_neutron_plugin_ml2('ovn/ovn_dhcp4_global_options').with_value(p[:ovn_dhcp4_global_options].join(','))
+        should contain_neutron_plugin_ml2('ovn/ovn_dhcp6_global_options').with_value(p[:ovn_dhcp6_global_options].join(','))
       end
     end
   end

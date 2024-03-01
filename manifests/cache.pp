@@ -108,9 +108,17 @@
 #   (oslo_cache.memcache_pool backend only)
 #   Defaults to $facts['os_service_default']
 #
-# [*manage_backend_package*]
-#   (Optional) Whether to install the backend package for the cache.
-#   Defaults to true
+# [*memcache_sasl_enabled*]
+#   (Optional) Whether SASL is enabled in memcached
+#   Defaults to $facts['os_service_default']
+#
+# [*memcache_username*]
+#   (Optional) The user name for the memcached with SASL enabled
+#   Defaults to $facts['os_service_default']
+#
+# [*memcache_password*]
+#   (Optional) The password for the memcached with SASL enabled
+#   Defaults to $facts['os_service_default']
 #
 # [*tls_enabled*]
 #   (Optional) Global toggle for TLS usage when communicating with
@@ -176,6 +184,10 @@
 #   back in the pool in the HashClient's internal mechanisms.
 #   Default to $facts['os_service_default']
 #
+# [*manage_backend_package*]
+#   (Optional) Whether to install the backend package for the cache.
+#   Defaults to true
+#
 class neutron::cache (
   $config_prefix                        = $facts['os_service_default'],
   $expiration_time                      = $facts['os_service_default'],
@@ -187,15 +199,17 @@ class neutron::cache (
   $memcache_servers                     = $facts['os_service_default'],
   $memcache_dead_retry                  = $facts['os_service_default'],
   $memcache_socket_timeout              = $facts['os_service_default'],
-  $memcache_pool_maxsize                = $facts['os_service_default'],
-  $memcache_pool_unused_timeout         = $facts['os_service_default'],
-  $memcache_pool_connection_get_timeout = $facts['os_service_default'],
-  $memcache_pool_flush_on_reconnect     = $facts['os_service_default'],
   $enable_socket_keepalive              = $facts['os_service_default'],
   $socket_keepalive_idle                = $facts['os_service_default'],
   $socket_keepalive_interval            = $facts['os_service_default'],
   $socket_keepalive_count               = $facts['os_service_default'],
-  $manage_backend_package               = true,
+  $memcache_pool_maxsize                = $facts['os_service_default'],
+  $memcache_pool_unused_timeout         = $facts['os_service_default'],
+  $memcache_pool_connection_get_timeout = $facts['os_service_default'],
+  $memcache_pool_flush_on_reconnect     = $facts['os_service_default'],
+  $memcache_sasl_enabled                = $facts['os_service_default'],
+  $memcache_username                    = $facts['os_service_default'],
+  $memcache_password                    = $facts['os_service_default'],
   $tls_enabled                          = $facts['os_service_default'],
   $tls_cafile                           = $facts['os_service_default'],
   $tls_certfile                         = $facts['os_service_default'],
@@ -207,6 +221,7 @@ class neutron::cache (
   $hashclient_retry_attempts            = $facts['os_service_default'],
   $hashclient_retry_delay               = $facts['os_service_default'],
   $dead_timeout                         = $facts['os_service_default'],
+  Boolean $manage_backend_package       = true,
 ) {
 
   include neutron::deps
@@ -230,7 +245,9 @@ class neutron::cache (
     memcache_pool_unused_timeout         => $memcache_pool_unused_timeout,
     memcache_pool_connection_get_timeout => $memcache_pool_connection_get_timeout,
     memcache_pool_flush_on_reconnect     => $memcache_pool_flush_on_reconnect,
-    manage_backend_package               => $manage_backend_package,
+    memcache_sasl_enabled                => $memcache_sasl_enabled,
+    memcache_username                    => $memcache_username,
+    memcache_password                    => $memcache_password,
     tls_enabled                          => $tls_enabled,
     tls_cafile                           => $tls_cafile,
     tls_certfile                         => $tls_certfile,
@@ -242,5 +259,6 @@ class neutron::cache (
     hashclient_retry_attempts            => $hashclient_retry_attempts,
     hashclient_retry_delay               => $hashclient_retry_delay,
     dead_timeout                         => $dead_timeout,
+    manage_backend_package               => $manage_backend_package,
   }
 }

@@ -279,4 +279,6 @@ class neutron::keystone::authtoken(
       service_type                   => $service_type,
       interface                      => $interface;
   }
+
+  Keystone::Resource::Authtoken['neutron_config'] -> Anchor['neutron::config::end']
 }

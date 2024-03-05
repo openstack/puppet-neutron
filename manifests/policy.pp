@@ -70,6 +70,11 @@ class neutron::policy (
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
 
+  # policy config should occur in the config block also.
+  Anchor['neutron::config::begin']
+  -> Openstacklib::Policy[$policy_path]
+  -> Anchor['neutron::config::end']
+
   oslo::policy { 'neutron_config':
     enforce_scope        => $enforce_scope,
     enforce_new_defaults => $enforce_new_defaults,

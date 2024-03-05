@@ -33,11 +33,12 @@ class neutron::deps {
   File<| tag == 'neutron-config-file' |> -> File_line<| tag == 'neutron-file-line' |>
 
   # All other inifile providers need to be processed in the config block
+  Anchor['neutron::config::begin'] -> Neutron_api_paste_ini<||> -> Anchor['neutron::config::end']
+  Anchor['neutron::config::begin'] -> Neutron_api_uwsgi_config<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_agent_linuxbridge<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_agent_macvtap<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_agent_ovs<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_agent_ovn<||> -> Anchor['neutron::config::end']
-  Anchor['neutron::config::begin'] -> Neutron_api_paste_ini<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_bgpvpn_bagpipe_config<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_bgpvpn_service_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_sfc_service_config<||> ~> Anchor['neutron::config::end']
@@ -57,12 +58,6 @@ class neutron::deps {
   Anchor['neutron::config::begin'] -> Neutron_rootwrap_config<||> ~> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Ovn_metadata_agent_config<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Ironic_neutron_agent_config<||> -> Anchor['neutron::config::end']
-  Anchor['neutron::config::begin'] -> Neutron_api_uwsgi_config<||> ~> Anchor['neutron::config::end']
-
-  # policy config should occur in the config block also.
-  Anchor['neutron::config::begin']
-  -> Openstacklib::Policy<| tag == 'neutron' |>
-  -> Anchor['neutron::config::end']
 
   # Support packages need to be installed in the install phase, but we don't
   # put them in the chain above because we don't want any false dependencies
@@ -81,14 +76,6 @@ class neutron::deps {
   Anchor['neutron::install::begin']
   -> Package<| tag == 'neutron-plugin-ml2-package'|>
   ~> Anchor['neutron::config::end']
-
-  # all cache settings should be applied and all packages should be installed
-  # before service startup
-  Oslo::Cache<||> -> Anchor['neutron::service::begin']
-
-  # all db settings should be applied and all packages should be installed
-  # before dbsync starts
-  Oslo::Db<||> -> Anchor['neutron::dbsync::begin']
 
   # We need openstackclient before marking service end so that neutron
   # will have clients available to create resources. This tag handles the

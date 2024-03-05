@@ -72,4 +72,7 @@ class neutron::db (
 
   }
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db['neutron_config'] -> Anchor['neutron::dbsync::begin']
 }

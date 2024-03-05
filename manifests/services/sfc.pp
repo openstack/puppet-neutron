@@ -70,7 +70,7 @@ class neutron::services::sfc (
 
   if $sync_db {
     exec { 'sfc-db-sync':
-      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-sfc upgrade head',
+      command     => 'neutron-db-manage --subproject networking-sfc upgrade head',
       path        => '/usr/bin',
       user        => $::neutron::params::user,
       subscribe   => [

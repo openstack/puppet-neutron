@@ -49,7 +49,7 @@ describe 'neutron::services::bgpvpn' do
 
       it 'runs neutron-db-manage' do
         should contain_exec('bgpvpn-db-sync').with(
-          :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-bgpvpn upgrade head',
+          :command     => 'neutron-db-manage --subproject networking-bgpvpn upgrade head',
           :path        => '/usr/bin',
           :user        => 'neutron',
           :subscribe   => ['Anchor[neutron::install::end]',

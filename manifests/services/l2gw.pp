@@ -85,7 +85,7 @@ class neutron::services::l2gw (
 
   if $sync_db {
     exec { 'l2gw-db-sync':
-      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-l2gw upgrade head',
+      command     => 'neutron-db-manage --subproject networking-l2gw upgrade head',
       path        => '/usr/bin',
       user        => $::neutron::params::user,
       subscribe   => [

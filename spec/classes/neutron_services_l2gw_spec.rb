@@ -74,7 +74,7 @@ describe 'neutron::services::l2gw' do
 
       it 'runs neutron-db-manage' do
         should contain_exec('l2gw-db-sync').with(
-          :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-l2gw upgrade head',
+          :command     => 'neutron-db-manage --subproject networking-l2gw upgrade head',
           :path        => '/usr/bin',
           :user        => 'neutron',
           :subscribe   => ['Anchor[neutron::install::end]',

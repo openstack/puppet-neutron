@@ -33,7 +33,7 @@ describe 'neutron::services::vpnaas' do
 
       it 'runs neutron-db-manage' do
         should contain_exec('vpnaas-db-sync').with(
-          :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject neutron-vpnaas upgrade head',
+          :command     => 'neutron-db-manage --subproject neutron-vpnaas upgrade head',
           :path        => '/usr/bin',
           :user        => 'neutron',
           :subscribe   => ['Anchor[neutron::install::end]',

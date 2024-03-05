@@ -48,7 +48,7 @@ describe 'neutron::services::taas' do
 
       it 'runs neutron-db-manage' do
         should contain_exec('taas-db-sync').with(
-          :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject tap-as-a-service upgrade head',
+          :command     => 'neutron-db-manage --subproject tap-as-a-service upgrade head',
           :path        => '/usr/bin',
           :user        => 'neutron',
           :subscribe   => ['Anchor[neutron::install::end]',

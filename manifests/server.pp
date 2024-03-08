@@ -398,8 +398,11 @@ the neutron::services::vpnaas class.")
           hasrestart => true,
           tag        => ['neutron-service', 'neutron-server-eventlet'],
         }
+        Neutron_api_paste_ini<||> ~> Service['neutron-server']
+
       } elsif $service_name == 'httpd' {
         fail('Use api_service_name and rpc_service_name to run api service by httpd')
+
       } else {
         warning('Support for arbitrary service name is deprecated')
         # backward compatibility so operators can customize the service name.
@@ -412,6 +415,7 @@ the neutron::services::vpnaas class.")
           tag        => ['neutron-service'],
         }
       }
+
     } else {
       if $::neutron::params::server_service {
         # we need to make sure neutron-server is stopped before trying to
@@ -429,9 +433,10 @@ the neutron::services::vpnaas class.")
       if $api_service_name {
         if $api_service_name == 'httpd' {
           Service <| title == 'httpd' |> { tag +> 'neutron-service' }
+          Neutron_api_paste_ini<||> ~> Service[$api_service_name]
 
           if $::neutron::params::server_service {
-            Service['neutron-server'] -> Service['httpd']
+            Service['neutron-server'] -> Service[$api_service_name]
           }
 
           if $::neutron::params::api_service_name {
@@ -445,8 +450,9 @@ the neutron::services::vpnaas class.")
               hasrestart => true,
               tag        => ['neutron-service'],
             }
-            Service['neutron-api'] -> Service['httpd']
+            Service['neutron-api'] -> Service[$api_service_name]
           }
+
         } else {
           service { 'neutron-api':
             ensure     => $service_ensure,
@@ -456,6 +462,9 @@ the neutron::services::vpnaas class.")
             hasrestart => true,
             tag        => ['neutron-service', 'neutron-server-eventlet'],
           }
+
+          Neutron_api_paste_ini<||> ~> Service['neutron-api']
+          Neutron_api_uwsgi_config<||> ~> Service['neutron-api']
 
           if $::neutron::params::server_service {
             Service['neutron-server'] -> Service['neutron-api']

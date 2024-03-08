@@ -80,6 +80,8 @@ class neutron::params {
         $api_service_name                 = 'neutron-api'
         $rpc_package_name                 = 'neutron-rpc-server'
         $rpc_service_name                 = 'neutron-rpc-server'
+        $bagpipe_bgp_package              = 'networking-bagpipe-bgp-agent'
+        $bagpipe_bgp_service              = 'networking-bagpipe-bgp-agent'
       } else {
         $ml2_server_package               = 'neutron-plugin-ml2'
         $server_service                   = 'neutron-server'
@@ -88,11 +90,11 @@ class neutron::params {
         $api_service_name                 = undef
         $rpc_package_name                 = undef
         $rpc_service_name                 = undef
+        $bagpipe_bgp_package              = undef
+        $bagpipe_bgp_service              = undef
       }
       $dynamic_routing_package            = 'python3-neutron-dynamic-routing'
       $bgp_dragent_package                = 'neutron-bgp-dragent'
-      $bagpipe_bgp_package                = undef
-      $bagpipe_bgp_service                = undef
       $bgpvpn_bagpipe_package             = 'python3-networking-bagpipe'
       $ovs_agent_package                  = 'neutron-openvswitch-agent'
       $ovs_cleanup_service                = undef

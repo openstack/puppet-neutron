@@ -118,11 +118,12 @@ describe 'neutron::agents::bagpipe' do
           { :bagpipe_bgp_package => 'openstack-bagpipe-bgp',
             :bagpipe_bgp_service => 'bagpipe-bgp' }
         when 'Debian'
-          {}
+          { :bagpipe_bgp_package => 'networking-bagpipe-bgp-agent',
+            :bagpipe_bgp_service => 'networking-bagpipe-bgp-agent' }
         end
       end
 
-      if facts[:os]['family'] == 'RedHat'
+      if facts[:os]['family'] == 'RedHat' or facts[:os]['name'] == 'Debian'
         it_behaves_like 'neutron bgpvpn bagpipe agent'
       end
     end

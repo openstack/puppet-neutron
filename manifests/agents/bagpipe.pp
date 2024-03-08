@@ -98,8 +98,8 @@ class neutron::agents::bagpipe (
   include neutron::deps
   include neutron::params
 
-  if $facts['os']['family'] != 'RedHat' {
-    fail('BaGPipe agent is currently supported in RedHat OS family')
+  if ! $::neutron::params::bagpipe_bgp_package {
+    fail('BaGPipe agent is currently unsupported in this operating system.')
   }
 
   resources { 'neutron_bgpvpn_bagpipe_config':

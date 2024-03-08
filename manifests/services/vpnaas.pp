@@ -53,7 +53,7 @@ class neutron::services::vpnaas (
 
   if $sync_db {
     exec { 'vpnaas-db-sync':
-      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject neutron-vpnaas upgrade head',
+      command     => 'neutron-db-manage --subproject neutron-vpnaas upgrade head',
       path        => '/usr/bin',
       user        => $::neutron::params::user,
       subscribe   => [

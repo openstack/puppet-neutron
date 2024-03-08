@@ -65,7 +65,7 @@ class neutron::services::taas (
 
   if $sync_db {
     exec { 'taas-db-sync':
-      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject tap-as-a-service upgrade head',
+      command     => 'neutron-db-manage --subproject tap-as-a-service upgrade head',
       path        => '/usr/bin',
       user        => $::neutron::params::user,
       subscribe   => [

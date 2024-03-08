@@ -93,6 +93,8 @@ describe 'neutron::server' do
       should contain_neutron_config('ovs/igmp_flood').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ovs/igmp_flood_reports').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ovs/igmp_flood_unregistered').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('DEFAULT/enable_default_route_ecmp').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('DEFAULT/enable_default_route_bfd').with_value('<SERVICE DEFAULT>')
     end
 
     context 'with manage_service as false' do
@@ -355,6 +357,20 @@ describe 'neutron::server' do
         should contain_neutron_config('ovs/igmp_flood').with_value(true)
         should contain_neutron_config('ovs/igmp_flood_reports').with_value(true)
         should contain_neutron_config('ovs/igmp_flood_unregistered').with_value(true)
+      end
+    end
+
+    context 'with default route options' do
+      before :each do
+        params.merge!({
+          :enable_default_route_ecmp => false,
+          :enable_default_route_bfd  => false,
+        })
+      end
+
+      it 'configure neutron.conf' do
+        should contain_neutron_config('DEFAULT/enable_default_route_ecmp').with_value(false)
+        should contain_neutron_config('DEFAULT/enable_default_route_bfd').with_value(false)
       end
     end
 

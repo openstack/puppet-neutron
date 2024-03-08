@@ -230,6 +230,16 @@
 #   multicast packets only to ports connected to multicast routers.
 #   Defaults to $facts['os_service_default']
 #
+# [*enable_default_route_ecmp*]
+#   (Optional) Define the default value for enable_default_route_ecmp if not
+#   speficied on the router.
+#   Defaults to $facts['os_service_default']
+#
+# [*enable_default_route_bfd*]
+#   (Optional) Define the default value for enable_default_route_bfd if not
+#   speficied on the router.
+#   Defaults to $facts['os_service_default']
+#
 # DEPRECATED PARAMETERS
 #
 # [*ensure_vpnaas_package*]
@@ -280,6 +290,8 @@ class neutron::server (
   $igmp_flood                       = $facts['os_service_default'],
   $igmp_flood_reports               = $facts['os_service_default'],
   $igmp_flood_unregistered          = $facts['os_service_default'],
+  $enable_default_route_ecmp        = $facts['os_service_default'],
+  $enable_default_route_bfd         = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   Boolean $ensure_vpnaas_package    = false,
 ) inherits neutron::params {
@@ -343,6 +355,8 @@ the neutron::services::vpnaas class.")
     'ovs/igmp_flood':                           value => $igmp_flood;
     'ovs/igmp_flood_reports':                   value => $igmp_flood_reports;
     'ovs/igmp_flood_unregistered':              value => $igmp_flood_unregistered;
+    'DEFAULT/enable_default_route_ecmp':        value => $enable_default_route_ecmp;
+    'DEFAULT/enable_default_route_bfd':         value => $enable_default_route_bfd;
   }
 
   if $server_package {

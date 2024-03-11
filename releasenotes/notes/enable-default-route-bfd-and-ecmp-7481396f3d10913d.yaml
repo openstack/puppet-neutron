@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``neutron::server`` class.
+
+    - ``enable_default_route_bfd``
+    - ``enable_default_route_ecmp``

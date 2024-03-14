@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::rabbit_transient_quorum_queue`` parameter has been
+    added.

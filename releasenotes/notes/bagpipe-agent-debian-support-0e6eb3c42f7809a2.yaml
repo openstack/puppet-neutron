@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Added support for networking-bagpie agent under Debian. Previously, only
+    Red Hat OS familly was supported, as Debian was not providing an agent
+    package. Note that Ubuntu still does not provide a bagpipe agent package
+    or service, and therefore, is still unsuported.

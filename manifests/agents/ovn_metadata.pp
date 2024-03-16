@@ -162,7 +162,7 @@ class neutron::agents::ovn_metadata (
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/nova_metadata_protocol':         value => $metadata_protocol;
     'DEFAULT/nova_metadata_insecure':         value => $metadata_insecure;
-    'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret;
+    'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret, secret => true;
     'DEFAULT/metadata_workers':               value => $metadata_workers;
     'DEFAULT/metadata_backlog':               value => $metadata_backlog;
     'DEFAULT/nova_client_cert':               value => $nova_client_cert;

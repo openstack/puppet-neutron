@@ -57,7 +57,6 @@ describe 'neutron::agents::metadata' do
       should contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_insecure').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_metadata_agent_config('DEFAULT/metadata_proxy_shared_secret').with(:value => params[:shared_secret]).with_secret(true)
-      should contain_neutron_metadata_agent_config('DEFAULT/cache_url').with(:ensure => 'absent')
       should contain_neutron_metadata_agent_config('agent/report_interval').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_metadata_agent_config('DEFAULT/rpc_response_max_timeout').with(:value => '<SERVICE DEFAULT>')
     end

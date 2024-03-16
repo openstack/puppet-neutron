@@ -48,12 +48,6 @@
 #   (optional) Number of backlog requests to configure the metadata server socket with.
 #   Defaults to $facts['os_service_default']
 #
-# [*metadata_memory_cache_ttl*]
-#   (optional) Specifies time in seconds a metadata cache entry is valid in
-#   memory caching backend.
-#   Set to 0 will cause cache entries to never expire.
-#   Set to $facts['os_service_default'] or false to disable cache.
-#
 # [*metadata_insecure*]
 #   (optional) Allow to perform insecure SSL (https) requests to nova metadata.
 #   Defaults to $facts['os_service_default']
@@ -73,6 +67,13 @@
 #   in the metadata config.
 #   Defaults to false.
 #
+# DEPRECATED PRAMETERS
+#
+# [*metadata_memory_cache_ttl*]
+#   (optional) Specifies time in seconds a metadata cache entry is valid in
+#   memory caching backend.
+#   Defaults to undef
+#
 class neutron::agents::metadata (
   $shared_secret,
   $package_ensure            = 'present',
@@ -85,17 +86,22 @@ class neutron::agents::metadata (
   $metadata_protocol         = $facts['os_service_default'],
   $metadata_workers          = $facts['os_workers'],
   $metadata_backlog          = $facts['os_service_default'],
-  $metadata_memory_cache_ttl = $facts['os_service_default'],
   $metadata_insecure         = $facts['os_service_default'],
   $nova_client_cert          = $facts['os_service_default'],
   $nova_client_priv_key      = $facts['os_service_default'],
   $report_interval           = $facts['os_service_default'],
   $rpc_response_max_timeout  = $facts['os_service_default'],
   Boolean $purge_config      = false,
+  # DEPRECATED PARAMETERS
+  $metadata_memory_cache_ttl = undef,
 ) {
 
   include neutron::deps
   include neutron::params
+
+  if metadata_memory_cache_ttl {
+    warning('The metadata_memotry_cache_ttl parameter is deprecated and has no effect.')
+  }
 
   resources { 'neutron_metadata_agent_config':
     purge => $purge_config,
@@ -117,14 +123,9 @@ class neutron::agents::metadata (
     'DEFAULT/rpc_response_max_timeout':       value => $rpc_response_max_timeout;
   }
 
-  if ! is_service_default ($metadata_memory_cache_ttl) and ($metadata_memory_cache_ttl) {
-    neutron_metadata_agent_config {
-      'DEFAULT/cache_url': value => "memory://?default_ttl=${metadata_memory_cache_ttl}";
-    }
-  } else {
-    neutron_metadata_agent_config {
-      'DEFAULT/cache_url': ensure => absent;
-    }
+  # TODO(tkajinam): Remove this after 2024.1 release
+  neutron_metadata_agent_config {
+    'DEFAULT/cache_url': ensure => absent;
   }
 
   if $::neutron::params::metadata_agent_package {

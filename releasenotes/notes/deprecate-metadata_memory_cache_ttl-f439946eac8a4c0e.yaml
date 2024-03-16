@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``neutron::agents::metadata::metadata_memory_cache_ttl`` parameter has
+    been deprecated and has no effect now. It will be removed in a future
+    release.

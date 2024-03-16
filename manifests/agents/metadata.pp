@@ -8,10 +8,12 @@
 #   (required) Shared secret to validate proxies Neutron metadata requests.
 #
 # [*package_ensure*]
-#   Ensure state of the package. Defaults to 'present'.
+#   (optional) Ensure state of the package.
+#   Defaults to 'present'.
 #
 # [*enabled*]
-#   State of the service. Defaults to true.
+#   (optional) State of the service.
+#   Defaults to true.
 #
 # [*manage_service*]
 #   (optional) Whether to start/stop the service
@@ -21,31 +23,38 @@
 #   Debug. Defaults to $facts['os_service_default'].
 #
 # [*auth_ca_cert*]
-#   CA cert to check against with for ssl keystone. (Defaults to $facts['os_service_default'])
+#   (optionall) CA cert to check against with for ssl keystone.
+#   Defaults to $facts['os_service_default']
 #
 # [*nova_client_cert*]
-#   Client certificate for nova metadata api server. (Defaults to $facts['os_service_default'])
+#   (optionall) Client certificate for nova metadata api server.
+#   Defaults to $facts['os_service_default']
 #
 # [*nova_client_priv_key*]
-#   Private key of client certificate. (Defaults to $facts['os_service_default'])
+#   (optionall) Private key of client certificate.
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_host*]
-#   The hostname of the metadata service. Defaults to $facts['os_service_default'].
+#   (optionall) The hostname of the metadata service.
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_port*]
-#   The TCP port of the metadata service. Defaults to $facts['os_service_default'].
+#   (optionall) The TCP port of the metadata service.
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_protocol*]
-#   The protocol to use for requests to Nova metadata server. Defaults to $facts['os_service_default'].
+#   (optionall) The protocol to use for requests to Nova metadata server.
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_workers*]
 #   (optional) Number of separate worker processes to spawn.  Greater than 0
 #   launches that number of child processes as workers.  The parent process
 #   manages them.
-#   Defaults to: $facts['os_workers']
+#   Defaults to $facts['os_workers']
 #
 # [*metadata_backlog*]
-#   (optional) Number of backlog requests to configure the metadata server socket with.
+#   (optional) Number of backlog requests to configure the metadata server
+#   socket with.
 #   Defaults to $facts['os_service_default']
 #
 # [*metadata_insecure*]
@@ -81,14 +90,14 @@ class neutron::agents::metadata (
   Boolean $manage_service    = true,
   $debug                     = $facts['os_service_default'],
   $auth_ca_cert              = $facts['os_service_default'],
+  $nova_client_cert          = $facts['os_service_default'],
+  $nova_client_priv_key      = $facts['os_service_default'],
   $metadata_host             = $facts['os_service_default'],
   $metadata_port             = $facts['os_service_default'],
   $metadata_protocol         = $facts['os_service_default'],
   $metadata_workers          = $facts['os_workers'],
   $metadata_backlog          = $facts['os_service_default'],
   $metadata_insecure         = $facts['os_service_default'],
-  $nova_client_cert          = $facts['os_service_default'],
-  $nova_client_priv_key      = $facts['os_service_default'],
   $report_interval           = $facts['os_service_default'],
   $rpc_response_max_timeout  = $facts['os_service_default'],
   Boolean $purge_config      = false,
@@ -110,6 +119,8 @@ class neutron::agents::metadata (
   neutron_metadata_agent_config {
     'DEFAULT/debug':                          value => $debug;
     'DEFAULT/auth_ca_cert':                   value => $auth_ca_cert;
+    'DEFAULT/nova_client_cert':               value => $nova_client_cert;
+    'DEFAULT/nova_client_priv_key':           value => $nova_client_priv_key;
     'DEFAULT/nova_metadata_host':             value => $metadata_host;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/nova_metadata_protocol':         value => $metadata_protocol;
@@ -117,8 +128,6 @@ class neutron::agents::metadata (
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret, secret => true;
     'DEFAULT/metadata_workers':               value => $metadata_workers;
     'DEFAULT/metadata_backlog':               value => $metadata_backlog;
-    'DEFAULT/nova_client_cert':               value => $nova_client_cert;
-    'DEFAULT/nova_client_priv_key':           value => $nova_client_priv_key;
     'agent/report_interval':                  value => $report_interval;
     'DEFAULT/rpc_response_max_timeout':       value => $rpc_response_max_timeout;
   }

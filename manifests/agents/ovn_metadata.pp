@@ -18,31 +18,31 @@
 #   Defaults to true
 #
 # [*debug*]
-#   Debug. Defaults to $facts['os_service_default'].
+#   (optional) Debug. Defaults to $facts['os_service_default'].
 #
 # [*auth_ca_cert*]
-#   CA cert to check against with for ssl keystone.
-#   Defaults to $facts['os_service_default'].
+#   (optionall) CA cert to check against with for ssl keystone.
+#   Defaults to $facts['os_service_default']
 #
 # [*nova_client_cert*]
-#   Client certificate for nova metadata api server.
-#   Defaults to $facts['os_service_default'].
+#   (optionall) Client certificate for nova metadata api server.
+#   Defaults to $facts['os_service_default']
 #
 # [*nova_client_priv_key*]
-#   Private key of client certificate.
-#   Defaults to $facts['os_service_default'].
+#   (optionall) Private key of client certificate.
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_host*]
-#   The hostname of the metadata service.
-#   Defaults to $facts['os_service_default'].
+#   (optionall) The hostname of the metadata service.
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_port*]
-#   The TCP port of the metadata service.
-#   Defaults to $facts['os_service_default'].
+#   (optionall) The TCP port of the metadata service.
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_protocol*]
-#   The protocol to use for requests to Nova metadata server.
-#   Defaults to $facts['os_service_default'].
+#   (optionall) The protocol to use for requests to Nova metadata server.
+#   Defaults to $facts['os_service_default']
 #
 # [*metadata_workers*]
 #   (optional) Number of separate worker processes to spawn.  Greater than 0
@@ -51,7 +51,8 @@
 #   Defaults to: $facts['os_service_defaut']
 #
 # [*metadata_backlog*]
-#   (optional) Number of backlog requests to configure the metadata server socket with.
+#   (optional) Number of backlog requests to configure the metadata server
+#   socket with.
 #   Defaults to $facts['os_service_default']
 #
 # [*metadata_insecure*]
@@ -63,8 +64,8 @@
 #   Defaults to 'tcp:127.0.0.1:6640'
 #
 # [*ovs_manager*]
-#   The manager target that will be set to OVS so that the metadata agent can
-#   connect to.
+#   (optional) The manager target that will be set to OVS so that the metadata
+#   agent can connect to.
 #   Defaults to 'ptcp:6640:127.0.0.1'
 #
 # [*ovn_sb_connection*]
@@ -99,14 +100,14 @@
 #   Defaults to $facts['os_service_default'].
 #
 # [*root_helper*]
-#  (optional) Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
-#  root filter facility. Change to "sudo" to skip the filtering and just run the command
-#  directly
-#  Defaults to 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf'.
+#   (optional) Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use
+#   the real root filter facility. Change to "sudo" to skip the filtering and
+#   just run the command directly
+#   Defaults to 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf'.
 #
 # [*root_helper_daemon*]
-#  (optional) Root helper daemon application to use when possible.
-#  Defaults to $facts['os_service_default'].
+#   (optional) Root helper daemon application to use when possible.
+#   Defaults to $facts['os_service_default'].
 #
 # [*state_path*]
 #   (optional) Where to store state files. This directory must be writable
@@ -161,10 +162,10 @@ class neutron::agents::ovn_metadata (
     'DEFAULT/nova_metadata_host':             value => $metadata_host;
     'DEFAULT/nova_metadata_port':             value => $metadata_port;
     'DEFAULT/nova_metadata_protocol':         value => $metadata_protocol;
-    'DEFAULT/nova_metadata_insecure':         value => $metadata_insecure;
     'DEFAULT/metadata_proxy_shared_secret':   value => $shared_secret, secret => true;
     'DEFAULT/metadata_workers':               value => $metadata_workers;
     'DEFAULT/metadata_backlog':               value => $metadata_backlog;
+    'DEFAULT/nova_metadata_insecure':         value => $metadata_insecure;
     'DEFAULT/nova_client_cert':               value => $nova_client_cert;
     'DEFAULT/nova_client_priv_key':           value => $nova_client_priv_key;
     'DEFAULT/state_path':                     value => $state_path;

@@ -15,7 +15,11 @@
 #   Defaults to true
 #
 # [*debug*]
-#   Debug. Defaults to $facts['os_service_default'].
+#   (optional) Debug. Defaults to $facts['os_service_default'].
+#
+# [*extensions*]
+#   (optional) Extension list to use.
+#   Defaults to $facts['os_service_default']
 #
 # [*ovsdb_connection*]
 #   (optional) The URI used to connect to the local OVSDB server.
@@ -105,6 +109,7 @@ class neutron::agents::ml2::ovn (
   Boolean $enabled          = true,
   Boolean $manage_service   = true,
   $debug                    = $facts['os_service_default'],
+  $extensions               = $facts['os_service_default'],
   $ovsdb_connection         = 'tcp:127.0.0.1:6640',
   $ovs_manager              = 'ptcp:6640:127.0.0.1',
   $ovn_nb_connection        = $facts['os_service_default'],
@@ -135,6 +140,7 @@ class neutron::agents::ml2::ovn (
   neutron_agent_ovn {
     'DEFAULT/debug':                value => $debug;
     'DEFAULT/state_path':           value => $state_path;
+    'agent/extensions':             value => join(any2array($extensions), ',');
     'agent/root_helper':            value => $root_helper;
     'agent/root_helper_daemon':     value => $root_helper_daemon;
     'ovs/ovsdb_connection':         value => $ovsdb_connection;

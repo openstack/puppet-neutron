@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``neutron::agents::ml2::ovn::extensions`` parameter has been added.

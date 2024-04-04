@@ -108,8 +108,8 @@ class neutron::agents::metadata (
   include neutron::deps
   include neutron::params
 
-  if metadata_memory_cache_ttl {
-    warning('The metadata_memotry_cache_ttl parameter is deprecated and has no effect.')
+  if $metadata_memory_cache_ttl {
+    warning('The metadata_memory_cache_ttl parameter is deprecated and has no effect.')
   }
 
   resources { 'neutron_metadata_agent_config':

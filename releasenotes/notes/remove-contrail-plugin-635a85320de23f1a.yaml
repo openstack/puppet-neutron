@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for contrail plugin has been removed.

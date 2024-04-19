@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``neutron::config::plugin_nuage_config`` parameter has been removed.

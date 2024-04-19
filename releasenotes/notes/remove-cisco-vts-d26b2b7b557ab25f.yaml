@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for Cisco VTS mechanism driver has been removed.

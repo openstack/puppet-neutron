@@ -14,7 +14,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/neutron_vpnaas.conf',
                      '/etc/neutron/taas_plugin.ini',
-                     '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
                      '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
                      '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
                      '/etc/neutron/plugins/ml2/ovn_agent.ini',
@@ -35,7 +34,6 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_vpnaas_agent_config <||>
   File <||> -> Neutron_vpnaas_service_config <||>
   File <||> -> Neutron_taas_service_config <||>
-  File <||> -> Neutron_plugin_opencontrail <||>
   File <||> -> Neutron_agent_linuxbridge <||>
   File <||> -> Neutron_agent_ovs <||>
   File <||> -> Neutron_agent_ovn <||>
@@ -46,8 +44,7 @@ describe 'basic neutron_config resource' do
 
   $neutron_directories = ['/etc/neutron',
                           '/etc/neutron/plugins',
-                          '/etc/neutron/plugins/ml2',
-                          '/etc/neutron/plugins/opencontrail']
+                          '/etc/neutron/plugins/ml2']
 
   $neutron_files = [ '/etc/neutron/api-paste.ini',
                      '/etc/neutron/neutron.conf',
@@ -61,7 +58,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/neutron_vpnaas.conf',
                      '/etc/neutron/taas_plugin.ini',
-                     '/etc/neutron/plugins/opencontrail/ContrailPlugin.ini',
                      '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
                      '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
                      '/etc/neutron/plugins/ml2/ovn_agent.ini',
@@ -255,24 +251,6 @@ describe 'basic neutron_config resource' do
     ensure_absent_val => 'toto',
   }
 
-  neutron_plugin_opencontrail { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_plugin_opencontrail { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_plugin_opencontrail { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_plugin_opencontrail { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
   neutron_agent_linuxbridge { 'DEFAULT/thisshouldexist' :
     value => 'foo',
   }
@@ -411,7 +389,6 @@ describe 'basic neutron_config resource' do
                     'neutron_vpnaas_agent_config',
                     'neutron_vpnaas_service_config',
                     'neutron_taas_service_config',
-                    'neutron_plugin_opencontrail',
                     'neutron_agent_linuxbridge',
                     'neutron_agent_ovs',
                     'neutron_agent_ovn',

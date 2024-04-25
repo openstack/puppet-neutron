@@ -92,9 +92,6 @@
 # [*linuxbridge_agent_config*]
 #   (optional) Manage configuration of linuxbridge_agent.ini
 #
-# [*plugin_nuage_config*]
-#   (optional) Manage configuration of plugins/nuage/plugin.ini
-#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -123,7 +120,6 @@ class neutron::config (
   Hash $plugin_ml2_config             = {},
   # DEPRECATED PARAMETERS
   Optional[Hash] $linuxbridge_agent_config   = undef,
-  Optional[Hash] $plugin_nuage_config        = undef,
 ) {
 
   include neutron::deps
@@ -133,10 +129,6 @@ class neutron::config (
     $linuxbridge_agent_config_real = $linuxbridge_agent_config
   } else {
     $linuxbridge_agent_config_real = {}
-  }
-
-  if $plugin_nuage_config != undef {
-    warning('The plugin_nuage_config parameter is deprecated and has no effect.')
   }
 
   create_resources('neutron_config', $server_config)

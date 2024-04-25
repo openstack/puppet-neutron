@@ -64,11 +64,6 @@ class neutron::params {
       $networking_baremetal_package       = 'python3-networking-baremetal'
       $networking_baremetal_agent_package = 'python3-ironic-neutron-agent'
       $networking_baremetal_agent_service = 'ironic-neutron-agent'
-      $mlnx_agent_package                 = 'python3-networking-mlnx'
-      $mlnx_plugin_package                = 'python3-networking-mlnx'
-      $eswitchd_package                   = undef
-      $mlnx_agent_service                 = 'neutron-mlnx-agent'
-      $eswitchd_service                   = 'eswitchd'
     }
     'Debian': {
       $package_name                       = 'neutron-common'
@@ -120,11 +115,6 @@ class neutron::params {
       $networking_baremetal_package       = 'python3-ironic-neutron-agent'
       $networking_baremetal_agent_package = 'ironic-neutron-agent'
       $networking_baremetal_agent_service = 'ironic-neutron-agent'
-      $mlnx_agent_package                 = 'neutron-mlnx-agent'
-      $mlnx_plugin_package                = 'python3-networking-mlnx'
-      $eswitchd_package                   = 'networking-mlnx-eswitchd'
-      $mlnx_agent_service                 = 'neutron-mlnx-agent'
-      $eswitchd_service                   = 'networking-mlnx-eswitchd'
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")

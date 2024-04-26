@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``neutron::agents::metadata::metadata_memory_cache_ttl`` parameter has
+    been removed.

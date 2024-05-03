@@ -502,9 +502,6 @@ describe 'neutron::agents::ml2::ovs' do
     end
 
     context 'when enabling dpdk with manage vswitch is default' do
-      let :pre_condition do
-        "class { 'vswitch::dpdk': host_core_list => '1,2', memory_channels => '1' }"
-      end
       before :each do
         params.merge!(:enable_dpdk => true,
                       :datapath_type => 'netdev',

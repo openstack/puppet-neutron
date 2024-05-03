@@ -33,7 +33,7 @@ describe 'neutron::plugins::ml2' do
       :tenant_network_types  => ['local', 'flat', 'vlan', 'gre', 'vxlan'],
       :mechanism_drivers     => ['openvswitch'],
       :flat_networks         => '*',
-      :network_vlan_ranges   => '10:50',
+      :network_vlan_ranges   => 'datacentre:10:50',
       :tunnel_id_ranges      => '20:100',
       :vxlan_group           => '224.0.0.1',
       :vni_ranges            => '10:100',
@@ -176,7 +176,7 @@ describe 'neutron::plugins::ml2' do
 
     context 'when using vlan driver with valid values' do
       before :each do
-        params.merge!(:network_vlan_ranges => ['1:20', '400:4094'])
+        params.merge!(:network_vlan_ranges => ['net1:1:20', 'net2:400:4094'])
       end
       it 'configures vlan_networks with 1:20 and 400:4094 VLAN ranges' do
         should contain_neutron_plugin_ml2('ml2_type_vlan/network_vlan_ranges').with_value(p[:network_vlan_ranges].join(','))
@@ -185,15 +185,15 @@ describe 'neutron::plugins::ml2' do
 
     context 'when using vlan driver with invalid vlan id' do
       before :each do
-       params.merge!(:network_vlan_ranges => ['1:20', '400:4099'])
+       params.merge!(:network_vlan_ranges => ['net1:1:20', 'net2:400:4099'])
       end
 
-      it { should raise_error(Puppet::Error, /vlan id are invalid./) }
+      it { should raise_error(Puppet::Error, /invalid vlan ids are used in vlan ranges./) }
     end
 
     context 'when using vlan driver with invalid vlan range' do
       before :each do
-        params.merge!(:network_vlan_ranges => ['2938:1'])
+        params.merge!(:network_vlan_ranges => ['net1:2938:1'])
       end
 
       it { should raise_error(Puppet::Error, /vlan ranges are invalid./) }

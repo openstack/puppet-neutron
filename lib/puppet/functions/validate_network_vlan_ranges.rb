@@ -26,19 +26,19 @@ Puppet::Functions.create_function(:validate_network_vlan_ranges) do
     end
 
     value.each do |range|
-      if m = /^(.+:)?(\d+):(\d+)$/.match(range)
+      if m = /^([^:]+):(\d+):(\d+)$/.match(range)
+        # <physical network>:<min>:<max>
         first_id = Integer(m[-2])
         second_id = Integer(m[-1])
-        if (first_id > 4094) || (second_id > 4094)
-          raise Puppet::Error, "vlan id are invalid."
+        if (first_id < 1) || (second_id > 4094)
+          raise Puppet::Error, "invalid vlan ids are used in vlan ranges."
         end
-        if ((second_id - first_id) < 0 )
+        if second_id < first_id
           raise Puppet::Error, "network vlan ranges are invalid."
         end
-      elsif m = /^([^:]+)?(:\d+)?$/.match(range)
-        # Either only name of physical network or single vlan id has
-        # been passed. This is also correct.
-      elsif range
+      elsif m = /^([^:]+)$/.match(range)
+        # Only name of physical network. This is also correct.
+      else
         raise Puppet::Error, "network vlan ranges are invalid."
       end
     end

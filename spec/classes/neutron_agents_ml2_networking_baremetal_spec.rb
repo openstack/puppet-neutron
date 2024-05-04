@@ -40,6 +40,7 @@ describe 'neutron::agents::ml2::networking_baremetal' do
       should contain_ironic_neutron_agent_config('ironic/cafile').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/certfile').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/keyfile').with_value('<SERVICE DEFAULT>')
+      should contain_ironic_neutron_agent_config('ironic/insecure').with_value('<SERVICE DEFAULT>')
       should contain_ironic_neutron_agent_config('ironic/auth_type').with_value(p[:auth_type])
       should contain_ironic_neutron_agent_config('ironic/auth_url').with_value(p[:auth_url])
       should contain_ironic_neutron_agent_config('ironic/user_domain_name').with_value(p[:user_domain_name])

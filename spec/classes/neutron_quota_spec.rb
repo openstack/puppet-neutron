@@ -7,6 +7,7 @@ describe 'neutron::quota' do
 
   let :default_params do
     {
+      :default_quota             => '<SERVICE DEFAULT>',
       :quota_network             => '<SERVICE DEFAULT>',
       :quota_subnet              => '<SERVICE DEFAULT>',
       :quota_port                => '<SERVICE DEFAULT>',
@@ -14,6 +15,7 @@ describe 'neutron::quota' do
       :quota_floatingip          => '<SERVICE DEFAULT>',
       :quota_security_group      => '<SERVICE DEFAULT>',
       :quota_security_group_rule => '<SERVICE DEFAULT>',
+      :quota_driver              => '<SERVICE DEFAULT>',
       :quota_rbac_policy         => '<SERVICE DEFAULT>',
     }
   end
@@ -38,6 +40,7 @@ describe 'neutron::quota' do
     context 'with provided parameters' do
       before do
         params.merge!({
+          :default_quota             => -1,
           :quota_network             => 20,
           :quota_subnet              => 20,
           :quota_port                => 100,
@@ -45,6 +48,7 @@ describe 'neutron::quota' do
           :quota_floatingip          => 100,
           :quota_security_group      => 20,
           :quota_security_group_rule => 200,
+          :quota_driver              => 'neutron.db.quota.driver.DbQuotaDriver',
           :quota_rbac_policy         => 10
         })
       end

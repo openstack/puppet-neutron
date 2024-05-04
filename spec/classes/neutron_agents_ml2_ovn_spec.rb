@@ -45,7 +45,13 @@ describe 'neutron::agents::ml2::ovn' do
       should contain_neutron_agent_ovn('ovs/ovsdb_connection_timeout').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_agent_ovn('ovn/ovsdb_connection_timeout').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_agent_ovn('ovn/ovn_nb_connection').with(:value => '<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovn('ovn/ovn_nb_private_key').with(:value => '<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovn('ovn/ovn_nb_certificate').with(:value => '<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovn('ovn/ovn_nb_ca_cert').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_agent_ovn('ovn/ovn_sb_connection').with(:value => '<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovn('ovn/ovn_sb_private_key').with(:value => '<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovn('ovn/ovn_sb_certificate').with(:value => '<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovn('ovn/ovn_sb_ca_cert').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_agent_ovn('ovn/ovsdb_retry_max_interval').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_agent_ovn('ovn/ovsdb_probe_interval').with(:value => '<SERVICE DEFAULT>')
     end

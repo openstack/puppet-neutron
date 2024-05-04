@@ -59,6 +59,9 @@ describe 'neutron::agents::ovn_metadata' do
       should contain_ovn_metadata_agent_config('ovs/ovsdb_connection_timeout').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('ovs/ovsdb_connection').with(:value => 'tcp:127.0.0.1:6640')
       should contain_ovn_metadata_agent_config('ovn/ovn_sb_connection').with(:value => '<SERVICE DEFAULT>')
+      should contain_ovn_metadata_agent_config('ovn/ovn_sb_private_key').with(:value => '<SERVICE DEFAULT>')
+      should contain_ovn_metadata_agent_config('ovn/ovn_sb_certificate').with(:value => '<SERVICE DEFAULT>')
+      should contain_ovn_metadata_agent_config('ovn/ovn_sb_ca_cert').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('ovn/ovsdb_retry_max_interval').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('ovn/ovsdb_probe_interval').with(:value => '<SERVICE DEFAULT>')
     end

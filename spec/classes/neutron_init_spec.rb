@@ -48,10 +48,6 @@ describe 'neutron' do
     it_behaves_like 'with max_allowed_address_pair defined'
     it_behaves_like 'when disabling vlan_transparent'
     it_behaves_like 'when enabling vlan_transparent'
-
-    context 'with amqp messaging' do
-      it_behaves_like 'amqp support'
-    end
   end
 
   shared_examples 'a neutron base installation' do
@@ -421,58 +417,6 @@ describe 'neutron' do
 
     it do
       should contain_neutron_config('agent/root_helper_daemon').with_value(params[:root_helper_daemon])
-    end
-  end
-
-  shared_examples 'amqp support' do
-    context 'with default amqp parameters' do
-      it { should contain_oslo__messaging__amqp('neutron_config').with(
-        :server_request_prefix => '<SERVICE DEFAULT>',
-        :broadcast_prefix      => '<SERVICE DEFAULT>',
-        :group_request_prefix  => '<SERVICE DEFAULT>',
-        :container_name        => '<SERVICE DEFAULT>',
-        :idle_timeout          => '<SERVICE DEFAULT>',
-        :trace                 => '<SERVICE DEFAULT>',
-        :ssl_ca_file           => '<SERVICE DEFAULT>',
-        :ssl_cert_file         => '<SERVICE DEFAULT>',
-        :ssl_key_file          => '<SERVICE DEFAULT>',
-        :ssl_key_password      => '<SERVICE DEFAULT>',
-        :sasl_mechanisms       => '<SERVICE DEFAULT>',
-        :sasl_config_dir       => '<SERVICE DEFAULT>',
-        :sasl_config_name      => '<SERVICE DEFAULT>',
-        :username              => '<SERVICE DEFAULT>',
-        :password              => '<SERVICE DEFAULT>',
-      ) }
-    end
-
-    context 'with overridden amqp parameters' do
-      before { params.merge!(
-        :amqp_idle_timeout  => '60',
-        :amqp_trace         => true,
-        :amqp_ssl_ca_file   => '/path/to/ca.cert',
-        :amqp_ssl_cert_file => '/path/to/certfile',
-        :amqp_ssl_key_file  => '/path/to/key',
-        :amqp_username      => 'amqp_user',
-        :amqp_password      => 'password',
-      ) }
-
-      it { should contain_oslo__messaging__amqp('neutron_config').with(
-        :server_request_prefix => '<SERVICE DEFAULT>',
-        :broadcast_prefix      => '<SERVICE DEFAULT>',
-        :group_request_prefix  => '<SERVICE DEFAULT>',
-        :container_name        => '<SERVICE DEFAULT>',
-        :idle_timeout          => '60',
-        :trace                 => true,
-        :ssl_ca_file           => '/path/to/ca.cert',
-        :ssl_cert_file         => '/path/to/certfile',
-        :ssl_key_file          => '/path/to/key',
-        :ssl_key_password      => '<SERVICE DEFAULT>',
-        :sasl_mechanisms       => '<SERVICE DEFAULT>',
-        :sasl_config_dir       => '<SERVICE DEFAULT>',
-        :sasl_config_name      => '<SERVICE DEFAULT>',
-        :username              => 'amqp_user',
-        :password              => 'password',
-      ) }
     end
   end
 

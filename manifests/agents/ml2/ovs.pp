@@ -269,6 +269,11 @@
 #   Used by logging service plugin.
 #   Defaults to $facts['os_service_default'].
 #
+# [*openflow_processed_per_port*]
+#   (Optional) If enabled, all OVS OpenFlow rules associated to a port will be
+#   processed at once, in one single transaction.
+#   Defaults to false
+#
 class neutron::agents::ml2::ovs (
   $package_ensure                       = 'present',
   Boolean $enabled                      = true,
@@ -325,6 +330,7 @@ class neutron::agents::ml2::ovs (
   $network_log_rate_limit               = $facts['os_service_default'],
   $network_log_burst_limit              = $facts['os_service_default'],
   $network_log_local_output_log_base    = $facts['os_service_default'],
+  Boolean $openflow_processed_per_port  = false,
 ) {
 
   include neutron::deps
@@ -511,6 +517,7 @@ class neutron::agents::ml2::ovs (
     'network_log/rate_limit':               value => $network_log_rate_limit;
     'network_log/burst_limit':              value => $network_log_burst_limit;
     'network_log/local_output_log_base':    value => $network_log_local_output_log_base;
+    'ovs/openflow_processed_per_port':      value => $openflow_processed_per_port;
   }
 
   if $firewall_driver {
@@ -550,7 +557,6 @@ class neutron::agents::ml2::ovs (
       'agent/vxlan_udp_port':    ensure => absent;
     }
   }
-
 
   package { 'neutron-ovs-agent':
     ensure => $package_ensure,

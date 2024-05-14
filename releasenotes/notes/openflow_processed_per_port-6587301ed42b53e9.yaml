@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::agents::ml2::ovs::openflow_processed_per_port``
+    parameter has been added.

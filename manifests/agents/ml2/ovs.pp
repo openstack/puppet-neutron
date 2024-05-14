@@ -272,7 +272,7 @@
 # [*openflow_processed_per_port*]
 #   (Optional) If enabled, all OVS OpenFlow rules associated to a port will be
 #   processed at once, in one single transaction.
-#   Defaults to false
+#   Defaults to $facts['os_service_default'].
 #
 class neutron::agents::ml2::ovs (
   $package_ensure                       = 'present',
@@ -330,7 +330,7 @@ class neutron::agents::ml2::ovs (
   $network_log_rate_limit               = $facts['os_service_default'],
   $network_log_burst_limit              = $facts['os_service_default'],
   $network_log_local_output_log_base    = $facts['os_service_default'],
-  Boolean $openflow_processed_per_port  = false,
+  $openflow_processed_per_port          = $facts['os_service_default'],
 ) {
 
   include neutron::deps

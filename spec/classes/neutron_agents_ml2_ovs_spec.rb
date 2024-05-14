@@ -91,6 +91,7 @@ describe 'neutron::agents::ml2::ovs' do
       should contain_neutron_agent_ovs('network_log/rate_limit').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('network_log/burst_limit').with_value('<SERVICE DEFAULT>')
       should contain_neutron_agent_ovs('network_log/local_output_log_base').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_agent_ovs('ovs/openflow_processed_per_port').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs neutron ovs agent package' do

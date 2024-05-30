@@ -79,7 +79,7 @@ describe 'neutron::agents::ml2::ovn' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :neutron_ovn_agent_package => 'neutron-ovn-agent',
             :neutron_ovn_agent_service => 'neutron-ovn-agent' }

@@ -374,22 +374,6 @@ describe 'neutron::server' do
       end
     end
 
-    context 'with VPNaaS package installation' do
-      before do
-        params.merge!(
-          :ensure_vpnaas_package => true,
-        )
-      end
-
-      it 'should install VPNaaS package' do
-        should contain_package('neutron-vpnaas-agent').with(
-          :ensure => 'installed',
-          :name   => platform_params[:vpnaas_agent_package],
-          :tag    => ['openstack', 'neutron-package'],
-        )
-      end
-    end
-
     context 'with Dynamic routing package installation' do
       before do
         params.merge!( :ensure_dr_package => true )

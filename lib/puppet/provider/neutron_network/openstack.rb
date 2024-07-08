@@ -97,7 +97,7 @@ Puppet::Type.type(:neutron_network).provide(
 
     if @resource[:provider_segmentation_id]
       opts << \
-        "--provider-segmentation-id=#{@resource[:provider_segmentation_id]}"
+        "--provider-segment=#{@resource[:provider_segmentation_id]}"
     end
 
     if @resource[:router_external] == 'True'

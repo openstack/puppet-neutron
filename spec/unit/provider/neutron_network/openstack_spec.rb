@@ -153,7 +153,7 @@ mtu="1500"')
             .with('network', 'create', '--format', 'shell',
                   ['net1', '--provider-network-type=vlan',
                    '--provider-physical-network=datacentre',
-                   '--provider-segmentation-id=10'])
+                   '--provider-segment=10'])
             .and_return('admin_state_up="True"
 availability_zone_hints="[]"
 id="076520cc-b783-4cf5-a4a9-4cb5a5e93a9b"

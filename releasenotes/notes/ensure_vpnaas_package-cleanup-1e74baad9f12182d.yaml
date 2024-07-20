@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``neutron::server`` class have been
+    removed.
+
+    - ``vpnaas_agent_package``
+    - ``ensure_vpnaas_package``

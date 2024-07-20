@@ -173,12 +173,6 @@
 #   Set to true to ensure installation of the package that is required to start neutron service if bgp service_plugin is enabled.
 #   Defaults to false.
 #
-# [*vpnaas_agent_package*]
-#   (Optional) Use VPNaaS agent package instead of L3 agent package on debian platforms
-#   RedHat platforms won't take care of this parameter
-#   true/false
-#   Defaults to false
-#
 # [*service_providers*]
 #   (Optional) (Array) Configures the service providers for neutron server.
 #   Defaults to $facts['os_service_default']
@@ -240,14 +234,6 @@
 #   speficied on the router.
 #   Defaults to $facts['os_service_default']
 #
-# DEPRECATED PARAMETERS
-#
-# [*ensure_vpnaas_package*]
-#   (Optional) Ensures installation of VPNaaS package before starting API
-#   service. Set to true to ensure installation of the package that is required
-#   to start neutron service if service_plugin is enabled.
-#   Defaults to false.
-#
 class neutron::server (
   $package_ensure                   = 'present',
   Boolean $enabled                  = true,
@@ -280,7 +266,6 @@ class neutron::server (
   $l3_ha_network_physical_name      = $facts['os_service_default'],
   $network_auto_schedule            = $facts['os_service_default'],
   Boolean $ensure_dr_package        = false,
-  $vpnaas_agent_package             = false,
   $service_providers                = $facts['os_service_default'],
   $auth_strategy                    = 'keystone',
   $enable_proxy_headers_parsing     = $facts['os_service_default'],
@@ -292,8 +277,6 @@ class neutron::server (
   $igmp_flood_unregistered          = $facts['os_service_default'],
   $enable_default_route_ecmp        = $facts['os_service_default'],
   $enable_default_route_bfd         = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  Boolean $ensure_vpnaas_package    = false,
 ) inherits neutron::params {
 
   include neutron::deps
@@ -304,16 +287,6 @@ class neutron::server (
     if ! ($dhcp_load_type in ['networks', 'subnets', 'ports'] ) {
       fail('Unsupported dhcp_load_type. It should be one of networks, subnets and ports.')
     }
-  }
-
-  if $ensure_vpnaas_package {
-    warning("The ensure_vpnaas_package parameter has been deprecated. Use \
-the neutron::services::vpnaas class.")
-    ensure_packages( 'neutron-vpnaas-agent', {
-      'ensure' => $package_ensure,
-      'name'   => $::neutron::params::vpnaas_agent_package,
-      'tag'    => ['openstack', 'neutron-package'],
-    })
   }
 
   if $ensure_dr_package {

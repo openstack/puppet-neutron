@@ -18,6 +18,11 @@ describe 'basic neutron' do
       neutron_network { 'mtutest':
         mtu => 1000,
       }
+      neutron_network { 'vlan':
+        provider_network_type     => 'vlan',
+        provider_physical_network => 'external',
+        provider_segmentation_id  => 100,
+      }
       EOS
 
 

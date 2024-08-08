@@ -359,27 +359,29 @@ the neutron::services::vpnaas class.")
     'DEFAULT/enable_default_route_bfd':         value => $enable_default_route_bfd;
   }
 
-  if $server_package {
-    package { 'neutron-server':
-      ensure => $package_ensure,
-      name   => $::neutron::params::server_package,
-      tag    => ['openstack', 'neutron-package'],
+  if $service_name {
+    if $server_package {
+      package { 'neutron-server':
+        ensure => $package_ensure,
+        name   => $::neutron::params::server_package,
+        tag    => ['openstack', 'neutron-package'],
+      }
     }
-  }
-
-  if $api_package_name {
-    package { 'neutron-api':
-      ensure => $package_ensure,
-      name   => $api_package_name,
-      tag    => ['openstack', 'neutron-package'],
+  } else {
+    if $api_package_name {
+      package { 'neutron-api':
+        ensure => $package_ensure,
+        name   => $api_package_name,
+        tag    => ['openstack', 'neutron-package'],
+      }
     }
-  }
 
-  if $rpc_package_name {
-    package { 'neutron-rpc-server':
-      ensure => $package_ensure,
-      name   => $rpc_package_name,
-      tag    => ['openstack', 'neutron-package'],
+    if $rpc_package_name {
+      package { 'neutron-rpc-server':
+        ensure => $package_ensure,
+        name   => $rpc_package_name,
+        tag    => ['openstack', 'neutron-package'],
+      }
     }
   }
 

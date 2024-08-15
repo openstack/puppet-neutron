@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::plugins::ml2::ovn::broadcast_arps_to_all_routers`` parameter
+    has been added.

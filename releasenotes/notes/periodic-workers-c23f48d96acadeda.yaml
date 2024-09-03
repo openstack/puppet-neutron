@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::server`` class now supports installation of
+    the ``neutron-periodic-workers`` service.

@@ -55,6 +55,16 @@
 #   be set with a value, so that an RPC server will run.
 #   Defaults to $::neutron::params::rpc_service_name
 #
+# [*periodic_workers_package_name*]
+#   (Optional) Name of the package for neutron-periodic-workers.
+#   Defaults to $::neutron::params::peiodic_workers_package_name
+#
+# [*periodic_workers_service_name*]
+#   (Optional) Name of the service for the periodic workers.
+#   If service_name is set to false, this parameter must
+#   be set with a value, so that an RPC server will run.
+#   Defaults to $::neutron::params::peiodic_workers_service_name
+#
 # [*sync_db*]
 #   (Optional) Run neutron-db-manage on api nodes after installing the package.
 #   Defaults to false
@@ -244,6 +254,8 @@ class neutron::server (
   $api_service_name                 = $::neutron::params::api_service_name,
   $rpc_package_name                 = $::neutron::params::rpc_package_name,
   $rpc_service_name                 = $::neutron::params::rpc_service_name,
+  $periodic_workers_package_name    = $::neutron::params::periodic_workers_package_name,
+  $periodic_workers_service_name    = $::neutron::params::periodic_workers_service_name,
   Boolean $sync_db                  = false,
   $api_workers                      = $facts['os_workers'],
   $rpc_workers                      = $facts['os_workers'],
@@ -353,6 +365,14 @@ class neutron::server (
       package { 'neutron-rpc-server':
         ensure => $package_ensure,
         name   => $rpc_package_name,
+        tag    => ['openstack', 'neutron-package'],
+      }
+    }
+
+    if $periodic_workers_package_name {
+      package { 'neutron-periodic-workers':
+        ensure => $package_ensure,
+        name   => $periodic_workers_package_name,
         tag    => ['openstack', 'neutron-package'],
       }
     }
@@ -473,6 +493,21 @@ class neutron::server (
 
         if $::neutron::params::server_service {
           Service['neutron-server'] -> Service['neutron-rpc-server']
+        }
+      }
+
+      if $periodic_workers_service_name {
+        service { 'neutron-periodic-workers':
+          ensure     => $service_ensure,
+          name       => $periodic_workers_service_name,
+          enable     => $enabled,
+          hasstatus  => true,
+          hasrestart => true,
+          tag        => ['neutron-service'],
+        }
+
+        if $::neutron::params::server_service {
+          Service['neutron-server'] -> Service['neutron-periodic-workers']
         }
       }
     }

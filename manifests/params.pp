@@ -31,7 +31,9 @@ class neutron::params {
       $api_package_name                   = undef
       $api_service_name                   = undef
       $rpc_package_name                   = 'openstack-neutron-rpc-server'
-      $rpc_service_name                   = 'neutron-rpc-server.service'
+      $rpc_service_name                   = 'neutron-rpc-server'
+      $periodic_workers_package_name      = 'openstack-neutron-periodic-workers'
+      $periodic_workers_service_name      = 'neutron-periodic-workers'
       $ml2_server_package                 = 'openstack-neutron-ml2'
       $ovs_agent_package                  = 'openstack-neutron-openvswitch'
       $ovs_cleanup_service                = 'neutron-ovs-cleanup'
@@ -86,6 +88,8 @@ class neutron::params {
         $bagpipe_bgp_package              = undef
         $bagpipe_bgp_service              = undef
       }
+      $periodic_workers_package_name      = undef
+      $periodic_workers_service_name      = undef
       $dynamic_routing_package            = 'python3-neutron-dynamic-routing'
       $bgp_dragent_package                = 'neutron-bgp-dragent'
       $bgpvpn_bagpipe_package             = 'python3-networking-bagpipe'

@@ -142,6 +142,11 @@
 #   Type: boolean
 #   Defaults to $facts['os_service_default']
 #
+# [*ovn_router_indirect_snat*]
+#   (optional) Whether to configure SNAT for all nested subnets connected to
+#   the router through any routers.
+#   Defaults to $facts['os_service_default']
+#
 # [*ignore_lsp_down*]
 #   (optional) Do not install ARP/ND reply flows for logical switch ports
 #   if the port is DOWN.
@@ -199,6 +204,7 @@ class neutron::plugins::ml2::ovn(
   $fdb_age_threshold                    = $facts['os_service_default'],
   $mac_binding_age_threshold            = $facts['os_service_default'],
   $broadcast_arps_to_all_routers        = $facts['os_service_default'],
+  $ovn_router_indirect_snat             = $facts['os_service_default'],
   $ignore_lsp_down                      = $facts['os_service_default'],
   $fdb_removal_limit                    = $facts['os_service_default'],
   $mac_binding_removal_limit            = $facts['os_service_default'],
@@ -249,6 +255,7 @@ class neutron::plugins::ml2::ovn(
     'ovn/fdb_age_threshold'                   : value => $fdb_age_threshold;
     'ovn/mac_binding_age_threshold'           : value => $mac_binding_age_threshold;
     'ovn/broadcast_arps_to_all_routers'       : value => $broadcast_arps_to_all_routers;
+    'ovn/ovn_router_indirect_snat'            : value => $ovn_router_indirect_snat;
     'ovn_nb_global/ignore_lsp_down'           : value => $ignore_lsp_down;
     'ovn_nb_global/fdb_removal_limit'         : value => $fdb_removal_limit;
     'ovn_nb_global/mac_binding_removal_limit' : value => $mac_binding_removal_limit;

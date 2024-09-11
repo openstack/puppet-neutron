@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::plugins::ml2::ovn::ovn_router_indirect_snat`` parameter
+    has been added.

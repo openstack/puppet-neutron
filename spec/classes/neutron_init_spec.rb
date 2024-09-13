@@ -80,6 +80,7 @@ describe 'neutron' do
         :heartbeat_timeout_threshold          => '<SERVICE DEFAULT>',
         :heartbeat_rate                       => '<SERVICE DEFAULT>',
         :heartbeat_in_pthread                 => '<SERVICE DEFAULT>',
+        :rabbit_qos_prefetch_count            => '<SERVICE DEFAULT>',
         :rabbit_use_ssl                       => '<SERVICE DEFAULT>',
         :rabbit_transient_queues_ttl          => '<SERVICE DEFAULT>',
         :kombu_reconnect_delay                => '<SERVICE DEFAULT>',

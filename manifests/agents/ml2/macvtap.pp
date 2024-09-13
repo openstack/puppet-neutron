@@ -53,9 +53,9 @@ class neutron::agents::ml2::macvtap (
     'securitygroup/firewall_driver': value => 'noop';
   }
 
-  if size($physical_interface_mappings) > 0 {
+  if !empty($physical_interface_mappings) {
     neutron_agent_macvtap {
-      'macvtap/physical_interface_mappings': value => join(any2array($physical_interface_mappings), ',');
+      'macvtap/physical_interface_mappings': value => join($physical_interface_mappings, ',');
     }
   } else {
     neutron_agent_macvtap {

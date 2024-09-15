@@ -114,7 +114,7 @@ describe 'neutron' do
       should contain_neutron_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/state_path').with_value('<SERVICE DEFAULT>')
       should contain_oslo__concurrency('neutron_config').with(
-        :lock_path => '$state_path/lock'
+        :lock_path => platform_params[:lock_path]
       )
       should contain_oslo__messaging__default('neutron_config').with(
         :executor_thread_pool_size => '<SERVICE DEFAULT>',
@@ -445,11 +445,13 @@ describe 'neutron' do
         case facts[:os]['family']
         when 'Debian'
           {
-            :common_package_name => 'neutron-common'
+            :common_package_name => 'neutron-common',
+            :lock_path           => '/var/lock/neutron'
           }
         when 'RedHat'
           {
-            :common_package_name => 'openstack-neutron'
+            :common_package_name => 'openstack-neutron',
+            :lock_path           => '/var/lib/neutron/tmp'
           }
         end
       end

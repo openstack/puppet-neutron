@@ -20,7 +20,8 @@
 #
 # [*state_path*]
 #   (optional) Where to store dnsmasq state files. This directory must be
-#   writable by the user executing the agent. Defaults to '/var/lib/neutron'.
+#   writable by the user executing the agent.
+#   Defaults to $facts['os_service_default'].
 #
 # [*resync_interval*]
 #   (optional) The DHCP agent will resync its state with Neutron to recover
@@ -130,7 +131,7 @@ class neutron::agents::dhcp (
   Boolean $enabled                  = true,
   Boolean $manage_service           = true,
   $debug                            = $facts['os_service_default'],
-  $state_path                       = '/var/lib/neutron',
+  $state_path                       = $facts['os_service_default'],
   $resync_interval                  = $facts['os_service_default'],
   $interface_driver                 = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $dhcp_driver                      = $facts['os_service_default'],

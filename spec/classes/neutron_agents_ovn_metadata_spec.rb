@@ -52,7 +52,7 @@ describe 'neutron::agents::ovn_metadata' do
       should contain_ovn_metadata_agent_config('DEFAULT/metadata_workers').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/nova_metadata_insecure').with(:value => '<SERVICE DEFAULT>')
-      should contain_ovn_metadata_agent_config('DEFAULT/state_path').with(:value => '/var/lib/neutron')
+      should contain_ovn_metadata_agent_config('DEFAULT/state_path').with(:value => '<SERVICE DEFAULT>')
       should contain_ovn_metadata_agent_config('DEFAULT/metadata_proxy_shared_secret').with(:value => params[:shared_secret]).with_secret(true)
       should contain_ovn_metadata_agent_config('agent/root_helper').with(:value => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       should contain_ovn_metadata_agent_config('agent/root_helper_daemon').with(:value => '<SERVICE DEFAULT>')

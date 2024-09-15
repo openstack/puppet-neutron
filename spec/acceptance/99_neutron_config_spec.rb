@@ -13,6 +13,7 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/neutron_vpnaas.conf',
+                     '/etc/neutron/ovn_vpn_agent.ini',
                      '/etc/neutron/taas_plugin.ini',
                      '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
                      '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
@@ -33,6 +34,7 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_l2gw_service_config <||>
   File <||> -> Neutron_vpnaas_agent_config <||>
   File <||> -> Neutron_vpnaas_service_config <||>
+  File <||> -> Neutron_ovn_vpn_agent_config <||>
   File <||> -> Neutron_taas_service_config <||>
   File <||> -> Neutron_agent_linuxbridge <||>
   File <||> -> Neutron_agent_ovs <||>
@@ -57,6 +59,7 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/neutron_vpnaas.conf',
+                     '/etc/neutron/ovn_vpn_agent.ini',
                      '/etc/neutron/taas_plugin.ini',
                      '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
                      '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
@@ -71,6 +74,7 @@ describe 'basic neutron_config resource' do
   file { $neutron_files :
     ensure => file,
   }
+
   neutron_api_paste_ini { 'DEFAULT/thisshouldexist' :
     value => 'foo',
   }
@@ -233,6 +237,24 @@ describe 'basic neutron_config resource' do
     ensure_absent_val => 'toto',
   }
 
+  neutron_ovn_vpn_agent_config { 'DEFAULT/thisshouldexist' :
+    value => 'foo',
+  }
+
+  neutron_ovn_vpn_agent_config { 'DEFAULT/thisshouldnotexist' :
+    value => '<SERVICE DEFAULT>',
+  }
+
+  neutron_ovn_vpn_agent_config { 'DEFAULT/thisshouldexist2' :
+    value             => '<SERVICE DEFAULT>',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_ovn_vpn_agent_config { 'DEFAULT/thisshouldnotexist2' :
+    value             => 'toto',
+    ensure_absent_val => 'toto',
+  }
+
   neutron_taas_service_config { 'DEFAULT/thisshouldexist' :
     value => 'foo',
   }
@@ -388,6 +410,7 @@ describe 'basic neutron_config resource' do
                     'neutron_plugin_ml2',
                     'neutron_vpnaas_agent_config',
                     'neutron_vpnaas_service_config',
+                    'neutron_ovn_vpn_agent_config',
                     'neutron_taas_service_config',
                     'neutron_agent_linuxbridge',
                     'neutron_agent_ovs',

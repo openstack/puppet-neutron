@@ -21,10 +21,6 @@
 require 'spec_helper'
 
 describe 'neutron::agents::vpnaas' do
-  let :pre_condition do
-    "class { 'neutron': }"
-  end
-
   let :params do
     {}
   end
@@ -64,7 +60,7 @@ describe 'neutron::agents::vpnaas' do
 
       it 'installs libreswan packages' do
         should contain_package('libreswan').with(
-          :ensure => 'present',
+          :ensure => 'installed',
           :name   => platform_params[:libreswan_package],
           :tag    => ['openstack', 'neutron-support-package'],
         )
@@ -85,7 +81,7 @@ describe 'neutron::agents::vpnaas' do
 
       it 'installs strongswan packages' do
         should contain_package('strongswan').with(
-          :ensure => 'present',
+          :ensure => 'installed',
           :name   => platform_params[:strongswan_package],
           :tag    => ['openstack', 'neutron-support-package'],
         )

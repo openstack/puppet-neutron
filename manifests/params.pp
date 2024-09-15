@@ -45,6 +45,8 @@ class neutron::params {
       $dhcp_agent_package                 = undef
       $metering_agent_package             = 'openstack-neutron-metering-agent'
       $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
+      $vpnaas_ovn_vpn_agent_package       = 'openstack-neutron-vpnaas-ovn-vpn-agent'
+      $vpnaas_ovn_vpn_agent_service       = 'neutron-vpnaas-ovn-vpn-agent'
       $libreswan_package                  = 'libreswan'
       $strongswan_package                 = 'strongswan'
       $taas_package                       = 'python3-tap-as-a-service'
@@ -105,6 +107,8 @@ class neutron::params {
       $dhcp_agent_package                 = 'neutron-dhcp-agent'
       $metering_agent_package             = 'neutron-metering-agent'
       $vpnaas_agent_package               = 'python3-neutron-vpnaas'
+      $vpnaas_ovn_vpn_agent_package       = undef
+      $vpnaas_ovn_vpn_agent_service       = undef
       $libreswan_package                  = 'libreswan'
       $strongswan_package                 = 'strongswan'
       $taas_package                       = 'python3-neutron-taas'

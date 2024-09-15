@@ -58,6 +58,15 @@
 #   (optional) The advertisement interval in seconds.
 #   Defaults to $facts['os_service_default']
 #
+# [*ha_vrrp_health_check_interval*]
+#   (optional) The VRRP health check interval in seconds.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_keepalived_state_change_server_threads*]
+#   (optional) Number of concurrent threads for keepalived server connection
+#   requests.
+#   Defaults to $facts['os_service_default']
+#
 # [*agent_mode*]
 #   (optional) The working mode for the agent.
 #   'legacy': default behavior (without DVR)
@@ -133,34 +142,36 @@
 #   Defaults to undef
 #
 class neutron::agents::l3 (
-  $package_ensure                    = 'present',
-  Boolean $enabled                   = true,
-  Boolean $manage_service            = true,
-  $debug                             = $facts['os_service_default'],
-  $interface_driver                  = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $handle_internal_only_routers      = $facts['os_service_default'],
-  $metadata_port                     = $facts['os_service_default'],
-  $periodic_interval                 = $facts['os_service_default'],
-  $periodic_fuzzy_delay              = $facts['os_service_default'],
-  $enable_metadata_proxy             = $facts['os_service_default'],
-  $ha_vrrp_auth_type                 = $facts['os_service_default'],
-  $ha_vrrp_auth_password             = $facts['os_service_default'],
-  $ha_vrrp_advert_int                = $facts['os_service_default'],
-  $agent_mode                        = $facts['os_service_default'],
-  $availability_zone                 = $facts['os_service_default'],
-  $extensions                        = $facts['os_service_default'],
-  $report_interval                   = $facts['os_service_default'],
-  $rpc_response_max_timeout          = $facts['os_service_default'],
-  $radvd_user                        = $facts['os_service_default'],
-  $ovs_integration_bridge            = $facts['os_service_default'],
-  $ovsdb_connection                  = $facts['os_service_default'],
-  $ovsdb_timeout                     = $facts['os_service_default'],
-  $network_log_rate_limit            = $facts['os_service_default'],
-  $network_log_burst_limit           = $facts['os_service_default'],
-  $network_log_local_output_log_base = $facts['os_service_default'],
-  Boolean $purge_config              = false,
+  $package_ensure                            = 'present',
+  Boolean $enabled                           = true,
+  Boolean $manage_service                    = true,
+  $debug                                     = $facts['os_service_default'],
+  $interface_driver                          = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $handle_internal_only_routers              = $facts['os_service_default'],
+  $metadata_port                             = $facts['os_service_default'],
+  $periodic_interval                         = $facts['os_service_default'],
+  $periodic_fuzzy_delay                      = $facts['os_service_default'],
+  $enable_metadata_proxy                     = $facts['os_service_default'],
+  $ha_vrrp_auth_type                         = $facts['os_service_default'],
+  $ha_vrrp_auth_password                     = $facts['os_service_default'],
+  $ha_vrrp_advert_int                        = $facts['os_service_default'],
+  $ha_keepalived_state_change_server_threads = $facts['os_service_default'],
+  $ha_vrrp_health_check_interval             = $facts['os_service_default'],
+  $agent_mode                                = $facts['os_service_default'],
+  $availability_zone                         = $facts['os_service_default'],
+  $extensions                                = $facts['os_service_default'],
+  $report_interval                           = $facts['os_service_default'],
+  $rpc_response_max_timeout                  = $facts['os_service_default'],
+  $radvd_user                                = $facts['os_service_default'],
+  $ovs_integration_bridge                    = $facts['os_service_default'],
+  $ovsdb_connection                          = $facts['os_service_default'],
+  $ovsdb_timeout                             = $facts['os_service_default'],
+  $network_log_rate_limit                    = $facts['os_service_default'],
+  $network_log_burst_limit                   = $facts['os_service_default'],
+  $network_log_local_output_log_base         = $facts['os_service_default'],
+  Boolean $purge_config                      = false,
   # DEPRECATED PARAMETERS
-  Optional[Boolean] $ha_enabled      = undef,
+  Optional[Boolean] $ha_enabled              = undef,
 ) {
 
   include neutron::deps
@@ -175,28 +186,30 @@ class neutron::agents::l3 (
   }
 
   neutron_l3_agent_config {
-    'DEFAULT/debug':                        value => $debug;
-    'DEFAULT/interface_driver':             value => $interface_driver;
-    'DEFAULT/handle_internal_only_routers': value => $handle_internal_only_routers;
-    'DEFAULT/metadata_port':                value => $metadata_port;
-    'DEFAULT/periodic_interval':            value => $periodic_interval;
-    'DEFAULT/periodic_fuzzy_delay':         value => $periodic_fuzzy_delay;
-    'DEFAULT/enable_metadata_proxy':        value => $enable_metadata_proxy;
-    'DEFAULT/ha_vrrp_auth_type':            value => $ha_vrrp_auth_type;
-    'DEFAULT/ha_vrrp_auth_password':        value => $ha_vrrp_auth_password, secret => true;
-    'DEFAULT/ha_vrrp_advert_int':           value => $ha_vrrp_advert_int;
-    'DEFAULT/agent_mode':                   value => $agent_mode;
-    'DEFAULT/radvd_user':                   value => $radvd_user;
-    'ovs/integration_bridge':               value => $ovs_integration_bridge;
-    'ovs/ovsdb_connection':                 value => $ovsdb_connection;
-    'ovs/ovsdb_timeout':                    value => $ovsdb_timeout;
-    'agent/availability_zone':              value => $availability_zone;
-    'agent/extensions':                     value => join(any2array($extensions), ',');
-    'agent/report_interval':                value => $report_interval;
-    'DEFAULT/rpc_response_max_timeout':     value => $rpc_response_max_timeout;
-    'network_log/rate_limit':               value => $network_log_rate_limit;
-    'network_log/burst_limit':              value => $network_log_burst_limit;
-    'network_log/local_output_log_base':    value => $network_log_local_output_log_base;
+    'DEFAULT/debug':                                     value => $debug;
+    'DEFAULT/interface_driver':                          value => $interface_driver;
+    'DEFAULT/handle_internal_only_routers':              value => $handle_internal_only_routers;
+    'DEFAULT/metadata_port':                             value => $metadata_port;
+    'DEFAULT/periodic_interval':                         value => $periodic_interval;
+    'DEFAULT/periodic_fuzzy_delay':                      value => $periodic_fuzzy_delay;
+    'DEFAULT/enable_metadata_proxy':                     value => $enable_metadata_proxy;
+    'DEFAULT/ha_vrrp_auth_type':                         value => $ha_vrrp_auth_type;
+    'DEFAULT/ha_vrrp_auth_password':                     value => $ha_vrrp_auth_password, secret => true;
+    'DEFAULT/ha_vrrp_advert_int':                        value => $ha_vrrp_advert_int;
+    'DEFAULT/ha_keepalived_state_change_server_threads': value => $ha_keepalived_state_change_server_threads;
+    'DEFAULT/ha_vrrp_health_check_interval':             value => $ha_vrrp_health_check_interval;
+    'DEFAULT/agent_mode':                                value => $agent_mode;
+    'DEFAULT/radvd_user':                                value => $radvd_user;
+    'ovs/integration_bridge':                            value => $ovs_integration_bridge;
+    'ovs/ovsdb_connection':                              value => $ovsdb_connection;
+    'ovs/ovsdb_timeout':                                 value => $ovsdb_timeout;
+    'agent/availability_zone':                           value => $availability_zone;
+    'agent/extensions':                                  value => join(any2array($extensions), ',');
+    'agent/report_interval':                             value => $report_interval;
+    'DEFAULT/rpc_response_max_timeout':                  value => $rpc_response_max_timeout;
+    'network_log/rate_limit':                            value => $network_log_rate_limit;
+    'network_log/burst_limit':                           value => $network_log_burst_limit;
+    'network_log/local_output_log_base':                 value => $network_log_local_output_log_base;
   }
 
   if $::neutron::params::l3_agent_package {

@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``neutron::agents::l3``
+    class.
+
+    - ``ha_keepalived_state_change_server_threads``
+    - ``ha_vrrp_health_check_interval``

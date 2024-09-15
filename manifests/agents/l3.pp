@@ -105,6 +105,14 @@
 #   (optional) Name of Open vSwitch bridge to use
 #   Defaults to $facts['os_service_default']
 #
+# [*ovsdb_connection*]
+#   (optional) The URI used to connect to the local OVSDB server
+#   Defaults to $facts['os_service_default']
+#
+# [*ovsdb_timeout*]
+#   (Optional) The timeout in seconds for OVSDB commands.
+#   Defaults to $facts['os_service_default']
+#
 # [*network_log_rate_limit*]
 #   (Optional) Maximum packets logging per second.
 #   Used by logging service plugin.
@@ -145,6 +153,8 @@ class neutron::agents::l3 (
   $rpc_response_max_timeout          = $facts['os_service_default'],
   $radvd_user                        = $facts['os_service_default'],
   $ovs_integration_bridge            = $facts['os_service_default'],
+  $ovsdb_connection                  = $facts['os_service_default'],
+  $ovsdb_timeout                     = $facts['os_service_default'],
   $network_log_rate_limit            = $facts['os_service_default'],
   $network_log_burst_limit           = $facts['os_service_default'],
   $network_log_local_output_log_base = $facts['os_service_default'],
@@ -182,6 +192,8 @@ class neutron::agents::l3 (
     'DEFAULT/agent_mode':                   value => $agent_mode;
     'DEFAULT/radvd_user':                   value => $radvd_user;
     'ovs/integration_bridge':               value => $ovs_integration_bridge;
+    'ovs/ovsdb_connection':                 value => $ovsdb_connection;
+    'ovs/ovsdb_timeout':                    value => $ovsdb_timeout;
     'agent/availability_zone':              value => $availability_zone;
     'agent/extensions':                     value => join(any2array($extensions), ',');
     'agent/report_interval':                value => $report_interval;

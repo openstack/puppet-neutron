@@ -361,7 +361,7 @@ class neutron::server (
       }
     }
 
-    if $rpc_package_name {
+    if $rpc_package_name and $rpc_service_name {
       package { 'neutron-rpc-server':
         ensure => $package_ensure,
         name   => $rpc_package_name,

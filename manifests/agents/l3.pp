@@ -46,10 +46,6 @@
 #   (optional) can be set to False if the Nova metadata server is not available
 #   Defaults to $facts['os_service_default']
 #
-# [*ha_enabled*]
-#   (optional) Enabled or not HA for L3 agent.
-#   Defaults to false
-#
 # [*ha_vrrp_auth_type*]
 #   (optional) VRRP authentication type. Can be AH or PASS.
 #   Defaults to "PASS"
@@ -60,19 +56,14 @@
 #
 # [*ha_vrrp_advert_int*]
 #   (optional) The advertisement interval in seconds.
-#   Defaults to '2'
+#   Defaults to $facts['os_service_default']
 #
 # [*agent_mode*]
 #   (optional) The working mode for the agent.
 #   'legacy': default behavior (without DVR)
 #   'dvr': enable DVR for an L3 agent running on compute node (DVR in production)
 #   'dvr_snat': enable DVR with centralized SNAT support (DVR for single-host, for testing only)
-#   Defaults to 'legacy'
-#
-# [*purge_config*]
-#   (optional) Whether to set only the specified config options
-#   in the l3 config.
-#   Defaults to false.
+#   Defaults to $facts['os_service_default']
 #
 # [*availability_zone*]
 #   (optional) The availability zone of the agent.
@@ -130,6 +121,17 @@
 #   Used by logging service plugin.
 #   Defaults to $facts['os_service_default'].
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the l3 config.
+#   Defaults to false.
+#
+# DEPRECATED PARAMETERS
+#
+# [*ha_enabled*]
+#   (optional) Enabled or not HA for L3 agent.
+#   Defaults to undef
+#
 class neutron::agents::l3 (
   $package_ensure                    = 'present',
   Boolean $enabled                   = true,
@@ -141,12 +143,10 @@ class neutron::agents::l3 (
   $periodic_interval                 = $facts['os_service_default'],
   $periodic_fuzzy_delay              = $facts['os_service_default'],
   $enable_metadata_proxy             = $facts['os_service_default'],
-  Boolean $ha_enabled                = false,
-  $ha_vrrp_auth_type                 = 'PASS',
+  $ha_vrrp_auth_type                 = $facts['os_service_default'],
   $ha_vrrp_auth_password             = $facts['os_service_default'],
-  $ha_vrrp_advert_int                = '3',
-  $agent_mode                        = 'legacy',
-  Boolean $purge_config              = false,
+  $ha_vrrp_advert_int                = $facts['os_service_default'],
+  $agent_mode                        = $facts['os_service_default'],
   $availability_zone                 = $facts['os_service_default'],
   $extensions                        = $facts['os_service_default'],
   $report_interval                   = $facts['os_service_default'],
@@ -158,27 +158,20 @@ class neutron::agents::l3 (
   $network_log_rate_limit            = $facts['os_service_default'],
   $network_log_burst_limit           = $facts['os_service_default'],
   $network_log_local_output_log_base = $facts['os_service_default'],
+  Boolean $purge_config              = false,
+  # DEPRECATED PARAMETERS
+  Optional[Boolean] $ha_enabled      = undef,
 ) {
 
   include neutron::deps
   include neutron::params
 
-  resources { 'neutron_l3_agent_config':
-    purge => $purge_config,
+  if $ha_enabled != undef {
+    warning('The ha_enabled parameter has been deprecated and has no effect.')
   }
 
-  if $ha_enabled {
-    neutron_l3_agent_config {
-      'DEFAULT/ha_vrrp_auth_type':     value => $ha_vrrp_auth_type;
-      'DEFAULT/ha_vrrp_auth_password': value => $ha_vrrp_auth_password, secret => true;
-      'DEFAULT/ha_vrrp_advert_int':    value => $ha_vrrp_advert_int;
-    }
-  } else {
-    neutron_l3_agent_config {
-      'DEFAULT/ha_vrrp_auth_type':     ensure => absent;
-      'DEFAULT/ha_vrrp_auth_password': ensure => absent;
-      'DEFAULT/ha_vrrp_advert_int':    ensure => absent;
-    }
+  resources { 'neutron_l3_agent_config':
+    purge => $purge_config,
   }
 
   neutron_l3_agent_config {
@@ -189,6 +182,9 @@ class neutron::agents::l3 (
     'DEFAULT/periodic_interval':            value => $periodic_interval;
     'DEFAULT/periodic_fuzzy_delay':         value => $periodic_fuzzy_delay;
     'DEFAULT/enable_metadata_proxy':        value => $enable_metadata_proxy;
+    'DEFAULT/ha_vrrp_auth_type':            value => $ha_vrrp_auth_type;
+    'DEFAULT/ha_vrrp_auth_password':        value => $ha_vrrp_auth_password, secret => true;
+    'DEFAULT/ha_vrrp_advert_int':           value => $ha_vrrp_advert_int;
     'DEFAULT/agent_mode':                   value => $agent_mode;
     'DEFAULT/radvd_user':                   value => $radvd_user;
     'ovs/integration_bridge':               value => $ovs_integration_bridge;

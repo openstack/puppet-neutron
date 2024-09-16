@@ -7,14 +7,8 @@ describe 'neutron::agents::l3' do
 
   let :default_params do
     {
-      :package_ensure     => 'present',
-      :enabled            => true,
-      :interface_driver   => 'neutron.agent.linux.interface.OVSInterfaceDriver',
-      :ha_enabled         => false,
-      :ha_vrrp_auth_type  => 'PASS',
-      :ha_vrrp_advert_int => '3',
-      :agent_mode         => 'legacy',
-      :purge_config       => false
+      :package_ensure   => 'present',
+      :interface_driver => 'neutron.agent.linux.interface.OVSInterfaceDriver',
     }
   end
 
@@ -30,9 +24,6 @@ describe 'neutron::agents::l3' do
     it { should contain_class('neutron::params') }
 
     it 'configures l3_agent.ini' do
-      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_ensure('absent')
-      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_ensure('absent')
-      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_ensure('absent')
       should contain_neutron_l3_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver])
       should contain_neutron_l3_agent_config('DEFAULT/handle_internal_only_routers').with_value('<SERVICE DEFAULT>')
@@ -40,6 +31,10 @@ describe 'neutron::agents::l3' do
       should contain_neutron_l3_agent_config('DEFAULT/periodic_interval').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/enable_metadata_proxy').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_value('<SERVICE DEFAULT>').with_secret(true)
+      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/agent_mode').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/radvd_user').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('ovs/integration_bridge').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('agent/availability_zone').with_value('<SERVICE DEFAULT>')
@@ -118,8 +113,11 @@ describe 'neutron::agents::l3' do
 
     context 'with HA routers' do
       before :each do
-        params.merge!(:ha_enabled            => true,
-                      :ha_vrrp_auth_password => 'secrete')
+        params.merge!({
+          :ha_vrrp_auth_type     => 'PASS',
+          :ha_vrrp_auth_password => 'secrete',
+          :ha_vrrp_advert_int    => 3,
+        })
       end
       it 'should configure VRRP' do
         should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_value(p[:ha_vrrp_auth_type])

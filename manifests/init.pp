@@ -240,7 +240,7 @@
 # [*lock_path*]
 #   (optional) Where to store lock files. This directory must be writeable
 #   by the user executing the agent
-#   Defaults to: '$state_path/lock'
+#   Defaults to: $::neutron::params::lock_path
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -320,17 +320,16 @@ class neutron (
   $key_file                             = $facts['os_service_default'],
   $ca_file                              = $facts['os_service_default'],
   $state_path                           = $facts['os_service_default'],
-  $lock_path                            = '$state_path/lock',
+  $lock_path                            = $::neutron::params::lock_path,
   Boolean $purge_config                 = false,
   $notification_driver                  = $facts['os_service_default'],
   $notification_topics                  = $facts['os_service_default'],
   $notification_transport_url           = $facts['os_service_default'],
   $max_allowed_address_pair             = $facts['os_service_default'],
   $vlan_transparent                     = $facts['os_service_default'],
-) {
+) inherits neutron::params {
 
   include neutron::deps
-  include neutron::params
 
   if ! is_service_default($use_ssl) and ($use_ssl) {
     if is_service_default($cert_file) {

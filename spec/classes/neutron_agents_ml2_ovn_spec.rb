@@ -37,7 +37,7 @@ describe 'neutron::agents::ml2::ovn' do
 
     it 'configures ovn_agent.ini' do
       should contain_neutron_agent_ovn('DEFAULT/debug').with(:value => '<SERVICE DEFAULT>')
-      should contain_neutron_agent_ovn('DEFAULT/state_path').with(:value => '/var/lib/neutron')
+      should contain_neutron_agent_ovn('DEFAULT/state_path').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_agent_ovn('agent/extensions').with(:value => '<SERVICE DEFAULT>')
       should contain_neutron_agent_ovn('agent/root_helper').with(:value => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       should contain_neutron_agent_ovn('agent/root_helper_daemon').with(:value => '<SERVICE DEFAULT>')

@@ -13,7 +13,6 @@ describe 'neutron::agents::dhcp' do
     {
       :package_ensure           => 'present',
       :enabled                  => true,
-      :state_path               => '/var/lib/neutron',
       :interface_driver         => 'neutron.agent.linux.interface.OVSInterfaceDriver',
       :root_helper              => 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
       :enable_isolated_metadata => false,
@@ -32,7 +31,7 @@ describe 'neutron::agents::dhcp' do
 
     it 'configures dhcp_agent.ini' do
       should contain_neutron_dhcp_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>');
-      should contain_neutron_dhcp_agent_config('DEFAULT/state_path').with_value(p[:state_path]);
+      should contain_neutron_dhcp_agent_config('DEFAULT/state_path').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/resync_interval').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/interface_driver').with_value(p[:interface_driver]);
       should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_driver').with_value('<SERVICE DEFAULT>');

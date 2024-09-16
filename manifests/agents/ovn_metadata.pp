@@ -112,7 +112,7 @@
 # [*state_path*]
 #   (optional) Where to store state files. This directory must be writable
 #   by the user executing the agent
-#   Defaults to: '/var/lib/neutron'.
+#   Defaults to $facts['os_service_default'].
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -145,7 +145,7 @@ class neutron::agents::ovn_metadata (
   $ovsdb_probe_interval      = $facts['os_service_default'],
   $root_helper               = 'sudo neutron-rootwrap /etc/neutron/rootwrap.conf',
   $root_helper_daemon        = $facts['os_service_default'],
-  $state_path                = '/var/lib/neutron',
+  $state_path                = $facts['os_service_default'],
   Boolean $purge_config      = false,
 ) {
 

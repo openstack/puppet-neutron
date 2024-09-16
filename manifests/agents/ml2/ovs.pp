@@ -42,6 +42,10 @@
 #   (Optional) List of <physical_network>:<bridge>
 #   Defaults to empty list
 #
+# [*ovsdb_connection*]
+#   (optional) The URI used to connect to the local OVSDB server
+#   Defaults to $facts['os_service_default']
+#
 # [*ovsdb_timeout*]
 #   (Optional) The timeout in seconds for OVSDB commands.
 #   Defaults to $facts['os_service_default']
@@ -281,6 +285,7 @@ class neutron::agents::ml2::ovs (
   $extensions                           = $facts['os_service_default'],
   $bridge_uplinks                       = [],
   $bridge_mappings                      = [],
+  $ovsdb_connection                     = $facts['os_service_default'],
   $ovsdb_timeout                        = $facts['os_service_default'],
   $of_listen_address                    = $facts['os_service_default'],
   $of_listen_port                       = $facts['os_service_default'],
@@ -498,6 +503,7 @@ class neutron::agents::ml2::ovs (
     'agent/minimize_polling':               value => $minimize_polling;
     'agent/tunnel_csum':                    value => $tunnel_csum;
     'agent/explicitly_egress_direct':       value => $explicitly_egress_direct;
+    'ovs/ovsdb_connection':                 value => $ovsdb_connection;
     'ovs/ovsdb_timeout':                    value => $ovsdb_timeout;
     'ovs/of_listen_address':                value => $of_listen_address;
     'ovs/of_listen_port':                   value => $of_listen_port;

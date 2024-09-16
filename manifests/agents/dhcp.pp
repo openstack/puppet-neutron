@@ -104,6 +104,10 @@
 #   (optional) The URI used to connect to the local OVSDB server
 #   Defaults to $facts['os_service_default']
 #
+# [*ovsdb_timeout*]
+#   (Optional) The timeout in seconds for OVSDB commands.
+#   Defaults to $facts['os_service_default']
+#
 # [*ovsdb_agent_ssl_key_file*]
 #   (optional) The SSL key file to use for Neutron agents to connect to OVSDB
 #   Defaults to $facts['os_service_default']
@@ -150,6 +154,7 @@ class neutron::agents::dhcp (
   $availability_zone                = $facts['os_service_default'],
   $ovs_integration_bridge           = $facts['os_service_default'],
   $ovsdb_connection                 = $facts['os_service_default'],
+  $ovsdb_timeout                    = $facts['os_service_default'],
   $ovsdb_agent_ssl_key_file         = $facts['os_service_default'],
   $ovsdb_agent_ssl_cert_file        = $facts['os_service_default'],
   $ovsdb_agent_ssl_ca_file          = $facts['os_service_default'],
@@ -212,8 +217,9 @@ class neutron::agents::dhcp (
   }
 
   neutron_dhcp_agent_config {
-    'ovs/ovsdb_connection':   value => $ovsdb_connection;
     'ovs/integration_bridge': value => $ovs_integration_bridge;
+    'ovs/ovsdb_connection':   value => $ovsdb_connection;
+    'ovs/ovsdb_timeout':      value => $ovsdb_timeout;
     'ovs/ssl_key_file':       value => $ovsdb_agent_ssl_key_file;
     'ovs/ssl_cert_file':      value => $ovsdb_agent_ssl_cert_file;
     'ovs/ssl_ca_cert_file':   value => $ovsdb_agent_ssl_ca_file;

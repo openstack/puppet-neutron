@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following parameters have been added.
+
+    - ``neutron::agents::dhcp::ovsdb_timeout``
+    - ``neutron::agents::l3::ovsdb_connection``
+    - ``neutron::agents::l3::ovsdb_timeout``
+    - ``neutron::agents::ml2::ovs::ovsdb_connection``

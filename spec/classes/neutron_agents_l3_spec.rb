@@ -34,6 +34,8 @@ describe 'neutron::agents::l3' do
       should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_value('<SERVICE DEFAULT>').with_secret(true)
       should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_keepalived_state_change_server_threads').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_health_check_interval').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/agent_mode').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/radvd_user').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('ovs/integration_bridge').with_value('<SERVICE DEFAULT>')
@@ -111,18 +113,23 @@ describe 'neutron::agents::l3' do
       end
     end
 
-    context 'with HA routers' do
+    context 'with HA options' do
       before :each do
         params.merge!({
-          :ha_vrrp_auth_type     => 'PASS',
-          :ha_vrrp_auth_password => 'secrete',
-          :ha_vrrp_advert_int    => 3,
+          :ha_vrrp_auth_type                         => 'PASS',
+          :ha_vrrp_auth_password                     => 'secrete',
+          :ha_vrrp_advert_int                        => 3,
+          :ha_keepalived_state_change_server_threads => 2,
+          :ha_vrrp_health_check_interval             => 0,
         })
       end
       it 'should configure VRRP' do
         should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_type').with_value(p[:ha_vrrp_auth_type])
         should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_auth_password').with_value(p[:ha_vrrp_auth_password]).with_secret(true)
         should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value(p[:ha_vrrp_advert_int])
+        should contain_neutron_l3_agent_config('DEFAULT/ha_keepalived_state_change_server_threads').with_value(
+          p[:ha_keepalived_state_change_server_threads])
+        should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_health_check_interval').with_value(p[:ha_vrrp_health_check_interval])
       end
     end
 

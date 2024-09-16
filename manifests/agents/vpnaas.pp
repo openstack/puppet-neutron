@@ -58,19 +58,19 @@ openswan package in distributions")
     }
     /\.LibreSwan/: {
       Package['libreswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
-      package { 'libreswan':
-        ensure => present,
-        name   => $::neutron::params::libreswan_package,
-        tag    => ['openstack', 'neutron-support-package'],
-      }
+      ensure_packages( 'libreswan', {
+        'ensure' => present,
+        'name'   => $::neutron::params::libreswan_package,
+        'tag'    => ['openstack', 'neutron-support-package'],
+      })
     }
     /\.StrongSwan/: {
       Package['strongswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
-      package { 'strongswan':
-        ensure => present,
-        name   => $::neutron::params::strongswan_package,
-        tag    => ['openstack', 'neutron-support-package'],
-      }
+      ensure_packages( 'strongswan', {
+        'ensure' => present,
+        'name'   => $::neutron::params::strongswan_package,
+        'tag'    => ['openstack', 'neutron-support-package'],
+      })
     }
     default: {
       fail("Unsupported vpn_device_driver ${vpn_device_driver}")

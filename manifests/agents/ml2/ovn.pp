@@ -5,10 +5,10 @@
 # === Parameters
 #
 # [*package_ensure*]
-#   Ensure state of the package. Defaults to 'present'.
+#   (optional) Ensure state of the package. Defaults to 'present'.
 #
 # [*enabled*]
-#   State of the service. Defaults to true.
+#   (optional) State of the service. Defaults to true.
 #
 # [*manage_service*]
 #   (optional) Whether to start/stop the service

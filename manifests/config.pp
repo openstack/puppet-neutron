@@ -78,6 +78,9 @@
 # [*vpnaas_service_config*]
 #   (optional) Manage configuration of neutron_vpnaas.conf
 #
+# [*ovn_vpn_agent_config*]
+#   (optional) Manage configuration of ovn_vpn_agent.ini
+#
 # [*taas_service_config*]
 #   (optional) Manage configuration of taas_plugin.ini
 #
@@ -115,6 +118,7 @@ class neutron::config (
   Hash $metering_agent_config         = {},
   Hash $vpnaas_agent_config           = {},
   Hash $vpnaas_service_config         = {},
+  Hash $ovn_vpn_agent_config          = {},
   Hash $taas_service_config           = {},
   Hash $bgp_dragent_config            = {},
   Hash $plugin_ml2_config             = {},
@@ -151,6 +155,7 @@ class neutron::config (
   create_resources('neutron_metering_agent_config', $metering_agent_config)
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)
   create_resources('neutron_vpnaas_service_config', $vpnaas_service_config)
+  create_resources('neutron_ovn_vpn_agent_config', $ovn_vpn_agent_config)
   create_resources('neutron_taas_service_config', $taas_service_config)
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)

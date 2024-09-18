@@ -6,3 +6,11 @@ features:
 
     - ``vlan_range_start``
     - ``vlan_range_end``
+
+deprecations:
+  - |
+    The following parameters of the ``neutron::agents::taas`` class have been
+    deprecated.
+
+    - ``vlan_range_start``
+    - ``vlan_range_end``

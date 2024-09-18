@@ -19,6 +19,8 @@
 # [*package_ensure*]
 #   (optional) Ensure state for package. Defaults to 'present'.
 #
+# DEPRECATED PARAMETERS
+#
 # [*vlan_range_start*]
 #   (optional) Starting rantge of TAAS VLAN IDs.
 #   Defaults to $facts['os_service_default'].
@@ -29,16 +31,27 @@
 #
 class neutron::agents::taas (
   $package_ensure   = present,
-  $vlan_range_start = $facts['os_service_default'],
-  $vlan_range_end   = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  $vlan_range_start = undef,
+  $vlan_range_end   = undef,
 ) {
 
   include neutron::deps
   include neutron::params
 
+  [
+    'vlan_range_start',
+    'vlan_range_end'
+  ].each | $opt | {
+    if getvar($opt) {
+      warning("The ${opt} parameter has been deprecated and will be removed in a future release. \
+Use the neutron::services::taas class parametes instead.")
+    }
+  }
+
   neutron_plugin_ml2 {
-    'taas/vlan_range_start': value => $vlan_range_start;
-    'taas/vlan_range_end':   value => $vlan_range_end;
+    'taas/vlan_range_start': value => pick($vlan_range_start, $facts['os_service_default']);
+    'taas/vlan_range_end':   value => pick($vlan_range_end, $facts['os_service_default']);
   }
 
   ensure_packages( 'neutron-taas', {

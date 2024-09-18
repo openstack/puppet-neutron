@@ -13,7 +13,7 @@ describe 'neutron::agents::taas' do
     context 'with defaults' do
       it { should contain_class('neutron::params') }
 
-      it 'configures taas_plugin.ini' do
+      it 'configures ml2_plugin.conf' do
         should contain_neutron_plugin_ml2('taas/vlan_range_start').with_value('<SERVICE DEFAULT>')
         should contain_neutron_plugin_ml2('taas/vlan_range_end').with_value('<SERVICE DEFAULT>')
       end
@@ -35,7 +35,7 @@ describe 'neutron::agents::taas' do
         }
       end
 
-      it 'configures taas_plugin.ini' do
+      it 'configures ml2_plugin.conf' do
         should contain_neutron_plugin_ml2('taas/vlan_range_start').with_value(1)
         should contain_neutron_plugin_ml2('taas/vlan_range_end').with_value(100)
       end

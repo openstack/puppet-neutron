@@ -19,6 +19,14 @@
 #   (optional) Number of Tap flows allowed per tenant.
 #   Defaults to $facts['os_service_default']
 #
+# [*vlan_range_start*]
+#   (optional) Starting rantge of TAAS VLAN IDs.
+#   Defaults to $facts['os_service_default'].
+#
+# [*vlan_range_end*]
+#   (optional) End rantge of TAAS VLAN IDs.
+#   Defaults to $facts['os_service_default'].
+#
 # [*sync_db*]
 #   Whether 'neutron-db-manage' should run to create and/or synchronize the
 #   database with neutron-taas specific tables.
@@ -34,6 +42,8 @@ class neutron::services::taas (
   $service_providers    = $facts['os_service_default'],
   $quota_tap_service    = $facts['os_service_default'],
   $quota_tap_flow       = $facts['os_service_default'],
+  $vlan_range_start     = $facts['os_service_default'],
+  $vlan_range_end       = $facts['os_service_default'],
   Boolean $sync_db      = false,
   Boolean $purge_config = false,
 ) {
@@ -61,6 +71,8 @@ class neutron::services::taas (
     'service_providers/service_provider': value => $service_providers_real;
     'quotas/quota_tap_service':           value => $quota_tap_service;
     'quotas/quota_tap_flow':              value => $quota_tap_flow;
+    'taas/vlan_range_start':              value => $vlan_range_start;
+    'taas/vlan_range_end':                value => $vlan_range_end;
   }
 
   if $sync_db {

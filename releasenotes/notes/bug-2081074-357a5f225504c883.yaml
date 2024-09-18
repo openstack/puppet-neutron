@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``neutron::services::taas``
+    class.
+
+    - ``vlan_range_start``
+    - ``vlan_range_end``

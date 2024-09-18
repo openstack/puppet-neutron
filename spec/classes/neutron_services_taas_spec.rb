@@ -19,6 +19,8 @@ describe 'neutron::services::taas' do
         )
         should contain_neutron_taas_service_config('quotas/quota_tap_service').with_value('<SERVICE DEFAULT>')
         should contain_neutron_taas_service_config('quotas/quota_tap_flow').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_taas_service_config('taas/vlan_range_start').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_taas_service_config('taas/vlan_range_end').with_value('<SERVICE DEFAULT>')
       end
 
       it 'does not run neutron-db-manage' do
@@ -31,11 +33,15 @@ describe 'neutron::services::taas' do
         {
           :quota_tap_service => 1,
           :quota_tap_flow    => 10,
+          :vlan_range_start  => 3000,
+          :vlan_range_end    => 3500,
         }
       end
       it 'configures taas_plugin.ini' do
         should contain_neutron_taas_service_config('quotas/quota_tap_service').with_value(1)
         should contain_neutron_taas_service_config('quotas/quota_tap_flow').with_value(10)
+        should contain_neutron_taas_service_config('taas/vlan_range_start').with_value(3000)
+        should contain_neutron_taas_service_config('taas/vlan_range_end').with_value(3500)
       end
     end
 

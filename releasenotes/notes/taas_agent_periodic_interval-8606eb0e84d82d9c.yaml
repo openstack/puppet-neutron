@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::agents::taas::taas_agent_periodic_interval`` parameter
+    has been added.

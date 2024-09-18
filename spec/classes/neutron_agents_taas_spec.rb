@@ -14,6 +14,7 @@ describe 'neutron::agents::taas' do
       it { should contain_class('neutron::params') }
 
       it 'configures ml2_plugin.conf' do
+        should contain_neutron_plugin_ml2('DEFAULT/taas_agent_periodic_interval').with_value('<SERVICE DEFAULT>')
         should contain_neutron_plugin_ml2('taas/vlan_range_start').with_value('<SERVICE DEFAULT>')
         should contain_neutron_plugin_ml2('taas/vlan_range_end').with_value('<SERVICE DEFAULT>')
       end
@@ -30,12 +31,14 @@ describe 'neutron::agents::taas' do
     context 'with parameters' do
       let :params do
         {
-          :vlan_range_start => 1,
-          :vlan_range_end   => 100,
+          :taas_agent_periodic_interval => 5,
+          :vlan_range_start             => 1,
+          :vlan_range_end               => 100,
         }
       end
 
       it 'configures ml2_plugin.conf' do
+        should contain_neutron_plugin_ml2('DEFAULT/taas_agent_periodic_interval').with_value(5)
         should contain_neutron_plugin_ml2('taas/vlan_range_start').with_value(1)
         should contain_neutron_plugin_ml2('taas/vlan_range_end').with_value(100)
       end

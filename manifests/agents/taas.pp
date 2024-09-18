@@ -19,6 +19,10 @@
 # [*package_ensure*]
 #   (optional) Ensure state for package. Defaults to 'present'.
 #
+# [*taas_agent_periodic_interval*]
+#   (optional) Seconds between periodic task runs.
+#   Defaults to $facts['os_service_default'].
+#
 # DEPRECATED PARAMETERS
 #
 # [*vlan_range_start*]
@@ -30,10 +34,11 @@
 #   Defaults to $facts['os_service_default'].
 #
 class neutron::agents::taas (
-  $package_ensure   = present,
+  $package_ensure               = present,
+  $taas_agent_periodic_interval = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
-  $vlan_range_start = undef,
-  $vlan_range_end   = undef,
+  $vlan_range_start             = undef,
+  $vlan_range_end               = undef,
 ) {
 
   include neutron::deps
@@ -47,6 +52,13 @@ class neutron::agents::taas (
       warning("The ${opt} parameter has been deprecated and will be removed in a future release. \
 Use the neutron::services::taas class parametes instead.")
     }
+  }
+
+  # NOTE(tkajinam): taas provides not its own agent but l2 agent extension so
+  #                 configure these options in the core plugin file so that
+  #                 these options are loaded by l2 agents such as ovs-agent.
+  neutron_plugin_ml2 {
+    'DEFAULT/taas_agent_periodic_interval': value => $taas_agent_periodic_interval;
   }
 
   neutron_plugin_ml2 {

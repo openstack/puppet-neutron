@@ -42,27 +42,9 @@
 #   connect to.
 #   Defaults to 'ptcp:6640:127.0.0.1'
 #
-# [*ovn_nb_connection*]
-#   (optional) The connection string for the OVN_Northbound OVSDB.
-#   Defaults to 'tcp:127.0.0.1:6641'
-#
 # [*ovn_sb_connection*]
 #   (optional) The connection string for the OVN_Southbound OVSDB
 #   Defaults to '$facts['os_service_default']'
-#
-# [*ovn_nb_private_key*]
-#   (optional) The PEM file with private key for SSL connection to OVN-NB-DB
-#   Defaults to $facts['os_service_default']
-#
-# [*ovn_nb_certificate*]
-#   (optional) The PEM file with certificate that certifies the private
-#   key specified in ovn_nb_private_key
-#   Defaults to $facts['os_service_default']
-#
-# [*ovn_nb_ca_cert*]
-#   (optional) The PEM file with CA certificate that OVN should use to
-#   verify certificates presented to it by SSL peers
-#   Defaults to $facts['os_service_default']
 #
 # [*ovn_sb_private_key*]
 #   (optional) TThe PEM file with private key for SSL connection to OVN-SB-DB
@@ -106,11 +88,7 @@ class neutron::agents::vpnaas::ovn (
   $ipsec_status_check_interval = $facts['os_service_default'],
   $ovsdb_connection            = 'tcp:127.0.0.1:6640',
   $ovs_manager                 = 'ptcp:6640:127.0.0.1',
-  $ovn_nb_connection           = $facts['os_service_default'],
   $ovn_sb_connection           = $facts['os_service_default'],
-  $ovn_nb_private_key          = $facts['os_service_default'],
-  $ovn_nb_certificate          = $facts['os_service_default'],
-  $ovn_nb_ca_cert              = $facts['os_service_default'],
   $ovn_sb_private_key          = $facts['os_service_default'],
   $ovn_sb_certificate          = $facts['os_service_default'],
   $ovn_sb_ca_cert              = $facts['os_service_default'],
@@ -170,10 +148,6 @@ openswan package in distributions")
     'ovn/ovsdb_retry_max_interval':      value => $ovsdb_retry_max_interval;
     'ovn/ovsdb_probe_interval':          value => $ovsdb_probe_interval;
     'ovn/ovn_sb_connection':             value => join(any2array($ovn_sb_connection), ',');
-    'ovn/ovn_nb_connection':             value => join(any2array($ovn_nb_connection), ',');
-    'ovn/ovn_nb_private_key':            value => $ovn_nb_private_key;
-    'ovn/ovn_nb_certificate':            value => $ovn_nb_certificate;
-    'ovn/ovn_nb_ca_cert':                value => $ovn_nb_ca_cert;
     'ovn/ovn_sb_private_key':            value => $ovn_sb_private_key;
     'ovn/ovn_sb_certificate':            value => $ovn_sb_certificate;
     'ovn/ovn_sb_ca_cert':                value => $ovn_sb_ca_cert;

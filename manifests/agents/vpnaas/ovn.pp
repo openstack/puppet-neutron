@@ -19,7 +19,7 @@
 #
 # [*vpn_device_driver*]
 #   (optional) The vpn device drivers Neutron will us.
-#   Defaults to 'neutron_vpnaas.services.vpn.device_drivers.ipsec.OpenSwanDriver'.
+#   Defaults to 'neutron_vpnaas.services.vpn.device_drivers.ovn_ipsec.OvnOpenSwanDriver'.
 #
 # [*interface_driver*]
 #   (optional) The driver used to manage the virtual interface.
@@ -83,7 +83,7 @@ class neutron::agents::vpnaas::ovn (
   Boolean $enabled             = true,
   Boolean $manage_service      = true,
   $debug                       = $facts['os_service_default'],
-  $vpn_device_driver           = 'neutron_vpnaas.services.vpn.device_drivers.ipsec.OpenSwanDriver',
+  $vpn_device_driver           = 'neutron_vpnaas.services.vpn.device_drivers.ovn_ipsec.OvnOpenSwanDriver',
   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $ipsec_status_check_interval = $facts['os_service_default'],
   $ovsdb_connection            = 'tcp:127.0.0.1:6640',
@@ -107,18 +107,18 @@ class neutron::agents::vpnaas::ovn (
   }
 
   case $vpn_device_driver {
-    /\.OpenSwan/: {
+    /\.OvnOpenSwanDriver$/: {
       warning("Support for OpenSwan has been deprecated, because of lack of \
 openswan package in distributions")
     }
-    /\.LibreSwan/: {
+    /\.OvnLibreSwanDriver$/: {
       ensure_packages( 'libreswan', {
         'ensure' => present,
         'name'   => $::neutron::params::libreswan_package,
         'tag'    => ['openstack', 'neutron-support-package'],
       })
     }
-    /\.StrongSwan/: {
+    /\.OvnStrongSwanDriver$/: {
       ensure_packages( 'strongswan', {
         'ensure' => present,
         'name'   => $::neutron::params::strongswan_package,

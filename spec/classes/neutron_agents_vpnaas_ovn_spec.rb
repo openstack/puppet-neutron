@@ -15,7 +15,7 @@ describe 'neutron::agents::vpnaas::ovn' do
       it 'configures ovn_vpn_agent.ini' do
         should contain_neutron_ovn_vpn_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
         should contain_neutron_ovn_vpn_agent_config('vpnagent/vpn_device_driver').with_value(
-          'neutron_vpnaas.services.vpn.device_drivers.ipsec.OpenSwanDriver')
+          'neutron_vpnaas.services.vpn.device_drivers.ovn_ipsec.OvnOpenSwanDriver')
         should contain_neutron_ovn_vpn_agent_config('ipsec/ipsec_status_check_interval').with_value('<SERVICE DEFAULT>')
         should contain_neutron_ovn_vpn_agent_config('DEFAULT/interface_driver').with_value(
           'neutron.agent.linux.interface.OVSInterfaceDriver')
@@ -51,13 +51,13 @@ describe 'neutron::agents::vpnaas::ovn' do
     context 'with libreswan vpnaas driver' do
       let :params do
         {
-          :vpn_device_driver => 'neutron_vpnaas.services.vpn.device_drivers.libreswan_ipsec.LibreSwanDriver'
+          :vpn_device_driver => 'neutron_vpnaas.services.vpn.device_drivers.ovn_ipsec.OvnLibreSwanDriver'
         }
       end
 
       it 'configures ovn_vpn_agent.ini' do
         should contain_neutron_ovn_vpn_agent_config('vpnagent/vpn_device_driver').with_value(
-          'neutron_vpnaas.services.vpn.device_drivers.libreswan_ipsec.LibreSwanDriver')
+          'neutron_vpnaas.services.vpn.device_drivers.ovn_ipsec.OvnLibreSwanDriver')
       end
 
       it 'installs libreswan packages' do
@@ -72,13 +72,13 @@ describe 'neutron::agents::vpnaas::ovn' do
     context 'with strongswan vpnaas driver' do
       let :params do
         {
-          :vpn_device_driver => 'neutron_vpnaas.services.vpn.device_drivers.strongswan_ipsec.StrongSwanDriver'
+          :vpn_device_driver => 'neutron_vpnaas.services.vpn.device_drivers.ovn_ipsec.OvnStrongSwanDriver'
         }
       end
 
       it 'configures ovn_vpn_agent.ini' do
         should contain_neutron_ovn_vpn_agent_config('vpnagent/vpn_device_driver').with_value(
-          'neutron_vpnaas.services.vpn.device_drivers.strongswan_ipsec.StrongSwanDriver')
+          'neutron_vpnaas.services.vpn.device_drivers.ovn_ipsec.OvnStrongSwanDriver')
       end
 
       it 'installs strongswan packages' do

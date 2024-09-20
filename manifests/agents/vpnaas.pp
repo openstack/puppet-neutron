@@ -52,11 +52,11 @@ class neutron::agents::vpnaas (
   include neutron::params
 
   case $vpn_device_driver {
-    /\.OpenSwan/: {
+    /\.OpenSwanDriver$/: {
       warning("Support for OpenSwan has been deprecated, because of lack of \
 openswan package in distributions")
     }
-    /\.LibreSwan/: {
+    /\.LibreSwanDriver$/: {
       Package['libreswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
       ensure_packages( 'libreswan', {
         'ensure' => present,
@@ -64,7 +64,7 @@ openswan package in distributions")
         'tag'    => ['openstack', 'neutron-support-package'],
       })
     }
-    /\.StrongSwan/: {
+    /\.StrongSwanDriver$/: {
       Package['strongswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
       ensure_packages( 'strongswan', {
         'ensure' => present,

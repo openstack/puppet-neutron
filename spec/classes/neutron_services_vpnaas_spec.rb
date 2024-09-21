@@ -17,6 +17,9 @@ describe 'neutron::services::vpnaas' do
         ).with_value(
           'VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default'
         )
+        should contain_neutron_vpnaas_service_config('DEFAULT/vpn_scheduler_driver').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_vpnaas_service_config('DEFAULT/vpn_auto_schedule').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_vpnaas_service_config('DEFAULT/allow_automatic_vpnagent_failover').with_value('<SERVICE DEFAULT>')
       end
 
       it 'does not run neutron-db-manage' do
@@ -57,6 +60,24 @@ describe 'neutron::services::vpnaas' do
         should contain_neutron_vpnaas_service_config(
           'service_providers/service_provider'
         ).with_value(['provider1', 'provider2'])
+      end
+    end
+
+    context 'with parameters' do
+      let :params do
+        {
+          :vpn_scheduler_driver              => 'neutron_vpnaas.scheduler.vpn_agent_scheduler.LeastRoutersScheduler',
+          :vpn_auto_schedule                 => true,
+          :allow_automatic_vpnagent_failover => false,
+        }
+      end
+
+      it 'configures neutron_vpnaas.conf' do
+        should contain_neutron_vpnaas_service_config('DEFAULT/vpn_scheduler_driver').with_value(
+          'neutron_vpnaas.scheduler.vpn_agent_scheduler.LeastRoutersScheduler'
+        )
+        should contain_neutron_vpnaas_service_config('DEFAULT/vpn_auto_schedule').with_value(true)
+        should contain_neutron_vpnaas_service_config('DEFAULT/allow_automatic_vpnagent_failover').with_value(false)
       end
     end
   end

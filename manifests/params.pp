@@ -25,7 +25,6 @@ class neutron::params {
 
   case $facts['os']['family'] {
     'RedHat': {
-      $lock_path                          = '/var/lib/neutron/tmp'
       $package_name                       = 'openstack-neutron'
       $server_service                     = 'neutron-server'
       $server_package                     = undef
@@ -71,7 +70,6 @@ class neutron::params {
       $networking_baremetal_agent_service = 'ironic-neutron-agent'
     }
     'Debian': {
-      $lock_path                          = '/var/lock/neutron'
       $package_name                       = 'neutron-common'
       if $facts['os']['name'] == 'Debian' {
         $ml2_server_package               = undef

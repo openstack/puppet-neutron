@@ -178,11 +178,6 @@
 #   (Optional) Allow auto scheduling networks to DHCP agent
 #   Defaults to $facts['os_service_default'].
 #
-# [*ensure_dr_package*]
-#   (Optional) Ensures installation of Neutron Dynamic Routing package before starting API service.
-#   Set to true to ensure installation of the package that is required to start neutron service if bgp service_plugin is enabled.
-#   Defaults to false.
-#
 # [*service_providers*]
 #   (Optional) (Array) Configures the service providers for neutron server.
 #   Defaults to $facts['os_service_default']
@@ -244,6 +239,14 @@
 #   speficied on the router.
 #   Defaults to $facts['os_service_default']
 #
+# DEPRECATED PARAMETERS
+#
+# [*ensure_dr_package*]
+#   (Optional) Ensures installation of Neutron Dynamic Routing package before
+#   starting API service. Set to true to ensure installation of the package
+#   that is required to start neutron service if bgp service_plugin is enabled.
+#   Defaults to false
+#
 class neutron::server (
   $package_ensure                   = 'present',
   Boolean $enabled                  = true,
@@ -277,7 +280,6 @@ class neutron::server (
   $l3_ha_network_type               = $facts['os_service_default'],
   $l3_ha_network_physical_name      = $facts['os_service_default'],
   $network_auto_schedule            = $facts['os_service_default'],
-  Boolean $ensure_dr_package        = false,
   $service_providers                = $facts['os_service_default'],
   $auth_strategy                    = 'keystone',
   $enable_proxy_headers_parsing     = $facts['os_service_default'],
@@ -289,6 +291,8 @@ class neutron::server (
   $igmp_flood_unregistered          = $facts['os_service_default'],
   $enable_default_route_ecmp        = $facts['os_service_default'],
   $enable_default_route_bfd         = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  Boolean $ensure_dr_package        = false,
 ) inherits neutron::params {
 
   include neutron::deps
@@ -302,6 +306,8 @@ class neutron::server (
   }
 
   if $ensure_dr_package {
+    warning("The ensure_dr_package parameter is deprecated. \
+Use the neutron::services::dr class instead.")
     ensure_packages('neutron-dynamic-routing', {
       ensure => $package_ensure,
       name   => $::neutron::params::dynamic_routing_package,

@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following parameters have been added to
+    the ``neutron::services::vpnaas`` class.
+
+    - ``vpn_scheduler_driver``
+    - ``vpn_auto_schedule``
+    - ``allow_automatic_vpnagent_failover``

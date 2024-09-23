@@ -11,6 +11,19 @@
 #   Must be in form: <service_type>:<name>:<driver>[:default]
 #   Defaults to $facts['os_service_default']
 #
+# [*vpn_scheduler_driver*]
+#   (optional) Driver to use for scheduling router to a VPN agent.
+#   Defaults to $facts['os_service_default']
+#
+# [*vpn_auto_schedule*]
+#   (optional) Allow auto scheduling of routers to VPN agent.
+#   Defaults to $facts['os_service_default']
+#
+# [*allow_automatic_vpnagent_failover*]
+#   (optional) Automatically reschedule routers from offline VPN agents to
+#   online VPN agents.
+#   Defaults to $facts['os_service_default']
+#
 # [*sync_db*]
 #   Whether 'neutron-db-manage' should run to create and/or synchronize the
 #   database with neutron-vpnaas specific tables.
@@ -22,10 +35,13 @@
 #   Defaults to false.
 #
 class neutron::services::vpnaas (
-  $package_ensure       = 'present',
-  $service_providers    = $facts['os_service_default'],
-  Boolean $sync_db      = false,
-  Boolean $purge_config = false,
+  $package_ensure                    = 'present',
+  $service_providers                 = $facts['os_service_default'],
+  $vpn_scheduler_driver              = $facts['os_service_default'],
+  $vpn_auto_schedule                 = $facts['os_service_default'],
+  $allow_automatic_vpnagent_failover = $facts['os_service_default'],
+  Boolean $sync_db                   = false,
+  Boolean $purge_config              = false,
 ) {
 
   include neutron::deps
@@ -48,7 +64,10 @@ class neutron::services::vpnaas (
   }
 
   neutron_vpnaas_service_config {
-    'service_providers/service_provider': value => $service_providers_real;
+    'service_providers/service_provider':        value => $service_providers_real;
+    'DEFAULT/vpn_scheduler_driver':              value => $vpn_scheduler_driver;
+    'DEFAULT/vpn_auto_schedule':                 value => $vpn_auto_schedule;
+    'DEFAULT/allow_automatic_vpnagent_failover': value => $allow_automatic_vpnagent_failover;
   }
 
   if $sync_db {

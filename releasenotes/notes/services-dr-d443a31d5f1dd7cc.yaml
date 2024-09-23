@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The new ``neutron::services::dr`` class has been added.
+
+deprecations:
+  - |
+    The ``neutron::server::ensure_dr_package`` parmaeter has been deprecated in
+    favor of the ``neutron::services::dr`` class. 

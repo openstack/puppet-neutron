@@ -13,25 +13,9 @@ describe 'neutron' do
   shared_examples 'neutron' do
     it_behaves_like 'a neutron base installation'
 
-    context 'with rabbitmq heartbeat configured' do
-      before { params.merge!( 
-        :rabbit_heartbeat_timeout_threshold => '60',
-        :rabbit_heartbeat_rate => '10',
-        :rabbit_heartbeat_in_pthread => true,
-      ) }
-      it_behaves_like 'rabbit with heartbeat configured'
-    end
-
-    context 'with rabbitmq durable queues configured' do
-      before { params.merge!( :amqp_durable_queues => true ) }
-      it_behaves_like 'rabbit with durable queues'
-    end
-
-    context 'with rabbitmq non default transient_queues_ttl' do
-      before { params.merge!( :rabbit_transient_queues_ttl => 20 ) }
-      it_behaves_like 'rabbit with non default transient_queues_ttl'
-    end
-
+    it_behaves_like 'with rabbit parameters configured'
+    it_behaves_like 'with notification parameters configured'
+    it_behaves_like 'with SSL enabled without kombu'
     it_behaves_like 'with SSL enabled with kombu'
     it_behaves_like 'with SSL enabled without kombu'
     it_behaves_like 'with SSL disabled'
@@ -131,41 +115,39 @@ describe 'neutron' do
     end
   end
 
-  shared_examples 'rabbit with heartbeat configured' do
+  shared_examples 'with rabbit parameters configured' do
+    before do
+      params.merge!(
+        :rabbit_heartbeat_timeout_threshold => 60,
+        :rabbit_heartbeat_rate              => 10,
+        :rabbit_heartbeat_in_pthread        => true,
+        :amqp_durable_queues                => true,
+        :rabbit_ha_queues                   => true,
+        :rabbit_transient_queues_ttl        => 20,
+      )
+    end
+
     it 'in neutron.conf' do
       should contain_oslo__messaging__rabbit('neutron_config').with(
-        :heartbeat_timeout_threshold => '60',
-        :heartbeat_rate              => '10',
+        :heartbeat_timeout_threshold => 60,
+        :heartbeat_rate              => 10,
         :heartbeat_in_pthread        => true,
+        :amqp_durable_queues         => true,
+        :rabbit_ha_queues            => true,
+        :rabbit_transient_queues_ttl => 20,
       )
     end
   end
 
-  shared_examples 'rabbit with durable queues' do
-    it 'in neutron.conf' do
-      should contain_oslo__messaging__rabbit('neutron_config').with(
-        :amqp_durable_queues => true
+  shared_examples 'with notification parameters configured' do
+    before do
+      params.merge!(
+        :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+        :notification_driver        => 'mesagingv2',
+        :notification_topics        => 'notifications',
       )
     end
-  end
 
-  shared_examples 'rabbit with non default transient_queues_ttl' do
-    it 'in neutron.conf' do
-      should contain_oslo__messaging__rabbit('neutron_config').with(
-        :rabbit_transient_queues_ttl => 20
-      )
-    end
-  end
-
-  shared_examples 'rabbit_ha_queues set to false' do
-    it 'in neutron.conf' do
-      should contain_oslo__messaging__rabbit('neutron_config').with(
-        :rabbit_ha_queues => true
-      )
-    end
-  end
-
-  shared_examples 'notification_driver and notification_topics' do
     it 'in neutron.conf' do
       should contain_oslo__messaging__notifications('neutron_config').with(
         :transport_url => params[:notification_transport_url],

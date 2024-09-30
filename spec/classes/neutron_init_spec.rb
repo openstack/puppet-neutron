@@ -56,6 +56,7 @@ describe 'neutron' do
         :transport_url => '<SERVICE DEFAULT>',
         :driver        => '<SERVICE DEFAULT>',
         :topics        => '<SERVICE DEFAULT>',
+        :retry         => '<SERVICE DEFAULT>',
       )
     end
 
@@ -145,6 +146,7 @@ describe 'neutron' do
         :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
         :notification_driver        => 'mesagingv2',
         :notification_topics        => 'notifications',
+        :notification_retry         => 10,
       )
     end
 
@@ -153,6 +155,7 @@ describe 'neutron' do
         :transport_url => params[:notification_transport_url],
         :driver        => params[:notification_driver],
         :topics        => params[:notification_topics],
+        :retry         => params[:notification_retry],
       )
     end
   end

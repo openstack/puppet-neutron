@@ -353,12 +353,6 @@ class neutron (
     }
   }
 
-  if ! is_service_default($use_ssl) and !($use_ssl) {
-    if ! is_service_default($ca_file) and ($ca_file) {
-      fail('The ca_file parameter requires that use_ssl to be set to true')
-    }
-  }
-
   package { 'neutron':
     ensure => $package_ensure,
     name   => $::neutron::params::package_name,
@@ -439,9 +433,11 @@ class neutron (
   # SSL Options
   neutron_config {
     'DEFAULT/use_ssl': value => $use_ssl;
-    'ssl/cert_file':   value => $cert_file;
-    'ssl/key_file':    value => $key_file;
-    'ssl/ca_file':     value => $ca_file;
+  }
+  oslo::service::ssl { 'neutron_config':
+    cert_file => $cert_file,
+    key_file  => $key_file,
+    ca_file   => $ca_file,
   }
 
 }

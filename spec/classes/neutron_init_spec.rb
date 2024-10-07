@@ -39,6 +39,8 @@ describe 'neutron' do
     it_behaves_like 'with SSL socket options set'
     it_behaves_like 'with SSL socket options set with wrong parameters'
     it_behaves_like 'with SSL socket options left by default'
+    it_behaves_like 'with SSL socket options set and no ca_file'
+    it_behaves_like 'with SSL socket options disabled but ca_file'
     it_behaves_like 'without service_plugins'
     it_behaves_like 'with service_plugins'
     it_behaves_like 'with host defined'
@@ -224,10 +226,10 @@ describe 'neutron' do
     it { should contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
     it { should contain_neutron_config('ssl/cert_file').with_value('/path/to/cert') }
     it { should contain_neutron_config('ssl/key_file').with_value('/path/to/key') }
-    it { should contain_neutron_config('ssl/ca_file').with_ensure('absent') }
+    it { should contain_neutron_config('ssl/ca_file').with_value('<SERVICE DEFAULT>') }
   end
 
-  shared_examples 'with SSL socket options disabled with ca_file' do
+  shared_examples 'with SSL socket options disabled but ca_file' do
     before do
       params.merge!(
         :use_ssl => false,

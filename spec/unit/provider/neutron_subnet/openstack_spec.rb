@@ -244,10 +244,10 @@ name="net1"')
 
         expect(provider_class).to receive(:openstack)
           .with('subnet', 'show', '--format', 'shell', 'dd5e0ef1-2c88-4b0b-ba08-7df65be87963')
-          .and_return('allocation_pools="[{\'start\': \'10.0.0.2\', \'end\': \'10.0.0.254\'}]"
+          .and_return('allocation_pools="[{\'start\': \'10.0.0.10\', \'end\': \'10.0.0.20\'}, {\'start\': \'10.0.0.30\', \'end\': \'10.0.0.40\'}]"
 cidr="10.0.0.0/24"
 description=""
-dns_nameservers="[]"
+dns_nameservers="[\'10.0.0.2\', \'10.0.0.3\']"
 enable_dhcp="True"
 gateway_ip="10.0.0.1"
 host_routes="[]"
@@ -292,7 +292,8 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
         expect(instances[0].network_name).to eq('net1')
         expect(instances[0].cidr).to eq('10.0.0.0/24')
         expect(instances[0].gateway_ip).to eq('10.0.0.1')
-        expect(instances[0].allocation_pools).to eq(['start=10.0.0.2,end=10.0.0.254'])
+        expect(instances[0].dns_nameservers).to eq(['10.0.0.2', '10.0.0.3'])
+        expect(instances[0].allocation_pools).to eq(['start=10.0.0.10,end=10.0.0.20','start=10.0.0.30,end=10.0.0.40'])
         expect(instances[0].enable_dhcp).to eq('True')
         expect(instances[0].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
 
@@ -303,6 +304,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
         expect(instances[1].network_name).to eq('net2')
         expect(instances[1].gateway_ip).to eq('10.0.1.1')
         expect(instances[1].cidr).to eq('10.0.1.0/24')
+        expect(instances[1].dns_nameservers).to eq([])
         expect(instances[1].allocation_pools).to eq(['start=10.0.1.2,end=10.0.1.254'])
         expect(instances[1].enable_dhcp).to eq('False')
         expect(instances[1].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')

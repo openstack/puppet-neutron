@@ -70,7 +70,7 @@ Puppet::Type.type(:neutron_subnet).provide(
 
   def self.parse_allocation_pool(values)
     allocation_pools = []
-    JSON.parse(values.gsub("'", '"')).each do |pool|
+    parse_python_list(values).each do |pool|
       start_ip = pool['start']
       end_ip = pool['end']
       allocation_pools << "start=#{start_ip},end=#{end_ip}"
@@ -80,7 +80,7 @@ Puppet::Type.type(:neutron_subnet).provide(
 
   def self.parse_host_routes(values)
     host_routes = []
-    JSON.parse(values.gsub("'", '"')).each do |route|
+    parse_python_list(values).each do |route|
       nexthop = route['nexthop']
       destination = route['destination']
       host_routes << "destination=#{destination},nexthop=#{nexthop}"
@@ -89,7 +89,7 @@ Puppet::Type.type(:neutron_subnet).provide(
   end
 
   def self.parse_dns_nameservers(values)
-    return JSON.parse(values.gsub("'", '"'))
+    return parse_python_list(values)
   end
 
   def exists?

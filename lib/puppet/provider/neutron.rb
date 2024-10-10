@@ -19,7 +19,7 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
   end
 
   def self.parse_subnet_id(value)
-    fixed_ips = JSON.parse(value.gsub(/\\"/,'"').gsub('\'','"'))
+    fixed_ips = parse_python_list(value)
     subnet_ids = []
     fixed_ips.each do |fixed_ip|
       subnet_ids << fixed_ip['subnet_id']

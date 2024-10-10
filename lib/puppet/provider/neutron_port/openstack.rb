@@ -176,7 +176,7 @@ Puppet::Type.type(:neutron_port).provide(
   end
 
   def self.parse_ip_address(value)
-    fixed_ips = JSON.parse(value.gsub('\'','"'))
+    fixed_ips = parse_python_list(value)
     ips = []
     fixed_ips.each do |fixed_ip|
       ips << fixed_ip['ip_address']
@@ -187,7 +187,7 @@ Puppet::Type.type(:neutron_port).provide(
   end
 
   def self.parse_binding_profile_interface_name(value)
-    profile = JSON.parse(value.gsub('\'','"'))
+    profile = parse_python_dict(value)
     profile['interface_name']
   end
 

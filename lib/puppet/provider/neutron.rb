@@ -24,20 +24,13 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
     fixed_ips.each do |fixed_ip|
       subnet_ids << fixed_ip['subnet_id']
     end
-
-    if subnet_ids.length > 1
-      subnet_ids
-    else
-      subnet_ids.first
-    end
+    # TODO(tkajinam): Support multiple values
+    subnet_ids.first
   end
 
   def self.parse_availability_zone_hint(value)
     hints = JSON.parse(value.gsub(/\\"/,'"').gsub('\'','"'))
-    if hints.length > 1
-      hints
-    else
-      hints.first
-    end
+    # TODO(tkajinam): Support multiple values
+    hints.first
   end
 end

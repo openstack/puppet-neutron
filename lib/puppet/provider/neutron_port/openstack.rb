@@ -182,11 +182,8 @@ Puppet::Type.type(:neutron_port).provide(
       ips << fixed_ip['ip_address']
     end
 
-    if ips.length > 1
-      ips
-    else
-      ips.first
-    end
+    # TODO(tkajinam): Support multiple values
+    ips.first
   end
 
   def self.parse_binding_profile_interface_name(value)

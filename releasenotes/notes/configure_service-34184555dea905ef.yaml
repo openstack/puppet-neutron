@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::keystone::auth::configure_service`` parameter has been
+    added.

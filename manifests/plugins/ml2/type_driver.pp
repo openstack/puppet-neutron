@@ -113,6 +113,10 @@ define neutron::plugins::ml2::type_driver (
     warning('local type_driver is useful only for single-box, because it provides no connectivity between hosts')
   }
   elsif ($name == 'geneve') {
+    # vni_ranges is required in geneve
+    if (! $vni_ranges) {
+      fail('when geneve is part of type_drivers, vni_ranges should be given.')
+    }
     validate_vni_ranges($vni_ranges)
     neutron_plugin_ml2 {
       'ml2_type_geneve/max_header_size': value => $max_header_size;

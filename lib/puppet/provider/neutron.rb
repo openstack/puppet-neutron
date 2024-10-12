@@ -29,7 +29,7 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
   end
 
   def self.parse_availability_zone_hint(value)
-    hints = JSON.parse(value.gsub(/\\"/,'"').gsub('\'','"'))
+    hints = parse_python_list(value)
     # TODO(tkajinam): Support multiple values
     hints.first
   end

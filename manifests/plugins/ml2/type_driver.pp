@@ -54,77 +54,77 @@ define neutron::plugins::ml2::type_driver (
 
   include neutron::deps
 
-  if ($name == 'flat') {
-    neutron_plugin_ml2 {
-      'ml2_type_flat/flat_networks': value => join(any2array($flat_networks), ',');
+  case $name {
+    'flat': {
+      neutron_plugin_ml2 {
+        'ml2_type_flat/flat_networks': value => join(any2array($flat_networks), ',');
+      }
     }
-  }
-  elsif ($name == 'gre') {
-    # tunnel_id_ranges is required in gre
-    if ! $tunnel_id_ranges {
-      fail('when gre is part of type_drivers, tunnel_id_ranges should be given.')
-    }
+    'gre': {
+      # tunnel_id_ranges is required in gre
+      if ! $tunnel_id_ranges {
+        fail('when gre is part of type_drivers, tunnel_id_ranges should be given.')
+      }
+      validate_tunnel_id_ranges($tunnel_id_ranges)
 
-    validate_tunnel_id_ranges($tunnel_id_ranges)
+      neutron_plugin_ml2 {
+        'ml2_type_gre/tunnel_id_ranges': value => join(any2array($tunnel_id_ranges), ',');
+      }
+    }
+    'vlan': {
+      # network_vlan_ranges is required in vlan
+      if ! $network_vlan_ranges {
+        fail('when vlan is part of type_drivers, network_vlan_ranges should be given.')
+      }
 
-    neutron_plugin_ml2 {
-      'ml2_type_gre/tunnel_id_ranges': value => join(any2array($tunnel_id_ranges), ',');
-    }
-  }
-  elsif ($name == 'vlan') {
-    # network_vlan_ranges is required in vlan
-    if ! $network_vlan_ranges {
-      fail('when vlan is part of type_drivers, network_vlan_ranges should be given.')
-    }
+      validate_network_vlan_ranges($network_vlan_ranges)
 
-    validate_network_vlan_ranges($network_vlan_ranges)
-
-    neutron_plugin_ml2 {
-      'ml2_type_vlan/network_vlan_ranges': value => join(any2array($network_vlan_ranges), ',');
+      neutron_plugin_ml2 {
+        'ml2_type_vlan/network_vlan_ranges': value => join(any2array($network_vlan_ranges), ',');
+      }
     }
-  }
-  elsif ($name == 'vxlan') {
-    # vni_ranges and vxlan_group are required in vxlan
-    if (! $vni_ranges) or (! $vxlan_group) {
-      fail('when vxlan is part of type_drivers, vni_ranges and vxlan_group should be given.')
-    }
-    # test multicast ip address (ipv4 else ipv6):
-    case $vxlan_group {
-      /^2[\d.]+$/: {
-        case $vxlan_group {
-          /^(22[4-9]|23[0-9])\.(\d+)\.(\d+)\.(\d+)$/: { }
-          default: { }
+    'vxlan': {
+      # vni_ranges and vxlan_group are required in vxlan
+      if (! $vni_ranges) or (! $vxlan_group) {
+        fail('when vxlan is part of type_drivers, vni_ranges and vxlan_group should be given.')
+      }
+      # test multicast ip address (ipv4 else ipv6):
+      case $vxlan_group {
+        /^2[\d.]+$/: {
+          case $vxlan_group {
+            /^(22[4-9]|23[0-9])\.(\d+)\.(\d+)\.(\d+)$/: { }
+            default: { }
+          }
+        }
+        /^ff[\d.]+$/: { }
+        default: {
+          fail("${vxlan_group} is not valid for vxlan_group.")
         }
       }
-      /^ff[\d.]+$/: { }
-      default: {
-        fail("${vxlan_group} is not valid for vxlan_group.")
+      validate_vni_ranges($vni_ranges)
+
+      neutron_plugin_ml2 {
+        'ml2_type_vxlan/vxlan_group': value => $vxlan_group;
+        'ml2_type_vxlan/vni_ranges':  value => join(any2array($vni_ranges), ',');
       }
     }
-
-    validate_vni_ranges($vni_ranges)
-
-    neutron_plugin_ml2 {
-      'ml2_type_vxlan/vxlan_group': value => $vxlan_group;
-      'ml2_type_vxlan/vni_ranges':  value => join(any2array($vni_ranges), ',');
+    'local': {
+      warning('local type_driver is useful only for single-box, because it provides no connectivity between hosts')
     }
-  }
-  elsif ($name == 'local') {
-    warning('local type_driver is useful only for single-box, because it provides no connectivity between hosts')
-  }
-  elsif ($name == 'geneve') {
-    # vni_ranges is required in geneve
-    if (! $vni_ranges) {
-      fail('when geneve is part of type_drivers, vni_ranges should be given.')
+    'geneve': {
+      # vni_ranges is required in geneve
+      if (! $vni_ranges) {
+        fail('when geneve is part of type_drivers, vni_ranges should be given.')
+      }
+      validate_vni_ranges($vni_ranges)
+      neutron_plugin_ml2 {
+        'ml2_type_geneve/max_header_size': value => $max_header_size;
+        'ml2_type_geneve/vni_ranges':      value => join(any2array($vni_ranges),',');
+      }
     }
-    validate_vni_ranges($vni_ranges)
-    neutron_plugin_ml2 {
-      'ml2_type_geneve/max_header_size': value => $max_header_size;
-      'ml2_type_geneve/vni_ranges':      value => join(any2array($vni_ranges),',');
+    default: {
+      # detect an invalid type_drivers value
+      warning('type_driver unknown.')
     }
-  }
-  else {
-    # detect an invalid type_drivers value
-    warning('type_driver unknown.')
   }
 }

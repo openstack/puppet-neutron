@@ -23,6 +23,7 @@ describe 'neutron::plugins::ml2::ovn' do
       :ovsdb_retry_max_interval             => '<SERVICE DEFAULT>',
       :ovsdb_probe_interval                 => '<SERVICE DEFAULT>',
       :neutron_sync_mode                    => '<SERVICE DEFAULT>',
+      :ovn_l3_scheduler                     => '<SERVICE DEFAULT>',
       :ovn_metadata_enabled                 => '<SERVICE DEFAULT>',
       :dvr_enabled                          => '<SERVICE DEFAULT>',
       :disable_ovn_dhcp_for_baremetal_ports => '<SERVICE DEFAULT>',
@@ -70,6 +71,7 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/ovsdb_retry_max_interval').with_value(p[:ovsdb_retry_max_interval])
         should contain_neutron_plugin_ml2('ovn/ovsdb_probe_interval').with_value(p[:ovsdb_probe_interval])
         should contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(p[:neutron_sync_mode])
+        should contain_neutron_plugin_ml2('ovn/ovn_l3_scheduler').with_value(p[:ovn_l3_scheduler])
         should contain_neutron_plugin_ml2('ovn/ovn_metadata_enabled').with_value(p[:ovn_metadata_enabled])
         should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(p[:dvr_enabled])
         should contain_neutron_plugin_ml2('ovn/disable_ovn_dhcp_for_baremetal_ports').with_value(p[:disable_ovn_dhcp_for_baremetal_ports])
@@ -108,6 +110,7 @@ describe 'neutron::plugins::ml2::ovn' do
           :ovsdb_retry_max_interval             => 180,
           :ovsdb_probe_interval                 => 60000,
           :neutron_sync_mode                    => 'log',
+          :ovn_l3_scheduler                     => 'leastloaded',
           :ovn_metadata_enabled                 => true,
           :dvr_enabled                          => false,
           :disable_ovn_dhcp_for_baremetal_ports => false,
@@ -141,6 +144,7 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/ovsdb_retry_max_interval').with_value(p[:ovsdb_retry_max_interval])
         should contain_neutron_plugin_ml2('ovn/ovsdb_probe_interval').with_value(p[:ovsdb_probe_interval])
         should contain_neutron_plugin_ml2('ovn/neutron_sync_mode').with_value(p[:neutron_sync_mode])
+        should contain_neutron_plugin_ml2('ovn/ovn_l3_scheduler').with_value(p[:ovn_l3_scheduler])
         should contain_neutron_plugin_ml2('ovn/ovn_metadata_enabled').with_value(p[:ovn_metadata_enabled])
         should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(p[:dvr_enabled])
         should contain_neutron_plugin_ml2('ovn/disable_ovn_dhcp_for_baremetal_ports').with_value(p[:disable_ovn_dhcp_for_baremetal_ports])

@@ -69,6 +69,11 @@
 #            that are no longer in Neutron.
 #   Defaults to $facts['os_service_default']
 #
+# [*ovn_l3_scheduler*]
+#   (optional) The OVN L3 Scheduler type used to schedule router gateway ports
+#   on hypervisors/chassis.
+#   Defaults to $facts['os_service_default']
+#
 # [*ovn_metadata_enabled*]
 #   (optional) Whether to enable metadata service in OVN.
 #   Type: boolean
@@ -191,6 +196,7 @@ class neutron::plugins::ml2::ovn(
   $ovsdb_retry_max_interval             = $facts['os_service_default'],
   $ovsdb_probe_interval                 = $facts['os_service_default'],
   $neutron_sync_mode                    = $facts['os_service_default'],
+  $ovn_l3_scheduler                     = $facts['os_service_default'],
   $ovn_metadata_enabled                 = $facts['os_service_default'],
   $dvr_enabled                          = $facts['os_service_default'],
   $disable_ovn_dhcp_for_baremetal_ports = $facts['os_service_default'],
@@ -242,6 +248,7 @@ class neutron::plugins::ml2::ovn(
     'ovn/ovsdb_retry_max_interval'            : value => $ovsdb_retry_max_interval;
     'ovn/ovsdb_probe_interval'                : value => $ovsdb_probe_interval;
     'ovn/neutron_sync_mode'                   : value => $neutron_sync_mode;
+    'ovn/ovn_l3_scheduler'                    : value => $ovn_l3_scheduler;
     'ovn/ovn_metadata_enabled'                : value => $ovn_metadata_enabled;
     'ovn/enable_distributed_floating_ip'      : value => $dvr_enabled;
     'ovn/disable_ovn_dhcp_for_baremetal_ports': value => $disable_ovn_dhcp_for_baremetal_ports;

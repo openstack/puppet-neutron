@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::plugins::ml2::ovn::ovn_l3_scheduler`` parameter has
+    been added.

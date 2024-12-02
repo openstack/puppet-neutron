@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The ``neutron::server`` class now supports installation of
+    the ``neutron-periodic-workers`` service also in Debian (previous version
+    only supported Red Hat based systems by default, unless the params value
+    was overridden).

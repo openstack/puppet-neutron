@@ -50,6 +50,10 @@
 #   (optional) Required if identity server requires client certificate
 #   Defaults to $facts['os_service_default'].
 #
+# [*region_name*]
+#   (Optional) The region of the Designate service.
+#   Defaults to $facts['os_service_default'].
+#
 # [*allow_reverse_dns_lookup*]
 #   (optional) Enable or not the creation of reverse lookup (PTR) records.
 #   Defaults to $facts['os_service_default'].
@@ -78,6 +82,7 @@ class neutron::designate (
   $auth_url                  = 'http://127.0.0.1:5000',
   $cafile                    = $facts['os_service_default'],
   $certfile                  = $facts['os_service_default'],
+  $region_name               = $facts['os_service_default'],
   $allow_reverse_dns_lookup  = $facts['os_service_default'],
   $ipv4_ptr_zone_prefix_size = $facts['os_service_default'],
   $ipv6_ptr_zone_prefix_size = $facts['os_service_default'],
@@ -107,6 +112,7 @@ class neutron::designate (
     'designate/auth_url':                  value => $auth_url;
     'designate/cafile':                    value => $cafile;
     'designate/certfile':                  value => $certfile;
+    'designate/region_name':               value => $region_name;
     'designate/allow_reverse_dns_lookup':  value => $allow_reverse_dns_lookup;
     'designate/ipv4_ptr_zone_prefix_size': value => $ipv4_ptr_zone_prefix_size;
     'designate/ipv6_ptr_zone_prefix_size': value => $ipv6_ptr_zone_prefix_size;

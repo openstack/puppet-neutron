@@ -25,6 +25,7 @@ describe 'neutron::designate' do
         should contain_neutron_config('designate/auth_url').with_value('http://127.0.0.1:5000')
         should contain_neutron_config('designate/cafile').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/certfile').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('designate/region_name').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/allow_reverse_dns_lookup').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/ipv4_ptr_zone_prefix_size').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/ipv6_ptr_zone_prefix_size').with_value('<SERVICE DEFAULT>')
@@ -43,6 +44,7 @@ describe 'neutron::designate' do
           :auth_url                  => 'http://localhost:5000',
           :cafile                    => '/path/to/cafile',
           :certfile                  => '/path/to/certfile',
+          :region_name               => 'region2',
           :allow_reverse_dns_lookup  => false,
           :ipv4_ptr_zone_prefix_size => 765,
           :ipv6_ptr_zone_prefix_size => 876,
@@ -63,6 +65,7 @@ describe 'neutron::designate' do
         should contain_neutron_config('designate/auth_url').with_value('http://localhost:5000')
         should contain_neutron_config('designate/cafile').with_value('/path/to/cafile')
         should contain_neutron_config('designate/certfile').with_value('/path/to/certfile')
+        should contain_neutron_config('designate/region_name').with_value('region2')
         should contain_neutron_config('designate/allow_reverse_dns_lookup').with_value(false)
         should contain_neutron_config('designate/ipv4_ptr_zone_prefix_size').with_value(765)
         should contain_neutron_config('designate/ipv6_ptr_zone_prefix_size').with_value(876)

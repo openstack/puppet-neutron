@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The ``neutron::designate`` class now has a new ``region_name`` parameter.

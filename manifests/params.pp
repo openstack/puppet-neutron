@@ -79,6 +79,8 @@ class neutron::params {
         $api_service_name                 = 'neutron-api'
         $rpc_package_name                 = 'neutron-rpc-server'
         $rpc_service_name                 = 'neutron-rpc-server'
+        $periodic_workers_package_name    = 'neutron-periodic-workers'
+        $periodic_workers_service_name    = 'neutron-periodic-workers'
         $bagpipe_bgp_package              = 'networking-bagpipe-bgp-agent'
         $bagpipe_bgp_service              = 'networking-bagpipe-bgp-agent'
       } else {
@@ -89,11 +91,11 @@ class neutron::params {
         $api_service_name                 = undef
         $rpc_package_name                 = undef
         $rpc_service_name                 = undef
+        $periodic_workers_package_name    = undef
+        $periodic_workers_service_name    = undef
         $bagpipe_bgp_package              = undef
         $bagpipe_bgp_service              = undef
       }
-      $periodic_workers_package_name      = undef
-      $periodic_workers_service_name      = undef
       $dynamic_routing_package            = 'python3-neutron-dynamic-routing'
       $bgp_dragent_package                = 'neutron-bgp-dragent'
       $bgpvpn_bagpipe_package             = 'python3-networking-bagpipe'

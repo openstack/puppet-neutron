@@ -115,16 +115,6 @@
 #   subnet upon creation and on all existing subnets when Neutron starts.
 #   Defaults to $facts['os_service_default']
 #
-# [*ovn_emit_need_to_frag*]
-#   (optional) Configure OVN to emit "need to frag" packets in case
-#              of MTU mismatch. Before enabling this configuration make
-#              sure that its supported by the host kernel (version >=
-#              5.2) or by checking the output of the following command:
-#              ovs-appctl -t ovs-vswitchd dpif/show-dp-features br-int |
-#              grep "Check pkt length action".
-#   Type: boolean
-#   Defaults to $facts['os_service_default']
-#
 # [*localnet_learn_fdb*]
 #   (optional) If enabled it will allow localnet ports to learn MAC addresses
 #              and store them in FDB SB table. This avoids flooding for
@@ -182,6 +172,18 @@
 #   Used by logging service plugin.
 #   Defaults to $facts['os_service_default'].
 #
+# DEPRECATED PARAMETERS
+#
+# [*ovn_emit_need_to_frag*]
+#   (optional) Configure OVN to emit "need to frag" packets in case of MTU
+#   mismatch. Before enabling this configuration make sure that its supported
+#   by the host kernel (version >= 5.2) or by checking the output of
+#   the following command:
+#     ovs-appctl -t ovs-vswitchd dpif/show-dp-features br-int |
+#     grep "Check pkt length action".
+#   Type: boolean
+#   Defaults to $facts['os_service_default']
+#
 class neutron::plugins::ml2::ovn(
   $ovn_nb_connection                    = $facts['os_service_default'],
   $ovn_sb_connection                    = $facts['os_service_default'],
@@ -205,7 +207,6 @@ class neutron::plugins::ml2::ovn(
   $dhcp_default_lease_time              = $facts['os_service_default'],
   $ovn_dhcp4_global_options             = $facts['os_service_default'],
   $ovn_dhcp6_global_options             = $facts['os_service_default'],
-  $ovn_emit_need_to_frag                = $facts['os_service_default'],
   $localnet_learn_fdb                   = $facts['os_service_default'],
   $fdb_age_threshold                    = $facts['os_service_default'],
   $mac_binding_age_threshold            = $facts['os_service_default'],
@@ -217,10 +218,16 @@ class neutron::plugins::ml2::ovn(
   $network_log_rate_limit               = $facts['os_service_default'],
   $network_log_burst_limit              = $facts['os_service_default'],
   $network_log_local_output_log_base    = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  $ovn_emit_need_to_frag                = undef,
 ) {
 
   include neutron::deps
   require neutron::plugins::ml2
+
+  if $ovn_emit_need_to_frag != undef {
+    warning('The ovn_emit_need_to_frag parameter has been deprecated.')
+  }
 
   if ! ( $neutron_sync_mode in ['off', 'log', 'repair', $facts['os_service_default']] ) {
     fail( 'Invalid value for neutron_sync_mode parameter' )
@@ -257,7 +264,7 @@ class neutron::plugins::ml2::ovn(
     'ovn/dhcp_default_lease_time'             : value => $dhcp_default_lease_time;
     'ovn/ovn_dhcp4_global_options'            : value => $ovn_dhcp4_global_options_real;
     'ovn/ovn_dhcp6_global_options'            : value => $ovn_dhcp6_global_options_real;
-    'ovn/ovn_emit_need_to_frag'               : value => $ovn_emit_need_to_frag;
+    'ovn/ovn_emit_need_to_frag'               : value => pick($ovn_emit_need_to_frag, $facts['os_service_default']);
     'ovn/localnet_learn_fdb'                  : value => $localnet_learn_fdb;
     'ovn/fdb_age_threshold'                   : value => $fdb_age_threshold;
     'ovn/mac_binding_age_threshold'           : value => $mac_binding_age_threshold;

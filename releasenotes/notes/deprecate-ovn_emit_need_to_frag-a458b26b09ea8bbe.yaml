@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::plugins::ml2::ovn::ovn_emit_need_to_frag`` parameter has
+    been deprecated and will be removed in a future release.

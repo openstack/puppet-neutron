@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for linuxbridge mechanism driver has been removed.

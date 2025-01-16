@@ -74,7 +74,6 @@ describe 'neutron::config' do
       { :ovs_agent_config         => config_hash,
         :ovn_agent_config         => config_hash,
         :sriov_agent_config       => config_hash,
-        :linuxbridge_agent_config => config_hash,
         :macvtap_agent_config     => config_hash,
         :l3_agent_config          => config_hash,
         :dhcp_agent_config        => config_hash,
@@ -105,12 +104,6 @@ describe 'neutron::config' do
       should contain_neutron_sriov_agent_config('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_sriov_agent_config('DEFAULT/bar').with_value('barValue')
       should contain_neutron_sriov_agent_config('DEFAULT/baz').with_ensure('absent')
-    end
-
-    it 'configures arbitrary neutron_agent_linuxbridge configurations' do
-      should contain_neutron_agent_linuxbridge('DEFAULT/foo').with_value('fooValue')
-      should contain_neutron_agent_linuxbridge('DEFAULT/bar').with_value('barValue')
-      should contain_neutron_agent_linuxbridge('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary neutron_agent_macvtap configurations' do

@@ -2,8 +2,6 @@
 #
 # Installs and configures the Neutron L3 service
 #
-# TODO: create ability to have multiple L3 services
-#
 # === Parameters
 #
 # [*package_ensure*]

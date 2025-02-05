@@ -46,7 +46,7 @@
 #   (optional) An ordered list of networking mechanism driver
 #   entrypoints to be loaded from the neutron.ml2.mechanism_drivers namespace.
 #   Should be an array that can have these elements:
-#   logger, test, openvswitch, arista, l2population, sriovnicswitch, macvtap
+#   arista, baremetal, l2populatiion, macvtap, openvswitch, ovn, sriovnicswitch
 #   Default to ['openvswitch'].
 #
 # [*flat_networks*]

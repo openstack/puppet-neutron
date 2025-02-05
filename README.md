@@ -48,16 +48,16 @@ Setup
 To utilize the neutron module's functionality you will need to declare multiple resources. The following example displays the setting up of an Open vSwitch neutron installation. This is not an exhaustive list of all the components needed. We recommend that you consult and understand the [core openstack](https://docs.openstack.org) documentation to assist you in understanding the available deployment options.
 
 ```puppet
-# enable the neutron service
-class { '::neutron':
-  enabled               => true,
+class { 'neutron':
   bind_host             => '127.0.0.1',
   default_transport_url => 'rabbit://neutron:passw0rd@localhost:5672/neutron',
   debug                 => false,
 }
 
-class { 'neutron::server':
+class { 'neutron::db':
   database_connection => 'mysql+pymysql://neutron:neutron_sql_secret@127.0.0.1/neutron?charset=utf8',
+}
+class { 'neutron::server':
 }
 
 class { 'neutron::keystone::authtoken':
@@ -79,16 +79,6 @@ Other neutron network drivers include:
 * dhcp,
 * metadata,
 * and l3.
-
-Nova will also need to be configured to connect to the neutron service. Setting up the `nova::network::neutron` class sets
-the `network_api_class` parameter in nova to use neutron instead of nova-network.
-
-```puppet
-class { 'nova::network::neutron':
-  neutron_password  => 'neutron_admin_secret',
-}
-```
-
 
 The `examples` directory also provides a quick tutorial on how to use this module.
 
@@ -133,21 +123,15 @@ If value is equal to ensure_absent_val then the resource will behave as if `ensu
 Limitations
 -----------
 
-This module supports the following neutron plugins:
+This module supports only the ml2 plugin, and its mechanism drivers listed below.
 
-* Open vSwitch with ML2
-* linuxbridge with ML2
-* Arista with ML2
-* cisco-neutron with and without ML2
-* NVP
-* PLUMgrid
-
-The following platforms are supported:
-
-* Ubuntu 12.04 (Precise)
-* Debian (Wheezy)
-* RHEL 6
-* Fedora 18
+* Arista
+* Baremetal
+* L2 Population
+* Macvtap
+* Open vSwitch
+* OVN
+* SR-IOV
 
 Development
 -----------

@@ -90,11 +90,6 @@
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
-# DEPRECATED PARAMETERS
-#
-# [*linuxbridge_agent_config*]
-#   (optional) Manage configuration of linuxbridge_agent.ini
-#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -122,18 +117,9 @@ class neutron::config (
   Hash $taas_service_config           = {},
   Hash $bgp_dragent_config            = {},
   Hash $plugin_ml2_config             = {},
-  # DEPRECATED PARAMETERS
-  Optional[Hash] $linuxbridge_agent_config   = undef,
 ) {
 
   include neutron::deps
-
-  if $linuxbridge_agent_config != undef {
-    warning('The linuxbridge_agent_config parameter is deprecated.')
-    $linuxbridge_agent_config_real = $linuxbridge_agent_config
-  } else {
-    $linuxbridge_agent_config_real = {}
-  }
 
   create_resources('neutron_config', $server_config)
   create_resources('neutron_api_paste_ini', $api_paste_ini)
@@ -141,7 +127,6 @@ class neutron::config (
   create_resources('neutron_agent_ovs', $ovs_agent_config)
   create_resources('neutron_agent_ovn', $ovn_agent_config)
   create_resources('neutron_sriov_agent_config', $sriov_agent_config)
-  create_resources('neutron_agent_linuxbridge', $linuxbridge_agent_config_real)
   create_resources('neutron_agent_macvtap', $macvtap_agent_config)
   create_resources('neutron_bgpvpn_bagpipe_config', $bgpvpn_bagpipe_config)
   create_resources('neutron_bgpvpn_service_config', $bgpvpn_service_config)

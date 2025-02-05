@@ -15,7 +15,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/neutron_vpnaas.conf',
                      '/etc/neutron/ovn_vpn_agent.ini',
                      '/etc/neutron/taas_plugin.ini',
-                     '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
                      '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
                      '/etc/neutron/plugins/ml2/ovn_agent.ini',
                      '/etc/neutron/plugins/ml2/sriov_agent.ini',
@@ -36,7 +35,6 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_vpnaas_service_config <||>
   File <||> -> Neutron_ovn_vpn_agent_config <||>
   File <||> -> Neutron_taas_service_config <||>
-  File <||> -> Neutron_agent_linuxbridge <||>
   File <||> -> Neutron_agent_ovs <||>
   File <||> -> Neutron_agent_ovn <||>
   File <||> -> Neutron_sriov_agent_config <||>
@@ -61,7 +59,6 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/neutron_vpnaas.conf',
                      '/etc/neutron/ovn_vpn_agent.ini',
                      '/etc/neutron/taas_plugin.ini',
-                     '/etc/neutron/plugins/ml2/linuxbridge_agent.ini',
                      '/etc/neutron/plugins/ml2/openvswitch_agent.ini',
                      '/etc/neutron/plugins/ml2/ovn_agent.ini',
                      '/etc/neutron/plugins/ml2/sriov_agent.ini',
@@ -273,24 +270,6 @@ describe 'basic neutron_config resource' do
     ensure_absent_val => 'toto',
   }
 
-  neutron_agent_linuxbridge { 'DEFAULT/thisshouldexist' :
-    value => 'foo',
-  }
-
-  neutron_agent_linuxbridge { 'DEFAULT/thisshouldnotexist' :
-    value => '<SERVICE DEFAULT>',
-  }
-
-  neutron_agent_linuxbridge { 'DEFAULT/thisshouldexist2' :
-    value             => '<SERVICE DEFAULT>',
-    ensure_absent_val => 'toto',
-  }
-
-  neutron_agent_linuxbridge { 'DEFAULT/thisshouldnotexist2' :
-    value             => 'toto',
-    ensure_absent_val => 'toto',
-  }
-
   neutron_agent_ovs { 'DEFAULT/thisshouldexist' :
     value => 'foo',
   }
@@ -412,7 +391,6 @@ describe 'basic neutron_config resource' do
                     'neutron_vpnaas_service_config',
                     'neutron_ovn_vpn_agent_config',
                     'neutron_taas_service_config',
-                    'neutron_agent_linuxbridge',
                     'neutron_agent_ovs',
                     'neutron_agent_ovn',
                     'neutron_sriov_agent_config',

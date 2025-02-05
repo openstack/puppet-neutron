@@ -35,7 +35,6 @@ class neutron::deps {
   # All other inifile providers need to be processed in the config block
   Anchor['neutron::config::begin'] -> Neutron_api_paste_ini<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_api_uwsgi_config<||> -> Anchor['neutron::config::end']
-  Anchor['neutron::config::begin'] -> Neutron_agent_linuxbridge<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_agent_macvtap<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_agent_ovs<||> -> Anchor['neutron::config::end']
   Anchor['neutron::config::begin'] -> Neutron_agent_ovn<||> -> Anchor['neutron::config::end']

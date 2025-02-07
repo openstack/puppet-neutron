@@ -31,8 +31,7 @@ describe 'neutron' do
     it_behaves_like 'with transport_url defined'
     it_behaves_like 'with rootwrap daemon'
     it_behaves_like 'with max_allowed_address_pair defined'
-    it_behaves_like 'when disabling vlan_transparent'
-    it_behaves_like 'when enabling vlan_transparent'
+    it_behaves_like 'when vlan transparent options defined'
   end
 
   shared_examples 'a neutron base installation' do
@@ -111,6 +110,7 @@ describe 'neutron' do
       )
 
       should contain_neutron_config('DEFAULT/vlan_transparent').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_config('DEFAULT/vlan_qinq').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       should contain_neutron_config('agent/root_helper_daemon').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('agent/report_interval').with_value('<SERVICE DEFAULT>')
@@ -301,25 +301,16 @@ describe 'neutron' do
     }
   end
 
-  shared_examples 'when disabling vlan_transparent' do
+  shared_examples 'when vlan transparent options defined' do
     before do
       params.merge!(
-        :vlan_transparent => false
-      )
-    end
-    it do
-      should contain_neutron_config('DEFAULT/vlan_transparent').with_value(false)
-    end
-  end
-
-  shared_examples 'when enabling vlan_transparent' do
-    before do
-      params.merge!(
-        :vlan_transparent => true
+        :vlan_transparent => true,
+        :vlan_qinq        => false,
       )
     end
     it do
       should contain_neutron_config('DEFAULT/vlan_transparent').with_value(true)
+      should contain_neutron_config('DEFAULT/vlan_qinq').with_value(false)
     end
   end
 

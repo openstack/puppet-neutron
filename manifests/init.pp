@@ -278,8 +278,14 @@
 #   Defaults to $facts['os_service_default'].
 #
 # [*vlan_transparent*]
-#   (optional) Allow plugins that support it to create VLAN transparent networks
-#   Defaults to $facts['os_service_default']
+#   (optional) Allow plugins that support it to create VLAN transparent
+#   networks.
+#   Defaults to $facts['os_service_default'].
+#
+# [*vlan_qinq*]
+#   (optional) Allow plugins that support it to create VLAN transparent
+#   networks using 0x8a88 ethertype.
+#   Defaults to $facts['os_service_default'].
 #
 class neutron (
   $package_ensure                       = 'present',
@@ -339,6 +345,7 @@ class neutron (
   $notification_retry                   = $facts['os_service_default'],
   $max_allowed_address_pair             = $facts['os_service_default'],
   $vlan_transparent                     = $facts['os_service_default'],
+  $vlan_qinq                            = $facts['os_service_default'],
 ) {
 
   include neutron::deps
@@ -380,6 +387,7 @@ class neutron (
     'DEFAULT/global_physnet_mtu':       value => $global_physnet_mtu;
     'DEFAULT/max_allowed_address_pair': value => $max_allowed_address_pair;
     'DEFAULT/vlan_transparent':         value => $vlan_transparent;
+    'DEFAULT/vlan_qinq':                value => $vlan_qinq;
     'agent/root_helper':                value => $root_helper;
     'agent/root_helper_daemon':         value => $root_helper_daemon;
     'agent/report_interval':            value => $report_interval;

@@ -38,6 +38,7 @@ describe 'neutron::plugins::ml2::ovn' do
       :mac_binding_age_threshold            => '<SERVICE DEFAULT>',
       :broadcast_arps_to_all_routers        => '<SERVICE DEFAULT>',
       :ovn_router_indirect_snat             => '<SERVICE DEFAULT>',
+      :live_migration_activation_strategy   => '<SERVICE DEFAULT>',
       :ignore_lsp_down                      => '<SERVICE DEFAULT>',
       :fdb_removal_limit                    => '<SERVICE DEFAULT>',
       :mac_binding_removal_limit            => '<SERVICE DEFAULT>',
@@ -86,6 +87,7 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/mac_binding_age_threshold').with_value(p[:mac_binding_age_threshold])
         should contain_neutron_plugin_ml2('ovn/broadcast_arps_to_all_routers').with_value(p[:broadcast_arps_to_all_routers])
         should contain_neutron_plugin_ml2('ovn/ovn_router_indirect_snat').with_value(p[:ovn_router_indirect_snat])
+        should contain_neutron_plugin_ml2('ovn/live_migration_activation_strategy').with_value(p[:live_migration_activation_strategy])
         should contain_neutron_plugin_ml2('ovn_nb_global/ignore_lsp_down').with_value(p[:ignore_lsp_down])
         should contain_neutron_plugin_ml2('ovn_nb_global/fdb_removal_limit').with_value(p[:fdb_removal_limit])
         should contain_neutron_plugin_ml2('ovn_nb_global/mac_binding_removal_limit').with_value(p[:mac_binding_removal_limit])
@@ -125,6 +127,7 @@ describe 'neutron::plugins::ml2::ovn' do
           :mac_binding_age_threshold            => 11,
           :broadcast_arps_to_all_routers        => true,
           :ovn_router_indirect_snat             => false,
+          :live_migration_activation_strategy   => 'rarp',
           :ignore_lsp_down                      => false,
           :fdb_removal_limit                    => 12,
           :mac_binding_removal_limit            => 13,
@@ -159,6 +162,7 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/mac_binding_age_threshold').with_value(p[:mac_binding_age_threshold])
         should contain_neutron_plugin_ml2('ovn/broadcast_arps_to_all_routers').with_value(p[:broadcast_arps_to_all_routers])
         should contain_neutron_plugin_ml2('ovn/ovn_router_indirect_snat').with_value(p[:ovn_router_indirect_snat])
+        should contain_neutron_plugin_ml2('ovn/live_migration_activation_strategy').with_value(p[:live_migration_activation_strategy])
         should contain_neutron_plugin_ml2('ovn_nb_global/ignore_lsp_down').with_value(p[:ignore_lsp_down])
         should contain_neutron_plugin_ml2('ovn_nb_global/fdb_removal_limit').with_value(p[:fdb_removal_limit])
         should contain_neutron_plugin_ml2('ovn_nb_global/mac_binding_removal_limit').with_value(p[:mac_binding_removal_limit])

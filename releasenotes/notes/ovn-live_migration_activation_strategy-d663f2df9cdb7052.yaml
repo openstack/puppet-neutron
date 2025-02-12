@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::plugins::ml2::ovn::live_migration_activation_strategy``
+    parameter has been added.

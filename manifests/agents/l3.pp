@@ -65,6 +65,50 @@
 #   requests.
 #   Defaults to $facts['os_service_default']
 #
+# [*ha_conntrackd_enabled*]
+#   (optional) Enable conntrackd to syncrhonize connection tracking states
+#   between HA routers.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_conntrackd_hashsize*]
+#   (optional) Number of buckets in the cache hashtable.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_conntrackd_hashlimit*]
+#   (optional) Maximum number of conntracks.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_conntrackd_unix_backlog*]
+#   (optional) Unix socket backlog.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_conntrackd_socketbuffersize*]
+#   (optional) Socket buffer size for events.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_conntrackd_socketbuffersize_max_grown*]
+#   (optional) Maximum size of socket buffer.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_conntrackd_ipv4_mcast_addr*]
+#   (optional) Multicast address: The address that you use as destination in
+#   the syncrhonization messages.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_conntrackd_group*]
+#   (optional) The multicast base port number.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_conntrackd_sndsocketbuffer*]
+#   (optional) Buffer used to enqueue the packets that are going to be
+#   transmitted.
+#   Defaults to $facts['os_service_default']
+#
+# [*ha_conntrackd_rcvsocketbuffer*]
+#   (optional) Buffer used to enqueue the packages that the socket is pending
+#   to handle.
+#   Defaults to $facts['os_service_default']
+#
 # [*agent_mode*]
 #   (optional) The working mode for the agent.
 #   'legacy': default behavior (without DVR)
@@ -155,6 +199,16 @@ class neutron::agents::l3 (
   $ha_vrrp_advert_int                        = $facts['os_service_default'],
   $ha_keepalived_state_change_server_threads = $facts['os_service_default'],
   $ha_vrrp_health_check_interval             = $facts['os_service_default'],
+  $ha_conntrackd_enabled                     = $facts['os_service_default'],
+  $ha_conntrackd_hashsize                    = $facts['os_service_default'],
+  $ha_conntrackd_hashlimit                   = $facts['os_service_default'],
+  $ha_conntrackd_unix_backlog                = $facts['os_service_default'],
+  $ha_conntrackd_socketbuffersize            = $facts['os_service_default'],
+  $ha_conntrackd_socketbuffersize_max_grown  = $facts['os_service_default'],
+  $ha_conntrackd_ipv4_mcast_addr             = $facts['os_service_default'],
+  $ha_conntrackd_group                       = $facts['os_service_default'],
+  $ha_conntrackd_sndsocketbuffer             = $facts['os_service_default'],
+  $ha_conntrackd_rcvsocketbuffer             = $facts['os_service_default'],
   $agent_mode                                = $facts['os_service_default'],
   $availability_zone                         = $facts['os_service_default'],
   $extensions                                = $facts['os_service_default'],
@@ -196,6 +250,16 @@ class neutron::agents::l3 (
     'DEFAULT/ha_vrrp_advert_int':                        value => $ha_vrrp_advert_int;
     'DEFAULT/ha_keepalived_state_change_server_threads': value => $ha_keepalived_state_change_server_threads;
     'DEFAULT/ha_vrrp_health_check_interval':             value => $ha_vrrp_health_check_interval;
+    'DEFAULT/ha_conntrackd_enabled':                     value => $ha_conntrackd_enabled;
+    'DEFAULT/ha_conntrackd_hashsize':                    value => $ha_conntrackd_hashsize;
+    'DEFAULT/ha_conntrackd_hashlimit':                   value => $ha_conntrackd_hashlimit;
+    'DEFAULT/ha_conntrackd_unix_backlog':                value => $ha_conntrackd_unix_backlog;
+    'DEFAULT/ha_conntrackd_socketbuffersize':            value => $ha_conntrackd_socketbuffersize;
+    'DEFAULT/ha_conntrackd_socketbuffersize_max_grown':  value => $ha_conntrackd_socketbuffersize_max_grown;
+    'DEFAULT/ha_conntrackd_ipv4_mcast_addr':             value => $ha_conntrackd_ipv4_mcast_addr;
+    'DEFAULT/ha_conntrackd_group':                       value => $ha_conntrackd_group;
+    'DEFAULT/ha_conntrackd_sndsocketbuffer':             value => $ha_conntrackd_sndsocketbuffer;
+    'DEFAULT/ha_conntrackd_rcvsocketbuffer':             value => $ha_conntrackd_rcvsocketbuffer;
     'DEFAULT/agent_mode':                                value => $agent_mode;
     'DEFAULT/radvd_user':                                value => $radvd_user;
     'ovs/integration_bridge':                            value => $ovs_integration_bridge;

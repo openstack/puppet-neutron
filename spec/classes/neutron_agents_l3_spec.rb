@@ -36,6 +36,16 @@ describe 'neutron::agents::l3' do
       should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_advert_int').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/ha_keepalived_state_change_server_threads').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_health_check_interval').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_enabled').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_hashsize').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_hashlimit').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_unix_backlog').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_socketbuffersize').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_socketbuffersize_max_grown').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_ipv4_mcast_addr').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_group').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_sndsocketbuffer').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_rcvsocketbuffer').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/agent_mode').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('DEFAULT/radvd_user').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l3_agent_config('ovs/integration_bridge').with_value('<SERVICE DEFAULT>')
@@ -130,6 +140,35 @@ describe 'neutron::agents::l3' do
         should contain_neutron_l3_agent_config('DEFAULT/ha_keepalived_state_change_server_threads').with_value(
           p[:ha_keepalived_state_change_server_threads])
         should contain_neutron_l3_agent_config('DEFAULT/ha_vrrp_health_check_interval').with_value(p[:ha_vrrp_health_check_interval])
+      end
+    end
+
+    context 'with conntrackd options' do
+      before :each do
+        params.merge!({
+          :ha_conntrackd_enabled                    => false,
+          :ha_conntrackd_hashsize                   => 32768,
+          :ha_conntrackd_hashlimit                  => 131072,
+          :ha_conntrackd_unix_backlog               => 20,
+          :ha_conntrackd_socketbuffersize           => 262142,
+          :ha_conntrackd_socketbuffersize_max_grown => 655355,
+          :ha_conntrackd_ipv4_mcast_addr            => '225.0.0.50',
+          :ha_conntrackd_group                      => 3780,
+          :ha_conntrackd_sndsocketbuffer            => 24985600,
+          :ha_conntrackd_rcvsocketbuffer            => 24985601,
+        })
+      end
+      it 'should configure conntrackd' do
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_enabled').with_value(false)
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_hashsize').with_value(32768)
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_hashlimit').with_value(131072)
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_unix_backlog').with_value(20)
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_socketbuffersize').with_value(262142)
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_socketbuffersize_max_grown').with_value(655355)
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_ipv4_mcast_addr').with_value('225.0.0.50')
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_group').with_value(3780)
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_sndsocketbuffer').with_value(24985600)
+        should contain_neutron_l3_agent_config('DEFAULT/ha_conntrackd_rcvsocketbuffer').with_value(24985601)
       end
     end
 

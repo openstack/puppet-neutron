@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``neutron::agents::l3`` class now supports configuring conntrackd
+    options.

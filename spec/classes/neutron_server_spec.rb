@@ -301,36 +301,28 @@ describe 'neutron::server' do
           )
         end
 
-        if platform_params.has_key?(:rpc_package_name)
-          should contain_package('neutron-rpc-server').with(
-            :name   => platform_params[:rpc_package_name],
-            :ensure => 'present',
-            :tag    => ['openstack', 'neutron-package'],
-          )
-        end
-        if platform_params.has_key?(:rpc_service_name)
-          should contain_service('neutron-rpc-server').with(
-            :ensure => 'running',
-            :name   => platform_params[:rpc_service_name],
-            :enable => true,
-            :tag    => ['neutron-service'],
-          )
-        end
-        if platform_params.has_key?(:periodic_workers_package_name)
-          should contain_package('neutron-periodic-workers').with(
-            :name   => platform_params[:periodic_workers_package_name],
-            :ensure => 'present',
-            :tag    => ['openstack', 'neutron-package'],
-          )
-        end
-        if platform_params.has_key?(:periodic_workers_service_name)
-          should contain_service('neutron-periodic-workers').with(
-            :ensure => 'running',
-            :name   => platform_params[:periodic_workers_service_name],
-            :enable => true,
-            :tag    => ['neutron-service'],
-          )
-        end
+        should contain_package('neutron-rpc-server').with(
+          :name   => platform_params[:rpc_package_name],
+          :ensure => 'present',
+          :tag    => ['openstack', 'neutron-package'],
+        )
+        should contain_service('neutron-rpc-server').with(
+          :ensure => 'running',
+          :name   => platform_params[:rpc_service_name],
+          :enable => true,
+          :tag    => ['neutron-service'],
+        )
+        should contain_package('neutron-periodic-workers').with(
+          :name   => platform_params[:periodic_workers_package_name],
+          :ensure => 'present',
+          :tag    => ['openstack', 'neutron-package'],
+        )
+        should contain_service('neutron-periodic-workers').with(
+          :ensure => 'running',
+          :name   => platform_params[:periodic_workers_service_name],
+          :enable => true,
+          :tag    => ['neutron-service'],
+        )
       end
     end
 
@@ -437,18 +429,26 @@ describe 'neutron::server' do
         when 'Debian'
           if facts[:os]['name'] == 'Ubuntu'
             {
-              :server_package          => 'neutron-server',
-              :server_service          => 'neutron-server',
-              :dynamic_routing_package => 'python3-neutron-dynamic-routing',
-              :vpnaas_agent_package    => 'python3-neutron-vpnaas',
+              :api_package_name              => 'neutron-api',
+              :server_package                => 'neutron-server',
+              :server_service                => 'neutron-server',
+              :rpc_package_name              => 'neutron-rpc-server',
+              :rpc_service_name              => 'neutron-rpc-server',
+              :periodic_workers_package_name => 'neutron-periodic-workers',
+              :periodic_workers_service_name => 'neutron-periodic-workers',
+              :dynamic_routing_package       => 'python3-neutron-dynamic-routing',
+              :vpnaas_agent_package          => 'python3-neutron-vpnaas',
             }
           else
             {
-              :api_service_name        => 'neutron-api',
-              :rpc_package_name        => 'neutron-rpc-server',
-              :rpc_service_name        => 'neutron-rpc-server',
-              :dynamic_routing_package => 'python3-neutron-dynamic-routing',
-              :vpnaas_agent_package    => 'python3-neutron-vpnaas',
+              :api_package_name              => 'neutron-api',
+              :api_service_name              => 'neutron-api',
+              :rpc_package_name              => 'neutron-rpc-server',
+              :rpc_service_name              => 'neutron-rpc-server',
+              :periodic_workers_package_name => 'neutron-periodic-workers',
+              :periodic_workers_service_name => 'neutron-periodic-workers',
+              :dynamic_routing_package       => 'python3-neutron-dynamic-routing',
+              :vpnaas_agent_package          => 'python3-neutron-vpnaas',
             }
           end
         when 'RedHat'

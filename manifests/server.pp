@@ -367,7 +367,7 @@ Use the neutron::services::dr class instead.")
       }
     }
 
-    if $rpc_package_name and $rpc_service_name {
+    if $rpc_service_name {
       package { 'neutron-rpc-server':
         ensure => $package_ensure,
         name   => $rpc_package_name,
@@ -375,7 +375,7 @@ Use the neutron::services::dr class instead.")
       }
     }
 
-    if $periodic_workers_package_name {
+    if $periodic_workers_service_name {
       package { 'neutron-periodic-workers':
         ensure => $package_ensure,
         name   => $periodic_workers_package_name,

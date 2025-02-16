@@ -85,12 +85,12 @@ class neutron::params {
         $ml2_server_package               = 'neutron-plugin-ml2'
         $server_service                   = 'neutron-server'
         $server_package                   = 'neutron-server'
-        $api_package_name                 = undef
+        $api_package_name                 = 'neutron-api'
         $api_service_name                 = undef
-        $rpc_package_name                 = undef
-        $rpc_service_name                 = undef
-        $periodic_workers_package_name    = undef
-        $periodic_workers_service_name    = undef
+        $rpc_package_name                 = 'neutron-rpc-server'
+        $rpc_service_name                 = 'neutron-rpc-server'
+        $periodic_workers_package_name    = 'neutron-periodic-workers'
+        $periodic_workers_service_name    = 'neutron-periodic-workers'
         $bagpipe_bgp_package              = undef
         $bagpipe_bgp_service              = undef
       }

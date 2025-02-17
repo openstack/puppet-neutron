@@ -34,7 +34,7 @@ class neutron::db::postgresql(
 
   include neutron::deps
 
-  ::openstacklib::db::postgresql { 'neutron':
+  openstacklib::db::postgresql { 'neutron':
     password   => $password,
     dbname     => $dbname,
     user       => $user,

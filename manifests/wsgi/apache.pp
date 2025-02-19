@@ -162,7 +162,7 @@ class neutron::wsgi::apache (
 
   Anchor['neutron::install::end'] -> Class['apache']
 
-  ::openstacklib::wsgi::apache { 'neutron_wsgi':
+  openstacklib::wsgi::apache { 'neutron_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
     group                       => $::neutron::params::group,

@@ -42,7 +42,7 @@ class neutron::db::mysql (
 
   include neutron::deps
 
-  ::openstacklib::db::mysql { 'neutron':
+  openstacklib::db::mysql { 'neutron':
     user          => $user,
     password      => $password,
     dbname        => $dbname,

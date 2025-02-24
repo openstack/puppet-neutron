@@ -4,11 +4,11 @@
 #
 # [*ovn_nb_connection*]
 #   (optional) The connection string for the OVN_Northbound OVSDB.
-#   Defaults to 'tcp:127.0.0.1:6641'
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_sb_connection*]
 #   (optional) The connection string for the OVN_Southbound OVSDB
-#   Defaults to 'tcp:127.0.0.1:6642'
+#   Defaults to $facts['os_service_default']
 #
 # [*ovn_nb_private_key*]
 #   (optional) The PEM file with private key for SSL connection to OVN-NB-DB

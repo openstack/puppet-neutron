@@ -90,9 +90,14 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*dns_servers*]
-#   (optional) List of dns servers which will be as forwarders
-#              if a subnet's dns_nameservers is empty.
+#   (optional) List of dns servers which will be as forwarders if a subnet's
+#   dns_nameservers is empty.
 #   Type: List
+#   Defaults to $facts['os_service_default']
+#
+# [*dns_records_ovn_owned*]
+#   (optional) Whether to consider DNS records local to OVN or not.
+#   Type: boolean
 #   Defaults to $facts['os_service_default']
 #
 # [*vhostuser_socket_dir*]
@@ -207,6 +212,7 @@ class neutron::plugins::ml2::ovn(
   $dvr_enabled                          = $facts['os_service_default'],
   $disable_ovn_dhcp_for_baremetal_ports = $facts['os_service_default'],
   $dns_servers                          = $facts['os_service_default'],
+  $dns_records_ovn_owned                = $facts['os_service_default'],
   $vhostuser_socket_dir                 = $facts['os_service_default'],
   $dhcp_default_lease_time              = $facts['os_service_default'],
   $ovn_dhcp4_global_options             = $facts['os_service_default'],
@@ -265,6 +271,7 @@ class neutron::plugins::ml2::ovn(
     'ovn/enable_distributed_floating_ip'      : value => $dvr_enabled;
     'ovn/disable_ovn_dhcp_for_baremetal_ports': value => $disable_ovn_dhcp_for_baremetal_ports;
     'ovn/dns_servers'                         : value => join(any2array($dns_servers), ',');
+    'ovn/dns_records_ovn_owned'               : value => $dns_records_ovn_owned;
     'ovn/vhost_sock_dir'                      : value => $vhostuser_socket_dir;
     'ovn/dhcp_default_lease_time'             : value => $dhcp_default_lease_time;
     'ovn/ovn_dhcp4_global_options'            : value => $ovn_dhcp4_global_options_real;

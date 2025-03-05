@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::plugins::ml2::ovn::dns_records_ovn_owned`` parameter
+    has been added.

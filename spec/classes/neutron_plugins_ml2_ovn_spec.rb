@@ -28,6 +28,7 @@ describe 'neutron::plugins::ml2::ovn' do
       :dvr_enabled                          => '<SERVICE DEFAULT>',
       :disable_ovn_dhcp_for_baremetal_ports => '<SERVICE DEFAULT>',
       :dns_servers                          => '<SERVICE DEFAULT>',
+      :dns_records_ovn_owned                => '<SERVICE DEFAULT>',
       :vhostuser_socket_dir                 => '<SERVICE DEFAULT>',
       :dhcp_default_lease_time              => '<SERVICE DEFAULT>',
       :ovn_dhcp4_global_options             => '<SERVICE DEFAULT>',
@@ -77,6 +78,7 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(p[:dvr_enabled])
         should contain_neutron_plugin_ml2('ovn/disable_ovn_dhcp_for_baremetal_ports').with_value(p[:disable_ovn_dhcp_for_baremetal_ports])
         should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(p[:dns_servers])
+        should contain_neutron_plugin_ml2('ovn/dns_records_ovn_owned').with_value(p[:dns_records_ovn_owned])
         should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value(p[:vhostuser_socket_dir])
         should contain_neutron_plugin_ml2('ovn/dhcp_default_lease_time').with_value(p[:dhcp_default_lease_time])
         should contain_neutron_plugin_ml2('ovn/ovn_dhcp4_global_options').with_value(p[:ovn_dhcp4_global_options])
@@ -117,6 +119,7 @@ describe 'neutron::plugins::ml2::ovn' do
           :dvr_enabled                          => false,
           :disable_ovn_dhcp_for_baremetal_ports => false,
           :dns_servers                          => '8.8.8.8,10.10.10.10',
+          :dns_records_ovn_owned                => false,
           :vhostuser_socket_dir                 => '/var/run/openvswitch',
           :dhcp_default_lease_time              => 43200,
           :ovn_dhcp4_global_options             => 'ntp_server:1.2.3.4',
@@ -152,6 +155,7 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/enable_distributed_floating_ip').with_value(p[:dvr_enabled])
         should contain_neutron_plugin_ml2('ovn/disable_ovn_dhcp_for_baremetal_ports').with_value(p[:disable_ovn_dhcp_for_baremetal_ports])
         should contain_neutron_plugin_ml2('ovn/dns_servers').with_value(p[:dns_servers])
+        should contain_neutron_plugin_ml2('ovn/dns_records_ovn_owned').with_value(p[:dns_records_ovn_owned])
         should contain_neutron_plugin_ml2('ovn/vhost_sock_dir').with_value(p[:vhostuser_socket_dir])
         should contain_neutron_plugin_ml2('ovn/dhcp_default_lease_time').with_value(p[:dhcp_default_lease_time])
         should contain_neutron_plugin_ml2('ovn/ovn_dhcp4_global_options').with_value(p[:ovn_dhcp4_global_options])

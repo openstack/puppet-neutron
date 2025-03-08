@@ -239,7 +239,7 @@ class neutron::keystone::authtoken(
 
   keystone::resource::authtoken {
     'neutron_config':
-      *                              => $params;
+      * => $params;
     default:
       username                       => $username,
       password                       => $password,

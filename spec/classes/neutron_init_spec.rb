@@ -73,6 +73,7 @@ describe 'neutron' do
         :kombu_failover_strategy              => '<SERVICE DEFAULT>',
         :kombu_compression                    => '<SERVICE DEFAULT>',
         :amqp_durable_queues                  => '<SERVICE DEFAULT>',
+        :amqp_auto_delete                     => '<SERVICE DEFAULT>',
         :rabbit_ha_queues                     => '<SERVICE DEFAULT>',
         :rabbit_quorum_queue                  => '<SERVICE DEFAULT>',
         :rabbit_transient_quorum_queue        => '<SERVICE DEFAULT>',

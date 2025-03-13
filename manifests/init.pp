@@ -164,6 +164,10 @@
 #   automatically deleted. The parameter affects only reply and fanout queues.
 #   Defaults to $facts['os_service_default']
 #
+# [*amqp_auto_delete*]
+#   (Optional) Define if transient queues should be auto-deleted (boolean value)
+#   Defaults to $facts['os_service_default']
+#
 # [*amqp_durable_queues*]
 #   (optional) Define queues as "durable" to rabbitmq.
 #   Defaults to $facts['os_service_default']
@@ -325,6 +329,7 @@ class neutron (
   $rabbit_use_ssl                       = $facts['os_service_default'],
   $rabbit_transient_queues_ttl          = $facts['os_service_default'],
   $amqp_durable_queues                  = $facts['os_service_default'],
+  $amqp_auto_delete                     = $facts['os_service_default'],
   $kombu_ssl_ca_certs                   = $facts['os_service_default'],
   $kombu_ssl_certfile                   = $facts['os_service_default'],
   $kombu_ssl_keyfile                    = $facts['os_service_default'],
@@ -431,6 +436,7 @@ class neutron (
     kombu_ssl_certfile                   => $kombu_ssl_certfile,
     kombu_ssl_keyfile                    => $kombu_ssl_keyfile,
     amqp_durable_queues                  => $amqp_durable_queues,
+    amqp_auto_delete                     => $amqp_auto_delete,
     rabbit_ha_queues                     => $rabbit_ha_queues,
     kombu_ssl_version                    => $kombu_ssl_version,
     rabbit_quorum_queue                  => $rabbit_quorum_queue,

@@ -203,6 +203,10 @@
 #   (Optional) Set max request body size
 #   Defaults to $facts['os_service_default'].
 #
+# [*pagination_max_limit*]
+#   (Optional) The maximum number of items returned in a single response.
+#   Defaults to $facts['os_service_default'].
+#
 # [*ovs_integration_bridge*]
 #   (Optional) Name of Open vSwitch bridge to use
 #   Defaults to $facts['os_service_default']
@@ -284,6 +288,7 @@ class neutron::server (
   $auth_strategy                    = 'keystone',
   $enable_proxy_headers_parsing     = $facts['os_service_default'],
   $max_request_body_size            = $facts['os_service_default'],
+  $pagination_max_limit             = $facts['os_service_default'],
   $ovs_integration_bridge           = $facts['os_service_default'],
   $igmp_snooping_enable             = $facts['os_service_default'],
   $igmp_flood                       = $facts['os_service_default'],
@@ -340,6 +345,7 @@ Use the neutron::services::dr class instead.")
     'DEFAULT/dhcp_load_type':                   value => $dhcp_load_type;
     'DEFAULT/default_availability_zones':       value => join(any2array($default_availability_zones), ',');
     'DEFAULT/network_auto_schedule':            value => $network_auto_schedule;
+    'DEFAULT/pagination_max_limit':             value => $pagination_max_limit;
     'ovs/integration_bridge':                   value => $ovs_integration_bridge;
     'service_providers/service_provider':       value => $service_providers;
     'ovs/igmp_snooping_enable':                 value => $igmp_snooping_enable;

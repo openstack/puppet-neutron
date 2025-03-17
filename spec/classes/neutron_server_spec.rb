@@ -88,6 +88,7 @@ describe 'neutron::server' do
         :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
         :max_request_body_size        => '<SERVICE DEFAULT>',
       )
+      should contain_neutron_config('DEFAULT/pagination_max_limit').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ovs/integration_bridge').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ovs/igmp_snooping_enable').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('ovs/igmp_flood').with_value('<SERVICE DEFAULT>')

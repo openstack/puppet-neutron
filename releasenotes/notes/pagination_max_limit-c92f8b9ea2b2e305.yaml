@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``neutron::server::pagination_max_limit`` parameter has been added.

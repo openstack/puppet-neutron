@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::rootwrap`` class has been deprecated and will be removed
+    in a future release.

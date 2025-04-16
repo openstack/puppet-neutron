@@ -101,12 +101,6 @@
 #   (Optional) Enables or disables fatal status of deprecations (boolean value).
 #   Defaults to $facts['os_service_default']
 #
-# DEPRECATED PARAMETERS
-#
-# [*watch_log_file*]
-#   (Optional) Uses logging handler designed to watch file system (boolean value).
-#   Defaults to undef
-#
 class neutron::logging (
   $debug                         = $facts['os_service_default'],
   $use_syslog                    = $facts['os_service_default'],
@@ -128,8 +122,6 @@ class neutron::logging (
   $instance_format               = $facts['os_service_default'],
   $instance_uuid_format          = $facts['os_service_default'],
   $fatal_deprecations            = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  $watch_log_file                = undef,
 ) {
 
   include neutron::deps
@@ -145,7 +137,6 @@ class neutron::logging (
     log_dir                       => $log_dir,
     log_config_append             => $log_config_append,
     log_date_format               => $log_date_format,
-    watch_log_file                => $watch_log_file,
     logging_context_format_string => $logging_context_format_string,
     logging_default_format_string => $logging_default_format_string,
     logging_debug_format_suffix   => $logging_debug_format_suffix,

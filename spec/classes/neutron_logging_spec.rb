@@ -29,7 +29,6 @@ describe 'neutron::logging' do
      :syslog_log_facility            => 'LOG_USER',
      :log_dir                        => '/var/log',
      :log_file                       => 'neutron.log',
-     :watch_log_file                 => true,
      :debug                          => true,
     }
   end
@@ -77,7 +76,6 @@ describe 'neutron::logging' do
         :syslog_log_facility => 'LOG_USER',
         :log_dir             => '/var/log',
         :log_file            => 'neutron.log',
-        :watch_log_file      => true,
         :debug               => true,
       )
     end

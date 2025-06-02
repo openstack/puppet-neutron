@@ -271,16 +271,6 @@
 #   (optional) Maximum number of allowed address pairs per port
 #   Defaults to $facts['os_service_default'].
 #
-# [*vlan_transparent*]
-#   (optional) Allow plugins that support it to create VLAN transparent
-#   networks.
-#   Defaults to $facts['os_service_default'].
-#
-# [*vlan_qinq*]
-#   (optional) Allow plugins that support it to create VLAN transparent
-#   networks using 0x8a88 ethertype.
-#   Defaults to $facts['os_service_default'].
-#
 # DEPRECATED PARAMETERS
 #
 # [*rabbit_heartbeat_in_pthread*]
@@ -292,6 +282,16 @@
 #   stdlib by using eventlet/greenlet then the heartbeat
 #   will be run through a green thread.
 #   Defaults to undef
+#
+# [*vlan_transparent*]
+#   (optional) Allow plugins that support it to create VLAN transparent
+#   networks.
+#   Defaults to undef.
+#
+# [*vlan_qinq*]
+#   (optional) Allow plugins that support it to create VLAN transparent
+#   networks using 0x8a88 ethertype.
+#   Defaults to undef.
 #
 class neutron (
   $package_ensure                       = 'present',
@@ -350,14 +350,23 @@ class neutron (
   $notification_topics                  = $facts['os_service_default'],
   $notification_retry                   = $facts['os_service_default'],
   $max_allowed_address_pair             = $facts['os_service_default'],
-  $vlan_transparent                     = $facts['os_service_default'],
-  $vlan_qinq                            = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $rabbit_heartbeat_in_pthread          = undef,
+  $vlan_transparent                     = undef,
+  $vlan_qinq                            = undef,
 ) {
 
   include neutron::deps
   include neutron::params
+
+  if $vlan_transparent != undef {
+    warning("The vlan_transparent parameter has been deprecated and \
+will be removed in a future release")
+  }
+  if $vlan_qinq != undef {
+    warning("The vlan_qinq parameter has been deprecated and \
+will be removed in a future release")
+  }
 
   if ! is_service_default($use_ssl) and ($use_ssl) {
     if is_service_default($cert_file) {
@@ -394,8 +403,8 @@ class neutron (
     'DEFAULT/state_path':               value => $state_path;
     'DEFAULT/global_physnet_mtu':       value => $global_physnet_mtu;
     'DEFAULT/max_allowed_address_pair': value => $max_allowed_address_pair;
-    'DEFAULT/vlan_transparent':         value => $vlan_transparent;
-    'DEFAULT/vlan_qinq':                value => $vlan_qinq;
+    'DEFAULT/vlan_transparent':         value => pick($vlan_transparent, $facts['os_service_default']);
+    'DEFAULT/vlan_qinq':                value => pick($vlan_qinq, $facts['os_service_default']);
     'agent/root_helper':                value => $root_helper;
     'agent/root_helper_daemon':         value => $root_helper_daemon;
     'agent/report_interval':            value => $report_interval;

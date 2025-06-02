@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::vlan_transparent`` parameter and the ``neutron::vlan_qinq``
+    parameter have been deprecated and will be removed in a future release.

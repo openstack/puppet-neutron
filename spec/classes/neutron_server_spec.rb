@@ -390,20 +390,6 @@ describe 'neutron::server' do
       end
     end
 
-    context 'with Dynamic routing package installation' do
-      before do
-        params.merge!( :ensure_dr_package => true )
-      end
-
-      it 'should install dynamic routing package' do
-        should contain_package('neutron-dynamic-routing').with(
-          :ensure => 'installed',
-          :name   => platform_params[:dynamic_routing_package],
-          :tag    => ['openstack', 'neutron-package'],
-        )
-      end
-    end
-
     context 'without database synchronization' do
       before do
         params.merge!(

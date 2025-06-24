@@ -1,0 +1,9 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``neutron::agents::taas`` class have been
+    removed.
+
+    - ``vlan_range_start``
+    - ``vlan_range_end``
+

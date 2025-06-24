@@ -35,10 +35,10 @@ class neutron::quota::sfc (
   include neutron::deps
 
   neutron_config {
-    'quota/quota_port_chain':      value => $quota_port_chain;
-    'quota/quota_port_pair_group': value => $quota_port_pair_group;
-    'quota/quota_port_pair':       value => $quota_port_pair;
-    'quota/quota_service_graphs':  value => $quota_service_graphs;
-    'quota/quota_flow_classifier': value => $quota_flow_classifier;
+    'quotas/quota_port_chain':      value => $quota_port_chain;
+    'quotas/quota_port_pair_group': value => $quota_port_pair_group;
+    'quotas/quota_port_pair':       value => $quota_port_pair;
+    'quotas/quota_service_graphs':  value => $quota_service_graphs;
+    'quotas/quota_flow_classifier': value => $quota_flow_classifier;
   }
 }

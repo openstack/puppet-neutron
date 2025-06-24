@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``neutron::rootwrap`` class has been removed.

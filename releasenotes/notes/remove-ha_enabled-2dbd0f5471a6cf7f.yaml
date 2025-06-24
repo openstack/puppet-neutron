@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``neutron::agents::l3::ha_enabled`` parameter has been removed.
+

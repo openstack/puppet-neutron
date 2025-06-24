@@ -243,14 +243,6 @@
 #   speficied on the router.
 #   Defaults to $facts['os_service_default']
 #
-# DEPRECATED PARAMETERS
-#
-# [*ensure_dr_package*]
-#   (Optional) Ensures installation of Neutron Dynamic Routing package before
-#   starting API service. Set to true to ensure installation of the package
-#   that is required to start neutron service if bgp service_plugin is enabled.
-#   Defaults to false
-#
 class neutron::server (
   $package_ensure                   = 'present',
   Boolean $enabled                  = true,
@@ -296,8 +288,6 @@ class neutron::server (
   $igmp_flood_unregistered          = $facts['os_service_default'],
   $enable_default_route_ecmp        = $facts['os_service_default'],
   $enable_default_route_bfd         = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  Boolean $ensure_dr_package        = false,
 ) inherits neutron::params {
 
   include neutron::deps
@@ -308,16 +298,6 @@ class neutron::server (
     if ! ($dhcp_load_type in ['networks', 'subnets', 'ports'] ) {
       fail('Unsupported dhcp_load_type. It should be one of networks, subnets and ports.')
     }
-  }
-
-  if $ensure_dr_package {
-    warning("The ensure_dr_package parameter is deprecated. \
-Use the neutron::services::dr class instead.")
-    ensure_packages('neutron-dynamic-routing', {
-      ensure => $package_ensure,
-      name   => $::neutron::params::dynamic_routing_package,
-      tag    => ['openstack', 'neutron-package'],
-    })
   }
 
   if $sync_db {

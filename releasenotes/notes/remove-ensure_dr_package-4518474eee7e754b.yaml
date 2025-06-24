@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``neutron::server::ensure_dr_package`` parameter has been removed.

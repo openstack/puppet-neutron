@@ -133,12 +133,6 @@
 #   in the l3 config.
 #   Defaults to false.
 #
-# DEPRECATED PARAMETERS
-#
-# [*ha_enabled*]
-#   (optional) Enabled or not HA for L3 agent.
-#   Defaults to undef
-#
 class neutron::agents::l3 (
   $package_ensure                            = 'present',
   Boolean $enabled                           = true,
@@ -168,16 +162,10 @@ class neutron::agents::l3 (
   $network_log_burst_limit                   = $facts['os_service_default'],
   $network_log_local_output_log_base         = $facts['os_service_default'],
   Boolean $purge_config                      = false,
-  # DEPRECATED PARAMETERS
-  Optional[Boolean] $ha_enabled              = undef,
 ) {
 
   include neutron::deps
   include neutron::params
-
-  if $ha_enabled != undef {
-    warning('The ha_enabled parameter has been deprecated and has no effect.')
-  }
 
   resources { 'neutron_l3_agent_config':
     purge => $purge_config,

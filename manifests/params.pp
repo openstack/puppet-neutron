@@ -5,22 +5,23 @@
 class neutron::params {
   include openstacklib::defaults
 
-  $client_package              = 'python3-neutronclient'
-  $ovs_agent_service           = 'neutron-openvswitch-agent'
-  $macvtap_agent_service       = 'neutron-macvtap-agent'
-  $dhcp_agent_service          = 'neutron-dhcp-agent'
-  $metering_agent_service      = 'neutron-metering-agent'
-  $l3_agent_service            = 'neutron-l3-agent'
-  $metadata_agent_service      = 'neutron-metadata-agent'
-  $ovn_metadata_agent_service  = 'neutron-ovn-metadata-agent'
-  $ovn_agent_service           = 'neutron-ovn-agent'
-  $bgp_dragent_service         = 'neutron-bgp-dragent'
-  $bgpvpn_plugin_package       = 'python3-networking-bgpvpn'
-  $l2gw_agent_service          = 'neutron-l2gw-agent'
-  $sfc_package                 = 'python3-networking-sfc'
-  $user                        = 'neutron'
-  $group                       = 'neutron'
-  $arista_plugin_package       = 'python3-networking-arista'
+  $client_package                 = 'python3-neutronclient'
+  $ovs_agent_service              = 'neutron-openvswitch-agent'
+  $macvtap_agent_service          = 'neutron-macvtap-agent'
+  $dhcp_agent_service             = 'neutron-dhcp-agent'
+  $metering_agent_service         = 'neutron-metering-agent'
+  $l3_agent_service               = 'neutron-l3-agent'
+  $metadata_agent_service         = 'neutron-metadata-agent'
+  $ovn_metadata_agent_service     = 'neutron-ovn-metadata-agent'
+  $ovn_agent_service              = 'neutron-ovn-agent'
+  $ovn_maintenance_worker_service = 'neutron-ovn-maintenance-worker'
+  $bgp_dragent_service            = 'neutron-bgp-dragent'
+  $bgpvpn_plugin_package          = 'python3-networking-bgpvpn'
+  $l2gw_agent_service             = 'neutron-l2gw-agent'
+  $sfc_package                    = 'python3-networking-sfc'
+  $user                           = 'neutron'
+  $group                          = 'neutron'
+  $arista_plugin_package          = 'python3-networking-arista'
 
   case $facts['os']['family'] {
     'RedHat': {
@@ -53,7 +54,6 @@ class neutron::params {
       $ovn_metadata_agent_package         = 'openstack-neutron-ovn-metadata-agent'
       $ovn_agent_package                  = 'openstack-neutron-ovn-agent'
       $ovn_maintenance_worker_package     = 'openstack-neutron-ovn-maintenance-worker'
-      $ovn_maintenance_worker_service     = 'neutron-ovn-maintenance-worker'
       $dynamic_routing_package            = 'python3-neutron-dynamic-routing'
       $bgp_dragent_package                = 'openstack-neutron-bgp-dragent'
       $bagpipe_bgp_package                = 'openstack-bagpipe-bgp'
@@ -117,8 +117,7 @@ class neutron::params {
       $l2gw_package                       = 'python3-networking-l2gw'
       $ovn_metadata_agent_package         = 'neutron-ovn-metadata-agent'
       $ovn_agent_package                  = 'neutron-ovn-agent'
-      $ovn_maintenance_worker_package     = undef
-      $ovn_maintenance_worker_service     = undef
+      $ovn_maintenance_worker_package     = 'neutron-ovn-maintenance-worker'
       $neutron_wsgi_script_path           = '/usr/lib/cgi-bin/neutron'
       $neutron_wsgi_script_source         = '/usr/bin/neutron-api'
       $networking_baremetal_package       = 'python3-ironic-neutron-agent'

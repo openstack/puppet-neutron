@@ -44,16 +44,15 @@ describe 'neutron::plugins::ml2::ovn::maintenance_worker' do
       let (:platform_params) do
         case facts[:os]['family']
         when 'Debian'
-          {}
+          { :ovn_maintenance_worker_package => 'neutron-ovn-maintenance-worker',
+            :ovn_maintenance_worker_service => 'neutron-ovn-maintenance-worker' }
         when 'RedHat'
           { :ovn_maintenance_worker_package => 'openstack-neutron-ovn-maintenance-worker',
             :ovn_maintenance_worker_service => 'neutron-ovn-maintenance-worker' }
         end
       end
 
-      if facts[:os]['family'] == 'RedHat'
-        it_behaves_like 'neutron::plugins::ml2::ovn::maintenance_worker'
-      end
+      it_behaves_like 'neutron::plugins::ml2::ovn::maintenance_worker'
     end
   end
 end

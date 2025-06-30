@@ -22,29 +22,23 @@ class neutron::plugins::ml2::ovn::maintenance_worker (
 
   include neutron::params
 
-  if $::neutron::params::ovn_maintenance_worker_package {
-    package { 'neutron-ovn-maintenance-worker':
-      ensure => $package_ensure,
-      name   => $::neutron::params::ovn_maintenance_worker_package,
-      tag    => ['openstack', 'neutron-package'],
-    }
+  package { 'neutron-ovn-maintenance-worker':
+    ensure => $package_ensure,
+    name   => $::neutron::params::ovn_maintenance_worker_package,
+    tag    => ['openstack', 'neutron-package'],
   }
 
   if $manage_service {
-    if $::neutron::params::ovn_maintenance_worker_service {
-      if $enabled {
-        $service_ensure = 'running'
-      } else {
-        $service_ensure = 'stopped'
-      }
-      service { 'neutron-ovn-maintenance-worker':
-        ensure => $service_ensure,
-        name   => $::neutron::params::ovn_maintenance_worker_service,
-        enable => $enabled,
-        tag    => 'neutron-service',
-      }
+    if $enabled {
+      $service_ensure = 'running'
     } else {
-      warning('neutron-ovn-maintenance-worker service is not available.')
+      $service_ensure = 'stopped'
+    }
+    service { 'neutron-ovn-maintenance-worker':
+      ensure => $service_ensure,
+      name   => $::neutron::params::ovn_maintenance_worker_service,
+      enable => $enabled,
+      tag    => 'neutron-service',
     }
   }
 }

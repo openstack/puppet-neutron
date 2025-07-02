@@ -67,7 +67,7 @@
 #   (optional) Manage configuration of metadata_agent.ini
 #
 # [*ovn_metadata_agent_config*]
-#   (optional) Manage configuration of networking-ovn metadata_agent.ini
+#   (optional) Manage configuration of neutron_ovn_metadata_agent.ini
 #
 # [*metering_agent_config*]
 #   (optional) Manage configuration of metering_agent.ini

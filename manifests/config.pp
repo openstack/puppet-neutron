@@ -66,9 +66,6 @@
 # [*metadata_agent_config*]
 #   (optional) Manage configuration of metadata_agent.ini
 #
-# [*ovn_metadata_agent_config*]
-#   (optional) Manage configuration of neutron_ovn_metadata_agent.ini
-#
 # [*metering_agent_config*]
 #   (optional) Manage configuration of metering_agent.ini
 #
@@ -90,6 +87,11 @@
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
+# DEPRECATED PARAMETERS
+#
+# [*ovn_metadata_agent_config*]
+#   (optional) Manage configuration of neutron_ovn_metadata_agent.ini
+#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -109,7 +111,6 @@ class neutron::config (
   Hash $l3_agent_config               = {},
   Hash $dhcp_agent_config             = {},
   Hash $metadata_agent_config         = {},
-  Hash $ovn_metadata_agent_config     = {},
   Hash $metering_agent_config         = {},
   Hash $vpnaas_agent_config           = {},
   Hash $vpnaas_service_config         = {},
@@ -117,6 +118,8 @@ class neutron::config (
   Hash $taas_service_config           = {},
   Hash $bgp_dragent_config            = {},
   Hash $plugin_ml2_config             = {},
+  # DEPRECATED PARAMETERS
+  Optional[Hash] $ovn_metadata_agent_config = undef,
 ) {
 
   include neutron::deps
@@ -136,7 +139,6 @@ class neutron::config (
   create_resources('neutron_l3_agent_config', $l3_agent_config)
   create_resources('neutron_dhcp_agent_config', $dhcp_agent_config)
   create_resources('neutron_metadata_agent_config', $metadata_agent_config)
-  create_resources('ovn_metadata_agent_config', $ovn_metadata_agent_config)
   create_resources('neutron_metering_agent_config', $metering_agent_config)
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)
   create_resources('neutron_vpnaas_service_config', $vpnaas_service_config)
@@ -144,4 +146,9 @@ class neutron::config (
   create_resources('neutron_taas_service_config', $taas_service_config)
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
+
+  if $ovn_metadata_agent_config != undef {
+    warning('The ovn_metadata_agent_config parameter is deprecated')
+    create_resources('ovn_metadata_agent_config', $ovn_metadata_agent_config)
+  }
 }

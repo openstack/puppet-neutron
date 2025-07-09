@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    Support for Ovn Metadata Agent service has been deprecated, because
+    the service was deprecated in neutron.

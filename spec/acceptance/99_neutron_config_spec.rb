@@ -11,6 +11,8 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/l2gw_plugin.ini',
                      '/etc/neutron/l2gateway_agent.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
+                     '/etc/neutron/fwaas_driver.ini',
+                     '/etc/neutron/neutron_fwaas.conf',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/neutron_vpnaas.conf',
                      '/etc/neutron/ovn_vpn_agent.ini',
@@ -31,6 +33,8 @@ describe 'basic neutron_config resource' do
   File <||> -> Neutron_metering_agent_config <||>
   File <||> -> Neutron_plugin_ml2 <||>
   File <||> -> Neutron_l2gw_service_config <||>
+  File <||> -> Neutron_fwaas_agent_config <||>
+  File <||> -> Neutron_fwaas_service_config <||>
   File <||> -> Neutron_vpnaas_agent_config <||>
   File <||> -> Neutron_vpnaas_service_config <||>
   File <||> -> Neutron_ovn_vpn_agent_config <||>
@@ -55,6 +59,8 @@ describe 'basic neutron_config resource' do
                      '/etc/neutron/l2gw_plugin.ini',
                      '/etc/neutron/l2gateway_agent.ini',
                      '/etc/neutron/plugins/ml2/ml2_conf.ini',
+                     '/etc/neutron/fwaas_driver.ini',
+                     '/etc/neutron/neutron_fwaas.conf',
                      '/etc/neutron/vpn_agent.ini',
                      '/etc/neutron/neutron_vpnaas.conf',
                      '/etc/neutron/ovn_vpn_agent.ini',
@@ -194,6 +200,42 @@ describe 'basic neutron_config resource' do
   }
 
   neutron_plugin_ml2 { 'DEFAULT/thisshouldnotexist2' :
+    value             => 'toto',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_fwaas_agent_config { 'DEFAULT/thisshouldexist' :
+    value => 'foo',
+  }
+
+  neutron_fwaas_agent_config { 'DEFAULT/thisshouldnotexist' :
+    value => '<SERVICE DEFAULT>',
+  }
+
+  neutron_fwaas_agent_config { 'DEFAULT/thisshouldexist2' :
+    value             => '<SERVICE DEFAULT>',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_fwaas_agent_config { 'DEFAULT/thisshouldnotexist2' :
+    value             => 'toto',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_fwaas_service_config { 'DEFAULT/thisshouldexist' :
+    value => 'foo',
+  }
+
+  neutron_fwaas_service_config { 'DEFAULT/thisshouldnotexist' :
+    value => '<SERVICE DEFAULT>',
+  }
+
+  neutron_fwaas_service_config { 'DEFAULT/thisshouldexist2' :
+    value             => '<SERVICE DEFAULT>',
+    ensure_absent_val => 'toto',
+  }
+
+  neutron_fwaas_service_config { 'DEFAULT/thisshouldnotexist2' :
     value             => 'toto',
     ensure_absent_val => 'toto',
   }
@@ -387,6 +429,8 @@ describe 'basic neutron_config resource' do
                     'neutron_metadata_agent_config',
                     'neutron_metering_agent_config',
                     'neutron_plugin_ml2',
+                    'neutron_fwaas_agent_config',
+                    'neutron_fwaas_service_config',
                     'neutron_vpnaas_agent_config',
                     'neutron_vpnaas_service_config',
                     'neutron_ovn_vpn_agent_config',

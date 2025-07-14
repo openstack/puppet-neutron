@@ -43,6 +43,7 @@ class neutron::params {
       $macvtap_agent_package              = 'openstack-neutron-macvtap-agent'
       $dhcp_agent_package                 = undef
       $metering_agent_package             = 'openstack-neutron-metering-agent'
+      $fwaas_package                      = 'openstack-neutron-fwaas'
       $vpnaas_agent_package               = 'openstack-neutron-vpnaas'
       $vpnaas_ovn_vpn_agent_package       = 'openstack-neutron-vpnaas-ovn-vpn-agent'
       $vpnaas_ovn_vpn_agent_service       = 'neutron-vpnaas-ovn-vpn-agent'
@@ -105,6 +106,7 @@ class neutron::params {
       $macvtap_agent_package              = 'neutron-macvtap-agent'
       $dhcp_agent_package                 = 'neutron-dhcp-agent'
       $metering_agent_package             = 'neutron-metering-agent'
+      $fwaas_package                      = 'python3-neutron-fwaas'
       $vpnaas_agent_package               = 'python3-neutron-vpnaas'
       $vpnaas_ovn_vpn_agent_package       = undef
       $vpnaas_ovn_vpn_agent_service       = undef

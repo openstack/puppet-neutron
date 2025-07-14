@@ -79,6 +79,8 @@ describe 'neutron::config' do
         :dhcp_agent_config        => config_hash,
         :metadata_agent_config    => config_hash,
         :metering_agent_config    => config_hash,
+        :fwaas_agent_config       => config_hash,
+        :fwaas_service_config     => config_hash,
         :vpnaas_agent_config      => config_hash,
         :vpnaas_service_config    => config_hash,
         :ovn_vpn_agent_config     => config_hash,
@@ -134,6 +136,18 @@ describe 'neutron::config' do
       should contain_neutron_metering_agent_config('DEFAULT/foo').with_value('fooValue')
       should contain_neutron_metering_agent_config('DEFAULT/bar').with_value('barValue')
       should contain_neutron_metering_agent_config('DEFAULT/baz').with_ensure('absent')
+    end
+
+    it 'configures arbitrary fwaas_agent_config configurations' do
+      should contain_neutron_fwaas_agent_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_fwaas_agent_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_fwaas_agent_config('DEFAULT/baz').with_ensure('absent')
+    end
+
+    it 'configures arbitrary fwaas_service_config configurations' do
+      should contain_neutron_fwaas_service_config('DEFAULT/foo').with_value('fooValue')
+      should contain_neutron_fwaas_service_config('DEFAULT/bar').with_value('barValue')
+      should contain_neutron_fwaas_service_config('DEFAULT/baz').with_ensure('absent')
     end
 
     it 'configures arbitrary vpnaas_agent_config configurations' do

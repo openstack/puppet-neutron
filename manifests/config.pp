@@ -72,6 +72,12 @@
 # [*metering_agent_config*]
 #   (optional) Manage configuration of metering_agent.ini
 #
+# [*fwaas_agent_config*]
+#   (optional) Manage configuration of fwaas_driver.ini
+#
+# [*fwaas_service_config*]
+#   (optional) Manage configuration of neutron_fwaas.conf
+#
 # [*vpnaas_agent_config*]
 #   (optional) Manage configuration of vpn_agent.ini
 #
@@ -111,6 +117,8 @@ class neutron::config (
   Hash $metadata_agent_config         = {},
   Hash $ovn_metadata_agent_config     = {},
   Hash $metering_agent_config         = {},
+  Hash $fwaas_agent_config            = {},
+  Hash $fwaas_service_config          = {},
   Hash $vpnaas_agent_config           = {},
   Hash $vpnaas_service_config         = {},
   Hash $ovn_vpn_agent_config          = {},
@@ -138,6 +146,8 @@ class neutron::config (
   create_resources('neutron_metadata_agent_config', $metadata_agent_config)
   create_resources('ovn_metadata_agent_config', $ovn_metadata_agent_config)
   create_resources('neutron_metering_agent_config', $metering_agent_config)
+  create_resources('neutron_fwaas_agent_config', $fwaas_agent_config)
+  create_resources('neutron_fwaas_service_config', $fwaas_service_config)
   create_resources('neutron_vpnaas_agent_config', $vpnaas_agent_config)
   create_resources('neutron_vpnaas_service_config', $vpnaas_service_config)
   create_resources('neutron_ovn_vpn_agent_config', $ovn_vpn_agent_config)

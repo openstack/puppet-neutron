@@ -1,5 +1,6 @@
 # == Class: neutron::agents::ovn_metadata
 #
+# DEPRECATED !!
 # Setup and configure neutron ovn metadata agent.
 #
 # === Parameters
@@ -151,6 +152,8 @@ class neutron::agents::ovn_metadata (
 
   include neutron::deps
   include neutron::params
+
+  warning('ovn-metadata-agent is deprecated')
 
   resources { 'ovn_metadata_agent_config':
     purge => $purge_config,

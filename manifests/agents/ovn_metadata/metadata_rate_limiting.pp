@@ -12,6 +12,7 @@
 #
 # == Class: neutron::agents:ovn_metadata::metadata_rate_limiting
 #
+# DEPRECATED !!
 # Setups metadata ratelimit options for ovn metadata agent
 #
 # === Parameters
@@ -50,6 +51,8 @@ class neutron::agents::ovn_metadata::metadata_rate_limiting (
   $burst_query_rate_limit = $facts['os_service_default'],
 ) {
   include neutron::deps
+
+  warning('ovn-metadata-agent is deprecated')
 
   ovn_metadata_agent_config {
     'metadata_rate_limiting/rate_limit_enabled':     value => $rate_limit_enabled;

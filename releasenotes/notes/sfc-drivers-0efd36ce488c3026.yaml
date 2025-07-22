@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The ``neutron::servics::sfc::sfc_driver`` parameter has been deprecated,
+    in favor of the new ``sfc_drivers`` parameter.
+
+  - |
+    The ``neutron::servics::sfc::fc_driver`` parameter has been deprecated,
+    in favor of the new ``fc_drivers`` parameter.

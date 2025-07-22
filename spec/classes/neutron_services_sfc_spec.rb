@@ -61,6 +61,20 @@ describe 'neutron::services::sfc' do
     context 'with sfc and classifier drivers' do
       let :params do
         {
+          :sfc_drivers => 'odl_v2',
+          :fc_drivers  => 'odl_v2'
+        }
+      end
+
+      it 'configures networking-sfc.conf' do
+        should contain_neutron_sfc_service_config('sfc/drivers').with_value('odl_v2')
+        should contain_neutron_sfc_service_config('flowclassifier/drivers').with_value('odl_v2')
+      end
+    end
+
+    context 'with sfc and classifier drivers (deprecated parameters)' do
+      let :params do
+        {
           :sfc_driver => 'odl_v2',
           :fc_driver  => 'odl_v2'
         }

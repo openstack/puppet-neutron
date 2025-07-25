@@ -25,12 +25,12 @@
 #   Whether to install the sfc extension package
 #   Default to 'present'
 #
-# [*sfc_driver*]
-#   (optional) SFC driver to use
+# [*sfc_drivers*]
+#   (optional) An ordered list of service chain drivers
 #   Defaults to $facts['os_service_default']
 #
-# [*fc_driver*]
-#   (optional) Flow classifier driver to use
+# [*fc_drivers*]
+#   (optional) An ordered list of flow classifier drivers
 #   Defaults to $facts['os_service_default']
 #
 # [*sync_db*]
@@ -42,16 +42,43 @@
 #   in the sfc config.
 #   Default to false.
 #
+# DEPRECATED PARAMETERS
+#
+# [*sfc_driver*]
+#   (optional) SFC driver to use
+#   Defaults to $facts['os_service_default']
+#
+# [*fc_driver*]
+#   (optional) Flow classifier driver to use
+#   Defaults to $facts['os_service_default']
+#
 class neutron::services::sfc (
   $package_ensure    = 'present',
-  $sfc_driver        = $facts['os_service_default'],
-  $fc_driver         = $facts['os_service_default'],
+  $sfc_drivers       = $facts['os_service_default'],
+  $fc_drivers        = $facts['os_service_default'],
   Boolean $sync_db   = false,
   $purge_config      = false,
+  # DEPRECATED PARAMETERS
+  $sfc_driver        = undef,
+  $fc_driver         = undef,
 ) {
 
   include neutron::deps
   include neutron::params
+
+  if $sfc_driver != undef {
+    warning('The sfc_driver parameter is deprecated. Use the sfc_drivers parameter instead.')
+    $sfc_drivers_real = $sfc_driver
+  } else {
+    $sfc_drivers_real = $sfc_drivers
+  }
+
+  if $fc_driver != undef {
+    warning('The fc_driver parameter is deprecated. Use the fc_drivers parameter instead.')
+    $fc_drivers_real = $fc_driver
+  } else {
+    $fc_drivers_real = $fc_drivers
+  }
 
   package { 'python-networking-sfc':
     ensure => $package_ensure,
@@ -60,8 +87,8 @@ class neutron::services::sfc (
   }
 
   neutron_sfc_service_config {
-    'sfc/drivers':            value => $sfc_driver;
-    'flowclassifier/drivers': value => $fc_driver;
+    'sfc/drivers':            value => join(any2array($sfc_drivers_real), ',');
+    'flowclassifier/drivers': value => join(any2array($fc_drivers_real), ',');
   }
 
   resources { 'neutron_sfc_service_config':

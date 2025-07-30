@@ -151,6 +151,10 @@
 #   (optional) Activation strategy to use for live migration.
 #   Defaults to $facts['os_service_default']
 #
+# [*stateless_nat_enabled*]
+#   (optional) Use statless NAT rules for floating IP.
+#   Defaults to $facts['os_service_default']
+#
 # [*ignore_lsp_down*]
 #   (optional) Do not install ARP/ND reply flows for logical switch ports
 #   if the port is DOWN.
@@ -223,6 +227,7 @@ class neutron::plugins::ml2::ovn(
   $broadcast_arps_to_all_routers        = $facts['os_service_default'],
   $ovn_router_indirect_snat             = $facts['os_service_default'],
   $live_migration_activation_strategy   = $facts['os_service_default'],
+  $stateless_nat_enabled                = $facts['os_service_default'],
   $ignore_lsp_down                      = $facts['os_service_default'],
   $fdb_removal_limit                    = $facts['os_service_default'],
   $mac_binding_removal_limit            = $facts['os_service_default'],
@@ -283,6 +288,7 @@ class neutron::plugins::ml2::ovn(
     'ovn/broadcast_arps_to_all_routers'       : value => $broadcast_arps_to_all_routers;
     'ovn/ovn_router_indirect_snat'            : value => $ovn_router_indirect_snat;
     'ovn/live_migration_activation_strategy'  : value => $live_migration_activation_strategy;
+    'ovn/stateless_nat_enabled'               : value => $stateless_nat_enabled;
     'ovn_nb_global/ignore_lsp_down'           : value => $ignore_lsp_down;
     'ovn_nb_global/fdb_removal_limit'         : value => $fdb_removal_limit;
     'ovn_nb_global/mac_binding_removal_limit' : value => $mac_binding_removal_limit;

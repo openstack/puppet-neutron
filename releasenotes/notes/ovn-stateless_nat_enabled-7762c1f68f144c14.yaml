@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::plugins::ml2::ovn::stateless_nat_enabled`` parameter
+    has been added.

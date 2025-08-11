@@ -52,7 +52,7 @@
 #   (optional) Manage configuration of l2gateway_agent.ini
 #
 # [*l2gw_service_config*]
-#   (optional) Manage configuration of l2gw_plugin.ini
+#   (optional) Manage configuration of networking_l2gw.conf
 #
 # [*sfc_service_config*]
 #   (optional) Manage configuration of networking-sfc.conf

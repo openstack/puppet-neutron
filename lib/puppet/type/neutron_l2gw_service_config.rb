@@ -3,7 +3,7 @@ Puppet::Type.newtype(:neutron_l2gw_service_config) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from l2gw_plugin.ini'
+    desc 'Section/setting name to manage from networking_l2gw.conf'
     newvalues(/\S+\/\S+/)
   end
 

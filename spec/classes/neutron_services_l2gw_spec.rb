@@ -31,7 +31,7 @@ describe 'neutron::services::l2gw' do
         )
       end
 
-      it 'configures l2gw_plugin.ini' do
+      it 'configures networking_l2gw.conf' do
         should contain_neutron_l2gw_service_config('DEFAULT/default_interface_name').with_value('<SERVICE DEFAULT>')
         should contain_neutron_l2gw_service_config('DEFAULT/default_device_name').with_value('<SERVICE DEFAULT>')
         should contain_neutron_l2gw_service_config('DEFAULT/quota_l2_gateway').with_value('<SERVICE DEFAULT>')
@@ -60,7 +60,7 @@ describe 'neutron::services::l2gw' do
         })
       end
 
-      it 'configures l2gw_plugin.ini' do
+      it 'configures networking_l2gw.conf' do
         should contain_neutron_l2gw_service_config('DEFAULT/default_interface_name').with_value('foo')
       end
     end
@@ -94,7 +94,7 @@ describe 'neutron::services::l2gw' do
         }
       end
 
-      it 'configures multiple service providers in l2gw_plugin.ini' do
+      it 'configures multiple service providers in networking_l2gw.conf' do
         should contain_neutron_l2gw_service_config(
           'service_providers/service_provider'
         ).with_value(['provider1', 'provider2'])

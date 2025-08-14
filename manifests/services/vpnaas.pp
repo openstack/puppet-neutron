@@ -47,7 +47,7 @@ class neutron::services::vpnaas (
   include neutron::deps
   include neutron::params
 
-  ensure_packages( 'neutron-vpnaas-agent', {
+  stdlib::ensure_packages( 'neutron-vpnaas-agent', {
     'ensure' => $package_ensure,
     'name'   => $::neutron::params::vpnaas_agent_package,
     'tag'    => ['openstack', 'neutron-package'],

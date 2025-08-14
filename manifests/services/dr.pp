@@ -24,7 +24,7 @@ class neutron::services::dr (
   include neutron::deps
   include neutron::params
 
-  ensure_packages('neutron-dynamic-routing', {
+  stdlib::ensure_packages('neutron-dynamic-routing', {
     ensure => $package_ensure,
     name   => $::neutron::params::dynamic_routing_package,
     tag    => ['openstack', 'neutron-package'],

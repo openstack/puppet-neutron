@@ -51,7 +51,7 @@ class neutron::services::taas (
   include neutron::deps
   include neutron::params
 
-  ensure_packages( 'neutron-taas', {
+  stdlib::ensure_packages( 'neutron-taas', {
     'ensure' => $package_ensure,
     'name'   => $::neutron::params::taas_package,
     'tag'    => ['openstack', 'neutron-package'],

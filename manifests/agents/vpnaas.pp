@@ -58,7 +58,7 @@ openswan package in distributions")
     }
     /\.LibreSwanDriver$/: {
       Package['libreswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
-      ensure_packages( 'libreswan', {
+      stdlib::ensure_packages( 'libreswan', {
         'ensure' => present,
         'name'   => $::neutron::params::libreswan_package,
         'tag'    => ['openstack', 'neutron-support-package'],
@@ -66,7 +66,7 @@ openswan package in distributions")
     }
     /\.StrongSwanDriver$/: {
       Package['strongswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
-      ensure_packages( 'strongswan', {
+      stdlib::ensure_packages( 'strongswan', {
         'ensure' => present,
         'name'   => $::neutron::params::strongswan_package,
         'tag'    => ['openstack', 'neutron-support-package'],
@@ -94,7 +94,7 @@ openswan package in distributions")
     'DEFAULT/interface_driver':          value => $interface_driver;
   }
 
-  ensure_packages( 'neutron-vpnaas-agent', {
+  stdlib::ensure_packages( 'neutron-vpnaas-agent', {
     'ensure' => $package_ensure,
     'name'   => $::neutron::params::vpnaas_agent_package,
     'tag'    => ['openstack', 'neutron-package'],

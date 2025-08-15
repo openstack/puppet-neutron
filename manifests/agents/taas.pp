@@ -38,7 +38,7 @@ class neutron::agents::taas (
     'DEFAULT/taas_agent_periodic_interval': value => $taas_agent_periodic_interval;
   }
 
-  ensure_packages( 'neutron-taas', {
+  stdlib::ensure_packages( 'neutron-taas', {
     'ensure' => $package_ensure,
     'name'   => $::neutron::params::taas_package,
     'tag'    => ['openstack', 'neutron-package'],

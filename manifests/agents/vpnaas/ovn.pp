@@ -112,14 +112,14 @@ class neutron::agents::vpnaas::ovn (
 openswan package in distributions")
     }
     /\.OvnLibreSwanDriver$/: {
-      ensure_packages( 'libreswan', {
+      stdlib::ensure_packages( 'libreswan', {
         'ensure' => present,
         'name'   => $::neutron::params::libreswan_package,
         'tag'    => ['openstack', 'neutron-support-package'],
       })
     }
     /\.OvnStrongSwanDriver$/: {
-      ensure_packages( 'strongswan', {
+      stdlib::ensure_packages( 'strongswan', {
         'ensure' => present,
         'name'   => $::neutron::params::strongswan_package,
         'tag'    => ['openstack', 'neutron-support-package'],
@@ -153,7 +153,7 @@ openswan package in distributions")
     'ovn/ovn_sb_ca_cert':                value => $ovn_sb_ca_cert;
   }
 
-  ensure_packages( 'neutron-vpnaas-ovn-vpn-agent', {
+  stdlib::ensure_packages( 'neutron-vpnaas-ovn-vpn-agent', {
     'ensure' => $package_ensure,
     'name'   => $::neutron::params::vpnaas_ovn_vpn_agent_package,
     'tag'    => ['openstack', 'neutron-package'],

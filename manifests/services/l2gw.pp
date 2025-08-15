@@ -58,7 +58,7 @@ class neutron::services::l2gw (
 
   package { 'python-networking-l2gw':
     ensure => $package_ensure,
-    name   => $::neutron::params::l2gw_package,
+    name   => $neutron::params::l2gw_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -87,14 +87,14 @@ class neutron::services::l2gw (
     exec { 'l2gw-db-sync':
       command     => 'neutron-db-manage --subproject networking-l2gw upgrade head',
       path        => '/usr/bin',
-      user        => $::neutron::params::user,
+      user        => $neutron::params::user,
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],
         Anchor['neutron::dbsync::begin']
       ],
       notify      => Anchor['neutron::dbsync::end'],
-      refreshonly => true
+      refreshonly => true,
     }
   }
 }

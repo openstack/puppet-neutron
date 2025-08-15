@@ -49,7 +49,7 @@ class neutron::services::vpnaas (
 
   stdlib::ensure_packages( 'neutron-vpnaas-agent', {
     'ensure' => $package_ensure,
-    'name'   => $::neutron::params::vpnaas_agent_package,
+    'name'   => $neutron::params::vpnaas_agent_package,
     'tag'    => ['openstack', 'neutron-package'],
   })
 
@@ -74,14 +74,14 @@ class neutron::services::vpnaas (
     exec { 'vpnaas-db-sync':
       command     => 'neutron-db-manage --subproject neutron-vpnaas upgrade head',
       path        => '/usr/bin',
-      user        => $::neutron::params::user,
+      user        => $neutron::params::user,
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],
         Anchor['neutron::dbsync::begin']
       ],
       notify      => Anchor['neutron::dbsync::end'],
-      refreshonly => true
+      refreshonly => true,
     }
   }
 }

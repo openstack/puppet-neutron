@@ -140,7 +140,7 @@ class neutron::agents::ml2::sriov (
 
   package { 'neutron-sriov-nic-agent':
     ensure => $package_ensure,
-    name   => $::neutron::params::sriov_nic_agent_package,
+    name   => $neutron::params::sriov_nic_agent_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -152,7 +152,7 @@ class neutron::agents::ml2::sriov (
     }
     service { 'neutron-sriov-nic-agent-service':
       ensure => $service_ensure,
-      name   => $::neutron::params::sriov_nic_agent_service,
+      name   => $neutron::params::sriov_nic_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

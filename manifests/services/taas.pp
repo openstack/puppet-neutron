@@ -53,7 +53,7 @@ class neutron::services::taas (
 
   stdlib::ensure_packages( 'neutron-taas', {
     'ensure' => $package_ensure,
-    'name'   => $::neutron::params::taas_package,
+    'name'   => $neutron::params::taas_package,
     'tag'    => ['openstack', 'neutron-package'],
   })
 
@@ -79,14 +79,14 @@ class neutron::services::taas (
     exec { 'taas-db-sync':
       command     => 'neutron-db-manage --subproject tap-as-a-service upgrade head',
       path        => '/usr/bin',
-      user        => $::neutron::params::user,
+      user        => $neutron::params::user,
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],
         Anchor['neutron::dbsync::begin']
       ],
       notify      => Anchor['neutron::dbsync::end'],
-      refreshonly => true
+      refreshonly => true,
     }
   }
 }

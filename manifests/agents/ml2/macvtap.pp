@@ -65,7 +65,7 @@ class neutron::agents::ml2::macvtap (
 
   package { 'neutron-plugin-macvtap-agent':
     ensure => $package_ensure,
-    name   => $::neutron::params::macvtap_agent_package,
+    name   => $neutron::params::macvtap_agent_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -77,7 +77,7 @@ class neutron::agents::ml2::macvtap (
     }
     service { 'neutron-plugin-macvtap-agent':
       ensure => $service_ensure,
-      name   => $::neutron::params::macvtap_agent_service,
+      name   => $neutron::params::macvtap_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

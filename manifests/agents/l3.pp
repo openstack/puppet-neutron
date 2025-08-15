@@ -262,10 +262,10 @@ class neutron::agents::l3 (
     'network_log/local_output_log_base':                 value => $network_log_local_output_log_base;
   }
 
-  if $::neutron::params::l3_agent_package {
+  if $neutron::params::l3_agent_package {
     package { 'neutron-l3':
       ensure => $package_ensure,
-      name   => $::neutron::params::l3_agent_package,
+      name   => $neutron::params::l3_agent_package,
       tag    => ['openstack', 'neutron-package'],
     }
   }
@@ -278,7 +278,7 @@ class neutron::agents::l3 (
     }
     service { 'neutron-l3':
       ensure => $service_ensure,
-      name   => $::neutron::params::l3_agent_service,
+      name   => $neutron::params::l3_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

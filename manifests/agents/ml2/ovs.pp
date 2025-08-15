@@ -420,7 +420,7 @@ class neutron::agents::ml2::ovs (
     }
 
     neutron_agent_ovs {
-      'ovs/bridge_mappings': ensure => absent
+      'ovs/bridge_mappings': ensure => absent;
     }
   }
 
@@ -566,7 +566,7 @@ class neutron::agents::ml2::ovs (
 
   package { 'neutron-ovs-agent':
     ensure => $package_ensure,
-    name   => $::neutron::params::ovs_agent_package,
+    name   => $neutron::params::ovs_agent_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -579,32 +579,32 @@ class neutron::agents::ml2::ovs (
 
     service { 'neutron-ovs-agent-service':
       ensure => $service_ensure,
-      name   => $::neutron::params::ovs_agent_service,
+      name   => $neutron::params::ovs_agent_service,
       enable => $enabled,
       tag    => ['neutron-service'],
     }
     Neutron_agent_ovs<||> ~> Service['neutron-ovs-agent-service']
 
-    if $::neutron::params::destroy_patch_ports_service {
+    if $neutron::params::destroy_patch_ports_service {
       # NOTE(tkajinam): The service should not be started in a running system.
       #                 DO NOT define ensure so the service status is not
       #                 changed.
       service { 'neutron-destroy-patch-ports-service':
-        name    => $::neutron::params::destroy_patch_ports_service,
+        name    => $neutron::params::destroy_patch_ports_service,
         enable  => $enabled,
         require => Anchor['neutron::service::begin'],
-        before  => Anchor['neutron::service::end']
+        before  => Anchor['neutron::service::end'],
       }
     }
 
-    if $::neutron::params::ovs_cleanup_service {
+    if $neutron::params::ovs_cleanup_service {
       # NOTE(tkajinam): This service should not be restarted, because it can
       #                 cause disruption of network connectivity.
       service { 'ovs-cleanup-service':
-        name    => $::neutron::params::ovs_cleanup_service,
+        name    => $neutron::params::ovs_cleanup_service,
         enable  => $enabled,
         require => Anchor['neutron::service::begin'],
-        before  => Anchor['neutron::service::end']
+        before  => Anchor['neutron::service::end'],
       }
     }
   }

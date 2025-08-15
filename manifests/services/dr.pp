@@ -26,7 +26,7 @@ class neutron::services::dr (
 
   stdlib::ensure_packages('neutron-dynamic-routing', {
     ensure => $package_ensure,
-    name   => $::neutron::params::dynamic_routing_package,
+    name   => $neutron::params::dynamic_routing_package,
     tag    => ['openstack', 'neutron-package'],
   })
 
@@ -38,14 +38,14 @@ class neutron::services::dr (
     exec { 'dr-db-sync':
       command     => 'neutron-db-manage --subproject neutron-dynamic-routing upgrade head',
       path        => '/usr/bin',
-      user        => $::neutron::params::user,
+      user        => $neutron::params::user,
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],
         Anchor['neutron::dbsync::begin']
       ],
       notify      => Anchor['neutron::dbsync::end'],
-      refreshonly => true
+      refreshonly => true,
     }
   }
 }

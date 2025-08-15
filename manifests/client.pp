@@ -20,7 +20,7 @@ in a future release.")
 
   package { 'python-neutronclient':
     ensure => $package_ensure,
-    name   => $::neutron::params::client_package,
+    name   => $neutron::params::client_package,
     tag    => 'openstack',
   }
 

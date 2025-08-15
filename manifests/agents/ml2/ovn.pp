@@ -160,7 +160,7 @@ class neutron::agents::ml2::ovn (
 
   package { 'neutron-ovn-agent':
     ensure => $package_ensure,
-    name   => $::neutron::params::ovn_agent_package,
+    name   => $neutron::params::ovn_agent_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -172,7 +172,7 @@ class neutron::agents::ml2::ovn (
     }
     service { 'neutron-ovn-agent':
       ensure => $service_ensure,
-      name   => $::neutron::params::ovn_agent_service,
+      name   => $neutron::params::ovn_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

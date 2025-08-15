@@ -19,7 +19,7 @@ class neutron::plugins::ml2::networking_baremetal(
 
   package { 'python-networking-baremetal':
     ensure => $package_ensure,
-    name   => $::neutron::params::networking_baremetal_package,
+    name   => $neutron::params::networking_baremetal_package,
     tag    => ['openstack', 'neutron-plugin-ml2-package'],
   }
 }

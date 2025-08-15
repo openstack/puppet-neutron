@@ -78,7 +78,7 @@ class neutron::plugins::ml2::arista(
 
   package { 'python-networking-arista':
     ensure => $package_ensure,
-    name   => $::neutron::params::arista_plugin_package,
+    name   => $neutron::params::arista_plugin_package,
     tag    => ['openstack', 'neutron-plugin-ml2-package'],
   }
 }

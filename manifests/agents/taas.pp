@@ -40,7 +40,7 @@ class neutron::agents::taas (
 
   stdlib::ensure_packages( 'neutron-taas', {
     'ensure' => $package_ensure,
-    'name'   => $::neutron::params::taas_package,
+    'name'   => $neutron::params::taas_package,
     'tag'    => ['openstack', 'neutron-package'],
   })
 }

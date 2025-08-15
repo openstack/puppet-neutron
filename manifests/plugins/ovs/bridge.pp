@@ -8,7 +8,7 @@ define neutron::plugins::ovs::bridge {
 
   vs_bridge {$bridge:
     ensure       => present,
-    external_ids => "bridge-id=${bridge}"
+    external_ids => "bridge-id=${bridge}",
   }
 }
 

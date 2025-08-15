@@ -114,14 +114,14 @@ openswan package in distributions")
     /\.OvnLibreSwanDriver$/: {
       stdlib::ensure_packages( 'libreswan', {
         'ensure' => present,
-        'name'   => $::neutron::params::libreswan_package,
+        'name'   => $neutron::params::libreswan_package,
         'tag'    => ['openstack', 'neutron-support-package'],
       })
     }
     /\.OvnStrongSwanDriver$/: {
       stdlib::ensure_packages( 'strongswan', {
         'ensure' => present,
-        'name'   => $::neutron::params::strongswan_package,
+        'name'   => $neutron::params::strongswan_package,
         'tag'    => ['openstack', 'neutron-support-package'],
       })
     }
@@ -155,7 +155,7 @@ openswan package in distributions")
 
   stdlib::ensure_packages( 'neutron-vpnaas-ovn-vpn-agent', {
     'ensure' => $package_ensure,
-    'name'   => $::neutron::params::vpnaas_ovn_vpn_agent_package,
+    'name'   => $neutron::params::vpnaas_ovn_vpn_agent_package,
     'tag'    => ['openstack', 'neutron-package'],
   })
 
@@ -167,7 +167,7 @@ openswan package in distributions")
     }
     service { 'neutron-vpnaas-ovn-vpn-agent':
       ensure => $service_ensure,
-      name   => $::neutron::params::vpnaas_ovn_vpn_agent_service,
+      name   => $neutron::params::vpnaas_ovn_vpn_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

@@ -82,7 +82,7 @@ class neutron::services::sfc (
 
   package { 'python-networking-sfc':
     ensure => $package_ensure,
-    name   => $::neutron::params::sfc_package,
+    name   => $neutron::params::sfc_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -99,14 +99,14 @@ class neutron::services::sfc (
     exec { 'sfc-db-sync':
       command     => 'neutron-db-manage --subproject networking-sfc upgrade head',
       path        => '/usr/bin',
-      user        => $::neutron::params::user,
+      user        => $neutron::params::user,
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],
         Anchor['neutron::dbsync::begin']
       ],
       notify      => Anchor['neutron::dbsync::end'],
-      refreshonly => true
+      refreshonly => true,
     }
   }
 }

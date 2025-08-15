@@ -63,7 +63,7 @@ class neutron::agents::fwaas (
 
   ensure_packages( 'neutron-fwaas', {
     'ensure' => $package_ensure,
-    'name'   => $::neutron::params::fwaas_package,
+    'name'   => $neutron::params::fwaas_package,
     'tag'    => ['openstack', 'neutron-package'],
   })
 }

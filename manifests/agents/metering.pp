@@ -99,10 +99,10 @@ class neutron::agents::metering (
     'agent/report_interval':            value => $agent_report_interval;
   }
 
-  if $::neutron::params::metering_agent_package {
+  if $neutron::params::metering_agent_package {
     package { 'neutron-metering-agent':
       ensure => $package_ensure,
-      name   => $::neutron::params::metering_agent_package,
+      name   => $neutron::params::metering_agent_package,
       tag    => ['openstack', 'neutron-package'],
     }
   }
@@ -115,7 +115,7 @@ class neutron::agents::metering (
     }
     service { 'neutron-metering-service':
       ensure => $service_ensure,
-      name   => $::neutron::params::metering_agent_service,
+      name   => $neutron::params::metering_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

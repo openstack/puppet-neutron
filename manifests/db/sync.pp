@@ -26,7 +26,7 @@ class neutron::db::sync(
     command     => "neutron-db-manage ${extra_params} upgrade heads",
     path        => '/usr/bin',
     refreshonly => true,
-    user        => $::neutron::params::user,
+    user        => $neutron::params::user,
     try_sleep   => 5,
     tries       => 10,
     timeout     => $db_sync_timeout,

@@ -184,10 +184,10 @@ class neutron::agents::ovn_metadata (
     'ovn/ovn_sb_ca_cert':                     value => $ovn_sb_ca_cert;
   }
 
-  if $::neutron::params::ovn_metadata_agent_package {
+  if $neutron::params::ovn_metadata_agent_package {
     package { 'ovn-metadata':
       ensure => $package_ensure,
-      name   => $::neutron::params::ovn_metadata_agent_package,
+      name   => $neutron::params::ovn_metadata_agent_package,
       tag    => ['openstack', 'neutron-package'],
     }
   }
@@ -200,7 +200,7 @@ class neutron::agents::ovn_metadata (
     }
     service { 'ovn-metadata':
       ensure => $service_ensure,
-      name   => $::neutron::params::ovn_metadata_agent_service,
+      name   => $neutron::params::ovn_metadata_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

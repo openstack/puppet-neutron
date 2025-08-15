@@ -106,10 +106,10 @@ class neutron::agents::l2gw (
     'ovsdb/periodic_interval':                  value => $periodic_interval;
   }
 
-  if $::neutron::params::l2gw_agent_package {
+  if $neutron::params::l2gw_agent_package {
     package { 'neutron-l2gw-agent':
       ensure => $package_ensure,
-      name   => $::neutron::params::l2gw_agent_package,
+      name   => $neutron::params::l2gw_agent_package,
       tag    => ['openstack', 'neutron-package'],
     }
   }
@@ -122,7 +122,7 @@ class neutron::agents::l2gw (
     }
     service { 'neutron-l2gw-agent':
       ensure => $service_ensure,
-      name   => $::neutron::params::l2gw_agent_service,
+      name   => $neutron::params::l2gw_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

@@ -4,7 +4,7 @@
 # Configures everything in neutron.conf
 class { 'neutron':
   default_transport_url => 'rabbit://guest:password@localhost:5672/neutron',
-  service_plugins       => ['metering']
+  service_plugins       => ['metering'],
 }
 
 # The API server talks to keystone for authorisation
@@ -29,7 +29,7 @@ class { 'neutron::agents::metering': }
 # Agent
 class { 'neutron::agents::ml2::ovs':
   local_ip     => '192.168.1.1',
-  tunnel_types => ['vxlan']
+  tunnel_types => ['vxlan'],
 }
 
 # ml2 plugin with vxlan as ml2 driver and ovs as mechanism driver
@@ -38,7 +38,7 @@ class { 'neutron::plugins::ml2':
   tenant_network_types => ['vxlan'],
   vxlan_group          => '239.1.1.1',
   mechanism_drivers    => ['openvswitch'],
-  vni_ranges           => ['0:300']
+  vni_ranges           => ['0:300'],
 }
 
 ### Compute Nodes:
@@ -52,5 +52,5 @@ class { 'neutron':
 # Agent
 class { 'neutron::agents::ml2::ovs':
   local_ip     => '192.168.1.11',
-  tunnel_types => ['vxlan']
+  tunnel_types => ['vxlan'],
 }

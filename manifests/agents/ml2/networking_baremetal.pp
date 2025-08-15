@@ -163,7 +163,7 @@ class neutron::agents::ml2::networking_baremetal (
 
   package { 'python-ironic-neutron-agent':
     ensure => $package_ensure,
-    name   => $::neutron::params::networking_baremetal_agent_package,
+    name   => $neutron::params::networking_baremetal_agent_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -175,7 +175,7 @@ class neutron::agents::ml2::networking_baremetal (
     }
     service { 'ironic-neutron-agent-service':
       ensure => $service_ensure,
-      name   => $::neutron::params::networking_baremetal_agent_service,
+      name   => $neutron::params::networking_baremetal_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

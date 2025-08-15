@@ -60,7 +60,7 @@ openswan package in distributions")
       Package['libreswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
       stdlib::ensure_packages( 'libreswan', {
         'ensure' => present,
-        'name'   => $::neutron::params::libreswan_package,
+        'name'   => $neutron::params::libreswan_package,
         'tag'    => ['openstack', 'neutron-support-package'],
       })
     }
@@ -68,7 +68,7 @@ openswan package in distributions")
       Package['strongswan'] -> Package<| title == 'neutron-vpnaas-agent' |>
       stdlib::ensure_packages( 'strongswan', {
         'ensure' => present,
-        'name'   => $::neutron::params::strongswan_package,
+        'name'   => $neutron::params::strongswan_package,
         'tag'    => ['openstack', 'neutron-support-package'],
       })
     }
@@ -96,7 +96,7 @@ openswan package in distributions")
 
   stdlib::ensure_packages( 'neutron-vpnaas-agent', {
     'ensure' => $package_ensure,
-    'name'   => $::neutron::params::vpnaas_agent_package,
+    'name'   => $neutron::params::vpnaas_agent_package,
     'tag'    => ['openstack', 'neutron-package'],
   })
 }

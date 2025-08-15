@@ -119,10 +119,10 @@ class neutron::agents::metadata (
     'DEFAULT/rpc_response_max_timeout':       value => $rpc_response_max_timeout;
   }
 
-  if $::neutron::params::metadata_agent_package {
+  if $neutron::params::metadata_agent_package {
     package { 'neutron-metadata':
       ensure => $package_ensure,
-      name   => $::neutron::params::metadata_agent_package,
+      name   => $neutron::params::metadata_agent_package,
       tag    => ['openstack', 'neutron-package'],
     }
   }
@@ -135,7 +135,7 @@ class neutron::agents::metadata (
     }
     service { 'neutron-metadata':
       ensure => $service_ensure,
-      name   => $::neutron::params::metadata_agent_service,
+      name   => $neutron::params::metadata_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

@@ -156,17 +156,17 @@ class neutron::plugins::ml2 (
 
   # In RH, the link is used to start Neutron process but in Debian, it's used only
   # to manage database synchronization.
-  file {'/etc/neutron/plugin.ini':
+  file { '/etc/neutron/plugin.ini':
     ensure => link,
     target => '/etc/neutron/plugins/ml2/ml2_conf.ini',
     tag    => 'neutron-config-file',
   }
 
   # Some platforms do not have a dedicated ml2 plugin package
-  if $::neutron::params::ml2_server_package {
+  if $neutron::params::ml2_server_package {
     package { 'neutron-plugin-ml2':
       ensure => $package_ensure,
-      name   => $::neutron::params::ml2_server_package,
+      name   => $neutron::params::ml2_server_package,
       tag    => ['openstack', 'neutron-package'],
     }
   }
@@ -181,7 +181,7 @@ class neutron::plugins::ml2 (
     network_vlan_ranges => $network_vlan_ranges,
     vni_ranges          => $vni_ranges,
     vxlan_group         => $vxlan_group,
-    max_header_size     => $max_header_size
+    max_header_size     => $max_header_size,
   }
 
   neutron_plugin_ml2 {

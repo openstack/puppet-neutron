@@ -98,7 +98,7 @@ class neutron::agents::bagpipe (
   include neutron::deps
   include neutron::params
 
-  if ! $::neutron::params::bagpipe_bgp_package {
+  if ! $neutron::params::bagpipe_bgp_package {
     fail('BaGPipe agent is currently unsupported in this operating system.')
   }
 
@@ -121,8 +121,8 @@ class neutron::agents::bagpipe (
 
   package { 'bagpipe-bgp':
     ensure => $package_ensure,
-    name   => $::neutron::params::bagpipe_bgp_package,
-    tag    => ['openstack', 'neutron-plugin-ml2-package']
+    name   => $neutron::params::bagpipe_bgp_package,
+    tag    => ['openstack', 'neutron-plugin-ml2-package'],
   }
 
   if $manage_service {
@@ -133,7 +133,7 @@ class neutron::agents::bagpipe (
     }
     service { 'bagpipe-bgp':
       ensure => $service_ensure,
-      name   => $::neutron::params::bagpipe_bgp_service,
+      name   => $neutron::params::bagpipe_bgp_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

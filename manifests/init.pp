@@ -389,7 +389,7 @@ will be removed in a future release")
 
   package { 'neutron':
     ensure => $package_ensure,
-    name   => $::neutron::params::package_name,
+    name   => $neutron::params::package_name,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -437,7 +437,7 @@ will be removed in a future release")
   }
 
   neutron_config {
-    'DEFAULT/service_plugins': value => join(any2array($service_plugins), ',')
+    'DEFAULT/service_plugins': value => join(any2array($service_plugins), ',');
   }
 
   oslo::messaging::rabbit {'neutron_config':

@@ -24,7 +24,7 @@ class neutron::plugins::ml2::ovn::maintenance_worker (
 
   package { 'neutron-ovn-maintenance-worker':
     ensure => $package_ensure,
-    name   => $::neutron::params::ovn_maintenance_worker_package,
+    name   => $neutron::params::ovn_maintenance_worker_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -36,7 +36,7 @@ class neutron::plugins::ml2::ovn::maintenance_worker (
     }
     service { 'neutron-ovn-maintenance-worker':
       ensure => $service_ensure,
-      name   => $::neutron::params::ovn_maintenance_worker_service,
+      name   => $neutron::params::ovn_maintenance_worker_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

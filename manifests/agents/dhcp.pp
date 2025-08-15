@@ -205,7 +205,7 @@ class neutron::agents::dhcp (
     $req_ssl_opts = {
       'ovsdb_agent_ssl_key_file'  => $ovsdb_agent_ssl_key_file,
       'ovsdb_agent_ssl_cert_file' => $ovsdb_agent_ssl_cert_file,
-      'ovsdb_agent_ssl_ca_file'   => $ovsdb_agent_ssl_ca_file
+      'ovsdb_agent_ssl_ca_file'   => $ovsdb_agent_ssl_ca_file,
     }
     $req_ssl_opts.each |$opts| {
       if !$opts[1] or is_service_default($opts[1]) {
@@ -225,10 +225,10 @@ class neutron::agents::dhcp (
     'ovs/ssl_ca_cert_file':   value => $ovsdb_agent_ssl_ca_file;
   }
 
-  if $::neutron::params::dhcp_agent_package {
+  if $neutron::params::dhcp_agent_package {
     package { 'neutron-dhcp-agent':
       ensure => $package_ensure,
-      name   => $::neutron::params::dhcp_agent_package,
+      name   => $neutron::params::dhcp_agent_package,
       tag    => ['openstack', 'neutron-package'],
     }
   }
@@ -241,7 +241,7 @@ class neutron::agents::dhcp (
     }
     service { 'neutron-dhcp-service':
       ensure => $service_ensure,
-      name   => $::neutron::params::dhcp_agent_service,
+      name   => $neutron::params::dhcp_agent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

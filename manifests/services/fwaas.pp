@@ -33,7 +33,7 @@ class neutron::services::fwaas (
 
   ensure_packages( 'neutron-fwaas', {
     'ensure' => $package_ensure,
-    'name'   => $::neutron::params::fwaas_package,
+    'name'   => $neutron::params::fwaas_package,
     'tag'    => ['openstack', 'neutron-package'],
   })
 
@@ -55,14 +55,14 @@ class neutron::services::fwaas (
     exec { 'fwaas-db-sync':
       command     => 'neutron-db-manage --subproject neutron-fwaas upgrade head',
       path        => '/usr/bin',
-      user        => $::neutron::params::user,
+      user        => $neutron::params::user,
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],
         Anchor['neutron::dbsync::begin']
       ],
       notify      => Anchor['neutron::dbsync::end'],
-      refreshonly => true
+      refreshonly => true,
     }
   }
 }

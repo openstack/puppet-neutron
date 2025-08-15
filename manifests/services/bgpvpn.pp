@@ -49,7 +49,7 @@ class neutron::services::bgpvpn (
 
   package { 'python-networking-bgpvpn':
     ensure => $package_ensure,
-    name   => $::neutron::params::bgpvpn_plugin_package,
+    name   => $neutron::params::bgpvpn_plugin_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -72,14 +72,14 @@ class neutron::services::bgpvpn (
     exec { 'bgpvpn-db-sync':
       command     => 'neutron-db-manage --subproject networking-bgpvpn upgrade head',
       path        => '/usr/bin',
-      user        => $::neutron::params::user,
+      user        => $neutron::params::user,
       subscribe   => [
         Anchor['neutron::install::end'],
         Anchor['neutron::config::end'],
         Anchor['neutron::dbsync::begin']
       ],
       notify      => Anchor['neutron::dbsync::end'],
-      refreshonly => true
+      refreshonly => true,
     }
   }
 }

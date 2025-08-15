@@ -68,7 +68,7 @@ class neutron::agents::bgp_dragent(
 
   package { 'neutron-bgp-dragent':
     ensure => $package_ensure,
-    name   => $::neutron::params::bgp_dragent_package,
+    name   => $neutron::params::bgp_dragent_package,
     tag    => ['openstack', 'neutron-package'],
   }
 
@@ -80,7 +80,7 @@ class neutron::agents::bgp_dragent(
     }
     service { 'neutron-bgp-dragent':
       ensure => $service_ensure,
-      name   => $::neutron::params::bgp_dragent_service,
+      name   => $neutron::params::bgp_dragent_service,
       enable => $enabled,
       tag    => 'neutron-service',
     }

@@ -12,20 +12,7 @@ describe 'neutron::server' do
     {}
   end
 
-  let :default_params do
-    {
-      :package_ensure           => 'present',
-      :enabled                  => true,
-      :auth_strategy            => 'keystone',
-      :sync_db                  => false,
-    }
-  end
-
   shared_examples 'neutron::server' do
-    let :p do
-      default_params.merge(params)
-    end
-
     it { should contain_class('neutron::db') }
     it { should contain_class('neutron::params') }
     it { should contain_class('neutron::policy') }
@@ -34,7 +21,7 @@ describe 'neutron::server' do
       if platform_params.has_key?(:server_package)
         should contain_package('neutron-server').with(
           :name   => platform_params[:server_package],
-          :ensure => p[:package_ensure],
+          :ensure => 'present',
           :tag    => ['openstack', 'neutron-package'],
         )
         should contain_package('neutron-server').that_requires('Anchor[neutron::install::begin]')
@@ -423,8 +410,6 @@ describe 'neutron::server' do
               :rpc_service_name              => 'neutron-rpc-server',
               :periodic_workers_package_name => 'neutron-periodic-workers',
               :periodic_workers_service_name => 'neutron-periodic-workers',
-              :dynamic_routing_package       => 'python3-neutron-dynamic-routing',
-              :vpnaas_agent_package          => 'python3-neutron-vpnaas',
             }
           else
             {
@@ -434,8 +419,6 @@ describe 'neutron::server' do
               :rpc_service_name              => 'neutron-rpc-server',
               :periodic_workers_package_name => 'neutron-periodic-workers',
               :periodic_workers_service_name => 'neutron-periodic-workers',
-              :dynamic_routing_package       => 'python3-neutron-dynamic-routing',
-              :vpnaas_agent_package          => 'python3-neutron-vpnaas',
             }
           end
         when 'RedHat'
@@ -445,8 +428,6 @@ describe 'neutron::server' do
             :rpc_service_name              => 'neutron-rpc-server',
             :periodic_workers_package_name => 'openstack-neutron-periodic-workers',
             :periodic_workers_service_name => 'neutron-periodic-workers',
-            :dynamic_routing_package       => 'python3-neutron-dynamic-routing',
-            :vpnaas_agent_package          => 'openstack-neutron-vpnaas',
           }
         end
       end

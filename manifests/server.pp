@@ -17,14 +17,8 @@
 #   Defaults to true
 #
 # [*service_name*]
-#   (Optional) Name of the service that will be providing the
-#   server functionality of neutron-api.
-#   If the value is 'httpd', this means neutron API will be a web
-#   service, and you must use another class to configure that
-#   web service. For example, use class { 'neutron::wsgi::apache'...}
-#   to make neutron-api be a web app using apache mod_wsgi.
-#   If set to false, then neutron-server isn't in use, and we will
-#   be using neutron-api and neutron-rpc-server instead.
+#   (Optional) Name of the service that will be providing neutron-server.
+#   If set to false, then separate api service and rpc service.
 #   Defaults to $neutron::params::server_service
 #
 # [*server_package*]

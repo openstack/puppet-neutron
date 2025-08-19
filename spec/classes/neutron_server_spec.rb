@@ -5,11 +5,12 @@ describe 'neutron::server' do
     "class { 'neutron': }
      class { 'neutron::keystone::authtoken':
        password => 'passw0rd',
-     }"
+     }
+     include apache"
   end
 
   let :params do
-    {}
+    { :api_service_name => 'httpd' }
   end
 
   shared_examples 'neutron::server' do
@@ -17,51 +18,49 @@ describe 'neutron::server' do
     it { should contain_class('neutron::params') }
     it { should contain_class('neutron::policy') }
 
-    it 'installs neutron server package' do
-      if platform_params.has_key?(:server_package)
-        should contain_package('neutron-server').with(
-          :name   => platform_params[:server_package],
+    it 'installs neutron server service' do
+      if platform_params.has_key?(:api_package_name)
+        should contain_package('neutron-api').with(
+          :name   => platform_params[:api_package_name],
           :ensure => 'present',
           :tag    => ['openstack', 'neutron-package'],
         )
-        should contain_package('neutron-server').that_requires('Anchor[neutron::install::begin]')
-        should contain_package('neutron-server').that_notifies('Anchor[neutron::install::end]')
-      else
-        should contain_package('neutron').that_requires('Anchor[neutron::install::begin]')
-        should contain_package('neutron').that_notifies('Anchor[neutron::install::end]')
       end
+      if platform_params.has_key?(:api_service_name)
+        should contain_service('neutron-api').with(
+          :ensure   => 'stopped',
+          :name     => platform_params[:api_service_name],
+          :enable   => false,
+          :tag      => ['neutron-service'],
+        )
+      end
+
+      should contain_package('neutron-rpc-server').with(
+        :name   => platform_params[:rpc_package_name],
+        :ensure => 'present',
+        :tag    => ['openstack', 'neutron-package'],
+      )
+      should contain_service('neutron-rpc-server').with(
+        :name    => platform_params[:rpc_service_name],
+        :enable  => true,
+        :ensure  => 'running',
+        :tag     => ['neutron-service'],
+      )
+
+      should contain_package('neutron-periodic-workers').with(
+        :name   => platform_params[:periodic_workers_package_name],
+        :ensure => 'present',
+        :tag    => ['openstack', 'neutron-package'],
+      )
+      should contain_service('neutron-periodic-workers').with(
+        :ensure => 'running',
+        :name   => platform_params[:periodic_workers_service_name],
+        :enable => true,
+        :tag    => ['neutron-service'],
+      )
     end
 
     it 'configures neutron server service' do
-      if platform_params.has_key?(:server_service)
-        should contain_service('neutron-server').with(
-          :name    => platform_params[:server_service],
-          :enable  => true,
-          :ensure  => 'running',
-          :tag     => ['neutron-service', 'neutron-server-eventlet'],
-        )
-        should contain_service('neutron-server').that_subscribes_to('Anchor[neutron::service::begin]')
-        should contain_service('neutron-server').that_notifies('Anchor[neutron::service::end]')
-      else
-        should contain_service('neutron-api').with(
-          :name    => platform_params[:api_service_name],
-          :enable  => true,
-          :ensure  => 'running',
-          :tag     => ['neutron-service', 'neutron-server-eventlet'],
-        )
-        should contain_service('neutron-api').that_subscribes_to('Anchor[neutron::service::begin]')
-        should contain_service('neutron-api').that_notifies('Anchor[neutron::service::end]')
-
-        should contain_service('neutron-rpc-server').with(
-          :name    => platform_params[:rpc_service_name],
-          :enable  => true,
-          :ensure  => 'running',
-          :tag     => ['neutron-service'],
-        )
-        should contain_service('neutron-rpc-server').that_subscribes_to('Anchor[neutron::service::begin]')
-        should contain_service('neutron-rpc-server').that_notifies('Anchor[neutron::service::end]')
-      end
-
       should_not contain_class('neutron::db::sync')
       should contain_neutron_config('DEFAULT/api_workers').with_value(facts[:os_workers])
       should contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:os_workers])
@@ -91,12 +90,9 @@ describe 'neutron::server' do
       end
 
       it 'should not manage the service' do
-        if platform_params.has_key?(:server_service)
-          should_not contain_service('neutron-server')
-        else
-          should_not contain_service('neutron-api')
-          should_not contain_service('neutron-rpc-server')
-        end
+        should_not contain_service('neutron-api')
+        should_not contain_service('neutron-rpc-server')
+        should_not contain_service('neutron-periodic-workers')
       end
     end
 
@@ -256,79 +252,6 @@ describe 'neutron::server' do
       )}
     end
 
-    context 'when running neutron-api in wsgi' do
-      before :each do
-        params.merge!(
-          :service_name     => false,
-          :api_service_name => 'httpd',
-        )
-      end
-
-      let :pre_condition do
-        "class { 'neutron': }
-         include apache
-         class { 'neutron::keystone::authtoken':
-           password => 'passw0rd',
-         }"
-      end
-
-      it 'configures neutron-api service with Apache' do
-        if platform_params.has_key?(:server_service)
-          should contain_service('neutron-server').with(
-            :ensure     => 'stopped',
-            :name       => platform_params[:server_service],
-            :enable     => false,
-            :tag        => ['neutron-service'],
-          )
-        else
-          should contain_service('neutron-api').with(
-            :ensure     => 'stopped',
-            :name       => platform_params[:api_service_name],
-            :enable     => false,
-            :tag        => ['neutron-service'],
-          )
-        end
-
-        should contain_package('neutron-rpc-server').with(
-          :name   => platform_params[:rpc_package_name],
-          :ensure => 'present',
-          :tag    => ['openstack', 'neutron-package'],
-        )
-        should contain_service('neutron-rpc-server').with(
-          :ensure => 'running',
-          :name   => platform_params[:rpc_service_name],
-          :enable => true,
-          :tag    => ['neutron-service'],
-        )
-        should contain_package('neutron-periodic-workers').with(
-          :name   => platform_params[:periodic_workers_package_name],
-          :ensure => 'present',
-          :tag    => ['openstack', 'neutron-package'],
-        )
-        should contain_service('neutron-periodic-workers').with(
-          :ensure => 'running',
-          :name   => platform_params[:periodic_workers_service_name],
-          :enable => true,
-          :tag    => ['neutron-service'],
-        )
-      end
-    end
-
-    context 'when service_name is customized' do
-      before :each do
-        params.merge!({ :service_name => 'foobar' })
-      end
-
-      it 'configures neutron-api service with custom name' do
-        should contain_service('neutron-server').with(
-          :name    => 'foobar',
-          :enable  => true,
-          :ensure  => 'running',
-          :tag     => ['neutron-service'],
-        )
-      end
-    end
-
     context 'with ovs_integration_bridge set' do
       before :each do
         params.merge!({:ovs_integration_bridge => 'br-int' })
@@ -390,6 +313,33 @@ describe 'neutron::server' do
     end
   end
 
+  shared_examples 'neutron::server in Debian' do
+    before :each do
+      params.clear()
+    end
+
+    let :pre_condition do
+      "class { 'neutron': }
+       class { 'neutron::keystone::authtoken':
+         password => 'passw0rd',
+       }"
+    end
+
+    it 'installs neutron server service' do
+      should contain_package('neutron-api').with(
+        :name   => platform_params[:api_package_name],
+        :ensure => 'present',
+        :tag    => ['openstack', 'neutron-package'],
+      )
+      should contain_service('neutron-api').with(
+        :ensure   => 'running',
+        :name     => platform_params[:api_service_name],
+        :enable   => true,
+        :tag      => ['neutron-service'],
+      )
+    end
+  end
+
   on_supported_os({
     :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -404,8 +354,6 @@ describe 'neutron::server' do
           if facts[:os]['name'] == 'Ubuntu'
             {
               :api_package_name              => 'neutron-api',
-              :server_package                => 'neutron-server',
-              :server_service                => 'neutron-server',
               :rpc_package_name              => 'neutron-rpc-server',
               :rpc_service_name              => 'neutron-rpc-server',
               :periodic_workers_package_name => 'neutron-periodic-workers',
@@ -423,7 +371,6 @@ describe 'neutron::server' do
           end
         when 'RedHat'
           {
-            :server_service                => 'neutron-server',
             :rpc_package_name              => 'openstack-neutron-rpc-server',
             :rpc_service_name              => 'neutron-rpc-server',
             :periodic_workers_package_name => 'openstack-neutron-periodic-workers',
@@ -433,6 +380,9 @@ describe 'neutron::server' do
       end
 
       it_behaves_like 'neutron::server'
+      if facts[:os]['name'] == 'Debian'
+        it_behaves_like 'neutron::server in Debian'
+      end
     end
   end
 end

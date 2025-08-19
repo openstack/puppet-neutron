@@ -20,15 +20,6 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::arista' do
-  let :pre_condition do
-    "class { 'neutron::keystone::authtoken':
-      password => 'passw0rd',
-     }
-     class { 'neutron::server': }
-     class { 'neutron':
-      core_plugin     => 'ml2' }"
-  end
-
   let :default_params do
     {
       :region_name   => '<SERVICE DEFAULT>',

@@ -1,14 +1,6 @@
 require 'spec_helper'
 
 describe 'neutron::plugins::ml2::ovn' do
-  let :pre_condition do
-    "class { 'neutron::keystone::authtoken':
-      password => 'passw0rd',
-     }
-     class { 'neutron::server': }
-     class { 'neutron': }"
-  end
-
   let :default_params do
     {
       :ovn_nb_connection                    => '<SERVICE DEFAULT>',

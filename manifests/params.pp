@@ -26,8 +26,6 @@ class neutron::params {
   case $facts['os']['family'] {
     'RedHat': {
       $package_name                       = 'openstack-neutron'
-      $server_service                     = 'neutron-server'
-      $server_package                     = undef
       $api_package_name                   = undef
       $api_service_name                   = undef
       $rpc_package_name                   = 'openstack-neutron-rpc-server'
@@ -72,8 +70,6 @@ class neutron::params {
       $package_name                       = 'neutron-common'
       if $facts['os']['name'] == 'Debian' {
         $ml2_server_package               = undef
-        $server_service                   = undef
-        $server_package                   = undef
         $api_package_name                 = 'neutron-api'
         $api_service_name                 = 'neutron-api'
         $rpc_package_name                 = 'neutron-rpc-server'
@@ -84,8 +80,6 @@ class neutron::params {
         $bagpipe_bgp_service              = 'networking-bagpipe-bgp-agent'
       } else {
         $ml2_server_package               = 'neutron-plugin-ml2'
-        $server_service                   = 'neutron-server'
-        $server_package                   = 'neutron-server'
         $api_package_name                 = 'neutron-api'
         $api_service_name                 = undef
         $rpc_package_name                 = 'neutron-rpc-server'

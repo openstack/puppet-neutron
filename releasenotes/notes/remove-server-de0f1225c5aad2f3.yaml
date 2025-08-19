@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for standalone neutron-server service has been removed.

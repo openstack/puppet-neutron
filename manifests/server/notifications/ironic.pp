@@ -77,7 +77,6 @@ class neutron::server::notifications::ironic (
   $valid_interfaces     = $facts['os_service_default'],
   $enable_notifications = $facts['os_service_default'],
 ) {
-
   include neutron::deps
 
   if is_service_default($system_scope) {

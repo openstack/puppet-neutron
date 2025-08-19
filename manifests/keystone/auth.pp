@@ -106,7 +106,6 @@ class neutron::keystone::auth (
   Keystone::EndpointUrl $admin_url        = 'http://127.0.0.1:9696',
   Keystone::EndpointUrl $internal_url     = 'http://127.0.0.1:9696',
 ) {
-
   include neutron::deps
 
   Keystone::Resource::Service_identity['neutron'] -> Anchor['neutron::service::end']
@@ -131,5 +130,4 @@ class neutron::keystone::auth (
     admin_url           => $admin_url,
     internal_url        => $internal_url,
   }
-
 }

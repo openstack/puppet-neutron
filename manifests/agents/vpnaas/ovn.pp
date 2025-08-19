@@ -98,7 +98,6 @@ class neutron::agents::vpnaas::ovn (
   $ovsdb_probe_interval        = $facts['os_service_default'],
   Boolean $purge_config        = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

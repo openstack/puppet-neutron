@@ -39,7 +39,6 @@ class neutron::agents::ml2::macvtap (
   Array   $physical_interface_mappings = [],
   Boolean $purge_config                = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

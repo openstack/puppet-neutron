@@ -27,7 +27,6 @@ class neutron::services::fwaas (
   Boolean $sync_db      = false,
   Boolean $purge_config = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

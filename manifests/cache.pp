@@ -259,7 +259,6 @@ class neutron::cache (
   $dead_timeout                         = $facts['os_service_default'],
   Boolean $manage_backend_package       = true,
 ) {
-
   include neutron::deps
 
   oslo::cache { 'neutron_config':

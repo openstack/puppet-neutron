@@ -62,7 +62,6 @@ class neutron::quota (
   # rbac extension
   $quota_rbac_policy         = $facts['os_service_default'],
 ) {
-
   include neutron::deps
 
   neutron_config {

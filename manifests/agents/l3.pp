@@ -217,7 +217,6 @@ class neutron::agents::l3 (
   $network_log_local_output_log_base         = $facts['os_service_default'],
   Boolean $purge_config                      = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

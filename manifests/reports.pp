@@ -17,12 +17,11 @@
 #   is set.
 #   Defaults to $facts['os_service_default']
 #
-class neutron::reports(
+class neutron::reports (
   $log_dir                     = $facts['os_service_default'],
   $file_event_handler          = $facts['os_service_default'],
   $file_event_handler_interval = $facts['os_service_default'],
 ) {
-
   include neutron::deps
 
   oslo::reports { 'neutron_config':

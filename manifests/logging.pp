@@ -123,7 +123,6 @@ class neutron::logging (
   $instance_uuid_format          = $facts['os_service_default'],
   $fatal_deprecations            = $facts['os_service_default'],
 ) {
-
   include neutron::deps
 
   oslo::log { 'neutron_config':
@@ -148,5 +147,4 @@ class neutron::logging (
     instance_uuid_format          => $instance_uuid_format,
     fatal_deprecations            => $fatal_deprecations,
   }
-
 }

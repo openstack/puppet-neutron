@@ -54,7 +54,6 @@ class neutron::db (
   $mysql_enable_ndb                 = $facts['os_service_default'],
   $database_db_max_retries          = $facts['os_service_default'],
 ) {
-
   include neutron::deps
 
   if $database_connection {
@@ -69,7 +68,6 @@ class neutron::db (
       mysql_enable_ndb        => $mysql_enable_ndb,
       db_max_retries          => $database_db_max_retries,
     }
-
   }
 
   # all db settings should be applied and all packages should be installed

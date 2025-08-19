@@ -21,7 +21,6 @@ class neutron::quota::fwaas (
   $quota_firewall_policy = $facts['os_service_default'],
   $quota_firewall_rule   = $facts['os_service_default'],
 ) {
-
   include neutron::deps
 
   neutron_config {

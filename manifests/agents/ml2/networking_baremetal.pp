@@ -124,7 +124,6 @@ class neutron::agents::ml2::networking_baremetal (
   Boolean $purge_config    = false,
   $report_interval         = $facts['os_service_default'],
 ) {
-
   include neutron::deps
   include neutron::params
 
@@ -181,5 +180,4 @@ class neutron::agents::ml2::networking_baremetal (
     }
     Ironic_neutron_agent_config<||> ~> Service['ironic-neutron-agent-service']
   }
-
 }

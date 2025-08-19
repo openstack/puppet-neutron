@@ -21,7 +21,7 @@
 #
 class neutron::plugins::ml2::sriov_driver (
   Array $vnic_type_prohibit_list = [],
-){
+) {
   if !empty($vnic_type_prohibit_list) {
     neutron_plugin_ml2 {
       'sriov_driver/vnic_type_prohibit_list': value => join($vnic_type_prohibit_list, ',');

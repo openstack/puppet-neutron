@@ -31,7 +31,6 @@ class neutron::quota::sfc (
   $quota_service_graphs  = $facts['os_service_default'],
   $quota_flow_classifier = $facts['os_service_default']
 ) {
-
   include neutron::deps
 
   neutron_config {

@@ -36,7 +36,6 @@ class neutron::agents::fwaas (
   $firewall_l2_driver   = $facts['os_service_default'],
   Boolean $purge_config = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

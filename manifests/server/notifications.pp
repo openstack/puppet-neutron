@@ -29,7 +29,6 @@ class neutron::server::notifications (
   $send_events_interval               = $facts['os_service_default'],
   $http_retries                       = $facts['os_service_default'],
 ) {
-
   include neutron::deps
 
   neutron_config {

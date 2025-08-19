@@ -50,7 +50,7 @@
 #   (optional) If it should create a router in VRF.
 #   Defaults to $facts['os_service_default']
 #
-class neutron::plugins::ml2::arista::l3(
+class neutron::plugins::ml2::arista::l3 (
   $primary_l3_host,
   $primary_l3_host_username,
   $primary_l3_host_password,
@@ -60,7 +60,6 @@ class neutron::plugins::ml2::arista::l3(
   $conn_timeout             = $facts['os_service_default'],
   $use_vrf                  = $facts['os_service_default'],
 ) {
-
   include neutron::deps
   require neutron::plugins::ml2
 

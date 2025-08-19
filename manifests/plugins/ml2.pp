@@ -140,7 +140,6 @@ class neutron::plugins::ml2 (
   $max_header_size           = $facts['os_service_default'],
   $overlay_ip_version        = $facts['os_service_default'],
 ) {
-
   include neutron::deps
   include neutron::params
 

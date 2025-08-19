@@ -62,7 +62,6 @@ class neutron::services::sfc (
   $sfc_driver        = undef,
   $fc_driver         = undef,
 ) {
-
   include neutron::deps
   include neutron::params
 

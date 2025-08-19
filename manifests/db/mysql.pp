@@ -39,7 +39,6 @@ class neutron::db::mysql (
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
 ) {
-
   include neutron::deps
 
   openstacklib::db::mysql { 'neutron':

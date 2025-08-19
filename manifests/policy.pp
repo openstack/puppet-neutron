@@ -54,7 +54,6 @@ class neutron::policy (
   $policy_dirs          = $facts['os_service_default'],
   Boolean $purge_config = false,
 ) {
-
   include neutron::deps
   include neutron::params
 
@@ -82,5 +81,4 @@ class neutron::policy (
     policy_default_rule  => $policy_default_rule,
     policy_dirs          => $policy_dirs,
   }
-
 }

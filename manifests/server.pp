@@ -282,13 +282,12 @@ class neutron::server (
   $service_name                     = undef,
   $server_package                   = undef,
 ) inherits neutron::params {
-
   include neutron::deps
   include neutron::db
   include neutron::policy
 
   if !is_service_default($dhcp_load_type) {
-    if ! ($dhcp_load_type in ['networks', 'subnets', 'ports'] ) {
+    if ! ($dhcp_load_type in ['networks', 'subnets', 'ports']) {
       fail('Unsupported dhcp_load_type. It should be one of networks, subnets and ports.')
     }
   }

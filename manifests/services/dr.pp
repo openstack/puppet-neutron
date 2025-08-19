@@ -20,7 +20,6 @@ class neutron::services::dr (
   $bgp_drscheduler_driver = $facts['os_service_default'],
   Boolean $sync_db        = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

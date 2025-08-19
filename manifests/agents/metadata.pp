@@ -95,7 +95,6 @@ class neutron::agents::metadata (
   $rpc_response_max_timeout = $facts['os_service_default'],
   Boolean $purge_config     = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

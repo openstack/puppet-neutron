@@ -45,7 +45,7 @@
 #   (Optional) Whether to set only the specified config options in the BGP dragent config.
 #   Defaults to false
 #
-class neutron::agents::bgp_dragent(
+class neutron::agents::bgp_dragent (
   $package_ensure         = 'present',
   Boolean $enabled        = true,
   Boolean $manage_service = true,
@@ -53,7 +53,6 @@ class neutron::agents::bgp_dragent(
   $bgp_router_id          = $facts['networking']['ip'],
   Boolean $purge_config   = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

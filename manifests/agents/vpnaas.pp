@@ -47,7 +47,6 @@ class neutron::agents::vpnaas (
   $ipsec_status_check_interval = $facts['os_service_default'],
   Boolean $purge_config        = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

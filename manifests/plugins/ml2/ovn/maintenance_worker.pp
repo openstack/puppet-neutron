@@ -19,7 +19,6 @@ class neutron::plugins::ml2::ovn::maintenance_worker (
   Boolean $enabled        = true,
   Boolean $manage_service = true,
 ) {
-
   include neutron::params
 
   package { 'neutron-ovn-maintenance-worker':

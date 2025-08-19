@@ -337,7 +337,6 @@ class neutron::agents::ml2::ovs (
   $network_log_local_output_log_base    = $facts['os_service_default'],
   $openflow_processed_per_port          = $facts['os_service_default'],
 ) {
-
   include neutron::deps
   include neutron::params
 
@@ -407,10 +406,10 @@ class neutron::agents::ml2::ovs (
     }
 
     if ($manage_vswitch) {
-      neutron::plugins::ovs::bridge{ $bridge_mappings_real:
+      neutron::plugins::ovs::bridge { $bridge_mappings_real:
         before => Service['neutron-ovs-agent-service'],
       }
-      neutron::plugins::ovs::port{ $bridge_uplinks:
+      neutron::plugins::ovs::port { $bridge_uplinks:
         before => Service['neutron-ovs-agent-service'],
       }
     }
@@ -424,26 +423,26 @@ class neutron::agents::ml2::ovs (
     }
   }
 
-  if ($resource_provider_bandwidths != []) {
+  if $resource_provider_bandwidths != [] {
     $resource_provider_bandwidths_real = join(any2array($resource_provider_bandwidths), ',')
   } else {
     $resource_provider_bandwidths_real = $facts['os_service_default']
   }
 
-  if ($resource_provider_hypervisors != []){
+  if $resource_provider_hypervisors != [] {
     $resource_provider_hypervisors_real = join(any2array($resource_provider_hypervisors), ',')
   } else {
     $resource_provider_hypervisors_real = $facts['os_service_default']
   }
 
-  if ($resource_provider_packet_processing_without_direction != []){
+  if $resource_provider_packet_processing_without_direction != [] {
     $resource_provider_packet_processing_without_direction_real =
       join(any2array($resource_provider_packet_processing_without_direction), ',')
   } else {
     $resource_provider_packet_processing_without_direction_real = $facts['os_service_default']
   }
 
-  if ($resource_provider_packet_processing_with_direction != []){
+  if $resource_provider_packet_processing_with_direction != [] {
     $resource_provider_packet_processing_with_direction_real =
       join(any2array($resource_provider_packet_processing_with_direction), ',')
   } else {
@@ -453,7 +452,7 @@ class neutron::agents::ml2::ovs (
   if empty($resource_provider_inventory_defaults) {
     $resource_provider_inventory_defaults_real = $facts['os_service_default']
   } else {
-    if ($resource_provider_inventory_defaults =~ Hash){
+    if $resource_provider_inventory_defaults =~ Hash {
       $resource_provider_inventory_defaults_real =
         join(join_keys_to_values($resource_provider_inventory_defaults, ':'), ',')
     } else {
@@ -465,7 +464,7 @@ class neutron::agents::ml2::ovs (
   if empty($resource_provider_packet_processing_inventory_defaults) {
     $resource_provider_packet_processing_inventory_defaults_real = $facts['os_service_default']
   } else {
-    if ($resource_provider_packet_processing_inventory_defaults =~ Hash){
+    if $resource_provider_packet_processing_inventory_defaults =~ Hash {
       $resource_provider_packet_processing_inventory_defaults_real =
         join(join_keys_to_values($resource_provider_packet_processing_inventory_defaults, ':'), ',')
     } else {

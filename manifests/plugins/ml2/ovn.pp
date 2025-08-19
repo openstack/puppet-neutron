@@ -197,7 +197,7 @@
 #   Type: boolean
 #   Defaults to $facts['os_service_default']
 #
-class neutron::plugins::ml2::ovn(
+class neutron::plugins::ml2::ovn (
   $ovn_nb_connection                    = $facts['os_service_default'],
   $ovn_sb_connection                    = $facts['os_service_default'],
   $ovn_nb_private_key                   = $facts['os_service_default'],
@@ -237,7 +237,6 @@ class neutron::plugins::ml2::ovn(
   # DEPRECATED PARAMETERS
   $ovn_emit_need_to_frag                = undef,
 ) {
-
   include neutron::deps
   require neutron::plugins::ml2
 
@@ -245,7 +244,7 @@ class neutron::plugins::ml2::ovn(
     warning('The ovn_emit_need_to_frag parameter has been deprecated.')
   }
 
-  if ! ( $neutron_sync_mode in ['off', 'log', 'repair', $facts['os_service_default']] ) {
+  if !($neutron_sync_mode in ['off', 'log', 'repair', $facts['os_service_default']]) {
     fail( 'Invalid value for neutron_sync_mode parameter' )
   }
 

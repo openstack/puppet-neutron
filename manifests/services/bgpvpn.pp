@@ -43,7 +43,6 @@ class neutron::services::bgpvpn (
   Boolean $sync_db   = false,
   $purge_config      = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

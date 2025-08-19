@@ -50,8 +50,7 @@ define neutron::plugins::ml2::type_driver (
   $vni_ranges,
   $vxlan_group,
   $max_header_size
-){
-
+) {
   include neutron::deps
 
   case $name {
@@ -92,11 +91,11 @@ define neutron::plugins::ml2::type_driver (
       case $vxlan_group {
         /^2[\d.]+$/: {
           case $vxlan_group {
-            /^(22[4-9]|23[0-9])\.(\d+)\.(\d+)\.(\d+)$/: { }
-            default: { }
+            /^(22[4-9]|23[0-9])\.(\d+)\.(\d+)\.(\d+)$/: {}
+            default: {}
           }
         }
-        /^ff[\d.]+$/: { }
+        /^ff[\d.]+$/: {}
         default: {
           fail("${vxlan_group} is not valid for vxlan_group.")
         }

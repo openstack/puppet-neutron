@@ -52,7 +52,7 @@
 #   property for a package resource type.
 #   Defaults to 'present'
 #
-class neutron::plugins::ml2::arista(
+class neutron::plugins::ml2::arista (
   $eapi_host,
   $eapi_username,
   $eapi_password,
@@ -62,7 +62,6 @@ class neutron::plugins::ml2::arista(
   $use_fqdn       = $facts['os_service_default'],
   $package_ensure = 'present'
 ) {
-
   include neutron::deps
   require neutron::plugins::ml2
 

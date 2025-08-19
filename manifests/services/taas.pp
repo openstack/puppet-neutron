@@ -47,7 +47,6 @@ class neutron::services::taas (
   Boolean $sync_db      = false,
   Boolean $purge_config = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

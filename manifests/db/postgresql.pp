@@ -24,14 +24,13 @@
 #    (Optional) Privileges given to the database user.
 #    Default to 'ALL'
 #
-class neutron::db::postgresql(
+class neutron::db::postgresql (
   $password,
   $dbname     = 'neutron',
   $user       = 'neutron',
   $encoding   = undef,
   $privileges = 'ALL',
 ) {
-
   include neutron::deps
 
   openstacklib::db::postgresql { 'neutron':

@@ -94,7 +94,6 @@ class neutron::agents::bagpipe (
   Boolean $purge_config    = false,
   $local_address           = $facts['networking']['ip'],
 ) {
-
   include neutron::deps
   include neutron::params
 

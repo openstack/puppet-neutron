@@ -38,7 +38,6 @@ class neutron::plugins::ml2::bagpipe (
   $mpls_bridge             = $facts['os_service_default'],
   $package_ensure          = 'present',
 ) {
-
   include neutron::deps
   include neutron::params
   require neutron::plugins::ml2

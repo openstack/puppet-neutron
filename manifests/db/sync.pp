@@ -14,11 +14,10 @@
 #   (Optional) Timeout for the execution of the db_sync
 #   Defaults to 300
 #
-class neutron::db::sync(
+class neutron::db::sync (
   $extra_params    = '',
   $db_sync_timeout = 300,
 ) {
-
   include neutron::deps
   include neutron::params
 

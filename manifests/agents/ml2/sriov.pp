@@ -114,7 +114,6 @@ class neutron::agents::ml2::sriov (
   $resource_provider_default_hypervisor = $facts['os_service_default'],
   $resource_provider_inventory_defaults = {},
 ) {
-
   include neutron::deps
   include neutron::params
 
@@ -160,13 +159,13 @@ class neutron::agents::ml2::sriov (
     Neutron_agent_sriov_numvfs<||> ~> Service['neutron-sriov-nic-agent-service']
   }
 
-  if ($resource_provider_bandwidths != []) {
+  if $resource_provider_bandwidths != [] {
     $resource_provider_bandwidths_real = join(any2array($resource_provider_bandwidths), ',')
   } else {
     $resource_provider_bandwidths_real = $facts['os_service_default']
   }
 
-  if ($resource_provider_hypervisors != []) {
+  if $resource_provider_hypervisors != [] {
     $resource_provider_hypervisors_real = join(any2array($resource_provider_hypervisors), ',')
   } else {
     $resource_provider_hypervisors_real = $facts['os_service_default']
@@ -175,7 +174,7 @@ class neutron::agents::ml2::sriov (
   if empty($resource_provider_inventory_defaults) {
     $resource_provider_inventory_defaults_real = $facts['os_service_default']
   } else {
-    if ($resource_provider_inventory_defaults =~ Hash){
+    if $resource_provider_inventory_defaults =~ Hash {
       $resource_provider_inventory_defaults_real = join(join_keys_to_values($resource_provider_inventory_defaults, ':'), ',')
     } else {
       $resource_provider_inventory_defaults_real = join(any2array($resource_provider_inventory_defaults), ',')
@@ -188,5 +187,4 @@ class neutron::agents::ml2::sriov (
     'sriov_nic/resource_provider_default_hypervisor': value => $resource_provider_default_hypervisor;
     'sriov_nic/resource_provider_inventory_defaults': value => $resource_provider_inventory_defaults_real;
   }
-
 }

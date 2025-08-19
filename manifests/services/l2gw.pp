@@ -52,7 +52,6 @@ class neutron::services::l2gw (
   $package_ensure               = 'present',
   Boolean $purge_config         = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

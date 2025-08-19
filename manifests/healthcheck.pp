@@ -46,7 +46,6 @@ class neutron::healthcheck (
   $disable_by_file_paths   = $facts['os_service_default'],
   $enable_by_file_paths    = $facts['os_service_default'],
 ) {
-
   include neutron::deps
 
   oslo::healthcheck { 'neutron_config':

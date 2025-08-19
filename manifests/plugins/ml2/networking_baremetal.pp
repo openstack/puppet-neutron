@@ -10,10 +10,9 @@
 #   property for a package resource type.
 #   Defaults to 'present'
 #
-class neutron::plugins::ml2::networking_baremetal(
+class neutron::plugins::ml2::networking_baremetal (
   $package_ensure = 'present',
-  ) {
-
+) {
   include neutron::deps
   include neutron::params
 

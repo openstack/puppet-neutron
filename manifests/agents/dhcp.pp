@@ -161,7 +161,6 @@ class neutron::agents::dhcp (
   $report_interval                  = $facts['os_service_default'],
   $rpc_response_max_timeout         = $facts['os_service_default'],
 ) {
-
   include neutron::deps
   include neutron::params
 

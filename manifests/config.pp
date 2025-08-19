@@ -129,7 +129,6 @@ class neutron::config (
   # DEPRECATED PARAMETERS
   Optional[Hash] $ovn_metadata_agent_config = undef,
 ) {
-
   include neutron::deps
 
   create_resources('neutron_config', $server_config)

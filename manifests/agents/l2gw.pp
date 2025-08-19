@@ -1,7 +1,6 @@
 # == Class: neutron::agents::l2gw
 #
 # Installs and configures the Neutron L2gw service
-
 #
 # === Parameters
 #
@@ -85,7 +84,6 @@ class neutron::agents::l2gw (
   $socket_timeout                   = '30',
   Boolean $purge_config             = false,
 ) {
-
   include neutron::deps
   include neutron::params
 

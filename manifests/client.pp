@@ -11,7 +11,6 @@
 class neutron::client (
   $package_ensure = present
 ) {
-
   include neutron::deps
   include neutron::params
 
@@ -25,5 +24,4 @@ in a future release.")
   }
 
   include openstacklib::openstackclient
-
 }

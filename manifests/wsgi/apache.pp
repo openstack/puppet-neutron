@@ -156,7 +156,6 @@ class neutron::wsgi::apache (
   $headers                     = undef,
   $request_headers             = undef,
 ) {
-
   include neutron::deps
   include neutron::params
 

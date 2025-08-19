@@ -83,7 +83,6 @@ class neutron::server::notifications::nova (
   $region_name                        = $facts['os_service_default'],
   $endpoint_type                      = $facts['os_service_default'],
 ) {
-
   include neutron::deps
 
   if is_service_default($system_scope) {

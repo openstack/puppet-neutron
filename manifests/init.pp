@@ -365,7 +365,6 @@ class neutron (
   $vlan_transparent                     = undef,
   $vlan_qinq                            = undef,
 ) {
-
   include neutron::deps
   include neutron::params
 
@@ -440,7 +439,7 @@ will be removed in a future release")
     'DEFAULT/service_plugins': value => join(any2array($service_plugins), ',');
   }
 
-  oslo::messaging::rabbit {'neutron_config':
+  oslo::messaging::rabbit { 'neutron_config':
     heartbeat_timeout_threshold          => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate                       => $rabbit_heartbeat_rate,
     heartbeat_in_pthread                 => $rabbit_heartbeat_in_pthread,
@@ -477,5 +476,4 @@ will be removed in a future release")
     key_file  => $key_file,
     ca_file   => $ca_file,
   }
-
 }

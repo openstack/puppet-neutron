@@ -194,7 +194,7 @@
 #  (Optional) Hash of additional parameters to pass through to the keystone
 #  authtoken class. Values set here override the individual parameters above.
 #
-class neutron::keystone::authtoken(
+class neutron::keystone::authtoken (
   String[1] $password,
   $username                       = 'neutron',
   $auth_url                       = 'http://localhost:5000',
@@ -234,7 +234,6 @@ class neutron::keystone::authtoken(
   $interface                      = $facts['os_service_default'],
   $params                         = {},
 ) {
-
   include neutron::deps
 
   keystone::resource::authtoken {

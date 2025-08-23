@@ -5,6 +5,8 @@
 class neutron::params {
   include openstacklib::defaults
 
+  $pyver3 = $openstacklib::defaults::pyver3
+
   $client_package                 = 'python3-neutronclient'
   $ovs_agent_service              = 'neutron-openvswitch-agent'
   $macvtap_agent_service          = 'neutron-macvtap-agent'
@@ -61,7 +63,7 @@ class neutron::params {
       $metadata_agent_package             = undef
       $l3_agent_package                   = undef
       $neutron_wsgi_script_path           = '/var/www/cgi-bin/neutron'
-      $neutron_wsgi_script_source         = '/usr/bin/neutron-api'
+      $neutron_wsgi_script_source         = "/usr/lib/python${pyver3}/site-packages/neutron/wsgi/api.py"
       $networking_baremetal_package       = 'python3-networking-baremetal'
       $networking_baremetal_agent_package = 'python3-ironic-neutron-agent'
       $networking_baremetal_agent_service = 'ironic-neutron-agent'

@@ -161,7 +161,7 @@ describe 'neutron::wsgi::apache' do
         when 'RedHat'
           {
             :wsgi_script_path   => '/var/www/cgi-bin/neutron',
-            :wsgi_script_source => '/usr/bin/neutron-api'
+            :wsgi_script_source => '/usr/lib/python3.9/site-packages/neutron/wsgi/api.py',
           }
 
         end

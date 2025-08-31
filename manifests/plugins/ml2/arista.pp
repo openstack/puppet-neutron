@@ -63,7 +63,7 @@ class neutron::plugins::ml2::arista (
   $package_ensure = 'present'
 ) {
   include neutron::deps
-  require neutron::plugins::ml2
+  include neutron::params
 
   neutron_plugin_ml2 {
     'ml2_arista/eapi_host'    : value => $eapi_host;

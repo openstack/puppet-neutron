@@ -61,7 +61,6 @@ class neutron::plugins::ml2::arista::l3 (
   $use_vrf                  = $facts['os_service_default'],
 ) {
   include neutron::deps
-  require neutron::plugins::ml2
 
   # TODO(tkajinam): Reconsider how we implement this. We probably should allow
   #                 more flexible values like 'on' supported by oslo.config.

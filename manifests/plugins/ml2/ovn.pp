@@ -238,7 +238,6 @@ class neutron::plugins::ml2::ovn (
   $ovn_emit_need_to_frag                = undef,
 ) {
   include neutron::deps
-  require neutron::plugins::ml2
 
   if $ovn_emit_need_to_frag != undef {
     warning('The ovn_emit_need_to_frag parameter has been deprecated.')

@@ -30,7 +30,7 @@ class neutron::services::fwaas (
   include neutron::deps
   include neutron::params
 
-  ensure_packages( 'neutron-fwaas', {
+  stdlib::ensure_packages( 'neutron-fwaas', {
     'ensure' => $package_ensure,
     'name'   => $neutron::params::fwaas_package,
     'tag'    => ['openstack', 'neutron-package'],

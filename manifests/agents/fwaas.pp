@@ -60,7 +60,7 @@ class neutron::agents::fwaas (
     'fwaas/firewall_l2_driver': value => $firewall_l2_driver;
   }
 
-  ensure_packages( 'neutron-fwaas', {
+  stdlib::ensure_packages( 'neutron-fwaas', {
     'ensure' => $package_ensure,
     'name'   => $neutron::params::fwaas_package,
     'tag'    => ['openstack', 'neutron-package'],

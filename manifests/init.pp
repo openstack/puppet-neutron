@@ -281,16 +281,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*rabbit_heartbeat_in_pthread*]
-#   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
-#   through a native python thread. By default if this
-#   option isn't provided the  health check heartbeat will
-#   inherit the execution model from the parent process. By
-#   example if the parent process have monkey patched the
-#   stdlib by using eventlet/greenlet then the heartbeat
-#   will be run through a green thread.
-#   Defaults to undef
-#
 # [*vlan_transparent*]
 #   (optional) Allow plugins that support it to create VLAN transparent
 #   networks.
@@ -361,7 +351,6 @@ class neutron (
   $notification_retry                   = $facts['os_service_default'],
   $max_allowed_address_pair             = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
-  $rabbit_heartbeat_in_pthread          = undef,
   $vlan_transparent                     = undef,
   $vlan_qinq                            = undef,
 ) {
@@ -442,7 +431,6 @@ will be removed in a future release")
   oslo::messaging::rabbit { 'neutron_config':
     heartbeat_timeout_threshold          => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate                       => $rabbit_heartbeat_rate,
-    heartbeat_in_pthread                 => $rabbit_heartbeat_in_pthread,
     rabbit_qos_prefetch_count            => $rabbit_qos_prefetch_count,
     rabbit_use_ssl                       => $rabbit_use_ssl,
     rabbit_transient_queues_ttl          => $rabbit_transient_queues_ttl,

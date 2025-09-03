@@ -64,7 +64,6 @@ describe 'neutron' do
       should contain_oslo__messaging__rabbit('neutron_config').with(
         :heartbeat_timeout_threshold          => '<SERVICE DEFAULT>',
         :heartbeat_rate                       => '<SERVICE DEFAULT>',
-        :heartbeat_in_pthread                 => nil,
         :rabbit_qos_prefetch_count            => '<SERVICE DEFAULT>',
         :rabbit_use_ssl                       => '<SERVICE DEFAULT>',
         :rabbit_transient_queues_ttl          => '<SERVICE DEFAULT>',
@@ -125,7 +124,6 @@ describe 'neutron' do
       params.merge!(
         :rabbit_heartbeat_timeout_threshold => 60,
         :rabbit_heartbeat_rate              => 10,
-        :rabbit_heartbeat_in_pthread        => true,
         :amqp_durable_queues                => true,
         :rabbit_ha_queues                   => true,
         :rabbit_transient_queues_ttl        => 20,
@@ -136,7 +134,6 @@ describe 'neutron' do
       should contain_oslo__messaging__rabbit('neutron_config').with(
         :heartbeat_timeout_threshold => 60,
         :heartbeat_rate              => 10,
-        :heartbeat_in_pthread        => true,
         :amqp_durable_queues         => true,
         :rabbit_ha_queues            => true,
         :rabbit_transient_queues_ttl => 20,

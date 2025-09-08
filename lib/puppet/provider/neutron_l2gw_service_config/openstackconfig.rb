@@ -4,7 +4,7 @@ Puppet::Type.type(:neutron_l2gw_service_config).provide(
 ) do
 
   def self.file_path
-    '/etc/neutron/l2gw_plugin.ini'
+    '/etc/neutron/networking_l2gw.conf'
   end
 
 end

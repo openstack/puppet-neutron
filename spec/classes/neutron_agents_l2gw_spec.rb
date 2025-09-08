@@ -49,7 +49,7 @@ describe 'neutron::agents::l2gw' do
       )
     end
 
-    it 'configures l2gw_plugin.ini' do
+    it 'configures networking_l2gw.conf' do
       should contain_neutron_l2gw_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l2gw_agent_config('ovsdb/enable_manager').with_value(p[:enable_manager])
       should contain_neutron_l2gw_agent_config('ovsdb/manager_table_listening_port').with_value(p[:manager_table_listening_port])

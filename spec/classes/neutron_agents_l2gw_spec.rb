@@ -18,12 +18,10 @@ require 'spec_helper'
 
 describe 'neutron::agents::l2gw' do
   let :default_params do
-    { :package_ensure                   => 'present',
-      :purge_config                     => false,
-      :enabled                          => true,
-      :enable_manager                   => false,
-      :manager_table_listening_port     => '6632',
-      :socket_timeout                   => '30',
+    { :package_ensure => 'present',
+      :purge_config   => false,
+      :enabled        => true,
+      :socket_timeout => '30',
     }
   end
 
@@ -51,8 +49,8 @@ describe 'neutron::agents::l2gw' do
 
     it 'configures networking_l2gw.conf' do
       should contain_neutron_l2gw_agent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_l2gw_agent_config('ovsdb/enable_manager').with_value(p[:enable_manager])
-      should contain_neutron_l2gw_agent_config('ovsdb/manager_table_listening_port').with_value(p[:manager_table_listening_port])
+      should contain_neutron_l2gw_agent_config('ovsdb/enable_manager').with_value('<SERVICE DEFAULT>')
+      should contain_neutron_l2gw_agent_config('ovsdb/manager_table_listening_port').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l2gw_agent_config('ovsdb/l2_gw_agent_priv_key_base_path').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l2gw_agent_config('ovsdb/l2_gw_agent_cert_base_path').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l2gw_agent_config('ovsdb/l2_gw_agent_ca_cert_base_path').with_value('<SERVICE DEFAULT>')

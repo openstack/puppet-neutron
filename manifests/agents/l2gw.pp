@@ -27,41 +27,36 @@
 #
 # [*enable_manager*]
 #   (optional) connection can be initiated by the ovsdb server.
-#   Defaults to false
+#   Defaults to $facts['os_service_default']
 #
 # [*manager_table_listening_port*]
 #   (optional) set port number for l2gateway agent, so that it can listen
-#   Defaults to '6632'
+#   Defaults to $facts['os_service_default']
 #
 # [*l2_gw_agent_priv_key_base_path*]
 #   (optional) Base path to private key file(s).
-#   Example: l2_gw_agent_priv_key_base_path = '/home/someuser/keys'
 #   Defaults to $facts['os_service_default']
 #
 # [*l2_gw_agent_cert_base_path*]
 #   (optional) Base path to cert file(s).
-#   Example: l2_gw_agent_cert_base_path = '/home/someuser/certs'
 #   Defaults to $facts['os_service_default']
 #
 # [*l2_gw_agent_ca_cert_base_path*]
 #   (optional) Base path to ca cert file(s).
-#   Example: l2_gw_agent_ca_cert_base_path = '/home/someuser/ca_certs'
 #   Defaults to $facts['os_service_default']
 #
 # [*periodic_interval*]
 #   (optional) The L2 gateway agent checks connection state with the OVSDB
 #   servers. The interval is number of seconds between attempts.
-#   Example: periodic_interval = 20
 #   Defaults to $facts['os_service_default']
 #
 # [*max_connection_retries*]
 #   (optional) The L2 gateway agent retries to connect to the OVSDB server
-#   Example: max_connection_retries = 10
 #   Defaults to $facts['os_service_default']
 #
 # [*socket_timeout*]
 #   (optional) socket timeout
-#   Defaults to '30'
+#   Defaults to 30
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -74,14 +69,14 @@ class neutron::agents::l2gw (
   Boolean $manage_service           = true,
   $debug                            = $facts['os_service_default'],
   $ovsdb_hosts                      = $facts['os_service_default'],
-  $enable_manager                   = false,
-  $manager_table_listening_port     = '6632',
+  $enable_manager                   = $facts['os_service_default'],
+  $manager_table_listening_port     = $facts['os_service_default'],
   $l2_gw_agent_priv_key_base_path   = $facts['os_service_default'],
   $l2_gw_agent_cert_base_path       = $facts['os_service_default'],
   $l2_gw_agent_ca_cert_base_path    = $facts['os_service_default'],
   $periodic_interval                = $facts['os_service_default'],
   $max_connection_retries           = $facts['os_service_default'],
-  $socket_timeout                   = '30',
+  $socket_timeout                   = 30,
   Boolean $purge_config             = false,
 ) {
   include neutron::deps

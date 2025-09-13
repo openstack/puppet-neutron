@@ -19,9 +19,7 @@ require 'spec_helper'
 describe 'neutron::agents::l2gw' do
   let :default_params do
     { :package_ensure => 'present',
-      :purge_config   => false,
       :enabled        => true,
-      :socket_timeout => '30',
     }
   end
 
@@ -56,7 +54,7 @@ describe 'neutron::agents::l2gw' do
       should contain_neutron_l2gw_agent_config('ovsdb/l2_gw_agent_ca_cert_base_path').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l2gw_agent_config('ovsdb/periodic_interval').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l2gw_agent_config('ovsdb/max_connection_retries').with_value('<SERVICE DEFAULT>')
-      should contain_neutron_l2gw_agent_config('ovsdb/socket_timeout').with_value(p[:socket_timeout])
+      should contain_neutron_l2gw_agent_config('ovsdb/socket_timeout').with_value('<SERVICE DEFAULT>')
       should contain_neutron_l2gw_agent_config('ovsdb/ovsdb_hosts').with_value('<SERVICE DEFAULT>')
     end
 

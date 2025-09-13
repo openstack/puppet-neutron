@@ -56,7 +56,7 @@
 #
 # [*socket_timeout*]
 #   (optional) socket timeout
-#   Defaults to 30
+#   Defaults to $facts['os_service_default']
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -76,7 +76,7 @@ class neutron::agents::l2gw (
   $l2_gw_agent_ca_cert_base_path    = $facts['os_service_default'],
   $periodic_interval                = $facts['os_service_default'],
   $max_connection_retries           = $facts['os_service_default'],
-  $socket_timeout                   = 30,
+  $socket_timeout                   = $facts['os_service_default'],
   Boolean $purge_config             = false,
 ) {
   include neutron::deps

@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The ``neutron::agents::l2gw::max_connection_retries`` parameter now
+    defaults to the ``os_service_default`` fact, which uses the internal
+    default value of the networking-l2gw plugin. Set this parameter in case
+    the previous default value ( ``30`` ) is desired.

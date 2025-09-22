@@ -9,7 +9,7 @@
 # [*service_providers*]
 #   (optional) Array of allowed service types includes vpnaas
 #   Must be in form: <service_type>:<name>:<driver>[:default]
-#   Defaults to $facts['os_service_default']
+#   Defaults to 'VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default'.
 #
 # [*vpn_scheduler_driver*]
 #   (optional) Driver to use for scheduling router to a VPN agent.
@@ -25,9 +25,9 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*sync_db*]
-#   Whether 'neutron-db-manage' should run to create and/or synchronize the
-#   database with neutron-vpnaas specific tables.
-#   Default to false
+#   (optional) Whether 'neutron-db-manage' should run to create and/or
+#   synchronize the database with neutron-vpnaas specific tables.
+#   Default to false.
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -36,7 +36,7 @@
 #
 class neutron::services::vpnaas (
   $package_ensure                    = 'present',
-  $service_providers                 = $facts['os_service_default'],
+  $service_providers                 = 'VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default',
   $vpn_scheduler_driver              = $facts['os_service_default'],
   $vpn_auto_schedule                 = $facts['os_service_default'],
   $allow_automatic_vpnagent_failover = $facts['os_service_default'],
@@ -56,14 +56,8 @@ class neutron::services::vpnaas (
     purge => $purge_config,
   }
 
-  if is_service_default($service_providers) {
-    $service_providers_real = 'VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default'
-  } else {
-    $service_providers_real = $service_providers
-  }
-
   neutron_vpnaas_service_config {
-    'service_providers/service_provider':        value => $service_providers_real;
+    'service_providers/service_provider':        value => $service_providers;
     'DEFAULT/vpn_scheduler_driver':              value => $vpn_scheduler_driver;
     'DEFAULT/vpn_auto_schedule':                 value => $vpn_auto_schedule;
     'DEFAULT/allow_automatic_vpnagent_failover': value => $allow_automatic_vpnagent_failover;

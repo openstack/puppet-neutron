@@ -22,8 +22,8 @@
 # === Parameters:
 #
 # [*package_ensure*]
-#   Whether to install the sfc extension package
-#   Default to 'present'
+#   (optional) Whether to install the sfc extension package.
+#   Default to 'present'.
 #
 # [*sfc_drivers*]
 #   (optional) An ordered list of service chain drivers
@@ -34,8 +34,9 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*sync_db*]
-#   Whether 'neutron-db-manage' should run to create and/or synchronize the
-#   database with networking-sfc specific tables. Default to false
+#   (optional) Whether 'neutron-db-manage' should run to create and/or
+#   synchronize the database with networking-sfc specific tables.
+#   Default to false.
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options

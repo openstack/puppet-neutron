@@ -22,15 +22,18 @@
 # === Parameters:
 #
 # [*package_ensure*]
-#   Whether to install the bgpvpn service package
-#   Default to 'present'
+#   (optional) Whether to install the bgpvpn service package.
+#   Default to 'present'.
 #
 # [*service_providers*]
-#   Array of allowed service types
+#   (optional) Array of allowed service types includes fwaas
+#   Must be in form: <service_type>:<name>:<driver>[:default]
+#   Defaults to 'BGPVPN:Dummy:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default'
 #
 # [*sync_db*]
-#   Whether 'neutron-db-manage' should run to create and/or synchronize the
-#   database with networking-bgpvpn specific tables. Default to false
+#   (optional) Whether 'neutron-db-manage' should run to create and/or
+#   synchronize the database with networking-bgpvpn specific tables.
+#   Default to false.
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -39,7 +42,7 @@
 #
 class neutron::services::bgpvpn (
   $package_ensure    = 'present',
-  $service_providers = $facts['os_service_default'],
+  $service_providers = 'BGPVPN:Dummy:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default',
   Boolean $sync_db   = false,
   $purge_config      = false,
 ) {
@@ -52,15 +55,8 @@ class neutron::services::bgpvpn (
     tag    => ['openstack', 'neutron-package'],
   }
 
-  if is_service_default($service_providers) {
-    # NOTE(tkajinam): bgpvpn requires the additional 'default' value.
-    $service_providers_real = 'BGPVPN:Dummy:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default'
-  } else {
-    $service_providers_real = $service_providers
-  }
-
   neutron_bgpvpn_service_config { 'service_providers/service_provider':
-    value => $service_providers_real,
+    value => $service_providers,
   }
 
   resources { 'neutron_bgpvpn_service_config':

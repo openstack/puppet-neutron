@@ -11,9 +11,9 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*sync_db*]
-#   Whether 'neutron-db-manage' should run to create and/or synchronize the
-#   database with neutron-vpnaas specific tables.
-#   Default to false
+#   (optional) Whether 'neutron-db-manage' should run to create and/or
+#   synchronize the database with neutron-vpnaas specific tables.
+#   Default to false.
 #
 class neutron::services::dr (
   $package_ensure         = 'present',

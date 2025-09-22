@@ -26,12 +26,12 @@
 # [*service_providers*]
 #   (optional) Array of allowed service types includes L2GW
 #   Must be in form: <service_type>:<name>:<driver>[:default]
-#   Defaults to $facts['os_service_default']
+#   Defaults to 'L2GW:l2gw:networking_l2gw.services.l2gateway.service_drivers.rpc_l2gw.L2gwRpcDriver:default'.
 #
 # [*sync_db*]
-#   Whether 'neutron-db-manage' should run to create and/or synchronize the
-#   database with networking-l2gw specific tables.
-#   Default to false
+#   (optional) Whether 'neutron-db-manage' should run to create and/or
+#   synchronize the database with networking-l2gw specific tables.
+#   Default to false.
 #
 # [*package_ensure*]
 #   (optional) Ensure state for package.
@@ -47,7 +47,7 @@ class neutron::services::l2gw (
   $default_device_name          = $facts['os_service_default'],
   $quota_l2_gateway             = $facts['os_service_default'],
   $periodic_monitoring_interval = $facts['os_service_default'],
-  $service_providers            = $facts['os_service_default'],
+  $service_providers            = 'L2GW:l2gw:networking_l2gw.services.l2gateway.service_drivers.rpc_l2gw.L2gwRpcDriver:default',
   Boolean $sync_db              = false,
   $package_ensure               = 'present',
   Boolean $purge_config         = false,
@@ -70,16 +70,7 @@ class neutron::services::l2gw (
     'DEFAULT/default_device_name':          value => $default_device_name;
     'DEFAULT/quota_l2_gateway':             value => $quota_l2_gateway;
     'DEFAULT/periodic_monitoring_interval': value => $periodic_monitoring_interval;
-  }
-
-  if is_service_default($service_providers) {
-    $service_providers_real = 'L2GW:l2gw:networking_l2gw.services.l2gateway.service_drivers.rpc_l2gw.L2gwRpcDriver:default'
-  } else {
-    $service_providers_real = $service_providers
-  }
-
-  neutron_l2gw_service_config {
-    'service_providers/service_provider': value => $service_providers_real;
+    'service_providers/service_provider':   value => $service_providers;
   }
 
   if $sync_db {

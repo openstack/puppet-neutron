@@ -9,7 +9,7 @@
 # [*service_providers*]
 #   (optional) Array of allowed service types includes taas
 #   Must be in form: <service_type>:<name>:<driver>[:default]
-#   Defaults to $facts['os_service_default']
+#   Defaults to 'TAAS:TAAS:neutron_taas.services.taas.service_drivers.taas_rpc.TaasRpcDriver:default'.
 #
 # [*quota_tap_service*]
 #   (optional) Number of Tap Service instances allowed per tenant.
@@ -28,9 +28,9 @@
 #   Defaults to $facts['os_service_default'].
 #
 # [*sync_db*]
-#   Whether 'neutron-db-manage' should run to create and/or synchronize the
-#   database with neutron-taas specific tables.
-#   Default to false
+#   (optional) Whether 'neutron-db-manage' should run to create and/or
+#   synchronize the database with neutron-taas specific tables.
+#   Default to false.
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -39,7 +39,7 @@
 #
 class neutron::services::taas (
   $package_ensure       = 'present',
-  $service_providers    = $facts['os_service_default'],
+  $service_providers    = 'TAAS:TAAS:neutron_taas.services.taas.service_drivers.taas_rpc.TaasRpcDriver:default',
   $quota_tap_service    = $facts['os_service_default'],
   $quota_tap_flow       = $facts['os_service_default'],
   $vlan_range_start     = $facts['os_service_default'],
@@ -60,14 +60,8 @@ class neutron::services::taas (
     purge => $purge_config,
   }
 
-  if is_service_default($service_providers) {
-    $service_providers_real = 'TAAS:TAAS:neutron_taas.services.taas.service_drivers.taas_rpc.TaasRpcDriver:default'
-  } else {
-    $service_providers_real = $service_providers
-  }
-
   neutron_taas_service_config {
-    'service_providers/service_provider': value => $service_providers_real;
+    'service_providers/service_provider': value => $service_providers;
     'quotas/quota_tap_service':           value => $quota_tap_service;
     'quotas/quota_tap_flow':              value => $quota_tap_flow;
     'taas/vlan_range_start':              value => $vlan_range_start;

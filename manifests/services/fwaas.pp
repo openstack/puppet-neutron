@@ -9,12 +9,12 @@
 # [*service_providers*]
 #   (optional) Array of allowed service types includes fwaas
 #   Must be in form: <service_type>:<name>:<driver>[:default]
-#   Defaults to $facts['os_service_default']
+#   Defaults to 'FIREWALL_V2:fwaas_db:neutron_fwaas.services.firewall.service_drivers.agents.agents.FirewallAgentDriver:default'.
 #
 # [*sync_db*]
-#   Whether 'neutron-db-manage' should run to create and/or synchronize the
-#   database with neutron-fwaas specific tables.
-#   Default to false
+#   (optional) Whether 'neutron-db-manage' should run to create and/or
+#   synchronize the database with neutron-fwaas specific tables.
+#   Default to false.
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -23,7 +23,7 @@
 #
 class neutron::services::fwaas (
   $package_ensure       = 'present',
-  $service_providers    = $facts['os_service_default'],
+  $service_providers    = 'FIREWALL_V2:fwaas_db:neutron_fwaas.services.firewall.service_drivers.agents.agents.FirewallAgentDriver:default',
   Boolean $sync_db      = false,
   Boolean $purge_config = false,
 ) {
@@ -40,14 +40,8 @@ class neutron::services::fwaas (
     purge => $purge_config,
   }
 
-  if is_service_default($service_providers) {
-    $service_providers_real = 'FIREWALL_V2:fwaas_db:neutron_fwaas.services.firewall.service_drivers.agents.agents.FirewallAgentDriver:default'
-  } else {
-    $service_providers_real = $service_providers
-  }
-
   neutron_fwaas_service_config {
-    'service_providers/service_provider': value => $service_providers_real;
+    'service_providers/service_provider': value => $service_providers;
   }
 
   if $sync_db {

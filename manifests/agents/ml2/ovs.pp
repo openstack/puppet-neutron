@@ -360,7 +360,7 @@ class neutron::agents::ml2::ovs (
     }
   }
 
-  if size($tunnel_types) > 0 {
+  if length($tunnel_types) > 0 {
     $enable_tunneling = true
   } else {
     $enable_tunneling = false

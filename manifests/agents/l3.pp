@@ -178,7 +178,7 @@
 #   Defaults to false.
 #
 class neutron::agents::l3 (
-  $package_ensure                            = 'present',
+  Stdlib::Ensure::Package $package_ensure    = 'present',
   Boolean $enabled                           = true,
   Boolean $manage_service                    = true,
   $debug                                     = $facts['os_service_default'],

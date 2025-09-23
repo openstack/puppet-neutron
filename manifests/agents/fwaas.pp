@@ -29,12 +29,12 @@
 #   Defaults to false.
 #
 class neutron::agents::fwaas (
-  $package_ensure       = present,
-  $driver               = $facts['os_service_default'],
-  $enabled              = $facts['os_service_default'],
-  $conntrack_driver     = $facts['os_service_default'],
-  $firewall_l2_driver   = $facts['os_service_default'],
-  Boolean $purge_config = false,
+  Stdlib::Ensure::Package $package_ensure = present,
+  $driver                                 = $facts['os_service_default'],
+  $enabled                                = $facts['os_service_default'],
+  $conntrack_driver                       = $facts['os_service_default'],
+  $firewall_l2_driver                     = $facts['os_service_default'],
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

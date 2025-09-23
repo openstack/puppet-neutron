@@ -11,7 +11,7 @@
 #   Defaults to 'present'
 #
 class neutron::plugins::ml2::networking_baremetal (
-  $package_ensure = 'present',
+  Stdlib::Ensure::Package $package_ensure = 'present',
 ) {
   include neutron::deps
   include neutron::params

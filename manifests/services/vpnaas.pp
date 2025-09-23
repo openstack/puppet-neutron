@@ -35,13 +35,13 @@
 #   Defaults to false.
 #
 class neutron::services::vpnaas (
-  $package_ensure                    = 'present',
-  $service_providers                 = 'VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default',
-  $vpn_scheduler_driver              = $facts['os_service_default'],
-  $vpn_auto_schedule                 = $facts['os_service_default'],
-  $allow_automatic_vpnagent_failover = $facts['os_service_default'],
-  Boolean $sync_db                   = false,
-  Boolean $purge_config              = false,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $service_providers                      = 'VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default',
+  $vpn_scheduler_driver                   = $facts['os_service_default'],
+  $vpn_auto_schedule                      = $facts['os_service_default'],
+  $allow_automatic_vpnagent_failover      = $facts['os_service_default'],
+  Boolean $sync_db                        = false,
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

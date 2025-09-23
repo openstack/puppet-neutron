@@ -66,17 +66,17 @@
 #   Defaults to false.
 #
 class neutron::agents::metering (
-  $package_ensure           = present,
-  Boolean $enabled          = true,
-  Boolean $manage_service   = true,
-  $debug                    = $facts['os_service_default'],
-  $interface_driver         = 'neutron.agent.linux.interface.OVSInterfaceDriver',
-  $driver                   = 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
-  $measure_interval         = $facts['os_service_default'],
-  $report_interval          = $facts['os_service_default'],
-  $rpc_response_max_timeout = $facts['os_service_default'],
-  $agent_report_interval    = $facts['os_service_default'],
-  Boolean $purge_config     = false,
+  Stdlib::Ensure::Package $package_ensure = present,
+  Boolean $enabled                        = true,
+  Boolean $manage_service                 = true,
+  $debug                                  = $facts['os_service_default'],
+  $interface_driver                       = 'neutron.agent.linux.interface.OVSInterfaceDriver',
+  $driver                                 = 'neutron.services.metering.drivers.noop.noop_driver.NoopMeteringDriver',
+  $measure_interval                       = $facts['os_service_default'],
+  $report_interval                        = $facts['os_service_default'],
+  $rpc_response_max_timeout               = $facts['os_service_default'],
+  $agent_report_interval                  = $facts['os_service_default'],
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

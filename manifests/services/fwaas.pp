@@ -22,10 +22,10 @@
 #   Defaults to false.
 #
 class neutron::services::fwaas (
-  $package_ensure       = 'present',
-  $service_providers    = 'FIREWALL_V2:fwaas_db:neutron_fwaas.services.firewall.service_drivers.agents.agents.FirewallAgentDriver:default',
-  Boolean $sync_db      = false,
-  Boolean $purge_config = false,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $service_providers                      = 'FIREWALL_V2:fwaas_db:neutron_fwaas.services.firewall.service_drivers.agents.agents.FirewallAgentDriver:default',
+  Boolean $sync_db                        = false,
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

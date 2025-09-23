@@ -60,7 +60,7 @@ class neutron::plugins::ml2::arista (
   $sync_interval  = $facts['os_service_default'],
   $conn_timeout   = $facts['os_service_default'],
   $use_fqdn       = $facts['os_service_default'],
-  $package_ensure = 'present'
+  Stdlib::Ensure::Package $package_ensure = 'present'
 ) {
   include neutron::deps
   include neutron::params

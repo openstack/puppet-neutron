@@ -15,9 +15,9 @@
 #   Defaults to true
 #
 class neutron::plugins::ml2::ovn::maintenance_worker (
-  $package_ensure         = 'present',
-  Boolean $enabled        = true,
-  Boolean $manage_service = true,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  Boolean $enabled                        = true,
+  Boolean $manage_service                 = true,
 ) {
   include neutron::params
 

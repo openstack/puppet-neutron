@@ -22,6 +22,10 @@
 #
 # === Parameters
 #
+# [*package_ensure*]
+#   (optional) Ensure state for package.
+#   Defaults to 'present'.
+#
 # [*type_drivers*]
 #   (optional) List of network type driver entrypoints to be loaded
 #   from the neutron.ml2.type_drivers namespace.
@@ -92,10 +96,6 @@
 #   It should be false when you use nova security group.
 #   Defaults to $facts['os_service_default'].
 #
-# [*package_ensure*]
-#   (optional) Ensure state for package.
-#   Defaults to 'present'.
-#
 # [*physical_network_mtus*]
 #   (optional) For L2 mechanism drivers, per-physical network MTU setting.
 #   Should be an array with 'physnetX1:9000'.
@@ -107,11 +107,6 @@
 #   encapsulated traffic is sent.
 #   Defaults to $facts['os_service_default'].
 #
-# [*purge_config*]
-#   (optional) Whether to set only the specified config options
-#   in the ml2 config.
-#   Defaults to false.
-#
 # [*max_header_size*]
 #   (optional) Geneve encapsulation header size is dynamic, this value is used to calculate
 #   the maximum MTU for the driver.
@@ -122,23 +117,28 @@
 #   are 4 and 6.
 #   Defaults to $facts['os_service_default']
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the ml2 config.
+#   Defaults to false.
+#
 class neutron::plugins::ml2 (
-  $type_drivers              = ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
-  $extension_drivers         = $facts['os_service_default'],
-  $tenant_network_types      = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
-  $mechanism_drivers         = ['openvswitch'],
-  $flat_networks             = '*',
-  $network_vlan_ranges       = 'physnet1:1000:2999',
-  $tunnel_id_ranges          = '20:100',
-  $vxlan_group               = '224.0.0.1',
-  $vni_ranges                = '10:100',
-  $enable_security_group     = $facts['os_service_default'],
-  $package_ensure            = 'present',
-  $physical_network_mtus     = $facts['os_service_default'],
-  $path_mtu                  = $facts['os_service_default'],
-  Boolean $purge_config      = false,
-  $max_header_size           = $facts['os_service_default'],
-  $overlay_ip_version        = $facts['os_service_default'],
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $type_drivers                           = ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
+  $extension_drivers                      = $facts['os_service_default'],
+  $tenant_network_types                   = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
+  $mechanism_drivers                      = ['openvswitch'],
+  $flat_networks                          = '*',
+  $network_vlan_ranges                    = 'physnet1:1000:2999',
+  $tunnel_id_ranges                       = '20:100',
+  $vxlan_group                            = '224.0.0.1',
+  $vni_ranges                             = '10:100',
+  $enable_security_group                  = $facts['os_service_default'],
+  $physical_network_mtus                  = $facts['os_service_default'],
+  $path_mtu                               = $facts['os_service_default'],
+  $max_header_size                        = $facts['os_service_default'],
+  $overlay_ip_version                     = $facts['os_service_default'],
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

@@ -9,7 +9,7 @@
 #   Defaults to present
 #
 class neutron::client (
-  $package_ensure = present
+  Stdlib::Ensure::Package $package_ensure = present
 ) {
   include neutron::deps
   include neutron::params

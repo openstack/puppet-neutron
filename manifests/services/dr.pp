@@ -16,9 +16,9 @@
 #   Default to false.
 #
 class neutron::services::dr (
-  $package_ensure         = 'present',
-  $bgp_drscheduler_driver = $facts['os_service_default'],
-  Boolean $sync_db        = false,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $bgp_drscheduler_driver                 = $facts['os_service_default'],
+  Boolean $sync_db                        = false,
 ) {
   include neutron::deps
   include neutron::params

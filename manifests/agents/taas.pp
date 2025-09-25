@@ -24,8 +24,8 @@
 #   Defaults to $facts['os_service_default'].
 #
 class neutron::agents::taas (
-  $package_ensure               = present,
-  $taas_agent_periodic_interval = $facts['os_service_default'],
+  Stdlib::Ensure::Package $package_ensure = present,
+  $taas_agent_periodic_interval           = $facts['os_service_default'],
 ) {
   include neutron::deps
   include neutron::params

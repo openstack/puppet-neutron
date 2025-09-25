@@ -32,12 +32,12 @@
 #   Defaults to false.
 #
 class neutron::agents::ml2::macvtap (
-  $package_ensure                      = 'present',
-  Boolean $enabled                     = true,
-  Boolean $manage_service              = true,
-  $polling_interval                    = $facts['os_service_default'],
-  Array   $physical_interface_mappings = [],
-  Boolean $purge_config                = false,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  Boolean $enabled                        = true,
+  Boolean $manage_service                 = true,
+  $polling_interval                       = $facts['os_service_default'],
+  Array   $physical_interface_mappings    = [],
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

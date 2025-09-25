@@ -64,20 +64,20 @@
 #   Default to false.
 #
 class neutron::agents::l2gw (
-  $package_ensure                   = 'present',
-  Boolean $enabled                  = true,
-  Boolean $manage_service           = true,
-  $debug                            = $facts['os_service_default'],
-  $ovsdb_hosts                      = $facts['os_service_default'],
-  $enable_manager                   = $facts['os_service_default'],
-  $manager_table_listening_port     = $facts['os_service_default'],
-  $l2_gw_agent_priv_key_base_path   = $facts['os_service_default'],
-  $l2_gw_agent_cert_base_path       = $facts['os_service_default'],
-  $l2_gw_agent_ca_cert_base_path    = $facts['os_service_default'],
-  $periodic_interval                = $facts['os_service_default'],
-  $max_connection_retries           = $facts['os_service_default'],
-  $socket_timeout                   = $facts['os_service_default'],
-  Boolean $purge_config             = false,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  Boolean $enabled                        = true,
+  Boolean $manage_service                 = true,
+  $debug                                  = $facts['os_service_default'],
+  $ovsdb_hosts                            = $facts['os_service_default'],
+  $enable_manager                         = $facts['os_service_default'],
+  $manager_table_listening_port           = $facts['os_service_default'],
+  $l2_gw_agent_priv_key_base_path         = $facts['os_service_default'],
+  $l2_gw_agent_cert_base_path             = $facts['os_service_default'],
+  $l2_gw_agent_ca_cert_base_path          = $facts['os_service_default'],
+  $periodic_interval                      = $facts['os_service_default'],
+  $max_connection_retries                 = $facts['os_service_default'],
+  $socket_timeout                         = $facts['os_service_default'],
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

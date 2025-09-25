@@ -41,10 +41,10 @@
 #   Default to false.
 #
 class neutron::services::bgpvpn (
-  $package_ensure    = 'present',
-  $service_providers = 'BGPVPN:Dummy:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default',
-  Boolean $sync_db   = false,
-  $purge_config      = false,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $service_providers                      = 'BGPVPN:Dummy:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default',
+  Boolean $sync_db                        = false,
+  $purge_config                           = false,
 ) {
   include neutron::deps
   include neutron::params

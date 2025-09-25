@@ -2,6 +2,12 @@
 #
 # === Parameters
 #
+# [*package_ensure*]
+#   (optional) The intended state of the python-networking-odl
+#   package, i.e. any of the possible values of the 'ensure'
+#   property for a package resource type.
+#   Defaults to 'present'
+#
 # [*ovn_nb_connection*]
 #   (optional) The connection string for the OVN_Northbound OVSDB.
 #   Defaults to $facts['os_service_default']
@@ -37,12 +43,6 @@
 #   (optional) The PEM file with CA certificate that OVN should use to
 #   verify certificates presented to it by SSL peers
 #   Defaults to $facts['os_service_default']
-#
-# [*package_ensure*]
-#   (optional) The intended state of the python-networking-odl
-#   package, i.e. any of the possible values of the 'ensure'
-#   property for a package resource type.
-#   Defaults to 'present'
 #
 # [*ovsdb_connection_timeout*]
 #   (optional) Timeout in seconds for the OVSDB connection transaction
@@ -198,44 +198,44 @@
 #   Defaults to $facts['os_service_default']
 #
 class neutron::plugins::ml2::ovn (
-  $ovn_nb_connection                    = $facts['os_service_default'],
-  $ovn_sb_connection                    = $facts['os_service_default'],
-  $ovn_nb_private_key                   = $facts['os_service_default'],
-  $ovn_nb_certificate                   = $facts['os_service_default'],
-  $ovn_nb_ca_cert                       = $facts['os_service_default'],
-  $ovn_sb_private_key                   = $facts['os_service_default'],
-  $ovn_sb_certificate                   = $facts['os_service_default'],
-  $ovn_sb_ca_cert                       = $facts['os_service_default'],
-  $package_ensure                       = 'present',
-  $ovsdb_connection_timeout             = $facts['os_service_default'],
-  $ovsdb_retry_max_interval             = $facts['os_service_default'],
-  $ovsdb_probe_interval                 = $facts['os_service_default'],
-  $neutron_sync_mode                    = $facts['os_service_default'],
-  $ovn_l3_scheduler                     = $facts['os_service_default'],
-  $ovn_metadata_enabled                 = $facts['os_service_default'],
-  $dvr_enabled                          = $facts['os_service_default'],
-  $disable_ovn_dhcp_for_baremetal_ports = $facts['os_service_default'],
-  $dns_servers                          = $facts['os_service_default'],
-  $dns_records_ovn_owned                = $facts['os_service_default'],
-  $vhostuser_socket_dir                 = $facts['os_service_default'],
-  $dhcp_default_lease_time              = $facts['os_service_default'],
-  $ovn_dhcp4_global_options             = $facts['os_service_default'],
-  $ovn_dhcp6_global_options             = $facts['os_service_default'],
-  $localnet_learn_fdb                   = $facts['os_service_default'],
-  $fdb_age_threshold                    = $facts['os_service_default'],
-  $mac_binding_age_threshold            = $facts['os_service_default'],
-  $broadcast_arps_to_all_routers        = $facts['os_service_default'],
-  $ovn_router_indirect_snat             = $facts['os_service_default'],
-  $live_migration_activation_strategy   = $facts['os_service_default'],
-  $stateless_nat_enabled                = $facts['os_service_default'],
-  $ignore_lsp_down                      = $facts['os_service_default'],
-  $fdb_removal_limit                    = $facts['os_service_default'],
-  $mac_binding_removal_limit            = $facts['os_service_default'],
-  $network_log_rate_limit               = $facts['os_service_default'],
-  $network_log_burst_limit              = $facts['os_service_default'],
-  $network_log_local_output_log_base    = $facts['os_service_default'],
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $ovn_nb_connection                      = $facts['os_service_default'],
+  $ovn_sb_connection                      = $facts['os_service_default'],
+  $ovn_nb_private_key                     = $facts['os_service_default'],
+  $ovn_nb_certificate                     = $facts['os_service_default'],
+  $ovn_nb_ca_cert                         = $facts['os_service_default'],
+  $ovn_sb_private_key                     = $facts['os_service_default'],
+  $ovn_sb_certificate                     = $facts['os_service_default'],
+  $ovn_sb_ca_cert                         = $facts['os_service_default'],
+  $ovsdb_connection_timeout               = $facts['os_service_default'],
+  $ovsdb_retry_max_interval               = $facts['os_service_default'],
+  $ovsdb_probe_interval                   = $facts['os_service_default'],
+  $neutron_sync_mode                      = $facts['os_service_default'],
+  $ovn_l3_scheduler                       = $facts['os_service_default'],
+  $ovn_metadata_enabled                   = $facts['os_service_default'],
+  $dvr_enabled                            = $facts['os_service_default'],
+  $disable_ovn_dhcp_for_baremetal_ports   = $facts['os_service_default'],
+  $dns_servers                            = $facts['os_service_default'],
+  $dns_records_ovn_owned                  = $facts['os_service_default'],
+  $vhostuser_socket_dir                   = $facts['os_service_default'],
+  $dhcp_default_lease_time                = $facts['os_service_default'],
+  $ovn_dhcp4_global_options               = $facts['os_service_default'],
+  $ovn_dhcp6_global_options               = $facts['os_service_default'],
+  $localnet_learn_fdb                     = $facts['os_service_default'],
+  $fdb_age_threshold                      = $facts['os_service_default'],
+  $mac_binding_age_threshold              = $facts['os_service_default'],
+  $broadcast_arps_to_all_routers          = $facts['os_service_default'],
+  $ovn_router_indirect_snat               = $facts['os_service_default'],
+  $live_migration_activation_strategy     = $facts['os_service_default'],
+  $stateless_nat_enabled                  = $facts['os_service_default'],
+  $ignore_lsp_down                        = $facts['os_service_default'],
+  $fdb_removal_limit                      = $facts['os_service_default'],
+  $mac_binding_removal_limit              = $facts['os_service_default'],
+  $network_log_rate_limit                 = $facts['os_service_default'],
+  $network_log_burst_limit                = $facts['os_service_default'],
+  $network_log_local_output_log_base      = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
-  $ovn_emit_need_to_frag                = undef,
+  $ovn_emit_need_to_frag                  = undef,
 ) {
   include neutron::deps
 

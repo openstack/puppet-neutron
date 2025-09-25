@@ -98,21 +98,21 @@
 #   Defaults to empty hash
 #
 class neutron::agents::ml2::sriov (
-  $package_ensure                       = 'present',
-  Boolean $enabled                      = true,
-  Boolean $manage_service               = true,
-  $physical_device_mappings             = $facts['os_service_default'],
-  $rpc_response_max_timeout             = $facts['os_service_default'],
-  $polling_interval                     = 2,
-  $report_interval                      = $facts['os_service_default'],
-  $exclude_devices                      = $facts['os_service_default'],
-  $extensions                           = $facts['os_service_default'],
-  Boolean $purge_config                 = false,
-  $number_of_vfs                        = $facts['os_service_default'],
-  $resource_provider_bandwidths         = [],
-  $resource_provider_hypervisors        = [],
-  $resource_provider_default_hypervisor = $facts['os_service_default'],
-  $resource_provider_inventory_defaults = {},
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  Boolean $enabled                        = true,
+  Boolean $manage_service                 = true,
+  $physical_device_mappings               = $facts['os_service_default'],
+  $rpc_response_max_timeout               = $facts['os_service_default'],
+  $polling_interval                       = 2,
+  $report_interval                        = $facts['os_service_default'],
+  $exclude_devices                        = $facts['os_service_default'],
+  $extensions                             = $facts['os_service_default'],
+  Boolean $purge_config                   = false,
+  $number_of_vfs                          = $facts['os_service_default'],
+  $resource_provider_bandwidths           = [],
+  $resource_provider_hypervisors          = [],
+  $resource_provider_default_hypervisor   = $facts['os_service_default'],
+  $resource_provider_inventory_defaults   = {},
 ) {
   include neutron::deps
   include neutron::params

@@ -38,14 +38,14 @@
 #   Defaults to false.
 #
 class neutron::services::taas (
-  $package_ensure       = 'present',
-  $service_providers    = 'TAAS:TAAS:neutron_taas.services.taas.service_drivers.taas_rpc.TaasRpcDriver:default',
-  $quota_tap_service    = $facts['os_service_default'],
-  $quota_tap_flow       = $facts['os_service_default'],
-  $vlan_range_start     = $facts['os_service_default'],
-  $vlan_range_end       = $facts['os_service_default'],
-  Boolean $sync_db      = false,
-  Boolean $purge_config = false,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $service_providers                      = 'TAAS:TAAS:neutron_taas.services.taas.service_drivers.taas_rpc.TaasRpcDriver:default',
+  $quota_tap_service                      = $facts['os_service_default'],
+  $quota_tap_flow                         = $facts['os_service_default'],
+  $vlan_range_start                       = $facts['os_service_default'],
+  $vlan_range_end                         = $facts['os_service_default'],
+  Boolean $sync_db                        = false,
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

@@ -43,14 +43,14 @@
 #   Defaults to false.
 #
 class neutron::services::l2gw (
-  $default_interface_name       = $facts['os_service_default'],
-  $default_device_name          = $facts['os_service_default'],
-  $quota_l2_gateway             = $facts['os_service_default'],
-  $periodic_monitoring_interval = $facts['os_service_default'],
-  $service_providers            = 'L2GW:l2gw:networking_l2gw.services.l2gateway.service_drivers.rpc_l2gw.L2gwRpcDriver:default',
-  Boolean $sync_db              = false,
-  $package_ensure               = 'present',
-  Boolean $purge_config         = false,
+  $default_interface_name                 = $facts['os_service_default'],
+  $default_device_name                    = $facts['os_service_default'],
+  $quota_l2_gateway                       = $facts['os_service_default'],
+  $periodic_monitoring_interval           = $facts['os_service_default'],
+  $service_providers                      = 'L2GW:l2gw:networking_l2gw.services.l2gateway.service_drivers.rpc_l2gw.L2gwRpcDriver:default',
+  Boolean $sync_db                        = false,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

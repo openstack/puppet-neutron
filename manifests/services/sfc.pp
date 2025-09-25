@@ -54,14 +54,14 @@
 #   Defaults to $facts['os_service_default']
 #
 class neutron::services::sfc (
-  $package_ensure    = 'present',
-  $sfc_drivers       = $facts['os_service_default'],
-  $fc_drivers        = $facts['os_service_default'],
-  Boolean $sync_db   = false,
-  $purge_config      = false,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $sfc_drivers                            = $facts['os_service_default'],
+  $fc_drivers                             = $facts['os_service_default'],
+  Boolean $sync_db                        = false,
+  $purge_config                           = false,
   # DEPRECATED PARAMETERS
-  $sfc_driver        = undef,
-  $fc_driver         = undef,
+  $sfc_driver                             = undef,
+  $fc_driver                              = undef,
 ) {
   include neutron::deps
   include neutron::params

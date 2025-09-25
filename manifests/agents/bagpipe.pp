@@ -21,6 +21,18 @@
 #
 # === Parameters
 #
+# [*package_ensure*]
+#   (optional) The state of the package
+#   Defaults to present
+#
+# [*enabled*]
+#   (optional) The state of the service
+#   Defaults to true
+#
+# [*manage_service*]
+#   (optional) Whether to start/stop the service
+#   Defaults to true
+#
 # [*my_as*]
 #   (required) Private Autonomous System number
 #   Defaults to $facts['os_service_default']
@@ -37,17 +49,9 @@
 #   IP VPN dataplane driver class
 #   Default to ovs
 #
-# [*enabled*]
-#   (optional) The state of the service
-#   Defaults to true
-#
 # [*enable_rtc*]
 #   Enable Route Target Constraint
 #   Defaults to $facts['os_service_default']
-#
-# [*manage_service*]
-#   (optional) Whether to start/stop the service
-#   Defaults to true
 #
 # [*mpls_interface*]
 #   MPLS outgoing interface for Linux and OVS drivers
@@ -57,10 +61,6 @@
 #   OVS bridge to use
 #   Defaults to $facts['os_service_default']
 #
-# [*package_ensure*]
-#   (optional) The state of the package
-#   Defaults to present
-#
 # [*peers*]
 #   List of peers' IPs to establish p2p connections
 #   Defaults to $facts['os_service_default']
@@ -69,30 +69,30 @@
 #   For OVS driver control if VRF will reply ARP messages
 #   Defaults to false
 #
+# [*local_address*]
+#   (required) Local IP of the server to carry BGP traffic
+#   Defaults to $facts['networking']['ip']
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the l2gateway config.
 #   Default to false.
 #
-# [*local_address*]
-#   (required) Local IP of the server to carry BGP traffic
-#   Defaults to $facts['networking']['ip']
-#
 class neutron::agents::bagpipe (
   $my_as,
-  $api_host                = $facts['os_service_default'],
-  $api_port                = $facts['os_service_default'],
-  $dataplane_driver_ipvpn  = 'ovs',
-  Boolean $enabled         = true,
-  $enable_rtc              = $facts['os_service_default'],
-  Boolean $manage_service  = true,
-  $mpls_interface          = $facts['os_service_default'],
-  $ovs_bridge              = $facts['os_service_default'],
-  $package_ensure          = 'present',
-  $peers                   = $facts['os_service_default'],
-  $proxy_arp               = false,
-  Boolean $purge_config    = false,
-  $local_address           = $facts['networking']['ip'],
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  Boolean $enabled                        = true,
+  Boolean $manage_service                 = true,
+  $api_host                               = $facts['os_service_default'],
+  $api_port                               = $facts['os_service_default'],
+  $dataplane_driver_ipvpn                 = 'ovs',
+  $enable_rtc                             = $facts['os_service_default'],
+  $mpls_interface                         = $facts['os_service_default'],
+  $ovs_bridge                             = $facts['os_service_default'],
+  $peers                                  = $facts['os_service_default'],
+  $proxy_arp                              = false,
+  $local_address                          = $facts['networking']['ip'],
+  Boolean $purge_config                   = false,
 ) {
   include neutron::deps
   include neutron::params

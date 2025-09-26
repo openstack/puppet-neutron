@@ -236,51 +236,51 @@
 #   Defaults to undef
 #
 class neutron::server (
-  Stdlib::Ensure::Package $package_ensure = 'present',
-  Boolean $enabled                        = true,
-  Boolean $manage_service                 = true,
-  $api_package_name                       = $neutron::params::api_package_name,
-  $api_service_name                       = $neutron::params::api_service_name,
-  $rpc_package_name                       = $neutron::params::rpc_package_name,
-  $rpc_service_name                       = $neutron::params::rpc_service_name,
-  $periodic_workers_package_name          = $neutron::params::periodic_workers_package_name,
-  $periodic_workers_service_name          = $neutron::params::periodic_workers_service_name,
-  Boolean $sync_db                        = false,
-  $api_workers                            = $facts['os_workers'],
-  $rpc_workers                            = $facts['os_workers'],
-  $rpc_state_report_workers               = $facts['os_service_default'],
-  $rpc_response_max_timeout               = $facts['os_service_default'],
-  $agent_down_time                        = $facts['os_service_default'],
-  $enable_new_agents                      = $facts['os_service_default'],
-  $network_scheduler_driver               = $facts['os_service_default'],
-  $router_scheduler_driver                = $facts['os_service_default'],
-  $router_distributed                     = $facts['os_service_default'],
-  $enable_dvr                             = $facts['os_service_default'],
-  $dhcp_load_type                         = $facts['os_service_default'],
-  $default_availability_zones             = $facts['os_service_default'],
-  $allow_automatic_l3agent_failover       = $facts['os_service_default'],
-  $allow_automatic_dhcp_failover          = $facts['os_service_default'],
-  $l3_ha                                  = $facts['os_service_default'],
-  $max_l3_agents_per_router               = $facts['os_service_default'],
-  $l3_ha_net_cidr                         = $facts['os_service_default'],
-  $l3_ha_network_type                     = $facts['os_service_default'],
-  $l3_ha_network_physical_name            = $facts['os_service_default'],
-  $network_auto_schedule                  = $facts['os_service_default'],
-  $service_providers                      = $facts['os_service_default'],
-  $auth_strategy                          = 'keystone',
-  $enable_proxy_headers_parsing           = $facts['os_service_default'],
-  $max_request_body_size                  = $facts['os_service_default'],
-  $pagination_max_limit                   = $facts['os_service_default'],
-  $ovs_integration_bridge                 = $facts['os_service_default'],
-  $igmp_snooping_enable                   = $facts['os_service_default'],
-  $igmp_flood                             = $facts['os_service_default'],
-  $igmp_flood_reports                     = $facts['os_service_default'],
-  $igmp_flood_unregistered                = $facts['os_service_default'],
-  $enable_default_route_ecmp              = $facts['os_service_default'],
-  $enable_default_route_bfd               = $facts['os_service_default'],
+  Stdlib::Ensure::Package $package_ensure              = 'present',
+  Boolean $enabled                                     = true,
+  Boolean $manage_service                              = true,
+  Optional[String[1]] $api_package_name                = $neutron::params::api_package_name,
+  String[1] $api_service_name                          = $neutron::params::api_service_name,
+  String[1] $rpc_package_name                          = $neutron::params::rpc_package_name,
+  Variant[String[1], Boolean[false]] $rpc_service_name = $neutron::params::rpc_service_name,
+  String[1] $periodic_workers_package_name             = $neutron::params::periodic_workers_package_name,
+  String[1] $periodic_workers_service_name             = $neutron::params::periodic_workers_service_name,
+  Boolean $sync_db                                     = false,
+  $api_workers                                         = $facts['os_workers'],
+  $rpc_workers                                         = $facts['os_workers'],
+  $rpc_state_report_workers                            = $facts['os_service_default'],
+  $rpc_response_max_timeout                            = $facts['os_service_default'],
+  $agent_down_time                                     = $facts['os_service_default'],
+  $enable_new_agents                                   = $facts['os_service_default'],
+  $network_scheduler_driver                            = $facts['os_service_default'],
+  $router_scheduler_driver                             = $facts['os_service_default'],
+  $router_distributed                                  = $facts['os_service_default'],
+  $enable_dvr                                          = $facts['os_service_default'],
+  $dhcp_load_type                                      = $facts['os_service_default'],
+  $default_availability_zones                          = $facts['os_service_default'],
+  $allow_automatic_l3agent_failover                    = $facts['os_service_default'],
+  $allow_automatic_dhcp_failover                       = $facts['os_service_default'],
+  $l3_ha                                               = $facts['os_service_default'],
+  $max_l3_agents_per_router                            = $facts['os_service_default'],
+  $l3_ha_net_cidr                                      = $facts['os_service_default'],
+  $l3_ha_network_type                                  = $facts['os_service_default'],
+  $l3_ha_network_physical_name                         = $facts['os_service_default'],
+  $network_auto_schedule                               = $facts['os_service_default'],
+  $service_providers                                   = $facts['os_service_default'],
+  $auth_strategy                                       = 'keystone',
+  $enable_proxy_headers_parsing                        = $facts['os_service_default'],
+  $max_request_body_size                               = $facts['os_service_default'],
+  $pagination_max_limit                                = $facts['os_service_default'],
+  $ovs_integration_bridge                              = $facts['os_service_default'],
+  $igmp_snooping_enable                                = $facts['os_service_default'],
+  $igmp_flood                                          = $facts['os_service_default'],
+  $igmp_flood_reports                                  = $facts['os_service_default'],
+  $igmp_flood_unregistered                             = $facts['os_service_default'],
+  $enable_default_route_ecmp                           = $facts['os_service_default'],
+  $enable_default_route_bfd                            = $facts['os_service_default'],
   # DEPRECATED PARMETERS
-  $service_name                           = undef,
-  $server_package                         = undef,
+  $service_name                                        = undef,
+  $server_package                                      = undef,
 ) inherits neutron::params {
   include neutron::deps
   include neutron::db
@@ -375,34 +375,37 @@ class neutron::server (
       $service_ensure = 'stopped'
     }
 
-    if $api_service_name == 'httpd' {
-      Service <| title == 'httpd' |> { tag +> 'neutron-service' }
+    case $api_service_name {
+      'httpd': {
+        Service <| title == 'httpd' |> { tag +> 'neutron-service' }
 
-      if $neutron::params::api_service_name {
-        # we need to make sure api service is stopped before trying to
-        # start apache
+        if $neutron::params::api_service_name {
+          # we need to make sure api service is stopped before trying to
+          # start apache
+          service { 'neutron-api':
+            ensure     => 'stopped',
+            name       => $neutron::params::api_service_name,
+            enable     => false,
+            hasstatus  => true,
+            hasrestart => true,
+            tag        => ['neutron-service'],
+          }
+          Service['neutron-api'] -> Service[$api_service_name]
+        }
+      }
+      default: {
         service { 'neutron-api':
-          ensure     => 'stopped',
-          name       => $neutron::params::api_service_name,
-          enable     => false,
+          ensure     => $service_ensure,
+          name       => $api_service_name,
+          enable     => $enabled,
           hasstatus  => true,
           hasrestart => true,
           tag        => ['neutron-service'],
         }
-        Service['neutron-api'] -> Service[$api_service_name]
-      }
-    } else {
-      service { 'neutron-api':
-        ensure     => $service_ensure,
-        name       => $api_service_name,
-        enable     => $enabled,
-        hasstatus  => true,
-        hasrestart => true,
-        tag        => ['neutron-service'],
-      }
 
-      Neutron_api_paste_ini<||> ~> Service['neutron-api']
-      Neutron_api_uwsgi_config<||> ~> Service['neutron-api']
+        Neutron_api_paste_ini<||> ~> Service['neutron-api']
+        Neutron_api_uwsgi_config<||> ~> Service['neutron-api']
+      }
     }
 
     if $rpc_service_name {

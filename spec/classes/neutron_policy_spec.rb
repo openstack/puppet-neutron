@@ -33,7 +33,6 @@ describe 'neutron::policy' do
           :file_group   => 'neutron',
           :file_format  => 'yaml',
           :purge_config => false,
-          :tag          => 'neutron',
         )
         is_expected.to contain_oslo__policy('neutron_config').with(
           :enforce_scope        => false,
@@ -64,7 +63,6 @@ describe 'neutron::policy' do
           :file_group   => 'neutron',
           :file_format  => 'yaml',
           :purge_config => true,
-          :tag          => 'neutron',
         )
         is_expected.to contain_oslo__policy('neutron_config').with(
           :enforce_scope        => false,

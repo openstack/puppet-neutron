@@ -21,9 +21,9 @@ Puppet::Type.newtype(:neutron_port) do
 
   newproperty(:admin_state_up) do
     desc 'The administrative status of the router'
-    newvalues(/(t|T)rue/, /(f|F)alse/)
+    newvalues(/(t|T)rue/, /(f|F)alse/, true, false)
     munge do |v|
-      v.to_s.capitalize
+      v.to_s.downcase.to_sym
     end
   end
 

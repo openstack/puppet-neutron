@@ -16,9 +16,9 @@ Puppet::Type.newtype(:neutron_router) do
 
   newproperty(:admin_state_up) do
     desc 'The administrative status of the router'
-    newvalues(/(t|T)rue/, /(f|F)alse/)
+    newvalues(/(t|T)rue/, /(f|F)alse/, true, false)
     munge do |v|
-      v.to_s.capitalize
+      v.to_s.downcase.to_sym
     end
   end
 
@@ -78,17 +78,17 @@ Puppet::Type.newtype(:neutron_router) do
 
   newproperty(:distributed) do
     desc 'Is router distributed or not, default depends on DVR state.'
-    newvalues(/(t|T)rue/, /(f|F)alse/)
+    newvalues(/(t|T)rue/, /(f|F)alse/, true, false)
     munge do |v|
-      v.to_s.capitalize
+      v.to_s.downcase.to_sym
     end
   end
 
   newproperty(:ha) do
     desc 'Is router of HA type or not, default depends on L3 HA state.'
-    newvalues(/(t|T)rue/, /(f|F)alse/)
+    newvalues(/(t|T)rue/, /(f|F)alse/, true, false)
     munge do |v|
-      v.to_s.capitalize
+      v.to_s.downcase.to_sym
     end
   end
 

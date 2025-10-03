@@ -36,12 +36,12 @@ Puppet::Type.type(:neutron_network).provide(
         :ensure                    => :present,
         :name                      => attrs[:name],
         :id                        => attrs[:id],
-        :admin_state_up            => network[:admin_state_up],
+        :admin_state_up            => network[:admin_state_up].downcase.chomp == 'true'? :true : :false,
         :provider_network_type     => network[:provider_network_type],
         :provider_physical_network => network[:provider_physical_network],
         :provider_segmentation_id  => network[:provider_segmentation_id],
-        :router_external           => network[:router_external],
-        :shared                    => network[:shared],
+        :router_external           => network[:router_external].downcase.chomp == 'true'? :true : :false,
+        :shared                    => network[:shared].downcase.chomp == 'true'? :true : :false,
         :project_id                => network[:project_id],
         :availability_zone_hint    => parse_availability_zone_hint(network[:availability_zone_hints]),
         :mtu                       => network[:mtu],
@@ -71,11 +71,11 @@ Puppet::Type.type(:neutron_network).provide(
 
     opts = [@resource[:name]]
 
-    if @resource[:shared] =~ /true/i
+    if @resource[:shared] == :true
       opts << '--share'
     end
 
-    if @resource[:admin_state_up] == 'False'
+    if @resource[:admin_state_up] == :false
       opts << '--disable'
     end
 
@@ -100,7 +100,7 @@ Puppet::Type.type(:neutron_network).provide(
         "--provider-segment=#{@resource[:provider_segmentation_id]}"
     end
 
-    if @resource[:router_external] == 'True'
+    if @resource[:router_external] == :true
       opts << '--external'
     end
 
@@ -119,12 +119,12 @@ Puppet::Type.type(:neutron_network).provide(
       :ensure                    => :present,
       :name                      => network[:name],
       :id                        => network[:id],
-      :admin_state_up            => network[:admin_state_up],
+      :admin_state_up            => network[:admin_state_up].downcase.chomp == 'true'? :true : :false,
       :provider_network_type     => network[:provider_network_type],
       :provider_physical_network => network[:provider_physical_network],
       :provider_segmentation_id  => network[:provider_segmentation_id],
-      :router_external           => network[:router_external],
-      :shared                    => network[:shared],
+      :router_external           => network[:router_external].downcase.chomp == 'true'? :true : :false,
+      :shared                    => network[:shared].downcase.chomp == 'true'? :true : :false,
       :project_id                => network[:project_id],
       :availability_zone_hint    => self.class.parse_availability_zone_hint(network[:availability_zone_hints]),
       :mtu                       => network[:mtu],
@@ -136,7 +136,7 @@ Puppet::Type.type(:neutron_network).provide(
       opts = [@resource[:name]]
 
       if @property_flush.has_key?(:admin_state_up)
-        if @property_flush[:admin_state_up] == 'False'
+        if @property_flush[:admin_state_up] == :false
           opts << '--disable'
         else
           opts << '--enable'
@@ -144,7 +144,7 @@ Puppet::Type.type(:neutron_network).provide(
       end
 
       if @property_flush.has_key?(:shared)
-        if @property_flush[:shared] == 'False'
+        if @property_flush[:shared] == :false
           opts << '--no-share'
         else
           opts << '--share'
@@ -152,7 +152,7 @@ Puppet::Type.type(:neutron_network).provide(
       end
 
       if @property_flush.has_key?(:router_external)
-        if @property_flush[:router_external] == 'False'
+        if @property_flush[:router_external] == :false
           opts << '--internal'
         else
           opts << '--external'

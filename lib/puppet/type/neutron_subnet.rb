@@ -52,9 +52,9 @@ Puppet::Type.newtype(:neutron_subnet) do
 
   newproperty(:enable_dhcp) do
     desc 'Whether DHCP is enabled for this subnet or not.'
-    newvalues(/(t|T)rue/, /(f|F)alse/)
+    newvalues(/(t|T)rue/, /(f|F)alse/, true, false)
     munge do |v|
-      v.to_s.capitalize
+      v.to_s.downcase.to_sym
     end
   end
 

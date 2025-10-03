@@ -36,11 +36,11 @@ Puppet::Type.type(:neutron_router).provide(
         :ensure                 => :present,
         :name                   => attrs[:name],
         :id                     => attrs[:id],
-        :admin_state_up         => router[:admin_state_up],
+        :admin_state_up         => router[:admin_state_up].downcase.chomp == 'true'? :true : :false,
         :external_gateway_info  => router[:external_gateway_info],
         :status                 => router[:status],
-        :distributed            => router[:distributed],
-        :ha                     => router[:ha],
+        :distributed            => router[:distributed].downcase.chomp == 'true'? :true : :false,
+        :ha                     => router[:ha].downcase.chomp == 'true'? :true : :false,
         :project_id             => router[:project_id],
         :availability_zone_hint => parse_availability_zone_hint(router[:availability_zone_hints])
       )
@@ -69,7 +69,7 @@ Puppet::Type.type(:neutron_router).provide(
 
     opts = [@resource[:name]]
 
-    if @resource[:admin_state_up] == 'False'
+    if @resource[:admin_state_up] == :false
       opts << '--disable'
     end
 
@@ -80,7 +80,7 @@ Puppet::Type.type(:neutron_router).provide(
     end
 
     if @resource[:distributed]
-      if @resource[:distributed] == 'False'
+      if @resource[:distributed] == :false
         opts << '--centralized'
       else
         opts << '--distributed'
@@ -88,7 +88,7 @@ Puppet::Type.type(:neutron_router).provide(
     end
 
     if @resource[:ha]
-      if @resource[:ha] == 'False'
+      if @resource[:ha] == :false
         opts << '--no-ha'
       else
         opts << '--ha'
@@ -118,11 +118,11 @@ Puppet::Type.type(:neutron_router).provide(
       :ensure                 => :present,
       :name                   => router[:name],
       :id                     => router[:id],
-      :admin_state_up         => router[:admin_state_up],
+      :admin_state_up         => router[:admin_state_up].downcase.chomp == 'true'? :true : :false,
       :external_gateway_info  => router[:external_gateway_info],
       :status                 => router[:status],
-      :distributed            => router[:distributed],
-      :ha                     => router[:ha],
+      :distributed            => router[:distributed].downcase.chomp == 'true'? :true : :false,
+      :ha                     => router[:ha].downcase.chomp == 'true'? :true : :false,
       :project_id             => router[:project_id],
       :availability_zone_hint => self.class.parse_availability_zone_hint(router[:availability_zone_hints])
     }
@@ -134,7 +134,7 @@ Puppet::Type.type(:neutron_router).provide(
       clear_opts = [@resource[:name]]
 
       if @property_flush.has_key?(:admin_state_up)
-        if @property_flush[:admin_state_up] == 'False'
+        if @property_flush[:admin_state_up] == :false
           opts << '--disable'
         else
           opts << '--enable'
@@ -142,7 +142,7 @@ Puppet::Type.type(:neutron_router).provide(
       end
 
       if @property_flush.has_key?(:distributed)
-        if @property_flush[:distributed] == 'False'
+        if @property_flush[:distributed] == :false
           opts << '--centralized'
         else
           opts << '--distributed'
@@ -164,7 +164,7 @@ Puppet::Type.type(:neutron_router).provide(
       end
 
       if @property_flush.has_key?(:ha)
-        if @property_flush[:ha] == 'False'
+        if @property_flush[:ha] == :false
           opts << '--no-ha'
         else
           opts << '--ha'

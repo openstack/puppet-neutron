@@ -44,7 +44,7 @@ Puppet::Type.type(:neutron_subnet).provide(
         :allocation_pools  => parse_allocation_pool(subnet[:allocation_pools]),
         :host_routes       => parse_host_routes(subnet[:host_routes]),
         :dns_nameservers   => parse_dns_nameservers(subnet[:dns_nameservers]),
-        :enable_dhcp       => subnet[:enable_dhcp],
+        :enable_dhcp       => subnet[:enable_dhcp].downcase.chomp == 'true'? :true : :false,
         :network_id        => subnet[:network_id],
         :network_name      => get_network_name(subnet[:network_id]),
         :project_id        => subnet[:project_id],
@@ -123,7 +123,7 @@ Puppet::Type.type(:neutron_subnet).provide(
       end
     end
 
-    if @resource[:enable_dhcp] == 'False'
+    if @resource[:enable_dhcp] == :false
       opts << "--no-dhcp"
     else
       opts << "--dhcp"
@@ -174,7 +174,7 @@ Puppet::Type.type(:neutron_subnet).provide(
       :allocation_pools  => self.class.parse_allocation_pool(subnet[:allocation_pools]),
       :host_routes       => self.class.parse_host_routes(subnet[:host_routes]),
       :dns_nameservers   => self.class.parse_dns_nameservers(subnet[:dns_nameservers]),
-      :enable_dhcp       => subnet[:enable_dhcp],
+      :enable_dhcp       => subnet[:enable_dhcp].downcase.chomp == 'true'? :true : :false,
       :network_id        => subnet[:network_id],
       :network_name      => self.class.get_network_name(subnet[:network_id]),
       :project_id        => subnet[:project_id],
@@ -195,7 +195,7 @@ Puppet::Type.type(:neutron_subnet).provide(
       end
 
       if @property_flush.has_key?(:enable_dhcp)
-        if @property_flush[:enable_dhcp] == 'False'
+        if @property_flush[:enable_dhcp] == :false
           opts << '--no-dhcp'
         else
           opts << '--dhcp'

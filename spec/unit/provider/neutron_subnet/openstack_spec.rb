@@ -81,7 +81,7 @@ name="net1"')
             :cidr             => '10.0.0.0/24',
             :ip_version       => '4',
             :gateway_ip       => '10.0.0.1',
-            :enable_dhcp      => 'False',
+            :enable_dhcp      => :false,
             :allocation_pools => 'start=10.0.0.2,end=10.0.0.10',
             :dns_nameservers  => '8.8.8.8',
             :host_routes      => 'destination=10.0.1.0/24,nexthop=10.0.0.1',
@@ -202,12 +202,12 @@ name="net1"')
         it 'updates subnet' do
           expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--no-dhcp'])
-          provider.enable_dhcp = 'False'
+          provider.enable_dhcp = :false
           provider.flush
 
           expect(provider_class).to receive(:openstack)
             .with('subnet', 'set', ['subnet1', '--dhcp'])
-          provider.enable_dhcp = 'True'
+          provider.enable_dhcp = :true
           provider.flush
         end
       end
@@ -294,7 +294,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
         expect(instances[0].gateway_ip).to eq('10.0.0.1')
         expect(instances[0].dns_nameservers).to eq(['10.0.0.2', '10.0.0.3'])
         expect(instances[0].allocation_pools).to eq(['start=10.0.0.10,end=10.0.0.20','start=10.0.0.30,end=10.0.0.40'])
-        expect(instances[0].enable_dhcp).to eq('True')
+        expect(instances[0].enable_dhcp).to eq(:true)
         expect(instances[0].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
 
         expect(instances[1].id).to eq('0da7a631-0f8f-4e51-8b1c-7a29d0d4f7b5')
@@ -306,7 +306,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"')
         expect(instances[1].cidr).to eq('10.0.1.0/24')
         expect(instances[1].dns_nameservers).to eq([])
         expect(instances[1].allocation_pools).to eq(['start=10.0.1.2,end=10.0.1.254'])
-        expect(instances[1].enable_dhcp).to eq('False')
+        expect(instances[1].enable_dhcp).to eq(:false)
         expect(instances[1].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
       end
     end

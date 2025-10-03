@@ -70,7 +70,7 @@ name="net1"')
 name="subnet1"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.admin_state_up).to eq('True')
+          expect(provider.admin_state_up).to eq(:true)
           expect(provider.ip_address).to eq('10.0.0.2')
           expect(provider.network_name).to eq('net1')
           expect(provider.subnet_id).to eq('dd5e0ef1-2c88-4b0b-ba08-7df65be87963')
@@ -84,7 +84,7 @@ name="subnet1"')
             :ensure         => 'present',
             :name           => port_name,
             :network_name   => 'net1',
-            :admin_state_up => 'False',
+            :admin_state_up => :false,
           }
         end
 
@@ -118,7 +118,7 @@ name="net1"')
 name="subnet1"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.admin_state_up).to eq('False')
+          expect(provider.admin_state_up).to eq(:false)
           expect(provider.ip_address).to eq('10.0.0.2')
           expect(provider.network_name).to eq('net1')
           expect(provider.subnet_id).to eq('dd5e0ef1-2c88-4b0b-ba08-7df65be87963')
@@ -167,7 +167,7 @@ name="net1"')
 name="subnet1"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.admin_state_up).to eq('True')
+          expect(provider.admin_state_up).to eq(:true)
           expect(provider.ip_address).to eq('10.0.0.2')
           expect(provider.network_name).to eq('net1')
           expect(provider.subnet_id).to eq('dd5e0ef1-2c88-4b0b-ba08-7df65be87963')
@@ -240,12 +240,12 @@ name="subnet1"')
         it 'updates port' do
           expect(provider_class).to receive(:openstack)
             .with('port', 'set', ['port1', '--disable'])
-          provider.admin_state_up = 'False'
+          provider.admin_state_up = :false
           provider.flush
 
           expect(provider_class).to receive(:openstack)
             .with('port', 'set', ['port1', '--enable'])
-          provider.admin_state_up = 'True'
+          provider.admin_state_up = :true
           provider.flush
         end
       end
@@ -316,7 +316,7 @@ status="DOWN"')
         expect(instances[0].subnet_id).to eq('dd5e0ef1-2c88-4b0b-ba08-7df65be87963')
         expect(instances[0].subnet_name).to eq('subnet1')
         expect(instances[0].status).to eq('ACTIVE')
-        expect(instances[0].admin_state_up).to eq('True')
+        expect(instances[0].admin_state_up).to eq(:true)
         expect(instances[0].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
 
         expect(instances[1].id).to eq('c880affb-b15e-4632-b5e7-3adba6e3ab35')
@@ -326,7 +326,7 @@ status="DOWN"')
         expect(instances[1].subnet_id).to eq('0da7a631-0f8f-4e51-8b1c-7a29d0d4f7b5')
         expect(instances[1].subnet_name).to eq('subnet2')
         expect(instances[1].status).to eq('DOWN')
-        expect(instances[1].admin_state_up).to eq('False')
+        expect(instances[1].admin_state_up).to eq(:false)
         expect(instances[0].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
       end
     end

@@ -52,10 +52,10 @@ shared="False"
 mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.admin_state_up).to eq('True')
+          expect(provider.admin_state_up).to eq(:true)
           expect(provider.project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
-          expect(provider.router_external).to eq('False')
-          expect(provider.shared).to eq('False')
+          expect(provider.router_external).to eq(:false)
+          expect(provider.shared).to eq(:false)
           expect(provider.mtu).to eq('1500')
         end
       end
@@ -65,7 +65,7 @@ mtu="1500"')
           {
             :name           => net_name,
             :ensure         => 'present',
-            :admin_state_up => 'False',
+            :admin_state_up => :false,
           }
         end
 
@@ -82,7 +82,7 @@ shared="False"
 mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.admin_state_up).to eq('False')
+          expect(provider.admin_state_up).to eq(:false)
         end
       end
 
@@ -91,7 +91,7 @@ mtu="1500"')
           {
             :name   => net_name,
             :ensure => 'present',
-            :shared => 'True',
+            :shared => :true,
           }
         end
 
@@ -108,7 +108,7 @@ shared="True"
 mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.shared).to eq('True')
+          expect(provider.shared).to eq(:true)
         end
       end
 
@@ -177,7 +177,7 @@ mtu="1500"')
           {
             :name            => net_name,
             :ensure          => 'present',
-            :router_external => 'True',
+            :router_external => :true,
           }
         end
 
@@ -194,7 +194,7 @@ shared="False"
 mtu="1500"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.router_external).to eq('True')
+          expect(provider.router_external).to eq(:true)
         end
       end
 
@@ -238,12 +238,12 @@ mtu="9000"')
         it 'updates network' do
           expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--disable'])
-          provider.admin_state_up = 'False'
+          provider.admin_state_up = :false
           provider.flush
 
           expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--enable'])
-          provider.admin_state_up = 'True'
+          provider.admin_state_up = :true
           provider.flush
         end
       end
@@ -252,12 +252,12 @@ mtu="9000"')
         it 'updates network' do
           expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--share'])
-          provider.shared = 'True'
+          provider.shared = :true
           provider.flush
 
           expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--no-share'])
-          provider.shared = 'False'
+          provider.shared = :false
           provider.flush
         end
       end
@@ -266,12 +266,12 @@ mtu="9000"')
         it 'updates network' do
           expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--external'])
-          provider.router_external = 'True'
+          provider.router_external = :true
           provider.flush
 
           expect(provider_class).to receive(:openstack)
             .with('network', 'set', ['net1', '--internal'])
-          provider.router_external = 'False'
+          provider.router_external = :false
           provider.flush
         end
       end
@@ -320,18 +320,18 @@ mtu="9000"')
 
         expect(instances[0].id).to eq('076520cc-b783-4cf5-a4a9-4cb5a5e93a9b')
         expect(instances[0].name).to eq('net1')
-        expect(instances[0].admin_state_up).to eq('True')
-        expect(instances[0].router_external).to eq('False')
+        expect(instances[0].admin_state_up).to eq(:true)
+        expect(instances[0].router_external).to eq(:false)
         expect(instances[0].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
-        expect(instances[0].shared).to eq('False')
+        expect(instances[0].shared).to eq(:false)
         expect(instances[0].mtu).to eq('1500')
 
         expect(instances[1].id).to eq('34e8f42b-89db-4a5b-92db-76ca7073414d')
         expect(instances[1].name).to eq('net2')
-        expect(instances[1].admin_state_up).to eq('False')
+        expect(instances[1].admin_state_up).to eq(:false)
         expect(instances[1].project_id).to eq('60f9544eb94c42a6b7e8e98c2be981b1')
-        expect(instances[1].router_external).to eq('True')
-        expect(instances[1].shared).to eq('True')
+        expect(instances[1].router_external).to eq(:true)
+        expect(instances[1].shared).to eq(:true)
         expect(instances[1].mtu).to eq('9000')
       end
     end

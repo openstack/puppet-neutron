@@ -54,9 +54,9 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="ACTIVE"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.admin_state_up).to eq('True')
-          expect(provider.ha).to eq('True')
-          expect(provider.distributed).to eq('False')
+          expect(provider.admin_state_up).to eq(:true)
+          expect(provider.ha).to eq(:true)
+          expect(provider.distributed).to eq(:false)
           expect(provider.status).to eq('ACTIVE')
         end
       end
@@ -66,7 +66,7 @@ status="ACTIVE"')
           {
             :name           => router_name,
             :ensure         => 'present',
-            :admin_state_up => 'False',
+            :admin_state_up => :false,
           }
         end
         it 'creates router' do
@@ -84,7 +84,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="ACTIVE"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.admin_state_up).to eq('False')
+          expect(provider.admin_state_up).to eq(:false)
         end
       end
 
@@ -93,7 +93,7 @@ status="ACTIVE"')
           {
             :name        => router_name,
             :ensure      => 'present',
-            :distributed => 'False',
+            :distributed => :false,
           }
         end
         it 'creates router' do
@@ -111,7 +111,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="ACTIVE"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.distributed).to eq('False')
+          expect(provider.distributed).to eq(:false)
         end
       end
 
@@ -120,7 +120,7 @@ status="ACTIVE"')
           {
             :name        => router_name,
             :ensure      => 'present',
-            :distributed => 'True',
+            :distributed => :true,
           }
         end
         it 'creates router' do
@@ -138,7 +138,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="ACTIVE"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.distributed).to eq('True')
+          expect(provider.distributed).to eq(:true)
         end
       end
 
@@ -147,7 +147,7 @@ status="ACTIVE"')
           {
             :name   => router_name,
             :ensure => 'present',
-            :ha     => 'True',
+            :ha     => :true,
           }
         end
         it 'creates router' do
@@ -165,7 +165,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="ACTIVE"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.ha).to eq('True')
+          expect(provider.ha).to eq(:true)
         end
       end
 
@@ -174,7 +174,7 @@ status="ACTIVE"')
           {
             :name   => router_name,
             :ensure => 'present',
-            :ha     => 'False',
+            :ha     => :false,
           }
         end
         it 'creates router' do
@@ -192,7 +192,7 @@ project_id="60f9544eb94c42a6b7e8e98c2be981b1"
 status="ACTIVE"')
           provider.create
           expect(provider.exists?).to be_truthy
-          expect(provider.ha).to eq('False')
+          expect(provider.ha).to eq(:false)
         end
       end
 
@@ -251,11 +251,11 @@ status="ACTIVE"')
         it 'updates router' do
           expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--disable'])
-          provider.admin_state_up = 'False'
+          provider.admin_state_up = :false
           provider.flush
           expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--enable'])
-          provider.admin_state_up = 'True'
+          provider.admin_state_up = :true
           provider.flush
         end
       end
@@ -263,11 +263,11 @@ status="ACTIVE"')
         it 'updates router' do
           expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--distributed'])
-          provider.distributed = 'True'
+          provider.distributed = :true
           provider.flush
           expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--centralized'])
-          provider.distributed = 'False'
+          provider.distributed = :false
           provider.flush
         end
       end
@@ -275,11 +275,11 @@ status="ACTIVE"')
         it 'updates router' do
           expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--ha'])
-          provider.ha = 'True'
+          provider.ha = :true
           provider.flush
           expect(provider_class).to receive(:openstack)
             .with('router', 'set', ['router1', '--no-ha'])
-          provider.ha = 'False'
+          provider.ha = :false
           provider.flush
         end
       end
@@ -333,16 +333,16 @@ status="DOWN"')
 
         expect(instances[0].id).to eq('d73f453a-77ca-4843-977a-3af0fda8dfcb')
         expect(instances[0].name).to eq('router1')
-        expect(instances[0].admin_state_up).to eq('True')
-        expect(instances[0].ha).to eq('True')
-        expect(instances[0].distributed).to eq('False')
+        expect(instances[0].admin_state_up).to eq(:true)
+        expect(instances[0].ha).to eq(:true)
+        expect(instances[0].distributed).to eq(:false)
         expect(instances[0].status).to eq('ACTIVE')
 
         expect(instances[1].id).to eq('c3e93a5b-45ee-4029-b3a3-3331cb3e3f2a')
         expect(instances[1].name).to eq('router2')
-        expect(instances[1].admin_state_up).to eq('False')
-        expect(instances[1].ha).to eq('False')
-        expect(instances[1].distributed).to eq('True')
+        expect(instances[1].admin_state_up).to eq(:false)
+        expect(instances[1].ha).to eq(:false)
+        expect(instances[1].distributed).to eq(:true)
         expect(instances[1].status).to eq('DOWN')
       end
     end

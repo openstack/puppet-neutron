@@ -41,7 +41,7 @@ Puppet::Type.type(:neutron_port).provide(
         :project_id      => port[:project_id],
         :network_id      => port[:network_id],
         :network_name    => get_network_name(port[:network_id]),
-        :admin_state_up  => port[:admin_state_up],
+        :admin_state_up  => port[:admin_state_up].downcase.chomp == 'true'? :true : :false,
         :subnet_id       => parse_subnet_id(port[:fixed_ips]),
         :subnet_name     => get_subnet_name(parse_subnet_id(port[:fixed_ips])),
         :ip_address      => parse_ip_address(port[:fixed_ips]),
@@ -79,7 +79,7 @@ Puppet::Type.type(:neutron_port).provide(
       opts << "--network=#{@resource[:network_id]}"
     end
 
-    if @resource[:admin_state_up] == 'False'
+    if @resource[:admin_state_up] == :false
       opts << '--disable'
     end
 
@@ -120,7 +120,7 @@ Puppet::Type.type(:neutron_port).provide(
       :project_id      => port[:project_id],
       :network_id      => port[:network_id],
       :network_name    => self.class.get_network_name(port[:network_id]),
-      :admin_state_up  => port[:admin_state_up],
+      :admin_state_up  => port[:admin_state_up].downcase.chomp == 'true'? :true : :false,
       :subnet_id       => self.class.parse_subnet_id(port[:fixed_ips]),
       :subnet_name     => self.class.get_subnet_name(self.class.parse_subnet_id(port[:fixed_ips])),
       :ip_address      => self.class.parse_ip_address(port[:fixed_ips]),
@@ -134,26 +134,10 @@ Puppet::Type.type(:neutron_port).provide(
       opts = [@resource[:name]]
 
       if @property_flush.has_key?(:admin_state_up)
-        if @property_flush[:admin_state_up] == 'False'
+        if @property_flush[:admin_state_up] == :false
           opts << '--disable'
         else
           opts << '--enable'
-        end
-      end
-
-      if @property_flush.has_key?(:shared)
-        if @property_flush[:shared] == 'False'
-          opts << '--no-share'
-        else
-          opts << '--share'
-        end
-      end
-
-      if @property_flush.has_key?(:router_external)
-        if @property_flush[:router_external] == 'False'
-          opts << '--internal'
-        else
-          opts << '--external'
         end
       end
 

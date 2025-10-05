@@ -18,13 +18,10 @@
 #
 # [*api_package_name*]
 #   (Optional) Name of the package holding neutron-api.
-#   If this parameter is set to false,
 #   Default to $neutron::params::api_package_name
 #
 # [*api_service_name*]
 #   (Optional) Name of the service for neutron-api.
-#   If service_name is set to false, this parameter must
-#   be set with a value, so that an API server will run.
 #   Defaults to $neutron::params::api_service_name
 #
 # [*rpc_package_name*]
@@ -33,8 +30,6 @@
 #
 # [*rpc_service_name*]
 #   (Optional) Name of the service for the RPC listener.
-#   If service_name is set to false, this parameter must
-#   be set with a value, so that an RPC server will run.
 #   Defaults to $neutron::params::rpc_service_name
 #
 # [*periodic_workers_package_name*]
@@ -43,8 +38,6 @@
 #
 # [*periodic_workers_service_name*]
 #   (Optional) Name of the service for the periodic workers.
-#   If service_name is set to false, this parameter must
-#   be set with a value, so that an RPC server will run.
 #   Defaults to $neutron::params::peiodic_workers_service_name
 #
 # [*sync_db*]

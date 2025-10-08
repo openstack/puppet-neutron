@@ -33,4 +33,12 @@ class Puppet::Provider::Neutron < Puppet::Provider::Openstack
     # TODO(tkajinam): Support multiple values
     hints.first
   end
+
+  def self.parse_boolean(value)
+    if value.nil?
+      nil
+    else
+      value.downcase.chomp == 'true' ? :true : :false
+    end
+  end
 end

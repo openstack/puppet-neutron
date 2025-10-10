@@ -36,11 +36,11 @@ Puppet::Type.type(:neutron_router).provide(
         :ensure                 => :present,
         :name                   => attrs[:name],
         :id                     => attrs[:id],
-        :admin_state_up         => router[:admin_state_up].downcase.chomp == 'true'? :true : :false,
+        :admin_state_up         => parse_boolean(router[:admin_state_up]),
         :external_gateway_info  => router[:external_gateway_info],
         :status                 => router[:status],
-        :distributed            => router[:distributed].downcase.chomp == 'true'? :true : :false,
-        :ha                     => router[:ha].downcase.chomp == 'true'? :true : :false,
+        :distributed            => parse_boolean(router[:distributed]),
+        :ha                     => parse_boolean(router[:ha]),
         :project_id             => router[:project_id],
         :availability_zone_hint => parse_availability_zone_hint(router[:availability_zone_hints])
       )
@@ -118,11 +118,11 @@ Puppet::Type.type(:neutron_router).provide(
       :ensure                 => :present,
       :name                   => router[:name],
       :id                     => router[:id],
-      :admin_state_up         => router[:admin_state_up].downcase.chomp == 'true'? :true : :false,
+      :admin_state_up         => self.class.parse_boolean(router[:admin_state_up]),
       :external_gateway_info  => router[:external_gateway_info],
       :status                 => router[:status],
-      :distributed            => router[:distributed].downcase.chomp == 'true'? :true : :false,
-      :ha                     => router[:ha].downcase.chomp == 'true'? :true : :false,
+      :distributed            => self.class.parse_boolean(router[:distributed]),
+      :ha                     => self.class.parse_boolean(router[:ha]),
       :project_id             => router[:project_id],
       :availability_zone_hint => self.class.parse_availability_zone_hint(router[:availability_zone_hints])
     }
@@ -214,5 +214,4 @@ Puppet::Type.type(:neutron_router).provide(
       fail("Property #{attr.to_s} does not support being updated")
     end
   end
-
 end

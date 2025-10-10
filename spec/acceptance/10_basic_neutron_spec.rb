@@ -49,10 +49,10 @@ describe 'basic neutron' do
         enable_dhcp      => false,
         network_name     => 'vlan',
       }
-      # TODO(tkajinam): Fix broken idempotency caused by gateway_network_name
-      #neutron_router { 'router':
-      #  gateway_network_name => 'flat',
-      #}
+      neutron_router { 'router':
+        # TODO(tkajinam): Fix broken idempotency caused by gateway_network_name
+        #gateway_network_name => 'flat',
+      }
       #neutron_router_interface { 'router:private':
       #}
       EOS

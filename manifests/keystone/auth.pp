@@ -21,7 +21,7 @@
 #
 # [*roles*]
 #   (Optional) List of roles assigned to neutron user.
-#   Defaults to ['admin']
+#   Defaults to ['admin', 'service']
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations.
@@ -91,7 +91,7 @@ class neutron::keystone::auth (
   String[1] $auth_name                    = 'neutron',
   String[1] $email                        = 'neutron@localhost',
   String[1] $tenant                       = 'services',
-  Array[String[1]] $roles                 = ['admin'],
+  Array[String[1]] $roles                 = ['admin', 'service'],
   String[1] $system_scope                 = 'all',
   Array[String[1]] $system_roles          = [],
   Boolean $configure_endpoint             = true,

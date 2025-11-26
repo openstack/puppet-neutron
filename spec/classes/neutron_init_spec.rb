@@ -20,10 +20,6 @@ describe 'neutron' do
     it_behaves_like 'with SSL enabled without kombu'
     it_behaves_like 'with SSL disabled'
     it_behaves_like 'with SSL and kombu wrongly configured'
-    it_behaves_like 'with SSL socket options set'
-    it_behaves_like 'with SSL socket options set with wrong parameters'
-    it_behaves_like 'with SSL socket options left by default'
-    it_behaves_like 'with SSL socket options set and no ca_file'
     it_behaves_like 'without service_plugins'
     it_behaves_like 'with service_plugins'
     it_behaves_like 'with host defined'
@@ -116,6 +112,9 @@ describe 'neutron' do
       should contain_neutron_config('agent/root_helper').with_value('sudo neutron-rootwrap /etc/neutron/rootwrap.conf')
       should contain_neutron_config('agent/root_helper_daemon').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('agent/report_interval').with_value('<SERVICE DEFAULT>')
+
+      should contain_neutron_config('DEFAULT/use_ssl').with_ensure('absent')
+      should contain_oslo__service__ssl('neutron_config')
     end
   end
 
@@ -159,63 +158,6 @@ describe 'neutron' do
         :retry         => params[:notification_retry],
       )
     end
-  end
-
-  shared_examples 'with SSL socket options set' do
-    before do
-      params.merge!(
-        :use_ssl   => true,
-        :cert_file => '/path/to/cert',
-        :key_file  => '/path/to/key',
-        :ca_file   => '/path/to/ca'
-      )
-    end
-
-    it { should contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
-    it { should contain_oslo__service__ssl('neutron_config').with(
-      :cert_file => '/path/to/cert',
-      :key_file  => '/path/to/key',
-      :ca_file   => '/path/to/ca'
-    ) }
-  end
-
-  shared_examples 'with SSL socket options set with wrong parameters' do
-    before do
-      params.merge!(
-        :use_ssl  => true,
-        :key_file => '/path/to/key',
-        :ca_file  => '/path/to/ca'
-      )
-    end
-
-    it { should raise_error(Puppet::Error, /The cert_file parameter is required when use_ssl is set to true/) }
-  end
-
-  shared_examples 'with SSL socket options left by default' do
-
-    it { should contain_neutron_config('DEFAULT/use_ssl').with_value('<SERVICE DEFAULT>') }
-    it { should contain_oslo__service__ssl('neutron_config').with(
-      :cert_file => '<SERVICE DEFAULT>',
-      :key_file  => '<SERVICE DEFAULT>',
-      :ca_file   => '<SERVICE DEFAULT>'
-    ) }
-  end
-
-  shared_examples 'with SSL socket options set and no ca_file' do
-    before do
-      params.merge!(
-        :use_ssl   => true,
-        :cert_file => '/path/to/cert',
-        :key_file  => '/path/to/key'
-      )
-    end
-
-    it { should contain_neutron_config('DEFAULT/use_ssl').with_value('true') }
-    it { should contain_oslo__service__ssl('neutron_config').with(
-      :cert_file => '/path/to/cert',
-      :key_file  => '/path/to/key',
-      :ca_file   => '<SERVICE DEFAULT>'
-    ) }
   end
 
   shared_examples 'with non-default kombu options' do

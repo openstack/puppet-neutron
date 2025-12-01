@@ -25,7 +25,6 @@ describe 'neutron::plugins::ml2::ovn' do
       :dhcp_default_lease_time              => '<SERVICE DEFAULT>',
       :ovn_dhcp4_global_options             => '<SERVICE DEFAULT>',
       :ovn_dhcp6_global_options             => '<SERVICE DEFAULT>',
-      :ovn_emit_need_to_frag                => '<SERVICE DEFAULT>',
       :localnet_learn_fdb                   => '<SERVICE DEFAULT>',
       :fdb_age_threshold                    => '<SERVICE DEFAULT>',
       :mac_binding_age_threshold            => '<SERVICE DEFAULT>',
@@ -76,7 +75,6 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/dhcp_default_lease_time').with_value(p[:dhcp_default_lease_time])
         should contain_neutron_plugin_ml2('ovn/ovn_dhcp4_global_options').with_value(p[:ovn_dhcp4_global_options])
         should contain_neutron_plugin_ml2('ovn/ovn_dhcp6_global_options').with_value(p[:ovn_dhcp6_global_options])
-        should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(p[:ovn_emit_need_to_frag])
         should contain_neutron_plugin_ml2('ovn/localnet_learn_fdb').with_value(p[:localnet_learn_fdb])
         should contain_neutron_plugin_ml2('ovn/fdb_age_threshold').with_value(p[:fdb_age_threshold])
         should contain_neutron_plugin_ml2('ovn/mac_binding_age_threshold').with_value(p[:mac_binding_age_threshold])
@@ -118,7 +116,6 @@ describe 'neutron::plugins::ml2::ovn' do
           :dhcp_default_lease_time              => 43200,
           :ovn_dhcp4_global_options             => 'ntp_server:1.2.3.4',
           :ovn_dhcp6_global_options             => 'ntp_server:5.6.7.8',
-          :ovn_emit_need_to_frag                => false,
           :localnet_learn_fdb                   => false,
           :fdb_age_threshold                    => 10,
           :mac_binding_age_threshold            => 11,
@@ -155,7 +152,6 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/dhcp_default_lease_time').with_value(p[:dhcp_default_lease_time])
         should contain_neutron_plugin_ml2('ovn/ovn_dhcp4_global_options').with_value(p[:ovn_dhcp4_global_options])
         should contain_neutron_plugin_ml2('ovn/ovn_dhcp6_global_options').with_value(p[:ovn_dhcp6_global_options])
-        should contain_neutron_plugin_ml2('ovn/ovn_emit_need_to_frag').with_value(p[:ovn_emit_need_to_frag])
         should contain_neutron_plugin_ml2('ovn/localnet_learn_fdb').with_value(p[:localnet_learn_fdb])
         should contain_neutron_plugin_ml2('ovn/fdb_age_threshold').with_value(p[:fdb_age_threshold])
         should contain_neutron_plugin_ml2('ovn/mac_binding_age_threshold').with_value(p[:mac_binding_age_threshold])

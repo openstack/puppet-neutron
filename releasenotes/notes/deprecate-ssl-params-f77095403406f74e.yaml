@@ -1,0 +1,10 @@
+---
+deprecations:
+  - |
+    The following parameters of the ``neutron`` class have been deprecated and
+    have no effect now.
+
+    - ``use_ssl``
+    - ``cert_file``
+    - ``key_file``
+    - ``ca_file``

@@ -223,22 +223,6 @@
 #   (string value)
 #   Defaults to $facts['os_service_default']
 #
-# [*use_ssl*]
-#   (optional) Enable SSL on the API server
-#   Defaults to $facts['os_service_default']
-#
-# [*cert_file*]
-#   (optional) certificate file to use when starting api server securely
-#   defaults to $facts['os_service_default']
-#
-# [*key_file*]
-#   (optional) Private key file to use when starting API server securely
-#   Defaults to $facts['os_service_default']
-#
-# [*ca_file*]
-#   (optional) CA certificate file to use to verify connecting clients
-#   Defaults to $facts['os_service_default']
-#
 # [*state_path*]
 #   (optional) Where to store state files. This directory must be writable
 #   by the user executing the agent
@@ -291,6 +275,22 @@
 #   networks using 0x8a88 ethertype.
 #   Defaults to undef.
 #
+# [*use_ssl*]
+#   (optional) Enable SSL on the API server
+#   Defaults to undef.
+#
+# [*cert_file*]
+#   (optional) certificate file to use when starting api server securely
+#   Defaults to undef.
+#
+# [*key_file*]
+#   (optional) Private key file to use when starting API server securely
+#   Defaults to undef.
+#
+# [*ca_file*]
+#   (optional) CA certificate file to use to verify connecting clients
+#   Defaults to undef.
+#
 class neutron (
   Stdlib::Ensure::Package $package_ensure = 'present',
   $bind_host                              = $facts['os_service_default'],
@@ -338,10 +338,6 @@ class neutron (
   $kombu_missing_consumer_retry_timeout   = $facts['os_service_default'],
   $kombu_failover_strategy                = $facts['os_service_default'],
   $kombu_compression                      = $facts['os_service_default'],
-  $use_ssl                                = $facts['os_service_default'],
-  $cert_file                              = $facts['os_service_default'],
-  $key_file                               = $facts['os_service_default'],
-  $ca_file                                = $facts['os_service_default'],
   $state_path                             = $facts['os_service_default'],
   $lock_path                              = '$state_path/lock',
   Boolean $purge_config                   = false,
@@ -353,6 +349,10 @@ class neutron (
   # DEPRECATED PARAMETERS
   $vlan_transparent                       = undef,
   $vlan_qinq                              = undef,
+  $use_ssl                                = undef,
+  $cert_file                              = undef,
+  $key_file                               = undef,
+  $ca_file                                = undef,
 ) {
   include neutron::deps
   include neutron::params
@@ -366,12 +366,11 @@ will be removed in a future release")
 will be removed in a future release")
   }
 
-  if ! is_service_default($use_ssl) and ($use_ssl) {
-    if is_service_default($cert_file) {
-      fail('The cert_file parameter is required when use_ssl is set to true')
-    }
-    if is_service_default($key_file) {
-      fail('The key_file parameter is required when use_ssl is set to true')
+  [
+    'use_ssl', 'cert_file', 'key_file', 'ca_file',
+  ].each |String $ssl_opt| {
+    if getvar($ssl_opt) != undef {
+      warning("The ${ssl_opt} parameter is deprecated and has no effect.")
     }
   }
 
@@ -455,13 +454,9 @@ will be removed in a future release")
     enable_cancel_on_failover            => $rabbit_enable_cancel_on_failover,
   }
 
-  # SSL Options
+  # NOTE(tkajinam): Remove these after 2026.1 release
   neutron_config {
-    'DEFAULT/use_ssl': value => $use_ssl;
+    'DEFAULT/use_ssl': ensure => absent;
   }
-  oslo::service::ssl { 'neutron_config':
-    cert_file => $cert_file,
-    key_file  => $key_file,
-    ca_file   => $ca_file,
-  }
+  oslo::service::ssl { 'neutron_config': }
 }

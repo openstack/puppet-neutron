@@ -87,7 +87,7 @@
 #
 # [*router_distributed*]
 #   (Optional) Setting the "router_distributed" flag to "True" will default to the creation
-#   of distributed tenant routers.
+#   of distributed project routers.
 #   Also can be the type of the router on the create request (admin-only attribute).
 #   Defaults to $facts['os_service_default']
 #

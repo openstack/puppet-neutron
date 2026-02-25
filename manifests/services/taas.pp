@@ -12,11 +12,11 @@
 #   Defaults to 'TAAS:TAAS:neutron_taas.services.taas.service_drivers.taas_rpc.TaasRpcDriver:default'.
 #
 # [*quota_tap_service*]
-#   (optional) Number of Tap Service instances allowed per tenant.
+#   (optional) Number of Tap Service instances allowed per project.
 #   Defaults to $facts['os_service_default']
 #
 # [*quota_tap_flow*]
-#   (optional) Number of Tap flows allowed per tenant.
+#   (optional) Number of Tap flows allowed per project.
 #   Defaults to $facts['os_service_default']
 #
 # [*vlan_range_start*]

@@ -66,11 +66,11 @@ class { 'neutron::keystone::authtoken':
 
 # ml2 plugin with vxlan as ml2 driver and ovs as mechanism driver
 class { 'neutron::plugins::ml2':
-  type_drivers         => ['vxlan'],
-  tenant_network_types => ['vxlan'],
-  vxlan_group          => '239.1.1.1',
-  mechanism_drivers    => ['openvswitch'],
-  vni_ranges           => ['1:300']
+  type_drivers          => ['vxlan'],
+  project_network_types => ['vxlan'],
+  vxlan_group           => '239.1.1.1',
+  mechanism_drivers     => ['openvswitch'],
+  vni_ranges            => ['1:300']
 }
 ```
 

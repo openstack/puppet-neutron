@@ -38,8 +38,8 @@
 #   from the neutron.ml2.extension_drivers namespace.
 #   Defaults to $facts['os_service_default']
 #
-# [*tenant_network_types*]
-#   (optional) Ordered list of network_types to allocate as tenant networks.
+# [*project_network_types*]
+#   (optional) Ordered list of network_types to allocate as project networks.
 #   The value 'local' is only useful for single-box testing
 #   but provides no connectivity between hosts.
 #   Should be an array that can have these elements:
@@ -62,17 +62,16 @@
 #
 # [*network_vlan_ranges*]
 #   (optional) List of <physical_network>:<vlan_min>:<vlan_max> or
-#   <physical_network> specifying physical_network names
-#   usable for VLAN provider and tenant networks, as
-#   well as ranges of VLAN tags on each available for
-#   allocation to tenant networks.
+#   <physical_network> specifying physical_network names usable for VLAN
+#   provider and project networks, as well as ranges of VLAN tags on each
+#   available for allocation to project networks.
 #   Should be an array with vlan_min = 1 & vlan_max = 4094 (IEEE 802.1Q)
 #   Default to 'physnet1:1000:2999'.
 #
 # [*tunnel_id_ranges*]
 #   (optional) Comma-separated list of <tun_min>:<tun_max> tuples
 #   enumerating ranges of GRE tunnel IDs that are
-#   available for tenant network allocation
+#   available for project network allocation
 #   Should be an array with tun_max +1 - tun_min > 1000000
 #   Default to '20:100'.
 #
@@ -87,7 +86,7 @@
 # [*vni_ranges*]
 #   (optional) Comma-separated list of <vni_min>:<vni_max> tuples
 #   enumerating ranges of VXLAN VNI IDs that are
-#   available for tenant network allocation.
+#   available for project network allocation.
 #   Min value is 0 and Max value is 16777215.
 #   Default to '10:100'.
 #
@@ -122,11 +121,21 @@
 #   in the ml2 config.
 #   Defaults to false.
 #
+# DEPRECATED PARAMETERS
+#
+# [*tenant_network_types*]
+#   (optional) Ordered list of network_types to allocate as project networks.
+#   The value 'local' is only useful for single-box testing
+#   but provides no connectivity between hosts.
+#   Should be an array that can have these elements:
+#   local, flat, vlan, gre, vxlan
+#   Defaults to undef
+#
 class neutron::plugins::ml2 (
   Stdlib::Ensure::Package $package_ensure = 'present',
   $type_drivers                           = ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
   $extension_drivers                      = $facts['os_service_default'],
-  $tenant_network_types                   = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
+  $project_network_types                  = ['local', 'flat', 'vlan', 'gre', 'vxlan'],
   $mechanism_drivers                      = ['openvswitch'],
   $flat_networks                          = '*',
   $network_vlan_ranges                    = 'physnet1:1000:2999',
@@ -139,6 +148,8 @@ class neutron::plugins::ml2 (
   $max_header_size                        = $facts['os_service_default'],
   $overlay_ip_version                     = $facts['os_service_default'],
   Boolean $purge_config                   = false,
+  # DEPRECATED PARAMETERS
+  $tenant_network_types                   = undef,
 ) {
   include neutron::deps
   include neutron::params
@@ -186,11 +197,23 @@ class neutron::plugins::ml2 (
   neutron_plugin_ml2 {
     'ml2/physical_network_mtus':            value => join(any2array($physical_network_mtus), ',');
     'ml2/type_drivers':                     value => join(any2array($type_drivers), ',');
-    'ml2/tenant_network_types':             value => join(any2array($tenant_network_types), ',');
     'ml2/mechanism_drivers':                value => join(any2array($mechanism_drivers), ',');
     'ml2/path_mtu':                         value => $path_mtu;
     'ml2/extension_drivers':                value => join(any2array($extension_drivers), ',');
     'ml2/overlay_ip_version':               value => $overlay_ip_version;
     'securitygroup/enable_security_group':  value => $enable_security_group;
+  }
+
+  if $tenant_network_types != undef {
+    warning('The tenant_netwoork_types parameter is deprecated')
+    neutron_plugin_ml2 {
+      'ml2/tenant_network_types':  value => join(any2array($tenant_network_types), ',');
+      'ml2/project_network_types': value => $facts['os_service_default'];
+    }
+  } else {
+    neutron_plugin_ml2 {
+      'ml2/tenant_network_types':  value => $facts['os_service_default'];
+      'ml2/project_network_types': value => join(any2array($project_network_types), ',');
+    }
   }
 }

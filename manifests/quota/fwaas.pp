@@ -5,15 +5,15 @@
 # === Parameters
 #
 # [*quota_firewall_group*]
-#  (Optional) Number of firewall groups allowed per tenant.
+#  (Optional) Number of firewall groups allowed per project.
 #  Defaults to $facts['os_service_default'].
 #
 # [*quota_firewall_policy*]
-#  (Optional) Number of firewall policies allowed per tenant.
+#  (Optional) Number of firewall policies allowed per project.
 #  Defaults to $facts['os_service_default'].
 #
 # [*quota_firewall_rule*]
-#  (Optional) Number of firewall rules allowed per tenant.
+#  (Optional) Number of firewall rules allowed per project.
 #  Defaults to $facts['os_service_default'].
 #
 class neutron::quota::fwaas (

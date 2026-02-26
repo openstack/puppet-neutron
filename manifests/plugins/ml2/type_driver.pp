@@ -25,16 +25,16 @@
 #
 # [*tunnel_id_ranges*]
 #  (required) Comma-separated list of <tun_min>:<tun_max> tuples enumerating ranges
-#  of GRE tunnel IDs that are available for tenant network allocation
+#  of GRE tunnel IDs that are available for project network allocation
 #
 # [*network_vlan_ranges*]
 #  (required) List of <physical_network>:<vlan_min>:<vlan_max> or <physical_network>
-#  specifying physical_network names usable for VLAN provider and tenant networks, as
-#  well as ranges of VLAN tags on each available for allocation to tenant networks.
+#  specifying physical_network names usable for VLAN provider and project networks, as
+#  well as ranges of VLAN tags on each available for allocation to project networks.
 #
 # [*vni_ranges*]
 #  (required) Comma-separated list of <vni_min> tuples enumerating ranges of VXLAN VNI IDs
-#  that are available for tenant network allocation.
+#  that are available for project network allocation.
 #
 # [*vxlan_group*]
 #  (required) Multicast group for VXLAN. If unset, disables VXLAN multicast mode.

@@ -5,23 +5,23 @@
 # === Parameters
 #
 # [*quota_port_chain*]
-#  (Optional) Maximum number of port chain per tenant.
+#  (Optional) Maximum number of port chain per project.
 #  Defaults to $facts['os_service_default'].
 #
 # [*quota_port_pair_group*]
-#  (Optional) Maximum number of port pair group per tenant.
+#  (Optional) Maximum number of port pair group per project.
 #  Defaults to $facts['os_service_default'].
 #
 # [*quota_port_pair*]
-#  (Optional) Maximum number of port pair per tenant.
+#  (Optional) Maximum number of port pair per project.
 #  Defaults to $facts['os_service_default'].
 #
 # [*quota_service_graphs*]
-#  (Optional) Maximum number of Service Graphs per tenant.
+#  (Optional) Maximum number of Service Graphs per project.
 #  Defaults to $facts['os_service_default'].
 #
 # [*quota_flow_classifier*]
-#  (Optional) Maximum number of Flow Classifiers per tenant.
+#  (Optional) Maximum number of Flow Classifiers per project.
 #  Defaults to $facts['os_service_default'].
 #
 class neutron::quota::sfc (

@@ -5,36 +5,36 @@
 # === Parameters
 #
 # [*default_quota*]
-#   (optional) Default number of resources allowed per tenant,
+#   (optional) Default number of resources allowed per project,
 #   minus for unlimited. Defaults to $facts['os_service_default'].
 #
 # [*quota_network*]
-#   (optional) Number of networks allowed per tenant, and minus means unlimited.
+#   (optional) Number of networks allowed per project, and minus means unlimited.
 #   Defaults to $facts['os_service_default'].
 #
 # [*quota_subnet*]
-#   (optional) Number of subnets allowed per tenant, and minus means unlimited.
+#   (optional) Number of subnets allowed per project, and minus means unlimited.
 #   Defaults to $facts['os_service_default'].
 #
 # [*quota_port*]
-#   (optional) Number of ports allowed per tenant, and minus means unlimited.
+#   (optional) Number of ports allowed per project, and minus means unlimited.
 #   Defaults to $facts['os_service_default'].
 #
 # [*quota_router*]
-#   (optional) Number of routers allowed per tenant, and minus means unlimited.
+#   (optional) Number of routers allowed per project, and minus means unlimited.
 #   Requires L3 extension. Defaults to $facts['os_service_default'].
 #
 # [*quota_floatingip*]
-#   (optional) Number of floating IPs allowed per tenant,
+#   (optional) Number of floating IPs allowed per project,
 #   and minus means unlimited. Requires L3 extension. Defaults to $facts['os_service_default'].
 #
 # [*quota_security_group*]
-#   (optional) Number of security groups allowed per tenant,
+#   (optional) Number of security groups allowed per project,
 #   and minus means unlimited. Requires securitygroup extension.
 #   Defaults to $facts['os_service_default'].
 #
 # [*quota_security_group_rule*]
-#   (optional) Number of security rules allowed per tenant,
+#   (optional) Number of security rules allowed per project,
 #   and minus means unlimited. Requires securitygroup extension.
 #   Defaults to $facts['os_service_default'].
 #
@@ -43,7 +43,7 @@
 #   Defaults to $facts['os_service_default'].
 #
 # [*quota_rbac_policy*]
-#   (optional) Number of rbac policies allowed per tenant.
+#   (optional) Number of rbac policies allowed per project.
 #   A negative value means unlimited.
 #   Defaults to $facts['os_service_default'].
 #

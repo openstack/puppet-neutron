@@ -67,6 +67,10 @@
 #   multiple IPv6 addresses in the same subnet.
 #   Defaults to $facts['os_service_default'].
 #
+# [*dnsmasq_txt_record*]
+#   (optional) Return a TXT DNS record.
+#   Defaults to $facts['os_service_default'].
+#
 # [*enable_isolated_metadata*]
 #   (optional) enable metadata support on isolated networks.
 #   Defaults to false.
@@ -146,6 +150,7 @@ class neutron::agents::dhcp (
   $dnsmasq_local_resolv                   = $facts['os_service_default'],
   $dnsmasq_lease_max                      = $facts['os_service_default'],
   $dnsmasq_enable_addr6_list              = $facts['os_service_default'],
+  $dnsmasq_txt_record                     = $facts['os_service_default'],
   Boolean $enable_isolated_metadata       = false,
   Boolean $enable_force_metadata          = false,
   Boolean $enable_metadata_network        = false,
@@ -195,6 +200,7 @@ class neutron::agents::dhcp (
     'DEFAULT/dnsmasq_local_resolv':      value => $dnsmasq_local_resolv;
     'DEFAULT/dnsmasq_lease_max':         value => $dnsmasq_lease_max;
     'DEFAULT/dnsmasq_enable_addr6_list': value => $dnsmasq_enable_addr6_list;
+    'DEFAULT/dnsmasq_txt_record':        value => $dnsmasq_txt_record;
     'agent/availability_zone':           value => $availability_zone;
     'agent/report_interval':             value => $report_interval;
     'DEFAULT/rpc_response_max_timeout':  value => $rpc_response_max_timeout;

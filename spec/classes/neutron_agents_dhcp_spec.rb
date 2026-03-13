@@ -42,6 +42,7 @@ describe 'neutron::agents::dhcp' do
       should contain_neutron_dhcp_agent_config('DEFAULT/dhcp_broadcast_reply').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_local_resolv').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_enable_addr6_list').with_value('<SERVICE DEFAULT>');
+      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_txt_record').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('agent/availability_zone').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('agent/report_interval').with_value('<SERVICE DEFAULT>');
       should contain_neutron_dhcp_agent_config('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>');
@@ -198,6 +199,7 @@ describe 'neutron::agents::dhcp' do
           :dnsmasq_local_resolv      => true,
           :dnsmasq_lease_max         => 16777216,
           :dnsmasq_enable_addr6_list => false,
+          :dnsmasq_txt_record        => 'record.example.com,txt_value',
         })
       end
 
@@ -214,6 +216,8 @@ describe 'neutron::agents::dhcp' do
           .with_value(params[:dnsmasq_lease_max])
         should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_enable_addr6_list')\
           .with_value(params[:dnsmasq_enable_addr6_list]);
+        should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_txt_record')\
+          .with_value(params[:dnsmasq_txt_record]);
       end
     end
   end

@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::agents::dhcp::dnsmasq_txt_record`` prameter has been
+    added.

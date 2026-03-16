@@ -156,7 +156,7 @@ describe 'neutron::wsgi::apache' do
         when 'Debian'
           {
             :wsgi_script_path   => '/usr/lib/cgi-bin/neutron',
-            :wsgi_script_source => '/usr/bin/neutron-api'
+            :wsgi_script_source => '/usr/lib/python3/dist-packages/neutron/wsgi/api.py',
           }
         when 'RedHat'
           {

@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The following new parameters have been added to
+    the ``neutron::plugins::ml2::ovn`` class.
+
+    - ``ha_failover_strategy``
+    - ``bfd_min_rx``
+    - ``bfd_min_tx``
+    - ``bfd_mult``

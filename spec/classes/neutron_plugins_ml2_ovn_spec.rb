@@ -32,6 +32,10 @@ describe 'neutron::plugins::ml2::ovn' do
       :ovn_router_indirect_snat             => '<SERVICE DEFAULT>',
       :live_migration_activation_strategy   => '<SERVICE DEFAULT>',
       :stateless_nat_enabled                => '<SERVICE DEFAULT>',
+      :ha_failover_strategy                 => '<SERVICE DEFAULT>',
+      :bfd_min_rx                           => '<SERVICE DEFAULT>',
+      :bfd_min_tx                           => '<SERVICE DEFAULT>',
+      :bfd_mult                             => '<SERVICE DEFAULT>',
       :ignore_lsp_down                      => '<SERVICE DEFAULT>',
       :fdb_removal_limit                    => '<SERVICE DEFAULT>',
       :mac_binding_removal_limit            => '<SERVICE DEFAULT>',
@@ -82,6 +86,10 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/ovn_router_indirect_snat').with_value(p[:ovn_router_indirect_snat])
         should contain_neutron_plugin_ml2('ovn/live_migration_activation_strategy').with_value(p[:live_migration_activation_strategy])
         should contain_neutron_plugin_ml2('ovn/stateless_nat_enabled').with_value(p[:stateless_nat_enabled])
+        should contain_neutron_plugin_ml2('ovn/ha_failover_strategy').with_value(p[:ha_failover_strategy])
+        should contain_neutron_plugin_ml2('ovn/bfd_min_rx').with_value(p[:bfd_min_rx])
+        should contain_neutron_plugin_ml2('ovn/bfd_min_tx').with_value(p[:bfd_min_tx])
+        should contain_neutron_plugin_ml2('ovn/bfd_mult').with_value(p[:bfd_mult])
         should contain_neutron_plugin_ml2('ovn_nb_global/ignore_lsp_down').with_value(p[:ignore_lsp_down])
         should contain_neutron_plugin_ml2('ovn_nb_global/fdb_removal_limit').with_value(p[:fdb_removal_limit])
         should contain_neutron_plugin_ml2('ovn_nb_global/mac_binding_removal_limit').with_value(p[:mac_binding_removal_limit])
@@ -123,6 +131,10 @@ describe 'neutron::plugins::ml2::ovn' do
           :ovn_router_indirect_snat             => false,
           :live_migration_activation_strategy   => 'rarp',
           :stateless_nat_enabled                => false,
+          :ha_failover_strategy                 => 'manual',
+          :bfd_min_rx                           => 1000,
+          :bfd_min_tx                           => 100,
+          :bfd_mult                             => 3,
           :ignore_lsp_down                      => false,
           :fdb_removal_limit                    => 12,
           :mac_binding_removal_limit            => 13,
@@ -159,6 +171,10 @@ describe 'neutron::plugins::ml2::ovn' do
         should contain_neutron_plugin_ml2('ovn/ovn_router_indirect_snat').with_value(p[:ovn_router_indirect_snat])
         should contain_neutron_plugin_ml2('ovn/live_migration_activation_strategy').with_value(p[:live_migration_activation_strategy])
         should contain_neutron_plugin_ml2('ovn/stateless_nat_enabled').with_value(p[:stateless_nat_enabled])
+        should contain_neutron_plugin_ml2('ovn/ha_failover_strategy').with_value(p[:ha_failover_strategy])
+        should contain_neutron_plugin_ml2('ovn/bfd_min_rx').with_value(p[:bfd_min_rx])
+        should contain_neutron_plugin_ml2('ovn/bfd_min_tx').with_value(p[:bfd_min_tx])
+        should contain_neutron_plugin_ml2('ovn/bfd_mult').with_value(p[:bfd_mult])
         should contain_neutron_plugin_ml2('ovn_nb_global/ignore_lsp_down').with_value(p[:ignore_lsp_down])
         should contain_neutron_plugin_ml2('ovn_nb_global/fdb_removal_limit').with_value(p[:fdb_removal_limit])
         should contain_neutron_plugin_ml2('ovn_nb_global/mac_binding_removal_limit').with_value(p[:mac_binding_removal_limit])

@@ -278,6 +278,10 @@
 #   processed at once, in one single transaction.
 #   Defaults to $facts['os_service_default'].
 #
+# [*trunk_enabled*]
+#   (Optional) Enable agent side trunk extension.
+#   Defaults to $facts['os_service_default'].
+#
 class neutron::agents::ml2::ovs (
   Stdlib::Ensure::Package $package_ensure                 = 'present',
   Boolean $enabled                                        = true,
@@ -333,6 +337,7 @@ class neutron::agents::ml2::ovs (
   $network_log_burst_limit                                = $facts['os_service_default'],
   $network_log_local_output_log_base                      = $facts['os_service_default'],
   $openflow_processed_per_port                            = $facts['os_service_default'],
+  $trunk_enabled                                          = $facts['os_service_default'],
 ) {
   include neutron::deps
   include neutron::params
@@ -520,6 +525,7 @@ class neutron::agents::ml2::ovs (
     'network_log/burst_limit':              value => $network_log_burst_limit;
     'network_log/local_output_log_base':    value => $network_log_local_output_log_base;
     'ovs/openflow_processed_per_port':      value => $openflow_processed_per_port;
+    'ovs/trunk_enabled':                    value => $trunk_enabled;
   }
 
   if $firewall_driver {

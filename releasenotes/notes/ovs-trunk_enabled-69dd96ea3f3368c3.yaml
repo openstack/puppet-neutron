@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``neutron::agents::ml2::ovs::trunk_enabled`` parameter has been
+    added.

@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add possibility to specify database connection parameters database
+    (parameter ``neutron::db::connection_parameters``).
+    This allows to eg. to specify ssl connection with a trusted certificate.

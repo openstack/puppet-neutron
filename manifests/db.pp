@@ -38,6 +38,11 @@
 #   before error is raised. Set to -1 to specify an infinite retry count.
 #   Defaults to $facts['os_service_default']
 #
+# [*connection_parameters*]
+#   (Optional) URL parameters to append to the database connection
+#   URL at connect time
+#   Defaults to $facts['os_service_default']
+#
 # DEPRECATED PARAMETERS
 #
 # [*mysql_enable_ndb*]
@@ -46,14 +51,15 @@
 #   Defaults to undef
 #
 class neutron::db (
-  $database_connection              = 'sqlite:////var/lib/neutron/ovs.sqlite',
-  $database_connection_recycle_time = $facts['os_service_default'],
-  $database_max_pool_size           = $facts['os_service_default'],
-  $database_max_retries             = $facts['os_service_default'],
-  $database_retry_interval          = $facts['os_service_default'],
-  $database_max_overflow            = $facts['os_service_default'],
-  $database_pool_timeout            = $facts['os_service_default'],
-  $database_db_max_retries          = $facts['os_service_default'],
+  $database_connection                                       = 'sqlite:////var/lib/neutron/ovs.sqlite',
+  $database_connection_recycle_time                          = $facts['os_service_default'],
+  $database_max_pool_size                                    = $facts['os_service_default'],
+  $database_max_retries                                      = $facts['os_service_default'],
+  $database_retry_interval                                   = $facts['os_service_default'],
+  $database_max_overflow                                     = $facts['os_service_default'],
+  $database_pool_timeout                                     = $facts['os_service_default'],
+  $database_db_max_retries                                   = $facts['os_service_default'],
+  Optional[Oslo::Dbconn::Conn_params] $connection_parameters = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $mysql_enable_ndb                 = undef,
 ) {
@@ -70,6 +76,7 @@ class neutron::db (
       pool_timeout            => $database_pool_timeout,
       mysql_enable_ndb        => $mysql_enable_ndb,
       db_max_retries          => $database_db_max_retries,
+      connection_parameters   => $connection_parameters,
     }
   }
 

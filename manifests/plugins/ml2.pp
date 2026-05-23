@@ -205,7 +205,7 @@ class neutron::plugins::ml2 (
   }
 
   if $tenant_network_types != undef {
-    warning('The tenant_netwoork_types parameter is deprecated')
+    warning('The tenant_network_types parameter is deprecated')
     neutron_plugin_ml2 {
       'ml2/tenant_network_types':  value => join(any2array($tenant_network_types), ',');
       'ml2/project_network_types': value => $facts['os_service_default'];

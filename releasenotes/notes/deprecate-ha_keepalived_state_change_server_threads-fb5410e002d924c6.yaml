@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``neutron::agents:l3::ha_keepalived_state_change_server_threads``
+    parameter has been deprecated. This parameter has no effect now and will
+    be removed in a future release.

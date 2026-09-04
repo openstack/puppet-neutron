@@ -60,11 +60,6 @@
 #   (optional) The VRRP health check interval in seconds.
 #   Defaults to $facts['os_service_default']
 #
-# [*ha_keepalived_state_change_server_threads*]
-#   (optional) Number of concurrent threads for keepalived server connection
-#   requests.
-#   Defaults to $facts['os_service_default']
-#
 # [*ha_conntrackd_enabled*]
 #   (optional) Enable conntrackd to syncrhonize connection tracking states
 #   between HA routers.
@@ -177,6 +172,13 @@
 #   in the l3 config.
 #   Defaults to false.
 #
+# DEPRECATED PARAMETERS
+#
+# [*ha_keepalived_state_change_server_threads*]
+#   (optional) Number of concurrent threads for keepalived server connection
+#   requests.
+#   Defaults to undef
+#
 class neutron::agents::l3 (
   Stdlib::Ensure::Package $package_ensure    = 'present',
   Boolean $enabled                           = true,
@@ -191,7 +193,6 @@ class neutron::agents::l3 (
   $ha_vrrp_auth_type                         = $facts['os_service_default'],
   $ha_vrrp_auth_password                     = $facts['os_service_default'],
   $ha_vrrp_advert_int                        = $facts['os_service_default'],
-  $ha_keepalived_state_change_server_threads = $facts['os_service_default'],
   $ha_vrrp_health_check_interval             = $facts['os_service_default'],
   $ha_conntrackd_enabled                     = $facts['os_service_default'],
   $ha_conntrackd_hashsize                    = $facts['os_service_default'],
@@ -216,6 +217,8 @@ class neutron::agents::l3 (
   $network_log_burst_limit                   = $facts['os_service_default'],
   $network_log_local_output_log_base         = $facts['os_service_default'],
   Boolean $purge_config                      = false,
+  # DEPRECATED PARAMETERS
+  $ha_keepalived_state_change_server_threads = undef,
 ) {
   include neutron::deps
   include neutron::params
@@ -235,7 +238,6 @@ class neutron::agents::l3 (
     'DEFAULT/ha_vrrp_auth_type':                         value => $ha_vrrp_auth_type;
     'DEFAULT/ha_vrrp_auth_password':                     value => $ha_vrrp_auth_password, secret => true;
     'DEFAULT/ha_vrrp_advert_int':                        value => $ha_vrrp_advert_int;
-    'DEFAULT/ha_keepalived_state_change_server_threads': value => $ha_keepalived_state_change_server_threads;
     'DEFAULT/ha_vrrp_health_check_interval':             value => $ha_vrrp_health_check_interval;
     'DEFAULT/ha_conntrackd_enabled':                     value => $ha_conntrackd_enabled;
     'DEFAULT/ha_conntrackd_hashsize':                    value => $ha_conntrackd_hashsize;
@@ -259,6 +261,14 @@ class neutron::agents::l3 (
     'network_log/rate_limit':                            value => $network_log_rate_limit;
     'network_log/burst_limit':                           value => $network_log_burst_limit;
     'network_log/local_output_log_base':                 value => $network_log_local_output_log_base;
+  }
+
+  if $ha_keepalived_state_change_server_threads != undef {
+    warning("The ha_keepalived_state_change_server_threads parameter is deprecated \
+and has no effect")
+  }
+  neutron_l3_agent_config {
+    'DEFAULT/ha_keepalived_state_change_server_threads': ensure => absent;
   }
 
   if $neutron::params::l3_agent_package {

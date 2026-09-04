@@ -214,14 +214,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*service_name*]
-#   (Optional) Name of the service that will be providing neutron-server.
-#   Defaults to undef
-#
-# [*server_package*]
-#   (Optional) Name of the package holding neutron-server.
-#   Defaults to undef
-#
 # [*api_workers*]
 #   (Optional) Number of separate worker processes to spawn.  Greater than 0
 #   launches that number of child processes as workers.  The parent process
@@ -271,8 +263,6 @@ class neutron::server (
   $enable_default_route_ecmp                                        = $facts['os_service_default'],
   $enable_default_route_bfd                                         = $facts['os_service_default'],
   # DEPRECATED PARMETERS
-  $service_name                                                     = undef,
-  $server_package                                                   = undef,
   $api_workers                                                      = undef,
 ) inherits neutron::params {
   include neutron::deps
@@ -282,13 +272,6 @@ class neutron::server (
   if !is_service_default($dhcp_load_type) {
     if ! ($dhcp_load_type in ['networks', 'subnets', 'ports']) {
       fail('Unsupported dhcp_load_type. It should be one of networks, subnets and ports.')
-    }
-  }
-
-  if $service_name != undef {
-    warning('The service_name parameter is deprecated')
-    if $service_name {
-      fail('The moonolithic neutron-service is no longer supported')
     }
   }
 

@@ -12,7 +12,7 @@ describe 'neutron::db' do
         :retry_interval          => '<SERVICE DEFAULT>',
         :max_overflow            => '<SERVICE DEFAULT>',
         :pool_timeout            => '<SERVICE DEFAULT>',
-        :mysql_enable_ndb        => '<SERVICE DEFAULT>',
+        :mysql_enable_ndb        => nil,
       )}
     end
 

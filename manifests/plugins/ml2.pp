@@ -121,16 +121,6 @@
 #   in the ml2 config.
 #   Defaults to false.
 #
-# DEPRECATED PARAMETERS
-#
-# [*tenant_network_types*]
-#   (optional) Ordered list of network_types to allocate as project networks.
-#   The value 'local' is only useful for single-box testing
-#   but provides no connectivity between hosts.
-#   Should be an array that can have these elements:
-#   local, flat, vlan, gre, vxlan
-#   Defaults to undef
-#
 class neutron::plugins::ml2 (
   Stdlib::Ensure::Package $package_ensure = 'present',
   $type_drivers                           = ['local', 'flat', 'vlan', 'gre', 'vxlan', 'geneve'],
@@ -148,8 +138,6 @@ class neutron::plugins::ml2 (
   $max_header_size                        = $facts['os_service_default'],
   $overlay_ip_version                     = $facts['os_service_default'],
   Boolean $purge_config                   = false,
-  # DEPRECATED PARAMETERS
-  $tenant_network_types                   = undef,
 ) {
   include neutron::deps
   include neutron::params
@@ -203,12 +191,5 @@ class neutron::plugins::ml2 (
     'ml2/path_mtu':                         value => $path_mtu;
     'ml2/overlay_ip_version':               value => $overlay_ip_version;
     'securitygroup/enable_security_group':  value => $enable_security_group;
-  }
-
-  if $tenant_network_types != undef {
-    warning('The tenant_network_types parameter is deprecated')
-    neutron_plugin_ml2 {
-      'ml2/tenant_network_types':  value => join(any2array($tenant_network_types), ',');
-    }
   }
 }

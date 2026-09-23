@@ -195,11 +195,12 @@ class neutron::plugins::ml2 (
   }
 
   neutron_plugin_ml2 {
-    'ml2/physical_network_mtus':            value => join(any2array($physical_network_mtus), ',');
     'ml2/type_drivers':                     value => join(any2array($type_drivers), ',');
-    'ml2/mechanism_drivers':                value => join(any2array($mechanism_drivers), ',');
-    'ml2/path_mtu':                         value => $path_mtu;
     'ml2/extension_drivers':                value => join(any2array($extension_drivers), ',');
+    'ml2/project_network_types':            value => join(any2array($project_network_types), ',');
+    'ml2/mechanism_drivers':                value => join(any2array($mechanism_drivers), ',');
+    'ml2/physical_network_mtus':            value => join(any2array($physical_network_mtus), ',');
+    'ml2/path_mtu':                         value => $path_mtu;
     'ml2/overlay_ip_version':               value => $overlay_ip_version;
     'securitygroup/enable_security_group':  value => $enable_security_group;
   }
@@ -208,12 +209,6 @@ class neutron::plugins::ml2 (
     warning('The tenant_network_types parameter is deprecated')
     neutron_plugin_ml2 {
       'ml2/tenant_network_types':  value => join(any2array($tenant_network_types), ',');
-      'ml2/project_network_types': value => $facts['os_service_default'];
-    }
-  } else {
-    neutron_plugin_ml2 {
-      'ml2/tenant_network_types':  value => $facts['os_service_default'];
-      'ml2/project_network_types': value => join(any2array($project_network_types), ',');
     }
   }
 }

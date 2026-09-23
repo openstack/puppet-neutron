@@ -66,7 +66,6 @@ describe 'neutron::plugins::ml2' do
     it 'configures ml2_conf.ini' do
       should contain_neutron_plugin_ml2('ml2/type_drivers').with_value(p[:type_drivers].join(','))
       should contain_neutron_plugin_ml2('ml2/project_network_types').with_value(p[:project_network_types].join(','))
-      should contain_neutron_plugin_ml2('ml2/tenant_network_types').with_value('<SERVICE DEFAULT>')
       should contain_neutron_plugin_ml2('ml2/mechanism_drivers').with_value(p[:mechanism_drivers].join(','))
       should contain_neutron_plugin_ml2('ml2/extension_drivers').with_value('<SERVICE DEFAULT>')
       should contain_neutron_plugin_ml2('ml2/path_mtu').with_value('<SERVICE DEFAULT>')
@@ -284,19 +283,6 @@ describe 'neutron::plugins::ml2' do
       end
       it 'configures ml2_conf.ini' do
         should contain_neutron_plugin_ml2('ml2/project_network_types').with_value(params[:project_network_types].join(','))
-        should contain_neutron_plugin_ml2('ml2/tenant_network_types').with_value('<SERVICE DEFAULT>')
-      end
-    end
-
-    context 'when tenant_network_types is set' do
-      before :each do
-        params.merge!({
-          :tenant_network_types => ['vlan', 'vxlan'],
-        })
-      end
-      it 'configures ml2_conf.ini' do
-        should contain_neutron_plugin_ml2('ml2/project_network_types').with_value('<SERVICE DEFAULT>')
-        should contain_neutron_plugin_ml2('ml2/tenant_network_types').with_value(params[:tenant_network_types].join(','))
       end
     end
   end

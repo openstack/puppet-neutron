@@ -92,7 +92,6 @@
 #
 # [*enable_security_group*]
 #   (optional) Controls if neutron security group is enabled or not.
-#   It should be false when you use nova security group.
 #   Defaults to $facts['os_service_default'].
 #
 # [*physical_network_mtus*]

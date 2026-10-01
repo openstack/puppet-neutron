@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``neutron::plugins::ml2::tenant_network_types`` parameter has been
+    removed.

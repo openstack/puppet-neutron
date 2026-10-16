@@ -1,0 +1,4 @@
+---
+deprecations:
+  - |
+    The ``neutron::policy::enforce_scope`` parameter has been deprecated.

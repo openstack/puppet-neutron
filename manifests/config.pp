@@ -93,41 +93,34 @@
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
-# DEPRECATED PARAMETERS
-#
-# [*ovn_metadata_agent_config*]
-#   (optional) Manage configuration of neutron_ovn_metadata_agent.ini
-#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class neutron::config (
-  Hash $server_config                 = {},
-  Hash $api_paste_ini                 = {},
-  Hash $rootwrap_config               = {},
-  Hash $ovs_agent_config              = {},
-  Hash $ovn_agent_config              = {},
-  Hash $sriov_agent_config            = {},
-  Hash $macvtap_agent_config          = {},
-  Hash $bgpvpn_bagpipe_config         = {},
-  Hash $bgpvpn_service_config         = {},
-  Hash $l2gw_agent_config             = {},
-  Hash $l2gw_service_config           = {},
-  Hash $sfc_service_config            = {},
-  Hash $l3_agent_config               = {},
-  Hash $dhcp_agent_config             = {},
-  Hash $metadata_agent_config         = {},
-  Hash $metering_agent_config         = {},
-  Hash $fwaas_agent_config            = {},
-  Hash $fwaas_service_config          = {},
-  Hash $vpnaas_agent_config           = {},
-  Hash $vpnaas_service_config         = {},
-  Hash $ovn_vpn_agent_config          = {},
-  Hash $taas_service_config           = {},
-  Hash $bgp_dragent_config            = {},
-  Hash $plugin_ml2_config             = {},
-  # DEPRECATED PARAMETERS
-  Optional[Hash] $ovn_metadata_agent_config = undef,
+  Hash $server_config         = {},
+  Hash $api_paste_ini         = {},
+  Hash $rootwrap_config       = {},
+  Hash $ovs_agent_config      = {},
+  Hash $ovn_agent_config      = {},
+  Hash $sriov_agent_config    = {},
+  Hash $macvtap_agent_config  = {},
+  Hash $bgpvpn_bagpipe_config = {},
+  Hash $bgpvpn_service_config = {},
+  Hash $l2gw_agent_config     = {},
+  Hash $l2gw_service_config   = {},
+  Hash $sfc_service_config    = {},
+  Hash $l3_agent_config       = {},
+  Hash $dhcp_agent_config     = {},
+  Hash $metadata_agent_config = {},
+  Hash $metering_agent_config = {},
+  Hash $fwaas_agent_config    = {},
+  Hash $fwaas_service_config  = {},
+  Hash $vpnaas_agent_config   = {},
+  Hash $vpnaas_service_config = {},
+  Hash $ovn_vpn_agent_config  = {},
+  Hash $taas_service_config   = {},
+  Hash $bgp_dragent_config    = {},
+  Hash $plugin_ml2_config     = {},
 ) {
   include neutron::deps
 
@@ -155,9 +148,4 @@ class neutron::config (
   create_resources('neutron_taas_service_config', $taas_service_config)
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
-
-  if $ovn_metadata_agent_config != undef {
-    warning('The ovn_metadata_agent_config parameter is deprecated')
-    create_resources('ovn_metadata_agent_config', $ovn_metadata_agent_config)
-  }
 }

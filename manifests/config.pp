@@ -54,9 +54,6 @@
 # [*l2gw_service_config*]
 #   (optional) Manage configuration of networking_l2gw.conf
 #
-# [*sfc_service_config*]
-#   (optional) Manage configuration of networking-sfc.conf
-#
 # [*l3_agent_config*]
 #   (optional) Manage configuration of l3_agent.ini
 #
@@ -93,6 +90,11 @@
 # [*plugin_ml2_config*]
 #   (optional) Manage configuration of ml2_conf.ini
 #
+# DEPRECATED PARAMETERS
+#
+# [*sfc_service_config*]
+#   (optional) Manage configuration of networking-sfc.conf
+#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -108,7 +110,6 @@ class neutron::config (
   Hash $bgpvpn_service_config = {},
   Hash $l2gw_agent_config     = {},
   Hash $l2gw_service_config   = {},
-  Hash $sfc_service_config    = {},
   Hash $l3_agent_config       = {},
   Hash $dhcp_agent_config     = {},
   Hash $metadata_agent_config = {},
@@ -121,6 +122,8 @@ class neutron::config (
   Hash $taas_service_config   = {},
   Hash $bgp_dragent_config    = {},
   Hash $plugin_ml2_config     = {},
+  # DEPRECATED PARAMETERS
+  Optional[Hash] $sfc_service_config = undef,
 ) {
   include neutron::deps
 
@@ -135,7 +138,6 @@ class neutron::config (
   create_resources('neutron_bgpvpn_service_config', $bgpvpn_service_config)
   create_resources('neutron_l2gw_agent_config', $l2gw_agent_config)
   create_resources('neutron_l2gw_service_config', $l2gw_service_config)
-  create_resources('neutron_sfc_service_config', $sfc_service_config)
   create_resources('neutron_l3_agent_config', $l3_agent_config)
   create_resources('neutron_dhcp_agent_config', $dhcp_agent_config)
   create_resources('neutron_metadata_agent_config', $metadata_agent_config)
@@ -148,4 +150,9 @@ class neutron::config (
   create_resources('neutron_taas_service_config', $taas_service_config)
   create_resources('neutron_bgp_dragent_config', $bgp_dragent_config)
   create_resources('neutron_plugin_ml2', $plugin_ml2_config)
+
+  if $sfc_service_config != undef {
+    warning('The sfc_service_config parameter is deprecated')
+    create_resources('neutron_sfc_service_config', $sfc_service_config)
+  }
 }

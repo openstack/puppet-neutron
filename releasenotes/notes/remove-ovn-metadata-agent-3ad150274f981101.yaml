@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for the ``neutron-ovn-metadata-agent`` service has been removed.

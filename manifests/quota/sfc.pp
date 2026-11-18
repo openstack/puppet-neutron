@@ -1,5 +1,6 @@
 # == Class: neutron::quota::sfc
 #
+# DEPRECATED !!
 # Setups neutron quota for networking-sfc.
 #
 # === Parameters
@@ -32,6 +33,8 @@ class neutron::quota::sfc (
   $quota_flow_classifier = $facts['os_service_default']
 ) {
   include neutron::deps
+
+  warning('Support for networking-sfc is deprecated')
 
   neutron_config {
     'quotas/quota_port_chain':      value => $quota_port_chain;

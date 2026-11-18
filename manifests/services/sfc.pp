@@ -17,6 +17,7 @@
 #
 # == Class: neutron::services::sfc
 #
+# DEPRECATED !!
 # Configure the Service Function Chaining Neutron extension
 #
 # === Parameters:
@@ -65,6 +66,8 @@ class neutron::services::sfc (
 ) {
   include neutron::deps
   include neutron::params
+
+  warning('Support for networking-sfc is deprecated')
 
   if $sfc_driver != undef {
     warning('The sfc_driver parameter is deprecated. Use the sfc_drivers parameter instead.')

@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``neutron::server::api_workers`` parmaeter has been deprecated.
+    The parameter has no effect now and will be removed in a future release.

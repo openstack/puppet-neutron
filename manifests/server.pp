@@ -44,12 +44,6 @@
 #   (Optional) Run neutron-db-manage on api nodes after installing the package.
 #   Defaults to false
 #
-# [*api_workers*]
-#   (Optional) Number of separate worker processes to spawn.  Greater than 0
-#   launches that number of child processes as workers.  The parent process
-#   manages them.
-#   Defaults to: $facts['os_workers']
-#
 # [*rpc_workers*]
 #   (Optional) Number of separate worker processes to spawn.  Greater than 0
 #   launches that number of child processes as workers.  The parent process
@@ -228,6 +222,12 @@
 #   (Optional) Name of the package holding neutron-server.
 #   Defaults to undef
 #
+# [*api_workers*]
+#   (Optional) Number of separate worker processes to spawn.  Greater than 0
+#   launches that number of child processes as workers.  The parent process
+#   manages them.
+#   Defaults to undef
+#
 class neutron::server (
   Stdlib::Ensure::Package $package_ensure                           = 'present',
   Boolean $enabled                                                  = true,
@@ -239,7 +239,6 @@ class neutron::server (
   String[1] $periodic_workers_package_name                          = $neutron::params::periodic_workers_package_name,
   Variant[String[1], Boolean[false]] $periodic_workers_service_name = $neutron::params::periodic_workers_service_name,
   Boolean $sync_db                                                  = false,
-  $api_workers                                                      = $facts['os_workers'],
   $rpc_workers                                                      = $facts['os_workers'],
   $rpc_state_report_workers                                         = $facts['os_service_default'],
   $rpc_response_max_timeout                                         = $facts['os_service_default'],
@@ -274,6 +273,7 @@ class neutron::server (
   # DEPRECATED PARMETERS
   $service_name                                                     = undef,
   $server_package                                                   = undef,
+  $api_workers                                                      = undef,
 ) inherits neutron::params {
   include neutron::deps
   include neutron::db
@@ -292,6 +292,13 @@ class neutron::server (
     }
   }
 
+  if $api_workers != undef {
+    warning('The api_workers parameter is deprecated and has no effect')
+  }
+  neutron_config {
+    'DEFAULT/api_workers': ensure => absent;
+  }
+
   if $sync_db {
     include neutron::db::sync
   }
@@ -302,7 +309,6 @@ class neutron::server (
     'DEFAULT/l3_ha_net_cidr':                   value => $l3_ha_net_cidr;
     'DEFAULT/l3_ha_network_type':               value => $l3_ha_network_type;
     'DEFAULT/l3_ha_network_physical_name':      value => $l3_ha_network_physical_name;
-    'DEFAULT/api_workers':                      value => $api_workers;
     'DEFAULT/rpc_workers':                      value => $rpc_workers;
     'DEFAULT/rpc_state_report_workers':         value => $rpc_state_report_workers;
     'DEFAULT/rpc_response_max_timeout':         value => $rpc_response_max_timeout;

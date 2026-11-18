@@ -62,7 +62,6 @@ describe 'neutron::server' do
 
     it 'configures neutron server service' do
       should_not contain_class('neutron::db::sync')
-      should contain_neutron_config('DEFAULT/api_workers').with_value(facts[:os_workers])
       should contain_neutron_config('DEFAULT/rpc_workers').with_value(facts[:os_workers])
       should contain_neutron_config('DEFAULT/rpc_state_report_workers').with_value('<SERVICE DEFAULT>')
       should contain_neutron_config('DEFAULT/rpc_response_max_timeout').with_value('<SERVICE DEFAULT>')

@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The ``neutron::designate::url`` parameter is now optional.
+
+  - |
+    The new ``neutron::designate::endpoint_type`` parameter has been added.

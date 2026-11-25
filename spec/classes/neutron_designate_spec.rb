@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe 'neutron::designate' do
   let :req_params do
-    { :password => 'secret',
-      :url      => 'http://ip/designate' }
+    { :password => 'secret' }
   end
 
   shared_examples 'neutron designate' do
@@ -14,7 +13,7 @@ describe 'neutron::designate' do
 
       it 'configures designate in neutron.conf' do
         should contain_neutron_config('DEFAULT/external_dns_driver').with_value('designate')
-        should contain_neutron_config('designate/url').with_value('http://ip/designate')
+        should contain_neutron_config('designate/url').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/password').with_value('secret').with_secret(true)
         should contain_neutron_config('designate/auth_type').with_value('password')
         should contain_neutron_config('designate/username').with_value('neutron')
@@ -25,6 +24,7 @@ describe 'neutron::designate' do
         should contain_neutron_config('designate/auth_url').with_value('http://127.0.0.1:5000')
         should contain_neutron_config('designate/cafile').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/certfile').with_value('<SERVICE DEFAULT>')
+        should contain_neutron_config('designate/endpoint_type').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/region_name').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/allow_reverse_dns_lookup').with_value('<SERVICE DEFAULT>')
         should contain_neutron_config('designate/ipv4_ptr_zone_prefix_size').with_value('<SERVICE DEFAULT>')
@@ -36,6 +36,7 @@ describe 'neutron::designate' do
     context 'with provided parameters' do
       let :params do
         req_params.merge!({
+          :url                       => 'http://ip/designate',
           :auth_type                 => 'v3password',
           :username                  => 'alt_neutron',
           :user_domain_name          => 'Domain2',
@@ -44,6 +45,7 @@ describe 'neutron::designate' do
           :auth_url                  => 'http://localhost:5000',
           :cafile                    => '/path/to/cafile',
           :certfile                  => '/path/to/certfile',
+          :endpoint_type             => 'public',
           :region_name               => 'region2',
           :allow_reverse_dns_lookup  => false,
           :ipv4_ptr_zone_prefix_size => 765,
@@ -65,6 +67,7 @@ describe 'neutron::designate' do
         should contain_neutron_config('designate/auth_url').with_value('http://localhost:5000')
         should contain_neutron_config('designate/cafile').with_value('/path/to/cafile')
         should contain_neutron_config('designate/certfile').with_value('/path/to/certfile')
+        should contain_neutron_config('designate/endpoint_type').with_value('public')
         should contain_neutron_config('designate/region_name').with_value('region2')
         should contain_neutron_config('designate/allow_reverse_dns_lookup').with_value(false)
         should contain_neutron_config('designate/ipv4_ptr_zone_prefix_size').with_value(765)

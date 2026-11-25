@@ -8,7 +8,8 @@
 #   (required) Password for connection to designate in admin context.
 #
 # [*url*]
-#   (required) URL to the designate service.
+#   (optional) URL to the designate service.
+#   Defaults to $facts['os_service_default']
 #
 # [*auth_type*]
 #   (optional) An authentication type to use with an OpenStack Identity server.
@@ -50,6 +51,10 @@
 #   (optional) Required if identity server requires client certificate
 #   Defaults to $facts['os_service_default'].
 #
+# [*endpoint_type*]
+#   (Optional) Type of the designate endpoint to use.
+#   Defaults to $facts['os_service_default'].
+#
 # [*region_name*]
 #   (Optional) The region of the Designate service.
 #   Defaults to $facts['os_service_default'].
@@ -72,7 +77,7 @@
 #
 class neutron::designate (
   $password,
-  $url,
+  $url                       = $facts['os_service_default'],
   $auth_type                 = 'password',
   $username                  = 'neutron',
   $user_domain_name          = 'Default',
@@ -82,6 +87,7 @@ class neutron::designate (
   $auth_url                  = 'http://127.0.0.1:5000',
   $cafile                    = $facts['os_service_default'],
   $certfile                  = $facts['os_service_default'],
+  $endpoint_type             = $facts['os_service_default'],
   $region_name               = $facts['os_service_default'],
   $allow_reverse_dns_lookup  = $facts['os_service_default'],
   $ipv4_ptr_zone_prefix_size = $facts['os_service_default'],
@@ -112,6 +118,7 @@ class neutron::designate (
     'designate/auth_url':                  value => $auth_url;
     'designate/cafile':                    value => $cafile;
     'designate/certfile':                  value => $certfile;
+    'designate/endpoint_type':             value => $endpoint_type;
     'designate/region_name':               value => $region_name;
     'designate/allow_reverse_dns_lookup':  value => $allow_reverse_dns_lookup;
     'designate/ipv4_ptr_zone_prefix_size': value => $ipv4_ptr_zone_prefix_size;
